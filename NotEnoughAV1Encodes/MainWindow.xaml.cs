@@ -43,6 +43,7 @@ namespace NotEnoughAV1Encodes
         public static int chunkLengthSplit = 120;
         public static int maxConcurrencyEncodes = 4;
         public static bool reencodeBeforeMainEncode = false;
+        public static bool resumeMode = false;
         //------------------------------------------------------||
         //----- aomenc Settings --------------------------------||
         public static int numberOfPasses = 1;
@@ -77,18 +78,19 @@ namespace NotEnoughAV1Encodes
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
             //Main entry Point
-            //SetParametersBeforeEncode();            
-            //SetAomencParameters();
-            //AsyncClass();
+            SetParametersBeforeEncode();            
+            SetAomencParameters();
+            AsyncClass();
         }
 
         public async void AsyncClass()
         {
             await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
             await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, exeffmpegPath));
+            await Task.Run(() => RenameChunks.Rename(workingTempDirectory));
             await Task.Run(() => SmallScripts.CountVideoChunks());
-            await Task.Run(() => EncodeAomenc());
-            await Task.Run(() => ConcatVideo.Concat());
+            //await Task.Run(() => EncodeAomenc());
+            //await Task.Run(() => ConcatVideo.Concat());
         }
 
         public void SetParametersBeforeEncode()
@@ -451,18 +453,27 @@ namespace NotEnoughAV1Encodes
             //SmallScripts.KillInstances();
         }
 
-        public void LoadSettings(string profileName)
+        public void LoadSettings(string profileName, bool saveJob)
         {
             //Loads Settings from XML File -------------------------------------------------------------------------------------||
             XmlDocument doc = new XmlDocument();
-            doc.Load(currentDir + "\\Profiles\\" + profileName);
+
+            string directory = "";
+            
+            if (saveJob == true)
+            {
+                directory = currentDir + "\\unfinishedjob.xml";
+            }
+            else
+            {
+                directory = currentDir + "\\Profiles\\" + profileName;
+            }
+
+            doc.Load(directory);
             XmlNodeList node = doc.GetElementsByTagName("Settings");
             foreach (XmlNode n in node[0].ChildNodes)
             {
-                if (n.Name == "ChunkLength")
-                {
-                    TextBoxChunkLength.Text = n.InnerText;
-                }
+                if (n.Name == "ChunkLength"){ TextBoxChunkLength.Text = n.InnerText; }
                 if (n.Name == "Reencode")
                 {
                     if (n.InnerText == "True")
@@ -511,14 +522,31 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "CustomAomencPath") { TextBoxCustomAomencPath.Text = n.InnerText; }
                 if (n.Name == "CustomTempPathActive") { if (n.InnerText == "True") { CheckBoxCustomTempFolder.IsChecked = true; } else { CheckBoxCustomTempFolder.IsChecked = false; } }
                 if (n.Name == "CustomAomencPath") { TextBoxCustomTempFolder.Text = n.InnerText; }
+
+                if (saveJob == true)
+                {
+                    if (n.Name == "VideoInput") { TextBoxVideoInput.Text = n.InnerText; }
+                    if (n.Name == "VideoOutput") { TextBoxVideoOutput.Text = n.InnerText; }
+                }
                 //------------------------------------------------------------------------------------------------------------------||
             }
         }
 
-        public void SaveSettings(string profileName)
+        public void SaveSettings(string profileName, bool saveJob)
         {
+            string directory = "";
             //Saves Settings to XML File ---------------------------------------------------------------------------------------||
-            XmlWriter writer = XmlWriter.Create(currentDir + "\\Profiles\\" + profileName);
+            if (saveJob == true)
+            {
+                directory = currentDir + "\\unfinishedjob.xml";
+            }
+            else
+            {
+                directory = currentDir + "\\Profiles\\" + profileName;
+            }
+
+            XmlWriter writer = XmlWriter.Create(directory);
+
             writer.WriteStartElement("Settings");
             writer.WriteElementString("ChunkLength", TextBoxChunkLength.Text);
             writer.WriteElementString("Reencode", CheckBoxReencode.IsChecked.ToString());
@@ -550,6 +578,11 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("CustomAomencPath", TextBoxCustomAomencPath.Text);
             writer.WriteElementString("CustomTempPathActive", CheckBoxCustomTempFolder.IsChecked.ToString());
             writer.WriteElementString("CustomTempPath", TextBoxCustomTempFolder.Text);
+            if (saveJob == true)
+            {
+                writer.WriteElementString("VideoInput", TextBoxVideoInput.Text);
+                writer.WriteElementString("VideoOutput", TextBoxVideoOutput.Text);
+            }
             writer.WriteEndElement();
             writer.Close();
             //------------------------------------------------------------------------------------------------------------------||
@@ -558,7 +591,7 @@ namespace NotEnoughAV1Encodes
         private void ButtonSaveProfile_Click(object sender, RoutedEventArgs e)
         {
             SmallScripts.CreateDirectory(currentDir, "Profiles");
-            SaveSettings(TextBoxProfiles.Text);
+            SaveSettings(TextBoxProfiles.Text, false);
         }
 
         private void ButtonProfilesRefresh_Click(object sender, RoutedEventArgs e)
@@ -570,7 +603,7 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonLoadProfile_Click(object sender, RoutedEventArgs e)
         {
-            LoadSettings(ComboBoxProfiles.Text);
+            LoadSettings(ComboBoxProfiles.Text, false);
         }
     }
 }

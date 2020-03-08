@@ -76,7 +76,7 @@ namespace NotEnoughAV1Encodes
         {
             string input;
 
-            input = fileinput;
+            input = '\u0022' + fileinput + '\u0022';
 
             Process process = new Process();
             process.StartInfo = new ProcessStartInfo()
@@ -93,7 +93,7 @@ namespace NotEnoughAV1Encodes
             process.Start();
             string streamlength = process.StandardOutput.ReadLine();
             //TextBoxFramerate.Text = fpsOutput;
-            //Console.WriteLine(streamlength);
+            Console.WriteLine(process.StartInfo);
             string value = new DataTable().Compute(streamlength, null).ToString();
             MainWindow.streamLength = Convert.ToInt64(Math.Round(Convert.ToDouble(value))).ToString();
             //streamLength = streamlength;

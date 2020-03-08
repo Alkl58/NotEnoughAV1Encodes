@@ -59,6 +59,7 @@
     </ApplicationDefinition>
     <Compile Include="ConcatVideo.cs" />
     <Compile Include="EncodeAudio.cs" />
+    <Compile Include="RenameChunks.cs" />
     <Compile Include="SmallScripts.cs" />
     <Compile Include="SplitVideo.cs" />
     <Page Include="MainWindow.xaml">
