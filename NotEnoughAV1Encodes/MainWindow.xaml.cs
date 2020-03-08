@@ -56,6 +56,7 @@ namespace NotEnoughAV1Encodes
         {
             InitializeComponent();
             CheckFfprobe();
+            CheckForResumeFile();
         }
 
         public void CheckFfprobe()
@@ -78,19 +79,139 @@ namespace NotEnoughAV1Encodes
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
             //Main entry Point
+            SmallScripts.Cancel.CancelAll = false;
+            ResetProgressBar();
+            CheckResume();
             SetParametersBeforeEncode();            
             SetAomencParameters();
-            AsyncClass();
+            if (SmallScripts.Cancel.CancelAll == false)
+            {
+                AsyncClass();
+            }
+            
         }
 
         public async void AsyncClass()
         {
-            await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
-            await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, exeffmpegPath));
-            await Task.Run(() => RenameChunks.Rename(workingTempDirectory));
+            if (resumeMode == false)
+            {
+                SaveSettings("", true);
+                await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Splitting ...", DispatcherPriority.Background);
+                await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, exeffmpegPath));
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Ended Splitting.", DispatcherPriority.Background);
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks ...", DispatcherPriority.Background);
+                await Task.Run(() => RenameChunks.Rename(workingTempDirectory));
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks Finished.", DispatcherPriority.Background);
+            }
             await Task.Run(() => SmallScripts.CountVideoChunks());
-            //await Task.Run(() => EncodeAomenc());
-            //await Task.Run(() => ConcatVideo.Concat());
+            if (SmallScripts.Cancel.CancelAll == false)
+            {
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started...", DispatcherPriority.Background);
+                await Task.Run(() => EncodeAomenc());
+            }else
+            {
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
+            }
+                
+            if (SmallScripts.Cancel.CancelAll == false)
+            {
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing Started...", DispatcherPriority.Background);
+                await Task.Run(() => ConcatVideo.Concat());
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing Completed!", DispatcherPriority.Background);
+                if (File.Exists("unfinishedjob.xml"))
+                {
+                    File.Delete("unfinishedjob.xml");
+                }
+                if (CheckBoxDeleteTempFiles.IsChecked == true)
+                {
+                    SmallScripts.DeleteTempFiles();
+                    SmallScripts.DeleteTempFilesDir(workingTempDirectory);
+                }
+            }else
+            {
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
+            }
+
+        }
+
+        private void CheckResume()
+        {
+            if (CheckBoxResumeMode.IsChecked == true)
+            {
+                resumeMode = true;
+
+                bool encodedExist = File.Exists("encoded.log");
+                bool splittedExist = File.Exists("splitted.log");
+                if (encodedExist && splittedExist)
+                {
+                    pLabel.Dispatcher.Invoke(() => pLabel.Content = "Resuming...", DispatcherPriority.Background);
+                    GetStreamFps(TextBoxVideoInput.Text);
+                    SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
+                    videoOutput = TextBoxVideoOutput.Text;
+                }
+                else if (encodedExist == false && splittedExist == true)
+                {
+                    if (MessageBox.Show("It appears that you toggled the resume mode, but there are no encoded chunks. Press Yes, to start Encoding of all Chunks. Press No, if you want to cancel!", "Resume", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Restarting...", DispatcherPriority.Background);
+                        GetStreamFps(TextBoxVideoInput.Text);
+                        SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
+                        videoOutput = TextBoxVideoOutput.Text;
+                        //This will be set if you Press Encode after a already finished encode
+                    }
+                    else
+                    {
+                        SmallScripts.Cancel.CancelAll = true;
+                    }
+                }else if (encodedExist == false && splittedExist == false)
+                {
+                    if (MessageBox.Show("It appears that you toggled the resume mode, but there are no encoded chunks and no information about a successfull split. Press Yes, to start Encoding of all Chunks. Press No, if you want to cancel!", "Resume", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Restarting...", DispatcherPriority.Background);
+                        GetStreamFps(TextBoxVideoInput.Text);
+                        SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
+                        videoOutput = TextBoxVideoOutput.Text;
+                        //This will be set if you Press Encode after a already finished encode
+                    }
+                    else
+                    {
+                        SmallScripts.Cancel.CancelAll = true;
+                    }
+                }
+
+            }
+            else if (CheckBoxResumeMode.IsChecked == false)
+            {
+                resumeMode = false;
+            }
+
+        }
+
+        private void CheckForResumeFile()
+        {
+            bool jobfileExist = File.Exists("unfinishedjob.xml");
+            if (jobfileExist)
+            {
+                if (MessageBox.Show("Unfinished Job detected! Load unfinished Job?",
+                        "Resume", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    LoadSettings("", true);
+                    CheckBoxResumeMode.IsChecked = true;
+                }
+
+            }
+            
+        }
+
+        private void ResetProgressBar()
+        {
+            if (MainProgressBar.Value != 0)
+            {
+                MainProgressBar.Value = 0;
+                MainProgressBar.Maximum = 100;
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Starting ...", DispatcherPriority.Background);
+            }
         }
 
         public void SetParametersBeforeEncode()
@@ -98,7 +219,7 @@ namespace NotEnoughAV1Encodes
             //Needed Parameters for Splitting --------------------------------------------------------||
             videoInput = TextBoxVideoInput.Text;
             //Sets the working directory
-            if (CheckBoxCustomTempFolder.IsChecked == false && TextBoxCustomTempFolder.Text == "Temp Folder")
+            if (CheckBoxCustomTempFolder.IsChecked == false)
             {
                 workingTempDirectory = System.IO.Path.Combine(currentDir, "Temp");
             }else if (CheckBoxCustomTempFolder.IsChecked == true && TextBoxCustomTempFolder.Text != "Temp Folder")
@@ -372,7 +493,7 @@ namespace NotEnoughAV1Encodes
                                     if (SmallScripts.Cancel.CancelAll == false)
                                     {
                                         //Write Item to file for later resume if something bad happens
-                                        SmallScripts.WriteToFileThreadSafe(items, "Temp\\encoded.log");
+                                        SmallScripts.WriteToFileThreadSafe(items, "encoded.log");
                                     }
                                     else
                                     {
@@ -424,7 +545,7 @@ namespace NotEnoughAV1Encodes
                                     if (SmallScripts.Cancel.CancelAll == false)
                                     {
                                         //Write Item to file for later resume if something bad happens
-                                        SmallScripts.WriteToFileThreadSafe(items, "Temp\\encoded.log");
+                                        SmallScripts.WriteToFileThreadSafe(items, "encoded.log");
                                     }
                                     else
                                     {
@@ -449,8 +570,8 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            //SmallScripts.Cancel.CancelAll = true;
-            //SmallScripts.KillInstances();
+            SmallScripts.Cancel.CancelAll = true;
+            SmallScripts.KillInstances();
         }
 
         public void LoadSettings(string profileName, bool saveJob)
@@ -462,7 +583,7 @@ namespace NotEnoughAV1Encodes
             
             if (saveJob == true)
             {
-                directory = currentDir + "\\unfinishedjob.xml";
+                directory = "unfinishedjob.xml";
             }
             else
             {
@@ -538,7 +659,7 @@ namespace NotEnoughAV1Encodes
             //Saves Settings to XML File ---------------------------------------------------------------------------------------||
             if (saveJob == true)
             {
-                directory = currentDir + "\\unfinishedjob.xml";
+                directory = "unfinishedjob.xml";
             }
             else
             {

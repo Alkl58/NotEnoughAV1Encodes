@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace NotEnoughAV1Encodes
 {
@@ -23,7 +24,20 @@ namespace NotEnoughAV1Encodes
             MainWindow.chunksDir = System.IO.Path.Combine(MainWindow.workingTempDirectory, "Chunks");
             MainWindow.videoChunks = Directory.GetFiles(MainWindow.chunksDir, "*mkv", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
             MainWindow.numberofvideoChunks = MainWindow.videoChunks.Count().ToString();
-            Console.WriteLine(MainWindow.numberofvideoChunks);
+
+
+            if (MainWindow.resumeMode == true)
+            {
+                bool fileExist = File.Exists("encoded.log");
+                if (fileExist)
+                {
+                    foreach (string line in File.ReadLines("encoded.log"))
+                    {
+                        MainWindow.videoChunks = MainWindow.videoChunks.Where(s => s != line).ToArray();
+                    }
+                    MainWindow.numberofvideoChunks = MainWindow.videoChunks.Count().ToString();
+                }
+            }
         }
 
         public static class Cancel
@@ -49,7 +63,7 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
 
-        
+
         private static ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
         public static void WriteToFileThreadSafe(string text, string path)
         {
@@ -98,8 +112,51 @@ namespace NotEnoughAV1Encodes
             MainWindow.streamLength = Convert.ToInt64(Math.Round(Convert.ToDouble(value))).ToString();
             //streamLength = streamlength;
             Console.WriteLine(MainWindow.streamLength);
-            
+
             process.WaitForExit();
+        }
+
+        public static void DeleteTempFiles()
+        {
+            try
+            {
+                //Delete Files, because of lazy dump****
+                if (File.Exists("splitted.log"))
+                {
+                    File.Delete("splitted.log");
+                }
+                if (File.Exists("encoded.log"))
+                {
+                    File.Delete("encoded.log");
+                }
+                if (File.Exists("no_audio.mkv"))
+                {
+                    File.Delete("no_audio.mkv");
+                }
+                if (Directory.Exists("Temp"))
+                {
+                    Directory.Delete("Temp", true);
+                }
+                if (File.Exists("unfinishedjob.xml"))
+                {
+                    File.Delete("unfinishedjob.xml");
+                }
+
+            }
+            catch { }
+        }
+
+        public static void DeleteTempFilesDir(string path)
+        {
+            try
+            {
+                if (Directory.Exists(path + "\\Temp"))
+                {
+                    Directory.Delete(path + "\\Temp", true);
+                }
+            }
+            catch { }
+            
         }
     }
 }

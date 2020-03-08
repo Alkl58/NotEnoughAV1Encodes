@@ -25,9 +25,15 @@ namespace NotEnoughAV1Encodes
                 startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + videoInput + '\u0022' + " -vcodec copy -f segment -segment_time " + chunkLength + " -an " + '\u0022' + tempFolderPath + "\\Chunks\\out%0d.mkv" + '\u0022';
             }
             ffmpegslit.StartInfo = startInfo;
-            Console.WriteLine(startInfo.Arguments);
             ffmpegslit.Start();
             ffmpegslit.WaitForExit();
+
+            if (SmallScripts.Cancel.CancelAll == false)
+            {
+                SmallScripts.WriteToFileThreadSafe("True", "splitted.log");
+            }
+
+
         }
     }
 }
