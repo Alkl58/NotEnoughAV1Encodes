@@ -1,0 +1,423 @@
+﻿<Window x:Class="NotEnoughAV1Encodes.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NotEnoughAV1Encodes"
+        mc:Ignorable="d"
+        Title="NotEnoughAV1Encodes" Height="541" Width="900" ResizeMode="CanMinimize" Background="#FF202020">
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#4D4D4D"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#2F2F2F"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#666666"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#CECECE"/>
+        <Style x:Key="ButtonDarkStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="Center" Margin="21,3,9,2" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Width="50"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <LinearGradientBrush x:Key="TabItem.Static.Background" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#666666" Offset="0.0"/>
+            <GradientStop Color="#666666" Offset="1.0"/>
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="TabItem.Static.Border" Color="#666666"/>
+        <LinearGradientBrush x:Key="TabItem.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#666666" Offset="0.0"/>
+            <GradientStop Color="#666666" Offset="1.0"/>
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="TabItem.MouseOver.Border" Color="#666666"/>
+        <SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#F0F0F0"/>
+        <SolidColorBrush x:Key="TabItem.Disabled.Border" Color="#D9D9D9"/>
+        <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
+        <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#454545"/>
+        <Style x:Key="DarkTabItem" TargetType="{x:Type TabItem}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="{StaticResource TabItem.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TabItem.Static.Border}"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="6,2,6,2"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+                            <Border x:Name="mainBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Background="{TemplateBinding Background}" Margin="0">
+                                <Border x:Name="innerBorder" BorderBrush="{StaticResource TabItem.Selected.Border}" BorderThickness="1,1,1,0" Background="{StaticResource TabItem.Selected.Background}" Margin="-1" Opacity="0"/>
+                            </Border>
+                            <ContentPresenter x:Name="contentPresenter" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Left"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.MouseOver.Border}"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,0,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,0,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Bottom"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.MouseOver.Border}"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,0,1,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,0,1,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Right"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.MouseOver.Border}"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="0,1,1,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="0,1,1,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.MouseOver.Border}"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,1,0"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,1,0"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Left"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity" TargetName="contentPresenter" Value="0.56"/>
+                                <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Border}"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,0,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,0,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Bottom"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity" TargetName="contentPresenter" Value="0.56"/>
+                                <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Border}"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,0,1,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,0,1,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Right"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity" TargetName="contentPresenter" Value="0.56"/>
+                                <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Border}"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="0,1,1,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="0,1,1,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity" TargetName="contentPresenter" Value="0.56"/>
+                                <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Border}"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,1,0"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,1,0"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Left"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,0,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,0,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Left"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Panel.ZIndex" Value="1"/>
+                                <Setter Property="Margin" Value="-2,-2,0,-2"/>
+                                <Setter Property="Opacity" TargetName="innerBorder" Value="1"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,0,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,0,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Bottom"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,0,1,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,0,1,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Bottom"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Panel.ZIndex" Value="1"/>
+                                <Setter Property="Margin" Value="-2,0,-2,-2"/>
+                                <Setter Property="Opacity" TargetName="innerBorder" Value="1"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,0,1,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,0,1,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Right"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="0,1,1,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="0,1,1,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Right"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Panel.ZIndex" Value="1"/>
+                                <Setter Property="Margin" Value="0,-2,-2,-2"/>
+                                <Setter Property="Opacity" TargetName="innerBorder" Value="1"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="0,1,1,1"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="0,1,1,1"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,1,0"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,1,0"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Panel.ZIndex" Value="1"/>
+                                <Setter Property="Margin" Value="-2,-2,-2,0"/>
+                                <Setter Property="Opacity" TargetName="innerBorder" Value="1"/>
+                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,1,0"/>
+                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,1,0"/>
+                            </MultiDataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <BooleanToVisibilityConverter x:Key="b2v" />
+    </Window.Resources>
+
+    <Grid>
+        <Label x:Name="LabelSourceVideo" Content="Source Video" HorizontalAlignment="Right" Margin="0,24,780,0" Background="{x:Null}" Foreground="White" Height="26" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxVideoInput" HorizontalAlignment="Left" Height="23" Margin="125,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="641" Background="#FF191919" Foreground="White"/>
+        <Label x:Name="LabelSourceVideo_Copy" Content="Output Video" HorizontalAlignment="Right" Margin="0,61,780,0" Background="{x:Null}" Foreground="White" Height="26" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoxVideoOutput" HorizontalAlignment="Left" Height="23" Margin="125,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="641" Background="#FF191919" Foreground="White"/>
+        <Button x:Name="ButtonOpenSource" Content="Open..." HorizontalAlignment="Left" Margin="784,27,0,0" VerticalAlignment="Top" Width="82" Height="23" Foreground="White" Background="#FF191919" BorderBrush="White" Style="{DynamicResource ButtonDarkStyle}" Click="ButtonOpenSource_Click"/>
+        <Button x:Name="ButtonSaveEncodeTo" Content="Save to..." HorizontalAlignment="Left" Margin="784,64,0,0" VerticalAlignment="Top" Width="82" Height="23" Foreground="White" Background="#FF191919" BorderBrush="White" Style="{DynamicResource ButtonDarkStyle}" Click="ButtonSaveEncodeTo_Click"/>
+        <Border BorderBrush="#FFB2B2B2" BorderThickness="1" HorizontalAlignment="Left" Height="91" Margin="10,10,0,0" VerticalAlignment="Top" Width="867"/>
+        <TabControl HorizontalAlignment="Left" Height="321" Margin="10,116,0,0" VerticalAlignment="Top" Width="867" Background="#CC191919">
+            <TabItem Header="Summary" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                <Grid Background="#CC191919">
+                    <Label Content="Video Source:" HorizontalAlignment="Left" Margin="60,31,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label Content="General Settings:" HorizontalAlignment="Left" Margin="44,69,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label Content="Encoding Parameters:" HorizontalAlignment="Left" Margin="19,160,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label x:Name="LabelSummaryVideoSource" Content="{Binding ElementName=TextBoxVideoInput, Path=Text, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="148,31,0,0" VerticalAlignment="Top" Width="703" Foreground="White"/>
+                    <Label Content="Chunk length in Seconds:" HorizontalAlignment="Left" Margin="164,96,0,0" VerticalAlignment="Top" Width="148" Foreground="White"/>
+                    <Label x:Name="LabelSummaryChunkLength" Content="{Binding ElementName=TextBoxChunkLength, Path=Text, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="312,96,0,0" VerticalAlignment="Top" Width="116" Foreground="White" VerticalContentAlignment="Center"/>
+                    <Label Content="Number of parallel Workers:" HorizontalAlignment="Left" Margin="148,122,0,0" VerticalAlignment="Top" Width="164" Foreground="White"/>
+                    <Label x:Name="LabelSummaryWorkers" Content="{Binding ElementName=TextBoxNumberOfWorkers, Path=Text, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="312,122,0,0" VerticalAlignment="Top" Width="116" Foreground="White"/>
+                    <Label Content="Encoder:" HorizontalAlignment="Left" Margin="250,178,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label x:Name="LabelSummaryEncoder" Content="{Binding ElementName=ComboBoxEncoder, Path=Text, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="312,178,0,0" VerticalAlignment="Top" Foreground="White" Width="98"/>
+                    <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="242,204,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label x:Name="LabelSummaryBitDepth" Content="{Binding ElementName=ComboBoxBitDepth, Path=Text, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="312,204,0,0" VerticalAlignment="Top" Width="98" Foreground="White"/>
+                    <Label Content="Preset:" HorizontalAlignment="Left" Margin="261,230,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label x:Name="LabelSummaryPreset" Content="{Binding ElementName=SliderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="312,230,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.289,-0.038" Width="98" Foreground="White"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="General Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                <Grid Background="#FF191919">
+                    <Label Content="Splitting" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold"/>
+                    <Label Content="Chunk length:" HorizontalAlignment="Left" Margin="121,41,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxChunkLength" HorizontalAlignment="Left" Height="26" Margin="243,41,0,0" TextWrapping="Wrap" Text="180" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <Label Content="Workers" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,85,0,0" FontWeight="Bold"/>
+                    <Label Content="Number of parallel Encodings:" HorizontalAlignment="Left" Margin="35,122,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxNumberOfWorkers" HorizontalAlignment="Left" Height="26" Margin="243,122,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="63" Background="#FF2C2C2C" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                    <CheckBox x:Name="CheckBoxReencode" Content="Reencode (lossless)" HorizontalAlignment="Left" Margin="355,47,0,0" VerticalAlignment="Top" Foreground="White"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Resolution" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                <Grid Background="#FF191919">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="857*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="LabelSourceResolution" Content="Source Resolution:" HorizontalAlignment="Left" Margin="6,10,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Video" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                <Grid Background="#FF191919">
+                    <Label Content="Video" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold"/>
+                    <Label Content="Encoder:" HorizontalAlignment="Left" Margin="35,41,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <ComboBox x:Name="ComboBoxEncoder" HorizontalAlignment="Left" Margin="104,41,0,0" VerticalAlignment="Top" Width="120" Foreground="Black" Background="Azure" Height="26" SelectionChanged="ComboBoxEncoder_SelectionChanged" >
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBoxItem Content="aomenc" IsSelected="True" Foreground="White"/>
+                        <ComboBoxItem Content="RAV1E" Foreground="White"/>
+                        <ComboBoxItem Content="SVT-AV1" Foreground="White"/>
+                    </ComboBox>
+                    <Label Content="Quality" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="388,10,0,0" FontWeight="Bold"/>
+                    <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="443,64,0,0" VerticalAlignment="Top" Width="392" Height="22" Maximum="61" SmallChange="1" Value="30" Foreground="White" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                    <Label Content="| Highest Quality" HorizontalAlignment="Left" Margin="443,86,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label Content="Lowest Quality |" HorizontalAlignment="Left" Margin="741,86,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label Content="Constant Quality :" HorizontalAlignment="Left" Margin="443,38,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label Content="Bitrate (kbps) :" HorizontalAlignment="Left" Margin="443,136,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxBitrate" HorizontalAlignment="Left" Height="26" Margin="540,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" Foreground="White"/>
+                    <RadioButton x:Name="RadioButtonConstantQuality" Content="" HorizontalAlignment="Left" Margin="424,44,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                    <RadioButton x:Name="RadioButtonBitrate" Content="" HorizontalAlignment="Left" Margin="424,143,0,0" VerticalAlignment="Top" Checked="RadioButtonBitrate_Checked"/>
+                    <Label Content="Framerate:" HorizontalAlignment="Left" Margin="25,86,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label Content="Video optimisation" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,162,0,0" FontWeight="Bold"/>
+                    <Label Content="Encoding Preset:" HorizontalAlignment="Left" Margin="33,193,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Slider x:Name="SliderPreset" HorizontalAlignment="Left" Margin="146,197,0,0" VerticalAlignment="Top" Width="112" Height="27" Maximum="8" TickPlacement="BottomRight" SmallChange="1" Value="3" IsSnapToTickEnabled="True"/>
+                    <Label x:Name="LabelQuality" Content="{Binding ElementName=SliderQuality, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="552,39,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="25,131,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <ComboBox x:Name="ComboBoxBitDepth" HorizontalAlignment="Left" Margin="104,131,0,0" VerticalAlignment="Top" Width="58" Height="26">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBoxItem Content="8" IsSelected="True" Foreground="White"/>
+                        <ComboBoxItem Content="10" Foreground="White"/>
+                        <ComboBoxItem Content="12" Foreground="White"/>
+                    </ComboBox>
+                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True"/>
+                    <TextBox x:Name="TextBoxFramerate" HorizontalAlignment="Left" Height="26" Margin="104,86,0,0" TextWrapping="Wrap" Text="24000/1001" VerticalAlignment="Top" Width="120" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <Label Content="| Slowest" HorizontalAlignment="Left" Margin="145,216,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label Content="Fastest |" HorizontalAlignment="Left" Margin="207,216,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label x:Name="LabelEncoderPreset" Content="{Binding ElementName=SliderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="129,193,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <CheckBox x:Name="CheckBoxCBR" Content="CBR" HorizontalAlignment="Left" Margin="680,142,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <CheckBox x:Name="CheckBoxTwoPass" Content="2-Pass Encoding" HorizontalAlignment="Left" Margin="39,256,0,0" VerticalAlignment="Top" Foreground="White"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Advanced Video Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}" Visibility="{Binding ElementName=CheckBoxAdvancedSettings, Path=IsChecked, Converter={StaticResource b2v}}">
+                <Grid Background="#FF191919">
+                    <Label Content="Advanced Video Settings" Height="29" Foreground="White" FontWeight="Bold" Margin="10,0,0,254" HorizontalAlignment="Left" Width="151" VerticalAlignment="Bottom"/>
+                    <Label Content="Threads:" HorizontalAlignment="Left" Margin="107,52,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxThreads" HorizontalAlignment="Left" Height="26" Margin="178,52,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Label Content="Tile Columns:" HorizontalAlignment="Left" Margin="278,52,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxTileColumns" HorizontalAlignment="Left" Height="26" Margin="375,52,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Label Content="Tile Rows:" HorizontalAlignment="Left" Margin="481,52,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxTileRows" HorizontalAlignment="Left" Height="26" Margin="559,52,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Label Content="Keyframe Interval:" HorizontalAlignment="Left" Margin="56,92,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxKeyframeInterval" HorizontalAlignment="Left" Height="26" Margin="178,92,0,0" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Label Content="AQ-Mode:" HorizontalAlignment="Left" Margin="659,52,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <ComboBox x:Name="ComboBoxAqMode" HorizontalAlignment="Left" Margin="737,52,0,0" VerticalAlignment="Top" Width="102" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBoxItem Background="#FF363636" Content="Off (Default)" Foreground="White" IsSelected="True"/>
+                        <ComboBoxItem Content="Variance" Foreground="White"/>
+                        <ComboBoxItem Content="Complexity" Foreground="White"/>
+                        <ComboBoxItem Content="Cyclic Refresh" Foreground="White"/>
+                    </ComboBox>
+                    <Label Content="Custom Command Line" Height="29" Foreground="White" FontWeight="Bold" Margin="10,0,0,127" HorizontalAlignment="Left" Width="151" VerticalAlignment="Bottom"/>
+                    <TextBox x:Name="TextBoxCustomCommand" HorizontalAlignment="Left" Height="23" Margin="16,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="823" Background="#FF2C2C2C" Foreground="White"/>
+                    <CheckBox x:Name="CheckBoxCustomCommandLine" Content="Enable Custom Command Line" HorizontalAlignment="Left" Margin="16,171,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label Content="Do not specify input or output! Do not specify 1/2-Pass (use the Passes option under &quot;Video&quot;)!  " HorizontalAlignment="Left" Margin="10,216,0,0" VerticalAlignment="Top" Foreground="#FFB9B9B9"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Audio" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                <Grid Background="#FF191919"/>
+            </TabItem>
+            <TabItem Header="Program Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                <Grid Background="#FF191919">
+                    <CheckBox x:Name="CheckBoxShutdownAfterEncode" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="37,22,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxCustomFfmpegPath" HorizontalAlignment="Left" Height="23" Margin="196,85,0,0" TextWrapping="Wrap" Text="ffmpeg.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding ElementName=CheckBoxCustomFfmpegPath, Path=IsChecked}"/>
+                    <CheckBox x:Name="CheckBoxCustomFfmpegPath" Content="Custom ffmpeg Path" HorizontalAlignment="Left" Margin="37,90,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Button x:Name="ButtonCustomFfmpegPath" Content="     ..." HorizontalAlignment="Left" Margin="766,85,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding ElementName=CheckBoxCustomFfmpegPath, Path=IsChecked}" Click="ButtonCustomFfmpegPath_Click"/>
+                    <CheckBox x:Name="CheckBoxCustomFfprobePath" Content="Custom ffprobe Path" HorizontalAlignment="Left" Margin="37,126,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxCustomFfprobePath" HorizontalAlignment="Left" Height="23" Margin="196,121,0,0" TextWrapping="Wrap" Text="ffprobe.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomFfprobePath}"/>
+                    <Button x:Name="ButtonCustomFfprobePath" Content="     ..." HorizontalAlignment="Left" Margin="766,121,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomFfprobePath}" Click="ButtonCustomFfprobePath_Click"/>
+                    <CheckBox x:Name="CheckBoxCustomAomencPath" Content="Custom aomenc Path" HorizontalAlignment="Left" Margin="37,163,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxCustomAomencPath" HorizontalAlignment="Left" Height="23" Margin="196,158,0,0" TextWrapping="Wrap" Text="aomenc.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomAomencPath}"/>
+                    <Button x:Name="ButtonCustomAomencPath" Content="     ..." HorizontalAlignment="Left" Margin="766,158,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomAomencPath}" Click="ButtonCustomAomencPath_Click"/>
+                    <TextBox x:Name="TextBoxCustomTempFolder" HorizontalAlignment="Left" Height="23" Margin="196,254,0,0" TextWrapping="Wrap" Text="Temp Folder" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempFolder}"/>
+                    <CheckBox x:Name="CheckBoxCustomTempFolder" Content="Custom Temp Path" HorizontalAlignment="Left" Margin="37,259,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Button x:Name="ButtonCustomTempFolder" Content="     ..." HorizontalAlignment="Left" Margin="766,254,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempFolder}" Click="ButtonCustomTempFolder_Click"/>
+                    <CheckBox x:Name="CheckBoxDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="196,22,0,0" VerticalAlignment="Top" Foreground="White"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Profiles" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                <Grid Background="#FF191919">
+                    <Button x:Name="ButtonSaveProfile" Content="Save Profile" HorizontalAlignment="Left" Margin="37,29,0,0" VerticalAlignment="Top" Width="86" Height="21" Background="#FF2B2B2B" Foreground="White" Click="ButtonSaveProfile_Click"/>
+                    <ComboBox x:Name="ComboBoxProfiles" HorizontalAlignment="Left" Margin="137,82,0,0" VerticalAlignment="Top" Width="187"/>
+                    <TextBox x:Name="TextBoxProfiles" HorizontalAlignment="Left" Height="21" Margin="137,29,0,0" TextWrapping="Wrap" Text="ProfileName.xml" VerticalAlignment="Top" Width="187" Foreground="White" Background="#FF1D1D1D" VerticalContentAlignment="Center"/>
+                    <Button x:Name="ButtonProfilesRefresh" Content="Refresh List" HorizontalAlignment="Left" Margin="37,82,0,0" VerticalAlignment="Top" Width="86" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonProfilesRefresh_Click"/>
+                    <Button x:Name="ButtonLoadProfile" Content="Load Profile" HorizontalAlignment="Left" Margin="342,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonLoadProfile_Click"/>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+        <ProgressBar x:Name="MainProgressBar" HorizontalAlignment="Left" Height="42" Margin="10,452,0,0" VerticalAlignment="Top" Width="579" SmallChange="1" Background="#CCE6E6E6"/>
+        <Button x:Name="ButtonStartEncode" Content="Start Encode" HorizontalAlignment="Left" Margin="763,452,0,0" VerticalAlignment="Top" Width="114" Height="42" Background="#FF2B2B2B" Foreground="White" BorderBrush="White" Click="ButtonStartEncode_Click"/>
+        <Label x:Name="pLabel" Content="" HorizontalAlignment="Left" Margin="10,460,0,0" VerticalAlignment="Top" Width="579" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Button x:Name="ButtonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="716,452,0,0" VerticalAlignment="Top" Width="47" Height="42" Background="#FF2B2B2B" Foreground="White" BorderBrush="#FFFF4A4A" Click="ButtonCancel_Click"/>
+
+
+    </Grid>
+</Window>
