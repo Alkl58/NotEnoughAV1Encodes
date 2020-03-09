@@ -55,6 +55,7 @@ namespace NotEnoughAV1Encodes
         public static string ravie = "";
         public static string ravieQualityMode = "";
         public static string allSettingsRavie = "";
+        public static string pipeBitDepth = " yuv420p";
         //------------------------------------------------------||
         public DateTime starttimea;
 
@@ -356,6 +357,7 @@ namespace NotEnoughAV1Encodes
                 ravieQualityMode = " --bitrate " + TextBoxBitrate.Text;
             }
             //----------------------------------------------------------------------------------------||
+            //Sets All Encoding Settings--------------------------------------------------------------||
             if (CheckBoxAdvancedSettings.IsChecked == false)
             {
                 //Basic Settings
@@ -368,6 +370,15 @@ namespace NotEnoughAV1Encodes
             else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == true)
             {
                 allSettingsRavie = " " + TextBoxCustomCommand.Text;
+            }
+            //----------------------------------------------------------------------------------------||
+            //Sets Piping Bit-Depth Settings because rav1e can't convert it itself--------------------||
+            if (ComboBoxBitDepth.Text == "10")
+            {
+                pipeBitDepth = " yuv420p10le -strict -1";
+            }else if (ComboBoxBitDepth.Text == "12")
+            {
+                pipeBitDepth = " yuv420p12le -strict -1";
             }
         }
 
@@ -438,6 +449,9 @@ namespace NotEnoughAV1Encodes
                     SliderQuality.Value = 30;
                     SliderPreset.Maximum = 8;
                     SliderPreset.Value = 3;
+                    CheckBoxCBR.IsEnabled = true;
+                    ComboBoxAqMode.IsEnabled = true;
+                    CheckBoxTwoPass.IsEnabled = true;
                 }
 
             }else if (comboitem == "RAV1E")
@@ -448,11 +462,15 @@ namespace NotEnoughAV1Encodes
                 SliderPreset.Value = 6;
                 CheckBoxCBR.IsEnabled = false;
                 ComboBoxAqMode.IsEnabled = false;
+                CheckBoxTwoPass.IsEnabled = false; //2-Pass completly broken in rav1e
             }
             else if (comboitem == "SVT-AV1")
             {
                 SliderQuality.Maximum = 63;
                 SliderQuality.Value = 50;
+                CheckBoxCBR.IsEnabled = true;
+                ComboBoxAqMode.IsEnabled = true;
+                CheckBoxTwoPass.IsEnabled = true;
             }
         }
 
@@ -671,7 +689,7 @@ namespace NotEnoughAV1Encodes
                                     startInfo.UseShellExecute = true;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     process.StartInfo = startInfo;
                                     Console.WriteLine(startInfo.Arguments);
                                     process.Start();
@@ -706,9 +724,9 @@ namespace NotEnoughAV1Encodes
                                         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                         startInfo.FileName = "cmd.exe";
                                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - --passes=2 --pass=1 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=NUL";
+                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --first-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022';
                                         process.StartInfo = startInfo;
-                                        //Console.WriteLine(startInfo.Arguments);
+                                        Console.WriteLine(startInfo.Arguments);
                                         process.Start();
                                         process.WaitForExit();
 
@@ -726,9 +744,9 @@ namespace NotEnoughAV1Encodes
                                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --second-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     process.StartInfo = startInfo;
-                                    //Console.WriteLine(startInfo.Arguments);
+                                    Console.WriteLine(startInfo.Arguments);
                                     process.Start();
                                     process.WaitForExit();
 

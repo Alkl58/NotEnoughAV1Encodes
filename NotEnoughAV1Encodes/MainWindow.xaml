@@ -372,7 +372,7 @@
                     <Label Content="Do not specify input or output! Do not specify 1/2-Pass (use the Passes option under &quot;Video&quot;)!  " HorizontalAlignment="Left" Margin="10,216,0,0" VerticalAlignment="Top" Foreground="#FFB9B9B9"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Audio" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+            <TabItem Header="Audio" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}" IsSelected="True">
                 <Grid Background="#FF191919">
                     <Label Content="Audio" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold"/>
                     <Label Content="Codec:" HorizontalAlignment="Left" Margin="35,41,0,0" VerticalAlignment="Top" Foreground="White"/>
@@ -393,7 +393,7 @@
                     <TextBox x:Name="TextBoxCustomTempFolder" HorizontalAlignment="Left" Height="23" Margin="196,254,0,0" TextWrapping="Wrap" Text="Temp Folder" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempFolder}"/>
                     <CheckBox x:Name="CheckBoxCustomTempFolder" Content="Custom Temp Path" HorizontalAlignment="Left" Margin="37,259,0,0" VerticalAlignment="Top" Foreground="White"/>
                     <Button x:Name="ButtonCustomTempFolder" Content="     ..." HorizontalAlignment="Left" Margin="766,254,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempFolder}" Click="ButtonCustomTempFolder_Click"/>
-                    <CheckBox x:Name="CheckBoxDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="196,22,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True"/>
+                    <CheckBox x:Name="CheckBoxDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="196,22,0,0" VerticalAlignment="Top" Foreground="White"/>
                     <CheckBox x:Name="CheckBoxCustomRaviePath" Content="Custom rav1e Path" HorizontalAlignment="Left" Margin="37,200,0,0" VerticalAlignment="Top" Foreground="White"/>
                     <TextBox x:Name="TextBoxCustomRaviePath" HorizontalAlignment="Left" Height="23" Margin="196,195,0,0" TextWrapping="Wrap" Text="rav1e.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomRaviePath}"/>
                     <Button x:Name="ButtonCustomRaviePath" Content="     ..." HorizontalAlignment="Left" Margin="766,195,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomRaviePath}" Click="ButtonCustomRaviePath_Click"/>
