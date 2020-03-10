@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace NotEnoughAV1Encodes
 {
-    class RenameChunks
+    internal class RenameChunks
     {
         //Renames all Chunk files accordingly, so while muxing they are in the right order
         public static void Rename(string currentPath)

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes
 {
-    class ConcatVideo
+    internal class ConcatVideo
     {
         public static void Concat()
         {
@@ -35,7 +31,6 @@ namespace NotEnoughAV1Encodes
                 process.StartInfo = startInfo;
                 process.Start();
                 process.WaitForExit();
-                
             }
         }
     }

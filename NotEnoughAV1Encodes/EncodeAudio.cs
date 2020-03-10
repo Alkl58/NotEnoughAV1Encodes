@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NotEnoughAV1Encodes
+﻿namespace NotEnoughAV1Encodes
 {
-    class EncodeAudio
+    internal class EncodeAudio
     {
         public static void AudioEncode()
         {

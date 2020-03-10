@@ -5,18 +5,10 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml;
 
@@ -26,6 +18,7 @@ namespace NotEnoughAV1Encodes
     {
         //----- General Settings -------------------------------||
         public static string videoInput = "";
+
         public static string videoOutput = "";
         public static string workingTempDirectory = "";
         public static string exeffmpegPath = "";
@@ -44,18 +37,25 @@ namespace NotEnoughAV1Encodes
         public static int maxConcurrencyEncodes = 4;
         public static bool reencodeBeforeMainEncode = false;
         public static bool resumeMode = false;
+
         //------------------------------------------------------||
         //----- aomenc Settings --------------------------------||
         public static int numberOfPasses = 1;
+
         public static string aomenc = "";
         public static string aomencQualityMode = "";
         public static string allSettingsAom = "";
+        public static bool aomEncode = false;
+
         //------------------------------------------------------||
         //----- RAV1E Settings ---------------------------------||
         public static string ravie = "";
+
         public static string ravieQualityMode = "";
         public static string allSettingsRavie = "";
         public static string pipeBitDepth = " yuv420p";
+        public static bool rav1eEncode = false;
+
         //------------------------------------------------------||
         public DateTime starttimea;
 
@@ -64,45 +64,6 @@ namespace NotEnoughAV1Encodes
             InitializeComponent();
             CheckFfprobe();
             CheckForResumeFile();
-        }
-
-        public void CheckFfprobe()
-        {
-            currentDir = Directory.GetCurrentDirectory();
-            if (CheckBoxCustomFfprobePath.IsChecked == true)
-            {
-                exeffprobePath = TextBoxCustomFfprobePath.Text;
-            }else if (CheckBoxCustomFfprobePath.IsChecked == false)
-            {
-                exeffprobePath = currentDir;
-            }
-        }
-
-        private void RadioButtonBitrate_Checked(object sender, RoutedEventArgs e)
-        {
-            RadioButtonConstantQuality.IsChecked = false;
-        }
-
-        private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
-        {
-            //Main entry Point
-            SmallScripts.Cancel.CancelAll = false;
-            ResetProgressBar();
-            CheckResume();
-            SetParametersBeforeEncode();
-            if (ComboBoxEncoder.Text == "aomenc")
-            {
-                SetAomencParameters();
-            }else if (ComboBoxEncoder.Text == "RAV1E")
-            {
-                SetRavieParameters();
-            }
-            
-            if (SmallScripts.Cancel.CancelAll == false)
-            {
-                AsyncClass();
-            }
-            
         }
 
         public async void AsyncClass()
@@ -121,12 +82,12 @@ namespace NotEnoughAV1Encodes
             await Task.Run(() => SmallScripts.CountVideoChunks());
             if (SmallScripts.Cancel.CancelAll == false)
             {
-                
                 if (ComboBoxEncoder.Text == "aomenc")
                 {
                     pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started aomenc...", DispatcherPriority.Background);
                     await Task.Run(() => EncodeAomenc());
-                }else if (ComboBoxEncoder.Text == "RAV1E")
+                }
+                else if (ComboBoxEncoder.Text == "RAV1E")
                 {
                     pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started RAV1E...", DispatcherPriority.Background);
                     await Task.Run(() => EncodeRavie());
@@ -136,7 +97,7 @@ namespace NotEnoughAV1Encodes
             {
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
             }
-                
+
             if (SmallScripts.Cancel.CancelAll == false)
             {
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing Started...", DispatcherPriority.Background);
@@ -151,12 +112,14 @@ namespace NotEnoughAV1Encodes
                     SmallScripts.DeleteTempFiles();
                     SmallScripts.DeleteTempFilesDir(workingTempDirectory);
                 }
-            }else
+            }
+            else
             {
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
             }
-
         }
+
+        //-------------------------------------- Small Functions ------------------------------------------||
 
         private void CheckResume()
         {
@@ -187,7 +150,8 @@ namespace NotEnoughAV1Encodes
                     {
                         SmallScripts.Cancel.CancelAll = true;
                     }
-                }else if (encodedExist == false && splittedExist == false)
+                }
+                else if (encodedExist == false && splittedExist == false)
                 {
                     if (MessageBox.Show("It appears that you toggled the resume mode, but there are no encoded chunks and no information about a successfull split. Press Yes, to start Encoding of all Chunks. Press No, if you want to cancel!", "Resume", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
@@ -202,13 +166,11 @@ namespace NotEnoughAV1Encodes
                         SmallScripts.Cancel.CancelAll = true;
                     }
                 }
-
             }
             else if (CheckBoxResumeMode.IsChecked == false)
             {
                 resumeMode = false;
             }
-
         }
 
         private void CheckForResumeFile()
@@ -222,9 +184,7 @@ namespace NotEnoughAV1Encodes
                     LoadSettings("", true);
                     CheckBoxResumeMode.IsChecked = true;
                 }
-
             }
-            
         }
 
         private void ResetProgressBar()
@@ -237,6 +197,47 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        public void GetStreamFps(string fileinput)
+        {
+            //Sets the Streamframerate, so the user don't has to change it
+            string input = '\u0022' + fileinput + '\u0022';
+            Process getStreamFps = new Process();
+            getStreamFps.StartInfo = new ProcessStartInfo()
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                WorkingDirectory = exeffprobePath,
+                Arguments = "/C ffprobe.exe -i " + input + " -v 0 -of csv=p=0 -select_streams v:0 -show_entries stream=r_frame_rate",
+                RedirectStandardError = true,
+                RedirectStandardOutput = true
+            };
+            getStreamFps.Start();
+            string fpsOutput = getStreamFps.StandardOutput.ReadLine();
+            TextBoxFramerate.Text = fpsOutput;
+            string value = new DataTable().Compute(TextBoxFramerate.Text, null).ToString();
+            streamFrameRateLabel = Convert.ToInt64(Math.Round(Convert.ToDouble(value))).ToString();
+            getStreamFps.WaitForExit();
+        }
+
+        public void CheckFfprobe()
+        {
+            currentDir = Directory.GetCurrentDirectory();
+            if (CheckBoxCustomFfprobePath.IsChecked == true)
+            {
+                exeffprobePath = TextBoxCustomFfprobePath.Text;
+            }
+            else if (CheckBoxCustomFfprobePath.IsChecked == false)
+            {
+                exeffprobePath = currentDir;
+            }
+        }
+
+        //-------------------------------------------------------------------------------------------------||
+
+        //------------------------------------- Encoder Settings ------------------------------------------||
+
         public void SetParametersBeforeEncode()
         {
             //Needed Parameters for Splitting --------------------------------------------------------||
@@ -245,7 +246,8 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxCustomTempFolder.IsChecked == false)
             {
                 workingTempDirectory = System.IO.Path.Combine(currentDir, "Temp");
-            }else if (CheckBoxCustomTempFolder.IsChecked == true && TextBoxCustomTempFolder.Text != "Temp Folder")
+            }
+            else if (CheckBoxCustomTempFolder.IsChecked == true && TextBoxCustomTempFolder.Text != "Temp Folder")
             {
                 workingTempDirectory = System.IO.Path.Combine(TextBoxCustomTempFolder.Text, "Temp");
             }
@@ -253,7 +255,8 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxCustomFfmpegPath.IsChecked == false)
             {
                 exeffmpegPath = currentDir;
-            }else if (CheckBoxCustomFfmpegPath.IsChecked == true)
+            }
+            else if (CheckBoxCustomFfmpegPath.IsChecked == true)
             {
                 exeffmpegPath = TextBoxCustomFfmpegPath.Text;
             }
@@ -267,24 +270,31 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxCustomAomencPath.IsChecked == false)
             {
                 aomenc = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "aomenc.exe");
+                aomEncode = true;
+                rav1eEncode = false;
             }
             else if (CheckBoxCustomAomencPath.IsChecked == true)
             {
                 exeaomencPath = TextBoxCustomAomencPath.Text;
                 aomenc = System.IO.Path.Combine(exeaomencPath, "aomenc.exe");
+                aomEncode = true;
+                rav1eEncode = false;
             }
             //----------------------------------------------------------------------------------------||
             //Needed Parameters for rav1e Encoding ---------------------------------------------------||
             if (CheckBoxCustomRaviePath.IsChecked == false)
             {
                 ravie = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "rav1e.exe");
+                rav1eEncode = true;
+                aomEncode = false;
             }
             else if (CheckBoxCustomRaviePath.IsChecked == true)
             {
                 exerav1ePath = TextBoxCustomRaviePath.Text;
                 ravie = System.IO.Path.Combine(exerav1ePath, "rav1e.exe");
+                rav1eEncode = true;
+                aomEncode = false;
             }
-
         }
 
         public void SetAomencParameters()
@@ -299,7 +309,8 @@ namespace NotEnoughAV1Encodes
             if (RadioButtonConstantQuality.IsChecked == true)
             {
                 aomencQualityMode = " --end-usage=q --cq-level=" + SliderQuality.Value;
-            }else if (RadioButtonBitrate.IsChecked == true)
+            }
+            else if (RadioButtonBitrate.IsChecked == true)
             {
                 if (CheckBoxCBR.IsChecked == true)
                 {
@@ -316,26 +327,31 @@ namespace NotEnoughAV1Encodes
             {
                 //Basic Settings
                 allSettingsAom = " --cpu-used=" + SliderPreset.Value + " --bit-depth=" + ComboBoxBitDepth.Text + " --fps=" + TextBoxFramerate.Text + " --threads=2 --kf-max-dist=240 --tile-rows=1 --tile-columns=1" + aomencQualityMode;
-            }else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == false)
+            }
+            else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == false)
             {
                 string aqMode = "";
                 if (ComboBoxAqMode.Text == "Off (Default)")
                 {
                     aqMode = "0";
-                }else if (ComboBoxAqMode.Text == "Variance")
+                }
+                else if (ComboBoxAqMode.Text == "Variance")
                 {
                     aqMode = "1";
-                }else if (ComboBoxAqMode.Text == "Complexity")
+                }
+                else if (ComboBoxAqMode.Text == "Complexity")
                 {
                     aqMode = "2";
-                }else if (ComboBoxAqMode.Text == "Cyclic Refresh")
+                }
+                else if (ComboBoxAqMode.Text == "Cyclic Refresh")
                 {
                     aqMode = "3";
                 }
                 allSettingsAom = " --cpu-used=" + SliderPreset.Value + " --bit-depth=" + ComboBoxBitDepth.Text + " --fps=" + TextBoxFramerate.Text + " --threads=" + TextBoxThreads.Text + " --kf-max-dist=" + TextBoxKeyframeInterval.Text + " --tile-rows=" + TextBoxTileRows.Text + " --tile-columns=" + TextBoxTileColumns.Text + " --aq-mode=" + aqMode;
-            }else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == true)
+            }
+            else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == true)
             {
-                allSettingsAom = " "+TextBoxCustomCommand.Text;
+                allSettingsAom = " " + TextBoxCustomCommand.Text;
             }
         }
 
@@ -376,169 +392,16 @@ namespace NotEnoughAV1Encodes
             if (ComboBoxBitDepth.Text == "10")
             {
                 pipeBitDepth = " yuv420p10le -strict -1";
-            }else if (ComboBoxBitDepth.Text == "12")
+            }
+            else if (ComboBoxBitDepth.Text == "12")
             {
                 pipeBitDepth = " yuv420p12le -strict -1";
             }
         }
 
-        private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
-        {
-            //Open the OpenFileDialog to set the Videoinput
-            OpenFileDialog openVideoFileDialog = new OpenFileDialog();
+        //-------------------------------------------------------------------------------------------------||
 
-            Nullable<bool> result = openVideoFileDialog.ShowDialog();
-
-            if (result == true)
-            {
-                TextBoxVideoInput.Text = openVideoFileDialog.FileName;
-                GetStreamFps(TextBoxVideoInput.Text);
-                SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
-            }
-                
-        }
-        public void GetStreamFps(string fileinput)
-        {
-            //Sets the Streamframerate, so the user don't has to change it
-            string input = '\u0022' + fileinput + '\u0022';
-            Process getStreamFps = new Process();
-            getStreamFps.StartInfo = new ProcessStartInfo()
-            {
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe",
-                WorkingDirectory = exeffprobePath,
-                Arguments = "/C ffprobe.exe -i " + input + " -v 0 -of csv=p=0 -select_streams v:0 -show_entries stream=r_frame_rate",
-                RedirectStandardError = true,
-                RedirectStandardOutput = true
-            };
-            getStreamFps.Start();
-            string fpsOutput = getStreamFps.StandardOutput.ReadLine();
-            TextBoxFramerate.Text = fpsOutput;
-            string value = new DataTable().Compute(TextBoxFramerate.Text, null).ToString();
-            streamFrameRateLabel = Convert.ToInt64(Math.Round(Convert.ToDouble(value))).ToString();
-            getStreamFps.WaitForExit();
-        }
-
-        private void ButtonSaveEncodeTo_Click(object sender, RoutedEventArgs e)
-        {
-            //Open the OpenFileDialog to set the Videooutput
-            SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
-            saveVideoFileDialog.Filter = "Matroska|*.mkv";
-
-            Nullable<bool> result = saveVideoFileDialog.ShowDialog();
-
-            if (result == true)
-            {
-                TextBoxVideoOutput.Text = saveVideoFileDialog.FileName;
-                videoOutput = saveVideoFileDialog.FileName;
-            }
-        }
-
-        private void ComboBoxEncoder_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //Sets the Maximum Quality Values, which are Encoder dependant
-            string comboitem = (e.AddedItems[0] as ComboBoxItem).Content as string;
-
-            if (comboitem == "aomenc")
-            {
-                if (SliderQuality != null)
-                {
-                    SliderQuality.Maximum = 61;
-                    SliderQuality.Value = 30;
-                    SliderPreset.Maximum = 8;
-                    SliderPreset.Value = 3;
-                    CheckBoxCBR.IsEnabled = true;
-                    ComboBoxAqMode.IsEnabled = true;
-                    CheckBoxTwoPass.IsEnabled = true;
-                }
-
-            }else if (comboitem == "RAV1E")
-            {
-                SliderQuality.Maximum = 255;
-                SliderQuality.Value = 100;
-                SliderPreset.Maximum = 10;
-                SliderPreset.Value = 6;
-                CheckBoxCBR.IsEnabled = false;
-                ComboBoxAqMode.IsEnabled = false;
-                CheckBoxTwoPass.IsEnabled = false; //2-Pass completly broken in rav1e
-            }
-            else if (comboitem == "SVT-AV1")
-            {
-                SliderQuality.Maximum = 63;
-                SliderQuality.Value = 50;
-                CheckBoxCBR.IsEnabled = true;
-                ComboBoxAqMode.IsEnabled = true;
-                CheckBoxTwoPass.IsEnabled = true;
-            }
-        }
-
-        private void ButtonCustomTempFolder_Click(object sender, RoutedEventArgs e)
-        {
-            //Sets the Temp Folder
-            System.Windows.Forms.FolderBrowserDialog browseTempFolder = new System.Windows.Forms.FolderBrowserDialog();
-
-            if (browseTempFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                TextBoxCustomTempFolder.Text = browseTempFolder.SelectedPath;
-            }
-        }
-
-        private void ButtonCustomFfmpegPath_Click(object sender, RoutedEventArgs e)
-        {
-            //Sets the ffmpeg folder
-            System.Windows.Forms.FolderBrowserDialog browseFfmpegFolder = new System.Windows.Forms.FolderBrowserDialog();
-
-            if (browseFfmpegFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                TextBoxCustomFfmpegPath.Text = browseFfmpegFolder.SelectedPath;
-
-                bool FfmpegExist = File.Exists(TextBoxCustomFfmpegPath.Text + "\\ffmpeg.exe");
-
-                if (FfmpegExist == false)
-                {
-                    MessageBox.Show("Couldn't find ffmpeg in that folder!", "Attention!", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-
-            }
-        }
-
-        private void ButtonCustomFfprobePath_Click(object sender, RoutedEventArgs e)
-        {
-            //Sets the ffprobe folder
-            System.Windows.Forms.FolderBrowserDialog browseFfprobeFolder = new System.Windows.Forms.FolderBrowserDialog();
-
-            if (browseFfprobeFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                TextBoxCustomFfprobePath.Text = browseFfprobeFolder.SelectedPath;
-
-                bool FfprobeExist = File.Exists(TextBoxCustomFfprobePath.Text + "\\ffprobe.exe");
-
-                if (FfprobeExist == false)
-                {
-                    MessageBox.Show("Couldn't find ffprobe in that folder!", "Attention!", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            }
-        }
-
-        private void ButtonCustomAomencPath_Click(object sender, RoutedEventArgs e)
-        {
-            //Sets the aomenc folder
-            System.Windows.Forms.FolderBrowserDialog browseAomencFolder = new System.Windows.Forms.FolderBrowserDialog();
-
-            if (browseAomencFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                TextBoxCustomAomencPath.Text = browseAomencFolder.SelectedPath;
-
-                bool FfprobeExist = File.Exists(TextBoxCustomAomencPath.Text + "\\aomenc.exe");
-
-                if (FfprobeExist == false)
-                {
-                    MessageBox.Show("Couldn't find aomenc in that folder!", "Attention!", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            }
-        }
+        //----------------------------------------- Encoders ----------------------------------------------||
 
         private void EncodeAomenc()
         {
@@ -579,7 +442,7 @@ namespace NotEnoughAV1Encodes
                                     MainProgressBar.Dispatcher.Invoke(() => MainProgressBar.Value += 1, DispatcherPriority.Background);
                                     //Label of Progressbar = Progressbar
                                     TimeSpan timespent = DateTime.Now - starttime;
-   
+
                                     pLabel.Dispatcher.Invoke(() => pLabel.Content = MainProgressBar.Value + " / " + labelstring + " - " + Math.Round(Convert.ToDecimal(((((Int16.Parse(streamLength) * Int16.Parse(streamFrameRateLabel)) / Int16.Parse(labelstring)) * MainProgressBar.Value) / timespent.TotalSeconds)), 2).ToString() + "fps" + " - " + Math.Round((((timespent.TotalSeconds / MainProgressBar.Value) * (Int16.Parse(labelstring) - MainProgressBar.Value)) / 60), MidpointRounding.ToEven) + "min left", DispatcherPriority.Background);
 
                                     if (SmallScripts.Cancel.CancelAll == false)
@@ -600,7 +463,6 @@ namespace NotEnoughAV1Encodes
                                     bool FileExistFirstPass = File.Exists(chunksDir + "\\" + items + "_1pass_successfull.log");
                                     if (FileExistFirstPass != true)
                                     {
-
                                         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                         startInfo.FileName = "cmd.exe";
                                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
@@ -657,7 +519,6 @@ namespace NotEnoughAV1Encodes
 
                 Task.WaitAll(tasks.ToArray());
             }
-
         }
 
         private void EncodeRavie()
@@ -720,7 +581,6 @@ namespace NotEnoughAV1Encodes
                                     bool FileExistFirstPass = File.Exists(chunksDir + "\\" + items + "_1pass_successfull.log");
                                     if (FileExistFirstPass != true)
                                     {
-
                                         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                         startInfo.FileName = "cmd.exe";
                                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
@@ -779,19 +639,16 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void ButtonCancel_Click(object sender, RoutedEventArgs e)
-        {
-            SmallScripts.Cancel.CancelAll = true;
-            SmallScripts.KillInstances();
-        }
+        //-------------------------------------------------------------------------------------------------||
 
+        //----------------------------------------- Settings ----------------------------------------------||
         public void LoadSettings(string profileName, bool saveJob)
         {
             //Loads Settings from XML File -------------------------------------------------------------------------------------||
             XmlDocument doc = new XmlDocument();
 
             string directory = "";
-            
+
             if (saveJob == true)
             {
                 directory = "unfinishedjob.xml";
@@ -805,20 +662,21 @@ namespace NotEnoughAV1Encodes
             XmlNodeList node = doc.GetElementsByTagName("Settings");
             foreach (XmlNode n in node[0].ChildNodes)
             {
-                if (n.Name == "ChunkLength"){ TextBoxChunkLength.Text = n.InnerText; }
+                if (n.Name == "ChunkLength") { TextBoxChunkLength.Text = n.InnerText; }
                 if (n.Name == "Reencode")
                 {
                     if (n.InnerText == "True")
                     {
                         CheckBoxReencode.IsChecked = true;
-                    }else if (n.InnerText == "False")
+                    }
+                    else if (n.InnerText == "False")
                     {
                         CheckBoxReencode.IsChecked = false;
                     }
                 }
                 if (n.Name == "Workers") { TextBoxNumberOfWorkers.Text = n.InnerText; }
-                if (n.Name == "Encoder") 
-                { 
+                if (n.Name == "Encoder")
+                {
                     if (n.InnerText == "aomenc") { ComboBoxEncoder.SelectedIndex = 0; }
                     if (n.InnerText == "RAV1E") { ComboBoxEncoder.SelectedIndex = 1; }
                     if (n.InnerText == "SVT-AV1") { ComboBoxEncoder.SelectedIndex = 2; }
@@ -831,11 +689,11 @@ namespace NotEnoughAV1Encodes
                 }
                 if (n.Name == "Preset") { SliderPreset.Value = Int16.Parse(n.InnerText); }
                 if (n.Name == "TwoPassEncoding") { if (n.InnerText == "True") { CheckBoxTwoPass.IsChecked = true; } else { CheckBoxTwoPass.IsChecked = false; } }
-                if (n.Name == "QualityMode") { if (n.InnerText == "True") { RadioButtonConstantQuality.IsChecked = true; }else { RadioButtonConstantQuality.IsChecked = false; } }
+                if (n.Name == "QualityMode") { if (n.InnerText == "True") { RadioButtonConstantQuality.IsChecked = true; } else { RadioButtonConstantQuality.IsChecked = false; } }
                 if (n.Name == "Quality") { SliderQuality.Value = Int16.Parse(n.InnerText); }
                 if (n.Name == "BitrateMode") { if (n.InnerText == "True") { RadioButtonBitrate.IsChecked = true; } else { RadioButtonBitrate.IsChecked = false; } }
                 if (n.Name == "Bitrate") { TextBoxBitrate.Text = n.InnerText; }
-                if (n.Name == "CBRActive") { if (n.InnerText == "True") { CheckBoxCBR.IsChecked = true; }else { CheckBoxCBR.IsChecked = false; } }
+                if (n.Name == "CBRActive") { if (n.InnerText == "True") { CheckBoxCBR.IsChecked = true; } else { CheckBoxCBR.IsChecked = false; } }
                 if (n.Name == "AdvancedSettingsActive") { if (n.InnerText == "True") { CheckBoxAdvancedSettings.IsChecked = true; } else { CheckBoxAdvancedSettings.IsChecked = false; } }
                 if (n.Name == "AdvancedSettingsThreads") { TextBoxThreads.Text = n.InnerText; }
                 if (n.Name == "AdvancedSettingsTileColumns") { TextBoxTileColumns.Text = n.InnerText; }
@@ -920,6 +778,31 @@ namespace NotEnoughAV1Encodes
             //------------------------------------------------------------------------------------------------------------------||
         }
 
+        //-------------------------------------------------------------------------------------------------||
+
+        //----------------------------------------- Buttons -----------------------------------------------||
+        private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
+        {
+            //Main entry Point
+            SmallScripts.Cancel.CancelAll = false;
+            ResetProgressBar();
+            CheckResume();
+            SetParametersBeforeEncode();
+            if (ComboBoxEncoder.Text == "aomenc")
+            {
+                SetAomencParameters();
+            }
+            else if (ComboBoxEncoder.Text == "RAV1E")
+            {
+                SetRavieParameters();
+            }
+
+            if (SmallScripts.Cancel.CancelAll == false)
+            {
+                AsyncClass();
+            }
+        }
+
         private void ButtonSaveProfile_Click(object sender, RoutedEventArgs e)
         {
             SmallScripts.CreateDirectory(currentDir, "Profiles");
@@ -955,5 +838,151 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
+
+        private void ButtonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            SmallScripts.Cancel.CancelAll = true;
+            SmallScripts.KillInstances();
+        }
+
+        private void ButtonCustomTempFolder_Click(object sender, RoutedEventArgs e)
+        {
+            //Sets the Temp Folder
+            System.Windows.Forms.FolderBrowserDialog browseTempFolder = new System.Windows.Forms.FolderBrowserDialog();
+
+            if (browseTempFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                TextBoxCustomTempFolder.Text = browseTempFolder.SelectedPath;
+            }
+        }
+
+        private void ButtonCustomFfmpegPath_Click(object sender, RoutedEventArgs e)
+        {
+            //Sets the ffmpeg folder
+            System.Windows.Forms.FolderBrowserDialog browseFfmpegFolder = new System.Windows.Forms.FolderBrowserDialog();
+
+            if (browseFfmpegFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                TextBoxCustomFfmpegPath.Text = browseFfmpegFolder.SelectedPath;
+
+                bool FfmpegExist = File.Exists(TextBoxCustomFfmpegPath.Text + "\\ffmpeg.exe");
+
+                if (FfmpegExist == false)
+                {
+                    MessageBox.Show("Couldn't find ffmpeg in that folder!", "Attention!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+        }
+
+        private void ButtonCustomFfprobePath_Click(object sender, RoutedEventArgs e)
+        {
+            //Sets the ffprobe folder
+            System.Windows.Forms.FolderBrowserDialog browseFfprobeFolder = new System.Windows.Forms.FolderBrowserDialog();
+
+            if (browseFfprobeFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                TextBoxCustomFfprobePath.Text = browseFfprobeFolder.SelectedPath;
+
+                bool FfprobeExist = File.Exists(TextBoxCustomFfprobePath.Text + "\\ffprobe.exe");
+
+                if (FfprobeExist == false)
+                {
+                    MessageBox.Show("Couldn't find ffprobe in that folder!", "Attention!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+        }
+
+        private void ButtonCustomAomencPath_Click(object sender, RoutedEventArgs e)
+        {
+            //Sets the aomenc folder
+            System.Windows.Forms.FolderBrowserDialog browseAomencFolder = new System.Windows.Forms.FolderBrowserDialog();
+
+            if (browseAomencFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                TextBoxCustomAomencPath.Text = browseAomencFolder.SelectedPath;
+
+                bool FfprobeExist = File.Exists(TextBoxCustomAomencPath.Text + "\\aomenc.exe");
+
+                if (FfprobeExist == false)
+                {
+                    MessageBox.Show("Couldn't find aomenc in that folder!", "Attention!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+        }
+
+        private void ButtonSaveEncodeTo_Click(object sender, RoutedEventArgs e)
+        {
+            //Open the OpenFileDialog to set the Videooutput
+            SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
+            saveVideoFileDialog.Filter = "Matroska|*.mkv";
+
+            Nullable<bool> result = saveVideoFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                TextBoxVideoOutput.Text = saveVideoFileDialog.FileName;
+                videoOutput = saveVideoFileDialog.FileName;
+            }
+        }
+
+        private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
+        {
+            //Open the OpenFileDialog to set the Videoinput
+            OpenFileDialog openVideoFileDialog = new OpenFileDialog();
+
+            Nullable<bool> result = openVideoFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                TextBoxVideoInput.Text = openVideoFileDialog.FileName;
+                GetStreamFps(TextBoxVideoInput.Text);
+                SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
+            }
+        }
+
+        private void ComboBoxEncoder_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Sets the Maximum Quality Values, which are Encoder dependant
+            string comboitem = (e.AddedItems[0] as ComboBoxItem).Content as string;
+
+            if (comboitem == "aomenc")
+            {
+                if (SliderQuality != null)
+                {
+                    SliderQuality.Maximum = 61;
+                    SliderQuality.Value = 30;
+                    SliderPreset.Maximum = 8;
+                    SliderPreset.Value = 3;
+                    CheckBoxCBR.IsEnabled = true;
+                    ComboBoxAqMode.IsEnabled = true;
+                    CheckBoxTwoPass.IsEnabled = true;
+                }
+            }
+            else if (comboitem == "RAV1E")
+            {
+                SliderQuality.Maximum = 255;
+                SliderQuality.Value = 100;
+                SliderPreset.Maximum = 10;
+                SliderPreset.Value = 6;
+                CheckBoxCBR.IsEnabled = false;
+                ComboBoxAqMode.IsEnabled = false;
+                CheckBoxTwoPass.IsEnabled = false; //2-Pass completly broken in rav1e
+            }
+            else if (comboitem == "SVT-AV1")
+            {
+                SliderQuality.Maximum = 63;
+                SliderQuality.Value = 50;
+                CheckBoxCBR.IsEnabled = true;
+                ComboBoxAqMode.IsEnabled = true;
+                CheckBoxTwoPass.IsEnabled = true;
+            }
+        }
+
+        private void RadioButtonBitrate_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButtonConstantQuality.IsChecked = false;
+        }
+
+        //-------------------------------------------------------------------------------------------------||
     }
 }

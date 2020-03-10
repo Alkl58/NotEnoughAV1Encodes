@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace NotEnoughAV1Encodes
 {
-    class SplitVideo
+    internal class SplitVideo
     {
         public static void StartSplitting(string videoInput, string tempFolderPath, int chunkLength, bool reencode, string ffmpegPath)
         {
@@ -32,8 +27,6 @@ namespace NotEnoughAV1Encodes
             {
                 SmallScripts.WriteToFileThreadSafe("True", "splitted.log");
             }
-
-
         }
     }
 }

@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:NotEnoughAV1Encodes"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
     </Application.Resources>
 </Application>

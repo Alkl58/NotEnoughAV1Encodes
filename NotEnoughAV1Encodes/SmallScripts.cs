@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace NotEnoughAV1Encodes
 {
-    class SmallScripts
+    internal class SmallScripts
     {
         public static void CreateDirectory(string currentPath, string foldername)
         {
@@ -24,7 +20,6 @@ namespace NotEnoughAV1Encodes
             MainWindow.chunksDir = System.IO.Path.Combine(MainWindow.workingTempDirectory, "Chunks");
             MainWindow.videoChunks = Directory.GetFiles(MainWindow.chunksDir, "*mkv", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
             MainWindow.numberofvideoChunks = MainWindow.videoChunks.Count().ToString();
-
 
             if (MainWindow.resumeMode == true)
             {
@@ -51,10 +46,18 @@ namespace NotEnoughAV1Encodes
             //Kills all aomenc and ffmpeg instances
             try
             {
-                foreach (var process in Process.GetProcessesByName("aomenc"))
-                {
-                    process.Kill();
-                }
+
+                 foreach (var process in Process.GetProcessesByName("aomenc"))
+                 {
+                     process.Kill();
+                 }
+
+
+                 foreach (var process in Process.GetProcessesByName("rav1e"))
+                 {
+                     process.Kill();
+                 }
+ 
                 foreach (var process in Process.GetProcessesByName("ffmpeg"))
                 {
                     process.Kill();
@@ -63,8 +66,8 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
 
-
         private static ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
+
         public static void WriteToFileThreadSafe(string text, string path)
         {
             //Some smaller Blackmagic, so parallel Workers won't lockdown files
@@ -141,7 +144,6 @@ namespace NotEnoughAV1Encodes
                 {
                     File.Delete("unfinishedjob.xml");
                 }
-
             }
             catch { }
         }
@@ -156,7 +158,6 @@ namespace NotEnoughAV1Encodes
                 }
             }
             catch { }
-            
         }
     }
 }
