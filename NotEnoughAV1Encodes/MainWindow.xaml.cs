@@ -949,7 +949,7 @@ namespace NotEnoughAV1Encodes
             {
                 if (SliderQuality != null)
                 {
-                    SliderQuality.Maximum = 61;
+                    SliderQuality.Maximum = 63;
                     SliderQuality.Value = 30;
                     SliderPreset.Maximum = 8;
                     SliderPreset.Value = 3;
