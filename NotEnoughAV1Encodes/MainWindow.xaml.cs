@@ -18,7 +18,6 @@ namespace NotEnoughAV1Encodes
     {
         //----- General Settings -------------------------------||
         public static string videoInput = "";
-
         public static string videoOutput = "";
         public static string workingTempDirectory = "";
         public static string exeffmpegPath = "";
@@ -37,24 +36,25 @@ namespace NotEnoughAV1Encodes
         public static int maxConcurrencyEncodes = 4;
         public static bool reencodeBeforeMainEncode = false;
         public static bool resumeMode = false;
-
         //------------------------------------------------------||
         //----- aomenc Settings --------------------------------||
         public static int numberOfPasses = 1;
-
         public static string aomenc = "";
         public static string aomencQualityMode = "";
         public static string allSettingsAom = "";
         public static bool aomEncode = false;
-
         //------------------------------------------------------||
         //----- RAV1E Settings ---------------------------------||
         public static string ravie = "";
-
         public static string ravieQualityMode = "";
         public static string allSettingsRavie = "";
         public static string pipeBitDepth = " yuv420p";
         public static bool rav1eEncode = false;
+        //------------------------------------------------------||
+        //----- SVT-AV1 Settings -------------------------------||
+        public static string svtav1 = "";
+        public static string svtav1QualityMode = "";
+        public static string allSettingsSvtav1 = "";
 
         //------------------------------------------------------||
         public DateTime starttimea;
@@ -91,6 +91,10 @@ namespace NotEnoughAV1Encodes
                 {
                     pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started RAV1E...", DispatcherPriority.Background);
                     await Task.Run(() => EncodeRavie());
+                }else if (ComboBoxEncoder.Text == "SVT-AV1")
+                {
+                    pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started SVT-AV1...", DispatcherPriority.Background);
+                    await Task.Run(() => EncodeSVTAV1());
                 }
             }
             else
@@ -295,6 +299,17 @@ namespace NotEnoughAV1Encodes
                 rav1eEncode = true;
                 aomEncode = false;
             }
+            //----------------------------------------------------------------------------------------||
+            //Needed Parameters for svt-av1 Encoding -------------------------------------------------||
+            if (CheckBoxCustomSVTPath.IsChecked == false)
+            {
+                svtav1 = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "SvtAv1EncApp.exe");
+            }
+            else if (CheckBoxCustomSVTPath.IsChecked == true)
+            {
+                exesvtav1Path = TextBoxCustomSVTPath.Text;
+                svtav1 = System.IO.Path.Combine(exesvtav1Path, "SvtAv1EncApp.exe");
+            }
         }
 
         public void SetAomencParameters()
@@ -396,6 +411,46 @@ namespace NotEnoughAV1Encodes
             else if (ComboBoxBitDepth.Text == "12")
             {
                 pipeBitDepth = " yuv420p12le -strict -1";
+            }
+        }
+
+        public void SetSVTAV1Parameters()
+        {
+            //Sets 2-Pass Mode -----------------------------------------------------------------------||
+            if (CheckBoxTwoPass.IsChecked == true)
+            {
+                numberOfPasses = 2;
+            }
+            //----------------------------------------------------------------------------------------||
+            //Sets Quality Mode ----------------------------------------------------------------------||
+            if (RadioButtonConstantQuality.IsChecked == true)
+            {
+                svtav1QualityMode = "-rc 0 -q " + SliderQuality.Value;
+            }
+            else if (RadioButtonBitrate.IsChecked == true)
+            {
+                svtav1QualityMode = "-rc 1 -tbr " + TextBoxBitrate.Text;
+            }
+            //----------------------------------------------------------------------------------------||
+            //Sets All Encoding Settings--------------------------------------------------------------||
+            if (CheckBoxAdvancedSettings.IsChecked == false)
+            {
+                //Basic Settings
+                allSettingsSvtav1 = "-enc-mode " + SliderPreset.Value + " -bit-depth "+ ComboBoxBitDepth.Text + " " + svtav1QualityMode;
+            }
+            else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == false)
+            {
+                allSettingsSvtav1 = "-enc-mode " + SliderPreset.Value + " -bit-depth " + ComboBoxBitDepth.Text + " -adaptive-quantization " + ComboBoxAqMode.Text + svtav1QualityMode;
+            }
+            else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == true)
+            {
+                allSettingsSvtav1 = " " + TextBoxCustomCommand.Text;
+            }
+            //----------------------------------------------------------------------------------------||
+            //Sets Piping Bit-Depth Settings because svt can't convert it itself----------------------||
+            if (ComboBoxBitDepth.Text == "10")
+            {
+                pipeBitDepth = " yuv420p10le -strict -1";
             }
         }
 
@@ -639,6 +694,56 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void EncodeSVTAV1()
+        {
+            //Sets the Timer
+            DateTime starttime = DateTime.Now;
+            starttimea = starttime;
+            //Sets the Maximum of the Progressbar
+            MainProgressBar.Dispatcher.Invoke(() => MainProgressBar.Maximum = Int16.Parse(numberofvideoChunks), DispatcherPriority.Background);
+            //Sets the Label of the Progressbar
+            pLabel.Dispatcher.Invoke(() => pLabel.Content = "0 / " + MainProgressBar.Maximum, DispatcherPriority.Background);
+            string labelstring = videoChunks.Count().ToString();
+
+            //-n set to 9.999.999s (~2777hours) so we don't need counting the frames... without -n the pipe would break
+
+            foreach (var items in videoChunks)
+            {
+                if (SmallScripts.Cancel.CancelAll == false)
+                {
+                    Process process = new Process();
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.UseShellExecute = true;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = exeffmpegPath + "\\";
+                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1 + " -n 9999999 -b " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                    process.StartInfo = startInfo;
+                    Console.WriteLine(startInfo.Arguments);
+                    process.Start();
+                    process.WaitForExit();
+
+                    //Progressbar +1
+                    MainProgressBar.Dispatcher.Invoke(() => MainProgressBar.Value += 1, DispatcherPriority.Background);
+                    //Label of Progressbar = Progressbar
+                    TimeSpan timespent = DateTime.Now - starttime;
+
+                    pLabel.Dispatcher.Invoke(() => pLabel.Content = MainProgressBar.Value + " / " + labelstring + " - " + Math.Round(Convert.ToDecimal(((((Int16.Parse(streamLength) * Int16.Parse(streamFrameRateLabel)) / Int16.Parse(labelstring)) * MainProgressBar.Value) / timespent.TotalSeconds)), 2).ToString() + "fps" + " - " + Math.Round((((timespent.TotalSeconds / MainProgressBar.Value) * (Int16.Parse(labelstring) - MainProgressBar.Value)) / 60), MidpointRounding.ToEven) + "min left", DispatcherPriority.Background);
+
+                    if (SmallScripts.Cancel.CancelAll == false)
+                    {
+                        //Write Item to file for later resume if something bad happens
+                        SmallScripts.WriteToFileThreadSafe(items, "encoded.log");
+                    }
+                    else
+                    {
+                        SmallScripts.KillInstances();
+                    }
+
+                }
+            }
+        }
+
         //-------------------------------------------------------------------------------------------------||
 
         //----------------------------------------- Settings ----------------------------------------------||
@@ -795,6 +900,9 @@ namespace NotEnoughAV1Encodes
             else if (ComboBoxEncoder.Text == "RAV1E")
             {
                 SetRavieParameters();
+            }else if (ComboBoxEncoder.Text == "SVT-AV1")
+            {
+                SetSVTAV1Parameters();
             }
 
             if (SmallScripts.Cancel.CancelAll == false)
@@ -981,6 +1089,24 @@ namespace NotEnoughAV1Encodes
         private void RadioButtonBitrate_Checked(object sender, RoutedEventArgs e)
         {
             RadioButtonConstantQuality.IsChecked = false;
+        }
+
+        private void ButtonCustomSVTPath_Click(object sender, RoutedEventArgs e)
+        {
+            //Sets the aomenc folder
+            System.Windows.Forms.FolderBrowserDialog browseSVTFolder = new System.Windows.Forms.FolderBrowserDialog();
+
+            if (browseSVTFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                TextBoxCustomSVTPath.Text = browseSVTFolder.SelectedPath;
+
+                bool SVTExist = File.Exists(TextBoxCustomSVTPath.Text + "\\SvtAv1EncApp.exe");
+
+                if (SVTExist == false)
+                {
+                    MessageBox.Show("Couldn't find svt-av1 in that folder!", "Attention!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
         }
 
         //-------------------------------------------------------------------------------------------------||
