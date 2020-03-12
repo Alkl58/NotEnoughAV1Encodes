@@ -9,11 +9,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Xml;
 
 namespace NotEnoughAV1Encodes
 {
+
     public partial class MainWindow : Window
     {
         //----- General Settings -------------------------------||
@@ -57,6 +59,11 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsSvtav1 = "";
         public static string allSettingsSvtav1SecondPass = "";
         //------------------------------------------------------||
+        //----- Custom Background ------------------------------||
+        public static string PathToBackground = "";
+        public static bool customBackground = false;
+        //------------------------------------------------------||
+
         public DateTime starttimea;
 
         public MainWindow()
@@ -64,6 +71,7 @@ namespace NotEnoughAV1Encodes
             InitializeComponent();
             CheckFfprobe();
             CheckForResumeFile();
+            LoadProfiles();
         }
 
         public async void AsyncClass()
@@ -858,7 +866,17 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "CustomAomencPath") { TextBoxCustomAomencPath.Text = n.InnerText; }
                 if (n.Name == "CustomTempPathActive") { if (n.InnerText == "True") { CheckBoxCustomTempFolder.IsChecked = true; } else { CheckBoxCustomTempFolder.IsChecked = false; } }
                 if (n.Name == "CustomAomencPath") { TextBoxCustomTempFolder.Text = n.InnerText; }
-
+                if (n.Name == "CustomBackground") { if(n.InnerText == "True") { customBackground = true; } else { customBackground = false; } }
+                if (n.Name == "CustomBackgroundPath") 
+                { 
+                    if(customBackground == true) 
+                    {
+                        Uri fileUri = new Uri(n.InnerText);
+                        imgDynamic.Source = new BitmapImage(fileUri);
+                        customBackground = true;
+                        PathToBackground = n.InnerText;
+                    } 
+                }
                 if (saveJob == true)
                 {
                     if (n.Name == "VideoInput") { TextBoxVideoInput.Text = n.InnerText; }
@@ -914,6 +932,9 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("CustomAomencPath", TextBoxCustomAomencPath.Text);
             writer.WriteElementString("CustomTempPathActive", CheckBoxCustomTempFolder.IsChecked.ToString());
             writer.WriteElementString("CustomTempPath", TextBoxCustomTempFolder.Text);
+            writer.WriteElementString("CustomBackground", customBackground.ToString());
+            writer.WriteElementString("CustomBackgroundPath", PathToBackground);
+
             if (saveJob == true)
             {
                 writer.WriteElementString("VideoInput", TextBoxVideoInput.Text);
@@ -954,20 +975,44 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonSaveProfile_Click(object sender, RoutedEventArgs e)
         {
-            SmallScripts.CreateDirectory(currentDir, "Profiles");
-            SaveSettings(TextBoxProfiles.Text, false);
+            try
+            {
+                SmallScripts.CreateDirectory(currentDir, "Profiles");
+                SaveSettings(TextBoxProfiles.Text, false);
+                LoadProfiles();
+            }
+            catch { }
+        }
+
+        private void LoadProfiles()
+        {
+            try
+            {
+                DirectoryInfo profiles = new DirectoryInfo(currentDir + "\\Profiles");
+                FileInfo[] Files = profiles.GetFiles("*.xml"); //Getting XML
+                ComboBoxProfiles.ItemsSource = Files;
+            }
+            catch { }
         }
 
         private void ButtonProfilesRefresh_Click(object sender, RoutedEventArgs e)
         {
-            DirectoryInfo profiles = new DirectoryInfo(currentDir + "\\Profiles");
-            FileInfo[] Files = profiles.GetFiles("*.xml"); //Getting XML
-            ComboBoxProfiles.ItemsSource = Files;
+            try
+            {
+                LoadProfiles();
+            }
+            catch { }
+
         }
 
         private void ButtonLoadProfile_Click(object sender, RoutedEventArgs e)
         {
-            LoadSettings(ComboBoxProfiles.Text, false);
+            try
+            {
+                LoadSettings(ComboBoxProfiles.Text, false);
+            }
+            catch { }
+            
         }
 
         private void ButtonCustomRaviePath_Click(object sender, RoutedEventArgs e)
@@ -1150,6 +1195,21 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    Uri fileUri = new Uri(openFileDialog.FileName);
+                    imgDynamic.Source = new BitmapImage(fileUri);
+                    customBackground = true;
+                    PathToBackground = openFileDialog.FileName;
+                }
+            }
+            catch { }
+        }
         //-------------------------------------------------------------------------------------------------||
     }
 }
