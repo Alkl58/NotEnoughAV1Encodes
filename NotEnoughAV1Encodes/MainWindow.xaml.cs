@@ -55,7 +55,7 @@ namespace NotEnoughAV1Encodes
         public static string svtav1 = "";
         public static string svtav1QualityMode = "";
         public static string allSettingsSvtav1 = "";
-
+        public static string allSettingsSvtav1SecondPass = "";
         //------------------------------------------------------||
         public DateTime starttimea;
 
@@ -437,10 +437,18 @@ namespace NotEnoughAV1Encodes
             {
                 //Basic Settings
                 allSettingsSvtav1 = "-enc-mode " + SliderPreset.Value + " -bit-depth "+ ComboBoxBitDepth.Text + " " + svtav1QualityMode;
+                if (numberOfPasses == 2)
+                {
+                    allSettingsSvtav1SecondPass = "-enc-mode-2p " + SliderPreset.Value + " -bit-depth " + ComboBoxBitDepth.Text + " " + svtav1QualityMode;
+                }
             }
             else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == false)
             {
                 allSettingsSvtav1 = "-enc-mode " + SliderPreset.Value + " -bit-depth " + ComboBoxBitDepth.Text + " -adaptive-quantization " + ComboBoxAqMode.Text + svtav1QualityMode;
+                if (numberOfPasses == 2)
+                {
+                    allSettingsSvtav1SecondPass = "-enc-mode-2p " + SliderPreset.Value + " -bit-depth " + ComboBoxBitDepth.Text + " -adaptive-quantization " + ComboBoxAqMode.Text + svtav1QualityMode;
+                }
             }
             else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == true)
             {
@@ -713,16 +721,49 @@ namespace NotEnoughAV1Encodes
                 {
                     Process process = new Process();
                     ProcessStartInfo startInfo = new ProcessStartInfo();
-                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    startInfo.UseShellExecute = true;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1 + " -n 9999999 -b " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
-                    process.StartInfo = startInfo;
-                    Console.WriteLine(startInfo.Arguments);
-                    process.Start();
-                    process.WaitForExit();
+                    if (numberOfPasses == 1)
+                    {
+                        //1 Pass
+                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        startInfo.UseShellExecute = true;
+                        startInfo.FileName = "cmd.exe";
+                        startInfo.WorkingDirectory = exeffmpegPath + "\\";
+                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1 + " -n 9999999 -b " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                        process.StartInfo = startInfo;
+                        Console.WriteLine(startInfo.Arguments);
+                        process.Start();
+                        process.WaitForExit();
 
+                    }
+
+                    if (numberOfPasses == 2)
+                    {
+                        //2 Pass
+
+                        //1st Pass
+                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        startInfo.UseShellExecute = true;
+                        startInfo.FileName = "cmd.exe";
+                        startInfo.WorkingDirectory = exeffmpegPath + "\\";
+                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1 + " -n 9999999 -b NUL -output-stat-file " + '\u0022' + chunksDir + "\\" + items + "-av1pass.stats" + '\u0022';
+                        process.StartInfo = startInfo;
+                        Console.WriteLine(startInfo.Arguments);
+                        process.Start();
+                        process.WaitForExit();
+
+                        //2nd Pass
+                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        startInfo.UseShellExecute = true;
+                        startInfo.FileName = "cmd.exe";
+                        startInfo.WorkingDirectory = exeffmpegPath + "\\";
+                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1SecondPass + " -n 9999999 -b " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022' + " -input-stat-file " + +'\u0022' + chunksDir + "\\" + items + "-av1pass.stats" + '\u0022';
+                        process.StartInfo = startInfo;
+                        Console.WriteLine(startInfo.Arguments);
+                        process.Start();
+                        process.WaitForExit();
+                    }
+
+                        
                     //Progressbar +1
                     MainProgressBar.Dispatcher.Invoke(() => MainProgressBar.Value += 1, DispatcherPriority.Background);
                     //Label of Progressbar = Progressbar
