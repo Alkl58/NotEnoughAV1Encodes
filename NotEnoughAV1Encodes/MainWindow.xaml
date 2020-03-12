@@ -341,7 +341,7 @@
                         <ComboBoxItem Content="10" Foreground="White" />
                         <ComboBoxItem Content="12" Foreground="White" />
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
+                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxFramerate" HorizontalAlignment="Left" Height="26" Margin="104,86,0,0" TextWrapping="Wrap" Text="24000/1001" VerticalAlignment="Top" Width="120" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                     <Label Content="| Slowest" HorizontalAlignment="Left" Margin="145,216,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Fastest |" HorizontalAlignment="Left" Margin="207,216,0,0" VerticalAlignment="Top" Foreground="White" />

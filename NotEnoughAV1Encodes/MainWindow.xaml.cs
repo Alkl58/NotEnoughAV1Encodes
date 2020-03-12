@@ -866,6 +866,10 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "CustomAomencPath") { TextBoxCustomAomencPath.Text = n.InnerText; }
                 if (n.Name == "CustomTempPathActive") { if (n.InnerText == "True") { CheckBoxCustomTempFolder.IsChecked = true; } else { CheckBoxCustomTempFolder.IsChecked = false; } }
                 if (n.Name == "CustomAomencPath") { TextBoxCustomTempFolder.Text = n.InnerText; }
+                if (n.Name == "CustomRaviePathActive") { if (n.InnerText == "True") { CheckBoxCustomRaviePath.IsChecked = true; } else { CheckBoxCustomRaviePath.IsChecked = false; } }
+                if (n.Name == "CustomRaviePath") { TextBoxCustomRaviePath.Text = n.InnerText; }
+                if (n.Name == "CustomSvtaviPathActive") { if (n.InnerText == "True") { CheckBoxCustomSVTPath.IsChecked = true; } else { CheckBoxCustomSVTPath.IsChecked = false; } }
+                if (n.Name == "CustomSvtaviPath") { TextBoxCustomSVTPath.Text = n.InnerText; }
                 if (n.Name == "CustomBackground") { if(n.InnerText == "True") { customBackground = true; } else { customBackground = false; } }
                 if (n.Name == "CustomBackgroundPath") 
                 { 
@@ -928,6 +932,10 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("CustomFfmpegPath", TextBoxCustomFfmpegPath.Text);
             writer.WriteElementString("CustomFfprobePathActive", CheckBoxCustomFfprobePath.IsChecked.ToString());
             writer.WriteElementString("CustomFfprobePath", TextBoxCustomFfprobePath.Text);
+            writer.WriteElementString("CustomRaviePathActive", CheckBoxCustomRaviePath.IsChecked.ToString());
+            writer.WriteElementString("CustomRaviePath", TextBoxCustomRaviePath.Text);
+            writer.WriteElementString("CustomSvtaviPathActive", CheckBoxCustomSVTPath.IsChecked.ToString());
+            writer.WriteElementString("CustomSvtaviPath", TextBoxCustomSVTPath.Text);
             writer.WriteElementString("CustomAomencPathActive", CheckBoxCustomAomencPath.IsChecked.ToString());
             writer.WriteElementString("CustomAomencPath", TextBoxCustomAomencPath.Text);
             writer.WriteElementString("CustomTempPathActive", CheckBoxCustomTempFolder.IsChecked.ToString());
