@@ -72,6 +72,7 @@ namespace NotEnoughAV1Encodes
             CheckFfprobe();
             CheckForResumeFile();
             LoadProfiles();
+            LoadProfileStartup();
         }
 
         public async void AsyncClass()
@@ -354,19 +355,19 @@ namespace NotEnoughAV1Encodes
             else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == false)
             {
                 string aqMode = "";
-                if (ComboBoxAqMode.Text == "Off (Default)")
+                if (ComboBoxAqMode.Text == "0")
                 {
                     aqMode = "0";
                 }
-                else if (ComboBoxAqMode.Text == "Variance")
+                else if (ComboBoxAqMode.Text == "1")
                 {
                     aqMode = "1";
                 }
-                else if (ComboBoxAqMode.Text == "Complexity")
+                else if (ComboBoxAqMode.Text == "2")
                 {
                     aqMode = "2";
                 }
-                else if (ComboBoxAqMode.Text == "Cyclic Refresh")
+                else if (ComboBoxAqMode.Text == "3")
                 {
                     aqMode = "3";
                 }
@@ -1205,6 +1206,7 @@ namespace NotEnoughAV1Encodes
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            //Changes the Background
             try
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -1217,6 +1219,51 @@ namespace NotEnoughAV1Encodes
                 }
             }
             catch { }
+        }
+
+        private void ButtonSetProfileDefault_Click(object sender, RoutedEventArgs e)
+        {
+            //Saves the default Profile to default.xml
+            try
+            {
+                SmallScripts.CreateDirectory(currentDir, "Profiles\\Default");
+                string directory = currentDir + "\\Profiles\\Default\\default.xml";
+                XmlWriter writer = XmlWriter.Create(directory);
+                writer.WriteStartElement("Settings");
+                writer.WriteElementString("DefaultProfile", ComboBoxProfiles.Text);
+                writer.WriteEndElement();
+                writer.Close();
+            }
+            catch { }
+
+
+        }
+
+        private void LoadProfileStartup()
+        {
+            try
+            {
+                //This function loads the default Profile if it exists
+                bool fileExist = File.Exists("Profiles\\Default\\default.xml");
+                if (fileExist)
+                {
+                    XmlDocument doc = new XmlDocument();
+
+                    string directory = currentDir + "\\Profiles\\Default\\default.xml";
+
+                    doc.Load(directory);
+                    XmlNodeList node = doc.GetElementsByTagName("Settings");
+                    foreach (XmlNode n in node[0].ChildNodes)
+                    {
+                        if (n.Name == "DefaultProfile") 
+                        { 
+                            LoadSettings(n.InnerText, false);
+                        }
+                    }
+                }
+            }
+            catch { }
+            
         }
         //-------------------------------------------------------------------------------------------------||
     }

@@ -341,7 +341,7 @@
                         <ComboBoxItem Content="10" Foreground="White" />
                         <ComboBoxItem Content="12" Foreground="White" />
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
                     <TextBox x:Name="TextBoxFramerate" HorizontalAlignment="Left" Height="26" Margin="104,86,0,0" TextWrapping="Wrap" Text="24000/1001" VerticalAlignment="Top" Width="120" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                     <Label Content="| Slowest" HorizontalAlignment="Left" Margin="145,216,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Fastest |" HorizontalAlignment="Left" Margin="207,216,0,0" VerticalAlignment="Top" Foreground="White" />
@@ -362,14 +362,14 @@
                     <Label Content="Keyframe Interval:" HorizontalAlignment="Left" Margin="56,92,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxKeyframeInterval" HorizontalAlignment="Left" Height="26" Margin="178,92,0,0" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                     <Label Content="AQ-Mode:" HorizontalAlignment="Left" Margin="659,52,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <ComboBox x:Name="ComboBoxAqMode" HorizontalAlignment="Left" Margin="737,52,0,0" VerticalAlignment="Top" Width="102" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                    <ComboBox x:Name="ComboBoxAqMode" HorizontalAlignment="Left" Margin="737,52,0,0" VerticalAlignment="Top" Width="60" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                         <ComboBox.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
                         </ComboBox.Resources>
-                        <ComboBoxItem Background="#FF363636" Content="Off (Default)" Foreground="White" IsSelected="True" />
-                        <ComboBoxItem Content="Variance" Foreground="White" />
-                        <ComboBoxItem Content="Complexity" Foreground="White" />
-                        <ComboBoxItem Content="Cyclic Refresh" Foreground="White" />
+                        <ComboBoxItem Background="#FF363636" Content="0" Foreground="White" IsSelected="True" />
+                        <ComboBoxItem Content="1" Foreground="White" />
+                        <ComboBoxItem Content="2" Foreground="White" />
+                        <ComboBoxItem Content="3" Foreground="White" />
                     </ComboBox>
                     <Label Content="Custom Command Line" Height="29" Foreground="White" FontWeight="Bold" Margin="10,0,0,127" HorizontalAlignment="Left" Width="151" VerticalAlignment="Bottom" />
                     <TextBox x:Name="TextBoxCustomCommand" HorizontalAlignment="Left" Height="23" Margin="16,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="823" Background="#FF2C2C2C" Foreground="White" />
@@ -410,6 +410,7 @@
                     <Button x:Name="ButtonProfilesRefresh" Content="Refresh List" HorizontalAlignment="Left" Margin="37,82,0,0" VerticalAlignment="Top" Width="86" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonProfilesRefresh_Click" />
                     <Button x:Name="ButtonLoadProfile" Content="Load Profile" HorizontalAlignment="Left" Margin="342,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonLoadProfile_Click" />
                     <Button Content="Select Background Image" HorizontalAlignment="Left" Margin="10,251,0,0" VerticalAlignment="Top" Width="156" Click="Button_Click" Height="32" Background="#FF2B2B2B" Foreground="White"/>
+                    <Button x:Name="ButtonSetProfileDefault" Content="Set as default" HorizontalAlignment="Left" Margin="448,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonSetProfileDefault_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>
