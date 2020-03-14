@@ -63,6 +63,15 @@ namespace NotEnoughAV1Encodes
         public static string PathToBackground = "";
         public static bool customBackground = false;
         //------------------------------------------------------||
+        //----- Audio Settings ---------------------------------||
+        public static bool audioEncoding = false;
+        public static string audioCodec = "";
+        public static int audioBitrate = 0;
+        public static bool trackOne = false;
+        public static bool trackTwo = false;
+        public static bool trackThree = false;
+        public static bool trackFour = false;
+        //------------------------------------------------------||
 
         public DateTime starttimea;
 
@@ -77,6 +86,10 @@ namespace NotEnoughAV1Encodes
 
         public async void AsyncClass()
         {
+            if (CheckBoxAudioEncoding.IsChecked == true)
+            {
+                EncodeAudio.AudioEncode();
+            }
             if (resumeMode == false)
             {
                 SaveSettings("", true);
@@ -319,6 +332,9 @@ namespace NotEnoughAV1Encodes
                 exesvtav1Path = TextBoxCustomSVTPath.Text;
                 svtav1 = System.IO.Path.Combine(exesvtav1Path, "SvtAv1EncApp.exe");
             }
+            //----------------------------------------------------------------------------------------||
+            //Audio Encoding -------------------------------------------------------------------------||
+            SetAudioParameters();
         }
 
         public void SetAomencParameters()
@@ -468,6 +484,20 @@ namespace NotEnoughAV1Encodes
             if (ComboBoxBitDepth.Text == "10")
             {
                 pipeBitDepth = " yuv420p10le -strict -1";
+            }
+        }
+
+        public void SetAudioParameters()
+        {
+            if (CheckBoxAudioEncoding.IsChecked == true)
+            {
+                audioEncoding = true;
+                audioCodec = ComboBoxAudioCodec.Text;
+                audioBitrate = Int16.Parse(TextBoxAudioBitrate.Text);
+                trackOne = CheckBoxAudioTrackOne.IsChecked == true;
+                trackTwo = CheckBoxAudioTrackTwo.IsChecked == true;
+                trackThree = CheckBoxAudioTrackThree.IsChecked == true;
+                trackFour = CheckBoxAudioTrackFour.IsChecked == true;
             }
         }
 
@@ -954,6 +984,43 @@ namespace NotEnoughAV1Encodes
             //------------------------------------------------------------------------------------------------------------------||
         }
 
+        private void LoadProfiles()
+        {
+            try
+            {
+                DirectoryInfo profiles = new DirectoryInfo(currentDir + "\\Profiles");
+                FileInfo[] Files = profiles.GetFiles("*.xml"); //Getting XML
+                ComboBoxProfiles.ItemsSource = Files;
+            }
+            catch { }
+        }
+        private void LoadProfileStartup()
+        {
+            try
+            {
+                //This function loads the default Profile if it exists
+                bool fileExist = File.Exists("Profiles\\Default\\default.xml");
+                if (fileExist)
+                {
+                    XmlDocument doc = new XmlDocument();
+
+                    string directory = currentDir + "\\Profiles\\Default\\default.xml";
+
+                    doc.Load(directory);
+                    XmlNodeList node = doc.GetElementsByTagName("Settings");
+                    foreach (XmlNode n in node[0].ChildNodes)
+                    {
+                        if (n.Name == "DefaultProfile")
+                        {
+                            LoadSettings(n.InnerText, false);
+                        }
+                    }
+                }
+            }
+            catch { }
+
+        }
+
         //-------------------------------------------------------------------------------------------------||
 
         //----------------------------------------- Buttons -----------------------------------------------||
@@ -964,6 +1031,7 @@ namespace NotEnoughAV1Encodes
             ResetProgressBar();
             CheckResume();
             SetParametersBeforeEncode();
+            SetAudioParameters();
             if (ComboBoxEncoder.Text == "aomenc")
             {
                 SetAomencParameters();
@@ -975,7 +1043,6 @@ namespace NotEnoughAV1Encodes
             {
                 SetSVTAV1Parameters();
             }
-
             if (SmallScripts.Cancel.CancelAll == false)
             {
                 AsyncClass();
@@ -989,17 +1056,6 @@ namespace NotEnoughAV1Encodes
                 SmallScripts.CreateDirectory(currentDir, "Profiles");
                 SaveSettings(TextBoxProfiles.Text, false);
                 LoadProfiles();
-            }
-            catch { }
-        }
-
-        private void LoadProfiles()
-        {
-            try
-            {
-                DirectoryInfo profiles = new DirectoryInfo(currentDir + "\\Profiles");
-                FileInfo[] Files = profiles.GetFiles("*.xml"); //Getting XML
-                ComboBoxProfiles.ItemsSource = Files;
             }
             catch { }
         }
@@ -1239,32 +1295,21 @@ namespace NotEnoughAV1Encodes
 
         }
 
-        private void LoadProfileStartup()
+        private void hmmm_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                //This function loads the default Profile if it exists
-                bool fileExist = File.Exists("Profiles\\Default\\default.xml");
-                if (fileExist)
-                {
-                    XmlDocument doc = new XmlDocument();
 
-                    string directory = currentDir + "\\Profiles\\Default\\default.xml";
+            EncodeAudio.AudioEncode();
 
-                    doc.Load(directory);
-                    XmlNodeList node = doc.GetElementsByTagName("Settings");
-                    foreach (XmlNode n in node[0].ChildNodes)
-                    {
-                        if (n.Name == "DefaultProfile") 
-                        { 
-                            LoadSettings(n.InnerText, false);
-                        }
-                    }
-                }
-            }
-            catch { }
-            
+            //string audioMuxCommand = "";
+            //DirectoryInfo AudioExtracted = new DirectoryInfo("Temp\\AudioExtracted");
+            //foreach (var file in AudioExtracted.GetFiles("*.mkv"))
+            //{
+            //audioMuxCommand += " -i " + '\u0022' + file + '\u0022';
+
+            //}
+            //Console.WriteLine(audioMuxCommand);
         }
+
         //-------------------------------------------------------------------------------------------------||
     }
 }

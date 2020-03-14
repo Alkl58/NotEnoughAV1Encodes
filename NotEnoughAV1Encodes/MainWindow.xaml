@@ -341,7 +341,7 @@
                         <ComboBoxItem Content="10" Foreground="White" />
                         <ComboBoxItem Content="12" Foreground="White" />
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
+                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxFramerate" HorizontalAlignment="Left" Height="26" Margin="104,86,0,0" TextWrapping="Wrap" Text="24000/1001" VerticalAlignment="Top" Width="120" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                     <Label Content="| Slowest" HorizontalAlignment="Left" Margin="145,216,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Fastest |" HorizontalAlignment="Left" Margin="207,216,0,0" VerticalAlignment="Top" Foreground="White" />
@@ -375,6 +375,27 @@
                     <TextBox x:Name="TextBoxCustomCommand" HorizontalAlignment="Left" Height="23" Margin="16,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="823" Background="#FF2C2C2C" Foreground="White" />
                     <CheckBox x:Name="CheckBoxCustomCommandLine" Content="Enable Custom Command Line" HorizontalAlignment="Left" Margin="16,171,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Do not specify input or output! Do not specify 1/2-Pass (use the Passes option under &quot;Video&quot;)!  " HorizontalAlignment="Left" Margin="10,216,0,0" VerticalAlignment="Top" Foreground="#FFB9B9B9" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Audio" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                <Grid Background="#19191919">
+                    <Label Content="Audio" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
+                    <CheckBox x:Name="CheckBoxAudioEncoding" Content="Enable Audio" HorizontalAlignment="Left" Margin="105,16,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Button x:Name="hmmm" Content="Button" HorizontalAlignment="Left" Margin="632,31,0,0" VerticalAlignment="Top" Width="75" Click="hmmm_Click"/>
+                    <ComboBox x:Name="ComboBoxAudioCodec" HorizontalAlignment="Left" Margin="105,60,0,0" VerticalAlignment="Top" Width="120" Height="26">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBoxItem Content="Opus" Foreground="White" IsSelected="True"/>
+                    </ComboBox>
+                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="44,60,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxAudioTrackOne" Content="Track 1" HorizontalAlignment="Left" Margin="436,68,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True"/>
+                    <Label Content="Audio Tracks:" HorizontalAlignment="Left" Margin="341,62,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxAudioTrackTwo" Content="Track 2" HorizontalAlignment="Left" Margin="436,99,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label Content="Bitrate:" HorizontalAlignment="Left" Margin="43,120,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxAudioTrackThree" Content="Track 3" HorizontalAlignment="Left" Margin="436,131,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <CheckBox x:Name="CheckBoxAudioTrackFour" Content="Track 4" HorizontalAlignment="Left" Margin="436,163,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="105,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" AcceptsReturn="True" Foreground="White" Text="128"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Program Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -413,6 +434,7 @@
                     <Button x:Name="ButtonSetProfileDefault" Content="Set as default" HorizontalAlignment="Left" Margin="448,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonSetProfileDefault_Click"/>
                 </Grid>
             </TabItem>
+
         </TabControl>
         <ProgressBar x:Name="MainProgressBar" HorizontalAlignment="Left" Height="42" Margin="10,452,0,0" VerticalAlignment="Top" Width="579" SmallChange="1" Background="#CC171717" Foreground="#FF00B249" />
         <Button x:Name="ButtonStartEncode" Content="Start Encode" HorizontalAlignment="Left" Margin="763,452,0,0" VerticalAlignment="Top" Width="114" Height="42" Background="#FF2B2B2B" Foreground="White" BorderBrush="White" Click="ButtonStartEncode_Click" />

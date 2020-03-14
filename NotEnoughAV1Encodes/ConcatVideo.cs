@@ -21,16 +21,45 @@ namespace NotEnoughAV1Encodes
                 process.Start();
                 process.WaitForExit();
 
-                //Concat the Videos
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
-                //FFmpeg Arguments
-                startInfo.Arguments = "/C ffmpeg.exe -f concat -safe 0 -i " + '\u0022' + MainWindow.chunksDir + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
-                Console.WriteLine(startInfo.Arguments);
-                process.StartInfo = startInfo;
-                process.Start();
-                process.WaitForExit();
+                if (MainWindow.audioEncoding == false)
+                {
+                    //Concat the Videos without Audio
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
+                    //FFmpeg Arguments
+                    startInfo.Arguments = "/C ffmpeg.exe -f concat -safe 0 -i " + '\u0022' + MainWindow.chunksDir + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                    //Console.WriteLine(startInfo.Arguments);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+
+                }else if (MainWindow.audioEncoding == true)
+                {
+                    //Concat the Videos with Audio
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
+                    //FFmpeg Arguments
+                    startInfo.Arguments = "/C ffmpeg.exe -f concat -safe 0 -i " + '\u0022' + MainWindow.chunksDir + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022';
+                    //Console.WriteLine(startInfo.Arguments);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+
+
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
+                    //FFmpeg Arguments
+                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + " -map 0:v -map 1:a -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                    //Console.WriteLine(startInfo.Arguments);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+
+                }
+
             }
         }
     }
