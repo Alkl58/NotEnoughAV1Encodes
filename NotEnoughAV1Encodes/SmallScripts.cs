@@ -110,11 +110,11 @@ namespace NotEnoughAV1Encodes
             process.Start();
             string streamlength = process.StandardOutput.ReadLine();
             //TextBoxFramerate.Text = fpsOutput;
-            Console.WriteLine(process.StartInfo);
+            //Console.WriteLine(process.StartInfo);
             string value = new DataTable().Compute(streamlength, null).ToString();
             MainWindow.streamLength = Convert.ToInt64(Math.Round(Convert.ToDouble(value))).ToString();
             //streamLength = streamlength;
-            Console.WriteLine(MainWindow.streamLength);
+            //Console.WriteLine(MainWindow.streamLength);
 
             process.WaitForExit();
         }

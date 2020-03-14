@@ -288,6 +288,7 @@ namespace NotEnoughAV1Encodes
             }
             chunkLengthSplit = Int16.Parse(TextBoxChunkLength.Text);
             reencodeBeforeMainEncode = CheckBoxReencode.IsChecked == true;
+            CheckFfprobe();
             //----------------------------------------------------------------------------------------||
             //Needed Parameters for aomenc Encoding --------------------------------------------------||
             streamFrameRate = TextBoxFramerate.Text;
@@ -536,7 +537,7 @@ namespace NotEnoughAV1Encodes
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
                                     startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=1" + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     process.StartInfo = startInfo;
-                                    Console.WriteLine(startInfo.Arguments);
+                                    //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
                                     process.WaitForExit();
 
@@ -654,7 +655,7 @@ namespace NotEnoughAV1Encodes
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
                                     startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     process.StartInfo = startInfo;
-                                    Console.WriteLine(startInfo.Arguments);
+                                    //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
                                     process.WaitForExit();
 
@@ -688,7 +689,7 @@ namespace NotEnoughAV1Encodes
                                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
                                         startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --first-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022';
                                         process.StartInfo = startInfo;
-                                        Console.WriteLine(startInfo.Arguments);
+                                        //Console.WriteLine(startInfo.Arguments);
                                         process.Start();
                                         process.WaitForExit();
 
@@ -708,7 +709,7 @@ namespace NotEnoughAV1Encodes
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
                                     startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --second-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     process.StartInfo = startInfo;
-                                    Console.WriteLine(startInfo.Arguments);
+                                    //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
                                     process.WaitForExit();
 
@@ -769,7 +770,7 @@ namespace NotEnoughAV1Encodes
                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
                         startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1 + " -n 9999999 -b " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                         process.StartInfo = startInfo;
-                        Console.WriteLine(startInfo.Arguments);
+                        //Console.WriteLine(startInfo.Arguments);
                         process.Start();
                         process.WaitForExit();
 
@@ -786,7 +787,7 @@ namespace NotEnoughAV1Encodes
                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
                         startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1 + " -n 9999999 -b NUL -output-stat-file " + '\u0022' + chunksDir + "\\" + items + "-av1pass.stats" + '\u0022';
                         process.StartInfo = startInfo;
-                        Console.WriteLine(startInfo.Arguments);
+                        //Console.WriteLine(startInfo.Arguments);
                         process.Start();
                         process.WaitForExit();
 
@@ -797,7 +798,7 @@ namespace NotEnoughAV1Encodes
                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
                         startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1SecondPass + " -n 9999999 -b " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022' + " -input-stat-file " + +'\u0022' + chunksDir + "\\" + items + "-av1pass.stats" + '\u0022';
                         process.StartInfo = startInfo;
-                        Console.WriteLine(startInfo.Arguments);
+                        //Console.WriteLine(startInfo.Arguments);
                         process.Start();
                         process.WaitForExit();
                     }
@@ -891,7 +892,17 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "DeleteTempFiles") { if (n.InnerText == "True") { CheckBoxDeleteTempFiles.IsChecked = true; } else { CheckBoxDeleteTempFiles.IsChecked = false; } }
                 if (n.Name == "CustomFfmpegPathActive") { if (n.InnerText == "True") { CheckBoxCustomFfmpegPath.IsChecked = true; } else { CheckBoxCustomFfmpegPath.IsChecked = false; } }
                 if (n.Name == "CustomFfmpegPath") { TextBoxCustomFfmpegPath.Text = n.InnerText; }
-                if (n.Name == "CustomFfprobePathActive") { if (n.InnerText == "True") { CheckBoxCustomFfprobePath.IsChecked = true; } else { CheckBoxCustomFfprobePath.IsChecked = false; } }
+                if (n.Name == "CustomFfprobePathActive") 
+                { 
+                    if (n.InnerText == "True") 
+                    { 
+                        CheckBoxCustomFfprobePath.IsChecked = true;
+                        CheckFfprobe();
+                    } else 
+                    { 
+                        CheckBoxCustomFfprobePath.IsChecked = false; 
+                    } 
+                }
                 if (n.Name == "CustomFfprobePath") { TextBoxCustomFfprobePath.Text = n.InnerText; }
                 if (n.Name == "CustomAomencPathActive") { if (n.InnerText == "True") { CheckBoxCustomAomencPath.IsChecked = true; } else { CheckBoxCustomAomencPath.IsChecked = false; } }
                 if (n.Name == "CustomAomencPath") { TextBoxCustomAomencPath.Text = n.InnerText; }
@@ -1138,7 +1149,7 @@ namespace NotEnoughAV1Encodes
             if (browseFfmpegFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 TextBoxCustomFfmpegPath.Text = browseFfmpegFolder.SelectedPath;
-
+                
                 bool FfmpegExist = File.Exists(TextBoxCustomFfmpegPath.Text + "\\ffmpeg.exe");
 
                 if (FfmpegExist == false)
@@ -1156,7 +1167,7 @@ namespace NotEnoughAV1Encodes
             if (browseFfprobeFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 TextBoxCustomFfprobePath.Text = browseFfprobeFolder.SelectedPath;
-
+                CheckFfprobe();
                 bool FfprobeExist = File.Exists(TextBoxCustomFfprobePath.Text + "\\ffprobe.exe");
 
                 if (FfprobeExist == false)
@@ -1208,6 +1219,7 @@ namespace NotEnoughAV1Encodes
 
             if (result == true)
             {
+                CheckFfprobe();
                 TextBoxVideoInput.Text = openVideoFileDialog.FileName;
                 GetStreamFps(TextBoxVideoInput.Text);
                 SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
