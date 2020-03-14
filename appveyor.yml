@@ -1,0 +1,11 @@
+version: 1.0.{build}
+image: Visual Studio 2019
+configuration: Release
+build:
+  verbosity: minimal
+artifacts:
+- path: '\NotEnoughAV1Encodes\bin\Release\'
+  name: NotEnoughAV1Encodes.exe
+skip_commits:
+  files:
+    - README.md
