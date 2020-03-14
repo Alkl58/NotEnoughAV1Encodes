@@ -72,6 +72,9 @@ namespace NotEnoughAV1Encodes
         public static bool trackThree = false;
         public static bool trackFour = false;
         //------------------------------------------------------||
+        //----- Resizing ---------------------------------------||
+        public static string videoResize = "";
+        //------------------------------------------------------||
 
         public DateTime starttimea;
 
@@ -336,6 +339,11 @@ namespace NotEnoughAV1Encodes
             //----------------------------------------------------------------------------------------||
             //Audio Encoding -------------------------------------------------------------------------||
             SetAudioParameters();
+            //Video Resizing -------------------------------------------------------------------------||
+            if (CheckBoxVideoResize.IsChecked == true)
+            {
+                videoResize = " -vf scale="+TextBoxFrameWidth.Text+":"+TextBoxFrameHeight.Text;
+            }
         }
 
         public void SetAomencParameters()
@@ -535,7 +543,7 @@ namespace NotEnoughAV1Encodes
                                     startInfo.UseShellExecute = true;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=1" + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=1" + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     process.StartInfo = startInfo;
                                     //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
@@ -569,7 +577,7 @@ namespace NotEnoughAV1Encodes
                                         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                         startInfo.FileName = "cmd.exe";
                                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=1 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=NUL";
+                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=1 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=NUL";
                                         process.StartInfo = startInfo;
                                         //Console.WriteLine(startInfo.Arguments);
                                         process.Start();
@@ -589,7 +597,7 @@ namespace NotEnoughAV1Encodes
                                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " "+ videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     process.StartInfo = startInfo;
                                     //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
@@ -653,7 +661,7 @@ namespace NotEnoughAV1Encodes
                                     startInfo.UseShellExecute = true;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     process.StartInfo = startInfo;
                                     //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
@@ -687,7 +695,7 @@ namespace NotEnoughAV1Encodes
                                         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                         startInfo.FileName = "cmd.exe";
                                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --first-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022';
+                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --first-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022';
                                         process.StartInfo = startInfo;
                                         //Console.WriteLine(startInfo.Arguments);
                                         process.Start();
@@ -707,7 +715,7 @@ namespace NotEnoughAV1Encodes
                                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --second-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --second-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     process.StartInfo = startInfo;
                                     //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
@@ -768,7 +776,7 @@ namespace NotEnoughAV1Encodes
                         startInfo.UseShellExecute = true;
                         startInfo.FileName = "cmd.exe";
                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1 + " -n 9999999 -b " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1 + " -n 9999999 -b " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                         process.StartInfo = startInfo;
                         //Console.WriteLine(startInfo.Arguments);
                         process.Start();
@@ -785,7 +793,7 @@ namespace NotEnoughAV1Encodes
                         startInfo.UseShellExecute = true;
                         startInfo.FileName = "cmd.exe";
                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1 + " -n 9999999 -b NUL -output-stat-file " + '\u0022' + chunksDir + "\\" + items + "-av1pass.stats" + '\u0022';
+                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1 + " -n 9999999 -b NUL -output-stat-file " + '\u0022' + chunksDir + "\\" + items + "-av1pass.stats" + '\u0022';
                         process.StartInfo = startInfo;
                         //Console.WriteLine(startInfo.Arguments);
                         process.Start();
@@ -796,7 +804,7 @@ namespace NotEnoughAV1Encodes
                         startInfo.UseShellExecute = true;
                         startInfo.FileName = "cmd.exe";
                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1SecondPass + " -n 9999999 -b " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022' + " -input-stat-file " + +'\u0022' + chunksDir + "\\" + items + "-av1pass.stats" + '\u0022';
+                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1 + '\u0022' + " -i stdin " + allSettingsSvtav1SecondPass + " -n 9999999 -b " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022' + " -input-stat-file " + +'\u0022' + chunksDir + "\\" + items + "-av1pass.stats" + '\u0022';
                         process.StartInfo = startInfo;
                         //Console.WriteLine(startInfo.Arguments);
                         process.Start();
@@ -930,6 +938,9 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "AudioTrackTwo") { if (n.InnerText == "True") { CheckBoxAudioTrackTwo.IsChecked = true; } else { CheckBoxAudioTrackTwo.IsChecked = false; } }
                 if (n.Name == "AudioTrackThree") { if (n.InnerText == "True") { CheckBoxAudioTrackThree.IsChecked = true; } else { CheckBoxAudioTrackThree.IsChecked = false; } }
                 if (n.Name == "AudioTrackFour") { if (n.InnerText == "True") { CheckBoxAudioTrackFour.IsChecked = true; } else { CheckBoxAudioTrackFour.IsChecked = false; } }
+                if (n.Name == "VideoResize") { if (n.InnerText == "True") { CheckBoxVideoResize.IsChecked = true; } else { CheckBoxVideoResize.IsChecked = false; } }
+                if (n.Name == "ResizeFrameHeight") { TextBoxFrameHeight.Text = n.InnerText; }
+                if (n.Name == "ResizeFrameWidth") { TextBoxFrameWidth.Text = n.InnerText; }
 
                 if (saveJob == true)
                 {
@@ -999,6 +1010,9 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("AudioTrackTwo", CheckBoxAudioTrackTwo.IsChecked.ToString());
             writer.WriteElementString("AudioTrackThree", CheckBoxAudioTrackThree.IsChecked.ToString());
             writer.WriteElementString("AudioTrackFour", CheckBoxAudioTrackFour.IsChecked.ToString());
+            writer.WriteElementString("VideoResize", CheckBoxVideoResize.IsChecked.ToString());
+            writer.WriteElementString("ResizeFrameHeight", TextBoxFrameHeight.Text);
+            writer.WriteElementString("ResizeFrameWidth", TextBoxFrameWidth.Text);
 
             if (saveJob == true)
             {

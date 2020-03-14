@@ -309,6 +309,13 @@
                     <Label Content="Number of parallel Encodings:" HorizontalAlignment="Left" Margin="35,122,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxNumberOfWorkers" HorizontalAlignment="Left" Height="26" Margin="243,122,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="63" Background="#FF2C2C2C" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                     <CheckBox x:Name="CheckBoxReencode" Content="Reencode (lossless)" HorizontalAlignment="Left" Margin="355,47,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <Label Content="Resize" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,174,0,0" FontWeight="Bold" />
+                    <CheckBox x:Name="CheckBoxVideoResize" Content="Enable Video Resizing" HorizontalAlignment="Left" Margin="69,180,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="TextBoxFrameHeight" HorizontalAlignment="Left" Height="26" Margin="243,236,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <Label Content="Frame Width:" HorizontalAlignment="Left" Margin="124,205,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <Label Content="Frame Height:" HorizontalAlignment="Left" Margin="121,236,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <TextBox x:Name="TextBoxFrameWidth" HorizontalAlignment="Left" Height="26" Margin="243,205,0,0" TextWrapping="Wrap" Text="-1" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <Label Content="* You can leave this at -1. It will scale the Framewidth accordingly to the height" HorizontalAlignment="Left" Margin="320,205,0,0" VerticalAlignment="Top" Foreground="Gainsboro"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Video" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
