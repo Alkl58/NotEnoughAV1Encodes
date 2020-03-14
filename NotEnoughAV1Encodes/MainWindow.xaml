@@ -387,6 +387,11 @@
                             <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
                         </ComboBox.Resources>
                         <ComboBoxItem Content="Opus" Foreground="White" IsSelected="True"/>
+                        <ComboBoxItem Content="Opus 5.1" Foreground="White"/>
+                        <ComboBoxItem Content="Opus Downmix" Foreground="White"/>
+                        <ComboBoxItem Content="AC3" Foreground="White"/>
+                        <ComboBoxItem Content="AAC" Foreground="White"/>
+                        <ComboBoxItem Content="MP3" Foreground="White"/>
                     </ComboBox>
                     <Label Content="Codec:" HorizontalAlignment="Left" Margin="44,60,0,0" VerticalAlignment="Top" Foreground="White" />
                     <CheckBox x:Name="CheckBoxAudioTrackOne" Content="Track 1" HorizontalAlignment="Left" Margin="436,68,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True"/>
