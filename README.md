@@ -14,6 +14,9 @@ This tool is Windows only. For multiplatform and more features check out the CLI
 
 ---
 
+[![Build status](https://ci.appveyor.com/api/projects/status/f3wd2kr5i8eofj88/branch/master?svg=true)](https://ci.appveyor.com/project/Alkl/notenoughav1encodes/branch/master)
+
+
 ### Installation:
 
 1. Download [ffmpeg and ffprobe](https://www.ffmpeg.org/download.html), [aomenc](https://ci.appveyor.com/project/marcomsousa/build-aom/history) or [rav1e](https://github.com/xiph/rav1e) or [SVT-AV1](https://github.com/OpenVisualCloud/SVT-AV1) and [NotEnoughAV1Encodes](https://github.com/Alkl58/NotEnoughAV1Encodes/releases). 
