@@ -86,7 +86,7 @@ namespace NotEnoughAV1Encodes
 
         public async void AsyncClass()
         {
-            if (CheckBoxAudioEncoding.IsChecked == true)
+            if (CheckBoxAudioEncoding.IsChecked == true && resumeMode == false)
             {
                 EncodeAudio.AudioEncode();
             }
@@ -912,6 +912,14 @@ namespace NotEnoughAV1Encodes
                         PathToBackground = n.InnerText;
                     } 
                 }
+                if (n.Name == "AudioEncoding") { if (n.InnerText == "True") { CheckBoxAudioEncoding.IsChecked = true; } else { CheckBoxAudioEncoding.IsChecked = false; } }
+                if (n.Name == "AudioCodec") { ComboBoxAudioCodec.Text = n.InnerText; }
+                if (n.Name == "AudioBitrate") { TextBoxAudioBitrate.Text = n.InnerText; }
+                if (n.Name == "AudioTrackOne") { if (n.InnerText == "True") { CheckBoxAudioTrackOne.IsChecked = true; } else { CheckBoxAudioTrackOne.IsChecked = false; } }
+                if (n.Name == "AudioTrackTwo") { if (n.InnerText == "True") { CheckBoxAudioTrackTwo.IsChecked = true; } else { CheckBoxAudioTrackTwo.IsChecked = false; } }
+                if (n.Name == "AudioTrackThree") { if (n.InnerText == "True") { CheckBoxAudioTrackThree.IsChecked = true; } else { CheckBoxAudioTrackThree.IsChecked = false; } }
+                if (n.Name == "AudioTrackFour") { if (n.InnerText == "True") { CheckBoxAudioTrackFour.IsChecked = true; } else { CheckBoxAudioTrackFour.IsChecked = false; } }
+
                 if (saveJob == true)
                 {
                     if (n.Name == "VideoInput") { TextBoxVideoInput.Text = n.InnerText; }
@@ -973,6 +981,13 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("CustomTempPath", TextBoxCustomTempFolder.Text);
             writer.WriteElementString("CustomBackground", customBackground.ToString());
             writer.WriteElementString("CustomBackgroundPath", PathToBackground);
+            writer.WriteElementString("AudioEncoding", CheckBoxAudioEncoding.IsChecked.ToString());
+            writer.WriteElementString("AudioCodec", ComboBoxAudioCodec.Text);
+            writer.WriteElementString("AudioBitrate", TextBoxAudioBitrate.Text);
+            writer.WriteElementString("AudioTrackOne", CheckBoxAudioTrackOne.IsChecked.ToString());
+            writer.WriteElementString("AudioTrackTwo", CheckBoxAudioTrackTwo.IsChecked.ToString());
+            writer.WriteElementString("AudioTrackThree", CheckBoxAudioTrackThree.IsChecked.ToString());
+            writer.WriteElementString("AudioTrackFour", CheckBoxAudioTrackFour.IsChecked.ToString());
 
             if (saveJob == true)
             {
@@ -1293,21 +1308,6 @@ namespace NotEnoughAV1Encodes
             catch { }
 
 
-        }
-
-        private void hmmm_Click(object sender, RoutedEventArgs e)
-        {
-
-            EncodeAudio.AudioEncode();
-
-            //string audioMuxCommand = "";
-            //DirectoryInfo AudioExtracted = new DirectoryInfo("Temp\\AudioExtracted");
-            //foreach (var file in AudioExtracted.GetFiles("*.mkv"))
-            //{
-            //audioMuxCommand += " -i " + '\u0022' + file + '\u0022';
-
-            //}
-            //Console.WriteLine(audioMuxCommand);
         }
 
         //-------------------------------------------------------------------------------------------------||

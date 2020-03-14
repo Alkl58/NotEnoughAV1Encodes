@@ -293,6 +293,11 @@
                     <Label x:Name="LabelSummaryBitDepth" Content="{Binding ElementName=ComboBoxBitDepth, Path=Text, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="312,204,0,0" VerticalAlignment="Top" Width="98" Foreground="White" />
                     <Label Content="Preset:" HorizontalAlignment="Left" Margin="261,230,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label x:Name="LabelSummaryPreset" Content="{Binding ElementName=SliderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="312,230,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.289,-0.038" Width="98" Foreground="White" />
+                    <Label Content="Audio:" HorizontalAlignment="Left" Margin="508,160,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="576,178,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <Label x:Name="LabelSummaryEncoderAudio" Content="{Binding Text, ElementName=ComboBoxAudioCodec, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="635,178,0,0" VerticalAlignment="Top" Foreground="White" Width="98" />
+                    <Label Content="Bitrate:" HorizontalAlignment="Left" Margin="575,204,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <Label x:Name="LabelSummaryAudioBitrate" Content="{Binding Text, ElementName=TextBoxAudioBitrate, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="635,204,0,0" VerticalAlignment="Top" Width="98" Foreground="White" />
                 </Grid>
             </TabItem>
             <TabItem Header="General Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -381,7 +386,6 @@
                 <Grid Background="#19191919">
                     <Label Content="Audio" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
                     <CheckBox x:Name="CheckBoxAudioEncoding" Content="Enable Audio" HorizontalAlignment="Left" Margin="105,16,0,0" VerticalAlignment="Top" Foreground="White"/>
-                    <Button x:Name="hmmm" Content="Button" HorizontalAlignment="Left" Margin="632,31,0,0" VerticalAlignment="Top" Width="75" Click="hmmm_Click"/>
                     <ComboBox x:Name="ComboBoxAudioCodec" HorizontalAlignment="Left" Margin="105,60,0,0" VerticalAlignment="Top" Width="120" Height="26">
                         <ComboBox.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
