@@ -78,6 +78,9 @@ namespace NotEnoughAV1Encodes
         //----- Subtitles --------------------------------------||
         public static bool subtitleStreamCopy = false;
         public static bool subtitles = false;
+        //----- Shutdown ---------------------------------------||
+        public static bool shutDownAfterEncode = false;
+        //------------------------------------------------------||
 
         public DateTime starttimea;
 
@@ -146,7 +149,18 @@ namespace NotEnoughAV1Encodes
                 if (CheckBoxDeleteTempFiles.IsChecked == true)
                 {
                     SmallScripts.DeleteTempFiles();
-                    SmallScripts.DeleteTempFilesDir(workingTempDirectory);
+
+                    if (CheckBoxCustomTempFolder.IsChecked == true)
+                    {
+                        SmallScripts.DeleteTempFilesDir(workingTempDirectory);
+                    }
+                }
+                if (shutDownAfterEncode == true)
+                {
+                    if (SmallScripts.Cancel.CancelAll == false)
+                    {
+                        Process.Start("shutdown.exe", "/s /t 0");
+                    }
                 }
             }
             else
@@ -357,7 +371,13 @@ namespace NotEnoughAV1Encodes
             {
                 subtitles = true;
             }
-           
+            //----------------------------------------------------------------------------------------||
+            //Shutdown -------------------------------------------------------------------------------||
+            if (CheckBoxShutdownAfterEncode.IsChecked == true)
+            {
+                shutDownAfterEncode = true;
+            }
+
         }
 
         public void SetAomencParameters()
@@ -929,7 +949,7 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "CustomAomencPathActive") { if (n.InnerText == "True") { CheckBoxCustomAomencPath.IsChecked = true; } else { CheckBoxCustomAomencPath.IsChecked = false; } }
                 if (n.Name == "CustomAomencPath") { TextBoxCustomAomencPath.Text = n.InnerText; }
                 if (n.Name == "CustomTempPathActive") { if (n.InnerText == "True") { CheckBoxCustomTempFolder.IsChecked = true; } else { CheckBoxCustomTempFolder.IsChecked = false; } }
-                if (n.Name == "CustomAomencPath") { TextBoxCustomTempFolder.Text = n.InnerText; }
+                if (n.Name == "CustomTempPath") { TextBoxCustomTempFolder.Text = n.InnerText; }
                 if (n.Name == "CustomRaviePathActive") { if (n.InnerText == "True") { CheckBoxCustomRaviePath.IsChecked = true; } else { CheckBoxCustomRaviePath.IsChecked = false; } }
                 if (n.Name == "CustomRaviePath") { TextBoxCustomRaviePath.Text = n.InnerText; }
                 if (n.Name == "CustomSvtaviPathActive") { if (n.InnerText == "True") { CheckBoxCustomSVTPath.IsChecked = true; } else { CheckBoxCustomSVTPath.IsChecked = false; } }

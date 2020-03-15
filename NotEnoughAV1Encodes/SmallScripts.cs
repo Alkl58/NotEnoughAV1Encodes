@@ -152,9 +152,9 @@ namespace NotEnoughAV1Encodes
         {
             try
             {
-                if (Directory.Exists(path + "\\Temp"))
+                if (Directory.Exists(path))
                 {
-                    Directory.Delete(path + "\\Temp", true);
+                    Directory.Delete(path, true);
                 }
             }
             catch { }
