@@ -80,6 +80,7 @@
     <Compile Include="RenameChunks.cs" />
     <Compile Include="SmallScripts.cs" />
     <Compile Include="SplitVideo.cs" />
+    <Compile Include="Subtitle.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

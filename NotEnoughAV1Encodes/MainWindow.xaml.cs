@@ -75,6 +75,9 @@ namespace NotEnoughAV1Encodes
         //----- Resizing ---------------------------------------||
         public static string videoResize = "";
         //------------------------------------------------------||
+        //----- Subtitles --------------------------------------||
+        public static bool subtitleStreamCopy = false;
+        public static bool subtitles = false;
 
         public DateTime starttimea;
 
@@ -92,6 +95,10 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxAudioEncoding.IsChecked == true && resumeMode == false)
             {
                 EncodeAudio.AudioEncode();
+            }
+            if (CheckBoxEnableSubtitles.IsChecked == true)
+            {
+                Subtitle.EncSubtitles();
             }
             if (resumeMode == false)
             {
@@ -344,6 +351,13 @@ namespace NotEnoughAV1Encodes
             {
                 videoResize = " -vf scale="+TextBoxFrameWidth.Text+":"+TextBoxFrameHeight.Text;
             }
+            //----------------------------------------------------------------------------------------||
+            //Subtitles ------------------------------------------------------------------------------||
+            if (CheckBoxEnableSubtitles.IsChecked == true)
+            {
+                subtitles = true;
+            }
+           
         }
 
         public void SetAomencParameters()
@@ -941,6 +955,7 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "VideoResize") { if (n.InnerText == "True") { CheckBoxVideoResize.IsChecked = true; } else { CheckBoxVideoResize.IsChecked = false; } }
                 if (n.Name == "ResizeFrameHeight") { TextBoxFrameHeight.Text = n.InnerText; }
                 if (n.Name == "ResizeFrameWidth") { TextBoxFrameWidth.Text = n.InnerText; }
+                if (n.Name == "SubtitleEnabled") { if (n.InnerText == "True") { CheckBoxEnableSubtitles.IsChecked = true; } else { CheckBoxEnableSubtitles.IsChecked = false; } }
 
                 if (saveJob == true)
                 {
@@ -1013,6 +1028,7 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("VideoResize", CheckBoxVideoResize.IsChecked.ToString());
             writer.WriteElementString("ResizeFrameHeight", TextBoxFrameHeight.Text);
             writer.WriteElementString("ResizeFrameWidth", TextBoxFrameWidth.Text);
+            writer.WriteElementString("SubtitleEnabled", CheckBoxEnableSubtitles.IsChecked.ToString());
 
             if (saveJob == true)
             {
@@ -1336,6 +1352,24 @@ namespace NotEnoughAV1Encodes
 
         }
 
+        private void ButtonAddCustomSubtitle_Click(object sender, RoutedEventArgs e)
+        {
+            //Open the OpenFileDialog to set the Subtitle Input
+            OpenFileDialog openVideoFileDialog = new OpenFileDialog();
+            openVideoFileDialog.Filter = "SubRip|*.srt|SubStation Alpha|*.ass|WebVTT|*.vtt";
+
+            Nullable<bool> result = openVideoFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                ListBoxSubtitles.Items.Add(openVideoFileDialog.FileName);
+            }
+        }
+
+        private void ButtonDeleteSubtitle_Click(object sender, RoutedEventArgs e)
+        {
+            ListBoxSubtitles.Items.RemoveAt(ListBoxSubtitles.SelectedIndex);
+        }
         //-------------------------------------------------------------------------------------------------||
     }
 }

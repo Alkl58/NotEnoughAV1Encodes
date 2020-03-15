@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
-        Title="NotEnoughAV1Encodes" Height="541" Width="900" ResizeMode="CanMinimize" Visibility="Visible" Background="#FF212121">
+        Title="NotEnoughAV1Encodes" Height="541" Width="900" ResizeMode="CanMinimize" Visibility="Visible" Background="#FF212121" BorderBrush="Black">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -414,6 +414,18 @@
                     <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="105,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" AcceptsReturn="True" Foreground="White" Text="128"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="Subtitles" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                <Grid Background="#19191919">
+                    <Label Content="Subtitles" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
+                    <CheckBox x:Name="CheckBoxSubitleStreamCopy" Content="Stream Copy embedded Subtitles" HorizontalAlignment="Left" Margin="56,56,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <CheckBox x:Name="CheckBoxCustomSubtitles" Content="Custom Subtitles" HorizontalAlignment="Left" Margin="56,95,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <ListBox x:Name="ListBoxSubtitles" HorizontalAlignment="Left" Height="100" Margin="56,159,0,0" VerticalAlignment="Top" Width="756" Background="#99151515" Foreground="White"/>
+                    <Button x:Name="ButtonAddCustomSubtitle" Content="Add Subtitle" HorizontalAlignment="Left" Margin="56,129,0,0" VerticalAlignment="Top" Width="83" Height="25" Foreground="White" Background="#FF2B2B2B" Click="ButtonAddCustomSubtitle_Click"/>
+                    <Button x:Name="ButtonDeleteSubtitle" Content="Remove Subtitle" HorizontalAlignment="Left" Margin="709,129,0,0" VerticalAlignment="Top" Width="103" Height="25" Click="ButtonDeleteSubtitle_Click" Background="#FF2B2B2B" Foreground="White"/>
+                    <CheckBox x:Name="CheckBoxEnableSubtitles" Content="Enable Subtitles" HorizontalAlignment="Left" Margin="92,16,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Label Content="Only Stream Copy embedded subtiles is avaiable for now. Further functions will be implemented later" HorizontalAlignment="Left" Margin="266,10,0,0" VerticalAlignment="Top" Foreground="#FFFF0404" Background="Black"/>
+                </Grid>
+            </TabItem>
             <TabItem Header="Program Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                 <Grid Background="#19191919">
                     <CheckBox x:Name="CheckBoxShutdownAfterEncode" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="37,22,0,0" VerticalAlignment="Top" Foreground="White" />
@@ -450,7 +462,6 @@
                     <Button x:Name="ButtonSetProfileDefault" Content="Set as default" HorizontalAlignment="Left" Margin="448,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonSetProfileDefault_Click"/>
                 </Grid>
             </TabItem>
-
         </TabControl>
         <ProgressBar x:Name="MainProgressBar" HorizontalAlignment="Left" Height="42" Margin="10,452,0,0" VerticalAlignment="Top" Width="579" SmallChange="1" Background="#CC171717" Foreground="#FF00B249" />
         <Button x:Name="ButtonStartEncode" Content="Start Encode" HorizontalAlignment="Left" Margin="763,452,0,0" VerticalAlignment="Top" Width="114" Height="42" Background="#FF2B2B2B" Foreground="White" BorderBrush="White" Click="ButtonStartEncode_Click" />
