@@ -99,7 +99,7 @@ namespace NotEnoughAV1Encodes
             {
                 EncodeAudio.AudioEncode();
             }
-            if (CheckBoxEnableSubtitles.IsChecked == true)
+            if (CheckBoxEnableSubtitles.IsChecked == true && resumeMode == false)
             {
                 Subtitle.EncSubtitles();
             }
