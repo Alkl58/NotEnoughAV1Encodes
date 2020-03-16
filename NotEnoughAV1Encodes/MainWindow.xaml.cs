@@ -97,11 +97,13 @@ namespace NotEnoughAV1Encodes
         {
             if (CheckBoxAudioEncoding.IsChecked == true && resumeMode == false)
             {
-                EncodeAudio.AudioEncode();
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Audio Encdoding ...", DispatcherPriority.Background);
+                await Task.Run(() => EncodeAudio.AudioEncode());
             }
             if (CheckBoxEnableSubtitles.IsChecked == true && resumeMode == false)
             {
-                Subtitle.EncSubtitles();
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Subtitle Copying ...", DispatcherPriority.Background);
+                await Task.Run(() => Subtitle.EncSubtitles());
             }
             if (resumeMode == false)
             {
