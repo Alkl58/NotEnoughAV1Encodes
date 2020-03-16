@@ -417,13 +417,12 @@
             <TabItem Header="Subtitles" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                 <Grid Background="#19191919">
                     <Label Content="Subtitles" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
-                    <CheckBox x:Name="CheckBoxSubitleStreamCopy" Content="Stream Copy embedded Subtitles" HorizontalAlignment="Left" Margin="56,56,0,0" VerticalAlignment="Top" Foreground="White"/>
-                    <CheckBox x:Name="CheckBoxCustomSubtitles" Content="Custom Subtitles" HorizontalAlignment="Left" Margin="56,95,0,0" VerticalAlignment="Top" Foreground="White"/>
                     <ListBox x:Name="ListBoxSubtitles" HorizontalAlignment="Left" Height="100" Margin="56,159,0,0" VerticalAlignment="Top" Width="756" Background="#99151515" Foreground="White"/>
                     <Button x:Name="ButtonAddCustomSubtitle" Content="Add Subtitle" HorizontalAlignment="Left" Margin="56,129,0,0" VerticalAlignment="Top" Width="83" Height="25" Foreground="White" Background="#FF2B2B2B" Click="ButtonAddCustomSubtitle_Click"/>
                     <Button x:Name="ButtonDeleteSubtitle" Content="Remove Subtitle" HorizontalAlignment="Left" Margin="709,129,0,0" VerticalAlignment="Top" Width="103" Height="25" Click="ButtonDeleteSubtitle_Click" Background="#FF2B2B2B" Foreground="White"/>
                     <CheckBox x:Name="CheckBoxEnableSubtitles" Content="Enable Subtitles" HorizontalAlignment="Left" Margin="92,16,0,0" VerticalAlignment="Top" Foreground="White"/>
-                    <Label Content="Only Stream Copy embedded subtiles is avaiable for now. Further functions will be implemented later" HorizontalAlignment="Left" Margin="266,10,0,0" VerticalAlignment="Top" Foreground="#FFFF0404" Background="Black"/>
+                    <RadioButton x:Name="RadioButtonStreamCopySubtitle" Content="Stream Copy embedded Subtitles" HorizontalAlignment="Left" Margin="56,60,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True"/>
+                    <RadioButton x:Name="RadioButtonCustomSubtitles" Content="Custom Subtitles" HorizontalAlignment="Left" Margin="56,100,0,0" VerticalAlignment="Top" Foreground="White"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Program Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">

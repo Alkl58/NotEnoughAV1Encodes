@@ -77,7 +77,10 @@ namespace NotEnoughAV1Encodes
         //------------------------------------------------------||
         //----- Subtitles --------------------------------------||
         public static bool subtitleStreamCopy = false;
+        public static bool subtitleCustom = false;
         public static bool subtitles = false;
+        public static string[] SubtitleChunks;
+        public static int subtitleAmount = 0;
         //----- Shutdown ---------------------------------------||
         public static bool shutDownAfterEncode = false;
         //------------------------------------------------------||
@@ -88,9 +91,9 @@ namespace NotEnoughAV1Encodes
         {
             InitializeComponent();
             CheckFfprobe();
-            CheckForResumeFile();
             LoadProfiles();
             LoadProfileStartup();
+            CheckForResumeFile();
         }
 
         public async void AsyncClass()
@@ -372,6 +375,16 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxEnableSubtitles.IsChecked == true)
             {
                 subtitles = true;
+                if (RadioButtonStreamCopySubtitle.IsChecked == true)
+                {
+                    subtitleStreamCopy = true;
+                    SetSubtitleParameters();
+                }
+                if (RadioButtonCustomSubtitles.IsChecked == true)
+                {
+                    subtitleCustom = true;
+                    SetSubtitleParameters();
+                }
             }
             //----------------------------------------------------------------------------------------||
             //Shutdown -------------------------------------------------------------------------------||
@@ -544,6 +557,11 @@ namespace NotEnoughAV1Encodes
                 trackThree = CheckBoxAudioTrackThree.IsChecked == true;
                 trackFour = CheckBoxAudioTrackFour.IsChecked == true;
             }
+        }
+
+        public void SetSubtitleParameters()
+        {
+            SubtitleChunks = ListBoxSubtitles.Items.OfType<string>().ToArray();
         }
 
         //-------------------------------------------------------------------------------------------------||
@@ -1072,6 +1090,7 @@ namespace NotEnoughAV1Encodes
             }
             catch { }
         }
+
         private void LoadProfileStartup()
         {
             try
@@ -1378,8 +1397,6 @@ namespace NotEnoughAV1Encodes
         {
             //Open the OpenFileDialog to set the Subtitle Input
             OpenFileDialog openVideoFileDialog = new OpenFileDialog();
-            openVideoFileDialog.Filter = "SubRip|*.srt|SubStation Alpha|*.ass|WebVTT|*.vtt";
-
             Nullable<bool> result = openVideoFileDialog.ShowDialog();
 
             if (result == true)

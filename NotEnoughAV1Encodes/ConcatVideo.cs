@@ -58,7 +58,7 @@ namespace NotEnoughAV1Encodes
                     process.Start();
                     process.WaitForExit();
 
-                }else if (MainWindow.audioEncoding == true && MainWindow.subtitles == true)
+                }else if (MainWindow.audioEncoding == true && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == true && MainWindow.subtitleCustom == false)
                 {
                     //Concat the Videos with Audio and Subtitles
                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -77,6 +77,77 @@ namespace NotEnoughAV1Encodes
                     startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
                     //FFmpeg Arguments
                     startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv" + " -map 0:v -map 1:a -map 2:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                    //Console.WriteLine(startInfo.Arguments);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+                }else if (MainWindow.audioEncoding == true && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == false && MainWindow.subtitleCustom == true)
+                {
+                    //Concat the Videos with Audio and Subtitles
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
+                    //FFmpeg Arguments
+                    startInfo.Arguments = "/C ffmpeg.exe -f concat -safe 0 -i " + '\u0022' + MainWindow.chunksDir + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022';
+                    //Console.WriteLine(startInfo.Arguments);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+
+
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
+                    //FFmpeg Arguments
+                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv" + " -map 0:v -map 1:a -map 2:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                    //Console.WriteLine(startInfo.Arguments);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+                }
+                else if (MainWindow.audioEncoding == false && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == false && MainWindow.subtitleCustom == true)
+                {
+                    //Concat the Videos with Audio and Subtitles
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
+                    //FFmpeg Arguments
+                    startInfo.Arguments = "/C ffmpeg.exe -f concat -safe 0 -i " + '\u0022' + MainWindow.chunksDir + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022';
+                    //Console.WriteLine(startInfo.Arguments);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+
+
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
+                    //FFmpeg Arguments
+                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv" + " -map 0:v -map 1:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                    //Console.WriteLine(startInfo.Arguments);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+                }
+                else if (MainWindow.audioEncoding == false && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == true && MainWindow.subtitleCustom == false)
+                {
+                    //Concat the Videos with Audio and Subtitles
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
+                    //FFmpeg Arguments
+                    startInfo.Arguments = "/C ffmpeg.exe -f concat -safe 0 -i " + '\u0022' + MainWindow.chunksDir + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022';
+                    //Console.WriteLine(startInfo.Arguments);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+
+
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
+                    //FFmpeg Arguments
+                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv" + " -map 0:v -map 1:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
                     //Console.WriteLine(startInfo.Arguments);
                     process.StartInfo = startInfo;
                     process.Start();
