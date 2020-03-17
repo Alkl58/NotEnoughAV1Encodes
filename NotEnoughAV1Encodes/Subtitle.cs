@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes
 {
-    class Subtitle
+    internal class Subtitle
     {
         public static void EncSubtitles()
         {
@@ -36,16 +32,15 @@ namespace NotEnoughAV1Encodes
                 string subtitleMapping = "";
                 string subtitleInput = "";
                 int subtitleAmount = 0;
-                
+
                 foreach (var items in MainWindow.SubtitleChunks)
                 {
-                    subtitleInput += " -i " + '\u0022'  + items + '\u0022';
-                    subtitleMapping += " -map "+subtitleAmount;
+                    subtitleInput += " -i " + '\u0022' + items + '\u0022';
+                    subtitleMapping += " -map " + subtitleAmount;
                     subtitleAmount += 1;
                 }
 
                 Console.WriteLine(subtitleMapping + subtitleInput);
-
 
                 Process process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -60,6 +55,5 @@ namespace NotEnoughAV1Encodes
                 process.WaitForExit();
             }
         }
-
     }
 }

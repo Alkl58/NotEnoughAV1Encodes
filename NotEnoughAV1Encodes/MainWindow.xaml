@@ -310,13 +310,13 @@
                     <TextBox x:Name="TextBoxNumberOfWorkers" HorizontalAlignment="Left" Height="26" Margin="243,122,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="63" Background="#FF2C2C2C" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                     <CheckBox x:Name="CheckBoxReencode" Content="Reencode (lossless)" HorizontalAlignment="Left" Margin="355,47,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Resize" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,174,0,0" FontWeight="Bold" />
-                    <CheckBox x:Name="CheckBoxVideoResize" Content="Enable Video Resizing" HorizontalAlignment="Left" Margin="69,180,0,0" VerticalAlignment="Top" Foreground="White"/>
-                    <TextBox x:Name="TextBoxFrameHeight" HorizontalAlignment="Left" Height="26" Margin="243,236,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <CheckBox x:Name="CheckBoxVideoResize" Content="Enable Video Resizing" HorizontalAlignment="Left" Margin="69,180,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <TextBox x:Name="TextBoxFrameHeight" HorizontalAlignment="Left" Height="26" Margin="243,236,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                     <Label Content="Frame Width:" HorizontalAlignment="Left" Margin="124,205,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Frame Height:" HorizontalAlignment="Left" Margin="121,236,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxFrameWidth" HorizontalAlignment="Left" Height="26" Margin="243,205,0,0" TextWrapping="Wrap" Text="-1" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                    <Label Content="* You can leave this at -1. It will scale the Framewidth accordingly to the height" HorizontalAlignment="Left" Margin="320,205,0,0" VerticalAlignment="Top" Foreground="Gainsboro"/>
-                    <CheckBox x:Name="CheckBoxAutomaticChunkLength" Content="Automatic Chunk length based on Workers" HorizontalAlignment="Left" Margin="529,47,0,0" VerticalAlignment="Top" Width="305" Foreground="White" IsChecked="True"/>
+                    <TextBox x:Name="TextBoxFrameWidth" HorizontalAlignment="Left" Height="26" Margin="243,205,0,0" TextWrapping="Wrap" Text="-1" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                    <Label Content="* You can leave this at -1. It will scale the Framewidth accordingly to the height" HorizontalAlignment="Left" Margin="320,205,0,0" VerticalAlignment="Top" Foreground="Gainsboro" />
+                    <CheckBox x:Name="CheckBoxAutomaticChunkLength" Content="Automatic Chunk length based on Workers" HorizontalAlignment="Left" Margin="529,47,0,0" VerticalAlignment="Top" Width="305" Foreground="White" IsChecked="True" />
                 </Grid>
             </TabItem>
             <TabItem Header="Video" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -329,7 +329,7 @@
                         </ComboBox.Resources>
                         <ComboBoxItem Content="aomenc" IsSelected="True" Foreground="White" />
                         <ComboBoxItem Content="RAV1E" Foreground="White" />
-                        <ComboBoxItem Content="SVT-AV1" Foreground="White"/>
+                        <ComboBoxItem Content="SVT-AV1" Foreground="White" />
                     </ComboBox>
                     <Label Content="Quality" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="388,10,0,0" FontWeight="Bold" />
                     <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="443,64,0,0" VerticalAlignment="Top" Width="392" Height="22" Maximum="63" SmallChange="1" Value="30" Foreground="White" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
@@ -393,37 +393,37 @@
             <TabItem Header="Audio" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                 <Grid Background="#19191919">
                     <Label Content="Audio" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
-                    <CheckBox x:Name="CheckBoxAudioEncoding" Content="Enable Audio" HorizontalAlignment="Left" Margin="105,16,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <CheckBox x:Name="CheckBoxAudioEncoding" Content="Enable Audio" HorizontalAlignment="Left" Margin="105,16,0,0" VerticalAlignment="Top" Foreground="White" />
                     <ComboBox x:Name="ComboBoxAudioCodec" HorizontalAlignment="Left" Margin="105,60,0,0" VerticalAlignment="Top" Width="120" Height="26">
                         <ComboBox.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
                         </ComboBox.Resources>
-                        <ComboBoxItem Content="Opus" Foreground="White" IsSelected="True"/>
-                        <ComboBoxItem Content="Opus 5.1" Foreground="White"/>
-                        <ComboBoxItem Content="Opus Downmix" Foreground="White"/>
-                        <ComboBoxItem Content="AC3" Foreground="White"/>
-                        <ComboBoxItem Content="AAC" Foreground="White"/>
-                        <ComboBoxItem Content="MP3" Foreground="White"/>
+                        <ComboBoxItem Content="Opus" Foreground="White" IsSelected="True" />
+                        <ComboBoxItem Content="Opus 5.1" Foreground="White" />
+                        <ComboBoxItem Content="Opus Downmix" Foreground="White" />
+                        <ComboBoxItem Content="AC3" Foreground="White" />
+                        <ComboBoxItem Content="AAC" Foreground="White" />
+                        <ComboBoxItem Content="MP3" Foreground="White" />
                     </ComboBox>
                     <Label Content="Codec:" HorizontalAlignment="Left" Margin="44,60,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxAudioTrackOne" Content="Track 1" HorizontalAlignment="Left" Margin="436,68,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True"/>
+                    <CheckBox x:Name="CheckBoxAudioTrackOne" Content="Track 1" HorizontalAlignment="Left" Margin="436,68,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
                     <Label Content="Audio Tracks:" HorizontalAlignment="Left" Margin="341,62,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxAudioTrackTwo" Content="Track 2" HorizontalAlignment="Left" Margin="436,99,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <CheckBox x:Name="CheckBoxAudioTrackTwo" Content="Track 2" HorizontalAlignment="Left" Margin="436,99,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Bitrate:" HorizontalAlignment="Left" Margin="43,120,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxAudioTrackThree" Content="Track 3" HorizontalAlignment="Left" Margin="436,131,0,0" VerticalAlignment="Top" Foreground="White"/>
-                    <CheckBox x:Name="CheckBoxAudioTrackFour" Content="Track 4" HorizontalAlignment="Left" Margin="436,163,0,0" VerticalAlignment="Top" Foreground="White"/>
-                    <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="105,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" AcceptsReturn="True" Foreground="White" Text="128"/>
+                    <CheckBox x:Name="CheckBoxAudioTrackThree" Content="Track 3" HorizontalAlignment="Left" Margin="436,131,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxAudioTrackFour" Content="Track 4" HorizontalAlignment="Left" Margin="436,163,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="105,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" AcceptsReturn="True" Foreground="White" Text="128" />
                 </Grid>
             </TabItem>
             <TabItem Header="Subtitles" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                 <Grid Background="#19191919">
                     <Label Content="Subtitles" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
-                    <ListBox x:Name="ListBoxSubtitles" HorizontalAlignment="Left" Height="100" Margin="56,159,0,0" VerticalAlignment="Top" Width="756" Background="#99151515" Foreground="White"/>
-                    <Button x:Name="ButtonAddCustomSubtitle" Content="Add Subtitle" HorizontalAlignment="Left" Margin="56,129,0,0" VerticalAlignment="Top" Width="83" Height="25" Foreground="White" Background="#FF2B2B2B" Click="ButtonAddCustomSubtitle_Click"/>
-                    <Button x:Name="ButtonDeleteSubtitle" Content="Remove Subtitle" HorizontalAlignment="Left" Margin="709,129,0,0" VerticalAlignment="Top" Width="103" Height="25" Click="ButtonDeleteSubtitle_Click" Background="#FF2B2B2B" Foreground="White"/>
-                    <CheckBox x:Name="CheckBoxEnableSubtitles" Content="Enable Subtitles" HorizontalAlignment="Left" Margin="92,16,0,0" VerticalAlignment="Top" Foreground="White"/>
-                    <RadioButton x:Name="RadioButtonStreamCopySubtitle" Content="Stream Copy embedded Subtitles" HorizontalAlignment="Left" Margin="56,60,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True"/>
-                    <RadioButton x:Name="RadioButtonCustomSubtitles" Content="Custom Subtitles" HorizontalAlignment="Left" Margin="56,100,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <ListBox x:Name="ListBoxSubtitles" HorizontalAlignment="Left" Height="100" Margin="56,159,0,0" VerticalAlignment="Top" Width="756" Background="#99151515" Foreground="White" />
+                    <Button x:Name="ButtonAddCustomSubtitle" Content="Add Subtitle" HorizontalAlignment="Left" Margin="56,129,0,0" VerticalAlignment="Top" Width="83" Height="25" Foreground="White" Background="#FF2B2B2B" Click="ButtonAddCustomSubtitle_Click" />
+                    <Button x:Name="ButtonDeleteSubtitle" Content="Remove Subtitle" HorizontalAlignment="Left" Margin="709,129,0,0" VerticalAlignment="Top" Width="103" Height="25" Click="ButtonDeleteSubtitle_Click" Background="#FF2B2B2B" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxEnableSubtitles" Content="Enable Subtitles" HorizontalAlignment="Left" Margin="92,16,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <RadioButton x:Name="RadioButtonStreamCopySubtitle" Content="Stream Copy embedded Subtitles" HorizontalAlignment="Left" Margin="56,60,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
+                    <RadioButton x:Name="RadioButtonCustomSubtitles" Content="Custom Subtitles" HorizontalAlignment="Left" Margin="56,100,0,0" VerticalAlignment="Top" Foreground="White" />
                 </Grid>
             </TabItem>
             <TabItem Header="Program Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -448,8 +448,8 @@
                     <CheckBox x:Name="CheckBoxCustomSVTPath" Content="Custom SVT-AV1 Path" HorizontalAlignment="Left" Margin="37,217,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxCustomSVTPath" HorizontalAlignment="Left" Height="23" Margin="196,212,0,0" TextWrapping="Wrap" Text="SvtAv1EncApp.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" />
                     <Button x:Name="ButtonCustomSVTPath" Content="     ..." HorizontalAlignment="Left" Margin="766,212,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" Click="ButtonCustomSVTPath_Click" />
-                    <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding Mode" HorizontalAlignment="Left" Margin="714,22,0,0" VerticalAlignment="Top" Foreground="White"/>
-                    <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="397,22,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True"/>
+                    <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding Mode" HorizontalAlignment="Left" Margin="714,22,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="397,22,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
                 </Grid>
             </TabItem>
             <TabItem Header="Profiles" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -460,8 +460,8 @@
                     <TextBox x:Name="TextBoxProfiles" HorizontalAlignment="Left" Height="21" Margin="137,29,0,0" TextWrapping="Wrap" Text="ProfileName.xml" VerticalAlignment="Top" Width="187" Foreground="White" Background="#FF1D1D1D" VerticalContentAlignment="Center" />
                     <Button x:Name="ButtonProfilesRefresh" Content="Refresh List" HorizontalAlignment="Left" Margin="37,82,0,0" VerticalAlignment="Top" Width="86" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonProfilesRefresh_Click" />
                     <Button x:Name="ButtonLoadProfile" Content="Load Profile" HorizontalAlignment="Left" Margin="342,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonLoadProfile_Click" />
-                    <Button Content="Select Background Image" HorizontalAlignment="Left" Margin="10,251,0,0" VerticalAlignment="Top" Width="156" Click="Button_Click" Height="32" Background="#FF2B2B2B" Foreground="White"/>
-                    <Button x:Name="ButtonSetProfileDefault" Content="Set as default" HorizontalAlignment="Left" Margin="448,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonSetProfileDefault_Click"/>
+                    <Button Content="Select Background Image" HorizontalAlignment="Left" Margin="10,251,0,0" VerticalAlignment="Top" Width="156" Click="Button_Click" Height="32" Background="#FF2B2B2B" Foreground="White" />
+                    <Button x:Name="ButtonSetProfileDefault" Content="Set as default" HorizontalAlignment="Left" Margin="448,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonSetProfileDefault_Click" />
                 </Grid>
             </TabItem>
         </TabControl>
@@ -472,4 +472,3 @@
         <CheckBox x:Name="CheckBoxResumeMode" Content="Resume" HorizontalAlignment="Left" Margin="612,466,0,0" VerticalAlignment="Top" Foreground="White" />
     </Grid>
 </Window>
-

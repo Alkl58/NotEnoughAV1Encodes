@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 
 namespace NotEnoughAV1Encodes
@@ -62,9 +61,7 @@ namespace NotEnoughAV1Encodes
                 process.Start();
                 process.WaitForExit();
                 //----------------------------------------------------------------------------------------||
-
             }
-
         }
     }
 }

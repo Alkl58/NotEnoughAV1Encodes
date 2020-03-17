@@ -16,7 +16,6 @@ using System.Xml;
 
 namespace NotEnoughAV1Encodes
 {
-
     public partial class MainWindow : Window
     {
         //----- General Settings -------------------------------||
@@ -53,6 +52,7 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsRavie = "";
         public static string pipeBitDepth = " yuv420p";
         public static bool rav1eEncode = false;
+
         //------------------------------------------------------||
         //----- SVT-AV1 Settings -------------------------------||
         public static string svtav1 = "";
@@ -89,7 +89,7 @@ namespace NotEnoughAV1Encodes
         public static string batchVideoInput = "";
         public static string batchVideoOutput = "";
         public static bool deleteTempAfterEncode = false;
-
+        //------------------------------------------------------||
         public DateTime starttimea;
 
         public MainWindow()
@@ -136,7 +136,8 @@ namespace NotEnoughAV1Encodes
                 {
                     pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started RAV1E...", DispatcherPriority.Background);
                     await Task.Run(() => EncodeRavie());
-                }else if (ComboBoxEncoder.Text == "SVT-AV1")
+                }
+                else if (ComboBoxEncoder.Text == "SVT-AV1")
                 {
                     pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started SVT-AV1...", DispatcherPriority.Background);
                     await Task.Run(() => EncodeSVTAV1());
@@ -190,7 +191,6 @@ namespace NotEnoughAV1Encodes
             DirectoryInfo batchfiles = new DirectoryInfo(TextBoxVideoInput.Text);
             foreach (var file in batchfiles.GetFiles())
             {
-
                 //Main entry Point
                 SmallScripts.Cancel.CancelAll = false;
                 ResetProgressBar();
@@ -209,7 +209,6 @@ namespace NotEnoughAV1Encodes
                     TextBoxChunkLength.Text = (Int16.Parse(streamLength) / Int16.Parse(TextBoxNumberOfWorkers.Text)).ToString();
                 }
 
-
                 if (ComboBoxEncoder.Text == "aomenc")
                 {
                     SetAomencParameters();
@@ -224,7 +223,6 @@ namespace NotEnoughAV1Encodes
                 }
                 if (SmallScripts.Cancel.CancelAll == false)
                 {
-
                     if (CheckBoxAudioEncoding.IsChecked == true && resumeMode == false)
                     {
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Audio Encdoding ...", DispatcherPriority.Background);
@@ -294,7 +292,7 @@ namespace NotEnoughAV1Encodes
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
                     }
 
-                    Console.WriteLine("Async fertig : "+ file);
+                    Console.WriteLine("Async fertig : " + file);
                 }
             }
             //Plays finished sound
@@ -499,7 +497,7 @@ namespace NotEnoughAV1Encodes
             //Video Resizing -------------------------------------------------------------------------||
             if (CheckBoxVideoResize.IsChecked == true)
             {
-                videoResize = " -vf scale="+TextBoxFrameWidth.Text+":"+TextBoxFrameHeight.Text;
+                videoResize = " -vf scale=" + TextBoxFrameWidth.Text + ":" + TextBoxFrameHeight.Text;
             }
             //----------------------------------------------------------------------------------------||
             //Subtitles ------------------------------------------------------------------------------||
@@ -523,7 +521,6 @@ namespace NotEnoughAV1Encodes
             {
                 shutDownAfterEncode = true;
             }
-
         }
 
         public void SetAomencParameters()
@@ -650,7 +647,7 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxAdvancedSettings.IsChecked == false)
             {
                 //Basic Settings
-                allSettingsSvtav1 = "-enc-mode " + SliderPreset.Value + " -bit-depth "+ ComboBoxBitDepth.Text + " " + svtav1QualityMode;
+                allSettingsSvtav1 = "-enc-mode " + SliderPreset.Value + " -bit-depth " + ComboBoxBitDepth.Text + " " + svtav1QualityMode;
                 if (numberOfPasses == 2)
                 {
                     allSettingsSvtav1SecondPass = "-enc-mode-2p " + SliderPreset.Value + " -bit-depth " + ComboBoxBitDepth.Text + " " + svtav1QualityMode;
@@ -782,7 +779,7 @@ namespace NotEnoughAV1Encodes
                                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " "+ videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     process.StartInfo = startInfo;
                                     //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
@@ -966,7 +963,6 @@ namespace NotEnoughAV1Encodes
                         //Console.WriteLine(startInfo.Arguments);
                         process.Start();
                         process.WaitForExit();
-
                     }
 
                     if (numberOfPasses == 2)
@@ -996,7 +992,6 @@ namespace NotEnoughAV1Encodes
                         process.WaitForExit();
                     }
 
-                        
                     //Progressbar +1
                     MainProgressBar.Dispatcher.Invoke(() => MainProgressBar.Value += 1, DispatcherPriority.Background);
                     //Label of Progressbar = Progressbar
@@ -1013,7 +1008,6 @@ namespace NotEnoughAV1Encodes
                     {
                         SmallScripts.KillInstances();
                     }
-
                 }
             }
         }
@@ -1085,16 +1079,17 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "DeleteTempFiles") { if (n.InnerText == "True") { CheckBoxDeleteTempFiles.IsChecked = true; } else { CheckBoxDeleteTempFiles.IsChecked = false; } }
                 if (n.Name == "CustomFfmpegPathActive") { if (n.InnerText == "True") { CheckBoxCustomFfmpegPath.IsChecked = true; } else { CheckBoxCustomFfmpegPath.IsChecked = false; } }
                 if (n.Name == "CustomFfmpegPath") { TextBoxCustomFfmpegPath.Text = n.InnerText; }
-                if (n.Name == "CustomFfprobePathActive") 
-                { 
-                    if (n.InnerText == "True") 
-                    { 
+                if (n.Name == "CustomFfprobePathActive")
+                {
+                    if (n.InnerText == "True")
+                    {
                         CheckBoxCustomFfprobePath.IsChecked = true;
                         CheckFfprobe();
-                    } else 
-                    { 
-                        CheckBoxCustomFfprobePath.IsChecked = false; 
-                    } 
+                    }
+                    else
+                    {
+                        CheckBoxCustomFfprobePath.IsChecked = false;
+                    }
                 }
                 if (n.Name == "CustomFfprobePath") { TextBoxCustomFfprobePath.Text = n.InnerText; }
                 if (n.Name == "CustomAomencPathActive") { if (n.InnerText == "True") { CheckBoxCustomAomencPath.IsChecked = true; } else { CheckBoxCustomAomencPath.IsChecked = false; } }
@@ -1105,16 +1100,16 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "CustomRaviePath") { TextBoxCustomRaviePath.Text = n.InnerText; }
                 if (n.Name == "CustomSvtaviPathActive") { if (n.InnerText == "True") { CheckBoxCustomSVTPath.IsChecked = true; } else { CheckBoxCustomSVTPath.IsChecked = false; } }
                 if (n.Name == "CustomSvtaviPath") { TextBoxCustomSVTPath.Text = n.InnerText; }
-                if (n.Name == "CustomBackground") { if(n.InnerText == "True") { customBackground = true; } else { customBackground = false; } }
-                if (n.Name == "CustomBackgroundPath") 
-                { 
-                    if(customBackground == true) 
+                if (n.Name == "CustomBackground") { if (n.InnerText == "True") { customBackground = true; } else { customBackground = false; } }
+                if (n.Name == "CustomBackgroundPath")
+                {
+                    if (customBackground == true)
                     {
                         Uri fileUri = new Uri(n.InnerText);
                         imgDynamic.Source = new BitmapImage(fileUri);
                         customBackground = true;
                         PathToBackground = n.InnerText;
-                    } 
+                    }
                 }
                 if (n.Name == "AudioEncoding") { if (n.InnerText == "True") { CheckBoxAudioEncoding.IsChecked = true; } else { CheckBoxAudioEncoding.IsChecked = false; } }
                 if (n.Name == "AudioCodec") { ComboBoxAudioCodec.Text = n.InnerText; }
@@ -1249,7 +1244,6 @@ namespace NotEnoughAV1Encodes
                 }
             }
             catch { }
-
         }
 
         //-------------------------------------------------------------------------------------------------||
@@ -1281,11 +1275,11 @@ namespace NotEnoughAV1Encodes
                 {
                     AsyncClass();
                 }
-            }else if (CheckBoxBatchEncoding.IsChecked == true)
+            }
+            else if (CheckBoxBatchEncoding.IsChecked == true)
             {
                 BatchEncode();
             }
-
         }
 
         private void ButtonSaveProfile_Click(object sender, RoutedEventArgs e)
@@ -1306,7 +1300,6 @@ namespace NotEnoughAV1Encodes
                 LoadProfiles();
             }
             catch { }
-
         }
 
         private void ButtonLoadProfile_Click(object sender, RoutedEventArgs e)
@@ -1316,7 +1309,6 @@ namespace NotEnoughAV1Encodes
                 LoadSettings(ComboBoxProfiles.Text, false);
             }
             catch { }
-            
         }
 
         private void ButtonCustomRaviePath_Click(object sender, RoutedEventArgs e)
@@ -1362,7 +1354,7 @@ namespace NotEnoughAV1Encodes
             if (browseFfmpegFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 TextBoxCustomFfmpegPath.Text = browseFfmpegFolder.SelectedPath;
-                
+
                 bool FfmpegExist = File.Exists(TextBoxCustomFfmpegPath.Text + "\\ffmpeg.exe");
 
                 if (FfmpegExist == false)
@@ -1423,16 +1415,16 @@ namespace NotEnoughAV1Encodes
                     TextBoxVideoOutput.Text = saveVideoFileDialog.FileName;
                     videoOutput = saveVideoFileDialog.FileName;
                 }
-            }else if (CheckBoxBatchEncoding.IsChecked == true)
+            }
+            else if (CheckBoxBatchEncoding.IsChecked == true)
             {
                 System.Windows.Forms.FolderBrowserDialog browseOutputFolder = new System.Windows.Forms.FolderBrowserDialog();
 
                 if (browseOutputFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    TextBoxVideoOutput.Text = browseOutputFolder.SelectedPath; 
+                    TextBoxVideoOutput.Text = browseOutputFolder.SelectedPath;
                 }
             }
-
         }
 
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
@@ -1466,7 +1458,6 @@ namespace NotEnoughAV1Encodes
                     TextBoxVideoInput.Text = browseInputFolder.SelectedPath;
                 }
             }
-
         }
 
         private void ComboBoxEncoder_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1561,8 +1552,6 @@ namespace NotEnoughAV1Encodes
                 writer.Close();
             }
             catch { }
-
-
         }
 
         private void ButtonAddCustomSubtitle_Click(object sender, RoutedEventArgs e)
@@ -1581,7 +1570,7 @@ namespace NotEnoughAV1Encodes
         {
             ListBoxSubtitles.Items.RemoveAt(ListBoxSubtitles.SelectedIndex);
         }
-        
+
         //-------------------------------------------------------------------------------------------------||
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace NotEnoughAV1Encodes
 {
@@ -33,10 +32,10 @@ namespace NotEnoughAV1Encodes
                     process.StartInfo = startInfo;
                     process.Start();
                     process.WaitForExit();
-
-                }else if (MainWindow.audioEncoding == true && MainWindow.subtitles == false)
+                }
+                else
                 {
-                    //Concat the Videos with Audio
+                    //Concat the Videofiles for later muxing
                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     startInfo.FileName = "cmd.exe";
                     startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
@@ -46,8 +45,10 @@ namespace NotEnoughAV1Encodes
                     process.StartInfo = startInfo;
                     process.Start();
                     process.WaitForExit();
+                }
 
-
+                if (MainWindow.audioEncoding == true && MainWindow.subtitles == false)
+                {
                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     startInfo.FileName = "cmd.exe";
                     startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
@@ -57,21 +58,9 @@ namespace NotEnoughAV1Encodes
                     process.StartInfo = startInfo;
                     process.Start();
                     process.WaitForExit();
-
-                }else if (MainWindow.audioEncoding == true && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == true && MainWindow.subtitleCustom == false)
+                }
+                else if (MainWindow.audioEncoding == true && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == true && MainWindow.subtitleCustom == false)
                 {
-                    //Concat the Videos with Audio and Subtitles
-                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
-                    //FFmpeg Arguments
-                    startInfo.Arguments = "/C ffmpeg.exe -f concat -safe 0 -i " + '\u0022' + MainWindow.chunksDir + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022';
-                    //Console.WriteLine(startInfo.Arguments);
-                    process.StartInfo = startInfo;
-                    process.Start();
-                    process.WaitForExit();
-
-
                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     startInfo.FileName = "cmd.exe";
                     startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
@@ -81,20 +70,9 @@ namespace NotEnoughAV1Encodes
                     process.StartInfo = startInfo;
                     process.Start();
                     process.WaitForExit();
-                }else if (MainWindow.audioEncoding == true && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == false && MainWindow.subtitleCustom == true)
+                }
+                else if (MainWindow.audioEncoding == true && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == false && MainWindow.subtitleCustom == true)
                 {
-                    //Concat the Videos with Audio and Subtitles
-                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
-                    //FFmpeg Arguments
-                    startInfo.Arguments = "/C ffmpeg.exe -f concat -safe 0 -i " + '\u0022' + MainWindow.chunksDir + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022';
-                    //Console.WriteLine(startInfo.Arguments);
-                    process.StartInfo = startInfo;
-                    process.Start();
-                    process.WaitForExit();
-
-
                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     startInfo.FileName = "cmd.exe";
                     startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
@@ -107,18 +85,6 @@ namespace NotEnoughAV1Encodes
                 }
                 else if (MainWindow.audioEncoding == false && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == false && MainWindow.subtitleCustom == true)
                 {
-                    //Concat the Videos with Audio and Subtitles
-                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
-                    //FFmpeg Arguments
-                    startInfo.Arguments = "/C ffmpeg.exe -f concat -safe 0 -i " + '\u0022' + MainWindow.chunksDir + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022';
-                    //Console.WriteLine(startInfo.Arguments);
-                    process.StartInfo = startInfo;
-                    process.Start();
-                    process.WaitForExit();
-
-
                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     startInfo.FileName = "cmd.exe";
                     startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
@@ -131,18 +97,6 @@ namespace NotEnoughAV1Encodes
                 }
                 else if (MainWindow.audioEncoding == false && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == true && MainWindow.subtitleCustom == false)
                 {
-                    //Concat the Videos with Audio and Subtitles
-                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
-                    //FFmpeg Arguments
-                    startInfo.Arguments = "/C ffmpeg.exe -f concat -safe 0 -i " + '\u0022' + MainWindow.chunksDir + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022';
-                    //Console.WriteLine(startInfo.Arguments);
-                    process.StartInfo = startInfo;
-                    process.Start();
-                    process.WaitForExit();
-
-
                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     startInfo.FileName = "cmd.exe";
                     startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
@@ -153,7 +107,6 @@ namespace NotEnoughAV1Encodes
                     process.Start();
                     process.WaitForExit();
                 }
-
             }
         }
     }

@@ -46,18 +46,16 @@ namespace NotEnoughAV1Encodes
             //Kills all aomenc and ffmpeg instances
             try
             {
+                foreach (var process in Process.GetProcessesByName("aomenc"))
+                {
+                    process.Kill();
+                }
 
-                 foreach (var process in Process.GetProcessesByName("aomenc"))
-                 {
-                     process.Kill();
-                 }
+                foreach (var process in Process.GetProcessesByName("rav1e"))
+                {
+                    process.Kill();
+                }
 
-
-                 foreach (var process in Process.GetProcessesByName("rav1e"))
-                 {
-                     process.Kill();
-                 }
- 
                 foreach (var process in Process.GetProcessesByName("ffmpeg"))
                 {
                     process.Kill();
