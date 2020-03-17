@@ -1414,7 +1414,7 @@ namespace NotEnoughAV1Encodes
             {
                 //Open the OpenFileDialog to set the Videooutput
                 SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
-                saveVideoFileDialog.Filter = "Matroska|*.mkv";
+                saveVideoFileDialog.Filter = "Matroska|*.mkv|WebM|*.webm|MP4|*.mp4";
 
                 Nullable<bool> result = saveVideoFileDialog.ShowDialog();
 
