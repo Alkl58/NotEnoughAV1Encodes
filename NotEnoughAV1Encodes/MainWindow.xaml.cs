@@ -418,6 +418,88 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        public void CheckDependencies()
+        {
+            bool aomencExist = false;
+            bool ffmpegExist = false;
+            bool ffprobeExist = false;
+            bool ravieExist = false;
+            bool svtav1Exist = false;
+
+            if (ComboBoxEncoder.Text == "aomenc")
+            {
+                if(CheckBoxCustomAomencPath.IsChecked == false)
+                {
+                    aomencExist = File.Exists("aomenc.exe");
+                }else if (CheckBoxCustomAomencPath.IsChecked == true)
+                {
+                    aomencExist = File.Exists(TextBoxCustomAomencPath.Text + "\\aomenc.exe");
+                }
+            }else if (ComboBoxEncoder.Text == "RAV1E")
+            {
+                if (CheckBoxCustomRaviePath.IsChecked == false)
+                {
+                    ravieExist = File.Exists("rav1e.exe");
+                }
+                else if (CheckBoxCustomRaviePath.IsChecked == true)
+                {
+                    ravieExist = File.Exists(TextBoxCustomRaviePath.Text + "\\rav1e.exe");
+                }
+            }else if (ComboBoxEncoder.Text == "SVT-AV1")
+            {
+                if (CheckBoxCustomSVTPath.IsChecked == false)
+                {
+                    svtav1Exist = File.Exists("SvtAv1EncApp.exe");
+                }
+                else if (CheckBoxCustomSVTPath.IsChecked == true)
+                {
+                    svtav1Exist = File.Exists(TextBoxCustomRaviePath.Text + "\\SvtAv1EncApp.exe");
+                }
+            }
+
+            if (CheckBoxCustomFfmpegPath.IsChecked == false)
+            {
+                ffmpegExist = File.Exists("ffmpeg.exe");
+            }else if (CheckBoxCustomFfmpegPath.IsChecked == true)
+            {
+                ffmpegExist = File.Exists(TextBoxCustomFfmpegPath.Text + "\\ffmpeg.exe");
+            }
+
+            if (CheckBoxCustomFfprobePath.IsChecked == false)
+            {
+                ffprobeExist = File.Exists("ffprobe.exe");
+            }
+            else if (CheckBoxCustomFfprobePath.IsChecked == true)
+            {
+                ffprobeExist = File.Exists(TextBoxCustomFfmpegPath.Text + "\\ffprobe.exe");
+            }
+
+            if (ComboBoxEncoder.Text == "aomenc")
+            {
+                if (aomencExist == false || ffmpegExist == false || ffprobeExist == false)
+                {
+                    MessageBox.Show("Couldn't find all depedencies: \n aomenc found: " + aomencExist + "\n ffmpeg found: " + ffmpegExist + " \n ffprobe found: " + ffprobeExist);
+                    SmallScripts.Cancel.CancelAll = true;
+                }
+            }else if (ComboBoxEncoder.Text == "RAV1E")
+            {
+                if (ravieExist == false || ffmpegExist == false || ffprobeExist == false)
+                {
+                    MessageBox.Show("Couldn't find all depedencies: \n rav1e found: " + ravieExist + "\n ffmpeg found: " + ffmpegExist + " \n ffprobe found: " + ffprobeExist);
+                    SmallScripts.Cancel.CancelAll = true;
+                }
+            }
+            else if (ComboBoxEncoder.Text == "SVT-AV1")
+            {
+                if (svtav1Exist == false || ffmpegExist == false || ffprobeExist == false)
+                {
+                    MessageBox.Show("Couldn't find all depedencies: \n SVT-AV1 found: " + svtav1Exist + "\n ffmpeg found: " + ffmpegExist + " \n ffprobe found: " + ffprobeExist);
+                    SmallScripts.Cancel.CancelAll = true;
+                }
+            }
+
+        }
+
         //-------------------------------------------------------------------------------------------------||
 
         //------------------------------------- Encoder Settings ------------------------------------------||
@@ -521,6 +603,7 @@ namespace NotEnoughAV1Encodes
             {
                 shutDownAfterEncode = true;
             }
+            CheckDependencies();
         }
 
         public void SetAomencParameters()
@@ -1431,6 +1514,7 @@ namespace NotEnoughAV1Encodes
         {
             if (CheckBoxBatchEncoding.IsChecked == false)
             {
+                CheckDependencies();
                 //Open the OpenFileDialog to set the Videoinput
                 OpenFileDialog openVideoFileDialog = new OpenFileDialog();
 
