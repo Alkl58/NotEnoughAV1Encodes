@@ -84,6 +84,10 @@ namespace NotEnoughAV1Encodes
         //----- Shutdown ---------------------------------------||
         public static bool shutDownAfterEncode = false;
         //------------------------------------------------------||
+        //----- Batch Encoding ---------------------------------||
+        public static string batchVideoInput = "";
+        public static string batchVideoOutput = "";
+        public static bool deleteTempAfterEncode = false;
 
         public DateTime starttimea;
 
@@ -151,7 +155,7 @@ namespace NotEnoughAV1Encodes
                 {
                     File.Delete("unfinishedjob.xml");
                 }
-                if (CheckBoxDeleteTempFiles.IsChecked == true)
+                if (CheckBoxDeleteTempFiles.IsChecked == true || deleteTempAfterEncode == true)
                 {
                     SmallScripts.DeleteTempFiles();
 
@@ -171,6 +175,115 @@ namespace NotEnoughAV1Encodes
             else
             {
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
+            }
+        }
+
+        public async void BatchEncode()
+        {
+            DirectoryInfo batchfiles = new DirectoryInfo(TextBoxVideoInput.Text);
+            foreach (var file in batchfiles.GetFiles())
+            {
+
+                //Main entry Point
+                SmallScripts.Cancel.CancelAll = false;
+                ResetProgressBar();
+                SetParametersBeforeEncode();
+                SetAudioParameters();
+
+                videoInput = TextBoxVideoInput.Text + "\\" + file;
+                videoOutput = TextBoxVideoOutput.Text + "\\" + file + "-av1.mkv";
+                deleteTempAfterEncode = true;
+
+                GetStreamFps(videoInput);
+                SmallScripts.GetStreamLength(videoInput);
+
+
+                if (ComboBoxEncoder.Text == "aomenc")
+                {
+                    SetAomencParameters();
+                }
+                else if (ComboBoxEncoder.Text == "RAV1E")
+                {
+                    SetRavieParameters();
+                }
+                else if (ComboBoxEncoder.Text == "SVT-AV1")
+                {
+                    SetSVTAV1Parameters();
+                }
+                if (SmallScripts.Cancel.CancelAll == false)
+                {
+
+                    if (CheckBoxAudioEncoding.IsChecked == true && resumeMode == false)
+                    {
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Audio Encdoding ...", DispatcherPriority.Background);
+                        await Task.Run(() => EncodeAudio.AudioEncode());
+                    }
+                    if (CheckBoxEnableSubtitles.IsChecked == true && resumeMode == false && RadioButtonCustomSubtitles.IsChecked == false)
+                    {
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Subtitle Copying ...", DispatcherPriority.Background);
+                        await Task.Run(() => Subtitle.EncSubtitles());
+                    }
+                    if (resumeMode == false)
+                    {
+                        SaveSettings("", true);
+                        await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Splitting ...", DispatcherPriority.Background);
+                        await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, exeffmpegPath));
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Ended Splitting.", DispatcherPriority.Background);
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks ...", DispatcherPriority.Background);
+                        await Task.Run(() => RenameChunks.Rename(workingTempDirectory));
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks Finished.", DispatcherPriority.Background);
+                    }
+                    await Task.Run(() => SmallScripts.CountVideoChunks());
+                    if (SmallScripts.Cancel.CancelAll == false)
+                    {
+                        if (ComboBoxEncoder.Text == "aomenc")
+                        {
+                            pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started aomenc...", DispatcherPriority.Background);
+                            await Task.Run(() => EncodeAomenc());
+                        }
+                        else if (ComboBoxEncoder.Text == "RAV1E")
+                        {
+                            pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started RAV1E...", DispatcherPriority.Background);
+                            await Task.Run(() => EncodeRavie());
+                        }
+                        else if (ComboBoxEncoder.Text == "SVT-AV1")
+                        {
+                            pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started SVT-AV1...", DispatcherPriority.Background);
+                            await Task.Run(() => EncodeSVTAV1());
+                        }
+                    }
+                    else
+                    {
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
+                    }
+
+                    if (SmallScripts.Cancel.CancelAll == false)
+                    {
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing Started...", DispatcherPriority.Background);
+                        await Task.Run(() => ConcatVideo.Concat());
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString(), DispatcherPriority.Background);
+                        if (File.Exists("unfinishedjob.xml"))
+                        {
+                            File.Delete("unfinishedjob.xml");
+                        }
+                        if (CheckBoxDeleteTempFiles.IsChecked == true || deleteTempAfterEncode == true)
+                        {
+                            SmallScripts.DeleteTempFiles();
+
+                            if (CheckBoxCustomTempFolder.IsChecked == true)
+                            {
+                                SmallScripts.DeleteTempFilesDir(workingTempDirectory);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
+                    }
+
+                    Console.WriteLine("Async fertig : "+ file);
+                }
             }
         }
 
@@ -1123,27 +1236,35 @@ namespace NotEnoughAV1Encodes
         //----------------------------------------- Buttons -----------------------------------------------||
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
-            //Main entry Point
-            SmallScripts.Cancel.CancelAll = false;
-            ResetProgressBar();
-            CheckResume();
-            SetParametersBeforeEncode();
-            SetAudioParameters();
-            if (ComboBoxEncoder.Text == "aomenc")
+            if (CheckBoxBatchEncoding.IsChecked == false)
             {
-                SetAomencParameters();
+                //Main entry Point
+                SmallScripts.Cancel.CancelAll = false;
+                ResetProgressBar();
+                CheckResume();
+                SetParametersBeforeEncode();
+                SetAudioParameters();
+                if (ComboBoxEncoder.Text == "aomenc")
+                {
+                    SetAomencParameters();
+                }
+                else if (ComboBoxEncoder.Text == "RAV1E")
+                {
+                    SetRavieParameters();
+                }
+                else if (ComboBoxEncoder.Text == "SVT-AV1")
+                {
+                    SetSVTAV1Parameters();
+                }
+                if (SmallScripts.Cancel.CancelAll == false)
+                {
+                    AsyncClass();
+                }
+            }else if (CheckBoxBatchEncoding.IsChecked == true)
+            {
+                BatchEncode();
             }
-            else if (ComboBoxEncoder.Text == "RAV1E")
-            {
-                SetRavieParameters();
-            }else if (ComboBoxEncoder.Text == "SVT-AV1")
-            {
-                SetSVTAV1Parameters();
-            }
-            if (SmallScripts.Cancel.CancelAll == false)
-            {
-                AsyncClass();
-            }
+
         }
 
         private void ButtonSaveProfile_Click(object sender, RoutedEventArgs e)
@@ -1268,33 +1389,58 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonSaveEncodeTo_Click(object sender, RoutedEventArgs e)
         {
-            //Open the OpenFileDialog to set the Videooutput
-            SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
-            saveVideoFileDialog.Filter = "Matroska|*.mkv";
-
-            Nullable<bool> result = saveVideoFileDialog.ShowDialog();
-
-            if (result == true)
+            if (CheckBoxBatchEncoding.IsChecked == false)
             {
-                TextBoxVideoOutput.Text = saveVideoFileDialog.FileName;
-                videoOutput = saveVideoFileDialog.FileName;
+                //Open the OpenFileDialog to set the Videooutput
+                SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
+                saveVideoFileDialog.Filter = "Matroska|*.mkv";
+
+                Nullable<bool> result = saveVideoFileDialog.ShowDialog();
+
+                if (result == true)
+                {
+                    TextBoxVideoOutput.Text = saveVideoFileDialog.FileName;
+                    videoOutput = saveVideoFileDialog.FileName;
+                }
+            }else if (CheckBoxBatchEncoding.IsChecked == true)
+            {
+                System.Windows.Forms.FolderBrowserDialog browseOutputFolder = new System.Windows.Forms.FolderBrowserDialog();
+
+                if (browseOutputFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    TextBoxVideoOutput.Text = browseOutputFolder.SelectedPath; 
+                }
             }
+
         }
 
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
         {
-            //Open the OpenFileDialog to set the Videoinput
-            OpenFileDialog openVideoFileDialog = new OpenFileDialog();
-
-            Nullable<bool> result = openVideoFileDialog.ShowDialog();
-
-            if (result == true)
+            if (CheckBoxBatchEncoding.IsChecked == false)
             {
-                CheckFfprobe();
-                TextBoxVideoInput.Text = openVideoFileDialog.FileName;
-                GetStreamFps(TextBoxVideoInput.Text);
-                SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
+                //Open the OpenFileDialog to set the Videoinput
+                OpenFileDialog openVideoFileDialog = new OpenFileDialog();
+
+                Nullable<bool> result = openVideoFileDialog.ShowDialog();
+
+                if (result == true)
+                {
+                    CheckFfprobe();
+                    TextBoxVideoInput.Text = openVideoFileDialog.FileName;
+                    GetStreamFps(TextBoxVideoInput.Text);
+                    SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
+                }
             }
+            else if (CheckBoxBatchEncoding.IsChecked == true)
+            {
+                System.Windows.Forms.FolderBrowserDialog browseInputFolder = new System.Windows.Forms.FolderBrowserDialog();
+
+                if (browseInputFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    TextBoxVideoInput.Text = browseInputFolder.SelectedPath;
+                }
+            }
+
         }
 
         private void ComboBoxEncoder_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -447,6 +447,7 @@
                     <CheckBox x:Name="CheckBoxCustomSVTPath" Content="Custom SVT-AV1 Path" HorizontalAlignment="Left" Margin="37,217,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxCustomSVTPath" HorizontalAlignment="Left" Height="23" Margin="196,212,0,0" TextWrapping="Wrap" Text="SvtAv1EncApp.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" />
                     <Button x:Name="ButtonCustomSVTPath" Content="     ..." HorizontalAlignment="Left" Margin="766,212,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" Click="ButtonCustomSVTPath_Click" />
+                    <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding Mode" HorizontalAlignment="Left" Margin="714,22,0,0" VerticalAlignment="Top" Foreground="White"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Profiles" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
