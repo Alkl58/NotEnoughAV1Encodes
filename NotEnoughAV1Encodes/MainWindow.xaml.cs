@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -164,6 +165,12 @@ namespace NotEnoughAV1Encodes
                         SmallScripts.DeleteTempFilesDir(workingTempDirectory);
                     }
                 }
+                if (CheckBoxEnableFinishedSound.IsChecked == true)
+                {
+                    //Plays finished sound
+                    SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
+                    playSound.Play();
+                }
                 if (shutDownAfterEncode == true)
                 {
                     if (SmallScripts.Cancel.CancelAll == false)
@@ -196,6 +203,11 @@ namespace NotEnoughAV1Encodes
 
                 GetStreamFps(videoInput);
                 SmallScripts.GetStreamLength(videoInput);
+
+                if (CheckBoxAutomaticChunkLength.IsChecked == true)
+                {
+                    TextBoxChunkLength.Text = (Int16.Parse(streamLength) / Int16.Parse(TextBoxNumberOfWorkers.Text)).ToString();
+                }
 
 
                 if (ComboBoxEncoder.Text == "aomenc")
@@ -284,6 +296,12 @@ namespace NotEnoughAV1Encodes
 
                     Console.WriteLine("Async fertig : "+ file);
                 }
+            }
+            //Plays finished sound
+            if (CheckBoxEnableFinishedSound.IsChecked == true)
+            {
+                SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
+                playSound.Play();
             }
         }
 
@@ -1109,7 +1127,8 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "ResizeFrameHeight") { TextBoxFrameHeight.Text = n.InnerText; }
                 if (n.Name == "ResizeFrameWidth") { TextBoxFrameWidth.Text = n.InnerText; }
                 if (n.Name == "SubtitleEnabled") { if (n.InnerText == "True") { CheckBoxEnableSubtitles.IsChecked = true; } else { CheckBoxEnableSubtitles.IsChecked = false; } }
-
+                if (n.Name == "CalculateChunkLengthAutomaticly") { if (n.InnerText == "True") { CheckBoxAutomaticChunkLength.IsChecked = true; } else { CheckBoxAutomaticChunkLength.IsChecked = false; } }
+                if (n.Name == "PlayFinishedSound") { if (n.InnerText == "True") { CheckBoxEnableFinishedSound.IsChecked = true; } else { CheckBoxEnableFinishedSound.IsChecked = false; } }
                 if (saveJob == true)
                 {
                     if (n.Name == "VideoInput") { TextBoxVideoInput.Text = n.InnerText; }
@@ -1182,6 +1201,8 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("ResizeFrameHeight", TextBoxFrameHeight.Text);
             writer.WriteElementString("ResizeFrameWidth", TextBoxFrameWidth.Text);
             writer.WriteElementString("SubtitleEnabled", CheckBoxEnableSubtitles.IsChecked.ToString());
+            writer.WriteElementString("CalculateChunkLengthAutomaticly", CheckBoxAutomaticChunkLength.IsChecked.ToString());
+            writer.WriteElementString("PlayFinishedSound", CheckBoxEnableFinishedSound.IsChecked.ToString());
 
             if (saveJob == true)
             {
@@ -1429,6 +1450,11 @@ namespace NotEnoughAV1Encodes
                     TextBoxVideoInput.Text = openVideoFileDialog.FileName;
                     GetStreamFps(TextBoxVideoInput.Text);
                     SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
+
+                    if (CheckBoxAutomaticChunkLength.IsChecked == true)
+                    {
+                        TextBoxChunkLength.Text = (Int16.Parse(streamLength) / Int16.Parse(TextBoxNumberOfWorkers.Text)).ToString();
+                    }
                 }
             }
             else if (CheckBoxBatchEncoding.IsChecked == true)
@@ -1555,6 +1581,7 @@ namespace NotEnoughAV1Encodes
         {
             ListBoxSubtitles.Items.RemoveAt(ListBoxSubtitles.SelectedIndex);
         }
+        
         //-------------------------------------------------------------------------------------------------||
     }
 }

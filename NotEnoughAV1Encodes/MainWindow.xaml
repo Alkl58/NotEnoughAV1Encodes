@@ -316,6 +316,7 @@
                     <Label Content="Frame Height:" HorizontalAlignment="Left" Margin="121,236,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxFrameWidth" HorizontalAlignment="Left" Height="26" Margin="243,205,0,0" TextWrapping="Wrap" Text="-1" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                     <Label Content="* You can leave this at -1. It will scale the Framewidth accordingly to the height" HorizontalAlignment="Left" Margin="320,205,0,0" VerticalAlignment="Top" Foreground="Gainsboro"/>
+                    <CheckBox x:Name="CheckBoxAutomaticChunkLength" Content="Automatic Chunk length based on Workers" HorizontalAlignment="Left" Margin="529,47,0,0" VerticalAlignment="Top" Width="305" Foreground="White" IsChecked="True"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Video" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -448,6 +449,7 @@
                     <TextBox x:Name="TextBoxCustomSVTPath" HorizontalAlignment="Left" Height="23" Margin="196,212,0,0" TextWrapping="Wrap" Text="SvtAv1EncApp.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" />
                     <Button x:Name="ButtonCustomSVTPath" Content="     ..." HorizontalAlignment="Left" Margin="766,212,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" Click="ButtonCustomSVTPath_Click" />
                     <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding Mode" HorizontalAlignment="Left" Margin="714,22,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="397,22,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Profiles" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
