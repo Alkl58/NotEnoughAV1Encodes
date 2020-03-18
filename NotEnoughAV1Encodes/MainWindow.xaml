@@ -276,7 +276,7 @@
         <TextBox x:Name="TextBoxVideoOutput" HorizontalAlignment="Left" Height="23" Margin="125,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="641" Background="#CC191919" Foreground="White" />
         <Button x:Name="ButtonOpenSource" Content="Open..." HorizontalAlignment="Left" Margin="784,27,0,0" VerticalAlignment="Top" Width="82" Height="23" Foreground="White" Background="#FF191919" BorderBrush="White" Style="{DynamicResource ButtonDarkStyle}" Click="ButtonOpenSource_Click" />
         <Button x:Name="ButtonSaveEncodeTo" Content="Save to..." HorizontalAlignment="Left" Margin="784,64,0,0" VerticalAlignment="Top" Width="82" Height="23" Foreground="White" Background="#FF191919" BorderBrush="White" Style="{DynamicResource ButtonDarkStyle}" Click="ButtonSaveEncodeTo_Click" />
-        
+
         <TabControl HorizontalAlignment="Left" Height="321" Margin="10,116,0,0" VerticalAlignment="Top" Width="867" Background="#CC191919">
             <TabItem Header="Summary" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                 <Grid Background="#19191919">
@@ -422,7 +422,7 @@
                     <CheckBox x:Name="CheckBoxTwoPass" Content="2-Pass Encoding" HorizontalAlignment="Left" Margin="39,256,0,0" VerticalAlignment="Top" Foreground="White">
                         <CheckBox.ToolTip>Enables Two-Pass video encoding. Very Helpful if Bitrate mode is used.</CheckBox.ToolTip>
                     </CheckBox>
-                    
+
 
 
                 </Grid>
@@ -518,8 +518,8 @@
                     <TabControl HorizontalAlignment="Left" Height="277" Margin="10,6,0,0" VerticalAlignment="Top" Width="841" Background="#CC191919">
                         <TabItem Header="General" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                             <Grid Background="#19191919">
-                                <CheckBox x:Name="CheckBoxDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="27,91,0,0" VerticalAlignment="Top" Foreground="White" />
-                                <CheckBox x:Name="CheckBoxShutdownAfterEncode" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="27,61,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <CheckBox x:Name="CheckBoxDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="27,90,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <CheckBox x:Name="CheckBoxShutdownAfterEncode" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="27,60,0,0" VerticalAlignment="Top" Foreground="White" />
                                 <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding Mode" HorizontalAlignment="Left" Margin="27,29,0,0" VerticalAlignment="Top" Foreground="White">
                                     <CheckBox.ToolTip>Enables Batch Encoding. You need to specify input/output Folder with the above Buttons!</CheckBox.ToolTip>
                                 </CheckBox>
@@ -528,7 +528,7 @@
                                         Sets a custom Background Image. JPG/PNG recommended!
                                     </Button.ToolTip>
                                 </Button>
-                                <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="27,121,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
+                                <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="27,120,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
                             </Grid>
                         </TabItem>
                         <TabItem Header="Paths" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -592,6 +592,15 @@
                             </Grid>
                         </TabItem>
                     </TabControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Queue" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                <Grid Background="#19191919">
+                    <ListBox x:Name="ListBoxQueue" HorizontalAlignment="Left" Height="228" Margin="10,55,0,0" VerticalAlignment="Top" Width="841" Background="#99151515" Foreground="White"/>
+                    <Button x:Name="ButtonAddQueue" Content="Add to Queue" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top" Width="135" Height="33" Background="#FF2B2B2B" Foreground="White" Click="ButtonAddQueue_Click"/>
+                    <Button x:Name="ButtonRemoveFromQueue" Content="Remove from Queue" HorizontalAlignment="Left" Margin="714,17,0,0" VerticalAlignment="Top" Width="137" Height="33" Background="#FF2B2B2B" Foreground="White" Click="ButtonRemoveFromQueue_Click"/>
+                    <TextBox x:Name="TextBoxQueueName" HorizontalAlignment="Left" Height="23" Margin="164,21,0,0" TextWrapping="Wrap" Text="QueueName.xml" VerticalAlignment="Top" Width="117" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center"/>
+                    <CheckBox x:Name="CheckBoxQueueMode" Content="Enable Queue Mode" HorizontalAlignment="Left" Margin="311,26,0,0" VerticalAlignment="Top" Foreground="White"/>
                 </Grid>
             </TabItem>
         </TabControl>
