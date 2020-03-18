@@ -508,72 +508,83 @@
             </TabItem>
             <TabItem Header="Program Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                 <Grid Background="#19191919">
-                    <CheckBox x:Name="CheckBoxShutdownAfterEncode" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="37,22,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxCustomFfmpegPath" HorizontalAlignment="Left" Height="23" Margin="196,64,0,0" TextWrapping="Wrap" Text="ffmpeg.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding ElementName=CheckBoxCustomFfmpegPath, Path=IsChecked}" />
-                    <CheckBox x:Name="CheckBoxCustomFfmpegPath" Content="Custom ffmpeg Path" HorizontalAlignment="Left" Margin="37,69,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <Button x:Name="ButtonCustomFfmpegPath" Content="     ..." HorizontalAlignment="Left" Margin="766,64,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding ElementName=CheckBoxCustomFfmpegPath, Path=IsChecked}" Click="ButtonCustomFfmpegPath_Click" />
-                    <CheckBox x:Name="CheckBoxCustomFfprobePath" Content="Custom ffprobe Path" HorizontalAlignment="Left" Margin="37,105,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxCustomFfprobePath" HorizontalAlignment="Left" Height="23" Margin="196,100,0,0" TextWrapping="Wrap" Text="ffprobe.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomFfprobePath}" />
-                    <Button x:Name="ButtonCustomFfprobePath" Content="     ..." HorizontalAlignment="Left" Margin="766,100,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomFfprobePath}" Click="ButtonCustomFfprobePath_Click" />
-                    <CheckBox x:Name="CheckBoxCustomAomencPath" Content="Custom aomenc Path" HorizontalAlignment="Left" Margin="37,142,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxCustomAomencPath" HorizontalAlignment="Left" Height="23" Margin="196,137,0,0" TextWrapping="Wrap" Text="aomenc.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomAomencPath}" />
-                    <Button x:Name="ButtonCustomAomencPath" Content="     ..." HorizontalAlignment="Left" Margin="766,137,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomAomencPath}" Click="ButtonCustomAomencPath_Click" />
-                    <TextBox x:Name="TextBoxCustomTempFolder" HorizontalAlignment="Left" Height="23" Margin="196,254,0,0" TextWrapping="Wrap" Text="Temp Folder" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempFolder}" />
-                    <CheckBox x:Name="CheckBoxCustomTempFolder" Content="Custom Temp Path" HorizontalAlignment="Left" Margin="37,259,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <Button x:Name="ButtonCustomTempFolder" Content="     ..." HorizontalAlignment="Left" Margin="766,254,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempFolder}" Click="ButtonCustomTempFolder_Click" />
-                    <CheckBox x:Name="CheckBoxDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="196,22,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxCustomRaviePath" Content="Custom rav1e Path" HorizontalAlignment="Left" Margin="37,179,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxCustomRaviePath" HorizontalAlignment="Left" Height="23" Margin="196,174,0,0" TextWrapping="Wrap" Text="rav1e.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomRaviePath}" />
-                    <Button x:Name="ButtonCustomRaviePath" Content="     ..." HorizontalAlignment="Left" Margin="766,174,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomRaviePath}" Click="ButtonCustomRaviePath_Click" />
-                    <CheckBox x:Name="CheckBoxCustomSVTPath" Content="Custom SVT-AV1 Path" HorizontalAlignment="Left" Margin="37,217,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxCustomSVTPath" HorizontalAlignment="Left" Height="23" Margin="196,212,0,0" TextWrapping="Wrap" Text="SvtAv1EncApp.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" />
-                    <Button x:Name="ButtonCustomSVTPath" Content="     ..." HorizontalAlignment="Left" Margin="766,212,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" Click="ButtonCustomSVTPath_Click" />
-                    <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding Mode" HorizontalAlignment="Left" Margin="714,22,0,0" VerticalAlignment="Top" Foreground="White">
-                        <CheckBox.ToolTip>Enables Batch Encoding. You need to specify input/output Folder with the above Buttons!</CheckBox.ToolTip>
-                    </CheckBox>
-                    <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="397,22,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
-                </Grid>
-            </TabItem>
-            <TabItem Header="Profiles" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
-                <Grid Background="#19191919">
-                    <Button x:Name="ButtonSaveProfile" Content="Save Profile" HorizontalAlignment="Left" Margin="37,29,0,0" VerticalAlignment="Top" Width="86" Height="21" Background="#FF2B2B2B" Foreground="White" Click="ButtonSaveProfile_Click" />
-                    <ComboBox x:Name="ComboBoxProfiles" HorizontalAlignment="Left" Margin="137,82,0,0" VerticalAlignment="Top" Width="187" Foreground="Black">
-                    </ComboBox>
-                    <TextBox x:Name="TextBoxProfiles" HorizontalAlignment="Left" Height="21" Margin="137,29,0,0" TextWrapping="Wrap" Text="ProfileName.xml" VerticalAlignment="Top" Width="187" Foreground="White" Background="#FF1D1D1D" VerticalContentAlignment="Center">
-                        <TextBox.ToolTip>
-                            <ToolTip>
-                                <StackPanel Width="200">
-                                    <StackPanel Orientation="Horizontal" Width="200">
-                                        <TextBlock Text="1. Select a Profilename"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Width="200">
-                                        <TextBlock Text="2. Click Save Profile"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </ToolTip>
-                        </TextBox.ToolTip>
-                    </TextBox>
-                    <Button x:Name="ButtonProfilesRefresh" Content="Refresh List" HorizontalAlignment="Left" Margin="37,82,0,0" VerticalAlignment="Top" Width="86" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonProfilesRefresh_Click" />
-                    <Button x:Name="ButtonLoadProfile" Content="Load Profile" HorizontalAlignment="Left" Margin="342,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonLoadProfile_Click" />
-                    <Button Content="Select Background Image" HorizontalAlignment="Left" Margin="10,251,0,0" VerticalAlignment="Top" Width="156" Click="Button_Click" Height="32" Background="#FF2B2B2B" Foreground="White">
-                        <Button.ToolTip>
-                            Sets a custom Background Image. JPG/PNG recommended!
-                        </Button.ToolTip>
-                    </Button>
-                    <Button x:Name="ButtonSetProfileDefault" Content="Set as default" HorizontalAlignment="Left" Margin="448,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonSetProfileDefault_Click">
-                        <Button.ToolTip>
-                            <ToolTip>
-                                <StackPanel Width="200">
-                                    <StackPanel Orientation="Horizontal" Width="200">
-                                        <TextBlock Text="1. Select the Profile from Combobox."/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Width="200">
-                                        <TextBlock Text="2. Click Set as default"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </ToolTip>
-                        </Button.ToolTip>
-                    </Button>
+                    <TabControl HorizontalAlignment="Left" Height="277" Margin="10,6,0,0" VerticalAlignment="Top" Width="841" Background="#CC191919">
+                        <TabItem Header="General" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                            <Grid Background="#19191919">
+                                <CheckBox x:Name="CheckBoxDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="27,91,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <CheckBox x:Name="CheckBoxShutdownAfterEncode" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="27,61,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding Mode" HorizontalAlignment="Left" Margin="27,29,0,0" VerticalAlignment="Top" Foreground="White">
+                                    <CheckBox.ToolTip>Enables Batch Encoding. You need to specify input/output Folder with the above Buttons!</CheckBox.ToolTip>
+                                </CheckBox>
+                                <Button Content="Select Background Image" HorizontalAlignment="Left" Margin="27,190,0,0" VerticalAlignment="Top" Width="156" Click="Button_Click" Height="32" Background="#FF2B2B2B" Foreground="White">
+                                    <Button.ToolTip>
+                                        Sets a custom Background Image. JPG/PNG recommended!
+                                    </Button.ToolTip>
+                                </Button>
+                                <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="27,121,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Paths" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                            <Grid Background="#19191919">
+                                <TextBox x:Name="TextBoxCustomFfmpegPath" HorizontalAlignment="Left" Height="23" Margin="169,13,0,0" TextWrapping="Wrap" Text="ffmpeg.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding ElementName=CheckBoxCustomFfmpegPath, Path=IsChecked}" />
+                                <CheckBox x:Name="CheckBoxCustomFfmpegPath" Content="Custom ffmpeg Path" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <Button x:Name="ButtonCustomFfmpegPath" Content="     ..." HorizontalAlignment="Left" Margin="739,13,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding ElementName=CheckBoxCustomFfmpegPath, Path=IsChecked}" Click="ButtonCustomFfmpegPath_Click" />
+                                <CheckBox x:Name="CheckBoxCustomFfprobePath" Content="Custom ffprobe Path" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <TextBox x:Name="TextBoxCustomFfprobePath" HorizontalAlignment="Left" Height="23" Margin="169,49,0,0" TextWrapping="Wrap" Text="ffprobe.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomFfprobePath}" />
+                                <Button x:Name="ButtonCustomFfprobePath" Content="     ..." HorizontalAlignment="Left" Margin="739,49,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomFfprobePath}" Click="ButtonCustomFfprobePath_Click" />
+                                <CheckBox x:Name="CheckBoxCustomAomencPath" Content="Custom aomenc Path" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <TextBox x:Name="TextBoxCustomAomencPath" HorizontalAlignment="Left" Height="23" Margin="169,86,0,0" TextWrapping="Wrap" Text="aomenc.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomAomencPath}" />
+                                <Button x:Name="ButtonCustomAomencPath" Content="     ..." HorizontalAlignment="Left" Margin="739,86,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomAomencPath}" Click="ButtonCustomAomencPath_Click" />
+                                <TextBox x:Name="TextBoxCustomTempFolder" HorizontalAlignment="Left" Height="23" Margin="169,200,0,0" TextWrapping="Wrap" Text="Temp Folder" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempFolder}" />
+                                <CheckBox x:Name="CheckBoxCustomTempFolder" Content="Custom Temp Path" HorizontalAlignment="Left" Margin="10,203,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <Button x:Name="ButtonCustomTempFolder" Content="     ..." HorizontalAlignment="Left" Margin="739,200,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempFolder}" Click="ButtonCustomTempFolder_Click" />
+
+                                <CheckBox x:Name="CheckBoxCustomRaviePath" Content="Custom rav1e Path" HorizontalAlignment="Left" Margin="10,128,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <TextBox x:Name="TextBoxCustomRaviePath" HorizontalAlignment="Left" Height="23" Margin="169,123,0,0" TextWrapping="Wrap" Text="rav1e.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomRaviePath}" />
+                                <Button x:Name="ButtonCustomRaviePath" Content="     ..." HorizontalAlignment="Left" Margin="739,123,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomRaviePath}" Click="ButtonCustomRaviePath_Click" />
+                                <CheckBox x:Name="CheckBoxCustomSVTPath" Content="Custom SVT-AV1 Path" HorizontalAlignment="Left" Margin="10,166,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <TextBox x:Name="TextBoxCustomSVTPath" HorizontalAlignment="Left" Height="23" Margin="169,161,0,0" TextWrapping="Wrap" Text="SvtAv1EncApp.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" />
+                                <Button x:Name="ButtonCustomSVTPath" Content="     ..." HorizontalAlignment="Left" Margin="739,161,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" Click="ButtonCustomSVTPath_Click" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Profiles" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                            <Grid Background="#19191919">
+                                <Button x:Name="ButtonSaveProfile" Content="Save Profile" HorizontalAlignment="Left" Margin="37,29,0,0" VerticalAlignment="Top" Width="86" Height="21" Background="#FF2B2B2B" Foreground="White" Click="ButtonSaveProfile_Click" />
+                                <ComboBox x:Name="ComboBoxProfiles" HorizontalAlignment="Left" Margin="137,82,0,0" VerticalAlignment="Top" Width="187" Foreground="Black">
+                                </ComboBox>
+                                <TextBox x:Name="TextBoxProfiles" HorizontalAlignment="Left" Height="21" Margin="137,29,0,0" TextWrapping="Wrap" Text="ProfileName.xml" VerticalAlignment="Top" Width="187" Foreground="White" Background="#FF1D1D1D" VerticalContentAlignment="Center">
+                                    <TextBox.ToolTip>
+                                        <ToolTip>
+                                            <StackPanel Width="200">
+                                                <StackPanel Orientation="Horizontal" Width="200">
+                                                    <TextBlock Text="1. Select a Profilename"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Width="200">
+                                                    <TextBlock Text="2. Click Save Profile"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </TextBox.ToolTip>
+                                </TextBox>
+                                <Button x:Name="ButtonProfilesRefresh" Content="Refresh List" HorizontalAlignment="Left" Margin="37,82,0,0" VerticalAlignment="Top" Width="86" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonProfilesRefresh_Click" />
+                                <Button x:Name="ButtonLoadProfile" Content="Load Profile" HorizontalAlignment="Left" Margin="342,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonLoadProfile_Click" />
+                                <Button x:Name="ButtonSetProfileDefault" Content="Set as default" HorizontalAlignment="Left" Margin="448,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonSetProfileDefault_Click">
+                                    <Button.ToolTip>
+                                        <ToolTip>
+                                            <StackPanel Width="200">
+                                                <StackPanel Orientation="Horizontal" Width="200">
+                                                    <TextBlock Text="1. Select the Profile from Combobox."/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Width="200">
+                                                    <TextBlock Text="2. Click Set as default"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </Button.ToolTip>
+                                </Button>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
             </TabItem>
         </TabControl>
