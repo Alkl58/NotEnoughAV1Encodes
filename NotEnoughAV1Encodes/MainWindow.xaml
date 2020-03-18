@@ -307,8 +307,16 @@
                     <TextBox x:Name="TextBoxChunkLength" HorizontalAlignment="Left" Height="26" Margin="243,41,0,0" TextWrapping="Wrap" Text="180" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                     <Label Content="Workers" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,85,0,0" FontWeight="Bold" />
                     <Label Content="Number of parallel Encodings:" HorizontalAlignment="Left" Margin="35,122,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxNumberOfWorkers" HorizontalAlignment="Left" Height="26" Margin="243,122,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="63" Background="#FF2C2C2C" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-                    <CheckBox x:Name="CheckBoxReencode" Content="Reencode (lossless)" HorizontalAlignment="Left" Margin="355,47,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <TextBox x:Name="TextBoxNumberOfWorkers" HorizontalAlignment="Left" Height="26" Margin="243,122,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="63" Background="#FF2C2C2C" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                        <TextBox.ToolTip>
+                            <ToolTip>Sets the number of parallel encodings. Should not exceed physical core count.</ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
+                    <CheckBox x:Name="CheckBoxReencode" Content="Reencode (lossless)" HorizontalAlignment="Left" Margin="355,47,0,0" VerticalAlignment="Top" Foreground="White">
+                        <CheckBox.ToolTip>
+                            <ToolTip>Reencodes the source to UT-Video during splitting. This avoids ffmpeg splitting inaccurate due to bad Keyframe timestamps.</ToolTip>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
                     <Label Content="Resize" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,174,0,0" FontWeight="Bold" />
                     <CheckBox x:Name="CheckBoxVideoResize" Content="Enable Video Resizing" HorizontalAlignment="Left" Margin="69,180,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxFrameHeight" HorizontalAlignment="Left" Height="26" Margin="243,236,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
@@ -332,18 +340,58 @@
                         <ComboBoxItem Content="SVT-AV1" Foreground="White" />
                     </ComboBox>
                     <Label Content="Quality" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="388,10,0,0" FontWeight="Bold" />
-                    <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="443,64,0,0" VerticalAlignment="Top" Width="392" Height="22" Maximum="63" SmallChange="1" Value="30" Foreground="White" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
+                    <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="443,64,0,0" VerticalAlignment="Top" Width="392" Height="22" Maximum="63" SmallChange="1" Value="30" Foreground="White" TickPlacement="BottomRight" IsSnapToTickEnabled="True">
+                        <Slider.ToolTip>
+                            <ToolTip>
+                                <StackPanel Width="200">
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="Recommended Values:"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="aomenc: 25-35"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="rav1e: 80-140"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="SVT-AV1: 25-45"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Slider.ToolTip>
+                    </Slider>
                     <Label Content="| Highest Quality" HorizontalAlignment="Left" Margin="443,86,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Lowest Quality |" HorizontalAlignment="Left" Margin="741,86,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Constant Quality :" HorizontalAlignment="Left" Margin="443,38,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Bitrate (kbps) :" HorizontalAlignment="Left" Margin="443,136,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxBitrate" HorizontalAlignment="Left" Height="26" Margin="540,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" Foreground="White" />
+                    <TextBox x:Name="TextBoxBitrate" HorizontalAlignment="Left" Height="26" Margin="540,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" Foreground="White">
+                        <TextBox.ToolTip>Sets the target Bitrate. Not Recommended. Quality mode will deliver far better results!</TextBox.ToolTip>
+                    </TextBox>
                     <RadioButton x:Name="RadioButtonConstantQuality" Content="" HorizontalAlignment="Left" Margin="424,44,0,0" VerticalAlignment="Top" IsChecked="True" />
                     <RadioButton x:Name="RadioButtonBitrate" Content="" HorizontalAlignment="Left" Margin="424,143,0,0" VerticalAlignment="Top" Checked="RadioButtonBitrate_Checked" />
                     <Label Content="Framerate:" HorizontalAlignment="Left" Margin="25,86,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Video optimisation" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,162,0,0" FontWeight="Bold" />
                     <Label Content="Encoding Preset:" HorizontalAlignment="Left" Margin="33,193,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <Slider x:Name="SliderPreset" HorizontalAlignment="Left" Margin="146,197,0,0" VerticalAlignment="Top" Width="112" Height="27" Maximum="8" TickPlacement="BottomRight" SmallChange="1" Value="3" IsSnapToTickEnabled="True" />
+                    <Slider x:Name="SliderPreset" HorizontalAlignment="Left" Margin="146,197,0,0" VerticalAlignment="Top" Width="112" Height="27" Maximum="8" TickPlacement="BottomRight" SmallChange="1" Value="3" IsSnapToTickEnabled="True">
+                        <Slider.ToolTip>
+                            <ToolTip>
+                                <StackPanel Width="200">
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="Recommended Values:"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="aomenc: 3"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="rav1e: 5-6"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="SVT-AV1: 4-6"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Slider.ToolTip>
+                    </Slider>
                     <Label x:Name="LabelQuality" Content="{Binding ElementName=SliderQuality, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="552,39,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="25,131,0,0" VerticalAlignment="Top" Foreground="White" />
                     <ComboBox x:Name="ComboBoxBitDepth" HorizontalAlignment="Left" Margin="104,131,0,0" VerticalAlignment="Top" Width="58" Height="26">
@@ -353,27 +401,40 @@
                         <ComboBoxItem Content="8" IsSelected="True" Foreground="White" />
                         <ComboBoxItem Content="10" Foreground="White" />
                         <ComboBoxItem Content="12" Foreground="White" />
+                        <ComboBox.ToolTip>
+                            <ToolTip>Recommended: 10bit -> Solves Banding issues and saves bandwidth.</ToolTip>
+                        </ComboBox.ToolTip>
                     </ComboBox>
                     <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxFramerate" HorizontalAlignment="Left" Height="26" Margin="104,86,0,0" TextWrapping="Wrap" Text="24000/1001" VerticalAlignment="Top" Width="120" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                    <TextBox x:Name="TextBoxFramerate" HorizontalAlignment="Left" Height="26" Margin="104,86,0,0" TextWrapping="Wrap" Text="24000/1001" VerticalAlignment="Top" Width="120" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                        <TextBox.ToolTip>Sets the Video Framerate (Numerator / Denominator)</TextBox.ToolTip>
+                    </TextBox>
                     <Label Content="| Slowest" HorizontalAlignment="Left" Margin="145,216,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Fastest |" HorizontalAlignment="Left" Margin="207,216,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label x:Name="LabelEncoderPreset" Content="{Binding ElementName=SliderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="129,193,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxCBR" Content="CBR" HorizontalAlignment="Left" Margin="680,142,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxTwoPass" Content="2-Pass Encoding" HorizontalAlignment="Left" Margin="39,256,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxCBR" Content="CBR" HorizontalAlignment="Left" Margin="680,142,0,0" VerticalAlignment="Top" Foreground="White">
+                        <CheckBox.ToolTip>Constant Bitrate Mode. Not Recommended!</CheckBox.ToolTip>
+                    </CheckBox>
+                    <CheckBox x:Name="CheckBoxTwoPass" Content="2-Pass Encoding" HorizontalAlignment="Left" Margin="39,256,0,0" VerticalAlignment="Top" Foreground="White">
+                        <CheckBox.ToolTip>Enables Two-Pass video encoding. Very Helpful if Bitrate mode is used.</CheckBox.ToolTip>
+                    </CheckBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Advanced Video Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}" Visibility="{Binding ElementName=CheckBoxAdvancedSettings, Path=IsChecked, Converter={StaticResource b2v}}">
                 <Grid Background="#19191919">
                     <Label Content="Advanced Video Settings" Height="29" Foreground="White" FontWeight="Bold" Margin="10,0,0,254" HorizontalAlignment="Left" Width="151" VerticalAlignment="Bottom" />
                     <Label Content="Threads:" HorizontalAlignment="Left" Margin="107,52,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxThreads" HorizontalAlignment="Left" Height="26" Margin="178,52,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                    <TextBox x:Name="TextBoxThreads" HorizontalAlignment="Left" Height="26" Margin="178,52,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                        <TextBox.ToolTip>Sets the Number of Threads for the encoder, if the encoder supports this feature. Recommended for aomenc: 2 or 4</TextBox.ToolTip>
+                    </TextBox>
                     <Label Content="Tile Columns:" HorizontalAlignment="Left" Margin="278,52,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxTileColumns" HorizontalAlignment="Left" Height="26" Margin="375,52,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                     <Label Content="Tile Rows:" HorizontalAlignment="Left" Margin="481,52,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxTileRows" HorizontalAlignment="Left" Height="26" Margin="559,52,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                     <Label Content="Keyframe Interval:" HorizontalAlignment="Left" Margin="56,92,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxKeyframeInterval" HorizontalAlignment="Left" Height="26" Margin="178,92,0,0" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                    <TextBox x:Name="TextBoxKeyframeInterval" HorizontalAlignment="Left" Height="26" Margin="178,92,0,0" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                        <TextBox.ToolTip>A maximum Keyframe Interval is recommended for faster seeking. Recommended: Framerate * 10</TextBox.ToolTip>
+                    </TextBox>
                     <Label Content="AQ-Mode:" HorizontalAlignment="Left" Margin="659,52,0,0" VerticalAlignment="Top" Foreground="White" />
                     <ComboBox x:Name="ComboBoxAqMode" HorizontalAlignment="Left" Margin="737,52,0,0" VerticalAlignment="Top" Width="60" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                         <ComboBox.Resources>
@@ -404,15 +465,34 @@
                         <ComboBoxItem Content="AC3" Foreground="White" />
                         <ComboBoxItem Content="AAC" Foreground="White" />
                         <ComboBoxItem Content="MP3" Foreground="White" />
+                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
                     </ComboBox>
                     <Label Content="Codec:" HorizontalAlignment="Left" Margin="44,60,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxAudioTrackOne" Content="Track 1" HorizontalAlignment="Left" Margin="436,68,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
+                    <CheckBox x:Name="CheckBoxAudioTrackOne" Content="Track 1" HorizontalAlignment="Left" Margin="436,68,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True">
+                        <CheckBox.ToolTip>
+                            <ToolTip>Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!</ToolTip>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
                     <Label Content="Audio Tracks:" HorizontalAlignment="Left" Margin="341,62,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxAudioTrackTwo" Content="Track 2" HorizontalAlignment="Left" Margin="436,99,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxAudioTrackTwo" Content="Track 2" HorizontalAlignment="Left" Margin="436,99,0,0" VerticalAlignment="Top" Foreground="White">
+                        <CheckBox.ToolTip>
+                            <ToolTip>Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!</ToolTip>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
                     <Label Content="Bitrate:" HorizontalAlignment="Left" Margin="43,120,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxAudioTrackThree" Content="Track 3" HorizontalAlignment="Left" Margin="436,131,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxAudioTrackFour" Content="Track 4" HorizontalAlignment="Left" Margin="436,163,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="105,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" AcceptsReturn="True" Foreground="White" Text="128" />
+                    <CheckBox x:Name="CheckBoxAudioTrackThree" Content="Track 3" HorizontalAlignment="Left" Margin="436,131,0,0" VerticalAlignment="Top" Foreground="White">
+                        <CheckBox.ToolTip>
+                            <ToolTip>Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!</ToolTip>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
+                    <CheckBox x:Name="CheckBoxAudioTrackFour" Content="Track 4" HorizontalAlignment="Left" Margin="436,163,0,0" VerticalAlignment="Top" Foreground="White">
+                        <CheckBox.ToolTip>
+                            <ToolTip>Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!</ToolTip>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
+                    <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="105,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" AcceptsReturn="True" Foreground="White" Text="128">
+                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                    </TextBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Subtitles" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -448,7 +528,9 @@
                     <CheckBox x:Name="CheckBoxCustomSVTPath" Content="Custom SVT-AV1 Path" HorizontalAlignment="Left" Margin="37,217,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxCustomSVTPath" HorizontalAlignment="Left" Height="23" Margin="196,212,0,0" TextWrapping="Wrap" Text="SvtAv1EncApp.exe" VerticalAlignment="Top" Width="553" Background="#FF191919" Foreground="White" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" />
                     <Button x:Name="ButtonCustomSVTPath" Content="     ..." HorizontalAlignment="Left" Margin="766,212,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" Click="ButtonCustomSVTPath_Click" />
-                    <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding Mode" HorizontalAlignment="Left" Margin="714,22,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding Mode" HorizontalAlignment="Left" Margin="714,22,0,0" VerticalAlignment="Top" Foreground="White">
+                        <CheckBox.ToolTip>Enables Batch Encoding. You need to specify input/output Folder with the above Buttons!</CheckBox.ToolTip>
+                    </CheckBox>
                     <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="397,22,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
                 </Grid>
             </TabItem>
@@ -457,11 +539,41 @@
                     <Button x:Name="ButtonSaveProfile" Content="Save Profile" HorizontalAlignment="Left" Margin="37,29,0,0" VerticalAlignment="Top" Width="86" Height="21" Background="#FF2B2B2B" Foreground="White" Click="ButtonSaveProfile_Click" />
                     <ComboBox x:Name="ComboBoxProfiles" HorizontalAlignment="Left" Margin="137,82,0,0" VerticalAlignment="Top" Width="187" Foreground="Black">
                     </ComboBox>
-                    <TextBox x:Name="TextBoxProfiles" HorizontalAlignment="Left" Height="21" Margin="137,29,0,0" TextWrapping="Wrap" Text="ProfileName.xml" VerticalAlignment="Top" Width="187" Foreground="White" Background="#FF1D1D1D" VerticalContentAlignment="Center" />
+                    <TextBox x:Name="TextBoxProfiles" HorizontalAlignment="Left" Height="21" Margin="137,29,0,0" TextWrapping="Wrap" Text="ProfileName.xml" VerticalAlignment="Top" Width="187" Foreground="White" Background="#FF1D1D1D" VerticalContentAlignment="Center">
+                        <TextBox.ToolTip>
+                            <ToolTip>
+                                <StackPanel Width="200">
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="1. Select a Profilename"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="2. Click Save Profile"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
                     <Button x:Name="ButtonProfilesRefresh" Content="Refresh List" HorizontalAlignment="Left" Margin="37,82,0,0" VerticalAlignment="Top" Width="86" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonProfilesRefresh_Click" />
                     <Button x:Name="ButtonLoadProfile" Content="Load Profile" HorizontalAlignment="Left" Margin="342,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonLoadProfile_Click" />
-                    <Button Content="Select Background Image" HorizontalAlignment="Left" Margin="10,251,0,0" VerticalAlignment="Top" Width="156" Click="Button_Click" Height="32" Background="#FF2B2B2B" Foreground="White" />
-                    <Button x:Name="ButtonSetProfileDefault" Content="Set as default" HorizontalAlignment="Left" Margin="448,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonSetProfileDefault_Click" />
+                    <Button Content="Select Background Image" HorizontalAlignment="Left" Margin="10,251,0,0" VerticalAlignment="Top" Width="156" Click="Button_Click" Height="32" Background="#FF2B2B2B" Foreground="White">
+                        <Button.ToolTip>
+                            Sets a custom Background Image. JPG/PNG recommended!
+                        </Button.ToolTip>
+                    </Button>
+                    <Button x:Name="ButtonSetProfileDefault" Content="Set as default" HorizontalAlignment="Left" Margin="448,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonSetProfileDefault_Click">
+                        <Button.ToolTip>
+                            <ToolTip>
+                                <StackPanel Width="200">
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="1. Select the Profile from Combobox."/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="2. Click Set as default"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
                 </Grid>
             </TabItem>
         </TabControl>

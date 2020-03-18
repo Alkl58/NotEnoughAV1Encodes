@@ -1575,7 +1575,9 @@ namespace NotEnoughAV1Encodes
             else if (comboitem == "SVT-AV1")
             {
                 SliderQuality.Maximum = 63;
-                SliderQuality.Value = 50;
+                SliderQuality.Value = 40;
+                SliderPreset.Value = 5;
+                SliderPreset.Maximum = 8;
                 CheckBoxCBR.IsEnabled = true;
                 ComboBoxAqMode.IsEnabled = true;
                 CheckBoxTwoPass.IsEnabled = true;
