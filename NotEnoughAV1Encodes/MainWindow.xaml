@@ -264,6 +264,7 @@
     </Window.Resources>
 
     <Grid>
+        <Border BorderBrush="#FFB2B2B2" BorderThickness="1" HorizontalAlignment="Left" Height="91" Margin="10,10,0,0" VerticalAlignment="Top" Width="867" />
         <Image x:Name="imgDynamic" Stretch="UniformToFill">
             <Image.Effect>
                 <BlurEffect Radius="7" RenderingBias="Quality"></BlurEffect>
@@ -275,7 +276,7 @@
         <TextBox x:Name="TextBoxVideoOutput" HorizontalAlignment="Left" Height="23" Margin="125,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="641" Background="#CC191919" Foreground="White" />
         <Button x:Name="ButtonOpenSource" Content="Open..." HorizontalAlignment="Left" Margin="784,27,0,0" VerticalAlignment="Top" Width="82" Height="23" Foreground="White" Background="#FF191919" BorderBrush="White" Style="{DynamicResource ButtonDarkStyle}" Click="ButtonOpenSource_Click" />
         <Button x:Name="ButtonSaveEncodeTo" Content="Save to..." HorizontalAlignment="Left" Margin="784,64,0,0" VerticalAlignment="Top" Width="82" Height="23" Foreground="White" Background="#FF191919" BorderBrush="White" Style="{DynamicResource ButtonDarkStyle}" Click="ButtonSaveEncodeTo_Click" />
-        <Border BorderBrush="#FFB2B2B2" BorderThickness="1" HorizontalAlignment="Left" Height="91" Margin="10,10,0,0" VerticalAlignment="Top" Width="867" />
+        
         <TabControl HorizontalAlignment="Left" Height="321" Margin="10,116,0,0" VerticalAlignment="Top" Width="867" Background="#CC191919">
             <TabItem Header="Summary" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                 <Grid Background="#19191919">
@@ -302,6 +303,9 @@
             </TabItem>
             <TabItem Header="General Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                 <Grid Background="#19191919">
+                    <Rectangle HorizontalAlignment="Left" Height="76" Margin="9,10,0,0" Stroke="#FF878787" VerticalAlignment="Top" Width="840"/>
+                    <Rectangle HorizontalAlignment="Left" Height="83" Margin="9,85,0,0" Stroke="#FF878787" VerticalAlignment="Top" Width="840"/>
+                    <Rectangle HorizontalAlignment="Left" Height="106" Margin="9,167,0,0" Stroke="#FF878787" VerticalAlignment="Top" Width="840"/>
                     <Label Content="Splitting" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
                     <Label Content="Chunk length:" HorizontalAlignment="Left" Margin="121,41,0,0" VerticalAlignment="Top" Foreground="White" />
                     <TextBox x:Name="TextBoxChunkLength" HorizontalAlignment="Left" Height="26" Margin="243,41,0,0" TextWrapping="Wrap" Text="180" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
@@ -363,12 +367,12 @@
                     <Label Content="| Highest Quality" HorizontalAlignment="Left" Margin="443,86,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Lowest Quality |" HorizontalAlignment="Left" Margin="741,86,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Constant Quality :" HorizontalAlignment="Left" Margin="443,38,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <Label Content="Bitrate (kbps) :" HorizontalAlignment="Left" Margin="443,136,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxBitrate" HorizontalAlignment="Left" Height="26" Margin="540,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" Foreground="White">
+                    <Label Content="Bitrate (kbps) :" HorizontalAlignment="Left" Margin="444,125,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <TextBox x:Name="TextBoxBitrate" HorizontalAlignment="Left" Height="26" Margin="542,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" Foreground="White">
                         <TextBox.ToolTip>Sets the target Bitrate. Not Recommended. Quality mode will deliver far better results!</TextBox.ToolTip>
                     </TextBox>
                     <RadioButton x:Name="RadioButtonConstantQuality" Content="" HorizontalAlignment="Left" Margin="424,44,0,0" VerticalAlignment="Top" IsChecked="True" />
-                    <RadioButton x:Name="RadioButtonBitrate" Content="" HorizontalAlignment="Left" Margin="424,143,0,0" VerticalAlignment="Top" Checked="RadioButtonBitrate_Checked" />
+                    <RadioButton x:Name="RadioButtonBitrate" Content="" HorizontalAlignment="Left" Margin="426,132,0,0" VerticalAlignment="Top" Checked="RadioButtonBitrate_Checked" />
                     <Label Content="Framerate:" HorizontalAlignment="Left" Margin="25,86,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Video optimisation" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,162,0,0" FontWeight="Bold" />
                     <Label Content="Encoding Preset:" HorizontalAlignment="Left" Margin="33,193,0,0" VerticalAlignment="Top" Foreground="White" />
@@ -412,12 +416,15 @@
                     <Label Content="| Slowest" HorizontalAlignment="Left" Margin="145,216,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Fastest |" HorizontalAlignment="Left" Margin="207,216,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label x:Name="LabelEncoderPreset" Content="{Binding ElementName=SliderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="129,193,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxCBR" Content="CBR" HorizontalAlignment="Left" Margin="680,142,0,0" VerticalAlignment="Top" Foreground="White">
+                    <CheckBox x:Name="CheckBoxCBR" Content="CBR" HorizontalAlignment="Left" Margin="682,131,0,0" VerticalAlignment="Top" Foreground="White">
                         <CheckBox.ToolTip>Constant Bitrate Mode. Not Recommended!</CheckBox.ToolTip>
                     </CheckBox>
                     <CheckBox x:Name="CheckBoxTwoPass" Content="2-Pass Encoding" HorizontalAlignment="Left" Margin="39,256,0,0" VerticalAlignment="Top" Foreground="White">
                         <CheckBox.ToolTip>Enables Two-Pass video encoding. Very Helpful if Bitrate mode is used.</CheckBox.ToolTip>
                     </CheckBox>
+                    
+
+
                 </Grid>
             </TabItem>
             <TabItem Header="Advanced Video Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}" Visibility="{Binding ElementName=CheckBoxAdvancedSettings, Path=IsChecked, Converter={StaticResource b2v}}">

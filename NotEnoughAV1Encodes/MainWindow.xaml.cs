@@ -38,6 +38,8 @@ namespace NotEnoughAV1Encodes
         public static int maxConcurrencyEncodes = 4;
         public static bool reencodeBeforeMainEncode = false;
         public static bool resumeMode = false;
+        public static bool inputSet = false;
+        public static bool outputSet = false;
         //------------------------------------------------------||
         //----- aomenc Settings --------------------------------||
         public static int numberOfPasses = 1;
@@ -1342,21 +1344,33 @@ namespace NotEnoughAV1Encodes
                 CheckResume();
                 SetParametersBeforeEncode();
                 SetAudioParameters();
-                if (ComboBoxEncoder.Text == "aomenc")
+                if (inputSet == false)
                 {
-                    SetAomencParameters();
+                    
+                    MessageBox.Show("Input Path not specified!");
                 }
-                else if (ComboBoxEncoder.Text == "RAV1E")
+                else if (outputSet == false)
                 {
-                    SetRavieParameters();
+                    MessageBox.Show("Output Path not specified!");
                 }
-                else if (ComboBoxEncoder.Text == "SVT-AV1")
+                else
                 {
-                    SetSVTAV1Parameters();
-                }
-                if (SmallScripts.Cancel.CancelAll == false)
-                {
-                    AsyncClass();
+                    if (ComboBoxEncoder.Text == "aomenc")
+                    {
+                        SetAomencParameters();
+                    }
+                    else if (ComboBoxEncoder.Text == "RAV1E")
+                    {
+                        SetRavieParameters();
+                    }
+                    else if (ComboBoxEncoder.Text == "SVT-AV1")
+                    {
+                        SetSVTAV1Parameters();
+                    }
+                    if (SmallScripts.Cancel.CancelAll == false)
+                    {
+                        AsyncClass();
+                    }
                 }
             }
             else if (CheckBoxBatchEncoding.IsChecked == true)
@@ -1497,6 +1511,7 @@ namespace NotEnoughAV1Encodes
                 {
                     TextBoxVideoOutput.Text = saveVideoFileDialog.FileName;
                     videoOutput = saveVideoFileDialog.FileName;
+                    outputSet = true;
                 }
             }
             else if (CheckBoxBatchEncoding.IsChecked == true)
@@ -1506,6 +1521,7 @@ namespace NotEnoughAV1Encodes
                 if (browseOutputFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     TextBoxVideoOutput.Text = browseOutputFolder.SelectedPath;
+                    outputSet = true;
                 }
             }
         }
@@ -1526,9 +1542,10 @@ namespace NotEnoughAV1Encodes
                     TextBoxVideoInput.Text = openVideoFileDialog.FileName;
                     GetStreamFps(TextBoxVideoInput.Text);
                     SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
-
+                    inputSet = true;
                     if (CheckBoxAutomaticChunkLength.IsChecked == true)
                     {
+                        //Sets the Chunk Length automaticly
                         TextBoxChunkLength.Text = (Int16.Parse(streamLength) / Int16.Parse(TextBoxNumberOfWorkers.Text)).ToString();
                     }
                 }
@@ -1539,6 +1556,7 @@ namespace NotEnoughAV1Encodes
 
                 if (browseInputFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
+                    inputSet = true;
                     TextBoxVideoInput.Text = browseInputFolder.SelectedPath;
                 }
             }
