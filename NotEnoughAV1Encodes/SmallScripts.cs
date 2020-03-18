@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 
 namespace NotEnoughAV1Encodes
 {
@@ -52,6 +53,11 @@ namespace NotEnoughAV1Encodes
                 }
 
                 foreach (var process in Process.GetProcessesByName("rav1e"))
+                {
+                    process.Kill();
+                }
+
+                foreach (var process in Process.GetProcessesByName("SvtAv1EncApp"))
                 {
                     process.Kill();
                 }
@@ -156,6 +162,41 @@ namespace NotEnoughAV1Encodes
                 }
             }
             catch { }
+        }
+
+        public static void CheckAudioEncode()
+        {
+            //Checks if Audio Encoding was successful
+            if (File.Exists(MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv") == false)
+            {
+                if (MessageBox.Show("Something with the Audio Encoding went wrong! Skip Audio?", "Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    MainWindow.audioEncoding = false;
+                }
+                else
+                {
+                    Cancel.CancelAll = true;
+                }
+            }
+            
+        }
+
+        public static void CheckSubtitleEncode()
+        {
+            //Checks if the Subtitle Muxing was successful
+            if ((File.Exists(MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv") == false || File.Exists(MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv") == false ) && MainWindow.subtitleStreamCopy == true)
+            {
+                if (MessageBox.Show("Something with the Subtitles went wrong! Skip Subtitles?", "Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    MainWindow.subtitles = false;
+                    MainWindow.subtitleStreamCopy = false;
+                    MainWindow.subtitleCustom = false;
+                }
+                else
+                {
+                    Cancel.CancelAll = true;
+                }
+            }
         }
     }
 }

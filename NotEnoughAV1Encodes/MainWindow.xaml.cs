@@ -109,11 +109,13 @@ namespace NotEnoughAV1Encodes
             {
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Audio Encdoding ...", DispatcherPriority.Background);
                 await Task.Run(() => EncodeAudio.AudioEncode());
+                SmallScripts.CheckAudioEncode();
             }
             if (CheckBoxEnableSubtitles.IsChecked == true && resumeMode == false)
             {
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Subtitle Copying ...", DispatcherPriority.Background);
                 await Task.Run(() => Subtitle.EncSubtitles());
+                SmallScripts.CheckSubtitleEncode();
             }
             if (resumeMode == false)
             {
@@ -229,11 +231,13 @@ namespace NotEnoughAV1Encodes
                     {
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Audio Encdoding ...", DispatcherPriority.Background);
                         await Task.Run(() => EncodeAudio.AudioEncode());
+                        SmallScripts.CheckAudioEncode();
                     }
                     if (CheckBoxEnableSubtitles.IsChecked == true && resumeMode == false && RadioButtonCustomSubtitles.IsChecked == false)
                     {
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Subtitle Copying ...", DispatcherPriority.Background);
                         await Task.Run(() => Subtitle.EncSubtitles());
+                        SmallScripts.CheckSubtitleEncode();
                     }
                     if (resumeMode == false)
                     {
