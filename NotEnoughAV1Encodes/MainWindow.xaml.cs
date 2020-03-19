@@ -107,7 +107,7 @@ namespace NotEnoughAV1Encodes
         {
             if (CheckBoxAudioEncoding.IsChecked == true && resumeMode == false)
             {
-                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Audio Encdoding ...", DispatcherPriority.Background);
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Audio Encoding ...", DispatcherPriority.Background);
                 await Task.Run(() => EncodeAudio.AudioEncode());
                 SmallScripts.CheckAudioEncode();
             }

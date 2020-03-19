@@ -262,7 +262,7 @@
         </Style>
         <BooleanToVisibilityConverter x:Key="b2v" />
     </Window.Resources>
-
+    
     <Grid>
         <Border BorderBrush="#FFB2B2B2" BorderThickness="1" HorizontalAlignment="Left" Height="91" Margin="10,10,0,0" VerticalAlignment="Top" Width="867" />
         <Image x:Name="imgDynamic" Stretch="UniformToFill">

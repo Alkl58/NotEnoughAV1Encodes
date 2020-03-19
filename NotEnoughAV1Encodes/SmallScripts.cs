@@ -184,7 +184,19 @@ namespace NotEnoughAV1Encodes
         public static void CheckSubtitleEncode()
         {
             //Checks if the Subtitle Muxing was successful
-            if ((File.Exists(MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv") == false || File.Exists(MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv") == false ) && MainWindow.subtitleStreamCopy == true)
+            if (File.Exists(MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv") == false && MainWindow.subtitleStreamCopy == true)
+            {
+                if (MessageBox.Show("Something with the Subtitles went wrong! Skip Subtitles?", "Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    MainWindow.subtitles = false;
+                    MainWindow.subtitleStreamCopy = false;
+                    MainWindow.subtitleCustom = false;
+                }
+                else
+                {
+                    Cancel.CancelAll = true;
+                }
+            }else if (File.Exists(MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv") == false && MainWindow.subtitleCustom == true)
             {
                 if (MessageBox.Show("Something with the Subtitles went wrong! Skip Subtitles?", "Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
