@@ -74,6 +74,14 @@ namespace NotEnoughAV1Encodes
         public static bool trackTwo = false;
         public static bool trackThree = false;
         public static bool trackFour = false;
+        public static string firstTrackIndex = "1";
+        public static string secondTrackIndex = "2";
+        public static string thirdTrackIndex = "3";
+        public static string fourthTrackIndex = "4";
+        public static bool detectedTrackOne = false;
+        public static bool detectedTrackTwo = false;
+        public static bool detectedTrackThree = false;
+        public static bool detectedTrackFour = false;
         //------------------------------------------------------||
         //----- Resizing ---------------------------------------||
         public static string videoResize = "";
@@ -206,6 +214,7 @@ namespace NotEnoughAV1Encodes
                 deleteTempAfterEncode = true;
 
                 GetStreamFps(videoInput);
+                CheckAudioTracks(videoInput);
                 SmallScripts.GetStreamLength(videoInput);
 
                 if (CheckBoxAutomaticChunkLength.IsChecked == true)
@@ -323,6 +332,7 @@ namespace NotEnoughAV1Encodes
                 deleteTempAfterEncode = true;
 
                 GetStreamFps(TextBoxVideoInput.Text);
+                CheckAudioTracks(TextBoxVideoInput.Text);
                 SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
 
                 videoInput = TextBoxVideoInput.Text;
@@ -442,6 +452,7 @@ namespace NotEnoughAV1Encodes
                 {
                     pLabel.Dispatcher.Invoke(() => pLabel.Content = "Resuming...", DispatcherPriority.Background);
                     GetStreamFps(TextBoxVideoInput.Text);
+                    CheckAudioTracks(TextBoxVideoInput.Text);
                     SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
                     videoOutput = TextBoxVideoOutput.Text;
                 }
@@ -451,6 +462,7 @@ namespace NotEnoughAV1Encodes
                     {
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Restarting...", DispatcherPriority.Background);
                         GetStreamFps(TextBoxVideoInput.Text);
+                        CheckAudioTracks(TextBoxVideoInput.Text);
                         SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
                         videoOutput = TextBoxVideoOutput.Text;
                         //This will be set if you Press Encode after a already finished encode
@@ -466,6 +478,7 @@ namespace NotEnoughAV1Encodes
                     {
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Restarting...", DispatcherPriority.Background);
                         GetStreamFps(TextBoxVideoInput.Text);
+                        CheckAudioTracks(TextBoxVideoInput.Text);
                         SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
                         videoOutput = TextBoxVideoOutput.Text;
                         //This will be set if you Press Encode after a already finished encode
@@ -566,14 +579,14 @@ namespace NotEnoughAV1Encodes
 
             if (ComboBoxEncoder.Text == "aomenc")
             {
-                if(CheckBoxCustomAomencPath.IsChecked == false)
+                if (CheckBoxCustomAomencPath.IsChecked == false)
                 {
                     aomencExist = File.Exists("aomenc.exe");
-                }else if (CheckBoxCustomAomencPath.IsChecked == true)
+                } else if (CheckBoxCustomAomencPath.IsChecked == true)
                 {
                     aomencExist = File.Exists(TextBoxCustomAomencPath.Text + "\\aomenc.exe");
                 }
-            }else if (ComboBoxEncoder.Text == "RAV1E")
+            } else if (ComboBoxEncoder.Text == "RAV1E")
             {
                 if (CheckBoxCustomRaviePath.IsChecked == false)
                 {
@@ -583,7 +596,7 @@ namespace NotEnoughAV1Encodes
                 {
                     ravieExist = File.Exists(TextBoxCustomRaviePath.Text + "\\rav1e.exe");
                 }
-            }else if (ComboBoxEncoder.Text == "SVT-AV1")
+            } else if (ComboBoxEncoder.Text == "SVT-AV1")
             {
                 if (CheckBoxCustomSVTPath.IsChecked == false)
                 {
@@ -598,7 +611,7 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxCustomFfmpegPath.IsChecked == false)
             {
                 ffmpegExist = File.Exists("ffmpeg.exe");
-            }else if (CheckBoxCustomFfmpegPath.IsChecked == true)
+            } else if (CheckBoxCustomFfmpegPath.IsChecked == true)
             {
                 ffmpegExist = File.Exists(TextBoxCustomFfmpegPath.Text + "\\ffmpeg.exe");
             }
@@ -619,7 +632,7 @@ namespace NotEnoughAV1Encodes
                     MessageBox.Show("Couldn't find all depedencies: \n aomenc found: " + aomencExist + "\n ffmpeg found: " + ffmpegExist + " \n ffprobe found: " + ffprobeExist);
                     SmallScripts.Cancel.CancelAll = true;
                 }
-            }else if (ComboBoxEncoder.Text == "RAV1E")
+            } else if (ComboBoxEncoder.Text == "RAV1E")
             {
                 if (ravieExist == false || ffmpegExist == false || ffprobeExist == false)
                 {
@@ -637,6 +650,116 @@ namespace NotEnoughAV1Encodes
             }
 
         }
+
+        public void CheckAudioTracks(string fileinput)
+        {
+            //Gets the AudioIndexes of the Input Video, because people may use bad videofiles with wrong indexes
+            string input = '\u0022' + fileinput + '\u0022';
+            Process getAudioIndexes = new Process();
+            getAudioIndexes.StartInfo = new ProcessStartInfo()
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                WorkingDirectory = exeffprobePath,
+                Arguments = "/C ffprobe.exe -i " + input + " -loglevel error -select_streams a -show_streams -show_entries stream=index:tags=:disposition= -of csv",
+                RedirectStandardError = true,
+                RedirectStandardOutput = true
+            };
+            getAudioIndexes.Start();
+
+            //Reads the Console Output
+            string audioIndexes = getAudioIndexes.StandardOutput.ReadToEnd();
+
+            //Splits the Console Output
+            string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", "stream," }, StringSplitOptions.RemoveEmptyEntries);
+
+            List<string> audioIndexList = new List<string>();
+
+            int detectedTracks = 0;
+            foreach (var item in audioIndexesFixed)
+            {
+                //Console.WriteLine(item.Trim());
+                audioIndexList.Add(item.Trim());
+
+                if (detectedTracks == 0)
+                {
+                    firstTrackIndex = item.Trim();
+                    detectedTrackOne = true;
+                }
+                if (detectedTracks == 1)
+                {
+                    secondTrackIndex = item.Trim();
+                    detectedTrackTwo = true;
+                }
+                if (detectedTracks == 2)
+                {
+                    thirdTrackIndex = item.Trim();
+                    detectedTrackThree = true;
+                }
+                if (detectedTracks == 3)
+                {
+                    fourthTrackIndex = item.Trim();
+                    detectedTrackFour = true;
+                }
+
+                detectedTracks += 1;
+            }
+
+            getAudioIndexes.WaitForExit();
+
+            //Sets the Checkboxes
+            if (detectedTrackOne == false)
+            {
+                CheckBoxAudioTrackOne.IsEnabled = false;
+                CheckBoxAudioTrackOne.IsChecked = false;
+            }else
+            {
+                CheckBoxAudioTrackOne.IsEnabled = true;
+            }
+
+            if (detectedTrackTwo == false)
+            {
+                CheckBoxAudioTrackTwo.IsEnabled = false;
+                CheckBoxAudioTrackTwo.IsChecked = false;
+            }
+            else
+            {
+                CheckBoxAudioTrackTwo.IsEnabled = true;
+            }
+
+            if (detectedTrackThree == false)
+            {
+                CheckBoxAudioTrackThree.IsEnabled = false;
+                CheckBoxAudioTrackThree.IsChecked = false;
+            }
+            else
+            {
+                CheckBoxAudioTrackThree.IsEnabled = true;
+            }
+
+            if (detectedTrackFour == false)
+            {
+                CheckBoxAudioTrackFour.IsEnabled = false;
+                CheckBoxAudioTrackFour.IsChecked = false;
+            }
+            else
+            {
+                CheckBoxAudioTrackFour.IsEnabled = true;
+            }
+
+            if (detectedTrackFour == false && detectedTrackThree == false && detectedTrackTwo == false && detectedTrackOne == false)
+            {
+                CheckBoxAudioEncoding.IsChecked = false;
+                CheckBoxAudioEncoding.IsEnabled = false;
+            }else
+            {
+                CheckBoxAudioEncoding.IsEnabled = true;
+            }
+
+        }
+
 
         //-------------------------------------------------------------------------------------------------||
 
@@ -1622,7 +1745,7 @@ namespace NotEnoughAV1Encodes
                 if (CheckBoxQueueMode.IsChecked == true)
                 {
                     QueueEncode();
-                }else
+                } else
                 {
                     //Main entry Point
                     SmallScripts.Cancel.CancelAll = false;
@@ -1660,7 +1783,7 @@ namespace NotEnoughAV1Encodes
                     }
                 }
 
-                
+
             }
             else if (CheckBoxBatchEncoding.IsChecked == true)
             {
@@ -1707,6 +1830,12 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
         {
+
+            detectedTrackOne = false;
+            detectedTrackTwo = false;
+            detectedTrackThree = false;
+            detectedTrackFour = false;
+
             if (CheckBoxBatchEncoding.IsChecked == false)
             {
                 CheckDependencies();
@@ -1720,6 +1849,7 @@ namespace NotEnoughAV1Encodes
                     CheckFfprobe();
                     TextBoxVideoInput.Text = openVideoFileDialog.FileName;
                     GetStreamFps(TextBoxVideoInput.Text);
+                    CheckAudioTracks(TextBoxVideoInput.Text);
                     SmallScripts.GetStreamLength(TextBoxVideoInput.Text);
                     inputSet = true;
                     if (CheckBoxAutomaticChunkLength.IsChecked == true)
@@ -1847,7 +1977,7 @@ namespace NotEnoughAV1Encodes
                 ListBoxQueue.Items.Add(TextBoxQueueName.Text);
             }
             catch { }
-            
+
         }
 
         private void ButtonRemoveFromQueue_Click(object sender, RoutedEventArgs e)
@@ -1858,7 +1988,7 @@ namespace NotEnoughAV1Encodes
                 ListBoxQueue.Items.RemoveAt(ListBoxQueue.SelectedIndex);
             }
             catch { }
-            
+
         }
 
         //-------------------------------------------------------------------------------------------------||

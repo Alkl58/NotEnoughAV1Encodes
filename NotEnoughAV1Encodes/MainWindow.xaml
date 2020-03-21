@@ -475,7 +475,7 @@
                         <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
                     </ComboBox>
                     <Label Content="Codec:" HorizontalAlignment="Left" Margin="44,60,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxAudioTrackOne" Content="Track 1" HorizontalAlignment="Left" Margin="436,68,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True">
+                    <CheckBox x:Name="CheckBoxAudioTrackOne" Content="Track 1" HorizontalAlignment="Left" Margin="436,68,0,0" VerticalAlignment="Top" Foreground="White">
                         <CheckBox.ToolTip>
                             <ToolTip>Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!</ToolTip>
                         </CheckBox.ToolTip>
