@@ -22,11 +22,7 @@ namespace NotEnoughAV1Encodes
             ffmpegslit.StartInfo = startInfo;
             ffmpegslit.Start();
             ffmpegslit.WaitForExit();
-
-            if (SmallScripts.Cancel.CancelAll == false)
-            {
-                SmallScripts.WriteToFileThreadSafe("True", "splitted.log");
-            }
+            if (SmallScripts.Cancel.CancelAll == false) { SmallScripts.WriteToFileThreadSafe("True", "splitted.log"); }
         }
     }
 }

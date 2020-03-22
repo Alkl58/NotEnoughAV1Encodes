@@ -36,7 +36,6 @@ namespace NotEnoughAV1Encodes
                 process.Start();
                 process.WaitForExit();
 
-
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 startInfo.FileName = "cmd.exe";
                 startInfo.WorkingDirectory = MainWindow.exeffmpegPath;

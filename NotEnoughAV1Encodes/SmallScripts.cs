@@ -47,25 +47,10 @@ namespace NotEnoughAV1Encodes
             //Kills all aomenc and ffmpeg instances
             try
             {
-                foreach (var process in Process.GetProcessesByName("aomenc"))
-                {
-                    process.Kill();
-                }
-
-                foreach (var process in Process.GetProcessesByName("rav1e"))
-                {
-                    process.Kill();
-                }
-
-                foreach (var process in Process.GetProcessesByName("SvtAv1EncApp"))
-                {
-                    process.Kill();
-                }
-
-                foreach (var process in Process.GetProcessesByName("ffmpeg"))
-                {
-                    process.Kill();
-                }
+                foreach (var process in Process.GetProcessesByName("aomenc")) { process.Kill(); }
+                foreach (var process in Process.GetProcessesByName("rav1e")) { process.Kill(); }
+                foreach (var process in Process.GetProcessesByName("SvtAv1EncApp")) { process.Kill(); }
+                foreach (var process in Process.GetProcessesByName("ffmpeg")) { process.Kill(); }
             }
             catch { }
         }
@@ -113,13 +98,8 @@ namespace NotEnoughAV1Encodes
             };
             process.Start();
             string streamlength = process.StandardOutput.ReadLine();
-            //TextBoxFramerate.Text = fpsOutput;
-            //Console.WriteLine(process.StartInfo);
             string value = new DataTable().Compute(streamlength, null).ToString();
             MainWindow.streamLength = Convert.ToInt64(Math.Round(Convert.ToDouble(value))).ToString();
-            //streamLength = streamlength;
-            //Console.WriteLine(MainWindow.streamLength);
-
             process.WaitForExit();
         }
 
@@ -128,26 +108,11 @@ namespace NotEnoughAV1Encodes
             try
             {
                 //Delete Files, because of lazy dump****
-                if (File.Exists("splitted.log"))
-                {
-                    File.Delete("splitted.log");
-                }
-                if (File.Exists("encoded.log"))
-                {
-                    File.Delete("encoded.log");
-                }
-                if (File.Exists("no_audio.mkv"))
-                {
-                    File.Delete("no_audio.mkv");
-                }
-                if (Directory.Exists("Temp"))
-                {
-                    Directory.Delete("Temp", true);
-                }
-                if (File.Exists("unfinishedjob.xml"))
-                {
-                    File.Delete("unfinishedjob.xml");
-                }
+                if (File.Exists("splitted.log")) { File.Delete("splitted.log"); }
+                if (File.Exists("encoded.log")) { File.Delete("encoded.log"); }
+                if (File.Exists("no_audio.mkv")) { File.Delete("no_audio.mkv"); }
+                if (Directory.Exists("Temp")) { Directory.Delete("Temp", true); }
+                if (File.Exists("unfinishedjob.xml")) { File.Delete("unfinishedjob.xml"); }
             }
             catch { }
         }
@@ -156,10 +121,7 @@ namespace NotEnoughAV1Encodes
         {
             try
             {
-                if (Directory.Exists(path))
-                {
-                    Directory.Delete(path, true);
-                }
+                if (Directory.Exists(path)) { Directory.Delete(path, true); }
             }
             catch { }
         }

@@ -22,7 +22,6 @@ namespace NotEnoughAV1Encodes
                 startInfo.WorkingDirectory = MainWindow.exeffmpegPath + "\\";
                 startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -vn -an -dn -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv" + '\u0022';
                 process.StartInfo = startInfo;
-                //Console.WriteLine(startInfo.Arguments);
                 process.Start();
                 process.WaitForExit();
             }
@@ -40,8 +39,6 @@ namespace NotEnoughAV1Encodes
                     subtitleAmount += 1;
                 }
 
-                Console.WriteLine(subtitleMapping + subtitleInput);
-
                 Process process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -50,7 +47,6 @@ namespace NotEnoughAV1Encodes
                 startInfo.WorkingDirectory = MainWindow.exeffmpegPath + "\\";
                 startInfo.Arguments = "/C ffmpeg.exe" + subtitleInput + " -vn -an -dn -c copy " + subtitleMapping + " " + '\u0022' + MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv" + '\u0022';
                 process.StartInfo = startInfo;
-                Console.WriteLine(startInfo.Arguments);
                 process.Start();
                 process.WaitForExit();
             }

@@ -55,7 +55,6 @@ namespace NotEnoughAV1Encodes
                 startInfo.WorkingDirectory = MainWindow.exeffmpegPath + "\\";
                 startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn" + audioInput + audioMapping + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022';
                 process.StartInfo = startInfo;
-                Console.WriteLine(startInfo.Arguments);
                 process.Start();
                 process.WaitForExit();
                 //----------------------------------------------------------------------------------------||
