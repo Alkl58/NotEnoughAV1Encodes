@@ -54,7 +54,6 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsRavie = "";
         public static string pipeBitDepth = " yuv420p";
         public static bool rav1eEncode = false;
-
         //------------------------------------------------------||
         //----- SVT-AV1 Settings -------------------------------||
         public static string svtav1 = "";
