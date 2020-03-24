@@ -36,33 +36,35 @@ namespace NotEnoughAV1Encodes
                 process.Start();
                 process.WaitForExit();
 
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
-                if (MainWindow.audioEncoding == true && MainWindow.subtitles == false)
+                if (MainWindow.audioEncoding != false || MainWindow.subtitles != false)
                 {
-                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022' + " -map_metadata -1 -map 0:v -map 1:a -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
+                    if (MainWindow.audioEncoding == true && MainWindow.subtitles == false)
+                    {
+                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022' + " -map_metadata -1 -map 0:v -map 1:a -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                    }
+                    else if (MainWindow.audioEncoding == true && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == true && MainWindow.subtitleCustom == false)
+                    {
+                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv" + " -map_metadata -1 -map 0:v -map 1:a -map 2:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                    }
+                    else if (MainWindow.audioEncoding == true && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == false && MainWindow.subtitleCustom == true)
+                    {
+                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv" + " -map_metadata -1 -map 0:v -map 1:a -map 2:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                    }
+                    else if (MainWindow.audioEncoding == false && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == false && MainWindow.subtitleCustom == true)
+                    {
+                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv" + " -map_metadata -1 -map 0:v -map 1:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                    }
+                    else if (MainWindow.audioEncoding == false && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == true && MainWindow.subtitleCustom == false)
+                    {
+                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv" + " -map_metadata -1 -map 0:v -map 1:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                    }
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
                 }
-                else if (MainWindow.audioEncoding == true && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == true && MainWindow.subtitleCustom == false)
-                {
-                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv" + " -map_metadata -1 -map 0:v -map 1:a -map 2:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
-                }
-                else if (MainWindow.audioEncoding == true && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == false && MainWindow.subtitleCustom == true)
-                {
-                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv" + " -map_metadata -1 -map 0:v -map 1:a -map 2:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
-                }
-                else if (MainWindow.audioEncoding == false && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == false && MainWindow.subtitleCustom == true)
-                {
-                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv" + " -map_metadata -1 -map 0:v -map 1:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
-                }
-                else if (MainWindow.audioEncoding == false && MainWindow.subtitles == true && MainWindow.subtitleStreamCopy == true && MainWindow.subtitleCustom == false)
-                {
-                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv" + " -map_metadata -1 -map 0:v -map 1:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
-                }
-                process.StartInfo = startInfo;
-                process.Start();
-                process.WaitForExit();
-
             }
         }
     }
