@@ -652,6 +652,9 @@ namespace NotEnoughAV1Encodes
 
         public void CheckAudioTracks(string fileinput)
         {
+
+            CheckSubtitleTracks(fileinput);
+
             //Gets the AudioIndexes of the Input Video, because people may use bad videofiles with wrong indexes
             string input = '\u0022' + fileinput + '\u0022';
             Process getAudioIndexes = new Process();
@@ -756,6 +759,41 @@ namespace NotEnoughAV1Encodes
             {
                 CheckBoxAudioEncoding.IsEnabled = true;
             }
+
+        }
+
+        public void CheckSubtitleTracks(string fileinput)
+        {
+            //Gets the SubtitleIndexes of the Input Video, because people may enable subtitles, even they don't exist
+            string input = '\u0022' + fileinput + '\u0022';
+            Process getSubtitleIndexes = new Process();
+            getSubtitleIndexes.StartInfo = new ProcessStartInfo()
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                WorkingDirectory = exeffprobePath,
+                Arguments = "/C ffprobe.exe -i " + input + " -loglevel error -select_streams s -show_streams -show_entries stream=index:tags=:disposition= -of csv",
+                RedirectStandardError = true,
+                RedirectStandardOutput = true
+            };
+
+            getSubtitleIndexes.Start();
+
+            //Reads the Console Output
+            string subtitleIndexes = getSubtitleIndexes.StandardOutput.ReadToEnd();
+
+            if (subtitleIndexes == "")
+            {
+                CheckBoxEnableSubtitles.IsChecked = false;
+                CheckBoxEnableSubtitles.IsEnabled = false;
+            }else if(subtitleIndexes != "")
+            {
+                CheckBoxEnableSubtitles.IsEnabled = true;
+            }
+
+            getSubtitleIndexes.WaitForExit();
 
         }
 
