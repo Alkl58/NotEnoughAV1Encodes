@@ -47,16 +47,8 @@ namespace NotEnoughAV1Encodes
                 }
                 //----------------------------------------------------------------------------------------||
                 //Audio Encoding -------------------------------------------------------------------------||
-                Process process = new Process();
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.UseShellExecute = true;
-                startInfo.FileName = "cmd.exe";
-                startInfo.WorkingDirectory = MainWindow.exeffmpegPath + "\\";
-                startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn" + audioInput + audioMapping + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022';
-                process.StartInfo = startInfo;
-                process.Start();
-                process.WaitForExit();
+                string ffmpegAudioCommands = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn" + audioInput + audioMapping + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022';
+                SmallScripts.ExecuteFfmpegTask(ffmpegAudioCommands);
                 //----------------------------------------------------------------------------------------||
             }
         }

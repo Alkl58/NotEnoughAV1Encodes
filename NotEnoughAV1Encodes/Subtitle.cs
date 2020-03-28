@@ -14,16 +14,8 @@ namespace NotEnoughAV1Encodes
 
             if (MainWindow.subtitleStreamCopy == true)
             {
-                Process process = new Process();
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.UseShellExecute = true;
-                startInfo.FileName = "cmd.exe";
-                startInfo.WorkingDirectory = MainWindow.exeffmpegPath + "\\";
-                startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -vn -an -dn -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv" + '\u0022';
-                process.StartInfo = startInfo;
-                process.Start();
-                process.WaitForExit();
+                string subtitleCommand = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -vn -an -dn -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv" + '\u0022';
+                SmallScripts.ExecuteFfmpegTask(subtitleCommand);
             }
 
             if (MainWindow.subtitleCustom == true)
@@ -39,16 +31,8 @@ namespace NotEnoughAV1Encodes
                     subtitleAmount += 1;
                 }
 
-                Process process = new Process();
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.UseShellExecute = true;
-                startInfo.FileName = "cmd.exe";
-                startInfo.WorkingDirectory = MainWindow.exeffmpegPath + "\\";
-                startInfo.Arguments = "/C ffmpeg.exe" + subtitleInput + " -vn -an -dn -c copy " + subtitleMapping + " " + '\u0022' + MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv" + '\u0022';
-                process.StartInfo = startInfo;
-                process.Start();
-                process.WaitForExit();
+                string subtitleCommand = "/C ffmpeg.exe" + subtitleInput + " -vn -an -dn -c copy " + subtitleMapping + " " + '\u0022' + MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv" + '\u0022';
+                SmallScripts.ExecuteFfmpegTask(subtitleCommand);
             }
         }
     }

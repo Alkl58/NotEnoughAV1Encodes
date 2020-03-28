@@ -172,5 +172,19 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
+
+        public static void ExecuteFfmpegTask(string ffmpegCommand)
+        {
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.WorkingDirectory = MainWindow.exeffmpegPath;
+            startInfo.Arguments = ffmpegCommand;
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+
+        }
     }
 }
