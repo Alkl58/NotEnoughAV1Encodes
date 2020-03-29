@@ -141,12 +141,12 @@ namespace NotEnoughAV1Encodes
                 if (ComboBoxEncoder.Text == "aomenc")
                 {
                     pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started aomenc...", DispatcherPriority.Background);
-                    await Task.Run(() => EncodeAomenc());
+                    await Task.Run(() => EncodeAomencOrRav1e());
                 }
                 else if (ComboBoxEncoder.Text == "RAV1E")
                 {
                     pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started RAV1E...", DispatcherPriority.Background);
-                    await Task.Run(() => EncodeRavie());
+                    await Task.Run(() => EncodeAomencOrRav1e());
                 }
                 else if (ComboBoxEncoder.Text == "SVT-AV1")
                 {
@@ -264,12 +264,12 @@ namespace NotEnoughAV1Encodes
                         if (ComboBoxEncoder.Text == "aomenc")
                         {
                             pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started aomenc...", DispatcherPriority.Background);
-                            await Task.Run(() => EncodeAomenc());
+                            await Task.Run(() => EncodeAomencOrRav1e());
                         }
                         else if (ComboBoxEncoder.Text == "RAV1E")
                         {
                             pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started RAV1E...", DispatcherPriority.Background);
-                            await Task.Run(() => EncodeRavie());
+                            await Task.Run(() => EncodeAomencOrRav1e());
                         }
                         else if (ComboBoxEncoder.Text == "SVT-AV1")
                         {
@@ -385,12 +385,12 @@ namespace NotEnoughAV1Encodes
                         if (ComboBoxEncoder.Text == "aomenc")
                         {
                             pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started aomenc...", DispatcherPriority.Background);
-                            await Task.Run(() => EncodeAomenc());
+                            await Task.Run(() => EncodeAomencOrRav1e());
                         }
                         else if (ComboBoxEncoder.Text == "RAV1E")
                         {
                             pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started RAV1E...", DispatcherPriority.Background);
-                            await Task.Run(() => EncodeRavie());
+                            await Task.Run(() => EncodeAomencOrRav1e());
                         }
                         else if (ComboBoxEncoder.Text == "SVT-AV1")
                         {
@@ -833,13 +833,13 @@ namespace NotEnoughAV1Encodes
             streamFrameRate = TextBoxFramerate.Text;
             maxConcurrencyEncodes = Int16.Parse(TextBoxNumberOfWorkers.Text);
             //Sets the aomenc path
-            if (CheckBoxCustomAomencPath.IsChecked == false)
+            if (CheckBoxCustomAomencPath.IsChecked == false && ComboBoxEncoder.Text == "aomenc")
             {
                 aomenc = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "aomenc.exe");
                 aomEncode = true;
                 rav1eEncode = false;
             }
-            else if (CheckBoxCustomAomencPath.IsChecked == true)
+            else if (CheckBoxCustomAomencPath.IsChecked == true && ComboBoxEncoder.Text == "aomenc")
             {
                 exeaomencPath = TextBoxCustomAomencPath.Text;
                 aomenc = System.IO.Path.Combine(exeaomencPath, "aomenc.exe");
@@ -848,13 +848,13 @@ namespace NotEnoughAV1Encodes
             }
             //----------------------------------------------------------------------------------------||
             //Needed Parameters for rav1e Encoding ---------------------------------------------------||
-            if (CheckBoxCustomRaviePath.IsChecked == false)
+            if (CheckBoxCustomRaviePath.IsChecked == false && ComboBoxEncoder.Text == "RAV1E")
             {
                 ravie = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "rav1e.exe");
                 rav1eEncode = true;
                 aomEncode = false;
             }
-            else if (CheckBoxCustomRaviePath.IsChecked == true)
+            else if (CheckBoxCustomRaviePath.IsChecked == true && ComboBoxEncoder.Text == "RAV1E")
             {
                 exerav1ePath = TextBoxCustomRaviePath.Text;
                 ravie = System.IO.Path.Combine(exerav1ePath, "rav1e.exe");
@@ -1078,7 +1078,7 @@ namespace NotEnoughAV1Encodes
 
         //----------------------------------------- Encoders ----------------------------------------------||
 
-        private void EncodeAomenc()
+        private void EncodeAomencOrRav1e()
         {
             MainProgressBar.Dispatcher.Invoke(() => MainProgressBar.Maximum = Int16.Parse(numberofvideoChunks), DispatcherPriority.Background);
             pLabel.Dispatcher.Invoke(() => pLabel.Content = "0 / " + MainProgressBar.Maximum, DispatcherPriority.Background);
@@ -1107,7 +1107,16 @@ namespace NotEnoughAV1Encodes
                                     startInfo.UseShellExecute = true;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=1" + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+
+                                    if (aomEncode == true)
+                                    {
+                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=1" + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    }
+                                    else if (rav1eEncode == true)
+                                    {
+                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    }
+
                                     process.StartInfo = startInfo;
                                     //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
@@ -1141,7 +1150,16 @@ namespace NotEnoughAV1Encodes
                                         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                         startInfo.FileName = "cmd.exe";
                                         startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=1 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=NUL";
+
+                                        if (aomEncode == true)
+                                        {
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=1 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=NUL";
+                                        }
+                                        else if (rav1eEncode == true)
+                                        {
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --first-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022';
+                                        }
+                                        
                                         process.StartInfo = startInfo;
                                         //Console.WriteLine(startInfo.Arguments);
                                         process.Start();
@@ -1161,7 +1179,15 @@ namespace NotEnoughAV1Encodes
                                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+
+                                    if (aomEncode == true)
+                                    {
+                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    }else if (rav1eEncode == true)
+                                    {
+                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --second-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    }
+                                    
                                     process.StartInfo = startInfo;
                                     //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
@@ -1196,123 +1222,6 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void EncodeRavie()
-        {
-            MainProgressBar.Dispatcher.Invoke(() => MainProgressBar.Maximum = Int16.Parse(numberofvideoChunks), DispatcherPriority.Background);
-            pLabel.Dispatcher.Invoke(() => pLabel.Content = "0 / " + MainProgressBar.Maximum, DispatcherPriority.Background);
-            string labelstring = videoChunks.Count().ToString();
-            //Sets the Time for later eta calculation
-            DateTime starttime = DateTime.Now;
-            starttimea = starttime;
-            using (SemaphoreSlim concurrencySemaphore = new SemaphoreSlim(maxConcurrencyEncodes))
-            {
-                List<Task> tasks = new List<Task>();
-                foreach (var items in videoChunks)
-                {
-                    concurrencySemaphore.Wait();
-
-                    var t = Task.Factory.StartNew(() =>
-                    {
-                        try
-                        {
-                            if (SmallScripts.Cancel.CancelAll == false)
-                            {
-                                if (numberOfPasses == 1)
-                                {
-                                    Process process = new Process();
-                                    ProcessStartInfo startInfo = new ProcessStartInfo();
-                                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                                    startInfo.UseShellExecute = true;
-                                    startInfo.FileName = "cmd.exe";
-                                    startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
-                                    process.StartInfo = startInfo;
-                                    //Console.WriteLine(startInfo.Arguments);
-                                    process.Start();
-                                    process.WaitForExit();
-
-                                    //Progressbar +1
-                                    MainProgressBar.Dispatcher.Invoke(() => MainProgressBar.Value += 1, DispatcherPriority.Background);
-                                    //Label of Progressbar = Progressbar
-                                    TimeSpan timespent = DateTime.Now - starttime;
-
-                                    pLabel.Dispatcher.Invoke(() => pLabel.Content = MainProgressBar.Value + " / " + labelstring + " - " + Math.Round(Convert.ToDecimal(((((Int16.Parse(streamLength) * Int16.Parse(streamFrameRateLabel)) / Int16.Parse(labelstring)) * MainProgressBar.Value) / timespent.TotalSeconds)), 2).ToString() + "fps" + " - " + Math.Round((((timespent.TotalSeconds / MainProgressBar.Value) * (Int16.Parse(labelstring) - MainProgressBar.Value)) / 60), MidpointRounding.ToEven) + "min left", DispatcherPriority.Background);
-
-                                    if (SmallScripts.Cancel.CancelAll == false)
-                                    {
-                                        //Write Item to file for later resume if something bad happens
-                                        SmallScripts.WriteToFileThreadSafe(items, "encoded.log");
-                                    }
-                                    else
-                                    {
-                                        SmallScripts.KillInstances();
-                                    }
-                                }
-                                else if (numberOfPasses == 2)
-                                {
-                                    Process process = new Process();
-                                    ProcessStartInfo startInfo = new ProcessStartInfo();
-
-                                    bool FileExistFirstPass = File.Exists(chunksDir + "\\" + items + "_1pass_successfull.log");
-                                    if (FileExistFirstPass != true)
-                                    {
-                                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                                        startInfo.FileName = "cmd.exe";
-                                        startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --first-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022';
-                                        process.StartInfo = startInfo;
-                                        //Console.WriteLine(startInfo.Arguments);
-                                        process.Start();
-                                        process.WaitForExit();
-
-                                        if (SmallScripts.Cancel.CancelAll == false)
-                                        {
-                                            //Write Item to file for later resume if something bad happens
-                                            SmallScripts.WriteToFileThreadSafe("", chunksDir + "\\" + items + "_1pass_successfull.log");
-                                        }
-                                        else
-                                        {
-                                            SmallScripts.KillInstances();
-                                        }
-                                    }
-
-                                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                                    startInfo.FileName = "cmd.exe";
-                                    startInfo.WorkingDirectory = exeffmpegPath + "\\";
-                                    startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --second-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
-                                    process.StartInfo = startInfo;
-                                    //Console.WriteLine(startInfo.Arguments);
-                                    process.Start();
-                                    process.WaitForExit();
-
-                                    MainProgressBar.Dispatcher.Invoke(() => MainProgressBar.Value += 1, DispatcherPriority.Background);
-                                    TimeSpan timespent = DateTime.Now - starttime;
-                                    pLabel.Dispatcher.Invoke(() => pLabel.Content = MainProgressBar.Value + " / " + labelstring + " - " + Math.Round(Convert.ToDecimal(((((Int16.Parse(streamLength) * Int16.Parse(streamFrameRateLabel)) / Int16.Parse(labelstring)) * MainProgressBar.Value) / timespent.TotalSeconds)), 2).ToString() + "fps" + " - " + Math.Round((((timespent.TotalSeconds / MainProgressBar.Value) * (Int16.Parse(labelstring) - MainProgressBar.Value)) / 60), MidpointRounding.ToEven) + "min left", DispatcherPriority.Background);
-
-                                    if (SmallScripts.Cancel.CancelAll == false)
-                                    {
-                                        //Write Item to file for later resume if something bad happens
-                                        SmallScripts.WriteToFileThreadSafe(items, "encoded.log");
-                                    }
-                                    else
-                                    {
-                                        SmallScripts.KillInstances();
-                                    }
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            concurrencySemaphore.Release();
-                        }
-                    });
-
-                    tasks.Add(t);
-                }
-
-                Task.WaitAll(tasks.ToArray());
-            }
-        }
 
         private void EncodeSVTAV1()
         {
