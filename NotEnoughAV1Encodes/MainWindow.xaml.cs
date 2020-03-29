@@ -444,7 +444,8 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxResumeMode.IsChecked == true)
             {
                 resumeMode = true;
-
+                inputSet = true;
+                outputSet = true;
                 bool encodedExist = File.Exists("encoded.log");
                 bool splittedExist = File.Exists("splitted.log");
                 if (encodedExist && splittedExist)
@@ -1792,7 +1793,6 @@ namespace NotEnoughAV1Encodes
                     SetAudioParameters();
                     if (inputSet == false)
                     {
-
                         MessageBox.Show("Input Path not specified!");
                     }
                     else if (outputSet == false)
