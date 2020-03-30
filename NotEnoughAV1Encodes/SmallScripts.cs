@@ -173,8 +173,21 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        public static void CheckSuccessfulEncode()
+        {
+            //Checks if Muxing created the specified output
+            string videoOutputPath = @MainWindow.videoOutput;
+            if (File.Exists(videoOutputPath) == false)
+            {
+                MessageBox.Show("Something with the Muxing went wrong! Automatic deleting of the tempfiles is disabled. Temp files can be found in the working directory. Please feel free to submit an error report to the Github Repository.", "Error", MessageBoxButton.OK);
+                MainWindow.deleteTempAfterEncode = false;
+                Cancel.CancelAll = true;
+            }
+        }
+
         public static void ExecuteFfmpegTask(string ffmpegCommand)
         {
+            //Run ffmpeg command
             Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -184,7 +197,6 @@ namespace NotEnoughAV1Encodes
             process.StartInfo = startInfo;
             process.Start();
             process.WaitForExit();
-
         }
     }
 }

@@ -170,9 +170,12 @@ namespace NotEnoughAV1Encodes
                 }
                 if (CheckBoxDeleteTempFiles.IsChecked == true || deleteTempAfterEncode == true)
                 {
-                    SmallScripts.DeleteTempFiles();
-
-                    if (CheckBoxCustomTempFolder.IsChecked == true)
+                    if (SmallScripts.Cancel.CancelAll == false)
+                    {
+                        SmallScripts.DeleteTempFiles();
+                    }
+                    
+                    if (CheckBoxCustomTempFolder.IsChecked == true && SmallScripts.Cancel.CancelAll == false)
                     {
                         SmallScripts.DeleteTempFilesDir(workingTempDirectory);
                     }
@@ -1417,6 +1420,8 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "ResizeFrameHeight") { TextBoxFrameHeight.Text = n.InnerText; }
                 if (n.Name == "ResizeFrameWidth") { TextBoxFrameWidth.Text = n.InnerText; }
                 if (n.Name == "SubtitleEnabled") { if (n.InnerText == "True") { CheckBoxEnableSubtitles.IsChecked = true; } else { CheckBoxEnableSubtitles.IsChecked = false; } }
+                if (n.Name == "SubtitleEnabledStreamCopy") { if (n.InnerText == "True") { RadioButtonStreamCopySubtitle.IsChecked = true; } else { RadioButtonStreamCopySubtitle.IsChecked = false; } }
+                if (n.Name == "SubtitleEnabledCustom") { if (n.InnerText == "True") { RadioButtonCustomSubtitles.IsChecked = true; } else { RadioButtonCustomSubtitles.IsChecked = false; } }
                 if (n.Name == "CalculateChunkLengthAutomaticly") { if (n.InnerText == "True") { CheckBoxAutomaticChunkLength.IsChecked = true; } else { CheckBoxAutomaticChunkLength.IsChecked = false; } }
                 if (n.Name == "PlayFinishedSound") { if (n.InnerText == "True") { CheckBoxEnableFinishedSound.IsChecked = true; } else { CheckBoxEnableFinishedSound.IsChecked = false; } }
                 if (saveJob == true || saveQueue == true)
@@ -1495,6 +1500,8 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("ResizeFrameHeight", TextBoxFrameHeight.Text);
             writer.WriteElementString("ResizeFrameWidth", TextBoxFrameWidth.Text);
             writer.WriteElementString("SubtitleEnabled", CheckBoxEnableSubtitles.IsChecked.ToString());
+            writer.WriteElementString("SubtitleEnabledStreamCopy", RadioButtonStreamCopySubtitle.IsChecked.ToString());
+            writer.WriteElementString("SubtitleEnabledCustom", RadioButtonCustomSubtitles.IsChecked.ToString());
             writer.WriteElementString("CalculateChunkLengthAutomaticly", CheckBoxAutomaticChunkLength.IsChecked.ToString());
             writer.WriteElementString("PlayFinishedSound", CheckBoxEnableFinishedSound.IsChecked.ToString());
 
