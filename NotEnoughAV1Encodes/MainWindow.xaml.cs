@@ -2044,6 +2044,19 @@ namespace NotEnoughAV1Encodes
 
         }
 
+        private void TextBoxNumberOfWorkers_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (CheckBoxAutomaticChunkLength != null)
+                {
+                    if (CheckBoxAutomaticChunkLength.IsChecked == true)
+                    //Sets the Chunk Length automaticly
+                    TextBoxChunkLength.Text = (Int16.Parse(streamLength) / Int16.Parse(TextBoxNumberOfWorkers.Text)).ToString();
+                }
+            }
+            catch { }
+        }
         //-------------------------------------------------------------------------------------------------||
     }
 }

@@ -311,7 +311,7 @@
                     <TextBox x:Name="TextBoxChunkLength" HorizontalAlignment="Left" Height="26" Margin="243,41,0,0" TextWrapping="Wrap" Text="180" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                     <Label Content="Workers" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,85,0,0" FontWeight="Bold" />
                     <Label Content="Number of parallel Encodings:" HorizontalAlignment="Left" Margin="35,122,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxNumberOfWorkers" HorizontalAlignment="Left" Height="26" Margin="243,122,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="63" Background="#FF2C2C2C" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                    <TextBox x:Name="TextBoxNumberOfWorkers" HorizontalAlignment="Left" Height="26" Margin="243,122,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="63" Background="#FF2C2C2C" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="TextBoxNumberOfWorkers_TextChanged">
                         <TextBox.ToolTip>
                             <ToolTip>Sets the number of parallel encodings. Should not exceed physical core count.</ToolTip>
                         </TextBox.ToolTip>
