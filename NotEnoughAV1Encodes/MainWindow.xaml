@@ -473,6 +473,7 @@
                         <ComboBoxItem Content="AC3" Foreground="White" />
                         <ComboBoxItem Content="AAC" Foreground="White" />
                         <ComboBoxItem Content="MP3" Foreground="White" />
+                        <ComboBoxItem Content="Copy Audio" Foreground="White"/>
                         <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
                     </ComboBox>
                     <Label Content="Codec:" HorizontalAlignment="Left" Margin="44,60,0,0" VerticalAlignment="Top" Foreground="White" />
