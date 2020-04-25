@@ -342,6 +342,7 @@
                         <ComboBoxItem Content="aomenc" IsSelected="True" Foreground="White" />
                         <ComboBoxItem Content="RAV1E" Foreground="White" />
                         <ComboBoxItem Content="SVT-AV1" Foreground="White" />
+                        <ComboBoxItem Content="libaom" Foreground="White"/>
                     </ComboBox>
                     <Label Content="Quality" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="388,10,0,0" FontWeight="Bold" />
                     <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="443,64,0,0" VerticalAlignment="Top" Width="392" Height="22" Maximum="63" SmallChange="1" Value="30" Foreground="White" TickPlacement="BottomRight" IsSnapToTickEnabled="True">

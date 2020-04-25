@@ -61,6 +61,12 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsSvtav1 = "";
         public static string allSettingsSvtav1SecondPass = "";
         //------------------------------------------------------||
+        //----- libaom Settings --------------------------------||
+        public static string libaom = "";
+        public static string libaomQualityMode = "";
+        public static string allSettingslibaom = "";
+        public static bool libaomEncode = false;
+        //------------------------------------------------------||
         //----- Custom Background ------------------------------||
         public static string PathToBackground = "";
         public static bool customBackground = false;
@@ -138,7 +144,7 @@ namespace NotEnoughAV1Encodes
             await Task.Run(() => SmallScripts.CountVideoChunks());
             if (SmallScripts.Cancel.CancelAll == false)
             {
-                if (ComboBoxEncoder.Text == "aomenc")
+                if (ComboBoxEncoder.Text == "aomenc" || ComboBoxEncoder.Text == "libaom")
                 {
                     pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started aomenc...", DispatcherPriority.Background);
                     await Task.Run(() => EncodeAomencOrRav1e());
@@ -264,7 +270,7 @@ namespace NotEnoughAV1Encodes
                     await Task.Run(() => SmallScripts.CountVideoChunks());
                     if (SmallScripts.Cancel.CancelAll == false)
                     {
-                        if (ComboBoxEncoder.Text == "aomenc")
+                        if (ComboBoxEncoder.Text == "aomenc" || ComboBoxEncoder.Text == "libaom")
                         {
                             pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started aomenc...", DispatcherPriority.Background);
                             await Task.Run(() => EncodeAomencOrRav1e());
@@ -385,7 +391,7 @@ namespace NotEnoughAV1Encodes
                     await Task.Run(() => SmallScripts.CountVideoChunks());
                     if (SmallScripts.Cancel.CancelAll == false)
                     {
-                        if (ComboBoxEncoder.Text == "aomenc")
+                        if (ComboBoxEncoder.Text == "aomenc" || ComboBoxEncoder.Text == "libaom")
                         {
                             pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started aomenc...", DispatcherPriority.Background);
                             await Task.Run(() => EncodeAomencOrRav1e());
@@ -628,10 +634,11 @@ namespace NotEnoughAV1Encodes
                 ffprobeExist = File.Exists(TextBoxCustomFfmpegPath.Text + "\\ffprobe.exe");
             }
 
-            if (ComboBoxEncoder.Text == "aomenc")
+            if (ComboBoxEncoder.Text == "aomenc" && inputSet == true)
             {
                 if (aomencExist == false || ffmpegExist == false || ffprobeExist == false)
                 {
+                    Console.WriteLine("wut");
                     MessageBox.Show("Couldn't find all depedencies: \n aomenc found: " + aomencExist + "\n ffmpeg found: " + ffmpegExist + " \n ffprobe found: " + ffprobeExist);
                     SmallScripts.Cancel.CancelAll = true;
                 }
@@ -642,12 +649,18 @@ namespace NotEnoughAV1Encodes
                     MessageBox.Show("Couldn't find all depedencies: \n rav1e found: " + ravieExist + "\n ffmpeg found: " + ffmpegExist + " \n ffprobe found: " + ffprobeExist);
                     SmallScripts.Cancel.CancelAll = true;
                 }
-            }
-            else if (ComboBoxEncoder.Text == "SVT-AV1")
+            }else if (ComboBoxEncoder.Text == "SVT-AV1")
             {
                 if (svtav1Exist == false || ffmpegExist == false || ffprobeExist == false)
                 {
                     MessageBox.Show("Couldn't find all depedencies: \n SVT-AV1 found: " + svtav1Exist + "\n ffmpeg found: " + ffmpegExist + " \n ffprobe found: " + ffprobeExist);
+                    SmallScripts.Cancel.CancelAll = true;
+                }
+            }else if (ComboBoxEncoder.Text == "libaom")
+            {
+                if (ffmpegExist == false || ffprobeExist == false)
+                {
+                    MessageBox.Show("Couldn't find all depedencies: \n ffmpeg found: " + ffmpegExist + " \n ffprobe found: " + ffprobeExist);
                     SmallScripts.Cancel.CancelAll = true;
                 }
             }
@@ -838,7 +851,7 @@ namespace NotEnoughAV1Encodes
             //Sets the aomenc path
             if (CheckBoxCustomAomencPath.IsChecked == false && ComboBoxEncoder.Text == "aomenc")
             {
-                aomenc = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "aomenc.exe");
+                aomenc = Path.Combine(Directory.GetCurrentDirectory(), "aomenc.exe");
                 aomEncode = true;
                 rav1eEncode = false;
             }
@@ -848,6 +861,15 @@ namespace NotEnoughAV1Encodes
                 aomenc = System.IO.Path.Combine(exeaomencPath, "aomenc.exe");
                 aomEncode = true;
                 rav1eEncode = false;
+            }
+            //----------------------------------------------------------------------------------------||
+            //Needed Parameters for libaom Encoding --------------------------------------------------||
+            if (CheckBoxCustomFfmpegPath.IsChecked == false && ComboBoxEncoder.Text == "libaom")
+            {
+                libaom = Path.Combine(Directory.GetCurrentDirectory(), "ffmpeg.exe");
+                libaomEncode = true;
+                rav1eEncode = false;
+                aomEncode = false;
             }
             //----------------------------------------------------------------------------------------||
             //Needed Parameters for rav1e Encoding ---------------------------------------------------||
@@ -964,6 +986,67 @@ namespace NotEnoughAV1Encodes
             {
                 allSettingsAom = " " + TextBoxCustomCommand.Text;
             }
+        }
+
+        public void SetLibAomParameters()
+        {
+            //Sets 2-Pass Mode -----------------------------------------------------------------------||
+            if (CheckBoxTwoPass.IsChecked == true)
+            {
+                numberOfPasses = 2;
+            }
+            //----------------------------------------------------------------------------------------||
+            //Sets Quality Mode ----------------------------------------------------------------------||
+            if (RadioButtonConstantQuality.IsChecked == true)
+            {
+                aomencQualityMode = " -crf " + SliderQuality.Value + " -b:v 0";
+            }
+            else if (RadioButtonBitrate.IsChecked == true)
+            {
+                aomencQualityMode = " -b:v " + TextBoxBitrate.Text + "k";
+            }
+            //----------------------------------------------------------------------------------------||
+            //Sets libaom arguments ------------------------------------------------------------------||
+            if (ComboBoxBitDepth.Text == "10")
+            {
+                pipeBitDepth = " yuv420p10le";
+            }
+            else if (ComboBoxBitDepth.Text == "12")
+            {
+                pipeBitDepth = " yuv420p12le";
+            }
+            if (CheckBoxAdvancedSettings.IsChecked == false)
+            {
+                //Basic Settings
+                allSettingsAom = aomencQualityMode + " -cpu-used " + SliderPreset.Value + " -r " + TextBoxFramerate.Text + " -threads 2 -g 240 -tile-columns 1 -tile-rows 1";
+            }
+            else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == false)
+            {
+                string aqMode = "";
+                if (ComboBoxAqMode.Text == "0")
+                {
+                    aqMode = "0";
+                }
+                else if (ComboBoxAqMode.Text == "1")
+                {
+                    aqMode = "1";
+                }
+                else if (ComboBoxAqMode.Text == "2")
+                {
+                    aqMode = "2";
+                }
+                else if (ComboBoxAqMode.Text == "3")
+                {
+                    aqMode = "3";
+                }
+                allSettingsAom = aomencQualityMode + " -cpu-used " + SliderPreset.Value + " -r " + TextBoxFramerate.Text + " -threads " + TextBoxThreads.Text + " -g " + TextBoxKeyframeInterval.Text + " -tile-rows " + TextBoxTileRows.Text + " -tile-columns " + TextBoxTileColumns.Text + " -aq-mode " + aqMode;
+            }
+            else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == true)
+            {
+                allSettingsAom = " " + TextBoxCustomCommand.Text;
+            }
+            //Sets Piping Bit-Depth Settings because rav1e can't convert it itself--------------------||
+
         }
 
         public void SetRavieParameters()
@@ -1119,9 +1202,13 @@ namespace NotEnoughAV1Encodes
                                     {
                                         startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     }
+                                    else if (libaomEncode == true)
+                                    {
+                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    }
 
                                     process.StartInfo = startInfo;
-                                    //Console.WriteLine(startInfo.Arguments);
+                                    Console.WriteLine(startInfo.Arguments);
                                     process.Start();
                                     process.WaitForExit();
 
@@ -1162,6 +1249,10 @@ namespace NotEnoughAV1Encodes
                                         {
                                             startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --first-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022';
                                         }
+                                        else if (libaomEncode == true)
+                                        {
+                                            startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 1 -passlogfile " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + " -f matroska NUL";
+                                        }
                                         
                                         process.StartInfo = startInfo;
                                         //Console.WriteLine(startInfo.Arguments);
@@ -1186,9 +1277,14 @@ namespace NotEnoughAV1Encodes
                                     if (aomEncode == true)
                                     {
                                         startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
-                                    }else if (rav1eEncode == true)
+                                    }
+                                    else if (rav1eEncode == true)
                                     {
                                         startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + ravie + '\u0022' + " - " + allSettingsRavie + " --second-pass " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + " --output " + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                    }
+                                    else if (libaomEncode == true)
+                                    {
+                                        startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 2 -passlogfile " + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + " " + '\u0022' + chunksDir + "\\" + items + " - av1.ivf" + '\u0022';
                                     }
                                     
                                     process.StartInfo = startInfo;
@@ -1224,7 +1320,6 @@ namespace NotEnoughAV1Encodes
                 Task.WaitAll(tasks.ToArray());
             }
         }
-
 
         private void EncodeSVTAV1()
         {
@@ -1305,6 +1400,7 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
+
 
         //-------------------------------------------------------------------------------------------------||
 
@@ -1728,6 +1824,10 @@ namespace NotEnoughAV1Encodes
                         else if (ComboBoxEncoder.Text == "SVT-AV1")
                         {
                             SetSVTAV1Parameters();
+                        }
+                        else if (ComboBoxEncoder.Text == "libaom")
+                        {
+                            SetLibAomParameters();
                         }
                         if (SmallScripts.Cancel.CancelAll == false)
                         {
