@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Xml;
@@ -41,12 +42,21 @@ namespace NotEnoughAV1Encodes
         public static bool inputSet = false;
         public static bool outputSet = false;
         //------------------------------------------------------||
+        //----- Color Settings ---------------------------------||
+        public static string yuvcolorspace = " yuv420p";
+        public static string colorprimaries = "bt709";
+        public static string colortransfer = "bt709";
+        public static string colormatrix = "bt709";
+        //------------------------------------------------------||
         //----- aomenc Settings --------------------------------||
         public static int numberOfPasses = 1;
         public static string aomenc = "";
         public static string aomencQualityMode = "";
         public static string allSettingsAom = "";
         public static bool aomEncode = false;
+        public static string aomColormatrix = "bt709";
+        public static string aomColortransfer = "bt709";
+        public static string aomChromaSubsample = "--i420";
         //------------------------------------------------------||
         //----- RAV1E Settings ---------------------------------||
         public static string ravie = "";
@@ -54,6 +64,8 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsRavie = "";
         public static string pipeBitDepth = " yuv420p";
         public static bool rav1eEncode = false;
+        public static string rav1eColormatrix = "BT709";
+        public static string rav1eColortransfer = "BT709";
         //------------------------------------------------------||
         //----- SVT-AV1 Settings -------------------------------||
         public static string svtav1 = "";
@@ -928,6 +940,76 @@ namespace NotEnoughAV1Encodes
                 shutDownAfterEncode = true;
             }
             CheckDependencies();
+            //----------------------------------------------------------------------------------------||
+            //Color ----------------------------------------------------------------------------------||
+            switch (ComboBoxChroma.Text)
+            {
+                case "4:2:0":
+                    yuvcolorspace = " yuv420p";
+                    pipeBitDepth = " yuv420p";
+                    if (ComboBoxBitDepth.Text == "10") { pipeBitDepth = " yuv420p10le -strict -1"; }
+                    if (ComboBoxBitDepth.Text == "12") { pipeBitDepth = " yuv420p12le -strict -1"; }
+                    break;
+                case "4:2:2":
+                    yuvcolorspace = " yuv422p";
+                    pipeBitDepth = " yuv422p -strict -1";
+                    if (ComboBoxBitDepth.Text == "10") { pipeBitDepth = " yuv422p10le -strict -1"; }
+                    if (ComboBoxBitDepth.Text == "12") { pipeBitDepth = " yuv422p12le -strict -1"; }
+                    break;
+                case "4:4:4":
+                    yuvcolorspace = " yuv444p";
+                    pipeBitDepth = " yuv444p -strict -1";
+                    if (ComboBoxBitDepth.Text == "10") { pipeBitDepth = " yuv444p10le -strict -1"; }
+                    if (ComboBoxBitDepth.Text == "12") { pipeBitDepth = " yuv444p12le -strict -1"; }
+                    break;
+                default:
+                    break;
+            }
+            switch (ComboBoxColorPrim.Text)
+            {
+                case "BT.709":
+                    colorprimaries = "bt709";
+                    break;
+                case "BT.2020":
+                    colorprimaries = "bt2020";
+                    break;
+                default:
+                    break;
+            }
+            switch (ComboBoxColorSpace.Text)
+            {
+                case "BT.709":
+                    colormatrix = "bt709";
+                    break;
+                case "BT.2020C":
+                    colormatrix = "bt2020c";
+                    break;
+                case "BT.2020NC":
+                    colormatrix = "bt2020nc";
+                    break;
+                case "SMPTE2085":
+                    colormatrix = "smpte2085";
+                    break;
+                default:
+                    break;
+            }
+            switch (ComboBoxColorTrans.Text)
+            {
+                case "BT.709":
+                    colortransfer = "bt709";
+                    break;
+                case "BT.2020-10":
+                    colortransfer = "bt2020-10";
+                    break;
+                case "BT.2020-12":
+                    colortransfer = "bt2020-12";
+                    break;
+                case "SMPTE2084":
+                    colortransfer = "smpte2084";
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void SetAomencParameters()
@@ -963,6 +1045,21 @@ namespace NotEnoughAV1Encodes
             }
             else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == false)
             {
+
+                if (colormatrix == "bt709") { aomColormatrix = "bt709"; }
+                else if (colormatrix == "bt2020c") { aomColormatrix = "bt2020cl"; }
+                else if (colormatrix == "bt2020nc") { aomColormatrix = "bt2020ncl"; }
+                else if (colormatrix == "smpte2085") { aomColormatrix = "smpte2085"; }
+
+                if (colortransfer == "bt709") {aomColortransfer = "bt709"; }
+                else if (colortransfer == "bt2020-10") { aomColortransfer = "bt2020-10bit"; }
+                else if (colortransfer == "bt2020-12") { aomColortransfer = "bt2020-12bit"; }
+                else if (colortransfer == "smpte2084") { aomColortransfer = "smpte2084"; }
+
+                if (yuvcolorspace == " yuv420p") { aomChromaSubsample = "--i420"; }
+                else if (yuvcolorspace == " yuv422p") { aomChromaSubsample = "--i422"; }
+                else if (yuvcolorspace == " yuv444p") { aomChromaSubsample = "--i444"; }
+
                 string aqMode = "";
                 if (ComboBoxAqMode.Text == "0")
                 {
@@ -980,7 +1077,7 @@ namespace NotEnoughAV1Encodes
                 {
                     aqMode = "3";
                 }
-                allSettingsAom = " --cpu-used=" + SliderPreset.Value + " --bit-depth=" + ComboBoxBitDepth.Text + " --fps=" + TextBoxFramerate.Text + " --threads=" + TextBoxThreads.Text + " --kf-max-dist=" + TextBoxKeyframeInterval.Text + " --tile-rows=" + TextBoxTileRows.Text + " --tile-columns=" + TextBoxTileColumns.Text + " --aq-mode=" + aqMode + aomencQualityMode;
+                allSettingsAom = " --cpu-used=" + SliderPreset.Value + " " + aomChromaSubsample + " --transfer-characteristics=" + aomColortransfer + " --color-primaries=" + colorprimaries + " --matrix-coefficients=" + aomColormatrix + " --bit-depth=" + ComboBoxBitDepth.Text + " --fps=" + TextBoxFramerate.Text + " --threads=" + TextBoxThreads.Text + " --kf-max-dist=" + TextBoxKeyframeInterval.Text + " --tile-rows=" + TextBoxTileRows.Text + " --tile-columns=" + TextBoxTileColumns.Text + " --aq-mode=" + aqMode + aomencQualityMode;
             }
             else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == true)
             {
@@ -1009,11 +1106,11 @@ namespace NotEnoughAV1Encodes
             //Sets libaom arguments ------------------------------------------------------------------||
             if (ComboBoxBitDepth.Text == "10")
             {
-                pipeBitDepth = " yuv420p10le";
+                //pipeBitDepth = " yuv420p10le";
             }
             else if (ComboBoxBitDepth.Text == "12")
             {
-                pipeBitDepth = " yuv420p12le";
+                //pipeBitDepth = " yuv420p12le";
             }
             if (CheckBoxAdvancedSettings.IsChecked == false)
             {
@@ -1039,7 +1136,7 @@ namespace NotEnoughAV1Encodes
                 {
                     aqMode = "3";
                 }
-                allSettingsAom = aomencQualityMode + " -cpu-used " + SliderPreset.Value + " -r " + TextBoxFramerate.Text + " -threads " + TextBoxThreads.Text + " -g " + TextBoxKeyframeInterval.Text + " -tile-rows " + TextBoxTileRows.Text + " -tile-columns " + TextBoxTileColumns.Text + " -aq-mode " + aqMode;
+                allSettingsAom = aomencQualityMode + " -colorspace " + colormatrix + " -color_primaries " + colorprimaries + " -color_trc " + colortransfer + " -cpu-used " + SliderPreset.Value + " -r " + TextBoxFramerate.Text + " -threads " + TextBoxThreads.Text + " -g " + TextBoxKeyframeInterval.Text + " -tile-rows " + TextBoxTileRows.Text + " -tile-columns " + TextBoxTileColumns.Text + " -aq-mode " + aqMode;
             }
             else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == true)
             {
@@ -1075,7 +1172,18 @@ namespace NotEnoughAV1Encodes
             }
             else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == false)
             {
-                allSettingsRavie = " --speed " + SliderPreset.Value + " --keyint " + TextBoxKeyframeInterval.Text + " --tile-rows " + TextBoxTileRows.Text + " --tile-cols " + TextBoxTileColumns.Text + " --primaries BT709 --transfer BT709 --matrix BT709 --threads " + TextBoxThreads.Text + ravieQualityMode;
+
+                if (colortransfer == "bt709") { rav1eColortransfer = "BT709"; }
+                else if (colortransfer == "bt2020-10") { rav1eColortransfer = "BT2020_10Bit"; }
+                else if (colortransfer == "bt2020-12") { rav1eColortransfer = "BT2020_12Bit"; }
+                else if (colortransfer == "smpte2084") { rav1eColortransfer = "SMPTE2084"; }
+
+                if (colormatrix == "bt709") { rav1eColormatrix = "BT709"; }
+                else if (colormatrix == "bt2020c") { rav1eColormatrix = "BT2020CL"; }
+                else if (colormatrix == "bt2020nc") { rav1eColormatrix = "BT2020NCL"; }
+                else if (colormatrix == "smpte2085") { rav1eColormatrix = "SMPTE2085"; }
+
+                allSettingsRavie = " --primaries " + colorprimaries + " --transfer " + rav1eColortransfer + " --matrix " + rav1eColormatrix + " --speed " + SliderPreset.Value + " --keyint " + TextBoxKeyframeInterval.Text + " --tile-rows " + TextBoxTileRows.Text + " --tile-cols " + TextBoxTileColumns.Text + " --threads " + TextBoxThreads.Text + ravieQualityMode;
             }
             else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == true)
             {
@@ -1196,7 +1304,7 @@ namespace NotEnoughAV1Encodes
 
                                     if (aomEncode == true)
                                     {
-                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=1" + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=1" + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     }
                                     else if (rav1eEncode == true)
                                     {
@@ -1243,7 +1351,7 @@ namespace NotEnoughAV1Encodes
 
                                         if (aomEncode == true)
                                         {
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=1 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=NUL";
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=1 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=NUL";
                                         }
                                         else if (rav1eEncode == true)
                                         {
@@ -1276,7 +1384,7 @@ namespace NotEnoughAV1Encodes
 
                                     if (aomEncode == true)
                                     {
-                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt yuv420p -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
+                                        startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + chunksDir + "\\" + items + '\u0022' + " " + videoResize + " -pix_fmt" + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomenc + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + chunksDir + "\\" + items + "_stats.log" + '\u0022' + allSettingsAom + " --output=" + '\u0022' + chunksDir + "\\" + items + "-av1.ivf" + '\u0022';
                                     }
                                     else if (rav1eEncode == true)
                                     {
@@ -1520,6 +1628,32 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "SubtitleEnabledCustom") { if (n.InnerText == "True") { RadioButtonCustomSubtitles.IsChecked = true; } else { RadioButtonCustomSubtitles.IsChecked = false; } }
                 if (n.Name == "CalculateChunkLengthAutomaticly") { if (n.InnerText == "True") { CheckBoxAutomaticChunkLength.IsChecked = true; } else { CheckBoxAutomaticChunkLength.IsChecked = false; } }
                 if (n.Name == "PlayFinishedSound") { if (n.InnerText == "True") { CheckBoxEnableFinishedSound.IsChecked = true; } else { CheckBoxEnableFinishedSound.IsChecked = false; } }
+                if (n.Name == "ChromaSubsampling")
+                {
+                    if (n.InnerText == "4:2:0") { ComboBoxEncoder.SelectedIndex = 0; }
+                    if (n.InnerText == "4:2:2") { ComboBoxEncoder.SelectedIndex = 1; }
+                    if (n.InnerText == "4:4:4") { ComboBoxEncoder.SelectedIndex = 2; }
+                }
+                if (n.Name == "ColorTransfer")
+                {
+                    if (n.InnerText == "BT.709") { ComboBoxEncoder.SelectedIndex = 0; }
+                    if (n.InnerText == "BT.2020-10") { ComboBoxEncoder.SelectedIndex = 1; }
+                    if (n.InnerText == "BT.2020-12") { ComboBoxEncoder.SelectedIndex = 2; }
+                    if (n.InnerText == "SMPTE2084") { ComboBoxEncoder.SelectedIndex = 3; }
+                }
+                if (n.Name == "ColorPrimaries")
+                {
+                    if (n.InnerText == "BT.709") { ComboBoxEncoder.SelectedIndex = 0; }
+                    if (n.InnerText == "BT.2020") { ComboBoxEncoder.SelectedIndex = 1; }
+                }
+                if (n.Name == "ColorSpace")
+                {
+                    if (n.InnerText == "BT.709") { ComboBoxEncoder.SelectedIndex = 0; }
+                    if (n.InnerText == "BT.2020NC") { ComboBoxEncoder.SelectedIndex = 1; }
+                    if (n.InnerText == "BT.2020C") { ComboBoxEncoder.SelectedIndex = 2; }
+                    if (n.InnerText == "SMPTE2085") { ComboBoxEncoder.SelectedIndex = 3; }
+                }
+
                 if (saveJob == true || saveQueue == true)
                 {
                     if (n.Name == "VideoInput") { TextBoxVideoInput.Text = n.InnerText; }
@@ -1600,6 +1734,10 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("SubtitleEnabledCustom", RadioButtonCustomSubtitles.IsChecked.ToString());
             writer.WriteElementString("CalculateChunkLengthAutomaticly", CheckBoxAutomaticChunkLength.IsChecked.ToString());
             writer.WriteElementString("PlayFinishedSound", CheckBoxEnableFinishedSound.IsChecked.ToString());
+            writer.WriteElementString("ChromaSubsampling", ComboBoxChroma.Text);
+            writer.WriteElementString("ColorTransfer", ComboBoxColorTrans.Text);
+            writer.WriteElementString("ColorPrimaries", ComboBoxColorPrim.Text);
+            writer.WriteElementString("ColorSpace", ComboBoxColorSpace.Text);
 
             if (saveJob == true || saveQueue == true)
             {

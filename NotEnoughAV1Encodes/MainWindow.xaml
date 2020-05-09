@@ -262,7 +262,7 @@
         </Style>
         <BooleanToVisibilityConverter x:Key="b2v" />
     </Window.Resources>
-    
+
     <Grid>
         <Border BorderBrush="#FFB2B2B2" BorderThickness="1" HorizontalAlignment="Left" Height="91" Margin="10,10,0,0" VerticalAlignment="Top" Width="867" />
         <Image x:Name="imgDynamic" Stretch="UniformToFill">
@@ -430,21 +430,25 @@
             </TabItem>
             <TabItem Header="Advanced Video Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}" Visibility="{Binding ElementName=CheckBoxAdvancedSettings, Path=IsChecked, Converter={StaticResource b2v}}">
                 <Grid Background="#19191919">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="179*"/>
+                        <ColumnDefinition Width="682*"/>
+                    </Grid.ColumnDefinitions>
                     <Label Content="Advanced Video Settings" Height="29" Foreground="White" FontWeight="Bold" Margin="10,0,0,254" HorizontalAlignment="Left" Width="151" VerticalAlignment="Bottom" />
                     <Label Content="Threads:" HorizontalAlignment="Left" Margin="107,52,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxThreads" HorizontalAlignment="Left" Height="26" Margin="178,52,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                    <TextBox x:Name="TextBoxThreads" HorizontalAlignment="Left" Height="26" Margin="178,52,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2">
                         <TextBox.ToolTip>Sets the Number of Threads for the encoder, if the encoder supports this feature. Recommended for aomenc: 2 or 4</TextBox.ToolTip>
                     </TextBox>
-                    <Label Content="Tile Columns:" HorizontalAlignment="Left" Margin="278,52,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxTileColumns" HorizontalAlignment="Left" Height="26" Margin="375,52,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-                    <Label Content="Tile Rows:" HorizontalAlignment="Left" Margin="481,52,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxTileRows" HorizontalAlignment="Left" Height="26" Margin="559,52,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                    <Label Content="Tile Columns:" HorizontalAlignment="Left" Margin="98.667,52,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1" />
+                    <TextBox x:Name="TextBoxTileColumns" HorizontalAlignment="Left" Height="26" Margin="195.667,52,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1" />
+                    <Label Content="Tile Rows:" HorizontalAlignment="Left" Margin="117.667,92,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1" />
+                    <TextBox x:Name="TextBoxTileRows" HorizontalAlignment="Left" Height="26" Margin="195.667,92,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1" />
                     <Label Content="Keyframe Interval:" HorizontalAlignment="Left" Margin="56,92,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxKeyframeInterval" HorizontalAlignment="Left" Height="26" Margin="178,92,0,0" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                    <TextBox x:Name="TextBoxKeyframeInterval" HorizontalAlignment="Left" Height="26" Margin="178,92,0,0" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Width="59" Foreground="White" Background="#FF2C2C2C" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2">
                         <TextBox.ToolTip>A maximum Keyframe Interval is recommended for faster seeking. Recommended: Framerate * 10</TextBox.ToolTip>
                     </TextBox>
-                    <Label Content="AQ-Mode:" HorizontalAlignment="Left" Margin="659,52,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <ComboBox x:Name="ComboBoxAqMode" HorizontalAlignment="Left" Margin="737,52,0,0" VerticalAlignment="Top" Width="60" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                    <Label Content="AQ-Mode:" HorizontalAlignment="Left" Margin="100,131,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <ComboBox x:Name="ComboBoxAqMode" HorizontalAlignment="Left" Margin="178,131,0,0" VerticalAlignment="Top" Width="60" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.ColumnSpan="2">
                         <ComboBox.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
                         </ComboBox.Resources>
@@ -453,10 +457,47 @@
                         <ComboBoxItem Content="2" Foreground="White" />
                         <ComboBoxItem Content="3" Foreground="White" />
                     </ComboBox>
-                    <Label Content="Custom Command Line" Height="29" Foreground="White" FontWeight="Bold" Margin="10,0,0,127" HorizontalAlignment="Left" Width="151" VerticalAlignment="Bottom" />
-                    <TextBox x:Name="TextBoxCustomCommand" HorizontalAlignment="Left" Height="23" Margin="16,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="823" Background="#FF2C2C2C" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxCustomCommandLine" Content="Enable Custom Command Line" HorizontalAlignment="Left" Margin="16,171,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <Label Content="Do not specify input or output! Do not specify 1/2-Pass (use the Passes option under &quot;Video&quot;)!  " HorizontalAlignment="Left" Margin="10,216,0,0" VerticalAlignment="Top" Foreground="#FFB9B9B9" />
+                    <Label Content="Custom Command Line" Height="29" Foreground="White" FontWeight="Bold" Margin="10,0,0,104" HorizontalAlignment="Left" Width="151" VerticalAlignment="Bottom" />
+                    <TextBox x:Name="TextBoxCustomCommand" HorizontalAlignment="Left" Height="23" Margin="16,221,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="823" Background="#FF2C2C2C" Foreground="White" Grid.ColumnSpan="2" />
+                    <CheckBox x:Name="CheckBoxCustomCommandLine" Content="Enable Custom Command Line" HorizontalAlignment="Left" Margin="16,194,0,0" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="2" />
+                    <Label Content="Do not specify input or output! Do not specify 1/2-Pass (use the Passes option under &quot;Video&quot;)!  " HorizontalAlignment="Left" Margin="10,239,0,0" VerticalAlignment="Top" Foreground="#FFB9B9B9" Grid.ColumnSpan="2" />
+                    <Label Content="Chroma subsampling:" HorizontalAlignment="Left" Margin="270.667,50,0,0" VerticalAlignment="Top" Foreground="White" RenderTransformOrigin="0.491,0.551" Grid.Column="1" />
+                    <ComboBox x:Name="ComboBoxChroma" HorizontalAlignment="Left" Margin="404.667,50,0,0" VerticalAlignment="Top" Width="63" Height="26" Grid.Column="1">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBoxItem Content="4:2:0" IsSelected="True" Background="#FF363636" Foreground="White"/>
+                        <ComboBoxItem Content="4:2:2" Background="#FF363636" Foreground="White"/>
+                        <ComboBoxItem Content="4:4:4" Background="#FF363636" Foreground="White"/>
+                    </ComboBox>
+                    <Label Content="Color primaries:" HorizontalAlignment="Left" Margin="270.667,90,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1" />
+                    <ComboBox x:Name="ComboBoxColorPrim" HorizontalAlignment="Left" Margin="368.667,90,0,0" VerticalAlignment="Top" Width="100" Height="26" Grid.Column="1">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBoxItem Content="BT.709" Foreground="White" IsSelected="True"/>
+                        <ComboBoxItem Content="BT.2020" Foreground="White"/>
+                    </ComboBox>
+                    <Label Content="Color transfer:" HorizontalAlignment="Left" Margin="472.667,52,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1" />
+                    <ComboBox x:Name="ComboBoxColorTrans" HorizontalAlignment="Left" Margin="562.667,52,0,0" VerticalAlignment="Top" Width="92" Height="26" Grid.Column="1">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBoxItem Content="BT.709" Foreground="White" IsSelected="True"/>
+                        <ComboBoxItem Content="BT.2020-10" Foreground="White"/>
+                        <ComboBoxItem Content="BT.2020-12" Foreground="White"/>
+                        <ComboBoxItem Content="SMPTE2084" Foreground="White"/>
+                    </ComboBox>
+                    <Label Content="Colorspace:" HorizontalAlignment="Left" Margin="480.667,90,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1" />
+                    <ComboBox x:Name="ComboBoxColorSpace" HorizontalAlignment="Left" Margin="562.667,92,0,0" VerticalAlignment="Top" Width="92" Height="26" Grid.Column="1">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBoxItem Content="BT.709" Foreground="White" IsSelected="True"/>
+                        <ComboBoxItem Content="BT.2020NC" Foreground="White"/>
+                        <ComboBoxItem Content="BT.2020C" Foreground="White"/>
+                        <ComboBoxItem Content="SMPTE2085" Foreground="White"/>
+                    </ComboBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Audio" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -591,6 +632,12 @@
                                         </ToolTip>
                                     </Button.ToolTip>
                                 </Button>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Program Info" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                            <Grid Background="#19191919">
+                                <Label Content="Build Version: 1.0.37 - 2020.05.09 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label Content="Github Repo: https://github.com/Alkl58/NotEnoughAV1Encodes" HorizontalAlignment="Left" Margin="40,78,0,0" VerticalAlignment="Top" Foreground="White"/>
                             </Grid>
                         </TabItem>
                     </TabControl>
