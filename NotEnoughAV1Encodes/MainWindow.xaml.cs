@@ -2195,6 +2195,48 @@ namespace NotEnoughAV1Encodes
             }
             catch { }
         }
+
+        private void CheckBoxCustomCommandLine_Checked(object sender, RoutedEventArgs e)
+        {
+            if (ComboBoxEncoder.Text == "aomenc")
+            {
+                if (RadioButtonConstantQuality.IsChecked == true)
+                {
+                    TextBoxCustomCommand.Text = "--threads=" + TextBoxThreads.Text + " --bit-depth=" + ComboBoxBitDepth.Text + " --end-usage=q --cq-level=" + SliderQuality.Value + " --kf-max-dist=" + TextBoxKeyframeInterval.Text + " --tile-columns=" + TextBoxTileColumns.Text + " --tile-rows=" + TextBoxTileRows.Text + " --aq-mode=" + ComboBoxAqMode.Text;
+                }
+                else
+                {
+                    if (CheckBoxCBR.IsChecked == true)
+                    {
+                        TextBoxCustomCommand.Text = "--threads=" + TextBoxThreads.Text + " --bit-depth=" + ComboBoxBitDepth.Text + " --end-usage=cbr --target-bitrate=" + TextBoxBitrate.Text + " --kf-max-dist=" + TextBoxKeyframeInterval.Text + " --tile-columns=" + TextBoxTileColumns.Text + " --tile-rows=" + TextBoxTileRows.Text + " --aq-mode=" + ComboBoxAqMode.Text;
+                    }
+                    else
+                    {
+                        TextBoxCustomCommand.Text = "--threads=" + TextBoxThreads.Text + " --bit-depth=" + ComboBoxBitDepth.Text + " --end-usage=vbr --target-bitrate=" + TextBoxBitrate.Text + " --kf-max-dist=" + TextBoxKeyframeInterval.Text + " --tile-columns=" + TextBoxTileColumns.Text + " --tile-rows=" + TextBoxTileRows.Text + " --aq-mode=" + ComboBoxAqMode.Text;
+                    }
+
+                }
+
+            }
+            else if (ComboBoxEncoder.Text == "RAV1E")
+            {
+                if (RadioButtonConstantQuality.IsChecked == true)
+                {
+                   
+
+                    TextBoxCustomCommand.Text = " --threads " + TextBoxThreads.Text + " --quantizer " + SliderQuality.Value + " --keyint " + TextBoxKeyframeInterval.Text + " --tile-cols " + TextBoxTileColumns.Text + " --tile-rows " + TextBoxTileRows.Text;
+                }
+                else
+                {
+
+                    TextBoxCustomCommand.Text = " --threads " + TextBoxThreads.Text + " --bitrate " + TextBoxBitrate.Text + " --keyint " + TextBoxKeyframeInterval.Text + " --tile-cols " + TextBoxTileColumns.Text + " --tile-rows " + TextBoxTileRows.Text;
+
+
+                }
+            }
+
+
+        }
         //-------------------------------------------------------------------------------------------------||
     }
 }

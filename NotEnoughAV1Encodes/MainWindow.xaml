@@ -333,6 +333,10 @@
             </TabItem>
             <TabItem Header="Video" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                 <Grid Background="#19191919">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="286*"/>
+                        <ColumnDefinition Width="575*"/>
+                    </Grid.ColumnDefinitions>
                     <Label Content="Video" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
                     <Label Content="Encoder:" HorizontalAlignment="Left" Margin="35,41,0,0" VerticalAlignment="Top" Foreground="White" />
                     <ComboBox x:Name="ComboBoxEncoder" HorizontalAlignment="Left" Margin="104,41,0,0" VerticalAlignment="Top" Width="120" Foreground="Black" Background="Azure" Height="26" SelectionChanged="ComboBoxEncoder_SelectionChanged">
@@ -344,8 +348,8 @@
                         <ComboBoxItem Content="SVT-AV1" Foreground="White" />
                         <ComboBoxItem Content="libaom" Foreground="White"/>
                     </ComboBox>
-                    <Label Content="Quality" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="388,10,0,0" FontWeight="Bold" />
-                    <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="443,64,0,0" VerticalAlignment="Top" Width="392" Height="22" Maximum="63" SmallChange="1" Value="30" Foreground="White" TickPlacement="BottomRight" IsSnapToTickEnabled="True">
+                    <Label Content="Quality" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="102,10,0,0" FontWeight="Bold" Grid.Column="1" />
+                    <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="157,64,0,0" VerticalAlignment="Top" Width="392" Height="22" Maximum="63" SmallChange="1" Value="30" Foreground="White" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Column="1">
                         <Slider.ToolTip>
                             <ToolTip>
                                 <StackPanel Width="200">
@@ -365,15 +369,15 @@
                             </ToolTip>
                         </Slider.ToolTip>
                     </Slider>
-                    <Label Content="| Highest Quality" HorizontalAlignment="Left" Margin="443,86,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <Label Content="Lowest Quality |" HorizontalAlignment="Left" Margin="741,86,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <Label Content="Constant Quality :" HorizontalAlignment="Left" Margin="443,38,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <Label Content="Bitrate (kbps) :" HorizontalAlignment="Left" Margin="444,125,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxBitrate" HorizontalAlignment="Left" Height="26" Margin="542,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" Foreground="White">
+                    <Label Content="| Highest Quality" HorizontalAlignment="Left" Margin="157,86,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1" />
+                    <Label Content="Lowest Quality |" HorizontalAlignment="Left" Margin="455,86,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1" />
+                    <Label Content="Constant Quality :" HorizontalAlignment="Left" Margin="157,38,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1" />
+                    <Label Content="Bitrate (kbps) :" HorizontalAlignment="Left" Margin="158,125,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1" />
+                    <TextBox x:Name="TextBoxBitrate" HorizontalAlignment="Left" Height="26" Margin="256,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" Foreground="White" Grid.Column="1">
                         <TextBox.ToolTip>Sets the target Bitrate. Not Recommended. Quality mode will deliver far better results!</TextBox.ToolTip>
                     </TextBox>
-                    <RadioButton x:Name="RadioButtonConstantQuality" Content="" HorizontalAlignment="Left" Margin="424,44,0,0" VerticalAlignment="Top" IsChecked="True" />
-                    <RadioButton x:Name="RadioButtonBitrate" Content="" HorizontalAlignment="Left" Margin="426,132,0,0" VerticalAlignment="Top" Checked="RadioButtonBitrate_Checked" />
+                    <RadioButton x:Name="RadioButtonConstantQuality" Content="" HorizontalAlignment="Left" Margin="138,44,0,0" VerticalAlignment="Top" IsChecked="True" Grid.Column="1" />
+                    <RadioButton x:Name="RadioButtonBitrate" Content="" HorizontalAlignment="Left" Margin="140,132,0,0" VerticalAlignment="Top" Checked="RadioButtonBitrate_Checked" Grid.Column="1" />
                     <Label Content="Framerate:" HorizontalAlignment="Left" Margin="25,86,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Video optimisation" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,162,0,0" FontWeight="Bold" />
                     <Label Content="Encoding Preset:" HorizontalAlignment="Left" Margin="33,193,0,0" VerticalAlignment="Top" Foreground="White" />
@@ -397,7 +401,7 @@
                             </ToolTip>
                         </Slider.ToolTip>
                     </Slider>
-                    <Label x:Name="LabelQuality" Content="{Binding ElementName=SliderQuality, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="552,39,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <Label x:Name="LabelQuality" Content="{Binding ElementName=SliderQuality, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="266,39,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1" />
                     <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="25,131,0,0" VerticalAlignment="Top" Foreground="White" />
                     <ComboBox x:Name="ComboBoxBitDepth" HorizontalAlignment="Left" Margin="104,131,0,0" VerticalAlignment="Top" Width="58" Height="26">
                         <ComboBox.Resources>
@@ -410,14 +414,14 @@
                             <ToolTip>Recommended: 10bit -> Solves Banding issues and saves bandwidth.</ToolTip>
                         </ComboBox.ToolTip>
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" Grid.ColumnSpan="2" />
                     <TextBox x:Name="TextBoxFramerate" HorizontalAlignment="Left" Height="26" Margin="104,86,0,0" TextWrapping="Wrap" Text="24000/1001" VerticalAlignment="Top" Width="120" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                         <TextBox.ToolTip>Sets the Video Framerate (Numerator / Denominator)</TextBox.ToolTip>
                     </TextBox>
                     <Label Content="| Slowest" HorizontalAlignment="Left" Margin="145,216,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Fastest |" HorizontalAlignment="Left" Margin="207,216,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label x:Name="LabelEncoderPreset" Content="{Binding ElementName=SliderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="129,193,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxCBR" Content="CBR" HorizontalAlignment="Left" Margin="682,131,0,0" VerticalAlignment="Top" Foreground="White">
+                    <CheckBox x:Name="CheckBoxCBR" Content="CBR" HorizontalAlignment="Left" Margin="396,131,0,0" VerticalAlignment="Top" Foreground="White" Grid.Column="1">
                         <CheckBox.ToolTip>Constant Bitrate Mode. Not Recommended!</CheckBox.ToolTip>
                     </CheckBox>
                     <CheckBox x:Name="CheckBoxTwoPass" Content="2-Pass Encoding" HorizontalAlignment="Left" Margin="39,256,0,0" VerticalAlignment="Top" Foreground="White">
@@ -459,7 +463,7 @@
                     </ComboBox>
                     <Label Content="Custom Command Line" Height="29" Foreground="White" FontWeight="Bold" Margin="10,0,0,104" HorizontalAlignment="Left" Width="151" VerticalAlignment="Bottom" />
                     <TextBox x:Name="TextBoxCustomCommand" HorizontalAlignment="Left" Height="23" Margin="16,221,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="823" Background="#FF2C2C2C" Foreground="White" Grid.ColumnSpan="2" />
-                    <CheckBox x:Name="CheckBoxCustomCommandLine" Content="Enable Custom Command Line" HorizontalAlignment="Left" Margin="16,194,0,0" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="2" />
+                    <CheckBox x:Name="CheckBoxCustomCommandLine" Content="Enable Custom Command Line" HorizontalAlignment="Left" Margin="16,194,0,0" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="2" Checked="CheckBoxCustomCommandLine_Checked" />
                     <Label Content="Do not specify input or output! Do not specify 1/2-Pass (use the Passes option under &quot;Video&quot;)!  " HorizontalAlignment="Left" Margin="10,239,0,0" VerticalAlignment="Top" Foreground="#FFB9B9B9" Grid.ColumnSpan="2" />
                     <Label Content="Chroma subsampling:" HorizontalAlignment="Left" Margin="270.667,50,0,0" VerticalAlignment="Top" Foreground="White" RenderTransformOrigin="0.491,0.551" Grid.Column="1" />
                     <ComboBox x:Name="ComboBoxChroma" HorizontalAlignment="Left" Margin="404.667,50,0,0" VerticalAlignment="Top" Width="63" Height="26" Grid.Column="1">
