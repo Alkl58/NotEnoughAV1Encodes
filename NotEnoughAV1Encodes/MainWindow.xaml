@@ -414,7 +414,7 @@
                             <ToolTip>Recommended: 10bit -> Solves Banding issues and saves bandwidth.</ToolTip>
                         </ComboBox.ToolTip>
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" Grid.ColumnSpan="2" />
+                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="2" />
                     <TextBox x:Name="TextBoxFramerate" HorizontalAlignment="Left" Height="26" Margin="104,86,0,0" TextWrapping="Wrap" Text="24000/1001" VerticalAlignment="Top" Width="120" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                         <TextBox.ToolTip>Sets the Video Framerate (Numerator / Denominator)</TextBox.ToolTip>
                     </TextBox>
@@ -640,7 +640,7 @@
                         </TabItem>
                         <TabItem Header="Program Info" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                             <Grid Background="#19191919">
-                                <Label Content="Build Version: 1.0.37 - 2020.05.09 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label Content="Build Version: 1.0.39 - 2020.05.14 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Label Content="Github Repo: https://github.com/Alkl58/NotEnoughAV1Encodes" HorizontalAlignment="Left" Margin="40,78,0,0" VerticalAlignment="Top" Foreground="White"/>
                             </Grid>
                         </TabItem>
