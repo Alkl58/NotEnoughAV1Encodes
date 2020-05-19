@@ -516,6 +516,20 @@
                         </CheckBox.Style>
                         <CheckBox.ToolTip>Enables/Disables Keyframefiltering. Disable this if encoder produced colorbleeding/cursed blocking.</CheckBox.ToolTip>
                     </CheckBox>
+                    <CheckBox x:Name="CheckBoxAutoAltRef" Content="auto-alt-ref" Grid.Column="1" HorizontalAlignment="Left" Margin="275,137,0,0" VerticalAlignment="Top" Foreground="White">
+                        <CheckBox.Style>
+                            <Style>
+                                <Setter Property="CheckBox.Visibility" Value="Collapsed"></Setter>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding ElementName=ComboBoxEncoder, Path=SelectedItem.Tag}" Value="aomenc">
+                                        <Setter Property="CheckBox.Visibility" Value="Visible"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                        <CheckBox.ToolTip>Enables/Disables automatic alt reference frames. Enabling this should make the encode more efficient.</CheckBox.ToolTip>
+                    </CheckBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Audio" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -654,7 +668,7 @@
                         </TabItem>
                         <TabItem Header="Program Info" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                             <Grid Background="#19191919">
-                                <Label Content="Build Version: 1.0.41 - 2020.05.19 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label Content="Build Version: 1.0.42 - 2020.05.19 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Label Content="Github Repo: https://github.com/Alkl58/NotEnoughAV1Encodes" HorizontalAlignment="Left" Margin="40,78,0,0" VerticalAlignment="Top" Foreground="White"/>
                             </Grid>
                         </TabItem>
