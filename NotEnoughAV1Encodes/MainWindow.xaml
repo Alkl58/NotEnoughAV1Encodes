@@ -343,7 +343,7 @@
                         <ComboBox.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
                         </ComboBox.Resources>
-                        <ComboBoxItem Content="aomenc" IsSelected="True" Foreground="White" />
+                        <ComboBoxItem Tag="aomenc" Content="aomenc" IsSelected="True" Foreground="White" />
                         <ComboBoxItem Content="RAV1E" Foreground="White" />
                         <ComboBoxItem Content="SVT-AV1" Foreground="White" />
                         <ComboBoxItem Content="libaom" Foreground="White"/>
@@ -502,6 +502,20 @@
                         <ComboBoxItem Content="BT.2020C" Foreground="White"/>
                         <ComboBoxItem Content="SMPTE2085" Foreground="White"/>
                     </ComboBox>
+                    <CheckBox x:Name="CheckBoxAomKeyframefiltering" Content="enable-keyframe-filtering" Grid.Column="1" HorizontalAlignment="Left" Margin="100,137,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True">
+                        <CheckBox.Style>
+                            <Style>
+                                <Setter Property="CheckBox.Visibility" Value="Collapsed"></Setter>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding ElementName=ComboBoxEncoder, Path=SelectedItem.Tag}" Value="aomenc">
+                                        <Setter Property="CheckBox.Visibility" Value="Visible"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                        <CheckBox.ToolTip>Enables/Disables Keyframefiltering. Disable this if encoder produced colorbleeding/cursed blocking.</CheckBox.ToolTip>
+                    </CheckBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Audio" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -640,7 +654,7 @@
                         </TabItem>
                         <TabItem Header="Program Info" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                             <Grid Background="#19191919">
-                                <Label Content="Build Version: 1.0.39 - 2020.05.14 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label Content="Build Version: 1.0.41 - 2020.05.19 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Label Content="Github Repo: https://github.com/Alkl58/NotEnoughAV1Encodes" HorizontalAlignment="Left" Margin="40,78,0,0" VerticalAlignment="Top" Foreground="White"/>
                             </Grid>
                         </TabItem>
