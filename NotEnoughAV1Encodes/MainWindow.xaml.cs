@@ -89,7 +89,13 @@ namespace NotEnoughAV1Encodes
         //----- Audio Settings ---------------------------------||
         public static bool audioEncoding = false;
         public static string audioCodec = "";
+        public static string audioCodecTrackTwo = "";
+        public static string audioCodecTrackThree = "";
+        public static string audioCodecTrackFour = "";
         public static int audioBitrate = 0;
+        public static int audioBitrateTrackTwo = 0;
+        public static int audioBitrateTrackThree = 0;
+        public static int audioBitrateTrackFour = 0;
         public static bool trackOne = false;
         public static bool trackTwo = false;
         public static bool trackThree = false;
@@ -1296,7 +1302,13 @@ namespace NotEnoughAV1Encodes
                 }
                 audioEncoding = true;
                 audioCodec = ComboBoxAudioCodec.Text;
+                audioCodecTrackTwo = ComboBoxAudioCodecTrackTwo.Text;
+                audioCodecTrackThree = ComboBoxAudioCodecTrackThree.Text;
+                audioCodecTrackFour = ComboBoxAudioCodecTrackFour.Text;
                 audioBitrate = Int16.Parse(TextBoxAudioBitrate.Text);
+                audioBitrateTrackTwo = Int16.Parse(TextBoxAudioBitrateTrackTwo.Text);
+                audioBitrateTrackThree = Int16.Parse(TextBoxAudioBitrateTrackThree.Text);
+                audioBitrateTrackFour = Int16.Parse(TextBoxAudioBitrateTrackFour.Text);
                 trackOne = CheckBoxAudioTrackOne.IsChecked == true;
                 trackTwo = CheckBoxAudioTrackTwo.IsChecked == true;
                 trackThree = CheckBoxAudioTrackThree.IsChecked == true;
@@ -1700,7 +1712,13 @@ namespace NotEnoughAV1Encodes
                 }
                 if (n.Name == "AudioEncoding") { if (n.InnerText == "True") { CheckBoxAudioEncoding.IsChecked = true; } else { CheckBoxAudioEncoding.IsChecked = false; } }
                 if (n.Name == "AudioCodec") { ComboBoxAudioCodec.Text = n.InnerText; }
+                if (n.Name == "AudioCodecTrackTwo") { ComboBoxAudioCodecTrackTwo.Text = n.InnerText; }
+                if (n.Name == "AudioCodecTrackThree") { ComboBoxAudioCodecTrackThree.Text = n.InnerText; }
+                if (n.Name == "AudioCodecTrackFour") { ComboBoxAudioCodecTrackFour.Text = n.InnerText; }
                 if (n.Name == "AudioBitrate") { TextBoxAudioBitrate.Text = n.InnerText; }
+                if (n.Name == "AudioBitrateTrackTwo") { TextBoxAudioBitrateTrackTwo.Text = n.InnerText; }
+                if (n.Name == "AudioBitrateTrackThree") { TextBoxAudioBitrateTrackThree.Text = n.InnerText; }
+                if (n.Name == "AudioBitrateTrackFour") { TextBoxAudioBitrateTrackFour.Text = n.InnerText; }
                 if (n.Name == "AudioTrackOne") { if (n.InnerText == "True") { CheckBoxAudioTrackOne.IsChecked = true; } else { CheckBoxAudioTrackOne.IsChecked = false; } }
                 if (n.Name == "AudioTrackTwo") { if (n.InnerText == "True") { CheckBoxAudioTrackTwo.IsChecked = true; } else { CheckBoxAudioTrackTwo.IsChecked = false; } }
                 if (n.Name == "AudioTrackThree") { if (n.InnerText == "True") { CheckBoxAudioTrackThree.IsChecked = true; } else { CheckBoxAudioTrackThree.IsChecked = false; } }
@@ -1809,7 +1827,13 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("CustomBackgroundPath", PathToBackground);
             writer.WriteElementString("AudioEncoding", CheckBoxAudioEncoding.IsChecked.ToString());
             writer.WriteElementString("AudioCodec", ComboBoxAudioCodec.Text);
+            writer.WriteElementString("AudioCodecTrackTwo", ComboBoxAudioCodecTrackTwo.Text);
+            writer.WriteElementString("AudioCodecTrackThree", ComboBoxAudioCodecTrackThree.Text);
+            writer.WriteElementString("AudioCodecTrackFour", ComboBoxAudioCodecTrackFour.Text);
             writer.WriteElementString("AudioBitrate", TextBoxAudioBitrate.Text);
+            writer.WriteElementString("AudioBitrateTrackTwo", TextBoxAudioBitrateTrackTwo.Text);
+            writer.WriteElementString("AudioBitrateTrackThree", TextBoxAudioBitrateTrackThree.Text);
+            writer.WriteElementString("AudioBitrateTrackFour", TextBoxAudioBitrateTrackFour.Text);
             writer.WriteElementString("AudioTrackOne", CheckBoxAudioTrackOne.IsChecked.ToString());
             writer.WriteElementString("AudioTrackTwo", CheckBoxAudioTrackTwo.IsChecked.ToString());
             writer.WriteElementString("AudioTrackThree", CheckBoxAudioTrackThree.IsChecked.ToString());

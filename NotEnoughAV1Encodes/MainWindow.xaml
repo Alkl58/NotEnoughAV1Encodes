@@ -542,7 +542,7 @@
                 <Grid Background="#19191919">
                     <Label Content="Audio" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
                     <CheckBox x:Name="CheckBoxAudioEncoding" Content="Enable Audio" HorizontalAlignment="Left" Margin="105,16,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <ComboBox x:Name="ComboBoxAudioCodec" HorizontalAlignment="Left" Margin="105,60,0,0" VerticalAlignment="Top" Width="120" Height="26">
+                    <ComboBox x:Name="ComboBoxAudioCodec" HorizontalAlignment="Left" Margin="171,78,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding ElementName=CheckBoxAudioTrackOne, Path=IsChecked}">
                         <ComboBox.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
                         </ComboBox.Resources>
@@ -555,30 +555,77 @@
                         <ComboBoxItem Content="Copy Audio" Foreground="White"/>
                         <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
                     </ComboBox>
-                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="44,60,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxAudioTrackOne" Content="Track 1" HorizontalAlignment="Left" Margin="436,68,0,0" VerticalAlignment="Top" Foreground="White">
+                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="207,41,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <CheckBox x:Name="CheckBoxAudioTrackOne" Content="Track 1" HorizontalAlignment="Left" Margin="62,84,0,0" VerticalAlignment="Top" Foreground="White">
                         <CheckBox.ToolTip>
                             <ToolTip>Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!</ToolTip>
                         </CheckBox.ToolTip>
                     </CheckBox>
-                    <Label Content="Audio Tracks:" HorizontalAlignment="Left" Margin="341,62,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxAudioTrackTwo" Content="Track 2" HorizontalAlignment="Left" Margin="436,99,0,0" VerticalAlignment="Top" Foreground="White">
+                    <CheckBox x:Name="CheckBoxAudioTrackTwo" Content="Track 2" HorizontalAlignment="Left" Margin="62,135,0,0" VerticalAlignment="Top" Foreground="White">
                         <CheckBox.ToolTip>
                             <ToolTip>Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!</ToolTip>
                         </CheckBox.ToolTip>
                     </CheckBox>
-                    <Label Content="Bitrate:" HorizontalAlignment="Left" Margin="43,120,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <CheckBox x:Name="CheckBoxAudioTrackThree" Content="Track 3" HorizontalAlignment="Left" Margin="436,131,0,0" VerticalAlignment="Top" Foreground="White">
+                    <Label Content="Bitrate:" HorizontalAlignment="Left" Margin="386,41,0,0" VerticalAlignment="Top" Foreground="White" RenderTransformOrigin="0.518,0.577" />
+                    <CheckBox x:Name="CheckBoxAudioTrackThree" Content="Track 3" HorizontalAlignment="Left" Margin="62,186,0,0" VerticalAlignment="Top" Foreground="White">
                         <CheckBox.ToolTip>
                             <ToolTip>Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!</ToolTip>
                         </CheckBox.ToolTip>
                     </CheckBox>
-                    <CheckBox x:Name="CheckBoxAudioTrackFour" Content="Track 4" HorizontalAlignment="Left" Margin="436,163,0,0" VerticalAlignment="Top" Foreground="White">
+                    <CheckBox x:Name="CheckBoxAudioTrackFour" Content="Track 4" HorizontalAlignment="Left" Margin="62,239,0,0" VerticalAlignment="Top" Foreground="White">
                         <CheckBox.ToolTip>
                             <ToolTip>Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!</ToolTip>
                         </CheckBox.ToolTip>
                     </CheckBox>
-                    <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="105,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" AcceptsReturn="True" Foreground="White" Text="128">
+                    <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="349,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" AcceptsReturn="True" Foreground="White" Text="128" IsEnabled="{Binding ElementName=CheckBoxAudioTrackOne, Path=IsChecked}">
+                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                    </TextBox>
+                    <ComboBox x:Name="ComboBoxAudioCodecTrackTwo" HorizontalAlignment="Left" Margin="171,129,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                        <ComboBoxItem Content="Opus" Foreground="White" IsSelected="True" />
+                        <ComboBoxItem Content="Opus 5.1" Foreground="White" />
+                        <ComboBoxItem Content="Opus Downmix" Foreground="White" />
+                        <ComboBoxItem Content="AC3" Foreground="White" />
+                        <ComboBoxItem Content="AAC" Foreground="White" />
+                        <ComboBoxItem Content="MP3" Foreground="White" />
+                        <ComboBoxItem Content="Copy Audio" Foreground="White"/>
+                    </ComboBox>
+                    <TextBox x:Name="TextBoxAudioBitrateTrackTwo" HorizontalAlignment="Left" Height="26" Margin="349,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" AcceptsReturn="True" Foreground="White" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}">
+                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                    </TextBox>
+                    <ComboBox x:Name="ComboBoxAudioCodecTrackThree" HorizontalAlignment="Left" Margin="171,180,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                        <ComboBoxItem Content="Opus" Foreground="White" IsSelected="True" />
+                        <ComboBoxItem Content="Opus 5.1" Foreground="White" />
+                        <ComboBoxItem Content="Opus Downmix" Foreground="White" />
+                        <ComboBoxItem Content="AC3" Foreground="White" />
+                        <ComboBoxItem Content="AAC" Foreground="White" />
+                        <ComboBoxItem Content="MP3" Foreground="White" />
+                        <ComboBoxItem Content="Copy Audio" Foreground="White"/>
+                    </ComboBox>
+                    <TextBox x:Name="TextBoxAudioBitrateTrackThree" HorizontalAlignment="Left" Height="26" Margin="349,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" AcceptsReturn="True" Foreground="White" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}">
+                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                    </TextBox>
+                    <ComboBox x:Name="ComboBoxAudioCodecTrackFour" HorizontalAlignment="Left" Margin="171,233,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                        <ComboBoxItem Content="Opus" Foreground="White" IsSelected="True" />
+                        <ComboBoxItem Content="Opus 5.1" Foreground="White" />
+                        <ComboBoxItem Content="Opus Downmix" Foreground="White" />
+                        <ComboBoxItem Content="AC3" Foreground="White" />
+                        <ComboBoxItem Content="AAC" Foreground="White" />
+                        <ComboBoxItem Content="MP3" Foreground="White" />
+                        <ComboBoxItem Content="Copy Audio" Foreground="White"/>
+                    </ComboBox>
+                    <TextBox x:Name="TextBoxAudioBitrateTrackFour" HorizontalAlignment="Left" Height="26" Margin="349,233,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2C2C2C" AcceptsReturn="True" Foreground="White" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}">
                         <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
                     </TextBox>
                 </Grid>
@@ -617,7 +664,7 @@
                                 </Button>
                                 <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="27,87,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="54" Margin="451,185,0,0" VerticalAlignment="Top" Width="355"/>
-                                <Label Content="Build Version: 1.0.49 - 2020.05.26 (AppVeyor)" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label Content="Build Version: 1.0.50 - 2020.05.26 (AppVeyor)" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Label Content="Github Repo: " HorizontalAlignment="Left" Margin="459,213,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="92" Margin="18,19,0,0" VerticalAlignment="Top" Width="212"/>
                                 <TextBox HorizontalAlignment="Left" Height="20" Margin="533,217,0,0" TextWrapping="Wrap" Text="https://github.com/Alkl58/NotEnoughAV1Encodes" VerticalAlignment="Top" Width="273" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#FF22403E" IsReadOnly="True"/>
