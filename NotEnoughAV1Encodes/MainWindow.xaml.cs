@@ -120,6 +120,7 @@ namespace NotEnoughAV1Encodes
         public static bool deleteTempAfterEncode = false;
         //------------------------------------------------------||
         public DateTime starttimea;
+        
 
         public MainWindow()
         {
@@ -132,6 +133,7 @@ namespace NotEnoughAV1Encodes
 
         public async void AsyncClass()
         {
+
             if (CheckBoxAudioEncoding.IsChecked == true && resumeMode == false)
             {
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Audio Encoding ...", DispatcherPriority.Background);
@@ -183,7 +185,7 @@ namespace NotEnoughAV1Encodes
             {
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing Started...", DispatcherPriority.Background);
                 await Task.Run(() => ConcatVideo.Concat());
-                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString(), DispatcherPriority.Background);
+                pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString("hh\\:mm\\:ss") + " - " + Math.Round(Convert.ToDecimal((((Int16.Parse(streamLength) * Int16.Parse(streamFrameRateLabel)) / (DateTime.Now - starttimea).TotalSeconds))), 2).ToString() + "fps", DispatcherPriority.Background);
                 if (File.Exists("unfinishedjob.xml"))
                 {
                     File.Delete("unfinishedjob.xml");
@@ -309,7 +311,7 @@ namespace NotEnoughAV1Encodes
                     {
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing Started...", DispatcherPriority.Background);
                         await Task.Run(() => ConcatVideo.Concat());
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString(), DispatcherPriority.Background);
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString("hh\\:mm\\:ss") + " - " + Math.Round(Convert.ToDecimal((((Int16.Parse(streamLength) * Int16.Parse(streamFrameRateLabel)) / (DateTime.Now - starttimea).TotalSeconds))), 2).ToString() + "fps", DispatcherPriority.Background);
                         if (File.Exists("unfinishedjob.xml"))
                         {
                             File.Delete("unfinishedjob.xml");
@@ -430,7 +432,7 @@ namespace NotEnoughAV1Encodes
                     {
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing Started...", DispatcherPriority.Background);
                         await Task.Run(() => ConcatVideo.Concat());
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString(), DispatcherPriority.Background);
+                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString("hh\\:mm\\:ss") + " - " + Math.Round(Convert.ToDecimal((((Int16.Parse(streamLength) * Int16.Parse(streamFrameRateLabel)) / (DateTime.Now - starttimea).TotalSeconds))), 2).ToString() + "fps", DispatcherPriority.Background);
                         if (File.Exists("unfinishedjob.xml"))
                         {
                             File.Delete("unfinishedjob.xml");

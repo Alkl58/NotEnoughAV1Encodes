@@ -668,7 +668,7 @@
                         </TabItem>
                         <TabItem Header="Program Info" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                             <Grid Background="#19191919">
-                                <Label Content="Build Version: 1.0.42 - 2020.05.19 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label Content="Build Version: 1.0.45 - 2020.05.26 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Label Content="Github Repo: https://github.com/Alkl58/NotEnoughAV1Encodes" HorizontalAlignment="Left" Margin="40,78,0,0" VerticalAlignment="Top" Foreground="White"/>
                             </Grid>
                         </TabItem>
