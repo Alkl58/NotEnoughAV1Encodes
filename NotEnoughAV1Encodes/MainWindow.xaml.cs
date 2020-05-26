@@ -789,9 +789,11 @@ namespace NotEnoughAV1Encodes
             {
                 CheckBoxAudioEncoding.IsChecked = false;
                 CheckBoxAudioEncoding.IsEnabled = false;
+                CheckboxAudiofound.IsChecked = false;
             }else
             {
                 CheckBoxAudioEncoding.IsEnabled = true;
+                CheckboxAudiofound.IsChecked = true;
             }
 
         }
