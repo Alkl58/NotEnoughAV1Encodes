@@ -271,7 +271,7 @@
             </Image.Effect>
         </Image>
         <Label x:Name="LabelSourceVideo" Content="Source Video" HorizontalAlignment="Right" Margin="0,24,780,0" Background="{x:Null}" Foreground="White" Height="26" VerticalAlignment="Top" />
-        <TextBox x:Name="TextBoxVideoInput" HorizontalAlignment="Left" Height="23" Margin="125,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="641" Background="#CC191919" Foreground="White" />
+        <TextBox x:Name="TextBoxVideoInput" HorizontalAlignment="Left" Height="23" Margin="125,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="641" Background="#CC191919" Foreground="White" IsReadOnly="True" />
         <Label x:Name="LabelSourceVideo_Copy" Content="Output Video" HorizontalAlignment="Right" Margin="0,61,780,0" Background="{x:Null}" Foreground="White" Height="26" VerticalAlignment="Top" />
         <TextBox x:Name="TextBoxVideoOutput" HorizontalAlignment="Left" Height="23" Margin="125,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="641" Background="#CC191919" Foreground="White" />
         <Button x:Name="ButtonOpenSource" Content="Open..." HorizontalAlignment="Left" Margin="784,27,0,0" VerticalAlignment="Top" Width="82" Height="23" Foreground="White" Background="#FF191919" BorderBrush="White" Style="{DynamicResource ButtonDarkStyle}" Click="ButtonOpenSource_Click" />
@@ -329,6 +329,14 @@
                     <TextBox x:Name="TextBoxFrameWidth" HorizontalAlignment="Left" Height="26" Margin="243,205,0,0" TextWrapping="Wrap" Text="-1" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                     <Label Content="* You can leave this at -1. It will scale the Framewidth accordingly to the height" HorizontalAlignment="Left" Margin="320,205,0,0" VerticalAlignment="Top" Foreground="Gainsboro" />
                     <CheckBox x:Name="CheckBoxAutomaticChunkLength" Content="Automatic Chunk length based on Workers" HorizontalAlignment="Left" Margin="529,47,0,0" VerticalAlignment="Top" Width="305" Foreground="White" IsChecked="True" />
+                    <ComboBox x:Name="ComboBoxProcessPrio" HorizontalAlignment="Left" Margin="460,122,0,0" VerticalAlignment="Top" Width="114" Height="26">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBoxItem Content="Normal" Foreground="White" IsSelected="True"/>
+                        <ComboBoxItem Content="Below Normal" Foreground="White"/>
+                    </ComboBox>
+                    <Label Content="Process priority:" HorizontalAlignment="Left" Margin="350,120,0,0" VerticalAlignment="Top" Foreground="White" />
                 </Grid>
             </TabItem>
             <TabItem Header="Video" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -668,7 +676,7 @@
                         </TabItem>
                         <TabItem Header="Program Info" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                             <Grid Background="#19191919">
-                                <Label Content="Build Version: 1.0.46 - 2020.05.26 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label Content="Build Version: 1.0.47 - 2020.05.26 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Label Content="Github Repo: https://github.com/Alkl58/NotEnoughAV1Encodes" HorizontalAlignment="Left" Margin="40,78,0,0" VerticalAlignment="Top" Foreground="White"/>
                             </Grid>
                         </TabItem>

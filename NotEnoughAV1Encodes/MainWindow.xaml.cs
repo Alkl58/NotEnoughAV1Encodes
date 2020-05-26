@@ -41,6 +41,7 @@ namespace NotEnoughAV1Encodes
         public static bool resumeMode = false;
         public static bool inputSet = false;
         public static bool outputSet = false;
+        public static string processPriority = "Normal";
         //------------------------------------------------------||
         //----- Color Settings ---------------------------------||
         public static string yuvcolorspace = " yuv420p";
@@ -1014,6 +1015,19 @@ namespace NotEnoughAV1Encodes
                 default:
                     break;
             }
+            //----------------------------------------------------------------------------------------||
+            //Process Priority -----------------------------------------------------------------------||
+            switch (ComboBoxProcessPrio.Text)
+            {
+                case "Normal":
+                    processPriority = "Normal";
+                    break;
+                case "Below Normal":
+                    processPriority = "BelowNormal";
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void SetAomencParameters()
@@ -1341,8 +1355,15 @@ namespace NotEnoughAV1Encodes
                                     }
 
                                     process.StartInfo = startInfo;
-                                    Console.WriteLine(startInfo.Arguments);
+                                    //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
+
+                                    //Sets the Process Priority
+                                    if (processPriority == "BelowNormal")
+                                    {
+                                        process.PriorityClass = ProcessPriorityClass.BelowNormal;
+                                    }
+                                    
                                     process.WaitForExit();
 
                                     //Progressbar +1
@@ -1390,6 +1411,13 @@ namespace NotEnoughAV1Encodes
                                         process.StartInfo = startInfo;
                                         //Console.WriteLine(startInfo.Arguments);
                                         process.Start();
+
+                                        //Sets the Process Priority
+                                        if (processPriority == "BelowNormal")
+                                        {
+                                            process.PriorityClass = ProcessPriorityClass.BelowNormal;
+                                        }
+
                                         process.WaitForExit();
 
                                         if (SmallScripts.Cancel.CancelAll == false)
@@ -1423,6 +1451,13 @@ namespace NotEnoughAV1Encodes
                                     process.StartInfo = startInfo;
                                     //Console.WriteLine(startInfo.Arguments);
                                     process.Start();
+
+                                    //Sets the Process Priority
+                                    if (processPriority == "BelowNormal")
+                                    {
+                                        process.PriorityClass = ProcessPriorityClass.BelowNormal;
+                                    }
+
                                     process.WaitForExit();
 
                                     MainProgressBar.Dispatcher.Invoke(() => MainProgressBar.Value += 1, DispatcherPriority.Background);
@@ -1484,6 +1519,13 @@ namespace NotEnoughAV1Encodes
                         process.StartInfo = startInfo;
                         //Console.WriteLine(startInfo.Arguments);
                         process.Start();
+
+                        //Sets the Process Priority
+                        if (processPriority == "BelowNormal")
+                        {
+                            process.PriorityClass = ProcessPriorityClass.BelowNormal;
+                        }
+
                         process.WaitForExit();
                     }
 
@@ -1500,6 +1542,13 @@ namespace NotEnoughAV1Encodes
                         process.StartInfo = startInfo;
                         //Console.WriteLine(startInfo.Arguments);
                         process.Start();
+
+                        //Sets the Process Priority
+                        if (processPriority == "BelowNormal")
+                        {
+                            process.PriorityClass = ProcessPriorityClass.BelowNormal;
+                        }
+
                         process.WaitForExit();
 
                         //2nd Pass
@@ -1511,6 +1560,13 @@ namespace NotEnoughAV1Encodes
                         process.StartInfo = startInfo;
                         //Console.WriteLine(startInfo.Arguments);
                         process.Start();
+
+                        //Sets the Process Priority
+                        if (processPriority == "BelowNormal")
+                        {
+                            process.PriorityClass = ProcessPriorityClass.BelowNormal;
+                        }
+
                         process.WaitForExit();
                     }
 
@@ -1655,6 +1711,7 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "SubtitleEnabledCustom") { if (n.InnerText == "True") { RadioButtonCustomSubtitles.IsChecked = true; } else { RadioButtonCustomSubtitles.IsChecked = false; } }
                 if (n.Name == "CalculateChunkLengthAutomaticly") { if (n.InnerText == "True") { CheckBoxAutomaticChunkLength.IsChecked = true; } else { CheckBoxAutomaticChunkLength.IsChecked = false; } }
                 if (n.Name == "PlayFinishedSound") { if (n.InnerText == "True") { CheckBoxEnableFinishedSound.IsChecked = true; } else { CheckBoxEnableFinishedSound.IsChecked = false; } }
+                if (n.Name == "ProcessPriority") { if (n.InnerText == "Below Normal") { ComboBoxProcessPrio.SelectedIndex = 1; } else { ComboBoxProcessPrio.SelectedIndex = 0; } }
                 if (n.Name == "ChromaSubsampling")
                 {
                     if (n.InnerText == "4:2:0") { ComboBoxEncoder.SelectedIndex = 0; }
@@ -1767,6 +1824,7 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("ColorTransfer", ComboBoxColorTrans.Text);
             writer.WriteElementString("ColorPrimaries", ComboBoxColorPrim.Text);
             writer.WriteElementString("ColorSpace", ComboBoxColorSpace.Text);
+            writer.WriteElementString("ProcessPriority", ComboBoxProcessPrio.Text);
 
             if (saveJob == true || saveQueue == true)
             {

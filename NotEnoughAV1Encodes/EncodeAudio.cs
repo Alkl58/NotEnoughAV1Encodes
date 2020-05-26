@@ -46,13 +46,6 @@ namespace NotEnoughAV1Encodes
                     default:
                         break;
                 }
-                /*
-                if (MainWindow.audioCodec == "Opus") {  }
-                if (MainWindow.audioCodec == "Opus 5.1") { audioCodec = "libopus -af channelmap=channel_layout=5.1"; }
-                if (MainWindow.audioCodec == "Opus Downmix") { audioCodec = "libopus -ac 2"; }
-                if (MainWindow.audioCodec == "AC3") { audioCodec = "ac3"; }
-                if (MainWindow.audioCodec == "AAC") { audioCodec = "aac"; }
-                if (MainWindow.audioCodec == "MP3") { audioCodec = "libmp3lame"; } */
                 //----------------------------------------------------------------------------------------||
                 //Audio Mapping --------------------------------------------------------------------------||
                 if (MainWindow.trackOne == true && MainWindow.detectedTrackOne == true)
