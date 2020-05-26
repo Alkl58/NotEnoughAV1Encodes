@@ -1267,6 +1267,17 @@ namespace NotEnoughAV1Encodes
         {
             if (CheckBoxAudioEncoding.IsChecked == true)
             {
+                if (CheckBoxAudioTrackOne.IsChecked == false && CheckBoxAudioTrackTwo.IsChecked == false && CheckBoxAudioTrackThree.IsChecked == false && CheckBoxAudioTrackThree.IsChecked == false)
+                {
+                    if (MessageBox.Show("You enabled Audio Encoding without selecting the Audio Track! Defaulting to Track Nr.1?", "Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        CheckBoxAudioTrackOne.IsChecked = true;
+                    }
+                    else
+                    {
+                        SmallScripts.Cancel.CancelAll = true;
+                    }
+                }
                 audioEncoding = true;
                 audioCodec = ComboBoxAudioCodec.Text;
                 audioBitrate = Int16.Parse(TextBoxAudioBitrate.Text);
