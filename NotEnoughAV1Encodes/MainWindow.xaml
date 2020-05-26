@@ -267,7 +267,7 @@
         <Border BorderBrush="#FFB2B2B2" BorderThickness="1" HorizontalAlignment="Left" Height="91" Margin="10,10,0,0" VerticalAlignment="Top" Width="867" />
         <Image x:Name="imgDynamic" Stretch="UniformToFill">
             <Image.Effect>
-                <BlurEffect Radius="7" RenderingBias="Quality"></BlurEffect>
+                <BlurEffect Radius="3" RenderingBias="Quality"></BlurEffect>
             </Image.Effect>
         </Image>
         <Label x:Name="LabelSourceVideo" Content="Source Video" HorizontalAlignment="Right" Margin="0,24,780,0" Background="{x:Null}" Foreground="White" Height="26" VerticalAlignment="Top" />
@@ -422,7 +422,7 @@
                             <ToolTip>Recommended: 10bit -> Solves Banding issues and saves bandwidth.</ToolTip>
                         </ComboBox.ToolTip>
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="2" />
+                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="169,256,0,0" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="2" IsChecked="True" />
                     <TextBox x:Name="TextBoxFramerate" HorizontalAlignment="Left" Height="26" Margin="104,86,0,0" TextWrapping="Wrap" Text="24000/1001" VerticalAlignment="Top" Width="120" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                         <TextBox.ToolTip>Sets the Video Framerate (Numerator / Denominator)</TextBox.ToolTip>
                     </TextBox>
@@ -596,22 +596,66 @@
                     <RadioButton x:Name="RadioButtonCustomSubtitles" Content="Custom Subtitles" HorizontalAlignment="Left" Margin="56,100,0,0" VerticalAlignment="Top" Foreground="White" />
                 </Grid>
             </TabItem>
+            <TabItem Header="Queue" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
+                <Grid Background="#19191919">
+                    <ListBox x:Name="ListBoxQueue" HorizontalAlignment="Left" Height="228" Margin="10,55,0,0" VerticalAlignment="Top" Width="841" Background="#99151515" Foreground="White"/>
+                    <Button x:Name="ButtonAddQueue" Content="Add to Queue" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top" Width="135" Height="33" Background="#FF2B2B2B" Foreground="White" Click="ButtonAddQueue_Click"/>
+                    <Button x:Name="ButtonRemoveFromQueue" Content="Remove from Queue" HorizontalAlignment="Left" Margin="714,17,0,0" VerticalAlignment="Top" Width="137" Height="33" Background="#FF2B2B2B" Foreground="White" Click="ButtonRemoveFromQueue_Click"/>
+                    <TextBox x:Name="TextBoxQueueName" HorizontalAlignment="Left" Height="23" Margin="164,21,0,0" TextWrapping="Wrap" Text="QueueName.xml" VerticalAlignment="Top" Width="117" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center"/>
+                    <CheckBox x:Name="CheckBoxQueueMode" Content="Enable Queue Mode" HorizontalAlignment="Left" Margin="311,26,0,0" VerticalAlignment="Top" Foreground="White"/>
+                </Grid>
+            </TabItem>
             <TabItem Header="Program Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                 <Grid Background="#19191919">
                     <TabControl HorizontalAlignment="Left" Height="277" Margin="10,6,0,0" VerticalAlignment="Top" Width="841" Background="#CC191919">
                         <TabItem Header="General" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                             <Grid Background="#19191919">
-                                <CheckBox x:Name="CheckBoxDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="27,90,0,0" VerticalAlignment="Top" Foreground="White" />
-                                <CheckBox x:Name="CheckBoxShutdownAfterEncode" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="27,60,0,0" VerticalAlignment="Top" Foreground="White" />
-                                <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding Mode" HorizontalAlignment="Left" Margin="27,29,0,0" VerticalAlignment="Top" Foreground="White">
-                                    <CheckBox.ToolTip>Enables Batch Encoding. You need to specify input/output Folder with the above Buttons!</CheckBox.ToolTip>
-                                </CheckBox>
-                                <Button Content="Select Background Image" HorizontalAlignment="Left" Margin="27,190,0,0" VerticalAlignment="Top" Width="156" Click="Button_Click" Height="32" Background="#FF2B2B2B" Foreground="White">
+                                <CheckBox x:Name="CheckBoxDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="27,57,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <CheckBox x:Name="CheckBoxShutdownAfterEncode" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="27,27,0,0" VerticalAlignment="Top" Foreground="White" />
+                                <Button Content="Select Background Image" HorizontalAlignment="Left" Margin="18,207,0,0" VerticalAlignment="Top" Width="156" Click="Button_Click" Height="32" Background="#FF2B2B2B" Foreground="White">
                                     <Button.ToolTip>
                                         Sets a custom Background Image. JPG/PNG recommended!
                                     </Button.ToolTip>
                                 </Button>
-                                <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="27,120,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
+                                <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="27,87,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
+                                <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="54" Margin="451,185,0,0" VerticalAlignment="Top" Width="355"/>
+                                <Label Content="Build Version: 1.0.47 - 2020.05.26 (AppVeyor)" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label Content="Github Repo: " HorizontalAlignment="Left" Margin="459,213,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="92" Margin="18,19,0,0" VerticalAlignment="Top" Width="212"/>
+                                <TextBox HorizontalAlignment="Left" Height="20" Margin="533,217,0,0" TextWrapping="Wrap" Text="https://github.com/Alkl58/NotEnoughAV1Encodes" VerticalAlignment="Top" Width="273" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#FF22403E" IsReadOnly="True"/>
+                                <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="105" Margin="451,19,0,0" VerticalAlignment="Top" Width="355"/>
+                                <Button x:Name="ButtonSaveProfile" Content="Save Profile" HorizontalAlignment="Left" Margin="481,30,0,0" VerticalAlignment="Top" Width="86" Height="21" Background="#FF2B2B2B" Foreground="White" Click="ButtonSaveProfile_Click" />
+                                <ComboBox x:Name="ComboBoxProfiles" HorizontalAlignment="Left" Margin="579,65,0,0" VerticalAlignment="Top" Width="203" Foreground="Black"/>
+                                <TextBox x:Name="TextBoxProfiles" HorizontalAlignment="Left" Height="21" Margin="579,29,0,0" TextWrapping="Wrap" Text="ProfileName.xml" VerticalAlignment="Top" Width="203" Foreground="White" Background="#FF1D1D1D" VerticalContentAlignment="Center">
+                                    <TextBox.ToolTip>
+                                        <ToolTip>
+                                            <StackPanel Width="200">
+                                                <StackPanel Orientation="Horizontal" Width="200">
+                                                    <TextBlock Text="1. Select a Profilename"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Width="200">
+                                                    <TextBlock Text="2. Click Save Profile"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </TextBox.ToolTip>
+                                </TextBox>
+                                <Button x:Name="ButtonProfilesRefresh" Content="Refresh List" HorizontalAlignment="Left" Margin="579,95,0,0" VerticalAlignment="Top" Width="92" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonProfilesRefresh_Click" />
+                                <Button x:Name="ButtonLoadProfile" Content="Load Profile" HorizontalAlignment="Left" Margin="481,65,0,0" VerticalAlignment="Top" Width="86" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonLoadProfile_Click" />
+                                <Button x:Name="ButtonSetProfileDefault" Content="Set as default" HorizontalAlignment="Left" Margin="686,95,0,0" VerticalAlignment="Top" Width="96" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonSetProfileDefault_Click">
+                                    <Button.ToolTip>
+                                        <ToolTip>
+                                            <StackPanel Width="200">
+                                                <StackPanel Orientation="Horizontal" Width="200">
+                                                    <TextBlock Text="1. Select the Profile from Combobox."/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Width="200">
+                                                    <TextBlock Text="2. Click Set as default"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </Button.ToolTip>
+                                </Button>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Paths" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -637,59 +681,7 @@
                                 <Button x:Name="ButtonCustomSVTPath" Content="     ..." HorizontalAlignment="Left" Margin="739,161,0,0" VerticalAlignment="Top" Width="85" Height="23" Background="#FF191919" Foreground="White" Style="{DynamicResource ButtonDarkStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="White" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomSVTPath}" Click="ButtonCustomSVTPath_Click" />
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Profiles" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
-                            <Grid Background="#19191919">
-                                <Button x:Name="ButtonSaveProfile" Content="Save Profile" HorizontalAlignment="Left" Margin="37,29,0,0" VerticalAlignment="Top" Width="86" Height="21" Background="#FF2B2B2B" Foreground="White" Click="ButtonSaveProfile_Click" />
-                                <ComboBox x:Name="ComboBoxProfiles" HorizontalAlignment="Left" Margin="137,82,0,0" VerticalAlignment="Top" Width="187" Foreground="Black">
-                                </ComboBox>
-                                <TextBox x:Name="TextBoxProfiles" HorizontalAlignment="Left" Height="21" Margin="137,29,0,0" TextWrapping="Wrap" Text="ProfileName.xml" VerticalAlignment="Top" Width="187" Foreground="White" Background="#FF1D1D1D" VerticalContentAlignment="Center">
-                                    <TextBox.ToolTip>
-                                        <ToolTip>
-                                            <StackPanel Width="200">
-                                                <StackPanel Orientation="Horizontal" Width="200">
-                                                    <TextBlock Text="1. Select a Profilename"/>
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Width="200">
-                                                    <TextBlock Text="2. Click Save Profile"/>
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </ToolTip>
-                                    </TextBox.ToolTip>
-                                </TextBox>
-                                <Button x:Name="ButtonProfilesRefresh" Content="Refresh List" HorizontalAlignment="Left" Margin="37,82,0,0" VerticalAlignment="Top" Width="86" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonProfilesRefresh_Click" />
-                                <Button x:Name="ButtonLoadProfile" Content="Load Profile" HorizontalAlignment="Left" Margin="342,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonLoadProfile_Click" />
-                                <Button x:Name="ButtonSetProfileDefault" Content="Set as default" HorizontalAlignment="Left" Margin="448,82,0,0" VerticalAlignment="Top" Width="88" Height="22" Background="#FF2B2B2B" Foreground="White" Click="ButtonSetProfileDefault_Click">
-                                    <Button.ToolTip>
-                                        <ToolTip>
-                                            <StackPanel Width="200">
-                                                <StackPanel Orientation="Horizontal" Width="200">
-                                                    <TextBlock Text="1. Select the Profile from Combobox."/>
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Width="200">
-                                                    <TextBlock Text="2. Click Set as default"/>
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </ToolTip>
-                                    </Button.ToolTip>
-                                </Button>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Program Info" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
-                            <Grid Background="#19191919">
-                                <Label Content="Build Version: 1.0.47 - 2020.05.26 (AppVeyor)" HorizontalAlignment="Left" Margin="40,41,0,0" VerticalAlignment="Top" Foreground="White"/>
-                                <Label Content="Github Repo: https://github.com/Alkl58/NotEnoughAV1Encodes" HorizontalAlignment="Left" Margin="40,78,0,0" VerticalAlignment="Top" Foreground="White"/>
-                            </Grid>
-                        </TabItem>
                     </TabControl>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Queue" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
-                <Grid Background="#19191919">
-                    <ListBox x:Name="ListBoxQueue" HorizontalAlignment="Left" Height="228" Margin="10,55,0,0" VerticalAlignment="Top" Width="841" Background="#99151515" Foreground="White"/>
-                    <Button x:Name="ButtonAddQueue" Content="Add to Queue" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top" Width="135" Height="33" Background="#FF2B2B2B" Foreground="White" Click="ButtonAddQueue_Click"/>
-                    <Button x:Name="ButtonRemoveFromQueue" Content="Remove from Queue" HorizontalAlignment="Left" Margin="714,17,0,0" VerticalAlignment="Top" Width="137" Height="33" Background="#FF2B2B2B" Foreground="White" Click="ButtonRemoveFromQueue_Click"/>
-                    <TextBox x:Name="TextBoxQueueName" HorizontalAlignment="Left" Height="23" Margin="164,21,0,0" TextWrapping="Wrap" Text="QueueName.xml" VerticalAlignment="Top" Width="117" Background="#FF2C2C2C" Foreground="White" VerticalContentAlignment="Center"/>
-                    <CheckBox x:Name="CheckBoxQueueMode" Content="Enable Queue Mode" HorizontalAlignment="Left" Margin="311,26,0,0" VerticalAlignment="Top" Foreground="White"/>
                 </Grid>
             </TabItem>
         </TabControl>
@@ -698,5 +690,8 @@
         <Label x:Name="pLabel" Content="" HorizontalAlignment="Left" Margin="10,460,0,0" VerticalAlignment="Top" Width="579" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" />
         <Button x:Name="ButtonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="692,452,0,0" VerticalAlignment="Top" Width="71" Height="42" Background="#FF2B2B2B" Foreground="White" BorderBrush="#FFFF4A4A" Click="ButtonCancel_Click" />
         <CheckBox x:Name="CheckBoxResumeMode" Content="Resume" HorizontalAlignment="Left" Margin="612,466,0,0" VerticalAlignment="Top" Foreground="White" />
+        <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding Mode" HorizontalAlignment="Left" Margin="741,110,0,0" VerticalAlignment="Top" Foreground="White">
+            <CheckBox.ToolTip>Enables Batch Encoding. You need to specify input/output Folder with the above Buttons!</CheckBox.ToolTip>
+        </CheckBox>
     </Grid>
 </Window>
