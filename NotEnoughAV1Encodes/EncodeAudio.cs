@@ -118,7 +118,7 @@ namespace NotEnoughAV1Encodes
                 }
                 //----------------------------------------------------------------------------------------||
                 //Audio Encoding -------------------------------------------------------------------------||
-                string ffmpegAudioCommands = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn" + audioInput + audioMapping + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022';
+                string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn" + audioInput + audioMapping + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022';
                 SmallScripts.ExecuteFfmpegTask(ffmpegAudioCommands);
                 //----------------------------------------------------------------------------------------||
             }
