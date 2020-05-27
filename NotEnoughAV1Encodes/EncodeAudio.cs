@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
 
 namespace NotEnoughAV1Encodes
@@ -17,8 +15,6 @@ namespace NotEnoughAV1Encodes
                 if (!Directory.Exists(Path.Combine(MainWindow.workingTempDirectory, "AudioEncoded")))
                     Directory.CreateDirectory(Path.Combine(MainWindow.workingTempDirectory, "AudioEncoded"));
 
-                //string audioInput = "";
-                //string audioMapping = "";
                 string audioCodec = "";
                 int numberoftracksactive = 0;
                 int indexinteger = 0;
@@ -73,10 +69,7 @@ namespace NotEnoughAV1Encodes
                 }
                 //----------------------------------------------------------------------------------------||
                 //Audio Encoding -------------------------------------------------------------------------||
-                //string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn" + audioInput + audioMapping + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022';
-
                 string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn " + audioCodec + " " + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022';
-                Console.WriteLine(ffmpegAudioCommands);
                 SmallScripts.ExecuteFfmpegTask(ffmpegAudioCommands);
                 //----------------------------------------------------------------------------------------||
             }

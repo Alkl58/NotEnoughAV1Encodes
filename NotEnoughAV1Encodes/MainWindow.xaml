@@ -340,10 +340,10 @@
                         <ColumnDefinition Width="286*"/>
                         <ColumnDefinition Width="575*"/>
                     </Grid.ColumnDefinitions>
-                    <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="117" Margin="102,166,0,0" VerticalAlignment="Top" Width="453" Grid.Column="1"/>
+                    <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="117" Margin="102,166,0,0" VerticalAlignment="Top" Width="463" Grid.Column="1"/>
                     <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="156" Margin="10,10,0,0" VerticalAlignment="Top" Width="378" Grid.ColumnSpan="2"/>
                     <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="117" Margin="10,166,0,0" VerticalAlignment="Top" Width="378" Grid.ColumnSpan="2"/>
-                    <Border BorderBrush="#FF959595" BorderThickness="1" Grid.Column="1" HorizontalAlignment="Left" Height="156" Margin="102,10,0,0" VerticalAlignment="Top" Width="453"/>
+                    <Border BorderBrush="#FF959595" BorderThickness="1" Grid.Column="1" HorizontalAlignment="Left" Height="156" Margin="102,10,0,0" VerticalAlignment="Top" Width="463"/>
                     <Label Content="Video" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="13,10,0,0" FontWeight="Bold" />
                     <Label Content="Encoder:" HorizontalAlignment="Left" Margin="64,38,0,0" VerticalAlignment="Top" Foreground="White" />
                     <ComboBox x:Name="ComboBoxEncoder" HorizontalAlignment="Left" Margin="133,38,0,0" VerticalAlignment="Top" Width="120" Foreground="Black" Background="Azure" Height="26" SelectionChanged="ComboBoxEncoder_SelectionChanged">
@@ -706,7 +706,7 @@
                                 </Button>
                                 <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="27,87,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="54" Margin="451,185,0,0" VerticalAlignment="Top" Width="355"/>
-                                <Label Content="Build Version: 1.0.52 - 2020.05.27 (AppVeyor)" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label Content="Build Version: Pre-Release v0.7-beta - 2020.05.27" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Label Content="Github Repo: " HorizontalAlignment="Left" Margin="459,213,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="92" Margin="18,19,0,0" VerticalAlignment="Top" Width="212"/>
                                 <TextBox HorizontalAlignment="Left" Height="20" Margin="533,217,0,0" TextWrapping="Wrap" Text="https://github.com/Alkl58/NotEnoughAV1Encodes" VerticalAlignment="Top" Width="273" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#FF22403E" IsReadOnly="True"/>
