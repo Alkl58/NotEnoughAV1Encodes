@@ -108,6 +108,10 @@ namespace NotEnoughAV1Encodes
         public static bool detectedTrackTwo = false;
         public static bool detectedTrackThree = false;
         public static bool detectedTrackFour = false;
+        public static int audioChannelsTrackOne = 2;
+        public static int audioChannelsTrackTwo = 2;
+        public static int audioChannelsTrackThree = 2;
+        public static int audioChannelsTrackFour = 2;
         //------------------------------------------------------||
         //----- Resizing ---------------------------------------||
         public static string videoResize = "";
@@ -1289,7 +1293,7 @@ namespace NotEnoughAV1Encodes
         {
             if (CheckBoxAudioEncoding.IsChecked == true)
             {
-                if (CheckBoxAudioTrackOne.IsChecked == false && CheckBoxAudioTrackTwo.IsChecked == false && CheckBoxAudioTrackThree.IsChecked == false && CheckBoxAudioTrackThree.IsChecked == false)
+                if (CheckBoxAudioTrackOne.IsChecked == false && CheckBoxAudioTrackTwo.IsChecked == false && CheckBoxAudioTrackThree.IsChecked == false && CheckBoxAudioTrackFour.IsChecked == false)
                 {
                     if (MessageBox.Show("You enabled Audio Encoding without selecting the Audio Track! Defaulting to Track Nr.1?", "Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
@@ -1313,6 +1317,78 @@ namespace NotEnoughAV1Encodes
                 trackTwo = CheckBoxAudioTrackTwo.IsChecked == true;
                 trackThree = CheckBoxAudioTrackThree.IsChecked == true;
                 trackFour = CheckBoxAudioTrackFour.IsChecked == true;
+
+                switch (ComboBoxTrackOneChannels.SelectedIndex.ToString())
+                {
+                    case "0":
+                        audioChannelsTrackOne = 1;
+                        break;
+                    case "1":
+                        audioChannelsTrackOne = 2;
+                        break;
+                    case "2":
+                        audioChannelsTrackOne = 6;
+                        break;
+                    case "3":
+                        audioChannelsTrackOne = 8;
+                        break;
+                    default:
+                        break;
+                }
+
+                switch (ComboBoxTrackTwoChannels.SelectedIndex.ToString())
+                {
+                    case "0":
+                        audioChannelsTrackTwo = 1;
+                        break;
+                    case "1":
+                        audioChannelsTrackTwo = 2;
+                        break;
+                    case "2":
+                        audioChannelsTrackTwo = 6;
+                        break;
+                    case "3":
+                        audioChannelsTrackTwo = 8;
+                        break;
+                    default:
+                        break;
+                }
+
+                switch (ComboBoxTrackThreeChannels.SelectedIndex.ToString())
+                {
+                    case "0":
+                        audioChannelsTrackThree = 1;
+                        break;
+                    case "1":
+                        audioChannelsTrackThree = 2;
+                        break;
+                    case "2":
+                        audioChannelsTrackThree = 6;
+                        break;
+                    case "3":
+                        audioChannelsTrackThree = 8;
+                        break;
+                    default:
+                        break;
+                }
+
+                switch (ComboBoxTrackFourChannels.SelectedIndex.ToString())
+                {
+                    case "0":
+                        audioChannelsTrackFour = 1;
+                        break;
+                    case "1":
+                        audioChannelsTrackFour = 2;
+                        break;
+                    case "2":
+                        audioChannelsTrackFour = 6;
+                        break;
+                    case "3":
+                        audioChannelsTrackFour = 8;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -1723,6 +1799,33 @@ namespace NotEnoughAV1Encodes
                 if (n.Name == "AudioTrackTwo") { if (n.InnerText == "True") { CheckBoxAudioTrackTwo.IsChecked = true; } else { CheckBoxAudioTrackTwo.IsChecked = false; } }
                 if (n.Name == "AudioTrackThree") { if (n.InnerText == "True") { CheckBoxAudioTrackThree.IsChecked = true; } else { CheckBoxAudioTrackThree.IsChecked = false; } }
                 if (n.Name == "AudioTrackFour") { if (n.InnerText == "True") { CheckBoxAudioTrackFour.IsChecked = true; } else { CheckBoxAudioTrackFour.IsChecked = false; } }
+                if (n.Name == "AudioChannelTrackOne") {
+                    if (n.InnerText == "1 (Mono)") { ComboBoxTrackOneChannels.SelectedIndex = 0; }
+                    if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackOneChannels.SelectedIndex = 1; }
+                    if (n.InnerText == "5.1") { ComboBoxTrackOneChannels.SelectedIndex = 2; }
+                    if (n.InnerText == "7.1") { ComboBoxTrackOneChannels.SelectedIndex = 3; }
+                }
+                if (n.Name == "AudioChannelTrackTwo")
+                {
+                    if (n.InnerText == "1 (Mono)") { ComboBoxTrackTwoChannels.SelectedIndex = 0; }
+                    if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackTwoChannels.SelectedIndex = 1; }
+                    if (n.InnerText == "5.1") { ComboBoxTrackTwoChannels.SelectedIndex = 2; }
+                    if (n.InnerText == "7.1") { ComboBoxTrackTwoChannels.SelectedIndex = 3; }
+                }
+                if (n.Name == "AudioChannelTrackThree")
+                {
+                    if (n.InnerText == "1 (Mono)") { ComboBoxTrackThreeChannels.SelectedIndex = 0; }
+                    if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackThreeChannels.SelectedIndex = 1; }
+                    if (n.InnerText == "5.1") { ComboBoxTrackThreeChannels.SelectedIndex = 2; }
+                    if (n.InnerText == "7.1") { ComboBoxTrackThreeChannels.SelectedIndex = 3; }
+                }
+                if (n.Name == "AudioChannelTrackFour")
+                {
+                    if (n.InnerText == "1 (Mono)") { ComboBoxTrackFourChannels.SelectedIndex = 0; }
+                    if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackFourChannels.SelectedIndex = 1; }
+                    if (n.InnerText == "5.1") { ComboBoxTrackFourChannels.SelectedIndex = 2; }
+                    if (n.InnerText == "7.1") { ComboBoxTrackFourChannels.SelectedIndex = 3; }
+                }
                 if (n.Name == "VideoResize") { if (n.InnerText == "True") { CheckBoxVideoResize.IsChecked = true; } else { CheckBoxVideoResize.IsChecked = false; } }
                 if (n.Name == "ResizeFrameHeight") { TextBoxFrameHeight.Text = n.InnerText; }
                 if (n.Name == "ResizeFrameWidth") { TextBoxFrameWidth.Text = n.InnerText; }
@@ -1838,6 +1941,10 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("AudioTrackTwo", CheckBoxAudioTrackTwo.IsChecked.ToString());
             writer.WriteElementString("AudioTrackThree", CheckBoxAudioTrackThree.IsChecked.ToString());
             writer.WriteElementString("AudioTrackFour", CheckBoxAudioTrackFour.IsChecked.ToString());
+            writer.WriteElementString("AudioChannelTrackOne", ComboBoxTrackOneChannels.Text);
+            writer.WriteElementString("AudioChannelTrackTwo", ComboBoxTrackTwoChannels.Text);
+            writer.WriteElementString("AudioChannelTrackThree", ComboBoxTrackThreeChannels.Text);
+            writer.WriteElementString("AudioChannelTrackFour", ComboBoxTrackFourChannels.Text);
             writer.WriteElementString("VideoResize", CheckBoxVideoResize.IsChecked.ToString());
             writer.WriteElementString("ResizeFrameHeight", TextBoxFrameHeight.Text);
             writer.WriteElementString("ResizeFrameWidth", TextBoxFrameWidth.Text);

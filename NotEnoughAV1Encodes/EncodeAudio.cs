@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 
@@ -10,201 +11,139 @@ namespace NotEnoughAV1Encodes
         {
             if (MainWindow.audioEncoding == true)
             {
-                string audioInput = "";
-                string audioMapping = "";
-                string audioCodec = "";
-                string audioCodecTrackTwo = "";
-                string audioCodecTrackThree = "";
-                string audioCodecTrackFour = "";
-                bool skipbitrate = false;
-                bool skipbitrateTrackTwo = false;
-                bool skipbitrateTrackThree = false;
-                bool skipbitrateTrackFour = false;
+                //Editing this shi** took longer than it should. Please work.
+
                 //Creates AudioEncoded Directory in the temp dir
                 if (!Directory.Exists(Path.Combine(MainWindow.workingTempDirectory, "AudioEncoded")))
                     Directory.CreateDirectory(Path.Combine(MainWindow.workingTempDirectory, "AudioEncoded"));
-                //Audio Encoder --------------------------------------------------------------------------||
-                //Audio Codec Switch Track One
-                switch (MainWindow.audioCodec)
+
+                //string audioInput = "";
+                //string audioMapping = "";
+                string audioCodec = "";
+                int numberoftracksactive = 0;
+                int indexinteger = 0;
+
+                //Counts the number of active audio tracks for audio mapping purposes
+                if (MainWindow.trackOne == true) { numberoftracksactive += 1; }
+                if (MainWindow.trackTwo == true) { numberoftracksactive += 1; }
+                if (MainWindow.trackThree == true) { numberoftracksactive += 1; }
+                if (MainWindow.trackFour == true) { numberoftracksactive += 1; }
+
+                if (numberoftracksactive == 1)
                 {
-                    case "Opus":
-                        audioCodec = "libopus";
-                        break;
-                    case "Opus 5.1":
-                        audioCodec = "libopus -af channelmap=channel_layout=5.1";
-                        break;
-                    case "Opus Downmix":
-                        audioCodec = "libopus -ac 2";
-                        break;
-                    case "AC3":
-                        audioCodec = "ac3";
-                        break;
-                    case "AAC":
-                        audioCodec = "aac";
-                        break;
-                    case "MP3":
-                        audioCodec = "libmp3lame";
-                        break;
-                    case "Copy Audio":
-                        audioCodec = "copy";
-                        skipbitrate = true;
-                        break;
-                    default:
-                        break;
-                }
-                //Audio Codec Switch Track Two
-                switch (MainWindow.audioCodecTrackTwo)
-                {
-                    case "Opus":
-                        audioCodecTrackTwo = "libopus";
-                        break;
-                    case "Opus 5.1":
-                        audioCodecTrackTwo = "libopus -af channelmap=channel_layout=5.1";
-                        break;
-                    case "Opus Downmix":
-                        audioCodecTrackTwo = "libopus -ac 2";
-                        break;
-                    case "AC3":
-                        audioCodecTrackTwo = "ac3";
-                        break;
-                    case "AAC":
-                        audioCodecTrackTwo = "aac";
-                        break;
-                    case "MP3":
-                        audioCodecTrackTwo = "libmp3lame";
-                        break;
-                    case "Copy Audio":
-                        audioCodecTrackTwo = "copy";
-                        skipbitrateTrackTwo = true;
-                        break;
-                    default:
-                        break;
-                }
-                //Audio Codec Switch Track Three
-                switch (MainWindow.audioCodecTrackThree)
-                {
-                    case "Opus":
-                        audioCodecTrackThree = "libopus";
-                        break;
-                    case "Opus 5.1":
-                        audioCodecTrackThree = "libopus -af channelmap=channel_layout=5.1";
-                        break;
-                    case "Opus Downmix":
-                        audioCodecTrackThree = "libopus -ac 2";
-                        break;
-                    case "AC3":
-                        audioCodecTrackThree = "ac3";
-                        break;
-                    case "AAC":
-                        audioCodecTrackThree = "aac";
-                        break;
-                    case "MP3":
-                        audioCodecTrackThree = "libmp3lame";
-                        break;
-                    case "Copy Audio":
-                        audioCodecTrackThree = "copy";
-                        skipbitrateTrackThree = true;
-                        break;
-                    default:
-                        break;
-                }
-                //Audio Codec Switch Track Four
-                switch (MainWindow.audioCodecTrackFour)
-                {
-                    case "Opus":
-                        audioCodecTrackFour = "libopus";
-                        break;
-                    case "Opus 5.1":
-                        audioCodecTrackFour = "libopus -af channelmap=channel_layout=5.1";
-                        break;
-                    case "Opus Downmix":
-                        audioCodecTrackFour = "libopus -ac 2";
-                        break;
-                    case "AC3":
-                        audioCodecTrackFour = "ac3";
-                        break;
-                    case "AAC":
-                        audioCodecTrackFour = "aac";
-                        break;
-                    case "MP3":
-                        audioCodecTrackFour = "libmp3lame";
-                        break;
-                    case "Copy Audio":
-                        audioCodecTrackFour = "copy";
-                        skipbitrateTrackFour = true;
-                        break;
-                    default:
-                        break;
-                }
-                //----------------------------------------------------------------------------------------||
-                //Audio Mapping --------------------------------------------------------------------------||
-                if (MainWindow.trackOne == true && MainWindow.detectedTrackOne == true)
-                {
-                    switch (skipbitrate)
+                    if (MainWindow.trackOne == true)
                     {
-                        case true:
-                            audioInput += " -c:a:0 " + audioCodec;
-                            break;
-                        case false:
-                            audioInput += " -c:a:0 " + audioCodec + " -b:a:0 " + MainWindow.audioBitrate + "k";
-                            break;
-                        default:
-                            break;
+                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrate, "0", MainWindow.audioCodec, MainWindow.audioChannelsTrackOne);
                     }
-                    
-                    audioMapping += " -map 0:"+ MainWindow.firstTrackIndex + " ";
-                }
-                if (MainWindow.trackTwo == true && MainWindow.detectedTrackTwo == true)
-                {
-                    switch (skipbitrateTrackTwo)
+                    if (MainWindow.trackTwo == true)
                     {
-                        case true:
-                            audioInput += " -c:a:1 " + audioCodecTrackTwo;
-                            break;
-                        case false:
-                            audioInput += " -c:a:1 " + audioCodecTrackTwo + " -b:a:1 " + MainWindow.audioBitrateTrackTwo + "k";
-                            break;
-                        default:
-                            break;
+                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackTwo, "1", MainWindow.audioCodecTrackTwo, MainWindow.audioChannelsTrackTwo);
                     }
-                    audioMapping += " -map 0:" + MainWindow.secondTrackIndex + " ";
-                }
-                if (MainWindow.trackThree == true && MainWindow.detectedTrackThree == true)
-                {
-                    switch (skipbitrateTrackThree)
+                    if (MainWindow.trackThree == true)
                     {
-                        case true:
-                            audioInput += " -c:a:2 " + audioCodecTrackThree;
-                            break;
-                        case false:
-                            audioInput += " -c:a:2 " + audioCodecTrackThree + " -b:a:2 " + MainWindow.audioBitrateTrackThree + "k";
-                            break;
-                        default:
-                            break;
+                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackThree, "2", MainWindow.audioCodecTrackThree, MainWindow.audioChannelsTrackThree);
                     }
-                    audioMapping += " -map 0:" + MainWindow.thirdTrackIndex + " ";
-                }
-                if (MainWindow.trackFour == true && MainWindow.detectedTrackFour == true)
-                {
-                    switch (skipbitrateTrackFour)
+                    if (MainWindow.trackFour == true)
                     {
-                        case true:
-                            audioInput += " -c:a:3 " + audioCodecTrackFour;
-                            break;
-                        case false:
-                            audioInput += " -c:a:3 " + audioCodecTrackFour + " -b:a:3 " + MainWindow.audioBitrateTrackFour + "k";
-                            break;
-                        default:
-                            break;
+                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackFour, "3", MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour);
                     }
-                    audioMapping += " -map 0:" + MainWindow.fourthTrackIndex + " ";
+                }
+                else
+                {
+                    if (MainWindow.trackOne == true)
+                    {
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrate, "0", indexinteger, MainWindow.audioCodec, MainWindow.audioChannelsTrackOne);
+                        indexinteger += 1;
+                    }
+                    if (MainWindow.trackTwo == true)
+                    {
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackTwo, "1", indexinteger, MainWindow.audioCodecTrackTwo, MainWindow.audioChannelsTrackTwo);
+                        indexinteger += 1;
+                    }
+                    if (MainWindow.trackThree == true)
+                    {
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackThree, "2", indexinteger, MainWindow.audioCodecTrackThree, MainWindow.audioChannelsTrackThree);
+                        indexinteger += 1;
+                    }
+                    if (MainWindow.trackFour == true)
+                    {
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackFour, "3", indexinteger, MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour);
+                        indexinteger += 1;
+                    }
                 }
                 //----------------------------------------------------------------------------------------||
                 //Audio Encoding -------------------------------------------------------------------------||
-                string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn" + audioInput + audioMapping + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022';
+                //string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn" + audioInput + audioMapping + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022';
+
+                string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn " + audioCodec + " " + '\u0022' + MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv" + '\u0022';
+                Console.WriteLine(ffmpegAudioCommands);
                 SmallScripts.ExecuteFfmpegTask(ffmpegAudioCommands);
                 //----------------------------------------------------------------------------------------||
             }
+        }
+        private static string audiocodecswitch = "";
+        private static string SwitchCodec(string Codec)
+        {
+            switch (Codec)
+            {
+                case "Opus":
+                    if (MainWindow.audioChannelsTrackOne == 2 || MainWindow.audioChannelsTrackOne == 1)
+                    {
+                        audiocodecswitch = "libopus";
+                    }
+                    else if (MainWindow.audioChannelsTrackOne == 6)
+                    {
+                        audiocodecswitch = "libopus -af channelmap=channel_layout=5.1";
+                    }
+                    else if (MainWindow.audioChannelsTrackOne == 8)
+                    {
+                        audiocodecswitch = "libopus -af channelmap=channel_layout=7.1";
+                    }
+                    break;
+                case "AC3":
+                    audiocodecswitch = "ac3";
+                    break;
+                case "AAC":
+                    audiocodecswitch = "aac";
+                    break;
+                case "MP3":
+                    audiocodecswitch = "libmp3lame";
+                    break;
+                case "Copy Audio":
+                    audiocodecswitch = "copy";
+                    break;
+                default:
+                    break;
+            }
+
+            return audiocodecswitch;
+        }
+
+        private static string audioCodecCommand = "";
+        private static string OneTrackCommandGenerator(int activetrackbitrate, string activetrackindex, string activtrackcodec, int channellayout)
+        {
+            //String Command Builder for a single Audio Track
+            audioCodecCommand = "-map 0:a:" + activetrackindex + " -c:a ";
+            audioCodecCommand += SwitchCodec(activtrackcodec);
+            if (activtrackcodec != "Copy Audio")
+            {
+                audioCodecCommand += " -b:a " + activetrackbitrate + "k";
+            }
+            audioCodecCommand += " -ac " + channellayout;
+            return audioCodecCommand;
+        }
+
+        private static string MultipleTrackCommandGenerator(int activetrackbitrate, string activetrackindex, int activetrackaudioindex, string activtrackcodec, int channellayout)
+        {
+            //String Command Builder for multiple Audio Tracks
+            audioCodecCommand = "-map 0:a:" + activetrackindex + " -c:a:" + activetrackaudioindex + " ";
+            audioCodecCommand += SwitchCodec(activtrackcodec);
+            if (activtrackcodec != "Copy Audio")
+            {
+                audioCodecCommand += " -b:a:" + activetrackaudioindex + " " + activetrackbitrate + "k";
+            }
+            audioCodecCommand += " -ac:a:" + activetrackaudioindex + " " + channellayout + " ";
+            return audioCodecCommand;
         }
     }
 }
