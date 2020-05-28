@@ -119,11 +119,7 @@ namespace NotEnoughAV1Encodes
 
         public static void DeleteTempFilesDir(string path)
         {
-            try
-            {
-                if (Directory.Exists(path)) { Directory.Delete(path, true); }
-            }
-            catch { }
+            try { if (Directory.Exists(path)) { Directory.Delete(path, true); } } catch { }
         }
 
         public static void CheckAudioEncode()

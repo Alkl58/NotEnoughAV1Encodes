@@ -32,8 +32,18 @@ namespace NotEnoughAV1Encodes
                 foreach (FileInfo f in infos)
                 {
                     int count = f.ToString().Count();
-                    if (count == 8) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00")); }
-                    if (count == 9) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0")); }
+
+                    switch (count)
+                    {
+                        case 8:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
+                            break;
+                        case 9:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             else if (numberOfChunks >= 1000 && numberOfChunks <= 9999) //If you have more than 1.000 Chunks and less than 9.999
@@ -41,9 +51,20 @@ namespace NotEnoughAV1Encodes
                 foreach (FileInfo f in infos)
                 {
                     int count = f.ToString().Count();
-                    if (count == 8) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000")); }
-                    if (count == 9) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00")); }
-                    if (count == 10) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0")); }
+                    switch (count)
+                    {
+                        case 8:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000"));
+                            break;
+                        case 9:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
+                            break;
+                        case 10:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             else if (numberOfChunks >= 10000 && numberOfChunks <= 99999) //If you have more than 10.000 Chunks and less than 99.999
@@ -51,24 +72,48 @@ namespace NotEnoughAV1Encodes
                 foreach (FileInfo f in infos)
                 {
                     int count = f.ToString().Count();
-                    if (count == 8) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0000")); }
-                    if (count == 9) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000")); }
-                    if (count == 10) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00")); }
-                    if (count == 11) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0")); }
+                    switch (count)
+                    {
+                        case 8:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0000"));
+                            break;
+                        case 9:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000"));
+                            break;
+                        case 10:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
+                            break;
+                        case 11:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
+                            break;
+                    }
                 }
             }
-            else if (numberOfChunks >= 100000 && numberOfChunks <= 999999)
+            else if (numberOfChunks >= 100000 && numberOfChunks <= 999999) //If you have more than 100.000 Chunks and less than 999.999
             {
                 foreach (FileInfo f in infos)
                 {
                     int count = f.ToString().Count();
-                    //If you have more than 100.000 Chunks and less than 999.999
-                    //BTW are fu*** insane?
-                    if (count == 8) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00000")); }
-                    if (count == 9) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0000")); }
-                    if (count == 10) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000")); }
-                    if (count == 11) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00")); }
-                    if (count == 12) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0")); }
+                    switch (count)
+                    {
+                        case 8:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00000"));
+                            break;
+                        case 9:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0000"));
+                            break;
+                        case 10:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000"));
+                            break;
+                        case 11:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
+                            break;
+                        case 12:
+                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
