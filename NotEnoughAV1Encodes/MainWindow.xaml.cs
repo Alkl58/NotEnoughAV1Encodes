@@ -1599,178 +1599,277 @@ namespace NotEnoughAV1Encodes
             XmlNodeList node = doc.GetElementsByTagName("Settings");
             foreach (XmlNode n in node[0].ChildNodes)
             {
-                if (n.Name == "ChunkLength") { TextBoxChunkLength.Text = n.InnerText; }
-                if (n.Name == "Reencode")
+                switch (n.Name)
                 {
-                    if (n.InnerText == "True")
-                    {
-                        CheckBoxReencode.IsChecked = true;
-                    }
-                    else if (n.InnerText == "False")
-                    {
-                        CheckBoxReencode.IsChecked = false;
-                    }
-                }
-                if (n.Name == "Prereencode")
-                {
-                    if (n.InnerText == "True")
-                    {
-                        CheckBoxPreReencode.IsChecked = true;
-                    }
-                    else if (n.InnerText == "False")
-                    {
-                        CheckBoxPreReencode.IsChecked = false;
-                    }
-                }
-                if (n.Name == "Reencodecodec")
-                {
-                    if (n.InnerText == "utvideo") { ComboBoxReencodingMethod.SelectedIndex = 0; }
-                    if (n.InnerText == "x264") { ComboBoxReencodingMethod.SelectedIndex = 1; }
-                }
-                if (n.Name == "Prereencodecodec")
-                {
-                    if (n.InnerText == "utvideo") { ComboBoxPreReencodingMethod.SelectedIndex = 0; }
-                    if (n.InnerText == "x264") { ComboBoxPreReencodingMethod.SelectedIndex = 1; }
-                }
-                if (n.Name == "Workers") { TextBoxNumberOfWorkers.Text = n.InnerText; }
-                if (n.Name == "Encoder")
-                {
-                    if (n.InnerText == "aomenc") { ComboBoxEncoder.SelectedIndex = 0; }
-                    if (n.InnerText == "RAV1E") { ComboBoxEncoder.SelectedIndex = 1; }
-                    if (n.InnerText == "SVT-AV1") { ComboBoxEncoder.SelectedIndex = 2; }
-                }
-                if (n.Name == "BitDepth")
-                {
-                    if (n.InnerText == "8") { ComboBoxBitDepth.SelectedIndex = 0; }
-                    if (n.InnerText == "10") { ComboBoxBitDepth.SelectedIndex = 1; }
-                    if (n.InnerText == "12") { ComboBoxBitDepth.SelectedIndex = 2; }
-                }
-                if (n.Name == "Preset") { SliderPreset.Value = Int16.Parse(n.InnerText); }
-                if (n.Name == "TwoPassEncoding") { if (n.InnerText == "True") { CheckBoxTwoPass.IsChecked = true; } else { CheckBoxTwoPass.IsChecked = false; } }
-                if (n.Name == "QualityMode") { if (n.InnerText == "True") { RadioButtonConstantQuality.IsChecked = true; } else { RadioButtonConstantQuality.IsChecked = false; } }
-                if (n.Name == "Quality") { SliderQuality.Value = Int16.Parse(n.InnerText); }
-                if (n.Name == "BitrateMode") { if (n.InnerText == "True") { RadioButtonBitrate.IsChecked = true; } else { RadioButtonBitrate.IsChecked = false; } }
-                if (n.Name == "Bitrate") { TextBoxBitrate.Text = n.InnerText; }
-                if (n.Name == "CBRActive") { if (n.InnerText == "True") { CheckBoxCBR.IsChecked = true; } else { CheckBoxCBR.IsChecked = false; } }
-                if (n.Name == "AdvancedSettingsActive") { if (n.InnerText == "True") { CheckBoxAdvancedSettings.IsChecked = true; } else { CheckBoxAdvancedSettings.IsChecked = false; } }
-                if (n.Name == "AdvancedSettingsThreads") { TextBoxThreads.Text = n.InnerText; }
-                if (n.Name == "AdvancedSettingsTileColumns") { TextBoxTileColumns.Text = n.InnerText; }
-                if (n.Name == "AdvancedSettingsTileRows") { TextBoxTileRows.Text = n.InnerText; }
-                if (n.Name == "AdvancedSettingsAQMode") { ComboBoxAqMode.Text = n.InnerText; }
-                if (n.Name == "AdvancedSettingsKeyFrameInterval") { TextBoxKeyframeInterval.Text = n.InnerText; }
-                if (n.Name == "AdvancedSettingsCustomCommandActive") { if (n.InnerText == "True") { CheckBoxCustomCommandLine.IsChecked = true; } else { CheckBoxCustomCommandLine.IsChecked = false; } }
-                if (n.Name == "AdvancedSettingsCustomCommand") { TextBoxCustomCommand.Text = n.InnerText; }
-                if (n.Name == "AdvancedSettingsAomKeyframeFiltering") { if (n.InnerText == "False") { CheckBoxAomKeyframefiltering.IsChecked = false; } }
-                if (n.Name == "AdvancedSettingsAomAutoAltRef") { if (n.InnerText == "True") { CheckBoxAutoAltRef.IsChecked = true; } }
-                if (n.Name == "ShutdownAfterEncode") { if (n.InnerText == "True") { CheckBoxShutdownAfterEncode.IsChecked = true; } else { CheckBoxShutdownAfterEncode.IsChecked = false; } }
-                if (n.Name == "DeleteTempFiles") { if (n.InnerText == "True") { CheckBoxDeleteTempFiles.IsChecked = true; } else { CheckBoxDeleteTempFiles.IsChecked = false; } }
-                if (n.Name == "CustomFfmpegPathActive") { if (n.InnerText == "True") { CheckBoxCustomFfmpegPath.IsChecked = true; } else { CheckBoxCustomFfmpegPath.IsChecked = false; } }
-                if (n.Name == "CustomFfmpegPath") { TextBoxCustomFfmpegPath.Text = n.InnerText; }
-                if (n.Name == "CustomFfprobePathActive")
-                {
-                    if (n.InnerText == "True")
-                    {
-                        CheckBoxCustomFfprobePath.IsChecked = true;
-                        CheckFfprobe();
-                    }
-                    else
-                    {
-                        CheckBoxCustomFfprobePath.IsChecked = false;
-                    }
-                }
-                if (n.Name == "CustomFfprobePath") { TextBoxCustomFfprobePath.Text = n.InnerText; }
-                if (n.Name == "CustomAomencPathActive") { if (n.InnerText == "True") { CheckBoxCustomAomencPath.IsChecked = true; } else { CheckBoxCustomAomencPath.IsChecked = false; } }
-                if (n.Name == "CustomAomencPath") { TextBoxCustomAomencPath.Text = n.InnerText; }
-                if (n.Name == "CustomTempPathActive") { if (n.InnerText == "True") { CheckBoxCustomTempFolder.IsChecked = true; } else { CheckBoxCustomTempFolder.IsChecked = false; } }
-                if (n.Name == "CustomTempPath") { TextBoxCustomTempFolder.Text = n.InnerText; }
-                if (n.Name == "CustomRaviePathActive") { if (n.InnerText == "True") { CheckBoxCustomRaviePath.IsChecked = true; } else { CheckBoxCustomRaviePath.IsChecked = false; } }
-                if (n.Name == "CustomRaviePath") { TextBoxCustomRaviePath.Text = n.InnerText; }
-                if (n.Name == "CustomSvtaviPathActive") { if (n.InnerText == "True") { CheckBoxCustomSVTPath.IsChecked = true; } else { CheckBoxCustomSVTPath.IsChecked = false; } }
-                if (n.Name == "CustomSvtaviPath") { TextBoxCustomSVTPath.Text = n.InnerText; }
-                if (n.Name == "CustomBackground") { if (n.InnerText == "True") { customBackground = true; } else { customBackground = false; } }
-                if (n.Name == "CustomBackgroundPath")
-                {
-                    if (customBackground == true)
-                    {
-                        Uri fileUri = new Uri(n.InnerText);
-                        imgDynamic.Source = new BitmapImage(fileUri);
-                        customBackground = true;
-                        PathToBackground = n.InnerText;
-                    }
-                }
-                if (n.Name == "AudioEncoding") { if (n.InnerText == "True") { CheckBoxAudioEncoding.IsChecked = true; } else { CheckBoxAudioEncoding.IsChecked = false; } }
-                if (n.Name == "AudioCodec") { ComboBoxAudioCodec.Text = n.InnerText; }
-                if (n.Name == "AudioCodecTrackTwo") { ComboBoxAudioCodecTrackTwo.Text = n.InnerText; }
-                if (n.Name == "AudioCodecTrackThree") { ComboBoxAudioCodecTrackThree.Text = n.InnerText; }
-                if (n.Name == "AudioCodecTrackFour") { ComboBoxAudioCodecTrackFour.Text = n.InnerText; }
-                if (n.Name == "AudioBitrate") { TextBoxAudioBitrate.Text = n.InnerText; }
-                if (n.Name == "AudioBitrateTrackTwo") { TextBoxAudioBitrateTrackTwo.Text = n.InnerText; }
-                if (n.Name == "AudioBitrateTrackThree") { TextBoxAudioBitrateTrackThree.Text = n.InnerText; }
-                if (n.Name == "AudioBitrateTrackFour") { TextBoxAudioBitrateTrackFour.Text = n.InnerText; }
-                if (n.Name == "AudioTrackOne") { if (n.InnerText == "True") { CheckBoxAudioTrackOne.IsChecked = true; } else { CheckBoxAudioTrackOne.IsChecked = false; } }
-                if (n.Name == "AudioTrackTwo") { if (n.InnerText == "True") { CheckBoxAudioTrackTwo.IsChecked = true; } else { CheckBoxAudioTrackTwo.IsChecked = false; } }
-                if (n.Name == "AudioTrackThree") { if (n.InnerText == "True") { CheckBoxAudioTrackThree.IsChecked = true; } else { CheckBoxAudioTrackThree.IsChecked = false; } }
-                if (n.Name == "AudioTrackFour") { if (n.InnerText == "True") { CheckBoxAudioTrackFour.IsChecked = true; } else { CheckBoxAudioTrackFour.IsChecked = false; } }
-                if (n.Name == "AudioChannelTrackOne") {
-                    if (n.InnerText == "1 (Mono)") { ComboBoxTrackOneChannels.SelectedIndex = 0; }
-                    if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackOneChannels.SelectedIndex = 1; }
-                    if (n.InnerText == "5.1") { ComboBoxTrackOneChannels.SelectedIndex = 2; }
-                    if (n.InnerText == "7.1") { ComboBoxTrackOneChannels.SelectedIndex = 3; }
-                }
-                if (n.Name == "AudioChannelTrackTwo")
-                {
-                    if (n.InnerText == "1 (Mono)") { ComboBoxTrackTwoChannels.SelectedIndex = 0; }
-                    if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackTwoChannels.SelectedIndex = 1; }
-                    if (n.InnerText == "5.1") { ComboBoxTrackTwoChannels.SelectedIndex = 2; }
-                    if (n.InnerText == "7.1") { ComboBoxTrackTwoChannels.SelectedIndex = 3; }
-                }
-                if (n.Name == "AudioChannelTrackThree")
-                {
-                    if (n.InnerText == "1 (Mono)") { ComboBoxTrackThreeChannels.SelectedIndex = 0; }
-                    if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackThreeChannels.SelectedIndex = 1; }
-                    if (n.InnerText == "5.1") { ComboBoxTrackThreeChannels.SelectedIndex = 2; }
-                    if (n.InnerText == "7.1") { ComboBoxTrackThreeChannels.SelectedIndex = 3; }
-                }
-                if (n.Name == "AudioChannelTrackFour")
-                {
-                    if (n.InnerText == "1 (Mono)") { ComboBoxTrackFourChannels.SelectedIndex = 0; }
-                    if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackFourChannels.SelectedIndex = 1; }
-                    if (n.InnerText == "5.1") { ComboBoxTrackFourChannels.SelectedIndex = 2; }
-                    if (n.InnerText == "7.1") { ComboBoxTrackFourChannels.SelectedIndex = 3; }
-                }
-                if (n.Name == "VideoResize") { if (n.InnerText == "True") { CheckBoxVideoResize.IsChecked = true; } else { CheckBoxVideoResize.IsChecked = false; } }
-                if (n.Name == "ResizeFrameHeight") { TextBoxFrameHeight.Text = n.InnerText; }
-                if (n.Name == "ResizeFrameWidth") { TextBoxFrameWidth.Text = n.InnerText; }
-                if (n.Name == "SubtitleEnabled") { if (n.InnerText == "True") { CheckBoxEnableSubtitles.IsChecked = true; } else { CheckBoxEnableSubtitles.IsChecked = false; } }
-                if (n.Name == "SubtitleEnabledStreamCopy") { if (n.InnerText == "True") { RadioButtonStreamCopySubtitle.IsChecked = true; } else { RadioButtonStreamCopySubtitle.IsChecked = false; } }
-                if (n.Name == "SubtitleEnabledCustom") { if (n.InnerText == "True") { RadioButtonCustomSubtitles.IsChecked = true; } else { RadioButtonCustomSubtitles.IsChecked = false; } }
-                if (n.Name == "CalculateChunkLengthAutomaticly") { if (n.InnerText == "True") { CheckBoxAutomaticChunkLength.IsChecked = true; } else { CheckBoxAutomaticChunkLength.IsChecked = false; } }
-                if (n.Name == "PlayFinishedSound") { if (n.InnerText == "True") { CheckBoxEnableFinishedSound.IsChecked = true; } else { CheckBoxEnableFinishedSound.IsChecked = false; } }
-                if (n.Name == "ProcessPriority") { if (n.InnerText == "Below Normal") { ComboBoxProcessPrio.SelectedIndex = 1; } else { ComboBoxProcessPrio.SelectedIndex = 0; } }
-                if (n.Name == "ChromaSubsampling")
-                {
-                    if (n.InnerText == "4:2:0") { ComboBoxEncoder.SelectedIndex = 0; }
-                    if (n.InnerText == "4:2:2") { ComboBoxEncoder.SelectedIndex = 1; }
-                    if (n.InnerText == "4:4:4") { ComboBoxEncoder.SelectedIndex = 2; }
-                }
-                if (n.Name == "ColorTransfer")
-                {
-                    if (n.InnerText == "BT.709") { ComboBoxEncoder.SelectedIndex = 0; }
-                    if (n.InnerText == "BT.2020-10") { ComboBoxEncoder.SelectedIndex = 1; }
-                    if (n.InnerText == "BT.2020-12") { ComboBoxEncoder.SelectedIndex = 2; }
-                    if (n.InnerText == "SMPTE2084") { ComboBoxEncoder.SelectedIndex = 3; }
-                }
-                if (n.Name == "ColorPrimaries")
-                {
-                    if (n.InnerText == "BT.709") { ComboBoxEncoder.SelectedIndex = 0; }
-                    if (n.InnerText == "BT.2020") { ComboBoxEncoder.SelectedIndex = 1; }
-                }
-                if (n.Name == "ColorSpace")
-                {
-                    if (n.InnerText == "BT.709") { ComboBoxEncoder.SelectedIndex = 0; }
-                    if (n.InnerText == "BT.2020NC") { ComboBoxEncoder.SelectedIndex = 1; }
-                    if (n.InnerText == "BT.2020C") { ComboBoxEncoder.SelectedIndex = 2; }
-                    if (n.InnerText == "SMPTE2085") { ComboBoxEncoder.SelectedIndex = 3; }
+                    case "ChunkLength":
+                        TextBoxChunkLength.Text = n.InnerText;
+                        break;
+                    case "Reencode":
+                        if (n.InnerText == "True")
+                        {
+                            CheckBoxReencode.IsChecked = true;
+                        }
+                        else if (n.InnerText == "False")
+                        {
+                            CheckBoxReencode.IsChecked = false;
+                        }
+                        break;
+                    case "Prereencode":
+                        if (n.InnerText == "True")
+                        {
+                            CheckBoxPreReencode.IsChecked = true;
+                        }
+                        else if (n.InnerText == "False")
+                        {
+                            CheckBoxPreReencode.IsChecked = false;
+                        }
+                        break;
+                    case "Reencodecodec":
+                        if (n.InnerText == "utvideo") { ComboBoxReencodingMethod.SelectedIndex = 0; }
+                        if (n.InnerText == "x264") { ComboBoxReencodingMethod.SelectedIndex = 1; }
+                        break;
+                    case "Prereencodecodec":
+                        if (n.InnerText == "utvideo") { ComboBoxPreReencodingMethod.SelectedIndex = 0; }
+                        if (n.InnerText == "x264") { ComboBoxPreReencodingMethod.SelectedIndex = 1; }
+                        break;
+                    case "Workers":
+                        TextBoxNumberOfWorkers.Text = n.InnerText;
+                        break;
+                    case "Encoder":
+                        if (n.InnerText == "aomenc") { ComboBoxEncoder.SelectedIndex = 0; }
+                        if (n.InnerText == "RAV1E") { ComboBoxEncoder.SelectedIndex = 1; }
+                        if (n.InnerText == "SVT-AV1") { ComboBoxEncoder.SelectedIndex = 2; }
+                        break;
+                    case "BitDepth":
+                        if (n.InnerText == "8") { ComboBoxBitDepth.SelectedIndex = 0; }
+                        if (n.InnerText == "10") { ComboBoxBitDepth.SelectedIndex = 1; }
+                        if (n.InnerText == "12") { ComboBoxBitDepth.SelectedIndex = 2; }
+                        break;
+                    case "Preset":
+                        SliderPreset.Value = Int16.Parse(n.InnerText);
+                        break;
+                    case "TwoPassEncoding":
+                        if (n.InnerText == "True") { CheckBoxTwoPass.IsChecked = true; } else { CheckBoxTwoPass.IsChecked = false; }
+                        break;
+                    case "QualityMode":
+                        if (n.InnerText == "True") { RadioButtonConstantQuality.IsChecked = true; } else { RadioButtonConstantQuality.IsChecked = false; }
+                        break;
+                    case "Quality":
+                        SliderQuality.Value = Int16.Parse(n.InnerText);
+                        break;
+                    case "BitrateMode":
+                        if (n.InnerText == "True") { RadioButtonBitrate.IsChecked = true; } else { RadioButtonBitrate.IsChecked = false; }
+                        break;
+                    case "Bitrate":
+                        TextBoxBitrate.Text = n.InnerText;
+                        break;
+                    case "CBRActive":
+                        if (n.InnerText == "True") { CheckBoxCBR.IsChecked = true; } else { CheckBoxCBR.IsChecked = false; }
+                        break;
+                    case "AdvancedSettingsActive":
+                        if (n.InnerText == "True") { CheckBoxAdvancedSettings.IsChecked = true; } else { CheckBoxAdvancedSettings.IsChecked = false; }
+                        break;
+                    case "AdvancedSettingsThreads":
+                        TextBoxThreads.Text = n.InnerText;
+                        break;
+                    case "AdvancedSettingsTileColumns":
+                        TextBoxTileColumns.Text = n.InnerText;
+                        break;
+                    case "AdvancedSettingsTileRows":
+                        TextBoxTileRows.Text = n.InnerText;
+                        break;
+                    case "AdvancedSettingsAQMode":
+                        ComboBoxAqMode.Text = n.InnerText;
+                        break;
+                    case "AdvancedSettingsKeyFrameInterval":
+                        TextBoxKeyframeInterval.Text = n.InnerText;
+                        break;
+                    case "AdvancedSettingsCustomCommandActive":
+                        if (n.InnerText == "True") { CheckBoxCustomCommandLine.IsChecked = true; } else { CheckBoxCustomCommandLine.IsChecked = false; }
+                        break;
+                    case "AdvancedSettingsCustomCommand":
+                        TextBoxCustomCommand.Text = n.InnerText;
+                        break;
+                    case "AdvancedSettingsAomKeyframeFiltering":
+                        if (n.InnerText == "False") { CheckBoxAomKeyframefiltering.IsChecked = false; }
+                        break;
+                    case "AdvancedSettingsAomAutoAltRef":
+                        if (n.InnerText == "True") { CheckBoxAutoAltRef.IsChecked = true; }
+                        break;
+                    case "ShutdownAfterEncode":
+                        if (n.InnerText == "True") { CheckBoxShutdownAfterEncode.IsChecked = true; } else { CheckBoxShutdownAfterEncode.IsChecked = false; }
+                        break;
+                    case "DeleteTempFiles":
+                        if (n.InnerText == "True") { CheckBoxDeleteTempFiles.IsChecked = true; } else { CheckBoxDeleteTempFiles.IsChecked = false; }
+                        break;
+                    case "CustomFfmpegPathActive":
+                        if (n.InnerText == "True") { CheckBoxCustomFfmpegPath.IsChecked = true; } else { CheckBoxCustomFfmpegPath.IsChecked = false; }
+                        break;
+                    case "CustomFfmpegPath":
+                        TextBoxCustomFfmpegPath.Text = n.InnerText;
+                        break;
+                    case "CustomFfprobePathActive":
+                        if (n.InnerText == "True") {
+                            CheckBoxCustomFfprobePath.IsChecked = true;
+                            CheckFfprobe();
+                        }
+                        else
+                        {
+                            CheckBoxCustomFfprobePath.IsChecked = false;
+                        }
+                        break;
+                    case "CustomFfprobePath":
+                        TextBoxCustomFfprobePath.Text = n.InnerText;
+                        break;
+                    case "CustomAomencPathActive":
+                        if (n.InnerText == "True") { CheckBoxCustomAomencPath.IsChecked = true; } else { CheckBoxCustomAomencPath.IsChecked = false; }
+                        break;
+                    case "CustomAomencPath":
+                        TextBoxCustomAomencPath.Text = n.InnerText;
+                        break;
+                    case "CustomTempPathActive":
+                        if (n.InnerText == "True") { CheckBoxCustomTempFolder.IsChecked = true; } else { CheckBoxCustomTempFolder.IsChecked = false; }
+                        break;
+                    case "CustomTempPath":
+                        TextBoxCustomTempFolder.Text = n.InnerText;
+                        break;
+                    case "CustomRaviePathActive":
+                        if (n.InnerText == "True") { CheckBoxCustomRaviePath.IsChecked = true; } else { CheckBoxCustomRaviePath.IsChecked = false; }
+                        break;
+                    case "CustomRaviePath":
+                        TextBoxCustomRaviePath.Text = n.InnerText;
+                        break;
+                    case "CustomSvtaviPathActive":
+                        if (n.InnerText == "True") { CheckBoxCustomSVTPath.IsChecked = true; } else { CheckBoxCustomSVTPath.IsChecked = false; }
+                        break;
+                    case "CustomSvtaviPath":
+                        TextBoxCustomSVTPath.Text = n.InnerText;
+                        break;
+                    case "CustomBackground":
+                        if (n.InnerText == "True") { customBackground = true; } else { customBackground = false; }
+                        break;
+                    case "CustomBackgroundPath":
+                        if (customBackground == true)
+                        {
+                            Uri fileUri = new Uri(n.InnerText);
+                            imgDynamic.Source = new BitmapImage(fileUri);
+                            customBackground = true;
+                            PathToBackground = n.InnerText;
+                        }
+                        break;
+                    case "AudioEncoding":
+                        if (n.InnerText == "True") { CheckBoxAudioEncoding.IsChecked = true; } else { CheckBoxAudioEncoding.IsChecked = false; }
+                        break;
+                    case "AudioCodec":
+                        ComboBoxAudioCodec.Text = n.InnerText;
+                        break;
+                    case "AudioCodecTrackTwo":
+                        ComboBoxAudioCodecTrackTwo.Text = n.InnerText;
+                        break;
+                    case "AudioCodecTrackThree":
+                        ComboBoxAudioCodecTrackThree.Text = n.InnerText;
+                        break;
+                    case "AudioCodecTrackFour":
+                        ComboBoxAudioCodecTrackFour.Text = n.InnerText;
+                        break;
+                    case "AudioBitrate":
+                        TextBoxAudioBitrate.Text = n.InnerText;
+                        break;
+                    case "AudioBitrateTrackTwo":
+                        TextBoxAudioBitrateTrackTwo.Text = n.InnerText;
+                        break;
+                    case "AudioBitrateTrackThree":
+                        TextBoxAudioBitrateTrackThree.Text = n.InnerText;
+                        break;
+                    case "AudioBitrateTrackFour":
+                        TextBoxAudioBitrateTrackFour.Text = n.InnerText;
+                        break;
+                    case "AudioTrackOne":
+                        if (n.InnerText == "True") { CheckBoxAudioTrackOne.IsChecked = true; } else { CheckBoxAudioTrackOne.IsChecked = false; }
+                        break;
+                    case "AudioTrackTwo":
+                        if (n.InnerText == "True") { CheckBoxAudioTrackTwo.IsChecked = true; } else { CheckBoxAudioTrackTwo.IsChecked = false; }
+                        break;
+                    case "AudioTrackThree":
+                        if (n.InnerText == "True") { CheckBoxAudioTrackThree.IsChecked = true; } else { CheckBoxAudioTrackThree.IsChecked = false; }
+                        break;
+                    case "AudioTrackFour":
+                        if (n.InnerText == "True") { CheckBoxAudioTrackFour.IsChecked = true; } else { CheckBoxAudioTrackFour.IsChecked = false; }
+                        break;
+                    case "AudioChannelTrackOne":
+                        if (n.InnerText == "1 (Mono)") { ComboBoxTrackOneChannels.SelectedIndex = 0; }
+                        if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackOneChannels.SelectedIndex = 1; }
+                        if (n.InnerText == "5.1") { ComboBoxTrackOneChannels.SelectedIndex = 2; }
+                        if (n.InnerText == "7.1") { ComboBoxTrackOneChannels.SelectedIndex = 3; }
+                        break;
+                    case "AudioChannelTrackTwo":
+                        if (n.InnerText == "1 (Mono)") { ComboBoxTrackTwoChannels.SelectedIndex = 0; }
+                        if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackTwoChannels.SelectedIndex = 1; }
+                        if (n.InnerText == "5.1") { ComboBoxTrackTwoChannels.SelectedIndex = 2; }
+                        if (n.InnerText == "7.1") { ComboBoxTrackTwoChannels.SelectedIndex = 3; }
+                        break;
+                    case "AudioChannelTrackThree":
+                        if (n.InnerText == "1 (Mono)") { ComboBoxTrackThreeChannels.SelectedIndex = 0; }
+                        if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackThreeChannels.SelectedIndex = 1; }
+                        if (n.InnerText == "5.1") { ComboBoxTrackThreeChannels.SelectedIndex = 2; }
+                        if (n.InnerText == "7.1") { ComboBoxTrackThreeChannels.SelectedIndex = 3; }
+                        break;
+                    case "AudioChannelTrackFour":
+                        if (n.InnerText == "1 (Mono)") { ComboBoxTrackFourChannels.SelectedIndex = 0; }
+                        if (n.InnerText == "2.0 (Stereo)") { ComboBoxTrackFourChannels.SelectedIndex = 1; }
+                        if (n.InnerText == "5.1") { ComboBoxTrackFourChannels.SelectedIndex = 2; }
+                        if (n.InnerText == "7.1") { ComboBoxTrackFourChannels.SelectedIndex = 3; }
+                        break;
+                    case "VideoResize":
+                        if (n.InnerText == "True") { CheckBoxVideoResize.IsChecked = true; } else { CheckBoxVideoResize.IsChecked = false; }
+                        break;
+                    case "ResizeFrameHeight":
+                        TextBoxFrameHeight.Text = n.InnerText;
+                        break;
+                    case "ResizeFrameWidth":
+                        TextBoxFrameWidth.Text = n.InnerText;
+                        break;
+                    case "SubtitleEnabled":
+                        if (n.InnerText == "True") { CheckBoxEnableSubtitles.IsChecked = true; } else { CheckBoxEnableSubtitles.IsChecked = false; }
+                        break;
+                    case "SubtitleEnabledStreamCopy":
+                        if (n.InnerText == "True") { RadioButtonStreamCopySubtitle.IsChecked = true; } else { RadioButtonStreamCopySubtitle.IsChecked = false; }
+                        break;
+                    case "SubtitleEnabledCustom":
+                        if (n.InnerText == "True") { RadioButtonCustomSubtitles.IsChecked = true; } else { RadioButtonCustomSubtitles.IsChecked = false; }
+                        break;
+                    case "CalculateChunkLengthAutomaticly":
+                        if (n.InnerText == "True") { CheckBoxAutomaticChunkLength.IsChecked = true; } else { CheckBoxAutomaticChunkLength.IsChecked = false; }
+                        break;
+                    case "PlayFinishedSound":
+                        if (n.InnerText == "True") { CheckBoxEnableFinishedSound.IsChecked = true; } else { CheckBoxEnableFinishedSound.IsChecked = false; }
+                        break;
+                    case "ProcessPriority":
+                        if (n.InnerText == "Below Normal") { ComboBoxProcessPrio.SelectedIndex = 1; } else { ComboBoxProcessPrio.SelectedIndex = 0; }
+                        break;
+                    case "ChromaSubsampling":
+                        if (n.InnerText == "4:2:0") { ComboBoxChroma.SelectedIndex = 0; }
+                        if (n.InnerText == "4:2:2") { ComboBoxChroma.SelectedIndex = 1; }
+                        if (n.InnerText == "4:4:4") { ComboBoxChroma.SelectedIndex = 2; }
+                        break;
+                    case "ColorTransfer":
+                        if (n.InnerText == "BT.709") { ComboBoxColorTrans.SelectedIndex = 0; }
+                        if (n.InnerText == "BT.2020-10") { ComboBoxColorTrans.SelectedIndex = 1; }
+                        if (n.InnerText == "BT.2020-12") { ComboBoxColorTrans.SelectedIndex = 2; }
+                        if (n.InnerText == "SMPTE2084") { ComboBoxColorTrans.SelectedIndex = 3; }
+                        break;
+                    case "ColorPrimaries":
+                        if (n.InnerText == "BT.709") { ComboBoxColorPrim.SelectedIndex = 0; }
+                        if (n.InnerText == "BT.2020") { ComboBoxColorPrim.SelectedIndex = 1; }
+                        break;
+                    case "ColorSpace":
+                        if (n.InnerText == "BT.709") { ComboBoxColorSpace.SelectedIndex = 0; }
+                        if (n.InnerText == "BT.2020NC") { ComboBoxColorSpace.SelectedIndex = 1; }
+                        if (n.InnerText == "BT.2020C") { ComboBoxColorSpace.SelectedIndex = 2; }
+                        if (n.InnerText == "SMPTE2085") { ComboBoxColorSpace.SelectedIndex = 3; }
+                        break;
+                    default:
+                        break;
                 }
 
                 if (saveJob == true || saveQueue == true)
