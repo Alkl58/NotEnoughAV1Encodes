@@ -241,7 +241,6 @@ namespace NotEnoughAV1Encodes
             DirectoryInfo batchfiles = new DirectoryInfo(TextBoxVideoInput.Text);
             foreach (var file in batchfiles.GetFiles())
             {
-                //Main entry Point
                 SmallScripts.Cancel.CancelAll = false;
                 ResetProgressBar();
                 SetParametersBeforeEncode();
@@ -260,92 +259,28 @@ namespace NotEnoughAV1Encodes
                     TextBoxChunkLength.Text = (Int16.Parse(streamLength) / Int16.Parse(TextBoxNumberOfWorkers.Text)).ToString();
                 }
 
-                if (ComboBoxEncoder.Text == "aomenc")
-                {
-                    SetAomencParameters();
-                }
-                else if (ComboBoxEncoder.Text == "RAV1E")
-                {
-                    SetRavieParameters();
-                }
-                else if (ComboBoxEncoder.Text == "SVT-AV1")
-                {
-                    SetSVTAV1Parameters();
-                }
                 if (SmallScripts.Cancel.CancelAll == false)
                 {
-                    if (CheckBoxAudioEncoding.IsChecked == true && resumeMode == false)
+                    if (ComboBoxEncoder.Text == "aomenc")
                     {
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Audio Encdoding ...", DispatcherPriority.Background);
-                        await Task.Run(() => EncodeAudio.AudioEncode());
-                        SmallScripts.CheckAudioEncode();
+                        SetAomencParameters();
                     }
-                    if (CheckBoxEnableSubtitles.IsChecked == true && resumeMode == false && RadioButtonCustomSubtitles.IsChecked == false)
+                    else if (ComboBoxEncoder.Text == "RAV1E")
                     {
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Subtitle Copying ...", DispatcherPriority.Background);
-                        await Task.Run(() => Subtitle.EncSubtitles());
-                        SmallScripts.CheckSubtitleEncode();
+                        SetRavieParameters();
                     }
-                    if (resumeMode == false)
+                    else if (ComboBoxEncoder.Text == "SVT-AV1")
                     {
-                        SaveSettings("", true, false, "");
-                        await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Splitting ...", DispatcherPriority.Background);
-                        await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, preencodeBeforeMainEncode, reencodeBeforeMainEncode, reencodecodec, prereencodecodec));
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Ended Splitting.", DispatcherPriority.Background);
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks ...", DispatcherPriority.Background);
-                        await Task.Run(() => RenameChunks.Rename(workingTempDirectory));
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks Finished.", DispatcherPriority.Background);
+                        SetSVTAV1Parameters();
                     }
-                    await Task.Run(() => SmallScripts.CountVideoChunks());
+                    else if (ComboBoxEncoder.Text == "libaom")
+                    {
+                        SetLibAomParameters();
+                    }
                     if (SmallScripts.Cancel.CancelAll == false)
                     {
-                        if (ComboBoxEncoder.Text == "aomenc" || ComboBoxEncoder.Text == "libaom")
-                        {
-                            pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started aomenc...", DispatcherPriority.Background);
-                            await Task.Run(() => EncodeAomencOrRav1e());
-                        }
-                        else if (ComboBoxEncoder.Text == "RAV1E")
-                        {
-                            pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started RAV1E...", DispatcherPriority.Background);
-                            await Task.Run(() => EncodeAomencOrRav1e());
-                        }
-                        else if (ComboBoxEncoder.Text == "SVT-AV1")
-                        {
-                            pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started SVT-AV1...", DispatcherPriority.Background);
-                            await Task.Run(() => EncodeSVTAV1());
-                        }
+                        await AsyncClass();
                     }
-                    else
-                    {
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
-                    }
-
-                    if (SmallScripts.Cancel.CancelAll == false)
-                    {
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing Started...", DispatcherPriority.Background);
-                        await Task.Run(() => ConcatVideo.Concat());
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString("hh\\:mm\\:ss") + " - " + Math.Round(Convert.ToDecimal((((Int16.Parse(streamLength) * Int16.Parse(streamFrameRateLabel)) / (DateTime.Now - starttimea).TotalSeconds))), 2).ToString() + "fps", DispatcherPriority.Background);
-                        if (File.Exists("unfinishedjob.xml"))
-                        {
-                            File.Delete("unfinishedjob.xml");
-                        }
-                        if (CheckBoxDeleteTempFiles.IsChecked == true || deleteTempAfterEncode == true)
-                        {
-                            SmallScripts.DeleteTempFiles();
-
-                            if (CheckBoxCustomTempFolder.IsChecked == true)
-                            {
-                                SmallScripts.DeleteTempFilesDir(workingTempDirectory);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
-                    }
-
-                    Console.WriteLine("Async fertig : " + file);
                 }
             }
             //Plays finished sound

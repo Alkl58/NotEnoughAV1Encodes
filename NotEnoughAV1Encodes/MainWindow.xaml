@@ -727,7 +727,7 @@
                                 </Button>
                                 <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="27,87,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="54" Margin="451,185,0,0" VerticalAlignment="Top" Width="355"/>
-                                <Label Content="Build Version: 1.0.55 (AppVeyor) - 2020.05.28" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label Content="Build Version: 1.0.57 (AppVeyor) - 2020.05.28" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Label Content="Github Repo: " HorizontalAlignment="Left" Margin="459,213,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="92" Margin="18,19,0,0" VerticalAlignment="Top" Width="212"/>
                                 <TextBox HorizontalAlignment="Left" Height="20" Margin="533,217,0,0" TextWrapping="Wrap" Text="https://github.com/Alkl58/NotEnoughAV1Encodes" VerticalAlignment="Top" Width="273" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#FF22403E" IsReadOnly="True"/>
