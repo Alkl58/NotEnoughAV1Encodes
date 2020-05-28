@@ -306,32 +306,53 @@
             </TabItem>
             <TabItem Header="General Settings" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
                 <Grid Background="#19191919">
-                    <Rectangle HorizontalAlignment="Left" Height="76" Margin="9,10,0,0" Stroke="#FF878787" VerticalAlignment="Top" Width="840"/>
-                    <Rectangle HorizontalAlignment="Left" Height="83" Margin="9,85,0,0" Stroke="#FF878787" VerticalAlignment="Top" Width="840"/>
+                    <Rectangle HorizontalAlignment="Left" Height="148" Margin="9,10,0,0" Stroke="#FF878787" VerticalAlignment="Top" Width="840"/>
+                    <Rectangle HorizontalAlignment="Left" Height="83" Margin="9,163,0,0" Stroke="#FF878787" VerticalAlignment="Top" Width="840"/>
                     <Label Content="Splitting" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
                     <Label Content="Chunk length:" HorizontalAlignment="Left" Margin="121,41,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxChunkLength" HorizontalAlignment="Left" Height="26" Margin="243,41,0,0" TextWrapping="Wrap" Text="180" VerticalAlignment="Top" Width="63" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-                    <Label Content="Workers" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,85,0,0" FontWeight="Bold" />
-                    <Label Content="Number of parallel Encodings:" HorizontalAlignment="Left" Margin="35,122,0,0" VerticalAlignment="Top" Foreground="White" />
-                    <TextBox x:Name="TextBoxNumberOfWorkers" HorizontalAlignment="Left" Height="26" Margin="243,122,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="63" Background="#FF2C2C2C" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="TextBoxNumberOfWorkers_TextChanged">
+                    <TextBox x:Name="TextBoxChunkLength" HorizontalAlignment="Left" Height="26" Margin="243,41,0,0" TextWrapping="Wrap" Text="180" VerticalAlignment="Top" Width="78" Foreground="White" Background="#FF2C2C2C" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                    <Label Content="Workers" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,163,0,0" FontWeight="Bold" />
+                    <Label Content="Number of parallel Encodings:" HorizontalAlignment="Left" Margin="35,200,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <TextBox x:Name="TextBoxNumberOfWorkers" HorizontalAlignment="Left" Height="26" Margin="243,200,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="63" Background="#FF2C2C2C" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="TextBoxNumberOfWorkers_TextChanged">
                         <TextBox.ToolTip>
                             <ToolTip>Sets the number of parallel encodings. Should not exceed physical core count.</ToolTip>
                         </TextBox.ToolTip>
                     </TextBox>
-                    <CheckBox x:Name="CheckBoxReencode" Content="Reencode (lossless)" HorizontalAlignment="Left" Margin="355,47,0,0" VerticalAlignment="Top" Foreground="White">
+                    <CheckBox x:Name="CheckBoxReencode" Content="(Enable/Disable)" HorizontalAlignment="Left" Margin="357,86,0,0" VerticalAlignment="Top" Foreground="White">
                         <CheckBox.ToolTip>
-                            <ToolTip>Reencodes the source to UT-Video during splitting. This avoids ffmpeg splitting inaccurate due to bad Keyframe timestamps.</ToolTip>
+                            <ToolTip>Reencodes the source during splitting. This helps reducing ffmpeg splitting inaccurate due to bad Keyframe timestamps.</ToolTip>
                         </CheckBox.ToolTip>
                     </CheckBox>
-                    <CheckBox x:Name="CheckBoxAutomaticChunkLength" Content="Automatic Chunk length based on Workers" HorizontalAlignment="Left" Margin="529,47,0,0" VerticalAlignment="Top" Width="305" Foreground="White" IsChecked="True" />
-                    <ComboBox x:Name="ComboBoxProcessPrio" HorizontalAlignment="Left" Margin="460,122,0,0" VerticalAlignment="Top" Width="114" Height="26">
+                    <CheckBox x:Name="CheckBoxAutomaticChunkLength" Content="Calculate Chunk Length based on number of Workers" HorizontalAlignment="Left" Margin="357,47,0,0" VerticalAlignment="Top" Width="305" Foreground="White" IsChecked="True" />
+                    <ComboBox x:Name="ComboBoxProcessPrio" HorizontalAlignment="Left" Margin="460,200,0,0" VerticalAlignment="Top" Width="114" Height="26">
                         <ComboBox.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
                         </ComboBox.Resources>
                         <ComboBoxItem Content="Normal" Foreground="White" IsSelected="True"/>
                         <ComboBoxItem Content="Below Normal" Foreground="White"/>
                     </ComboBox>
-                    <Label Content="Process priority:" HorizontalAlignment="Left" Margin="350,120,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <Label Content="Process priority:" HorizontalAlignment="Left" Margin="350,198,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <ComboBox x:Name="ComboBoxReencodingMethod" HorizontalAlignment="Left" Margin="243,80,0,0" VerticalAlignment="Top" Width="78" Height="26">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBoxItem Content="utvideo" Foreground="White" IsSelected="True"/>
+                        <ComboBoxItem Content="x264" Foreground="White"/>
+                    </ComboBox>
+                    <Label Content="Reencode during splitting:" HorizontalAlignment="Left" Margin="56,80,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <Label Content="Reencode before splitting:" HorizontalAlignment="Left" Margin="56,117,0,0" VerticalAlignment="Top" Foreground="White" />
+                    <ComboBox x:Name="ComboBoxPreReencodingMethod" HorizontalAlignment="Left" Margin="243,119,0,0" VerticalAlignment="Top" Width="78" Height="26">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF202020" />
+                        </ComboBox.Resources>
+                        <ComboBoxItem Content="utvideo" Foreground="White" IsSelected="True"/>
+                        <ComboBoxItem Content="x264" Foreground="White"/>
+                    </ComboBox>
+                    <CheckBox x:Name="CheckBoxPreReencode" Content="(Enable/Disable)" HorizontalAlignment="Left" Margin="357,123,0,0" VerticalAlignment="Top" Foreground="White">
+                        <CheckBox.ToolTip>
+                            <ToolTip>Reencodes the source before splitting. This helps reducing ffmpeg splitting inaccurate due to bad Keyframe timestamps.</ToolTip>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Video" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}">
@@ -706,7 +727,7 @@
                                 </Button>
                                 <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="27,87,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="54" Margin="451,185,0,0" VerticalAlignment="Top" Width="355"/>
-                                <Label Content="Build Version: Pre-Release v0.7-beta - 2020.05.27" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label Content="Build Version: 1.0.55 (AppVeyor) - 2020.05.28" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Label Content="Github Repo: " HorizontalAlignment="Left" Margin="459,213,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="92" Margin="18,19,0,0" VerticalAlignment="Top" Width="212"/>
                                 <TextBox HorizontalAlignment="Left" Height="20" Margin="533,217,0,0" TextWrapping="Wrap" Text="https://github.com/Alkl58/NotEnoughAV1Encodes" VerticalAlignment="Top" Width="273" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#FF22403E" IsReadOnly="True"/>

@@ -38,6 +38,9 @@ namespace NotEnoughAV1Encodes
         public static int chunkLengthSplit = 120;
         public static int maxConcurrencyEncodes = 4;
         public static bool reencodeBeforeMainEncode = false;
+        public static bool pereencodeBeforeMainEncode = false;
+        public static string reencodecodec = "utvideo";
+        public static string prereencodecodec = "utvideo";
         public static bool resumeMode = false;
         public static bool inputSet = false;
         public static bool outputSet = false;
@@ -162,7 +165,7 @@ namespace NotEnoughAV1Encodes
                 SaveSettings("", true, false, "");
                 await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Splitting ...", DispatcherPriority.Background);
-                await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, exeffmpegPath));
+                await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, pereencodeBeforeMainEncode, reencodecodec, prereencodecodec));
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Ended Splitting.", DispatcherPriority.Background);
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks ...", DispatcherPriority.Background);
                 await Task.Run(() => RenameChunks.Rename(workingTempDirectory));
@@ -288,7 +291,7 @@ namespace NotEnoughAV1Encodes
                         SaveSettings("", true, false, "");
                         await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Splitting ...", DispatcherPriority.Background);
-                        await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, exeffmpegPath));
+                        await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, pereencodeBeforeMainEncode, reencodecodec, prereencodecodec));
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Ended Splitting.", DispatcherPriority.Background);
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks ...", DispatcherPriority.Background);
                         await Task.Run(() => RenameChunks.Rename(workingTempDirectory));
@@ -409,7 +412,7 @@ namespace NotEnoughAV1Encodes
                         SaveSettings("", true, false, "");
                         await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Splitting ...", DispatcherPriority.Background);
-                        await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, exeffmpegPath));
+                        await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, pereencodeBeforeMainEncode, reencodecodec, prereencodecodec));
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Ended Splitting.", DispatcherPriority.Background);
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks ...", DispatcherPriority.Background);
                         await Task.Run(() => RenameChunks.Rename(workingTempDirectory));
@@ -871,7 +874,11 @@ namespace NotEnoughAV1Encodes
                 exeffmpegPath = TextBoxCustomFfmpegPath.Text;
             }
             chunkLengthSplit = Int16.Parse(TextBoxChunkLength.Text);
+            //Reencoding
             reencodeBeforeMainEncode = CheckBoxReencode.IsChecked == true;
+            pereencodeBeforeMainEncode = CheckBoxPreReencode.IsEnabled == true;
+            reencodecodec = ComboBoxReencodingMethod.Text;
+            prereencodecodec = ComboBoxPreReencodingMethod.Text;
             CheckFfprobe();
             //----------------------------------------------------------------------------------------||
             //Needed Parameters for aomenc Encoding --------------------------------------------------||
@@ -1720,6 +1727,27 @@ namespace NotEnoughAV1Encodes
                         CheckBoxReencode.IsChecked = false;
                     }
                 }
+                if (n.Name == "Prereencode")
+                {
+                    if (n.InnerText == "True")
+                    {
+                        CheckBoxPreReencode.IsChecked = true;
+                    }
+                    else if (n.InnerText == "False")
+                    {
+                        CheckBoxPreReencode.IsChecked = false;
+                    }
+                }
+                if (n.Name == "Reencodecodec")
+                {
+                    if (n.InnerText == "utvideo") { ComboBoxReencodingMethod.SelectedIndex = 0; }
+                    if (n.InnerText == "x264") { ComboBoxReencodingMethod.SelectedIndex = 1; }
+                }
+                if (n.Name == "Prereencodecodec")
+                {
+                    if (n.InnerText == "utvideo") { ComboBoxPreReencodingMethod.SelectedIndex = 0; }
+                    if (n.InnerText == "x264") { ComboBoxPreReencodingMethod.SelectedIndex = 1; }
+                }
                 if (n.Name == "Workers") { TextBoxNumberOfWorkers.Text = n.InnerText; }
                 if (n.Name == "Encoder")
                 {
@@ -1892,6 +1920,9 @@ namespace NotEnoughAV1Encodes
             writer.WriteStartElement("Settings");
             writer.WriteElementString("ChunkLength", TextBoxChunkLength.Text);
             writer.WriteElementString("Reencode", CheckBoxReencode.IsChecked.ToString());
+            writer.WriteElementString("Prereencode", CheckBoxPreReencode.IsChecked.ToString());
+            writer.WriteElementString("Reencodecodec", ComboBoxReencodingMethod.Text);
+            writer.WriteElementString("Prereencodecodec", ComboBoxPreReencodingMethod.Text);
             writer.WriteElementString("Workers", TextBoxNumberOfWorkers.Text);
             writer.WriteElementString("Encoder", ComboBoxEncoder.Text);
             writer.WriteElementString("BitDepth", ComboBoxBitDepth.Text);
