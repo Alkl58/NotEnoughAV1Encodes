@@ -123,6 +123,7 @@ namespace NotEnoughAV1Encodes
         public static bool subtitleStreamCopy = false;
         public static bool subtitleCustom = false;
         public static bool subtitles = false;
+        public static int customsubtitleadded = 0;
         public static string[] SubtitleChunks;
         public static int subtitleAmount = 0;
         //----- Shutdown ---------------------------------------||
@@ -154,7 +155,7 @@ namespace NotEnoughAV1Encodes
                 await Task.Run(() => EncodeAudio.AudioEncode());
                 SmallScripts.CheckAudioEncode();
             }
-            if (CheckBoxEnableSubtitles.IsChecked == true && resumeMode == false)
+            if (CheckBoxEnableSubtitles.IsChecked == true && resumeMode == false && subtitles == true)
             {
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Subtitle Copying ...", DispatcherPriority.Background);
                 await Task.Run(() => Subtitle.EncSubtitles());
@@ -835,11 +836,13 @@ namespace NotEnoughAV1Encodes
 
             if (subtitleIndexes == "")
             {
-                CheckBoxEnableSubtitles.IsChecked = false;
-                CheckBoxEnableSubtitles.IsEnabled = false;
-            }else if(subtitleIndexes != "")
+                //If the Source video doesnt have Subtitles embedded, then Stream Copy Subtitles will be disabled.
+                RadioButtonStreamCopySubtitle.IsChecked = false;
+                RadioButtonStreamCopySubtitle.IsEnabled = false;
+            }
+            else if(subtitleIndexes != "")
             {
-                CheckBoxEnableSubtitles.IsEnabled = true;
+                RadioButtonStreamCopySubtitle.IsEnabled = true;
             }
 
             getSubtitleIndexes.WaitForExit();
@@ -953,8 +956,23 @@ namespace NotEnoughAV1Encodes
                 }
                 if (RadioButtonCustomSubtitles.IsChecked == true)
                 {
-                    subtitleCustom = true;
-                    SetSubtitleParameters();
+                    if (customsubtitleadded != 0)
+                    {
+                        subtitleCustom = true;
+                        SetSubtitleParameters();
+                    }
+                    else {
+                        if (MessageBox.Show("You enabled Subtitles, but it seems there is no Subtitles in the List! Skip Subtitles?", "Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            subtitles = false;
+                            subtitleStreamCopy = false;
+                            subtitleCustom = false;
+                        }
+                        else
+                        {
+                            SmallScripts.Cancel.CancelAll = true;
+                        }
+                    }
                 }
             }
             //----------------------------------------------------------------------------------------||
@@ -2402,12 +2420,17 @@ namespace NotEnoughAV1Encodes
             if (result == true)
             {
                 ListBoxSubtitles.Items.Add(openVideoFileDialog.FileName);
+                customsubtitleadded += 1;
             }
         }
 
         private void ButtonDeleteSubtitle_Click(object sender, RoutedEventArgs e)
         {
-            ListBoxSubtitles.Items.RemoveAt(ListBoxSubtitles.SelectedIndex);
+            try {
+                ListBoxSubtitles.Items.RemoveAt(ListBoxSubtitles.SelectedIndex);
+                customsubtitleadded -= 1;
+            }
+            catch { }
         }
 
         private void ButtonAddQueue_Click(object sender, RoutedEventArgs e)
