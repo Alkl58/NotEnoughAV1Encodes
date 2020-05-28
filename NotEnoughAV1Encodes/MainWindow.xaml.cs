@@ -38,7 +38,7 @@ namespace NotEnoughAV1Encodes
         public static int chunkLengthSplit = 120;
         public static int maxConcurrencyEncodes = 4;
         public static bool reencodeBeforeMainEncode = false;
-        public static bool pereencodeBeforeMainEncode = false;
+        public static bool preencodeBeforeMainEncode = false;
         public static string reencodecodec = "utvideo";
         public static string prereencodecodec = "utvideo";
         public static bool resumeMode = false;
@@ -146,9 +146,8 @@ namespace NotEnoughAV1Encodes
             CheckForResumeFile();
         }
 
-        public async void AsyncClass()
+        public async Task AsyncClass()
         {
-
             if (CheckBoxAudioEncoding.IsChecked == true && resumeMode == false)
             {
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Audio Encoding ...", DispatcherPriority.Background);
@@ -166,7 +165,7 @@ namespace NotEnoughAV1Encodes
                 SaveSettings("", true, false, "");
                 await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Splitting ...", DispatcherPriority.Background);
-                await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, pereencodeBeforeMainEncode, reencodecodec, prereencodecodec));
+                await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, preencodeBeforeMainEncode, reencodeBeforeMainEncode, reencodecodec, prereencodecodec));
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Ended Splitting.", DispatcherPriority.Background);
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks ...", DispatcherPriority.Background);
                 await Task.Run(() => RenameChunks.Rename(workingTempDirectory));
@@ -217,13 +216,13 @@ namespace NotEnoughAV1Encodes
                         SmallScripts.DeleteTempFilesDir(workingTempDirectory);
                     }
                 }
-                if (CheckBoxEnableFinishedSound.IsChecked == true)
+                if (CheckBoxEnableFinishedSound.IsChecked == true && CheckBoxQueueMode.IsChecked == false)
                 {
                     //Plays finished sound
                     SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
                     playSound.Play();
                 }
-                if (shutDownAfterEncode == true)
+                if (shutDownAfterEncode == true && CheckBoxQueueMode.IsChecked == false)
                 {
                     if (SmallScripts.Cancel.CancelAll == false)
                     {
@@ -292,7 +291,7 @@ namespace NotEnoughAV1Encodes
                         SaveSettings("", true, false, "");
                         await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Splitting ...", DispatcherPriority.Background);
-                        await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, pereencodeBeforeMainEncode, reencodecodec, prereencodecodec));
+                        await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, preencodeBeforeMainEncode, reencodeBeforeMainEncode, reencodecodec, prereencodecodec));
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Ended Splitting.", DispatcherPriority.Background);
                         pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks ...", DispatcherPriority.Background);
                         await Task.Run(() => RenameChunks.Rename(workingTempDirectory));
@@ -362,8 +361,8 @@ namespace NotEnoughAV1Encodes
             foreach (var item in ListBoxQueue.Items)
             {
                 LoadSettings("", false, true, item.ToString());
-                //Main entry Point
                 SmallScripts.Cancel.CancelAll = false;
+
                 ResetProgressBar();
                 SetParametersBeforeEncode();
                 SetAudioParameters();
@@ -381,7 +380,6 @@ namespace NotEnoughAV1Encodes
                 {
                     TextBoxChunkLength.Text = (Int16.Parse(streamLength) / Int16.Parse(TextBoxNumberOfWorkers.Text)).ToString();
                 }
-
                 if (ComboBoxEncoder.Text == "aomenc")
                 {
                     SetAomencParameters();
@@ -394,87 +392,20 @@ namespace NotEnoughAV1Encodes
                 {
                     SetSVTAV1Parameters();
                 }
+                else if (ComboBoxEncoder.Text == "libaom")
+                {
+                    SetLibAomParameters();
+                }
                 if (SmallScripts.Cancel.CancelAll == false)
                 {
-                    if (CheckBoxAudioEncoding.IsChecked == true && resumeMode == false)
-                    {
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Audio Encdoding ...", DispatcherPriority.Background);
-                        await Task.Run(() => EncodeAudio.AudioEncode());
-                        SmallScripts.CheckAudioEncode();
-                    }
-                    if (CheckBoxEnableSubtitles.IsChecked == true && resumeMode == false && RadioButtonCustomSubtitles.IsChecked == false)
-                    {
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Subtitle Copying ...", DispatcherPriority.Background);
-                        await Task.Run(() => Subtitle.EncSubtitles());
-                        SmallScripts.CheckSubtitleEncode();
-                    }
-                    if (resumeMode == false)
-                    {
-                        SaveSettings("", true, false, "");
-                        await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Splitting ...", DispatcherPriority.Background);
-                        await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, pereencodeBeforeMainEncode, reencodecodec, prereencodecodec));
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Ended Splitting.", DispatcherPriority.Background);
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks ...", DispatcherPriority.Background);
-                        await Task.Run(() => RenameChunks.Rename(workingTempDirectory));
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks Finished.", DispatcherPriority.Background);
-                    }
-                    await Task.Run(() => SmallScripts.CountVideoChunks());
-                    if (SmallScripts.Cancel.CancelAll == false)
-                    {
-                        if (ComboBoxEncoder.Text == "aomenc" || ComboBoxEncoder.Text == "libaom")
-                        {
-                            pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started aomenc...", DispatcherPriority.Background);
-                            await Task.Run(() => EncodeAomencOrRav1e());
-                        }
-                        else if (ComboBoxEncoder.Text == "RAV1E")
-                        {
-                            pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started RAV1E...", DispatcherPriority.Background);
-                            await Task.Run(() => EncodeAomencOrRav1e());
-                        }
-                        else if (ComboBoxEncoder.Text == "SVT-AV1")
-                        {
-                            pLabel.Dispatcher.Invoke(() => pLabel.Content = "Encoding Started SVT-AV1...", DispatcherPriority.Background);
-                            await Task.Run(() => EncodeSVTAV1());
-                        }
-                    }
-                    else
-                    {
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
-                    }
-
-                    if (SmallScripts.Cancel.CancelAll == false)
-                    {
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing Started...", DispatcherPriority.Background);
-                        await Task.Run(() => ConcatVideo.Concat());
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Muxing completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString("hh\\:mm\\:ss") + " - " + Math.Round(Convert.ToDecimal((((Int16.Parse(streamLength) * Int16.Parse(streamFrameRateLabel)) / (DateTime.Now - starttimea).TotalSeconds))), 2).ToString() + "fps", DispatcherPriority.Background);
-                        if (File.Exists("unfinishedjob.xml"))
-                        {
-                            File.Delete("unfinishedjob.xml");
-                        }
-                        if (CheckBoxDeleteTempFiles.IsChecked == true || deleteTempAfterEncode == true)
-                        {
-                            SmallScripts.DeleteTempFiles();
-
-                            if (CheckBoxCustomTempFolder.IsChecked == true)
-                            {
-                                SmallScripts.DeleteTempFilesDir(workingTempDirectory);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        pLabel.Dispatcher.Invoke(() => pLabel.Content = "Canceled!", DispatcherPriority.Background);
-                    }
-
+                    await AsyncClass();
                 }
             }
-            //Plays finished sound
             if (CheckBoxEnableFinishedSound.IsChecked == true)
             {
                 SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
                 playSound.Play();
-            }
+            } 
         }
 
         //-------------------------------------- Small Functions ------------------------------------------||
@@ -879,7 +810,7 @@ namespace NotEnoughAV1Encodes
             chunkLengthSplit = Int16.Parse(TextBoxChunkLength.Text);
             //Reencoding
             reencodeBeforeMainEncode = CheckBoxReencode.IsChecked == true;
-            pereencodeBeforeMainEncode = CheckBoxPreReencode.IsEnabled == true;
+            preencodeBeforeMainEncode = CheckBoxPreReencode.IsEnabled == true;
             reencodecodec = ComboBoxReencodingMethod.Text;
             prereencodecodec = ComboBoxPreReencodingMethod.Text;
             CheckFfprobe();
