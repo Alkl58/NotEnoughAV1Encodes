@@ -9,6 +9,7 @@ namespace NotEnoughAV1Encodes
         public static string ffmpegCommand = "";
         public static void StartSplitting(string videoInput, string tempFolderPath, int chunkLength, bool reencode, bool prereencode, string reencodecodec, string prereencodecodec)
         {
+            SmallScripts.Logging("Landed in SplitVideo Class.");
             if (reencodecodec == "x264"){ reencodecodec = "libx264 -crf 0 -preset ultrafast"; }
             if (prereencodecodec == "x264") { prereencodecodec = "libx264 -crf 0 -preset ultrafast"; }
 
@@ -40,6 +41,7 @@ namespace NotEnoughAV1Encodes
                     break;
             
             }
+            SmallScripts.Logging("SplitVideo Class Executing Command : " + ffmpegCommand);
             SmallScripts.ExecuteFfmpegTask(ffmpegCommand);
             if (SmallScripts.Cancel.CancelAll == false) { SmallScripts.WriteToFileThreadSafe("True", "splitted.log"); }
         }

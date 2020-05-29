@@ -21,8 +21,8 @@ namespace NotEnoughAV1Encodes
                 {
                     ffmpegCommand = "/C ffmpeg.exe -f concat -safe 0 -i " + '\u0022' + MainWindow.chunksDir + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022';
                 }
+                SmallScripts.Logging("ConcatVideo Class Executing Command : " + ffmpegCommand);
                 await Task.Run(() => SmallScripts.ExecuteFfmpegTask(ffmpegCommand));
-
 
                 if (MainWindow.audioEncoding != false || MainWindow.subtitles != false)
                 {
@@ -46,6 +46,7 @@ namespace NotEnoughAV1Encodes
                     {
                         ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.workingTempDirectory + "\\withoutaudio.mkv" + '\u0022' + " -i " + MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv" + " -map_metadata -1 -map 0:v -map 1:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
                     }
+                    SmallScripts.Logging("ConcatVideo Class Executing Command : " + ffmpegCommand);
                     await Task.Run(() => SmallScripts.ExecuteFfmpegTask(ffmpegCommand));
                     SmallScripts.CheckSuccessfulEncode();
                 }

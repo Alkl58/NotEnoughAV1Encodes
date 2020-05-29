@@ -8,6 +8,7 @@ namespace NotEnoughAV1Encodes
         //Renames all Chunk files accordingly, so while muxing they are in the right order
         public static void Rename(string currentPath)
         {
+            SmallScripts.Logging("Landed in RenameChunks Class.");
             //Create Array List with all Chunks
             string[] chunks;
             //Sets the Chunks directory
@@ -21,6 +22,7 @@ namespace NotEnoughAV1Encodes
 
             if (numberOfChunks >= 10 && numberOfChunks <= 99)
             {
+                SmallScripts.Logging("RenameChunks Class : Found more than 10 Chunks and less than 99 Chunks.");
                 foreach (FileInfo f in infos)
                 {
                     int count = f.ToString().Count();
@@ -29,6 +31,7 @@ namespace NotEnoughAV1Encodes
             }
             else if (numberOfChunks >= 100 && numberOfChunks <= 999) //If you have more than 100 Chunks and less than 999
             {
+                SmallScripts.Logging("RenameChunks Class : Found more than 100 Chunks and less than 999 Chunks.");
                 foreach (FileInfo f in infos)
                 {
                     int count = f.ToString().Count();
@@ -48,6 +51,7 @@ namespace NotEnoughAV1Encodes
             }
             else if (numberOfChunks >= 1000 && numberOfChunks <= 9999) //If you have more than 1.000 Chunks and less than 9.999
             {
+                SmallScripts.Logging("RenameChunks Class : Found more than 1000 Chunks and less than 9999 Chunks.");
                 foreach (FileInfo f in infos)
                 {
                     int count = f.ToString().Count();
@@ -69,6 +73,7 @@ namespace NotEnoughAV1Encodes
             }
             else if (numberOfChunks >= 10000 && numberOfChunks <= 99999) //If you have more than 10.000 Chunks and less than 99.999
             {
+                SmallScripts.Logging("RenameChunks Class : Found more than 10.000 Chunks and less than 99.999 Chunks.");
                 foreach (FileInfo f in infos)
                 {
                     int count = f.ToString().Count();
@@ -91,6 +96,7 @@ namespace NotEnoughAV1Encodes
             }
             else if (numberOfChunks >= 100000 && numberOfChunks <= 999999) //If you have more than 100.000 Chunks and less than 999.999
             {
+                SmallScripts.Logging("RenameChunks Class : Found more than 100.000 Chunks and less than 999.999 Chunks.");
                 foreach (FileInfo f in infos)
                 {
                     int count = f.ToString().Count();

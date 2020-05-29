@@ -78,8 +78,18 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        public static void Logging(string text)
+        {
+            if (MainWindow.logging == true)
+            {
+                DateTime starttime = DateTime.Now;
+                WriteToFileThreadSafe(starttime.ToString() + " : " + text, "program.log");
+            }
+        }
+
         public static void GetStreamLength(string fileinput)
         {
+            Logging("Landed in GetStreamLength() function.");
             string input;
 
             input = '\u0022' + fileinput + '\u0022';
@@ -100,11 +110,13 @@ namespace NotEnoughAV1Encodes
             string streamlength = process.StandardOutput.ReadLine();
             string value = new DataTable().Compute(streamlength, null).ToString();
             MainWindow.streamLength = Convert.ToInt64(Math.Round(Convert.ToDouble(value))).ToString();
+            Logging("GetStreamLength() : " + Convert.ToInt64(Math.Round(Convert.ToDouble(value))).ToString());
             process.WaitForExit();
         }
 
         public static void DeleteTempFiles()
         {
+            Logging("Landed in DeleteTempFiles() function.");
             try
             {
                 //Delete Files, because of lazy dump****
@@ -124,46 +136,57 @@ namespace NotEnoughAV1Encodes
 
         public static void CheckAudioEncode()
         {
+            Logging("Landed in CheckAudioEncode() function.");
             //Checks if Audio Encoding was successful
             if (File.Exists(MainWindow.workingTempDirectory + "\\AudioEncoded\\audio.mkv") == false)
             {
+                Logging("CheckAudioEncode() : No Audio Output found!");
                 if (MessageBox.Show("Something with the Audio Encoding went wrong! Skip Audio?", "Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
+                    Logging("CheckAudioEncode() : Skipping Audio!");
                     MainWindow.audioEncoding = false;
                 }
                 else
                 {
+                    Logging("CheckAudioEncode() : Cancelling!");
                     Cancel.CancelAll = true;
                 }
-            }
+            }else { Logging("CheckAudioEncode() : Audio File found!"); }
             
         }
 
         public static void CheckSubtitleEncode()
         {
+            Logging("Landed in CheckSubtitleEncode() function.");
             //Checks if the Subtitle Muxing was successful
             if (File.Exists(MainWindow.workingTempDirectory + "\\Subtitles\\subtitle.mkv") == false && MainWindow.subtitleStreamCopy == true)
             {
+                Logging("CheckSubtitleEncode() : No Subtitle Output found from Stream Copy!");
                 if (MessageBox.Show("Something with the Subtitles went wrong! Skip Subtitles?", "Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
+                    Logging("CheckSubtitleEncode() : Skipping Subtitles!");
                     MainWindow.subtitles = false;
                     MainWindow.subtitleStreamCopy = false;
                     MainWindow.subtitleCustom = false;
                 }
                 else
                 {
+                    Logging("CheckSubtitleEncode() : Cancelling!");
                     Cancel.CancelAll = true;
                 }
             }else if (File.Exists(MainWindow.workingTempDirectory + "\\Subtitles\\subtitlecustom.mkv") == false && MainWindow.subtitleCustom == true)
             {
+                Logging("CheckSubtitleEncode() : No Subtitle Output found from Custom Subtitles!");
                 if (MessageBox.Show("Something with the Subtitles went wrong! Skip Subtitles?", "Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
+                    Logging("CheckSubtitleEncode() : Skipping Subtitles!");
                     MainWindow.subtitles = false;
                     MainWindow.subtitleStreamCopy = false;
                     MainWindow.subtitleCustom = false;
                 }
                 else
                 {
+                    Logging("CheckSubtitleEncode() : Cancelling!");
                     Cancel.CancelAll = true;
                 }
             }
@@ -171,13 +194,18 @@ namespace NotEnoughAV1Encodes
 
         public static void CheckSuccessfulEncode()
         {
+            Logging("Landed in CheckSuccessfulEncode() function.");
             //Checks if Muxing created the specified output
             string videoOutputPath = @MainWindow.videoOutput;
             if (File.Exists(videoOutputPath) == false)
             {
+                Logging("CheckSuccessfulEncode() : No Output File found from the Muxer!");
                 MessageBox.Show("Something with the Muxing went wrong! Automatic deleting of the tempfiles is disabled. Temp files can be found in the working directory. Please feel free to submit an error report to the Github Repository.", "Error", MessageBoxButton.OK);
                 MainWindow.deleteTempAfterEncode = false;
                 Cancel.CancelAll = true;
+            }else
+            {
+                Logging("CheckSuccessfulEncode() : File found! Note this function may be wrong!");
             }
         }
 
