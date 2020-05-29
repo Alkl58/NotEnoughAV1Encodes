@@ -64,6 +64,7 @@ namespace NotEnoughAV1Encodes
         public static string aomChromaSubsample = "--i420";
         public static string keyframefilt = "1";
         public static string autoaltref = "0";
+        public static string frameboost = "0";
         //------------------------------------------------------||
         //----- RAV1E Settings ---------------------------------||
         public static string ravie = "";
@@ -1025,17 +1026,11 @@ namespace NotEnoughAV1Encodes
                     aqMode = "3";
                 }
 
-                if (CheckBoxAomKeyframefiltering.IsChecked == false)
-                {
-                    keyframefilt = "0";
-                }
+                if (CheckBoxAomKeyframefiltering.IsChecked == false) { keyframefilt = "0"; }
+                if (CheckBoxAutoAltRef.IsChecked == true) { autoaltref = "1"; }
+                if (CheckBoxFrameBoost.IsChecked == true) { frameboost = "1"; }
 
-                if (CheckBoxAutoAltRef.IsChecked == true)
-                {
-                    autoaltref = "1";
-                }
-
-                allSettingsAom = " --cpu-used=" + SliderPreset.Value + " " + aomChromaSubsample + " --transfer-characteristics=" + aomColortransfer + " --color-primaries=" + colorprimaries + " --matrix-coefficients=" + aomColormatrix + " --bit-depth=" + ComboBoxBitDepth.Text + " --fps=" + TextBoxFramerate.Text + " --threads=" + TextBoxThreads.Text + " --kf-max-dist=" + TextBoxKeyframeInterval.Text + " --tile-rows=" + TextBoxTileRows.Text + " --tile-columns=" + TextBoxTileColumns.Text + " --aq-mode=" + aqMode + aomencQualityMode + " --enable-keyframe-filtering=" + keyframefilt + " --auto-alt-ref=" + autoaltref;
+                allSettingsAom = " --cpu-used=" + SliderPreset.Value + " " + aomChromaSubsample + " --transfer-characteristics=" + aomColortransfer + " --color-primaries=" + colorprimaries + " --matrix-coefficients=" + aomColormatrix + " --bit-depth=" + ComboBoxBitDepth.Text + " --fps=" + TextBoxFramerate.Text + " --threads=" + TextBoxThreads.Text + " --kf-max-dist=" + TextBoxKeyframeInterval.Text + " --tile-rows=" + TextBoxTileRows.Text + " --tile-columns=" + TextBoxTileColumns.Text + " --aq-mode=" + aqMode + aomencQualityMode + " --enable-keyframe-filtering=" + keyframefilt + " --auto-alt-ref=" + autoaltref + " --frame-boost=" + frameboost;
             }
             else if (CheckBoxAdvancedSettings.IsChecked == true && CheckBoxCustomCommandLine.IsChecked == true)
             {
@@ -1764,7 +1759,10 @@ namespace NotEnoughAV1Encodes
                         if (n.InnerText == "False") { CheckBoxAomKeyframefiltering.IsChecked = false; }
                         break;
                     case "AdvancedSettingsAomAutoAltRef":
-                        if (n.InnerText == "True") { CheckBoxAutoAltRef.IsChecked = true; }
+                        if (n.InnerText == "True") { CheckBoxAutoAltRef.IsChecked = true; } else { CheckBoxAutoAltRef.IsChecked = false; }
+                        break;
+                    case "AdvancedSettingsAomFrameboost":
+                        if (n.InnerText == "True") { CheckBoxFrameBoost.IsChecked = true; } else { CheckBoxFrameBoost.IsChecked = false; }
                         break;
                     case "ShutdownAfterEncode":
                         if (n.InnerText == "True") { CheckBoxShutdownAfterEncode.IsChecked = true; } else { CheckBoxShutdownAfterEncode.IsChecked = false; }
@@ -1998,6 +1996,7 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("AdvancedSettingsCustomCommand", TextBoxCustomCommand.Text);
             writer.WriteElementString("AdvancedSettingsAomKeyframeFiltering", CheckBoxAomKeyframefiltering.IsChecked.ToString());
             writer.WriteElementString("AdvancedSettingsAomAutoAltRef", CheckBoxAutoAltRef.IsChecked.ToString());
+            writer.WriteElementString("AdvancedSettingsAomFrameboost", CheckBoxFrameBoost.IsChecked.ToString());
             writer.WriteElementString("ShutdownAfterEncode", CheckBoxShutdownAfterEncode.IsChecked.ToString());
             writer.WriteElementString("DeleteTempFiles", CheckBoxDeleteTempFiles.IsChecked.ToString());
             writer.WriteElementString("CustomFfmpegPathActive", CheckBoxCustomFfmpegPath.IsChecked.ToString());

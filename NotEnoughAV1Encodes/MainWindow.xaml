@@ -566,6 +566,20 @@
                         </CheckBox.Style>
                         <CheckBox.ToolTip>Enables/Disables automatic alt reference frames. Enabling this should make the encode more efficient.</CheckBox.ToolTip>
                     </CheckBox>
+                    <CheckBox x:Name="CheckBoxFrameBoost" Content="frame-boost" Grid.Column="1" HorizontalAlignment="Left" Margin="383,137,0,0" VerticalAlignment="Top" Foreground="White">
+                        <CheckBox.Style>
+                        <Style>
+                            <Setter Property="CheckBox.Visibility" Value="Collapsed"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger
+                                        Binding="{Binding ElementName=ComboBoxEncoder, Path=SelectedItem.Tag}" Value="aomenc">
+                                    <Setter Property="CheckBox.Visibility" Value="Visible"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                        </CheckBox.Style>
+                        <CheckBox.ToolTip>Enables/Disables frame periodic boost (0: off (default), 1: on)</CheckBox.ToolTip>
+                    </CheckBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Audio" Background="#FF2C2C2C" Foreground="White" Style="{DynamicResource DarkTabItem}" Visibility="{Binding ElementName=CheckboxAudiofound, Path=IsChecked, Converter={StaticResource b2v}}">
@@ -727,7 +741,7 @@
                                 </Button>
                                 <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="27,87,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="54" Margin="451,185,0,0" VerticalAlignment="Top" Width="355"/>
-                                <Label x:Name="LabelProgramVersion" Content="Build Version: 1.0.60 (AppVeyor) - 2020.05.29" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label x:Name="LabelProgramVersion" Content="Build Version: 1.0.61 (AppVeyor) - 2020.05.29" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Label Content="Github Repo: " HorizontalAlignment="Left" Margin="459,213,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="119" Margin="18,19,0,0" VerticalAlignment="Top" Width="212"/>
                                 <TextBox HorizontalAlignment="Left" Height="20" Margin="533,217,0,0" TextWrapping="Wrap" Text="https://github.com/Alkl58/NotEnoughAV1Encodes" VerticalAlignment="Top" Width="273" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#FF22403E" IsReadOnly="True"/>
