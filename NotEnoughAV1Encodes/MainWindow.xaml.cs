@@ -779,7 +779,7 @@ namespace NotEnoughAV1Encodes
             chunkLengthSplit = Int16.Parse(TextBoxChunkLength.Text);
             //Reencoding
             reencodeBeforeMainEncode = CheckBoxReencode.IsChecked == true;
-            preencodeBeforeMainEncode = CheckBoxPreReencode.IsEnabled == true;
+            preencodeBeforeMainEncode = CheckBoxPreReencode.IsChecked == true;
             reencodecodec = ComboBoxReencodingMethod.Text;
             prereencodecodec = ComboBoxPreReencodingMethod.Text;
             CheckFfprobe();
