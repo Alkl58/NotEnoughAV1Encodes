@@ -176,7 +176,7 @@ namespace NotEnoughAV1Encodes
                 await Task.Run(() => SmallScripts.CreateDirectory(workingTempDirectory, "Chunks"));
                 SmallScripts.Logging("AsyncClass : Started Splitting");
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Started Splitting ...", DispatcherPriority.Background);
-                await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, preencodeBeforeMainEncode, reencodeBeforeMainEncode, reencodecodec, prereencodecodec));
+                await Task.Run(() => SplitVideo.StartSplitting(videoInput, workingTempDirectory, chunkLengthSplit, reencodeBeforeMainEncode, preencodeBeforeMainEncode, reencodecodec, prereencodecodec));
                 SmallScripts.Logging("AsyncClass : Finished Splitting");
                 SmallScripts.Logging("AsyncClass : Started Renaming Chunks");
                 pLabel.Dispatcher.Invoke(() => pLabel.Content = "Renaming Chunks ...", DispatcherPriority.Background);
@@ -506,6 +506,7 @@ namespace NotEnoughAV1Encodes
 
         public void CheckFfprobe()
         {
+            bool ffprobeExist = false;
             SmallScripts.Logging("Landed in CheckFfprobe() function.");
             currentDir = Directory.GetCurrentDirectory();
             if (CheckBoxCustomFfprobePath.IsChecked == true)
@@ -515,6 +516,12 @@ namespace NotEnoughAV1Encodes
             else if (CheckBoxCustomFfprobePath.IsChecked == false)
             {
                 exeffprobePath = currentDir;
+            }
+            if (CheckBoxCustomFfprobePath.IsChecked == false) { ffprobeExist = File.Exists("ffprobe.exe"); }
+            else if (CheckBoxCustomFfprobePath.IsChecked == true) { ffprobeExist = File.Exists(TextBoxCustomFfmpegPath.Text + "\\ffprobe.exe"); }
+            if (ffprobeExist == false)
+            {
+                MessageBox.Show("Couldn't find ffprobe!");
             }
         }
 
