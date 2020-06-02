@@ -1699,10 +1699,12 @@ namespace NotEnoughAV1Encodes
                     case "Reencodecodec":
                         if (n.InnerText == "utvideo") { ComboBoxReencodingMethod.SelectedIndex = 0; }
                         if (n.InnerText == "x264") { ComboBoxReencodingMethod.SelectedIndex = 1; }
+                        if (n.InnerText == "ffv1") { ComboBoxReencodingMethod.SelectedIndex = 2; }
                         break;
                     case "Prereencodecodec":
                         if (n.InnerText == "utvideo") { ComboBoxPreReencodingMethod.SelectedIndex = 0; }
                         if (n.InnerText == "x264") { ComboBoxPreReencodingMethod.SelectedIndex = 1; }
+                        if (n.InnerText == "ffv1") { ComboBoxPreReencodingMethod.SelectedIndex = 2; }
                         break;
                     case "Workers":
                         TextBoxNumberOfWorkers.Text = n.InnerText;

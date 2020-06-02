@@ -338,6 +338,7 @@
                         </ComboBox.Resources>
                         <ComboBoxItem Content="utvideo" Foreground="White" IsSelected="True"/>
                         <ComboBoxItem Content="x264" Foreground="White"/>
+                        <ComboBoxItem Content="ffv1" Foreground="White"/>
                     </ComboBox>
                     <Label Content="Reencode during splitting:" HorizontalAlignment="Left" Margin="56,80,0,0" VerticalAlignment="Top" Foreground="White" />
                     <Label Content="Reencode before splitting:" HorizontalAlignment="Left" Margin="56,117,0,0" VerticalAlignment="Top" Foreground="White" />
@@ -347,6 +348,7 @@
                         </ComboBox.Resources>
                         <ComboBoxItem Content="utvideo" Foreground="White" IsSelected="True"/>
                         <ComboBoxItem Content="x264" Foreground="White"/>
+                        <ComboBoxItem Content="ffv1" Foreground="White"/>
                     </ComboBox>
                     <CheckBox x:Name="CheckBoxPreReencode" Content="(Enable/Disable)" HorizontalAlignment="Left" Margin="357,123,0,0" VerticalAlignment="Top" Foreground="White">
                         <CheckBox.ToolTip>
@@ -741,7 +743,7 @@
                                 </Button>
                                 <CheckBox x:Name="CheckBoxEnableFinishedSound" Content="Play Finished Sound after Encode" HorizontalAlignment="Left" Margin="27,87,0,0" VerticalAlignment="Top" Foreground="White" IsChecked="True" />
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="54" Margin="451,185,0,0" VerticalAlignment="Top" Width="355"/>
-                                <Label x:Name="LabelProgramVersion" Content="Build Version: Pre-Release 1.0.65 - 2020.05.30" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
+                                <Label x:Name="LabelProgramVersion" Content="Build Version: Pre-Release 1.0.66 - 2020.05.30" HorizontalAlignment="Left" Margin="459,187,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Label Content="Github Repo: " HorizontalAlignment="Left" Margin="459,213,0,0" VerticalAlignment="Top" Foreground="White"/>
                                 <Border BorderBrush="#FF959595" BorderThickness="1" HorizontalAlignment="Left" Height="119" Margin="18,19,0,0" VerticalAlignment="Top" Width="212"/>
                                 <TextBox HorizontalAlignment="Left" Height="20" Margin="533,217,0,0" TextWrapping="Wrap" Text="https://github.com/Alkl58/NotEnoughAV1Encodes" VerticalAlignment="Top" Width="273" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#FF22403E" IsReadOnly="True"/>

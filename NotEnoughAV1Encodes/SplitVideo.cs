@@ -12,6 +12,8 @@ namespace NotEnoughAV1Encodes
             SmallScripts.Logging("Landed in SplitVideo Class.");
             if (reencodecodec == "x264"){ reencodecodec = "libx264 -crf 0 -preset ultrafast"; }
             if (prereencodecodec == "x264") { prereencodecodec = "libx264 -crf 0 -preset ultrafast"; }
+            if (reencodecodec == "ffv1") { reencodecodec = "ffv1 -level 3"; }
+            if (prereencodecodec == "ffv1") { reencodecodec = "ffv1 -level 3"; }
 
             switch (prereencode)
             {
