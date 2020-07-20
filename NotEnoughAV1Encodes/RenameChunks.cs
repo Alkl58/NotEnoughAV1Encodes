@@ -1,124 +1,113 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes
 {
-    internal class RenameChunks
+    class RenameChunks
     {
         //Renames all Chunk files accordingly, so while muxing they are in the right order
-        public static void Rename(string currentPath)
+        public static void Rename()
         {
-            SmallScripts.Logging("Landed in RenameChunks Class.");
-            //Create Array List with all Chunks
-            string[] chunks;
-            //Sets the Chunks directory
-            string sdira = currentPath + "\\Chunks";
-            //Add all Files in Chunks Folder to array
-            chunks = Directory.GetFiles(sdira, "*mkv", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
-            DirectoryInfo d = new DirectoryInfo(currentPath + "\\Chunks");
-            FileInfo[] infos = d.GetFiles();
-
-            int numberOfChunks = chunks.Count();
-
-            if (numberOfChunks >= 10 && numberOfChunks <= 99)
+            if (SmallFunctions.Cancel.CancelAll == false)
             {
-                SmallScripts.Logging("RenameChunks Class : Found more than 10 Chunks and less than 99 Chunks.");
-                foreach (FileInfo f in infos)
+                string[] chunks;
+                string chunkDir = Path.Combine(MainWindow.tempPath, "Chunks");
+                //Add all Files in Chunks Folder to array
+                chunks = Directory.GetFiles(chunkDir, "*mkv", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
+                DirectoryInfo d = new DirectoryInfo(chunkDir);
+                FileInfo[] infos = d.GetFiles();
+                int numberOfChunks = chunks.Count();
+                if (numberOfChunks >= 10 && numberOfChunks <= 99) { foreach (FileInfo f in infos) { int count = f.ToString().Count(); if (count == 8) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0")); } } }
+                else if (numberOfChunks >= 100 && numberOfChunks <= 999) //If you have more than 100 Chunks and less than 999
                 {
-                    int count = f.ToString().Count();
-                    if (count == 8) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0")); }
-                }
-            }
-            else if (numberOfChunks >= 100 && numberOfChunks <= 999) //If you have more than 100 Chunks and less than 999
-            {
-                SmallScripts.Logging("RenameChunks Class : Found more than 100 Chunks and less than 999 Chunks.");
-                foreach (FileInfo f in infos)
-                {
-                    int count = f.ToString().Count();
-
-                    switch (count)
+                    foreach (FileInfo f in infos)
                     {
-                        case 8:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
-                            break;
-                        case 9:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
-                            break;
-                        default:
-                            break;
+                        int count = f.ToString().Count();
+                        switch (count)
+                        {
+                            case 8:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
+                                break;
+                            case 9:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
-            }
-            else if (numberOfChunks >= 1000 && numberOfChunks <= 9999) //If you have more than 1.000 Chunks and less than 9.999
-            {
-                SmallScripts.Logging("RenameChunks Class : Found more than 1000 Chunks and less than 9999 Chunks.");
-                foreach (FileInfo f in infos)
+                else if (numberOfChunks >= 1000 && numberOfChunks <= 9999) //If you have more than 1.000 Chunks and less than 9.999
                 {
-                    int count = f.ToString().Count();
-                    switch (count)
+                    foreach (FileInfo f in infos)
                     {
-                        case 8:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000"));
-                            break;
-                        case 9:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
-                            break;
-                        case 10:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
-                            break;
-                        default:
-                            break;
+                        int count = f.ToString().Count();
+                        switch (count)
+                        {
+                            case 8:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000"));
+                                break;
+                            case 9:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
+                                break;
+                            case 10:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
-            }
-            else if (numberOfChunks >= 10000 && numberOfChunks <= 99999) //If you have more than 10.000 Chunks and less than 99.999
-            {
-                SmallScripts.Logging("RenameChunks Class : Found more than 10.000 Chunks and less than 99.999 Chunks.");
-                foreach (FileInfo f in infos)
+                else if (numberOfChunks >= 10000 && numberOfChunks <= 99999) //If you have more than 10.000 Chunks and less than 99.999
                 {
-                    int count = f.ToString().Count();
-                    switch (count)
+                    foreach (FileInfo f in infos)
                     {
-                        case 8:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0000"));
-                            break;
-                        case 9:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000"));
-                            break;
-                        case 10:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
-                            break;
-                        case 11:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
-                            break;
+                        int count = f.ToString().Count();
+                        switch (count)
+                        {
+                            case 8:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0000"));
+                                break;
+                            case 9:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000"));
+                                break;
+                            case 10:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
+                                break;
+                            case 11:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
+                                break;
+                        }
                     }
                 }
-            }
-            else if (numberOfChunks >= 100000 && numberOfChunks <= 999999) //If you have more than 100.000 Chunks and less than 999.999
-            {
-                SmallScripts.Logging("RenameChunks Class : Found more than 100.000 Chunks and less than 999.999 Chunks.");
-                foreach (FileInfo f in infos)
+                else if (numberOfChunks >= 100000 && numberOfChunks <= 999999) //If you have more than 100.000 Chunks and less than 999.999
                 {
-                    int count = f.ToString().Count();
-                    switch (count)
+                    foreach (FileInfo f in infos)
                     {
-                        case 8:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00000"));
-                            break;
-                        case 9:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0000"));
-                            break;
-                        case 10:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000"));
-                            break;
-                        case 11:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
-                            break;
-                        case 12:
-                            File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
-                            break;
-                        default:
-                            break;
+                        int count = f.ToString().Count();
+                        switch (count)
+                        {
+                            case 8:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00000"));
+                                break;
+                            case 9:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0000"));
+                                break;
+                            case 10:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out000"));
+                                break;
+                            case 11:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out00"));
+                                break;
+                            case 12:
+                                File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0"));
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }

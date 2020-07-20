@@ -1,0 +1,14 @@
+﻿<Window x:Name="WindowSettings" x:Class="NotEnoughAV1Encodes.ShowSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NotEnoughAV1Encodes"
+        mc:Ignorable="d"
+        Title="Settings" Height="214.198" Width="448.956">
+    <Grid>
+        <Button Content="Close" Margin="0,0,10,10" Click="Button_Click" HorizontalAlignment="Right" Width="93" Height="30" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="TextBoxSettings" Margin="10,10,10,55" TextWrapping="Wrap" IsReadOnly="True"/>
+
+    </Grid>
+</Window>
