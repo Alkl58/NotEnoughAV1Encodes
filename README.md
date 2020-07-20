@@ -35,7 +35,7 @@ AppVeyor Builds: [Click](https://ci.appveyor.com/project/Alkl/notenoughav1encode
 4. Edit the Encoding settings. (You can save the settings by clicking on "Save Settings". Saving/Loading multiple Presets is possible!)
 5. Click on "Start Encode".  
 
-NEAV1E has a resume feature, with which you can resume cancled encodes. (unfinished chunks will be overwritten!)
+NEAV1E has a resume feature, with which you can resume cancelled encodes. (unfinished chunks will be overwritten!)
 
 If you press on cancel, the program will terminate ALL aomenc/rav1e/SVT-AV1 and ffmpeg processes. Don't press it if you have other encodes/instances running!
 
