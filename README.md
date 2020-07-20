@@ -9,9 +9,8 @@ At the end it will [Concatenate](https://trac.ffmpeg.org/wiki/Concatenate) the c
 
 This tool is Windows only. For multiplatform and more features check out the CLI Tool [Av1an](https://github.com/master-of-zen/Av1an).
 
-![alt text](https://i.imgur.com/c64IXwY.png)
-![alt text](https://i.imgur.com/u7KpQaL.png)
-![alt text](https://i.imgur.com/2ErOxKj.png)
+![alt text](https://i.imgur.com/UUiyvkV.png)
+![alt text](https://i.imgur.com/NQJPexQ.png)
 
 ---
 
@@ -22,8 +21,8 @@ AppVeyor Builds: [Click](https://ci.appveyor.com/project/Alkl/notenoughav1encode
 
 ### Installation:
 
-1. Download [ffmpeg and ffprobe](https://www.ffmpeg.org/download.html), [aomenc](https://ci.appveyor.com/project/marcomsousa/build-aom/history) or [rav1e](https://github.com/xiph/rav1e) or [SVT-AV1](https://github.com/OpenVisualCloud/SVT-AV1) and [NotEnoughAV1Encodes](https://github.com/Alkl58/NotEnoughAV1Encodes/releases). 
-2. Create a new Folder and put all .exe files in them (ffmpeg, ffprobe, aomenc/rav1e/SVT-AV1 and NotEnoughAV1Encodes.exe - you can also specify the location of these files under Settings!)
+1. Download [NotEnoughAV1Encodes](https://github.com/Alkl58/NotEnoughAV1Encodes/releases). 
+2. Exteract the archive to your desired location.
 
 ### System Requirements:
 - [Microsoft .NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/net472)
@@ -40,9 +39,9 @@ NEAV1E has a resume feature, with which you can resume cancled encodes. (unfinis
 
 If you press on cancel, the program will terminate ALL aomenc/rav1e/SVT-AV1 and ffmpeg processes. Don't press it if you have other encodes/instances running!
 
-SVT-AV1 encoding is limited to one instance. NEAV1E is using a pipe to encode with SVT-AV1.
+SVT-AV1 encoding is limited to one instance. This limitation can be overwritten in the program settings.
 
-If you experience framelosses you may have a slightly corrupted video. Using the option "Reencode Lossless" might help with this issue. (Video will be encoded to utvideo - this may take alot of disk space)
+If you experience framelosses you may have a slightly corrupted video. Using the option "Reencode Lossless" might help with this issue. (Video will be reencoded - this may take alot of disk space)
 
 ---
 ### How does this program work?:
