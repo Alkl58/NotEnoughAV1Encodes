@@ -45,6 +45,17 @@ namespace NotEnoughAV1Encodes
             return Path.GetFileNameWithoutExtension(videoInput);
         }
 
+        public static void checkDependeciesStartup()
+        {
+            bool ffmpegExists, ffprobeExists;
+            ffmpegExists = File.Exists("Apps\\ffmpeg\\ffmpeg.exe");
+            ffprobeExists = File.Exists("Apps\\ffmpeg\\ffprobe.exe");
+            if (ffmpegExists == false || ffprobeExists == false)
+            {
+                MessageBox.Show("Could not find all dependencies! Please check if the dependencies ffprobe and ffmpeg are located in: " + Directory.GetCurrentDirectory() + "\\Apps\\ffmpeg\\", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         public static bool checkDependencies(string encoder)
         {
             bool av1encoderexists = false, ffmpegExists, ffprobeExists;

@@ -47,6 +47,7 @@ namespace NotEnoughAV1Encodes
             LoadPresetsIntoComboBox();
             LoadDefaultProfile();
             CheckForResumeFile();
+            SmallFunctions.checkDependeciesStartup();
         }
 
         //════════════════════════════════════ Main Functions ═════════════════════════════════════
