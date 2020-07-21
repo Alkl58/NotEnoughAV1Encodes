@@ -99,6 +99,29 @@ namespace NotEnoughAV1Encodes
             return framerate;
         }
 
+        public static string getPixelFormat(string videoInput)
+        {
+            string input = '\u0022' + videoInput + '\u0022';
+            Process getPixelFormat = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = MainWindow.ffprobePath,
+                    Arguments = "/C ffprobe.exe -i " + input + " -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=pix_fmt",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            getPixelFormat.Start();
+            string pixfmt = getPixelFormat.StandardOutput.ReadLine();
+            getPixelFormat.WaitForExit();
+            return pixfmt;
+        }
+
         public static string getVideoLength(string videoInput)
         {
             string input = '\u0022' + videoInput + '\u0022';

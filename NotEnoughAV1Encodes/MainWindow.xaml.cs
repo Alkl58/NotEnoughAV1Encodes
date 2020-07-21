@@ -90,7 +90,6 @@ namespace NotEnoughAV1Encodes
 
             SmallFunctions.CountVideoChunks();
             setProgressBar(videoChunksCount);
-            Console.WriteLine(videoChunksCount);
             setProgressBarLabel("0 / " + videoChunksCount.ToString());
             setEncoderParameters(false);
 
@@ -129,9 +128,6 @@ namespace NotEnoughAV1Encodes
 
                 videoInput = LabelVideoSource.Content + "\\" + file;
                 videoOutput = LabelVideoOutput.Content + "\\" + file + "_av1.mkv";
-
-                Console.WriteLine(videoInput);
-                Console.WriteLine(videoOutput);
 
                 getVideoInformation();
                 getAudioInformation();
@@ -468,8 +464,64 @@ namespace NotEnoughAV1Encodes
         {
             string frameRate = SmallFunctions.getFrameRate(videoInput);
             setFrameRate(frameRate);
+            string pixelFormat = SmallFunctions.getPixelFormat(videoInput);
+            setPixelFormat(pixelFormat);
             setChunkLength();
             fileName = SmallFunctions.getFilename(videoInput);
+        }
+
+        private void setPixelFormat(string pixelFormat)
+        {
+            switch (pixelFormat)
+            {
+                case "yuv420p10le":
+                    ComboBoxBitDepth.SelectedIndex = 1;
+                    break;
+                case "yuv420p12le":
+                    ComboBoxBitDepth.SelectedIndex = 2;
+                    break;
+                case "yuv422p":
+                    ComboBoxChromaSubsamplingAomenc.SelectedIndex = 1;
+                    ComboBoxColorFormatRav1e.SelectedIndex = 1;
+                    ComboBoxColorFormatSVT.SelectedIndex = 1;
+                    ComboBoxColorFormatLibaom.SelectedIndex = 1;
+                    break;
+                case "yuv422p10le":
+                    ComboBoxChromaSubsamplingAomenc.SelectedIndex = 1;
+                    ComboBoxColorFormatRav1e.SelectedIndex = 1;
+                    ComboBoxColorFormatSVT.SelectedIndex = 1;
+                    ComboBoxColorFormatLibaom.SelectedIndex = 1;
+                    ComboBoxBitDepth.SelectedIndex = 1;
+                    break;
+                case "yuv422p12le":
+                    ComboBoxChromaSubsamplingAomenc.SelectedIndex = 1;
+                    ComboBoxColorFormatRav1e.SelectedIndex = 1;
+                    ComboBoxColorFormatSVT.SelectedIndex = 1;
+                    ComboBoxColorFormatLibaom.SelectedIndex = 1;
+                    ComboBoxBitDepth.SelectedIndex = 2;
+                    break;
+                case "yuv444p":
+                    ComboBoxChromaSubsamplingAomenc.SelectedIndex = 2;
+                    ComboBoxColorFormatRav1e.SelectedIndex = 2;
+                    ComboBoxColorFormatSVT.SelectedIndex = 2;
+                    ComboBoxColorFormatLibaom.SelectedIndex = 2;
+                    break;
+                case "yuv444p10le":
+                    ComboBoxChromaSubsamplingAomenc.SelectedIndex = 2;
+                    ComboBoxColorFormatRav1e.SelectedIndex = 2;
+                    ComboBoxColorFormatSVT.SelectedIndex = 2;
+                    ComboBoxColorFormatLibaom.SelectedIndex = 2;
+                    ComboBoxBitDepth.SelectedIndex = 1;
+                    break;
+                case "yuv444p12le":
+                    ComboBoxChromaSubsamplingAomenc.SelectedIndex = 2;
+                    ComboBoxColorFormatRav1e.SelectedIndex = 2;
+                    ComboBoxColorFormatSVT.SelectedIndex = 2;
+                    ComboBoxColorFormatLibaom.SelectedIndex = 2;
+                    ComboBoxBitDepth.SelectedIndex = 2;
+                    break;
+                default: break;
+            }
         }
 
         private void setFrameRate(string frameRate)
@@ -1246,7 +1298,6 @@ namespace NotEnoughAV1Encodes
                                     }
 
                                     process.StartInfo = startInfo;
-                                    Console.WriteLine(startInfo.Arguments);
                                     process.Start();
                                     //Sets the Process Priority
                                     if (processPriority == 1) { process.PriorityClass = ProcessPriorityClass.BelowNormal; }
@@ -1289,7 +1340,6 @@ namespace NotEnoughAV1Encodes
                                         process.StartInfo = startInfo;
                                         
                                         process.Start();
-                                        Console.WriteLine(startInfo.Arguments);
                                         //Sets the Process Priority
                                         if (processPriority == 1) { process.PriorityClass = ProcessPriorityClass.BelowNormal; }
 
@@ -1323,7 +1373,6 @@ namespace NotEnoughAV1Encodes
                                     process.StartInfo = startInfo;
                                     
                                     process.Start();
-                                    Console.WriteLine(startInfo.Arguments);
                                     if (processPriority == 1) { process.PriorityClass = ProcessPriorityClass.BelowNormal; }
                                     process.WaitForExit();
 
