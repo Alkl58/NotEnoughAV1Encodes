@@ -591,6 +591,7 @@ namespace NotEnoughAV1Encodes
             LabelProgressbar.Content = Text;
         }
 
+
         private void setProgressBar(int Value)
         {
             ProgressBar.Maximum = Value;
@@ -641,6 +642,22 @@ namespace NotEnoughAV1Encodes
         }
 
         //════════════════════════════════════════ Buttons ════════════════════════════════════════
+
+        private void ButtonOpenProgramFolder_Click(object sender, RoutedEventArgs e)
+        {
+            try { Process.Start(Directory.GetCurrentDirectory()); }
+            catch { }            
+        }
+
+        private void ButtonOpenTempFolder_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (CheckBoxCustomTempPath.IsChecked == false) { Process.Start(Directory.GetCurrentDirectory() + "\\Temp"); }
+                else { Process.Start(TextBoxCustomTempPath.Text); }
+            }
+            catch { }
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
