@@ -684,7 +684,7 @@ namespace NotEnoughAV1Encodes
             {
                 //Opens OpenFileDialog for the Input Video
                 OpenFileDialog openVideoFileDialog = new OpenFileDialog();
-                openVideoFileDialog.Filter = "Video Files|*.mp4;*.m4v;*.mkv;*.webm;*.m2ts;*.flv;*.avi;*.wmv;*.ts;*.yuv";
+                openVideoFileDialog.Filter = "Video Files|*.mp4;*.m4v;*.mkv;*.webm;*.m2ts;*.flv;*.avi;*.wmv;*.ts;*.yuv|All Files|*.*";
                 Nullable<bool> result = openVideoFileDialog.ShowDialog();
                 if (result == true)
                 {
