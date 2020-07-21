@@ -32,17 +32,14 @@ namespace NotEnoughAV1Encodes
             {
                 //Reencodes before splitting
                 ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + videoInput + '\u0022' + " -map_metadata -1 -c:v " + reencodeCodec + " -an " + '\u0022' + MainWindow.tempPath + "\\temp_prereencode.mkv" + '\u0022';
-                Console.WriteLine(ffmpegCommand);
                 SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
                 ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.tempPath + "\\temp_prereencode.mkv" + '\u0022' + " -map_metadata -1 -vcodec copy -f segment -segment_time " + chunkLength + " -an " + '\u0022' + MainWindow.tempPath + "\\Chunks\\out%0d.mkv" + '\u0022';
-                Console.WriteLine(ffmpegCommand);
                 SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
             }
             else if(reencode == false && beforereencode == false)
             {
                 //Splits the Video without Reencoding
                 ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + videoInput + '\u0022' + " -map_metadata -1 -vcodec copy -f segment -segment_time " + chunkLength + " -an " + '\u0022' + MainWindow.tempPath + "\\Chunks\\out%0d.mkv" + '\u0022';
-                Console.WriteLine(ffmpegCommand);
                 SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
             }
         }

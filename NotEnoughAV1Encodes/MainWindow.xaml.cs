@@ -23,7 +23,7 @@ namespace NotEnoughAV1Encodes
     public partial class MainWindow : Window
     {
         public static string ffprobePath = "Apps\\ffmpeg\\", ffmpegPath = "Apps\\ffmpeg\\", aomencPath, rav1ePath, svtav1Path;
-        public static string videoInput, videoOutput, encoder, fileName, videoResize, pipeBitDepth, reencoder;
+        public static string videoInput, videoOutput, encoder, fileName, videoResize, pipeBitDepth = "yuv420p", reencoder;
         public static string audioCodecTrackOne, audioCodecTrackTwo, audioCodecTrackThree, audioCodecTrackFour;
         public static string allSettingsAom, allSettingsRav1e, allSettingsSVTAV1;
         public static string tempPath = ""; //Temp Path for Splitting and Encoding
@@ -154,7 +154,7 @@ namespace NotEnoughAV1Encodes
         }
 
         //═══════════════════════════════════════ Functions ═══════════════════════════════════════
-        
+   
         private void MessageNoAudioOutput()
         {
             if (MessageBox.Show("No Audio Output detected! \nCancel?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes) { SmallFunctions.Cancel.CancelAll = true; CancelRoutine(); }
@@ -177,7 +177,6 @@ namespace NotEnoughAV1Encodes
         private void setParameters()
         {
             tempPath = "Temp\\" + fileName + "\\";
-            pipeBitDepth = "yuv420p"; //Temporary for testing
 
             encoder = ComboBoxEncoder.Text;
             reencoder = ComboBoxReencodeCodec.Text;
@@ -272,6 +271,24 @@ namespace NotEnoughAV1Encodes
         private void SetAomencParameters(bool tempSettings)
         {
             string aomencQualityMode = "";
+            switch (ComboBoxChromaSubsamplingAomenc.SelectedIndex)
+            {
+                case 0:
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le"; }
+                    break;
+                case 1:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv422p -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv422p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv422p12le -strict -1"; }
+                    break;
+                case 2:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv444p -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv444p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv444p12le -strict -1"; }
+                    break;
+                default: break;
+            }
             if (RadioButtonConstantQuality.IsChecked == true) { aomencQualityMode = "--end-usage=q --cq-level=" + SliderQuality.Value; }
             else { aomencQualityMode = "--end-usage=vbr --target-bitrate=" + TextBoxBitrate.Text; }
             //Basic Settings
@@ -303,6 +320,25 @@ namespace NotEnoughAV1Encodes
         private void SetLibaomParameters(bool tempSettings)
         {
             string aomencQualityMode = "";
+            switch (ComboBoxColorFormatLibaom.SelectedIndex)
+            {
+                case 0:
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le"; }
+                    break;
+                case 1:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv422p -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv422p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv422p12le -strict -1"; }
+                    break;
+                case 2:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv444p -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv444p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv444p12le -strict -1"; }
+                    break;
+                default: break;
+            }
+            if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le"; } else if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le"; }
             if (RadioButtonConstantQuality.IsChecked == true) { aomencQualityMode = " -crf " + SliderQuality.Value + " -b:v 0"; }
             else { aomencQualityMode = " -b:v " + TextBoxBitrate.Text + "k"; }
             //Basic Settings
@@ -331,6 +367,24 @@ namespace NotEnoughAV1Encodes
             string rav1eQualityMode = "";
             string rav1eContentLight = "";
             string rav1eMasteringDisplay = "";
+            switch (ComboBoxColorFormatRav1e.SelectedIndex)
+            {
+                case 0:
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le"; }
+                    break;
+                case 1:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv422p -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv422p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv422p12le -strict -1"; }
+                    break;
+                case 2:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv444p -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv444p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv444p12le -strict -1"; }
+                    break;
+                default: break;
+            }
             if (RadioButtonConstantQuality.IsChecked == true) { rav1eQualityMode = "--quantizer " + SliderQuality.Value; }
             else { rav1eQualityMode = "--bitrate " + TextBoxBitrate.Text; }
             //Basic Settings
@@ -355,6 +409,24 @@ namespace NotEnoughAV1Encodes
         private void SetSVTAV1Parameters(bool tempSettings)
         {
             string svtav1QualityMode;
+            switch (ComboBoxColorFormatSVT.SelectedIndex)
+            {
+                case 0:
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le"; }
+                    break;
+                case 1:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv422p -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv422p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv422p12le -strict -1"; }
+                    break;
+                case 2:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv444p -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv444p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv444p12le -strict -1"; }
+                    break;
+                default: break;
+            }
             if (RadioButtonConstantQuality.IsChecked == true) { svtav1QualityMode = " --rc 0 -q " + SliderQuality.Value; }
             else { svtav1QualityMode = " --rc 1 --tbr " + TextBoxBitrate.Text; }
             //Basic Settings
@@ -751,10 +823,13 @@ namespace NotEnoughAV1Encodes
                     }
                     break;
                 case "aomenc (ffmpeg)":
-                    SliderQuality.Maximum = 63;
-                    SliderQuality.Value = 30;
-                    SliderPreset.Maximum = 8;
-                    SliderPreset.Value = 3;
+                    if (SliderQuality != null)
+                    {
+                        SliderQuality.Maximum = 63;
+                        SliderQuality.Value = 30;
+                        SliderPreset.Maximum = 8;
+                        SliderPreset.Value = 3;
+                    }
                     break;
                 case "rav1e":
                     if (SliderQuality != null)
@@ -944,11 +1019,9 @@ namespace NotEnoughAV1Encodes
                 }
                 writer.WriteElementString("TileColumns", ComboBoxTileColumns.SelectedIndex.ToString());
                 writer.WriteElementString("TileRows", ComboBoxTileRows.SelectedIndex.ToString());
-                if (ComboBoxEncoder.SelectedIndex == 0 || ComboBoxEncoder.SelectedIndex == 2)
-                {
-                    writer.WriteElementString("MinKeyframeInterval", TextBoxMinKeyframeinterval.Text);
-                    writer.WriteElementString("MaxKeyframeInterval", TextBoxMaxKeyframeinterval.Text);
-                }
+                writer.WriteElementString("MinKeyframeInterval", TextBoxMinKeyframeinterval.Text);
+                writer.WriteElementString("MaxKeyframeInterval", TextBoxMaxKeyframeinterval.Text);
+                writer.WriteElementString("ColorFormatLibaom", ComboBoxColorFormatLibaom.SelectedIndex.ToString());
                 if (ComboBoxEncoder.SelectedIndex == 0)
                 {
                     writer.WriteElementString("LagInFrames", TextBoxMaxLagInFrames.Text);
@@ -986,7 +1059,9 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("MasteringWPy", TextBoxMasteringWPyRav1e.Text);
                     writer.WriteElementString("MasteringLmin", TextBoxMasteringLminRav1e.Text);
                     writer.WriteElementString("MasteringLmax", TextBoxMasteringLmaxRav1e.Text);
-                }else if (ComboBoxEncoder.SelectedIndex == 3)
+                    writer.WriteElementString("ColorFormatRav1e", ComboBoxColorFormatRav1e.SelectedIndex.ToString());
+                }
+                else if (ComboBoxEncoder.SelectedIndex == 3)
                 {
                     writer.WriteElementString("ColorFormatSVT", ComboBoxColorFormatSVT.SelectedIndex.ToString());
                     writer.WriteElementString("HDRSVT", CheckBoxEnableHDRSVT.IsChecked.ToString());
@@ -1085,6 +1160,7 @@ namespace NotEnoughAV1Encodes
                     case "ContentLightBool":    CheckBoxContentLightRav1e.IsChecked = n.InnerText == "True"; break;
                     case "ContentLightCll":     TextBoxContentLightCllRav1e.Text = n.InnerText; break;
                     case "ContentLightFall":    TextBoxContentLightFallRav1e.Text = n.InnerText; break;
+                    case "ColorFormatRav1e":    ComboBoxColorFormatRav1e.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "MasteringDisplay":    CheckBoxMasteringDisplayRav1e.IsChecked = n.InnerText == "True"; break;
                     case "MasteringGx":         TextBoxMasteringGxRav1e.Text = n.InnerText; break;
                     case "MasteringGy":         TextBoxMasteringGyRav1e.Text = n.InnerText; break;
@@ -1100,6 +1176,7 @@ namespace NotEnoughAV1Encodes
                     case "HDRSVT":              CheckBoxEnableHDRSVT.IsChecked = n.InnerText == "True"; break;
                     case "AQModeSVT":           ComboBoxAQModeSVT.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "KeyintSVT":           TextBoxkeyframeIntervalSVT.Text = n.InnerText; break;
+                    case "ColorFormatLibaom":   ComboBoxColorFormatLibaom.SelectedIndex = Int16.Parse(n.InnerText); break;
 
                     default: break;
                 }
