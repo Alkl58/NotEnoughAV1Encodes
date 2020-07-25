@@ -45,6 +45,7 @@ namespace NotEnoughAV1Encodes
             InitializeComponent();
             getCoreCount();
             LoadPresetsIntoComboBox();
+            LoadBackground();
             LoadDefaultProfile();
             CheckForResumeFile();
             setEncoderPath();
@@ -726,6 +727,60 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void SetBackgroundColorBlack()
+        {
+            SolidColorBrush white = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255));
+            SolidColorBrush dark = new SolidColorBrush(System.Windows.Media.Color.FromRgb(33, 33, 33));
+            SolidColorBrush darker = new SolidColorBrush(System.Windows.Media.Color.FromRgb(25, 25, 25));
+            if (customBackground != true)
+            {
+                Window.Background = darker;
+                TabControl.Background = dark;
+                TabGrid.Background = dark;
+                TabGrid1.Background = dark;
+                TabGrid2.Background = dark;
+                TabGrid3.Background = dark;
+                TabGrid4.Background = dark;
+                TabGrid6.Background = dark;
+                TextBoxPresetName.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(44, 44, 44));
+                ProgressBar.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(25, 25, 25));
+            }
+
+            LabelPresets.Foreground = white;
+            CheckBoxResumeMode.Foreground = white;
+            TextBlockOpenSource.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(240, 240, 240));
+            GroupBox.BorderBrush = darker;
+            GroupBox1.BorderBrush = darker;
+            GroupBox2.BorderBrush = darker;
+            GroupBox3.BorderBrush = darker;
+        }
+
+        private void SetBackgroundColorWhite()
+        {
+            SolidColorBrush white = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255));
+            SolidColorBrush black = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
+            if (customBackground != true)
+            {
+                Window.Background = white;
+                TabControl.Background = white;
+                TabGrid.Background = white;
+                TabGrid1.Background = white;
+                TabGrid2.Background = white;
+                TabGrid3.Background = white;
+                TabGrid4.Background = white;
+                TabGrid6.Background = white;
+                TextBoxPresetName.Background = white;
+                ProgressBar.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(230, 230, 230));
+            }
+            LabelPresets.Foreground = black;
+            CheckBoxResumeMode.Foreground = black;
+            TextBlockOpenSource.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(21, 65, 126));
+            GroupBox.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(213, 223, 229));
+            GroupBox1.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(213, 223, 229));
+            GroupBox2.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(213, 223, 229));
+            GroupBox3.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(213, 223, 229));
+        }
+
         //════════════════════════════════════════ Buttons ════════════════════════════════════════
 
         private void ButtonAddCustomSubtitle_Click(object sender, RoutedEventArgs e)
@@ -925,9 +980,42 @@ namespace NotEnoughAV1Encodes
                     customBackground = true;
                     PathToBackground = openFileDialog.FileName;
                     SetBackground();
+                    if (File.Exists("background.txt")) { File.Delete("background.txt"); }
+                    SmallFunctions.WriteToFileThreadSafe(PathToBackground, "background.txt");
                 }
             }
             catch { }
+        }
+        
+        private void ButtonResetBackground_Click(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists("background.txt")) { try { File.Delete("background.txt"); } catch { } }
+            imgDynamic.Source = null;
+            customBackground = false;
+            if (CheckBoxDarkMode.IsChecked == true) { SetBackgroundColorBlack(); }
+            else { SetBackgroundColorWhite(); }
+            
+        }
+
+        private void ButtonSupportMePayPal_Click(object sender, RoutedEventArgs e)
+        {
+            //If people wan't to support me
+            Process.Start("https://paypal.me/alkl58");
+        }
+
+        private void ButtonDiscord_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://discord.gg/HSBxne3");
+        }
+
+        private void ButtonGithub_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/Alkl58/NotEnoughAV1Encodes");
+        }
+
+        private void ButtonReddit_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://www.reddit.com/user/Al_kl");
         }
 
         //═══════════════════════════════════ Other UI Elements ═══════════════════════════════════
@@ -971,27 +1059,6 @@ namespace NotEnoughAV1Encodes
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(e.Uri.ToString());
-        }
-
-        private void ButtonSupportMePayPal_Click(object sender, RoutedEventArgs e)
-        {
-            //If people wan't to support me
-            Process.Start("https://paypal.me/alkl58");
-        }
-
-        private void ButtonDiscord_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://discord.gg/HSBxne3");
-        }
-
-        private void ButtonGithub_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://github.com/Alkl58/NotEnoughAV1Encodes");
-        }
-
-        private void ButtonReddit_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://www.reddit.com/user/Al_kl");
         }
 
         private void ComboBoxEncoder_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1085,56 +1152,16 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxDarkMode_Checked(object sender, RoutedEventArgs e)
         {
-            SolidColorBrush white = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255));
-            SolidColorBrush dark = new SolidColorBrush(System.Windows.Media.Color.FromRgb(33, 33, 33));
-            SolidColorBrush darker = new SolidColorBrush(System.Windows.Media.Color.FromRgb(25, 25, 25));
-            if (customBackground != true)
-            {
-                Window.Background = darker;
-                TabControl.Background = dark;
-                TabGrid.Background = dark;
-                TabGrid1.Background = dark;
-                TabGrid2.Background = dark;
-                TabGrid3.Background = dark;
-                TabGrid4.Background = dark;
-                TabGrid6.Background = dark;
-                TextBoxPresetName.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(44, 44, 44));
-                ProgressBar.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(25, 25, 25));
-            }
-
-            LabelPresets.Foreground = white;
-            CheckBoxResumeMode.Foreground = white;
-            TextBlockOpenSource.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(240, 240, 240));
-            GroupBox.BorderBrush = darker;
-            GroupBox1.BorderBrush = darker;
-            GroupBox2.BorderBrush = darker;
-            GroupBox3.BorderBrush = darker;
+            SetBackgroundColorBlack();
+            if (File.Exists("darkmode.txt")) { File.Delete("darkmode.txt"); }
+            SmallFunctions.WriteToFileThreadSafe(CheckBoxDarkMode.IsChecked.ToString(), "darkmode.txt");
         }
 
         private void CheckBoxDarkMode_UnChecked(object sender, RoutedEventArgs e)
         {
-            SolidColorBrush white = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255));
-            SolidColorBrush black = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
-            if (customBackground != true)
-            {
-                Window.Background = white;
-                TabControl.Background = white;
-                TabGrid.Background = white;
-                TabGrid1.Background = white;
-                TabGrid2.Background = white;
-                TabGrid3.Background = white;
-                TabGrid4.Background = white;
-                TabGrid6.Background = white;
-                TextBoxPresetName.Background = white;
-                ProgressBar.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(230, 230, 230));
-            }
-            LabelPresets.Foreground = black;
-            CheckBoxResumeMode.Foreground = black;
-            TextBlockOpenSource.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(21, 65, 126));
-            GroupBox.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(213, 223, 229));
-            GroupBox1.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(213, 223, 229));
-            GroupBox2.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(213, 223, 229));
-            GroupBox3.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(213, 223, 229));
+            SetBackgroundColorWhite();
+            if (File.Exists("darkmode.txt")) { File.Delete("darkmode.txt"); }
+            SmallFunctions.WriteToFileThreadSafe(CheckBoxDarkMode.IsChecked.ToString(), "darkmode.txt");
         }
 
         //═════════════════════════════════ Save / Load Settings ══════════════════════════════════
@@ -1389,6 +1416,29 @@ namespace NotEnoughAV1Encodes
                 }
             }
             catch { }
+        }
+
+        private void LoadBackground()
+        {
+            if (File.Exists("background.txt"))
+            {
+                Uri fileUri = new Uri(File.ReadAllText("background.txt"));
+                imgDynamic.Source = new BitmapImage(fileUri);
+                PathToBackground = File.ReadAllText("background.txt");
+                SetBackground();
+            }
+            if (File.Exists("darkmode.txt"))
+            {
+                Console.WriteLine(File.ReadAllText("darkmode.txt"));
+                if(File.ReadAllText("darkmode.txt").Contains("True"))
+                {
+                    CheckBoxDarkMode.IsChecked = true;
+                }
+                else
+                {
+                    CheckBoxDarkMode.IsChecked = false;
+                }
+            }
         }
 
         //═══════════════════════════════════════ Encoding ════════════════════════════════════════
