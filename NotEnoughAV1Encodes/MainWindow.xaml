@@ -1382,20 +1382,20 @@
                     <CheckBox x:Name="CheckBoxDarkMode" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Darkmode" HorizontalAlignment="Left" Margin="26,153,0,0" VerticalAlignment="Top" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_UnChecked"/>
                     <Label Content="Settings" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Button x:Name="ButtonBackgroundImage" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Set Background Image" HorizontalAlignment="Left" Margin="15,194,0,0" VerticalAlignment="Top" Width="137" Height="30" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonBackgroundImage_Click"/>
-                    <Button x:Name="ButtonDiscord" HorizontalAlignment="Left" VerticalAlignment="Top" Width="62" Height="62" BorderBrush="{x:Null}" Margin="704,237,0,0" Background="{x:Null}" Click="ButtonDiscord_Click">
-                        <Image HorizontalAlignment="Left" Height="56" VerticalAlignment="Top" Width="56" Source="img/discord.png"/>
+                    <Button x:Name="ButtonDiscord" HorizontalAlignment="Left" VerticalAlignment="Top" Width="45" Height="45" BorderBrush="{x:Null}" Margin="758,250,0,0" Background="{x:Null}" Click="ButtonDiscord_Click">
+                        <Image HorizontalAlignment="Left" Height="42" VerticalAlignment="Top" Width="45" Source="img/discord.png"/>
                     </Button>
-                    <Button x:Name="ButtonGithub" HorizontalAlignment="Left" VerticalAlignment="Top" Width="62" Height="62" BorderBrush="{x:Null}" Margin="637,237,0,0" Background="{x:Null}" Click="ButtonGithub_Click">
-                        <Image HorizontalAlignment="Left" Height="56" VerticalAlignment="Top" Width="56" Source="img/github.png"/>
+                    <Button x:Name="ButtonGithub" HorizontalAlignment="Left" VerticalAlignment="Top" Width="45" Height="45" BorderBrush="{x:Null}" Margin="708,250,0,0" Background="{x:Null}" Click="ButtonGithub_Click">
+                        <Image HorizontalAlignment="Left" Height="42" VerticalAlignment="Top" Width="42" Source="img/github.png"/>
                     </Button>
-                    <Button x:Name="ButtonReddit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="62" Height="62" BorderBrush="{x:Null}" Margin="771,237,0,0" Background="{x:Null}" Click="ButtonReddit_Click">
-                        <Image HorizontalAlignment="Left" Height="56" VerticalAlignment="Top" Width="56" Source="img/reddit.png"/>
+                    <Button x:Name="ButtonReddit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="45" Height="45" BorderBrush="{x:Null}" Margin="808,250,0,0" Background="{x:Null}" Click="ButtonReddit_Click">
+                        <Image HorizontalAlignment="Left" Height="42" VerticalAlignment="Top" Width="42" Source="img/reddit.png"/>
                     </Button>
-                    <Button x:Name="ButtonSupportMePayPal" HorizontalAlignment="Left" VerticalAlignment="Top" Width="62" Height="62" BorderBrush="{x:Null}" Click="ButtonSupportMePayPal_Click" Margin="838,237,0,0" Background="{x:Null}">
-                        <Image HorizontalAlignment="Left" Height="56" VerticalAlignment="Top" Width="56" Source="img/paypal.png"/>
+                    <Button x:Name="ButtonSupportMePayPal" HorizontalAlignment="Left" VerticalAlignment="Top" Width="45" Height="45" BorderBrush="{x:Null}" Click="ButtonSupportMePayPal_Click" Margin="858,250,0,0" Background="{x:Null}">
+                        <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="img/paypal.png"/>
                     </Button>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="574,129,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="637,131,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.75" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <TextBox HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="637,131,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.76" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
                     <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="584,155,0,0" VerticalAlignment="Top"/>
                     <TextBlock HorizontalAlignment="Left" Margin="637,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
             <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
