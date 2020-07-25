@@ -940,7 +940,15 @@ namespace NotEnoughAV1Encodes
 
             foreach (var words in forbiddenWords)
             {
-                TextBoxAdvancedSettings.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
+                if (CheckBoxDarkMode.IsChecked == false)
+                {
+                    TextBoxAdvancedSettings.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
+                }
+                else
+                {
+                    TextBoxAdvancedSettings.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255));
+                }
+                
                 if (TextBoxAdvancedSettings.Text.Contains(words))
                 {
                     TextBoxAdvancedSettings.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 0, 0));

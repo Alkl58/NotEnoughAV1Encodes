@@ -143,7 +143,7 @@
             <TabItem Header="Advanced Settings" Visibility="{Binding ElementName=CheckBoxAdvancedSettings, Path=IsChecked, Converter={StaticResource b2v}}">
                 <Grid x:Name="TabGrid5" Background="{Binding Background, ElementName=TabGrid, UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="Advanced Settings" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBox x:Name="TextBoxAdvancedSettings" IsEnabled="{Binding ElementName=CheckBoxCustomSettings, Path=IsChecked}" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="48" Margin="10,316,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="924" TextChanged="TextBoxAdvancedSettings_TextChanged" BorderBrush="#FFB3ABAB"/>
+                    <TextBox x:Name="TextBoxAdvancedSettings" IsEnabled="{Binding ElementName=CheckBoxCustomSettings, Path=IsChecked}" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="48" Margin="10,316,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="924" TextChanged="TextBoxAdvancedSettings_TextChanged" BorderBrush="#FFB3ABAB" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
                     <Label Content="Threads:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="38,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26">
                         <Label.Style>
                             <Style>
@@ -1190,7 +1190,7 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <CheckBox x:Name="CheckBoxCustomSettings" Content="Custom Settings" HorizontalAlignment="Left" Margin="10,296,0,0" VerticalAlignment="Top" Checked="CheckBoxCustomSettings_Checked"/>
+                    <CheckBox x:Name="CheckBoxCustomSettings" Content="Custom Settings" HorizontalAlignment="Left" Margin="10,296,0,0" VerticalAlignment="Top" Checked="CheckBoxCustomSettings_Checked" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
                     <Label Content="Color Format:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="264,138,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" RenderTransformOrigin="0.504,0.442" Height="26">
                         <Label.Style>
                             <Style>
@@ -1407,7 +1407,7 @@
                         <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="img/paypal.png"/>
                     </Button>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="574,129,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="637,131,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.78" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <TextBox HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="637,131,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.79" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
                     <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="584,155,0,0" VerticalAlignment="Top"/>
                     <TextBlock HorizontalAlignment="Left" Margin="637,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
             <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
