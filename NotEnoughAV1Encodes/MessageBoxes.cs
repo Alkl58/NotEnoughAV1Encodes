@@ -23,5 +23,20 @@ namespace NotEnoughAV1Encodes
         {
             MessageBox.Show("It is not necessary to have more than one Worker for SVT-AV1. \nIf you really want more Workers check the Program Settings Page.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        public static void MessageHardcodeSubtitles()
+        {
+            MessageBox.Show("You can only hardcode one subtitle!\nDisable hardcoding to be able to add more subtitles!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        public static void MessageHardcodeSubtitlesCheckBox()
+        {
+            MessageBox.Show("You can only hardcode one subtitle!\nYou have added too many subtitles.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        public static void MessageNoSubtitlesToDelete()
+        {
+            MessageBox.Show("No Subtitle selected or no subtitles to delete.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }

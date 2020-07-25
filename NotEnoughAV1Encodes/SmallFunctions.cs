@@ -226,6 +226,17 @@ namespace NotEnoughAV1Encodes
             }else { return true; }
         }
 
+        public static bool CheckSubtitleOutput()
+        {
+            if (MainWindow.subtitleEncoding)
+            {
+                if (File.Exists(Path.Combine(MainWindow.tempPath, "Subtitles", "subtitle.mkv")))
+                { return true; }
+                else { return false; }
+            }
+            else { return true; }
+        }
+
         public static bool CheckFileFolder()
         {
             try { 

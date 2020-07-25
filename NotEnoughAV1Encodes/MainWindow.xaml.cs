@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,15 +26,16 @@ namespace NotEnoughAV1Encodes
         public static string audioCodecTrackOne, audioCodecTrackTwo, audioCodecTrackThree, audioCodecTrackFour;
         public static string allSettingsAom, allSettingsRav1e, allSettingsSVTAV1;
         public static string tempPath = ""; //Temp Path for Splitting and Encoding
-        public static string[] videoChunks; //Temp Chunk List
-        public static string PathToBackground;
+        public static string[] videoChunks, SubtitleChunks; //Temp Chunk List
+        public static string PathToBackground, subtitleFfmpegCommand;
         public static int videoChunksCount; //Number of Chunks, mainly only for Progressbar
         public static int coreCount, workerCount, chunkLength; //Variable to set the Worker Count
-        public static int videoPasses, processPriority, videoLength;
+        public static int videoPasses, processPriority, videoLength, customsubtitleadded;
         public static int audioBitrateTrackOne, audioBitrateTrackTwo, audioBitrateTrackThree, audioBitrateTrackFour;
         public static int audioChannelsTrackOne, audioChannelsTrackTwo, audioChannelsTrackThree, audioChannelsTrackFour;
         public static bool trackOne, trackTwo, trackThree, trackFour, audioEncoding;
         public static bool inputSet, outputSet, reencode, beforereencode, resumeMode, deleteTempFiles;
+        public static bool subtitleCopy, subtitleCustom, subtitleHardcoding, subtitleEncoding;
         public static bool customBackground;
         public static double videoFrameRate;
         public DateTime starttimea;
@@ -58,6 +60,7 @@ namespace NotEnoughAV1Encodes
             {
                 setParameters();
                 setAudioParameters();
+                setSubtitleParameters();
                 if (resumeMode == false) { saveResumeJob(); }
                 if (resumeMode == true) { await AsyncClass(); } 
                 else
@@ -80,6 +83,19 @@ namespace NotEnoughAV1Encodes
         {
             if (SmallFunctions.Cancel.CancelAll == false && resumeMode == false)
             {
+                if (CheckBoxSubtitleEncoding.IsChecked == true && CheckBoxBatchEncoding.IsChecked == false)
+                {
+                    setProgressBarLabel("Started Subtitle Encoding / Demuxing");
+                    await Task.Run(() => Subtitles.EncSubtitles());
+                    if (SmallFunctions.CheckSubtitleOutput() == false) { MessageNoSubtitleOutput(); }                    
+                }
+                else if (RadioButtonStreamCopySubtitles.IsChecked == true)
+                {
+                    setProgressBarLabel("Started Subtitle Encoding / Demuxing");
+                    await Task.Run(() => Subtitles.EncSubtitles());
+                    if (SmallFunctions.CheckSubtitleOutput() == false) { MessageNoSubtitleOutput(); }
+                }
+
                 setProgressBarLabel("Started Audio Encoding");
                 await Task.Run(() => EncodeAudio.AudioEncode());
                 if (SmallFunctions.CheckAudioOutput() == false) { MessageNoAudioOutput(); }
@@ -150,11 +166,52 @@ namespace NotEnoughAV1Encodes
         }
 
         //═══════════════════════════════════════ Functions ═══════════════════════════════════════
-   
+
+        public void CheckSubtitleTracks()
+        {
+            //Gets the SubtitleIndexes of the Input Video, because people may enable subtitles, even they don't exist
+            string input = '\u0022' + videoInput + '\u0022';
+            Process getSubtitleIndexes = new Process();
+            getSubtitleIndexes.StartInfo = new ProcessStartInfo()
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                WorkingDirectory = ffprobePath,
+                Arguments = "/C ffprobe.exe -i " + input + " -loglevel error -select_streams s -show_streams -show_entries stream=index:tags=:disposition= -of csv",
+                RedirectStandardError = true,
+                RedirectStandardOutput = true
+            };
+
+            getSubtitleIndexes.Start();
+
+            //Reads the Console Output
+            string subtitleIndexes = getSubtitleIndexes.StandardOutput.ReadToEnd();
+
+            if (subtitleIndexes == "")
+            {
+                //If the Source video doesnt have Subtitles embedded, then Stream Copy Subtitles will be disabled.
+                RadioButtonStreamCopySubtitles.IsChecked = false;
+                RadioButtonStreamCopySubtitles.IsEnabled = false;
+            }
+            else if (subtitleIndexes != "")
+            {
+                RadioButtonStreamCopySubtitles.IsEnabled = true;
+            }
+            getSubtitleIndexes.WaitForExit();
+        }
+
         private void MessageNoAudioOutput()
         {
             if (MessageBox.Show("No Audio Output detected! \nCancel?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes) { SmallFunctions.Cancel.CancelAll = true; CancelRoutine(); }
             else { audioEncoding = false; }
+        }
+
+        private void MessageNoSubtitleOutput()
+        {
+            if (MessageBox.Show("No Subtitle Output detected! \nCancel?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes) { SmallFunctions.Cancel.CancelAll = true; CancelRoutine(); }
+            else { subtitleEncoding = false; }
         }
 
         private void getCoreCount()
@@ -206,6 +263,18 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxCustomTempPath.IsChecked == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); } else { tempPath = Path.Combine(Directory.GetCurrentDirectory(), tempPath); }
             
             SmallFunctions.checkCreateFolder(tempPath);
+        }
+
+        private void setSubtitleParameters()
+        {
+            subtitleCopy = RadioButtonStreamCopySubtitles.IsChecked == true;
+            subtitleCustom = RadioButtonCustomSubtitles.IsChecked == true;
+            subtitleHardcoding = CheckBoxHardcodeSubtitle.IsChecked == true;
+            subtitleEncoding = CheckBoxSubtitleEncoding.IsChecked == true;
+            if (subtitleCustom) { SubtitleChunks = ListBoxSubtitles.Items.OfType<string>().ToArray(); }
+            if (subtitleCustom && subtitleHardcoding) { subtitleFfmpegCommand = "-vf subtitles=" + '\u0022' + SubtitleChunks[0] + '\u0022'; subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c"); subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:"); }
+            if (subtitleCopy && subtitleHardcoding) { subtitleFfmpegCommand = "-vf subtitles=" + '\u0022' + videoInput + '\u0022'; subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c"); subtitleFfmpegCommand=  subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:"); }
+            if (subtitleHardcoding == false) { subtitleFfmpegCommand = ""; } //If not set, it could create problems when a second job is running afterwards
         }
 
         private void setChunkLength()
@@ -478,6 +547,7 @@ namespace NotEnoughAV1Encodes
             setPixelFormat(pixelFormat);
             setChunkLength();
             fileName = SmallFunctions.getFilename(videoInput);
+            CheckSubtitleTracks();
         }
 
         private void setPixelFormat(string pixelFormat)
@@ -600,7 +670,6 @@ namespace NotEnoughAV1Encodes
             LabelProgressbar.Content = Text;
         }
 
-
         private void setProgressBar(int Value)
         {
             ProgressBar.Maximum = Value;
@@ -609,6 +678,11 @@ namespace NotEnoughAV1Encodes
         private void CheckForResumeFile()
         {
             if (File.Exists("unfinishedjob.xml")) { if (MessageBox.Show("Unfinished Job detected! Load unfinished Job?", "Resume", MessageBoxButton.YesNo) == MessageBoxResult.Yes) { LoadSettings("", false, true, false); CheckBoxResumeMode.IsChecked = true; } }
+        }
+
+        private void CheckBoxHardcodeSubtitle_Checked(object sender, RoutedEventArgs e)
+        {
+            if (customsubtitleadded > 1) { MessageBoxes.MessageHardcodeSubtitlesCheckBox(); }
         }
 
         private void CancelRoutine()
@@ -633,6 +707,7 @@ namespace NotEnoughAV1Encodes
                 TabGrid2.Background = transparentBlack;
                 TabGrid3.Background = transparentBlack;
                 TabGrid4.Background = transparentBlack;
+                TabGrid6.Background = transparentBlack;
                 TextBoxPresetName.Background = transparentBlack;
                 ProgressBar.Background = transparentBlack;
             }
@@ -645,12 +720,37 @@ namespace NotEnoughAV1Encodes
                 TabGrid2.Background = transparentWhite;
                 TabGrid3.Background = transparentWhite;
                 TabGrid4.Background = transparentWhite;
+                TabGrid6.Background = transparentWhite;
                 TextBoxPresetName.Background = transparentWhite;
                 ProgressBar.Background = transparentWhite;
             }
         }
 
         //════════════════════════════════════════ Buttons ════════════════════════════════════════
+
+        private void ButtonAddCustomSubtitle_Click(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxHardcodeSubtitle.IsChecked == false)
+            {
+                //Open the OpenFileDialog to set the Subtitle Input
+                OpenFileDialog openVideoFileDialog = new OpenFileDialog();
+                Nullable<bool> result = openVideoFileDialog.ShowDialog();
+                if (result == true) { ListBoxSubtitles.Items.Add(openVideoFileDialog.FileName); customsubtitleadded += 1; }
+            } else if (customsubtitleadded < 1)
+            {
+                //Open the OpenFileDialog to set the Subtitle Input
+                OpenFileDialog openVideoFileDialog = new OpenFileDialog();
+                Nullable<bool> result = openVideoFileDialog.ShowDialog();
+                if (result == true) { ListBoxSubtitles.Items.Add(openVideoFileDialog.FileName); customsubtitleadded += 1; }
+            }
+
+        }
+
+        private void ButtonDeleteSubtitle_Click(object sender, RoutedEventArgs e)
+        {
+            try { ListBoxSubtitles.Items.RemoveAt(ListBoxSubtitles.SelectedIndex); customsubtitleadded -= 1; }
+            catch { MessageBoxes.MessageNoSubtitlesToDelete(); }
+        }
 
         private void ButtonOpenProgramFolder_Click(object sender, RoutedEventArgs e)
         {
@@ -847,7 +947,6 @@ namespace NotEnoughAV1Encodes
                     break;
                 }
             }
-
         }
 
         private void CheckBoxCustomSettings_Checked(object sender, RoutedEventArgs e)
@@ -972,7 +1071,7 @@ namespace NotEnoughAV1Encodes
 
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            double taskMax = ProgressBar.Maximum, taskVal = ProgressBar.Value, barVal;
+            double taskMax = ProgressBar.Maximum, taskVal = ProgressBar.Value;
             TaskbarItemInfo.ProgressValue = (1.0 / taskMax) * taskVal;
         }
 
@@ -990,6 +1089,7 @@ namespace NotEnoughAV1Encodes
                 TabGrid2.Background = dark;
                 TabGrid3.Background = dark;
                 TabGrid4.Background = dark;
+                TabGrid6.Background = dark;
                 TextBoxPresetName.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(44, 44, 44));
                 ProgressBar.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(25, 25, 25));
             }
@@ -1001,7 +1101,6 @@ namespace NotEnoughAV1Encodes
             GroupBox1.BorderBrush = darker;
             GroupBox2.BorderBrush = darker;
             GroupBox3.BorderBrush = darker;
-
         }
 
         private void CheckBoxDarkMode_UnChecked(object sender, RoutedEventArgs e)
@@ -1017,6 +1116,7 @@ namespace NotEnoughAV1Encodes
                 TabGrid2.Background = white;
                 TabGrid3.Background = white;
                 TabGrid4.Background = white;
+                TabGrid6.Background = white;
                 TextBoxPresetName.Background = white;
                 ProgressBar.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(230, 230, 230));
             }
@@ -1087,6 +1187,10 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("DarkMode",           CheckBoxDarkMode.IsChecked.ToString());
             writer.WriteElementString("CustomBackground",   customBackground.ToString());
             writer.WriteElementString("BackgroundPath",     PathToBackground);
+            writer.WriteElementString("Subtitles",          CheckBoxSubtitleEncoding.IsChecked.ToString());
+            writer.WriteElementString("SubtitlesCopy",      RadioButtonStreamCopySubtitles.IsChecked.ToString());
+            writer.WriteElementString("SubtitlesCustom",    RadioButtonCustomSubtitles.IsChecked.ToString());
+            writer.WriteElementString("SubtitlesHardSub",   CheckBoxHardcodeSubtitle.IsChecked.ToString());
             writer.WriteElementString("AdvancedSettings",   CheckBoxAdvancedSettings.IsChecked.ToString());
             if (CheckBoxAdvancedSettings.IsChecked == true)
             {
@@ -1255,7 +1359,10 @@ namespace NotEnoughAV1Encodes
                     case "AQModeSVT":           ComboBoxAQModeSVT.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "KeyintSVT":           TextBoxkeyframeIntervalSVT.Text = n.InnerText; break;
                     case "ColorFormatLibaom":   ComboBoxColorFormatLibaom.SelectedIndex = Int16.Parse(n.InnerText); break;
-
+                    case "Subtitles":           CheckBoxSubtitleEncoding.IsChecked = n.InnerText == "True"; break;
+                    case "SubtitlesCopy":       RadioButtonStreamCopySubtitles.IsChecked = n.InnerText == "True"; break;
+                    case "SubtitlesCustom":     RadioButtonCustomSubtitles.IsChecked = n.InnerText == "True"; break;
+                    case "SubtitlesHardSub":    CheckBoxHardcodeSubtitle.IsChecked = n.InnerText == "True"; break;
                     default: break;
                 }
             }

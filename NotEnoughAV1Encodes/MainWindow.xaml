@@ -1363,6 +1363,18 @@
                     <Label Content="Codec:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="206,313,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="Subtitles">
+                <Grid x:Name="TabGrid6" Background="White">
+                    <Label Content="Subtitles" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <CheckBox x:Name="CheckBoxSubtitleEncoding" Content="Enable Subtitles" HorizontalAlignment="Left" Margin="74,16,0,0" VerticalAlignment="Top" Foreground="#FF36AC00" RenderTransformOrigin="0.413,0.467" />
+                    <RadioButton x:Name="RadioButtonStreamCopySubtitles" Content="Stream Copy Subtitles from Source" HorizontalAlignment="Left" Margin="74,57,0,0" VerticalAlignment="Top" IsChecked="True" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" />
+                    <RadioButton x:Name="RadioButtonCustomSubtitles" Content="Custom Subtitles" HorizontalAlignment="Left" Margin="74,87,0,0" VerticalAlignment="Top" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox x:Name="CheckBoxHardcodeSubtitle" Content="Hardcode Subtitle (requires reencoding)" HorizontalAlignment="Left" Margin="199,16,0,0" VerticalAlignment="Top" Checked="CheckBoxHardcodeSubtitle_Checked" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ListBox x:Name="ListBoxSubtitles" HorizontalAlignment="Left" Height="205" Margin="10,159,0,0" VerticalAlignment="Top" Width="924" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" />
+                    <Button x:Name="ButtonAddCustomSubtitle" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Add Subtitle" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="90" Height="29" Click="ButtonAddCustomSubtitle_Click" />
+                    <Button x:Name="ButtonDeleteSubtitle" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Remove Subtitle" HorizontalAlignment="Left" Margin="105,125,0,0" VerticalAlignment="Top" Width="103" Height="29" Click="ButtonDeleteSubtitle_Click" />
+                </Grid>
+            </TabItem>
             <TabItem Header="Program Settings">
                 <Grid x:Name="TabGrid4" Background="White">
                     <Label Content="Presets" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="385,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
@@ -1395,7 +1407,7 @@
                         <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="img/paypal.png"/>
                     </Button>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="574,129,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="637,131,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.76" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <TextBox HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="637,131,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.77" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
                     <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="584,155,0,0" VerticalAlignment="Top"/>
                     <TextBlock HorizontalAlignment="Left" Margin="637,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
             <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>

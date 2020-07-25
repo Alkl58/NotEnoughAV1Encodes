@@ -86,6 +86,7 @@
       <DependentUpon>ShowSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="SmallFunctions.cs" />
+    <Compile Include="Subtitles.cs" />
     <Compile Include="VideoMuxing.cs" />
     <Compile Include="VideoSplitting.cs" />
     <Page Include="MainWindow.xaml">
