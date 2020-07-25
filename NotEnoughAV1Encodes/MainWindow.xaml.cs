@@ -231,15 +231,15 @@ namespace NotEnoughAV1Encodes
         private void setEncoderPath()
         {
             if (SmallFunctions.ExistsOnPath("aomenc.exe") && File.Exists("Apps\\Encoder\\aomenc.exe") == false) { aomencPath = SmallFunctions.GetFullPathWithOutName("aomenc.exe"); }
-            else{ aomencPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\aomenc.exe"); }
+            else{ aomencPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\"); }
             if (SmallFunctions.ExistsOnPath("rav1e.exe") && File.Exists("Apps\\Encoder\\rav1e.exe") == false) { rav1ePath = SmallFunctions.GetFullPathWithOutName("rav1e.exe"); }
-            else { rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\rav1e.exe"); }
+            else { rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\"); }
             if (SmallFunctions.ExistsOnPath("SvtAv1EncApp.exe") && File.Exists("Apps\\Encoder\\SvtAv1EncApp.exe") == false) { svtav1Path = SmallFunctions.GetFullPathWithOutName("SvtAv1EncApp.exe"); } 
-            else { svtav1Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\SvtAv1EncApp.exe"); }
+            else { svtav1Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\"); }
             if (SmallFunctions.ExistsOnPath("ffmpeg.exe") && File.Exists("Apps\\ffmpeg\\ffmpeg.exe") == false) { ffmpegPath = SmallFunctions.GetFullPathWithOutName("ffmpeg.exe"); }
-            else { ffmpegPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\ffmpeg\\ffmpeg.exe"); }
+            else { ffmpegPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\ffmpeg\\"); }
             if (SmallFunctions.ExistsOnPath("ffprobe.exe") && File.Exists("Apps\\ffmpeg\\ffprobe.exe") == false) { ffprobePath = SmallFunctions.GetFullPathWithOutName("ffprobe.exe"); }
-            else { ffprobePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\ffmpeg\\ffprobe.exe"); }
+            else { ffprobePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\ffmpeg\\"); }
         }
 
         private void setParameters()
