@@ -48,29 +48,29 @@ namespace NotEnoughAV1Encodes
         public static void checkDependeciesStartup()
         {
             bool ffmpegExists, ffprobeExists;
-            ffmpegExists = File.Exists("Apps\\ffmpeg\\ffmpeg.exe");
-            ffprobeExists = File.Exists("Apps\\ffmpeg\\ffprobe.exe");
+            ffmpegExists = File.Exists(MainWindow.ffmpegPath + "\\ffmpeg.exe");
+            ffprobeExists = File.Exists(MainWindow.ffprobePath + "\\ffprobe.exe");
             if (ffmpegExists == false || ffprobeExists == false)
             {
-                MessageBox.Show("Could not find all dependencies! Please check if the dependencies ffprobe and ffmpeg are located in: " + Directory.GetCurrentDirectory() + "\\Apps\\ffmpeg\\", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Could not find all dependencies! Please check if the dependencies ffprobe and ffmpeg are located in: \n" + Directory.GetCurrentDirectory() + "\\Apps\\ffmpeg\\ \nor in the Windows PATH environment!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         public static bool checkDependencies(string encoder)
         {
             bool av1encoderexists = false, ffmpegExists, ffprobeExists;
-            ffmpegExists = File.Exists("Apps\\ffmpeg\\ffmpeg.exe");
-            ffprobeExists = File.Exists("Apps\\ffmpeg\\ffprobe.exe");
+            ffmpegExists = File.Exists(MainWindow.ffmpegPath + "\\ffmpeg.exe");
+            ffprobeExists = File.Exists(MainWindow.ffprobePath + "\\ffprobe.exe");
             switch (encoder)
             {
                 case "aomenc":
-                    av1encoderexists = File.Exists("Apps\\Encoder\\aomenc.exe");
+                    av1encoderexists = File.Exists(MainWindow.aomencPath + "\\aomenc.exe");
                     break;
                 case "rav1e":
-                    av1encoderexists = File.Exists("Apps\\Encoder\\rav1e.exe");
+                    av1encoderexists = File.Exists(MainWindow.rav1ePath + "\\rav1e.exe");
                     break;
                 case "svt-av1":
-                    av1encoderexists = File.Exists("Apps\\Encoder\\SvtAv1EncApp.exe");
+                    av1encoderexists = File.Exists(MainWindow.svtav1Path + "\\SvtAv1EncApp.exe");
                     break;
                 case "aomenc (ffmpeg)":
                     av1encoderexists = ffmpegExists;
@@ -263,6 +263,41 @@ namespace NotEnoughAV1Encodes
         {
             SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
             playSound.Play();
+        }
+
+        public static bool ExistsOnPath(string fileName)
+        {
+            return GetFullPath(fileName) != null;
+        }
+
+        public static string GetFullPath(string fileName)
+        {
+            if (File.Exists(fileName))
+                return Path.GetFullPath(fileName);
+
+            var values = Environment.GetEnvironmentVariable("PATH");
+            foreach (var path in values.Split(Path.PathSeparator))
+            {
+                var fullPath = Path.Combine(path, fileName);
+                if (File.Exists(fullPath))
+                    return fullPath;
+            }
+            return null;
+        }
+
+        public static string GetFullPathWithOutName(string fileName)
+        {
+            if (File.Exists(fileName))
+                return Path.GetFullPath(fileName);
+
+            var values = Environment.GetEnvironmentVariable("PATH");
+            foreach (var path in values.Split(Path.PathSeparator))
+            {
+                var fullPath = Path.Combine(path, fileName);
+                if (File.Exists(fullPath))
+                    return path;
+            }
+            return null;
         }
     }
 }
