@@ -1422,22 +1422,24 @@ namespace NotEnoughAV1Encodes
         {
             if (File.Exists("background.txt"))
             {
-                Uri fileUri = new Uri(File.ReadAllText("background.txt"));
-                imgDynamic.Source = new BitmapImage(fileUri);
-                PathToBackground = File.ReadAllText("background.txt");
-                SetBackground();
+                try
+                {
+                    Uri fileUri = new Uri(File.ReadAllText("background.txt"));
+                    imgDynamic.Source = new BitmapImage(fileUri);
+                    PathToBackground = File.ReadAllText("background.txt");
+                    SetBackground();
+                }
+                catch { }
             }
             if (File.Exists("darkmode.txt"))
             {
-                Console.WriteLine(File.ReadAllText("darkmode.txt"));
-                if(File.ReadAllText("darkmode.txt").Contains("True"))
+                try
                 {
-                    CheckBoxDarkMode.IsChecked = true;
+                    if (File.ReadAllText("darkmode.txt").Contains("True")) 
+                    { CheckBoxDarkMode.IsChecked = true; }
+                    else { CheckBoxDarkMode.IsChecked = false; }
                 }
-                else
-                {
-                    CheckBoxDarkMode.IsChecked = false;
-                }
+                catch { }
             }
         }
 
