@@ -27,7 +27,7 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsAom, allSettingsRav1e, allSettingsSVTAV1;
         public static string tempPath = ""; //Temp Path for Splitting and Encoding
         public static string[] videoChunks, SubtitleChunks; //Temp Chunk List
-        public static string PathToBackground, subtitleFfmpegCommand;
+        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand;
         public static int videoChunksCount; //Number of Chunks, mainly only for Progressbar
         public static int coreCount, workerCount, chunkLength; //Variable to set the Worker Count
         public static int videoPasses, processPriority, videoLength, customsubtitleadded;
@@ -262,7 +262,12 @@ namespace NotEnoughAV1Encodes
             
             if (CheckBoxResize.IsChecked == true) { videoResize = "-vf scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text; } else { videoResize = ""; }
             if (CheckBoxCustomTempPath.IsChecked == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); } else { tempPath = Path.Combine(Directory.GetCurrentDirectory(), tempPath); }
-            
+            if (CheckBoxDeinterlaceYadif.IsChecked == true) { deinterlaceCommand = " -vf " + ComboBoxDeinterlace.Text; } else { deinterlaceCommand = ""; }
+            if (CheckBoxDeinterlaceYadif.IsChecked == true && CheckBoxResize.IsChecked == true)
+            {
+                deinterlaceCommand = " -vf " + '\u0022' + "scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + "," + ComboBoxDeinterlace.Text + '\u0022';
+                videoResize = "";
+            }
             SmallFunctions.checkCreateFolder(tempPath);
         }
 
@@ -681,11 +686,6 @@ namespace NotEnoughAV1Encodes
             if (File.Exists("unfinishedjob.xml")) { if (MessageBox.Show("Unfinished Job detected! Load unfinished Job?", "Resume", MessageBoxButton.YesNo) == MessageBoxResult.Yes) { LoadSettings("", false, true, false); CheckBoxResumeMode.IsChecked = true; } }
         }
 
-        private void CheckBoxHardcodeSubtitle_Checked(object sender, RoutedEventArgs e)
-        {
-            if (customsubtitleadded > 1) { MessageBoxes.MessageHardcodeSubtitlesCheckBox(); }
-        }
-
         private void CancelRoutine()
         {
             ButtonCancelEncode.BorderBrush = System.Windows.Media.Brushes.Red;
@@ -994,7 +994,6 @@ namespace NotEnoughAV1Encodes
             customBackground = false;
             if (CheckBoxDarkMode.IsChecked == true) { SetBackgroundColorBlack(); }
             else { SetBackgroundColorWhite(); }
-            
         }
 
         private void ButtonSupportMePayPal_Click(object sender, RoutedEventArgs e)
@@ -1019,6 +1018,35 @@ namespace NotEnoughAV1Encodes
         }
 
         //═══════════════════════════════════ Other UI Elements ═══════════════════════════════════
+
+        private void CheckBoxHardcodeSubtitle_Checked(object sender, RoutedEventArgs e)
+        {
+            if (customsubtitleadded > 1) { MessageBoxes.MessageHardcodeSubtitlesCheckBox(); }
+        }
+
+        private void CheckBoxReencodeDuringSplitting_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxDeinterlaceYadif.IsChecked == true && CheckBoxReencodeBeforeSplitting.IsChecked == false)
+            {
+                MessageBoxes.MessageDeinterlacingWithoutReencoding();
+            }
+        }
+
+        private void CheckBoxReencodeBeforeSplitting_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxDeinterlaceYadif.IsChecked == true && CheckBoxReencodeDuringSplitting.IsChecked == false)
+            {
+                MessageBoxes.MessageDeinterlacingWithoutReencoding();
+            }
+        }
+
+        private void CheckBoxDeinterlaceYadif_Checked(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxReencodeBeforeSplitting.IsChecked == false && CheckBoxReencodeDuringSplitting.IsChecked == false)
+            {
+                CheckBoxReencodeDuringSplitting.IsChecked = true;
+            }
+        }
 
         private void TextBoxAdvancedSettings_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -1226,6 +1254,8 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("SubtitlesCopy",      RadioButtonStreamCopySubtitles.IsChecked.ToString());
             writer.WriteElementString("SubtitlesCustom",    RadioButtonCustomSubtitles.IsChecked.ToString());
             writer.WriteElementString("SubtitlesHardSub",   CheckBoxHardcodeSubtitle.IsChecked.ToString());
+            writer.WriteElementString("Deinterlacing",      CheckBoxDeinterlaceYadif.IsChecked.ToString());
+            writer.WriteElementString("Deinterlacer",          ComboBoxDeinterlace.SelectedIndex.ToString());
             writer.WriteElementString("AdvancedSettings",   CheckBoxAdvancedSettings.IsChecked.ToString());
             if (CheckBoxAdvancedSettings.IsChecked == true)
             {
@@ -1398,6 +1428,8 @@ namespace NotEnoughAV1Encodes
                     case "SubtitlesCopy":       RadioButtonStreamCopySubtitles.IsChecked = n.InnerText == "True"; break;
                     case "SubtitlesCustom":     RadioButtonCustomSubtitles.IsChecked = n.InnerText == "True"; break;
                     case "SubtitlesHardSub":    CheckBoxHardcodeSubtitle.IsChecked = n.InnerText == "True"; break;
+                    case "Deinterlacing":       CheckBoxDeinterlaceYadif.IsChecked = n.InnerText == "True"; break;
+                    case "Deinterlacer":        ComboBoxDeinterlace.SelectedIndex = Int16.Parse(n.InnerText); break;
                     default: break;
                 }
             }
@@ -1564,7 +1596,6 @@ namespace NotEnoughAV1Encodes
                                     }
 
                                     process.StartInfo = startInfo;
-                                    
                                     process.Start();
                                     if (processPriority == 1) { process.PriorityClass = ProcessPriorityClass.BelowNormal; }
                                     process.WaitForExit();

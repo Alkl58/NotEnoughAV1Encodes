@@ -38,5 +38,10 @@ namespace NotEnoughAV1Encodes
         {
             MessageBox.Show("No Subtitle selected or no subtitles to delete.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        public static void MessageDeinterlacingWithoutReencoding()
+        {
+            MessageBox.Show("You need reencoding for deinterlacing to work!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }

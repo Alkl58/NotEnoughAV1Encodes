@@ -64,8 +64,8 @@
                         <ComboBoxItem Content="x264"/>
                         <ComboBoxItem Content="utvideo" IsSelected="True"/>
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxReencodeBeforeSplitting" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Before Splitting" HorizontalAlignment="Left" Margin="311,96,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="CheckBoxReencodeDuringSplitting" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="During Splitting" HorizontalAlignment="Left" Margin="428,96,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckBoxReencodeBeforeSplitting" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Before Splitting" HorizontalAlignment="Left" Margin="311,96,0,0" VerticalAlignment="Top" Unchecked="CheckBoxReencodeBeforeSplitting_Unchecked"/>
+                    <CheckBox x:Name="CheckBoxReencodeDuringSplitting" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="During Splitting" HorizontalAlignment="Left" Margin="428,96,0,0" VerticalAlignment="Top" Unchecked="CheckBoxReencodeDuringSplitting_Unchecked"/>
                     <Label Content="Workers" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,164,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Parallel Encoding:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
                     <CheckBox x:Name="CheckBoxChunkLengthAutoCalculation" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Automatic Calculation" HorizontalAlignment="Left" Margin="311,51,0,0" VerticalAlignment="Top" IsChecked="True"/>
@@ -75,6 +75,12 @@
                     </ComboBox>
                     <Label Content="Process Priority:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,256,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
                     <ComboBox x:Name="ComboBoxWorkers" HorizontalAlignment="Left" Margin="187,212,0,0" VerticalAlignment="Top" Width="101" Height="26" SelectionChanged="ComboBoxWorkers_SelectionChanged"/>
+                    <Label Content="Deinterlacing" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="590,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <CheckBox x:Name="CheckBoxDeinterlaceYadif" Content="" HorizontalAlignment="Left" Margin="688,51,0,0" VerticalAlignment="Top" Checked="CheckBoxDeinterlaceYadif_Checked"/>
+                    <ComboBox x:Name="ComboBoxDeinterlace" HorizontalAlignment="Left" Margin="726,45,0,0" VerticalAlignment="Top" Width="120" Height="26" ToolTip="yadif=0 will drop half the frames, thus resulting in a poor substitute of the original footage.">
+                        <ComboBoxItem Content="yadif=0"/>
+                        <ComboBoxItem Content="yadif=1" IsSelected="True"/>
+                    </ComboBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Video">
@@ -1407,7 +1413,7 @@
                         <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="img/paypal.png"/>
                     </Button>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="574,129,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="637,131,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.82" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <TextBox HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="637,131,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.83" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
                     <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="584,155,0,0" VerticalAlignment="Top"/>
                     <TextBlock HorizontalAlignment="Left" Margin="637,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
             <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
