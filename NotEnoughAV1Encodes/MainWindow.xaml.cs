@@ -1307,10 +1307,15 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("SubtitlesCustom",    RadioButtonCustomSubtitles.IsChecked.ToString());
             writer.WriteElementString("SubtitlesHardSub",   CheckBoxHardcodeSubtitle.IsChecked.ToString());
             writer.WriteElementString("Deinterlacing",      CheckBoxDeinterlaceYadif.IsChecked.ToString());
-            writer.WriteElementString("Deinterlacer",          ComboBoxDeinterlace.SelectedIndex.ToString());
+            writer.WriteElementString("Deinterlacer",       ComboBoxDeinterlace.SelectedIndex.ToString());
             writer.WriteElementString("AdvancedSettings",   CheckBoxAdvancedSettings.IsChecked.ToString());
             if (CheckBoxAdvancedSettings.IsChecked == true)
             {
+                if (CheckBoxAdvancedSettings.IsChecked == true)
+                {
+                    writer.WriteElementString("CustomSettings",     CheckBoxCustomSettings.IsChecked.ToString());
+                    writer.WriteElementString("CustomSettingsText", TextBoxAdvancedSettings.Text);
+                }
                 writer.WriteElementString("Threads", ComboBoxThreadsAomenc.SelectedIndex.ToString());
                 if  (ComboBoxEncoder.SelectedIndex == 0 || ComboBoxEncoder.SelectedIndex == 1 || ComboBoxEncoder.SelectedIndex == 2)
                 {
@@ -1482,6 +1487,8 @@ namespace NotEnoughAV1Encodes
                     case "SubtitlesHardSub":    CheckBoxHardcodeSubtitle.IsChecked = n.InnerText == "True"; break;
                     case "Deinterlacing":       CheckBoxDeinterlaceYadif.IsChecked = n.InnerText == "True"; break;
                     case "Deinterlacer":        ComboBoxDeinterlace.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "CustomSettings":      CheckBoxCustomSettings.IsChecked = n.InnerText == "True"; break;
+                    case "CustomSettingsText":  TextBoxAdvancedSettings.Text = n.InnerText; break;
                     default: break;
                 }
             }
