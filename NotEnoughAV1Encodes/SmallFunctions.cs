@@ -310,5 +310,15 @@ namespace NotEnoughAV1Encodes
             }
             return null;
         }
+
+        public static void Logging(string log)
+        {
+            if (MainWindow.logging)
+            {
+                DateTime starttime = DateTime.Now;
+                checkCreateFolder(Path.Combine(Directory.GetCurrentDirectory(), "Logging"));
+                WriteToFileThreadSafe(starttime.ToString() + " : " + log, Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log"));
+            }
+        }
     }
 }

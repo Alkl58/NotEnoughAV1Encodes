@@ -14,6 +14,7 @@ namespace NotEnoughAV1Encodes
                 if (MainWindow.subtitleCopy)
                 {
                     string subtitleCommand = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -vn -an -dn -c copy " + '\u0022' + MainWindow.tempPath + "\\Subtitles\\subtitle.mkv" + '\u0022';
+                    SmallFunctions.Logging("EncSubtitles() Command: " + subtitleCommand);
                     SmallFunctions.ExecuteFfmpegTask(subtitleCommand);
                 }
                 if (MainWindow.subtitleCustom)
@@ -29,6 +30,7 @@ namespace NotEnoughAV1Encodes
                     }
 
                     string subtitleCommand = "/C ffmpeg.exe" + subtitleInput + " -vn -an -dn -c copy " + subtitleMapping + " " + '\u0022' + MainWindow.tempPath + "\\Subtitles\\subtitle.mkv" + '\u0022';
+                    SmallFunctions.Logging("EncSubtitles() Command: " + subtitleCommand);
                     SmallFunctions.ExecuteFfmpegTask(subtitleCommand);
                 }
             }

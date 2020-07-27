@@ -36,20 +36,23 @@ namespace NotEnoughAV1Encodes
         public static bool trackOne, trackTwo, trackThree, trackFour, audioEncoding;
         public static bool inputSet, outputSet, reencode, beforereencode, resumeMode, deleteTempFiles;
         public static bool subtitleCopy, subtitleCustom, subtitleHardcoding, subtitleEncoding;
-        public static bool customBackground;
+        public static bool customBackground, programStartup = true, logging = true;
         public static double videoFrameRate;
         public DateTime starttimea;
 
         public MainWindow()
         {
             InitializeComponent();
-            getCoreCount();
+            CheckLogging();
+            getCoreCount();            
             LoadPresetsIntoComboBox();
             LoadBackground();
             LoadDefaultProfile();
             CheckForResumeFile();
             setEncoderPath();
             SmallFunctions.checkDependeciesStartup();
+            programStartup = false;
+            SmallFunctions.Logging("Program Version: " + TextBoxProgramVersion.Text);
         }
 
         //════════════════════════════════════ Main Functions ═════════════════════════════════════
@@ -189,7 +192,7 @@ namespace NotEnoughAV1Encodes
 
             //Reads the Console Output
             string subtitleIndexes = getSubtitleIndexes.StandardOutput.ReadToEnd();
-
+            SmallFunctions.Logging("Subtitle Indexes ffprobe: " + subtitleIndexes);
             if (subtitleIndexes == "")
             {
                 //If the Source video doesnt have Subtitles embedded, then Stream Copy Subtitles will be disabled.
@@ -221,6 +224,7 @@ namespace NotEnoughAV1Encodes
             foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get()) { coreCount += int.Parse(item["NumberOfCores"].ToString()); }
             for (int i = 1; i <= coreCount; i++) { ComboBoxWorkers.Items.Add(i); }
             ComboBoxWorkers.SelectedItem = coreCount;
+            SmallFunctions.Logging("System Core Count: " + coreCount);
         }
 
         private void saveResumeJob()
@@ -232,14 +236,20 @@ namespace NotEnoughAV1Encodes
         {
             if (SmallFunctions.ExistsOnPath("aomenc.exe") && File.Exists("Apps\\Encoder\\aomenc.exe") == false) { aomencPath = SmallFunctions.GetFullPathWithOutName("aomenc.exe"); }
             else{ aomencPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\"); }
+            SmallFunctions.Logging("Encoder aomenc Path: " + aomencPath);
             if (SmallFunctions.ExistsOnPath("rav1e.exe") && File.Exists("Apps\\Encoder\\rav1e.exe") == false) { rav1ePath = SmallFunctions.GetFullPathWithOutName("rav1e.exe"); }
             else { rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\"); }
+            SmallFunctions.Logging("Encoder rav1e Path: " + rav1ePath);
             if (SmallFunctions.ExistsOnPath("SvtAv1EncApp.exe") && File.Exists("Apps\\Encoder\\SvtAv1EncApp.exe") == false) { svtav1Path = SmallFunctions.GetFullPathWithOutName("SvtAv1EncApp.exe"); } 
             else { svtav1Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\"); }
+            SmallFunctions.Logging("Encoder svt-av1 Path: " + svtav1Path);
             if (SmallFunctions.ExistsOnPath("ffmpeg.exe") && File.Exists("Apps\\ffmpeg\\ffmpeg.exe") == false) { ffmpegPath = SmallFunctions.GetFullPathWithOutName("ffmpeg.exe"); }
             else { ffmpegPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\ffmpeg\\"); }
+            SmallFunctions.Logging("Encoder ffmpeg Path: " + ffmpegPath);
             if (SmallFunctions.ExistsOnPath("ffprobe.exe") && File.Exists("Apps\\ffmpeg\\ffprobe.exe") == false) { ffprobePath = SmallFunctions.GetFullPathWithOutName("ffprobe.exe"); }
             else { ffprobePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\ffmpeg\\"); }
+            SmallFunctions.Logging("Encoder ffprobe Path: " + ffprobePath);
+
         }
 
         private void setParameters()
@@ -247,19 +257,28 @@ namespace NotEnoughAV1Encodes
             tempPath = "Temp\\" + fileName + "\\";
 
             encoder = ComboBoxEncoder.Text;
+            SmallFunctions.Logging("Encoder: " + encoder);
             reencoder = ComboBoxReencodeCodec.Text;
+            SmallFunctions.Logging("ReEncoder: " + reencoder);
             processPriority = ComboBoxProcessPriority.SelectedIndex;
 
             resumeMode = CheckBoxResumeMode.IsChecked == true ? true : false;
+            SmallFunctions.Logging("Resume Mode: " + resumeMode);
             deleteTempFiles = CheckBoxDeleteTempFiles.IsChecked == true ? true : false;
             reencode = CheckBoxReencodeDuringSplitting.IsChecked == true ? true : false;
+            SmallFunctions.Logging("Reencode: " + reencode);
             beforereencode = CheckBoxReencodeBeforeSplitting.IsChecked == true ? true : false;
+            SmallFunctions.Logging("PreReencode: " + beforereencode);
 
             videoPasses = Int16.Parse(ComboBoxPasses.Text);
+            SmallFunctions.Logging("Encoding Passes: " + videoPasses);
             workerCount = Int16.Parse(ComboBoxWorkers.Text);
+            SmallFunctions.Logging("Worker Count: " + workerCount);
             chunkLength = Int16.Parse(TextBoxChunkLength.Text);
+            SmallFunctions.Logging("Chunk Length: " + chunkLength);
             videoLength = Int16.Parse(SmallFunctions.getVideoLength(videoInput));
-            
+            SmallFunctions.Logging("Video Length: " + videoLength);
+
             if (CheckBoxResize.IsChecked == true) { videoResize = "-vf scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text; } else { videoResize = ""; }
             if (CheckBoxCustomTempPath.IsChecked == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); } else { tempPath = Path.Combine(Directory.GetCurrentDirectory(), tempPath); }
             if (CheckBoxDeinterlaceYadif.IsChecked == true) { deinterlaceCommand = " -vf " + ComboBoxDeinterlace.Text; } else { deinterlaceCommand = ""; }
@@ -394,8 +413,8 @@ namespace NotEnoughAV1Encodes
                 {
                     allSettingsAom = TextBoxAdvancedSettings.Text;
                 }
-
             }
+            SmallFunctions.Logging("Parameters aomenc: " + allSettingsAom);
         }
 
         private void SetLibaomParameters(bool tempSettings)
@@ -438,9 +457,8 @@ namespace NotEnoughAV1Encodes
                 {
                     allSettingsAom = TextBoxAdvancedSettings.Text;
                 }
-
             }
-            
+            SmallFunctions.Logging("Parameters libaom: " + allSettingsAom);
         }
 
         private void SetRav1eParameters(bool tempSettings)
@@ -484,7 +502,7 @@ namespace NotEnoughAV1Encodes
             {
                 allSettingsRav1e = TextBoxCustomTempPath.Text;
             }
-            
+            SmallFunctions.Logging("Parameters rav1e: " + allSettingsRav1e);
         }
 
         private void SetSVTAV1Parameters(bool tempSettings)
@@ -525,7 +543,7 @@ namespace NotEnoughAV1Encodes
             {
                 allSettingsSVTAV1 = TextBoxAdvancedSettings.Text;
             }
-            
+            SmallFunctions.Logging("Parameters svt-av1: " + allSettingsSVTAV1);
         }
 
         private void LoadDefaultProfile()
@@ -548,8 +566,10 @@ namespace NotEnoughAV1Encodes
         private void getVideoInformation()
         {
             string frameRate = SmallFunctions.getFrameRate(videoInput);
+            SmallFunctions.Logging("Video Framerate: " + frameRate);
             setFrameRate(frameRate);
             string pixelFormat = SmallFunctions.getPixelFormat(videoInput);
+            SmallFunctions.Logging("Video Pixelformat: " + pixelFormat);
             setPixelFormat(pixelFormat);
             setChunkLength();
             fileName = SmallFunctions.getFilename(videoInput);
@@ -647,6 +667,7 @@ namespace NotEnoughAV1Encodes
             getAudioIndexes.Start();
             //Reads the Console Output
             string audioIndexes = getAudioIndexes.StandardOutput.ReadToEnd();
+            SmallFunctions.Logging("Audio Indexes ffprobe: " + audioIndexes);
             //Splits the Console Output
             string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", "stream," }, StringSplitOptions.RemoveEmptyEntries);
             int detectedTracks = 0;
@@ -683,7 +704,17 @@ namespace NotEnoughAV1Encodes
 
         private void CheckForResumeFile()
         {
-            if (File.Exists("unfinishedjob.xml")) { if (MessageBox.Show("Unfinished Job detected! Load unfinished Job?", "Resume", MessageBoxButton.YesNo) == MessageBoxResult.Yes) { LoadSettings("", false, true, false); CheckBoxResumeMode.IsChecked = true; } }
+            if (File.Exists("unfinishedjob.xml")) 
+            {
+                SmallFunctions.Logging("Unfinished Job File found");
+                if (MessageBox.Show("Unfinished Job detected! Load unfinished Job?", "Resume", MessageBoxButton.YesNo) == MessageBoxResult.Yes) 
+                { LoadSettings("", false, true, false); CheckBoxResumeMode.IsChecked = true; } else { SmallFunctions.Logging("Unfinished Job File found but not loaded"); }
+            }
+        }
+
+        private void CheckLogging()
+        {
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\disablelogging.txt")) { CheckBoxLogging.IsChecked = false; Console.WriteLine("ka"); }
         }
 
         private void CancelRoutine()
@@ -695,6 +726,7 @@ namespace NotEnoughAV1Encodes
             ProgressBar.Foreground = System.Windows.Media.Brushes.Red;
             ProgressBar.Value = 100;
             LabelProgressbar.Content = "Cancelled";
+            SmallFunctions.Logging("CancelRoutine()");
         }
 
         private void SetBackground()
@@ -837,12 +869,13 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonSaveVideo_Click(object sender, RoutedEventArgs e)
         {
+            SmallFunctions.Logging("Button Save Video");
             if (CheckBoxBatchEncoding.IsChecked == false)
             {
                 SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
                 saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;*.mp4";
                 Nullable<bool> result = saveVideoFileDialog.ShowDialog();
-                if (result == true) { videoOutput = saveVideoFileDialog.FileName; outputSet = true; LabelVideoOutput.Content = videoOutput; }
+                if (result == true) { videoOutput = saveVideoFileDialog.FileName; outputSet = true; LabelVideoOutput.Content = videoOutput; SmallFunctions.Logging("Video Output: " + videoOutput); }
             }
             else
             {               
@@ -861,6 +894,7 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
         {
+            SmallFunctions.Logging("Button Open Video");
             if (CheckBoxBatchEncoding.IsChecked == false)
             {
                 //Opens OpenFileDialog for the Input Video
@@ -871,6 +905,7 @@ namespace NotEnoughAV1Encodes
                 {
                     videoInput = openVideoFileDialog.FileName;
                     LabelVideoSource.Content = videoInput;
+                    SmallFunctions.Logging("Video Input: " + videoInput);
                     getVideoInformation();
                     getAudioInformation();
                     inputSet = true;
@@ -899,14 +934,15 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
+            SmallFunctions.Logging("Button Start encode");
             SmallFunctions.Cancel.CancelAll = false;
             if (inputSet && outputSet)
             {
                 ProgressBar.Value = 0;
-                ProgressBar.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(3, 112, 200));
+                ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(3, 112, 200));
                 resumeMode = CheckBoxResumeMode.IsChecked == true ? true : false;
-                ButtonStartEncode.BorderBrush = System.Windows.Media.Brushes.Green;
-                ButtonCancelEncode.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(228, 228, 228));
+                ButtonStartEncode.BorderBrush = Brushes.Green;
+                ButtonCancelEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
                 ButtonOpenSource.IsEnabled = false;
                 ButtonSaveVideo.IsEnabled = false;
                 if (CheckBoxBatchEncoding.IsChecked == false)
@@ -915,13 +951,14 @@ namespace NotEnoughAV1Encodes
                 }
                 else
                 {
+                    SmallFunctions.Logging("BatchEncode()");
                     BatchEncode();
                 }
             }
             else
             {
-                if (inputSet == false) { MessageBoxes.MessageVideoInput(); }
-                if (outputSet == false) { MessageBoxes.MessageVideoOutput(); }
+                if (inputSet == false) { MessageBoxes.MessageVideoInput(); SmallFunctions.Logging("Video Input not set"); }
+                if (outputSet == false) { MessageBoxes.MessageVideoOutput(); SmallFunctions.Logging("Video Output not set"); }
             }
         }
 
@@ -1018,6 +1055,20 @@ namespace NotEnoughAV1Encodes
         }
 
         //═══════════════════════════════════ Other UI Elements ═══════════════════════════════════
+
+        private void CheckBoxLogging_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SmallFunctions.WriteToFileThreadSafe("", "disablelogging.txt");
+            logging = false;
+        }
+
+        private void CheckBoxLogging_Checked(object sender, RoutedEventArgs e)
+        {
+            if (programStartup == false)
+            {
+                if (File.Exists("disablelogging.txt")) { File.Delete("disablelogging.txt"); logging = true; }
+            }            
+        }
 
         private void CheckBoxHardcodeSubtitle_Checked(object sender, RoutedEventArgs e)
         {
@@ -1196,6 +1247,7 @@ namespace NotEnoughAV1Encodes
 
         private void SaveSettings(string saveName, bool saveProfile, bool saveJob, bool saveQueue)
         {
+            SmallFunctions.Logging("SaveSettings(): " + saveName + " Profile: " + saveProfile + " Job: " + saveJob);
             string directory = "";
             if (saveProfile) { directory = "Profiles\\" + saveName + ".xml"; }
             if (saveJob) { directory = "unfinishedjob.xml"; }
@@ -1521,7 +1573,7 @@ namespace NotEnoughAV1Encodes
                                         default:
                                             break;
                                     }
-
+                                    SmallFunctions.Logging("Encode() Arguments: " + startInfo.Arguments);
                                     process.StartInfo = startInfo;
                                     process.Start();
                                     //Sets the Process Priority
@@ -1563,7 +1615,7 @@ namespace NotEnoughAV1Encodes
                                                 break;
                                         }
                                         process.StartInfo = startInfo;
-                                        
+                                        SmallFunctions.Logging("Encode() Arguments: " + startInfo.Arguments);
                                         process.Start();
                                         //Sets the Process Priority
                                         if (processPriority == 1) { process.PriorityClass = ProcessPriorityClass.BelowNormal; }
@@ -1596,6 +1648,7 @@ namespace NotEnoughAV1Encodes
                                     }
 
                                     process.StartInfo = startInfo;
+                                    SmallFunctions.Logging("Encode() Arguments: " + startInfo.Arguments);
                                     process.Start();
                                     if (processPriority == 1) { process.PriorityClass = ProcessPriorityClass.BelowNormal; }
                                     process.WaitForExit();
@@ -1613,6 +1666,7 @@ namespace NotEnoughAV1Encodes
                             ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value += 1, DispatcherPriority.Background);
                             TimeSpan timespent = DateTime.Now - starttime;
                             LabelProgressbar.Dispatcher.Invoke(() => LabelProgressbar.Content = ProgressBar.Value + " / " + videoChunksCount.ToString() + " - " + Math.Round(Convert.ToDecimal(((((videoLength * videoFrameRate) / videoChunksCount) * ProgressBar.Value) / timespent.TotalSeconds)), 2).ToString() + "fps" + " - " + Math.Round((((timespent.TotalSeconds / ProgressBar.Value) * (videoChunksCount - ProgressBar.Value)) / 60), MidpointRounding.ToEven) + "min left", DispatcherPriority.Background);
+                            LabelProgressbar.Dispatcher.Invoke(() => SmallFunctions.Logging("Progessbar: " + LabelProgressbar.Content), DispatcherPriority.Background);
                         }
                     });
                     tasks.Add(t);
