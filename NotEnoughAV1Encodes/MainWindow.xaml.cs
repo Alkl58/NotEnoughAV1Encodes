@@ -48,8 +48,8 @@ namespace NotEnoughAV1Encodes
             LoadPresetsIntoComboBox();
             LoadBackground();
             LoadDefaultProfile();
-            CheckForResumeFile();
             setEncoderPath();
+            CheckForResumeFile();
             SmallFunctions.checkDependeciesStartup();
             programStartup = false;
             SmallFunctions.Logging("Program Version: " + TextBoxProgramVersion.Text);
@@ -709,7 +709,7 @@ namespace NotEnoughAV1Encodes
             {
                 SmallFunctions.Logging("Unfinished Job File found");
                 if (MessageBox.Show("Unfinished Job detected! Load unfinished Job?", "Resume", MessageBoxButton.YesNo) == MessageBoxResult.Yes) 
-                { LoadSettings("", false, true, false); CheckBoxResumeMode.IsChecked = true; } else { SmallFunctions.Logging("Unfinished Job File found but not loaded"); }
+                { LoadSettings("", false, true, false); CheckBoxResumeMode.IsChecked = true; setFrameRate(SmallFunctions.getFrameRate(videoInput)); } else { SmallFunctions.Logging("Unfinished Job File found but not loaded"); }
             }
         }
 
@@ -720,12 +720,13 @@ namespace NotEnoughAV1Encodes
 
         private void CancelRoutine()
         {
-            ButtonCancelEncode.BorderBrush = System.Windows.Media.Brushes.Red;
-            ButtonStartEncode.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(228, 228, 228));
+            ButtonCancelEncode.BorderBrush = Brushes.Red;
+            ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
             //ButtonOpenSource.IsEnabled = true;
             //ButtonSaveVideo.IsEnabled = true;
             buttonActive = true;
-            ProgressBar.Foreground = System.Windows.Media.Brushes.Red;
+            ProgressBar.Foreground = Brushes.Red;
+            ProgressBar.Maximum = 100;
             ProgressBar.Value = 100;
             LabelProgressbar.Content = "Cancelled";
             SmallFunctions.Logging("CancelRoutine()");
@@ -949,8 +950,6 @@ namespace NotEnoughAV1Encodes
                 resumeMode = CheckBoxResumeMode.IsChecked == true ? true : false;
                 ButtonStartEncode.BorderBrush = Brushes.Green;
                 ButtonCancelEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
-                //ButtonOpenSource.IsEnabled = false;
-                //ButtonSaveVideo.IsEnabled = false;
                 buttonActive = false;
                 if (CheckBoxBatchEncoding.IsChecked == false)
                 {
@@ -1677,10 +1676,13 @@ namespace NotEnoughAV1Encodes
                         finally
                         {
                             concurrencySemaphore.Release();
-                            ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value += 1, DispatcherPriority.Background);
-                            TimeSpan timespent = DateTime.Now - starttime;
-                            LabelProgressbar.Dispatcher.Invoke(() => LabelProgressbar.Content = ProgressBar.Value + " / " + videoChunksCount.ToString() + " - " + Math.Round(Convert.ToDecimal(((((videoLength * videoFrameRate) / videoChunksCount) * ProgressBar.Value) / timespent.TotalSeconds)), 2).ToString() + "fps" + " - " + Math.Round((((timespent.TotalSeconds / ProgressBar.Value) * (videoChunksCount - ProgressBar.Value)) / 60), MidpointRounding.ToEven) + "min left", DispatcherPriority.Background);
-                            LabelProgressbar.Dispatcher.Invoke(() => SmallFunctions.Logging("Progessbar: " + LabelProgressbar.Content), DispatcherPriority.Background);
+                            if (SmallFunctions.Cancel.CancelAll == false)
+                            {
+                                ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value += 1, DispatcherPriority.Background);
+                                TimeSpan timespent = DateTime.Now - starttime;
+                                LabelProgressbar.Dispatcher.Invoke(() => LabelProgressbar.Content = ProgressBar.Value + " / " + videoChunksCount.ToString() + " - " + Math.Round(Convert.ToDecimal(((((videoLength * videoFrameRate) / videoChunksCount) * ProgressBar.Value) / timespent.TotalSeconds)), 2).ToString() + "fps" + " - " + Math.Round((((timespent.TotalSeconds / ProgressBar.Value) * (videoChunksCount - ProgressBar.Value)) / 60), MidpointRounding.ToEven) + "min left", DispatcherPriority.Background);
+                                LabelProgressbar.Dispatcher.Invoke(() => SmallFunctions.Logging("Progessbar: " + LabelProgressbar.Content), DispatcherPriority.Background);
+                            }
                         }
                     });
                     tasks.Add(t);
