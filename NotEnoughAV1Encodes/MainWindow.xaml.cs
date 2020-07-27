@@ -376,8 +376,8 @@ namespace NotEnoughAV1Encodes
             switch (ComboBoxChromaSubsamplingAomenc.SelectedIndex)
             {
                 case 0:
-                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le"; }
-                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le -strict -1"; }
                     break;
                 case 1:
                     if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv422p -strict -1"; }
@@ -425,8 +425,8 @@ namespace NotEnoughAV1Encodes
             switch (ComboBoxColorFormatLibaom.SelectedIndex)
             {
                 case 0:
-                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le"; }
-                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le -strict -1"; }
                     break;
                 case 1:
                     if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv422p -strict -1"; }
@@ -440,7 +440,6 @@ namespace NotEnoughAV1Encodes
                     break;
                 default: break;
             }
-            if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le"; } else if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le"; }
             if (RadioButtonConstantQuality.IsChecked == true) { aomencQualityMode = " -crf " + SliderQuality.Value + " -b:v 0"; }
             else { aomencQualityMode = " -b:v " + TextBoxBitrate.Text + "k"; }
             //Basic Settings
@@ -471,8 +470,8 @@ namespace NotEnoughAV1Encodes
             switch (ComboBoxColorFormatRav1e.SelectedIndex)
             {
                 case 0:
-                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le"; }
-                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le -strict -1"; }
                     break;
                 case 1:
                     if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv422p -strict -1"; }
@@ -513,8 +512,8 @@ namespace NotEnoughAV1Encodes
             switch (ComboBoxColorFormatSVT.SelectedIndex)
             {
                 case 0:
-                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le"; }
-                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le -strict -1"; }
                     break;
                 case 1:
                     if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv422p -strict -1"; }
@@ -1574,16 +1573,16 @@ namespace NotEnoughAV1Encodes
                                     switch (encoder)
                                     {
                                         case "aomenc":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomencPath + "\\aomenc.exe" + '\u0022' + " - --passes=1 " + allSettingsAom + " --output=" + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1.ivf" + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(aomencPath, "aomenc.exe") + '\u0022' + " - --passes=1 " + allSettingsAom + " --output=" + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
                                             break;
                                         case "rav1e":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + rav1ePath + "\\rav1e.exe" + '\u0022' + " - " + allSettingsRav1e + " --output " + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1.ivf" + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(rav1ePath, "rav1e.exe") + '\u0022' + " - " + allSettingsRav1e + " --output " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
                                             break;
                                         case "aomenc (ffmpeg)":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " " + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1.ivf" + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
                                             break;
                                         case "svt-av1":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1Path + "\\SvtAv1EncApp.exe" + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b " + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1.ivf" + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
                                             break;
                                         default:
                                             break;
@@ -1604,7 +1603,7 @@ namespace NotEnoughAV1Encodes
                                     Process process = new Process();
                                     ProcessStartInfo startInfo = new ProcessStartInfo();
 
-                                    bool FileExistFirstPass = File.Exists(tempPath + "\\Chunks\\" + items + "_1pass_successfull.log");
+                                    bool FileExistFirstPass = File.Exists(Path.Combine(tempPath, "Chunks", items + "_1pass_successfull.log"));
 
                                     if (FileExistFirstPass != true)
                                     {
@@ -1615,16 +1614,16 @@ namespace NotEnoughAV1Encodes
                                         switch (encoder)
                                         {
                                             case "aomenc":
-                                                startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomencPath + "\\aomenc.exe" + '\u0022' + " - --passes=2 --pass=1 --fpf=" + '\u0022' + tempPath + "\\Chunks\\" + items + "_stats.log" + '\u0022' + " " + allSettingsAom + " --output=NUL";
+                                                startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(aomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=1 --fpf=" + '\u0022' + Path.Combine(tempPath, "Chunks", items + "_stats.log") + '\u0022' + " " + allSettingsAom + " --output=NUL";
                                                 break;
                                             //case "rav1e": !!! RAV1E TWO PASS IS STILL BROKEN !!!
                                                 //startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + rav1ePath + '\u0022' + " - " + allSettingsRav1e + " --first-pass " + '\u0022' + tempPath + "\\Chunks\\" + items + "_stats.log" + '\u0022';
                                                 //break;
                                             case "aomenc (ffmpeg)":
-                                                startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 1 -passlogfile " + '\u0022' + tempPath + "\\Chunks\\" + items + "_stats.log" + '\u0022' + " -f matroska NUL";
+                                                startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 1 -passlogfile " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "_stats.log") + '\u0022' + " -f matroska NUL";
                                                 break;
                                             case "svt-av1":
-                                                startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1Path + "\\SvtAv1EncApp.exe" + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b NUL -output-stat-file " + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1pass.stats" + '\u0022';
+                                                startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b NUL -output-stat-file " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1pass.stats") + '\u0022';
                                                 break;
                                             default:
                                                 break;
@@ -1647,16 +1646,16 @@ namespace NotEnoughAV1Encodes
                                     switch (encoder)
                                     {
                                         case "aomenc":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + aomencPath + "\\aomenc.exe" + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + tempPath + "\\Chunks\\" + items + "_stats.log" + '\u0022' + " " + allSettingsAom + " --output=" + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1.ivf" + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(aomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + Path.Combine(tempPath, "Chunks", items + "_stats.log") + '\u0022' + " " + allSettingsAom + " --output=" + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
                                             break;
                                         //case "rav1e": !!! RAV1E TWO PASS IS STILL BROKEN !!!
                                         //startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + rav1ePath + '\u0022' + " - " + allSettingsRav1e + " --second-pass " + '\u0022' + tempPath + "\\Chunks\\" + items + "_stats.log" + '\u0022' + " --output " + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1.ivf" + '\u0022';
                                         //break;
                                         case "aomenc (ffmpeg)":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 2 -passlogfile " + '\u0022' + tempPath + "\\Chunks\\" + items + "_stats.log" + '\u0022' + " " + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1.ivf" + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 2 -passlogfile " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "_stats.log") + '\u0022' + " " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
                                             break;
                                         case "svt-av1":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + svtav1Path + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b " + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1.ivf" + '\u0022'+ " -input-stat-file " + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1pass.stats" + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022'+ " -input-stat-file " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1pass.stats") + '\u0022';
                                             break;
                                         default:
                                             break;
