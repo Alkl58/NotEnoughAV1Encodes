@@ -36,7 +36,7 @@ namespace NotEnoughAV1Encodes
         public static bool trackOne, trackTwo, trackThree, trackFour, audioEncoding;
         public static bool inputSet, outputSet, reencode, beforereencode, resumeMode, deleteTempFiles;
         public static bool subtitleCopy, subtitleCustom, subtitleHardcoding, subtitleEncoding;
-        public static bool customBackground, programStartup = true, logging = true;
+        public static bool customBackground, programStartup = true, logging = true, buttonActive = true;
         public static double videoFrameRate;
         public DateTime starttimea;
 
@@ -123,8 +123,9 @@ namespace NotEnoughAV1Encodes
                     if (CheckBoxBatchEncoding.IsChecked == false)
                     {
                         LabelProgressbar.Dispatcher.Invoke(() => LabelProgressbar.Content = "Encoding completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString("hh\\:mm\\:ss") + " - " + Math.Round(Convert.ToDecimal((((videoLength * videoFrameRate) / (DateTime.Now - starttimea).TotalSeconds))), 2).ToString() + "fps", DispatcherPriority.Background);
-                        ButtonSaveVideo.IsEnabled = true;
-                        ButtonOpenSource.IsEnabled = true;
+                        //ButtonSaveVideo.IsEnabled = true;
+                        //ButtonOpenSource.IsEnabled = true;
+                        buttonActive = true;
                         ProgressBar.Foreground = System.Windows.Media.Brushes.Green;
                         ButtonStartEncode.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(228, 228, 228));
                     }
@@ -162,7 +163,8 @@ namespace NotEnoughAV1Encodes
                 }
 
             }
-            ButtonOpenSource.IsEnabled = true;
+            //ButtonOpenSource.IsEnabled = true;
+            buttonActive = true;
             ProgressBar.Foreground = System.Windows.Media.Brushes.Green;
             ButtonStartEncode.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(228, 228, 228));
             if (CheckBoxFinishedSound.IsChecked == true) { SmallFunctions.PlayFinishedSound(); }
@@ -721,8 +723,9 @@ namespace NotEnoughAV1Encodes
         {
             ButtonCancelEncode.BorderBrush = System.Windows.Media.Brushes.Red;
             ButtonStartEncode.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(228, 228, 228));
-            ButtonOpenSource.IsEnabled = true;
-            ButtonSaveVideo.IsEnabled = true;
+            //ButtonOpenSource.IsEnabled = true;
+            //ButtonSaveVideo.IsEnabled = true;
+            buttonActive = true;
             ProgressBar.Foreground = System.Windows.Media.Brushes.Red;
             ProgressBar.Value = 100;
             LabelProgressbar.Content = "Cancelled";
@@ -869,60 +872,64 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonSaveVideo_Click(object sender, RoutedEventArgs e)
         {
-            SmallFunctions.Logging("Button Save Video");
-            if (CheckBoxBatchEncoding.IsChecked == false)
+            if (buttonActive)
             {
-                SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
-                saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;*.mp4";
-                Nullable<bool> result = saveVideoFileDialog.ShowDialog();
-                if (result == true) { videoOutput = saveVideoFileDialog.FileName; outputSet = true; LabelVideoOutput.Content = videoOutput; SmallFunctions.Logging("Video Output: " + videoOutput); }
-            }
-            else
-            {               
-                //Sets the Batch Encoding Output Folder
-                System.Windows.Forms.FolderBrowserDialog browseOutputFolder = new System.Windows.Forms.FolderBrowserDialog();
-                if (browseOutputFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                SmallFunctions.Logging("Button Save Video");
+                if (CheckBoxBatchEncoding.IsChecked == false)
                 {
-                    videoOutput = browseOutputFolder.SelectedPath;
-                    LabelVideoOutput.Content = videoOutput;
-                    outputSet = true;
+                    SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
+                    saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;*.mp4";
+                    Nullable<bool> result = saveVideoFileDialog.ShowDialog();
+                    if (result == true) { videoOutput = saveVideoFileDialog.FileName; outputSet = true; LabelVideoOutput.Content = videoOutput; SmallFunctions.Logging("Video Output: " + videoOutput); }
                 }
+                else
+                {
+                    //Sets the Batch Encoding Output Folder
+                    System.Windows.Forms.FolderBrowserDialog browseOutputFolder = new System.Windows.Forms.FolderBrowserDialog();
+                    if (browseOutputFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        videoOutput = browseOutputFolder.SelectedPath;
+                        LabelVideoOutput.Content = videoOutput;
+                        outputSet = true;
+                    }
 
+                }
             }
-
         }
 
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
         {
-            SmallFunctions.Logging("Button Open Video");
-            if (CheckBoxBatchEncoding.IsChecked == false)
+            if (buttonActive)
             {
-                //Opens OpenFileDialog for the Input Video
-                OpenFileDialog openVideoFileDialog = new OpenFileDialog();
-                openVideoFileDialog.Filter = "Video Files|*.mp4;*.m4v;*.mkv;*.webm;*.m2ts;*.flv;*.avi;*.wmv;*.ts;*.yuv|All Files|*.*";
-                Nullable<bool> result = openVideoFileDialog.ShowDialog();
-                if (result == true)
+                SmallFunctions.Logging("Button Open Video");
+                if (CheckBoxBatchEncoding.IsChecked == false)
                 {
-                    videoInput = openVideoFileDialog.FileName;
-                    LabelVideoSource.Content = videoInput;
-                    SmallFunctions.Logging("Video Input: " + videoInput);
-                    getVideoInformation();
-                    getAudioInformation();
-                    inputSet = true;
+                    //Opens OpenFileDialog for the Input Video
+                    OpenFileDialog openVideoFileDialog = new OpenFileDialog();
+                    openVideoFileDialog.Filter = "Video Files|*.mp4;*.m4v;*.mkv;*.webm;*.m2ts;*.flv;*.avi;*.wmv;*.ts;*.yuv|All Files|*.*";
+                    Nullable<bool> result = openVideoFileDialog.ShowDialog();
+                    if (result == true)
+                    {
+                        videoInput = openVideoFileDialog.FileName;
+                        LabelVideoSource.Content = videoInput;
+                        SmallFunctions.Logging("Video Input: " + videoInput);
+                        getVideoInformation();
+                        getAudioInformation();
+                        inputSet = true;
+                    }
+                }
+                else
+                {
+                    //Sets the Batch Encoding Source Folder
+                    System.Windows.Forms.FolderBrowserDialog browseSourceFolder = new System.Windows.Forms.FolderBrowserDialog();
+                    if (browseSourceFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        videoInput = browseSourceFolder.SelectedPath;
+                        LabelVideoSource.Content = videoInput;
+                        inputSet = true;
+                    }
                 }
             }
-            else
-            {
-                //Sets the Batch Encoding Source Folder
-                System.Windows.Forms.FolderBrowserDialog browseSourceFolder = new System.Windows.Forms.FolderBrowserDialog();
-                if (browseSourceFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    videoInput = browseSourceFolder.SelectedPath;
-                    LabelVideoSource.Content = videoInput;
-                    inputSet = true;
-                }
-            }
-
         }
 
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
@@ -943,8 +950,9 @@ namespace NotEnoughAV1Encodes
                 resumeMode = CheckBoxResumeMode.IsChecked == true ? true : false;
                 ButtonStartEncode.BorderBrush = Brushes.Green;
                 ButtonCancelEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
-                ButtonOpenSource.IsEnabled = false;
-                ButtonSaveVideo.IsEnabled = false;
+                //ButtonOpenSource.IsEnabled = false;
+                //ButtonSaveVideo.IsEnabled = false;
+                buttonActive = false;
                 if (CheckBoxBatchEncoding.IsChecked == false)
                 {
                     MainEntry();
