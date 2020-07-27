@@ -82,6 +82,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="RenameChunks.cs" />
+    <Compile Include="SavePreset.xaml.cs">
+      <DependentUpon>SavePreset.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ShowSettings.xaml.cs">
       <DependentUpon>ShowSettings.xaml</DependentUpon>
     </Compile>
@@ -102,6 +105,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SavePreset.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ShowSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

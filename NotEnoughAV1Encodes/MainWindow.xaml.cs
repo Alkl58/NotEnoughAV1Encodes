@@ -27,7 +27,7 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsAom, allSettingsRav1e, allSettingsSVTAV1;
         public static string tempPath = ""; //Temp Path for Splitting and Encoding
         public static string[] videoChunks, SubtitleChunks; //Temp Chunk List
-        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand;
+        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, saveSettingString;
         public static int videoChunksCount; //Number of Chunks, mainly only for Progressbar
         public static int coreCount, workerCount, chunkLength; //Variable to set the Worker Count
         public static int videoPasses, processPriority, videoLength, customsubtitleadded;
@@ -36,7 +36,7 @@ namespace NotEnoughAV1Encodes
         public static bool trackOne, trackTwo, trackThree, trackFour, audioEncoding;
         public static bool inputSet, outputSet, reencode, beforereencode, resumeMode, deleteTempFiles;
         public static bool subtitleCopy, subtitleCustom, subtitleHardcoding, subtitleEncoding;
-        public static bool customBackground, programStartup = true, logging = true, buttonActive = true;
+        public static bool customBackground, programStartup = true, logging = true, buttonActive = true, saveSettings;
         public static double videoFrameRate;
         public DateTime starttimea;
 
@@ -734,7 +734,7 @@ namespace NotEnoughAV1Encodes
 
         private void SetBackground()
         {
-            if (CheckBoxDarkMode.IsChecked == true)
+            if (CheckBoxDarkMode.IsChecked == true && customBackground)
             {
                 SolidColorBrush transparentBlack = new SolidColorBrush(System.Windows.Media.Color.FromArgb(65, 30, 30, 30));
                 TabControl.Background = transparentBlack;
@@ -744,10 +744,10 @@ namespace NotEnoughAV1Encodes
                 TabGrid3.Background = transparentBlack;
                 TabGrid4.Background = transparentBlack;
                 TabGrid6.Background = transparentBlack;
-                TextBoxPresetName.Background = transparentBlack;
+                TextBoxChunkLength.Background = transparentBlack;
                 ProgressBar.Background = transparentBlack;
             }
-            else
+            else if (customBackground)
             {
                 SolidColorBrush transparentWhite = new SolidColorBrush(System.Windows.Media.Color.FromArgb(65, 100, 100, 100));
                 TabControl.Background = transparentWhite;
@@ -757,16 +757,16 @@ namespace NotEnoughAV1Encodes
                 TabGrid3.Background = transparentWhite;
                 TabGrid4.Background = transparentWhite;
                 TabGrid6.Background = transparentWhite;
-                TextBoxPresetName.Background = transparentWhite;
+                TextBoxChunkLength.Background = transparentWhite;
                 ProgressBar.Background = transparentWhite;
             }
         }
 
         private void SetBackgroundColorBlack()
         {
-            SolidColorBrush white = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255));
-            SolidColorBrush dark = new SolidColorBrush(System.Windows.Media.Color.FromRgb(33, 33, 33));
-            SolidColorBrush darker = new SolidColorBrush(System.Windows.Media.Color.FromRgb(25, 25, 25));
+            SolidColorBrush white = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            SolidColorBrush dark = new SolidColorBrush(Color.FromRgb(33, 33, 33));
+            SolidColorBrush darker = new SolidColorBrush(Color.FromRgb(25, 25, 25));
             if (customBackground != true)
             {
                 Window.Background = darker;
@@ -777,13 +777,13 @@ namespace NotEnoughAV1Encodes
                 TabGrid3.Background = dark;
                 TabGrid4.Background = dark;
                 TabGrid6.Background = dark;
-                TextBoxPresetName.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(44, 44, 44));
-                ProgressBar.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(25, 25, 25));
+                TextBoxChunkLength.Background = new SolidColorBrush(Color.FromRgb(44, 44, 44));
+                ProgressBar.Background = new SolidColorBrush(Color.FromRgb(25, 25, 25));
             }
 
             LabelPresets.Foreground = white;
             CheckBoxResumeMode.Foreground = white;
-            TextBlockOpenSource.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(240, 240, 240));
+            TextBlockOpenSource.Foreground = new SolidColorBrush(Color.FromRgb(240, 240, 240));
             GroupBox.BorderBrush = darker;
             GroupBox1.BorderBrush = darker;
             GroupBox2.BorderBrush = darker;
@@ -804,7 +804,7 @@ namespace NotEnoughAV1Encodes
                 TabGrid3.Background = white;
                 TabGrid4.Background = white;
                 TabGrid6.Background = white;
-                TextBoxPresetName.Background = white;
+                TextBoxChunkLength.Background = white;
                 ProgressBar.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(230, 230, 230));
             }
             LabelPresets.Foreground = black;
@@ -934,9 +934,15 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
         {
-            SmallFunctions.checkCreateFolder("Profiles");
-            SaveSettings(TextBoxPresetName.Text, true, false, false);
-            LoadPresetsIntoComboBox();
+            SavePreset kappa = new SavePreset(CheckBoxDarkMode.IsChecked == true);
+            kappa.ShowDialog();
+            if (saveSettings)
+            {
+                SaveSettings(saveSettingString, true, false, false);
+                saveSettings = false;
+                saveSettingString = null;
+                LoadPresetsIntoComboBox();
+            }
         }
 
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
@@ -989,7 +995,7 @@ namespace NotEnoughAV1Encodes
         {
             try
             {
-                File.Delete("Profiles\\" + ComboBoxPresetSettings.SelectedItem);
+                File.Delete("Profiles\\" + ComboBoxPresets.SelectedItem);
                 LoadPresetsIntoComboBox(); //Reloads ComboBox
             }
             catch { }
@@ -1199,7 +1205,7 @@ namespace NotEnoughAV1Encodes
         {
             try
             {
-                if (ComboBoxPresets.SelectedItem.ToString() != null)
+                if (ComboBoxPresets.SelectedItem != null)
                 {
                     LoadSettings(ComboBoxPresets.SelectedItem.ToString(), true, false, false);
                 }else { }
@@ -1238,6 +1244,9 @@ namespace NotEnoughAV1Encodes
         private void CheckBoxDarkMode_Checked(object sender, RoutedEventArgs e)
         {
             SetBackgroundColorBlack();
+            SetBackground();
+
+            SetBackgroundColorBlack();
             if (File.Exists("darkmode.txt")) { File.Delete("darkmode.txt"); }
             SmallFunctions.WriteToFileThreadSafe(CheckBoxDarkMode.IsChecked.ToString(), "darkmode.txt");
         }
@@ -1245,13 +1254,15 @@ namespace NotEnoughAV1Encodes
         private void CheckBoxDarkMode_UnChecked(object sender, RoutedEventArgs e)
         {
             SetBackgroundColorWhite();
+            SetBackground();
+            
             if (File.Exists("darkmode.txt")) { File.Delete("darkmode.txt"); }
-            SmallFunctions.WriteToFileThreadSafe(CheckBoxDarkMode.IsChecked.ToString(), "darkmode.txt");
+            //SmallFunctions.WriteToFileThreadSafe(CheckBoxDarkMode.IsChecked.ToString(), "darkmode.txt");
         }
 
         //═════════════════════════════════ Save / Load Settings ══════════════════════════════════
 
-        private void SaveSettings(string saveName, bool saveProfile, bool saveJob, bool saveQueue)
+        public void SaveSettings(string saveName, bool saveProfile, bool saveJob, bool saveQueue)
         {
             SmallFunctions.Logging("SaveSettings(): " + saveName + " Profile: " + saveProfile + " Job: " + saveJob);
             string directory = "";
@@ -1306,8 +1317,8 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("TrackThreeChannels", ComboBoxTrackThreeChannels.SelectedIndex.ToString());
             writer.WriteElementString("TrackFourChannels",  ComboBoxTrackFourChannels.SelectedIndex.ToString());
             writer.WriteElementString("DarkMode",           CheckBoxDarkMode.IsChecked.ToString());
-            writer.WriteElementString("CustomBackground",   customBackground.ToString());
-            writer.WriteElementString("BackgroundPath",     PathToBackground);
+            //writer.WriteElementString("CustomBackground",   customBackground.ToString());
+            //writer.WriteElementString("BackgroundPath",     PathToBackground);
             writer.WriteElementString("Subtitles",          CheckBoxSubtitleEncoding.IsChecked.ToString());
             writer.WriteElementString("SubtitlesCopy",      RadioButtonStreamCopySubtitles.IsChecked.ToString());
             writer.WriteElementString("SubtitlesCustom",    RadioButtonCustomSubtitles.IsChecked.ToString());
@@ -1440,8 +1451,8 @@ namespace NotEnoughAV1Encodes
                     case "TrackThreeChannels":  ComboBoxTrackThreeChannels.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "TrackFourChannels":   ComboBoxTrackFourChannels.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "DarkMode":            CheckBoxDarkMode.IsChecked = n.InnerText == "True"; break;
-                    case "CustomBackground":    customBackground = n.InnerText == "True"; break;
-                    case "BackgroundPath":      if (customBackground) { Uri fileUri = new Uri(n.InnerText); imgDynamic.Source = new BitmapImage(fileUri); PathToBackground = n.InnerText; SetBackground(); } break;
+                    //case "CustomBackground":    customBackground = n.InnerText == "True"; break;
+                    //case "BackgroundPath":      if (customBackground) { Uri fileUri = new Uri(n.InnerText); imgDynamic.Source = new BitmapImage(fileUri); PathToBackground = n.InnerText; SetBackground(); } break;
                     case "AdvancedSettings":    CheckBoxAdvancedSettings.IsChecked = n.InnerText == "True"; break;
                     case "Threads":             ComboBoxThreadsAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "TileColumns":         ComboBoxTileColumns.SelectedIndex = Int16.Parse(n.InnerText); break;
@@ -1509,7 +1520,6 @@ namespace NotEnoughAV1Encodes
                     DirectoryInfo profiles = new DirectoryInfo("Profiles");
                     FileInfo[] Files = profiles.GetFiles("*.xml");
                     ComboBoxPresets.ItemsSource = Files;
-                    ComboBoxPresetSettings.ItemsSource = Files;
                 }
             }
             catch { }
@@ -1517,6 +1527,16 @@ namespace NotEnoughAV1Encodes
 
         private void LoadBackground()
         {
+            if (File.Exists("darkmode.txt"))
+            {
+                try
+                {
+                    if (File.ReadAllText("darkmode.txt").Contains("True"))
+                    { CheckBoxDarkMode.IsChecked = true; }
+                    else { CheckBoxDarkMode.IsChecked = false; }
+                }
+                catch { }
+            }
             if (File.Exists("background.txt"))
             {
                 try
@@ -1524,17 +1544,8 @@ namespace NotEnoughAV1Encodes
                     Uri fileUri = new Uri(File.ReadAllText("background.txt"));
                     imgDynamic.Source = new BitmapImage(fileUri);
                     PathToBackground = File.ReadAllText("background.txt");
+                    customBackground = true;
                     SetBackground();
-                }
-                catch { }
-            }
-            if (File.Exists("darkmode.txt"))
-            {
-                try
-                {
-                    if (File.ReadAllText("darkmode.txt").Contains("True")) 
-                    { CheckBoxDarkMode.IsChecked = true; }
-                    else { CheckBoxDarkMode.IsChecked = false; }
                 }
                 catch { }
             }
