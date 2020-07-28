@@ -228,7 +228,7 @@ namespace NotEnoughAV1Encodes
 
         public static bool CheckSubtitleOutput()
         {
-            if (MainWindow.subtitleEncoding)
+            if (MainWindow.subtitleEncoding && MainWindow.subtitleHardcoding == false)
             {
                 if (File.Exists(Path.Combine(MainWindow.tempPath, "Subtitles", "subtitle.mkv")))
                 { return true; }
