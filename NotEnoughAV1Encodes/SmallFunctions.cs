@@ -255,6 +255,10 @@ namespace NotEnoughAV1Encodes
                 DirectoryInfo tmp2 = new DirectoryInfo(MainWindow.tempPath);
                 foreach (FileInfo file in tmp.GetFiles()) { file.Delete(); }
                 foreach (FileInfo file in tmp2.GetFiles()) { file.Delete(); }
+                if (Directory.Exists(Path.Combine(MainWindow.tempPath, "Subitles")))
+                    Directory.Delete(Path.Combine(MainWindow.tempPath, "Subitles"), true);
+                if (Directory.Exists(Path.Combine(MainWindow.tempPath, "AudioEncoded")))
+                    Directory.Delete(Path.Combine(MainWindow.tempPath, "AudioEncoded"), true);
             }
             catch (IOException ex) { MessageBox.Show(ex.Message); }
 
