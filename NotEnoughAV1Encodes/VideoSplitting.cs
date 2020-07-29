@@ -8,7 +8,7 @@ namespace NotEnoughAV1Encodes
         public static string ffmpegCommand = "";
         public static void SplitVideo(string videoInput, int chunkLength, string reencodeCodec, bool reencode, bool beforereencode)
         {
-            if (reencodeCodec == "x264") { reencodeCodec = "libx264 -crf 0 -preset ultrafast"; }
+            if (reencodeCodec == "x264") { reencodeCodec = "libx264 -crf 0 -preset ultrafast -g 9 -sc_threshold 0 -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * 9)" + '\u0022'; }
             if (reencodeCodec == "utvideo") { reencodeCodec = "utvideo"; }
 
             SmallFunctions.checkCreateFolder(Path.Combine(MainWindow.tempPath, "Chunks"));
