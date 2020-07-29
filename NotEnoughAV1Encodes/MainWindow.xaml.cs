@@ -236,22 +236,35 @@ namespace NotEnoughAV1Encodes
 
         private void setEncoderPath()
         {
-            if (SmallFunctions.ExistsOnPath("aomenc.exe") && File.Exists("Apps\\Encoder\\aomenc.exe") == false) { aomencPath = SmallFunctions.GetFullPathWithOutName("aomenc.exe"); }
-            else{ aomencPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\"); }
+            //aomenc
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "aomenc.exe"))) { aomencPath = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "aomenc.exe"))) { aomencPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
+            else if (SmallFunctions.ExistsOnPath("aomenc.exe")) { aomencPath = SmallFunctions.GetFullPathWithOutName("aomenc.exe"); }
             SmallFunctions.Logging("Encoder aomenc Path: " + aomencPath);
-            if (SmallFunctions.ExistsOnPath("rav1e.exe") && File.Exists("Apps\\Encoder\\rav1e.exe") == false) { rav1ePath = SmallFunctions.GetFullPathWithOutName("rav1e.exe"); }
-            else { rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\"); }
-            SmallFunctions.Logging("Encoder rav1e Path: " + rav1ePath);
-            if (SmallFunctions.ExistsOnPath("SvtAv1EncApp.exe") && File.Exists("Apps\\Encoder\\SvtAv1EncApp.exe") == false) { svtav1Path = SmallFunctions.GetFullPathWithOutName("SvtAv1EncApp.exe"); } 
-            else { svtav1Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\Encoder\\"); }
-            SmallFunctions.Logging("Encoder svt-av1 Path: " + svtav1Path);
-            if (SmallFunctions.ExistsOnPath("ffmpeg.exe") && File.Exists("Apps\\ffmpeg\\ffmpeg.exe") == false) { ffmpegPath = SmallFunctions.GetFullPathWithOutName("ffmpeg.exe"); }
-            else { ffmpegPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\ffmpeg\\"); }
-            SmallFunctions.Logging("Encoder ffmpeg Path: " + ffmpegPath);
-            if (SmallFunctions.ExistsOnPath("ffprobe.exe") && File.Exists("Apps\\ffmpeg\\ffprobe.exe") == false) { ffprobePath = SmallFunctions.GetFullPathWithOutName("ffprobe.exe"); }
-            else { ffprobePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps\\ffmpeg\\"); }
-            SmallFunctions.Logging("Encoder ffprobe Path: " + ffprobePath);
 
+            //rav1e
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "rav1e.exe"))) { rav1ePath = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "rav1e.exe"))) { rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
+            else if (SmallFunctions.ExistsOnPath("rav1e.exe")) { rav1ePath = SmallFunctions.GetFullPathWithOutName("rav1e.exe"); }
+            SmallFunctions.Logging("Encoder rav1e Path: " + rav1ePath);
+
+            //svt-av1
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "SvtAv1EncApp.exe"))) { svtav1Path = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "SvtAv1EncApp.exe"))) { svtav1Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
+            else if (SmallFunctions.ExistsOnPath("SvtAv1EncApp.exe")) { svtav1Path = SmallFunctions.GetFullPathWithOutName("SvtAv1EncApp.exe");  }
+            SmallFunctions.Logging("Encoder svt-av1 Path: " + svtav1Path);
+
+            //ffmpeg
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "ffmpeg.exe"))) { ffmpegPath = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg", "ffmpeg.exe"))) { ffmpegPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"); }  
+            else if (SmallFunctions.ExistsOnPath("ffmpeg.exe")) { ffmpegPath = SmallFunctions.GetFullPathWithOutName("ffmpeg.exe"); }
+            SmallFunctions.Logging("Encoder ffmpeg Path: " + ffmpegPath);
+
+            //ffprobe
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "ffprobe.exe"))) { ffprobePath = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg", "ffprobe.exe"))) { ffprobePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"); }
+            else if (SmallFunctions.ExistsOnPath("ffprobe.exe")) { ffprobePath = SmallFunctions.GetFullPathWithOutName("ffprobe.exe"); }
+            SmallFunctions.Logging("Encoder ffprobe Path: " + ffprobePath);
         }
 
         private void setParameters()
@@ -545,23 +558,6 @@ namespace NotEnoughAV1Encodes
                 allSettingsSVTAV1 = TextBoxAdvancedSettings.Text;
             }
             SmallFunctions.Logging("Parameters svt-av1: " + allSettingsSVTAV1);
-        }
-
-        private void LoadDefaultProfile()
-        {
-            try
-            {
-                bool fileExist = File.Exists("Profiles\\Default\\default.xml");
-                if (fileExist)
-                {
-                    XmlDocument doc = new XmlDocument();
-                    string directory = "Profiles\\Default\\default.xml";
-                    doc.Load(directory);
-                    XmlNodeList node = doc.GetElementsByTagName("Settings");
-                    foreach (XmlNode n in node[0].ChildNodes) { if (n.Name == "DefaultProfile") { ComboBoxPresets.Text = n.InnerText; } }  //ComboBox automaticly loads Settings on change
-                }
-            }
-            catch { }
         }
 
         private void getVideoInformation()
@@ -1549,6 +1545,23 @@ namespace NotEnoughAV1Encodes
                 }
                 catch { }
             }
+        }
+
+        private void LoadDefaultProfile()
+        {
+            try
+            {
+                bool fileExist = File.Exists("Profiles\\Default\\default.xml");
+                if (fileExist)
+                {
+                    XmlDocument doc = new XmlDocument();
+                    string directory = "Profiles\\Default\\default.xml";
+                    doc.Load(directory);
+                    XmlNodeList node = doc.GetElementsByTagName("Settings");
+                    foreach (XmlNode n in node[0].ChildNodes) { if (n.Name == "DefaultProfile") { ComboBoxPresets.Text = n.InnerText; } }  //ComboBox automaticly loads Settings on change
+                }
+            }
+            catch { }
         }
 
         //═══════════════════════════════════════ Encoding ════════════════════════════════════════
