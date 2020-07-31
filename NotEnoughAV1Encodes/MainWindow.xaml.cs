@@ -350,9 +350,34 @@ namespace NotEnoughAV1Encodes
             subtitleHardcoding = CheckBoxHardcodeSubtitle.IsChecked == true;
             subtitleEncoding = CheckBoxSubtitleEncoding.IsChecked == true;
             if (subtitleCustom) { SubtitleChunks = ListBoxSubtitles.Items.OfType<string>().ToArray(); }
-            if (subtitleCustom && subtitleHardcoding) { subtitleFfmpegCommand = "-vf subtitles=" + '\u0022' + SubtitleChunks[0] + '\u0022'; subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c"); subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:"); }
-            if (subtitleCopy && subtitleHardcoding) { subtitleFfmpegCommand = "-vf subtitles=" + '\u0022' + videoInput + '\u0022'; subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c"); subtitleFfmpegCommand=  subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:"); }
+            if (subtitleHardcoding) { setSubtitleHardcodingParameters(); }
             if (subtitleHardcoding == false) { subtitleFfmpegCommand = ""; } //If not set, it could create problems when a second job is running afterwards
+        }
+
+        private void setSubtitleHardcodingParameters()
+        {
+            if (subtitleCustom)
+            {
+                string ext = Path.GetExtension(SubtitleChunks[0]);
+                if (ext == ".ass" || ext == ".ssa")
+                {
+                    subtitleFfmpegCommand = "-vf ass=" + '\u0022' + SubtitleChunks[0] + '\u0022';
+                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
+                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:");
+                    Console.WriteLine(subtitleFfmpegCommand);
+                }else if (ext == ".srt")
+                {
+                    subtitleFfmpegCommand = "-vf subtitles=" + '\u0022' + SubtitleChunks[0] + '\u0022';
+                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
+                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:");
+                }
+                else
+                {
+                    MessageBoxes.MessageCustomSubtitleHardCodeNotSupported();
+                }            
+            }
+            
+            if (subtitleCopy) { subtitleFfmpegCommand = "-vf subtitles=" + '\u0022' + videoInput + '\u0022'; subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c"); subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:"); }
         }
 
         private void setChunkLength()
@@ -924,13 +949,22 @@ namespace NotEnoughAV1Encodes
                 //Open the OpenFileDialog to set the Subtitle Input
                 OpenFileDialog openVideoFileDialog = new OpenFileDialog();
                 Nullable<bool> result = openVideoFileDialog.ShowDialog();
-                if (result == true) { ListBoxSubtitles.Items.Add(openVideoFileDialog.FileName); customsubtitleadded += 1; }
+                if (result == true)  {  ListBoxSubtitles.Items.Add(openVideoFileDialog.FileName); customsubtitleadded += 1; }
             } else if (customsubtitleadded < 1)
             {
                 //Open the OpenFileDialog to set the Subtitle Input
                 OpenFileDialog openVideoFileDialog = new OpenFileDialog();
                 Nullable<bool> result = openVideoFileDialog.ShowDialog();
-                if (result == true) { ListBoxSubtitles.Items.Add(openVideoFileDialog.FileName); customsubtitleadded += 1; }
+                if (result == true) { 
+                    ListBoxSubtitles.Items.Add(openVideoFileDialog.FileName); 
+                    customsubtitleadded += 1;
+                    try
+                    {
+                        string ext = Path.GetExtension(openVideoFileDialog.FileName);
+                        if (ext != ".ass") { if (ext != ".ssa") { if (ext != ".srt") { MessageBoxes.MessageCustomSubtitleHardCodeNotSupported(); } } }
+                    }
+                    catch { }
+                }
             }
 
         }
@@ -1189,6 +1223,14 @@ namespace NotEnoughAV1Encodes
         private void CheckBoxHardcodeSubtitle_Checked(object sender, RoutedEventArgs e)
         {
             if (customsubtitleadded > 1) { MessageBoxes.MessageHardcodeSubtitlesCheckBox(); }
+            if (customsubtitleadded == 1) {
+                try
+                {
+                    string ext = Path.GetExtension((string)ListBoxSubtitles.Items[0]);
+                    if (ext != ".ass") { if (ext != ".ssa") { if (ext != ".srt") { MessageBoxes.MessageCustomSubtitleHardCodeNotSupported(); } } }
+                }
+                catch { }
+            }
         }
 
         private void CheckBoxReencodeDuringSplitting_Unchecked(object sender, RoutedEventArgs e)
@@ -1553,8 +1595,6 @@ namespace NotEnoughAV1Encodes
                     case "TrackThreeChannels":  ComboBoxTrackThreeChannels.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "TrackFourChannels":   ComboBoxTrackFourChannels.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "DarkMode":            CheckBoxDarkMode.IsChecked = n.InnerText == "True"; break;
-                    //case "CustomBackground":    customBackground = n.InnerText == "True"; break;
-                    //case "BackgroundPath":      if (customBackground) { Uri fileUri = new Uri(n.InnerText); imgDynamic.Source = new BitmapImage(fileUri); PathToBackground = n.InnerText; SetBackground(); } break;
                     case "AdvancedSettings":    CheckBoxAdvancedSettings.IsChecked = n.InnerText == "True"; break;
                     case "Threads":             ComboBoxThreadsAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "TileColumns":         ComboBoxTileColumns.SelectedIndex = Int16.Parse(n.InnerText); break;

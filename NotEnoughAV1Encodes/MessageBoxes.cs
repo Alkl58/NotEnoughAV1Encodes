@@ -48,5 +48,10 @@ namespace NotEnoughAV1Encodes
         {
             MessageBox.Show("Custom Subtitles is not available in Batch Encoding Mode!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        public static void MessageCustomSubtitleHardCodeNotSupported()
+        {
+            MessageBox.Show("The selected subtitle for hardcoding is currently not supported!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }
