@@ -27,10 +27,10 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsAom, allSettingsRav1e, allSettingsSVTAV1;
         public static string tempPath = ""; //Temp Path for Splitting and Encoding
         public static string[] videoChunks, SubtitleChunks; //Temp Chunk List
-        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, saveSettingString;
+        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, saveSettingString, localFileName;
         public static int videoChunksCount; //Number of Chunks, mainly only for Progressbar
         public static int coreCount, workerCount, chunkLength; //Variable to set the Worker Count
-        public static int videoPasses, processPriority, videoLength, customsubtitleadded;
+        public static int videoPasses, processPriority, videoLength, customsubtitleadded, counterQueue;
         public static int audioBitrateTrackOne, audioBitrateTrackTwo, audioBitrateTrackThree, audioBitrateTrackFour;
         public static int audioChannelsTrackOne, audioChannelsTrackTwo, audioChannelsTrackThree, audioChannelsTrackFour;
         public static bool trackOne, trackTwo, trackThree, trackFour, audioEncoding;
@@ -39,10 +39,10 @@ namespace NotEnoughAV1Encodes
         public static bool customBackground, programStartup = true, logging = true, buttonActive = true, saveSettings;
         public static double videoFrameRate;
         public DateTime starttimea;
-
         public MainWindow()
         {
             InitializeComponent();
+            SmallFunctions.Logging("Program Version: " + TextBoxProgramVersion.Text);
             CheckLogging();
             getCoreCount();            
             LoadPresetsIntoComboBox();
@@ -51,8 +51,8 @@ namespace NotEnoughAV1Encodes
             setEncoderPath();
             CheckForResumeFile();
             SmallFunctions.checkDependeciesStartup();
-            programStartup = false;
-            SmallFunctions.Logging("Program Version: " + TextBoxProgramVersion.Text);
+            programStartup = false;            
+            LoadQueueStartup();
         }
 
         //════════════════════════════════════ Main Functions ═════════════════════════════════════
@@ -156,6 +156,7 @@ namespace NotEnoughAV1Encodes
                 setChunkLength();
                 setParameters();
                 setAudioParameters();
+                setSubtitleParameters();
 
                 if (SmallFunctions.Cancel.CancelAll == false)
                 {
@@ -163,12 +164,49 @@ namespace NotEnoughAV1Encodes
                 }
 
             }
-            //ButtonOpenSource.IsEnabled = true;
             buttonActive = true;
-            ProgressBar.Foreground = System.Windows.Media.Brushes.Green;
-            ButtonStartEncode.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(228, 228, 228));
+            ProgressBar.Foreground = Brushes.Green;
+            ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
             if (CheckBoxFinishedSound.IsChecked == true) { SmallFunctions.PlayFinishedSound(); }
             if (CheckBoxShutdownAfterEncode.IsChecked == true) { Process.Start("shutdown.exe", "/s /t 0"); }
+        }
+
+        private async void QueueEncode()
+        {
+            List<object> queue = new List<object>();
+            foreach (var item in ListBoxQueue.Items)
+            {
+                queue.Add(item);
+            }
+            foreach (var item in queue)
+            {
+                while(SmallFunctions.Cancel.CancelAll == false)
+                {
+                    LoadSettings(item.ToString(), false, false, true);
+                    ProgressBar.Maximum = 100;
+                    ProgressBar.Value = 0;
+                    setChunkLength();
+                    setParameters();
+                    SmallFunctions.DeleteChunkFolderContent();
+                    setAudioParameters();
+                    setSubtitleParameters();
+                    setFrameRate(SmallFunctions.getFrameRate(videoInput));
+
+                    if (SmallFunctions.Cancel.CancelAll == false)
+                    {
+                        await AsyncClass();
+                    }
+
+                    File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Queue", item.ToString()));
+                    ListBoxQueue.Items.Clear();
+                    LoadQueueStartup();
+                }
+            }
+            buttonActive = true;
+            ProgressBar.Foreground = Brushes.Green;
+            ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
+            if (CheckBoxFinishedSound.IsChecked == true) { SmallFunctions.PlayFinishedSound(); }
+            if (CheckBoxShutdownAfterEncode.IsChecked == true && SmallFunctions.Cancel.CancelAll == false) { Process.Start("shutdown.exe", "/s /t 0"); }
         }
 
         //═══════════════════════════════════════ Functions ═══════════════════════════════════════
@@ -758,6 +796,16 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void RadioButtonCustomSubtitles_Checked(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxBatchEncoding.IsChecked == true) { RadioButtonCustomSubtitles.IsChecked = false; RadioButtonStreamCopySubtitles.IsChecked = true; MessageBoxes.MessageCustomSubtitleBatchMode(); }
+        }
+
+        private void CheckBoxBatchEncoding_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButtonCustomSubtitles.IsChecked = false; RadioButtonStreamCopySubtitles.IsChecked = true;
+        }
+
         private void SetBackgroundColorBlack()
         {
             SolidColorBrush white = new SolidColorBrush(Color.FromRgb(255, 255, 255));
@@ -812,7 +860,62 @@ namespace NotEnoughAV1Encodes
             GroupBox3.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(213, 223, 229));
         }
 
+        private void AddToQueue()
+        {
+            SmallFunctions.checkCreateFolder(Path.Combine(Directory.GetCurrentDirectory(), "Queue"));
+            if (ListBoxQueue.Items.Contains(localFileName) == false)
+            {
+                SaveSettings(localFileName, false, false, true);
+                ListBoxQueue.Items.Add(localFileName);
+            }
+            else
+            {
+                localFileName += counterQueue;
+                counterQueue += 1;
+                AddToQueue();
+            }
+        }
+
+        private void LoadQueueStartup()
+        {
+            if (Directory.Exists("Queue") == true)
+            {
+                try
+                {
+                    DirectoryInfo queueFiles = new DirectoryInfo("Queue");
+                    foreach (var file in queueFiles.GetFiles())
+                    {
+                        ListBoxQueue.Items.Add(file);
+                        SmallFunctions.Logging("Found Queue file: " + file.ToString());
+                    }
+                }
+                catch { }
+            }
+        }
+
         //════════════════════════════════════════ Buttons ════════════════════════════════════════
+
+        private void ButtonRemoveFromQueue_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Queue", (string)ListBoxQueue.SelectedItem));
+                ListBoxQueue.Items.RemoveAt(ListBoxQueue.SelectedIndex);
+            }
+            catch { }
+        }
+
+        private void ButtonQueue_Click(object sender, RoutedEventArgs e)
+        {
+            if (TabItemQueue.Visibility == Visibility.Visible) { TabItemQueue.Visibility = Visibility.Collapsed; }
+            else{ TabItemQueue.Visibility = Visibility.Visible; }           
+        }
+
+        private void ButtonAddToQueue_Click(object sender, RoutedEventArgs e)
+        {
+            localFileName = fileName;
+            AddToQueue();
+        }
 
         private void ButtonAddCustomSubtitle_Click(object sender, RoutedEventArgs e)
         {
@@ -953,20 +1056,25 @@ namespace NotEnoughAV1Encodes
                 ButtonStartEncode.BorderBrush = Brushes.Green;
                 ButtonCancelEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
                 buttonActive = false;
-                if (CheckBoxBatchEncoding.IsChecked == false)
+                if (CheckBoxBatchEncoding.IsChecked == false && CheckBoxQueueEncoding.IsChecked == false)
                 {
                     MainEntry();
                 }
-                else
+                else if (CheckBoxBatchEncoding.IsChecked == true && CheckBoxQueueEncoding.IsChecked == false)
                 {
                     SmallFunctions.Logging("BatchEncode()");
                     BatchEncode();
                 }
             }
-            else
+            else if (CheckBoxQueueEncoding.IsChecked == false)
             {
                 if (inputSet == false) { MessageBoxes.MessageVideoInput(); SmallFunctions.Logging("Video Input not set"); }
                 if (outputSet == false) { MessageBoxes.MessageVideoOutput(); SmallFunctions.Logging("Video Output not set"); }
+            }
+            else if (CheckBoxBatchEncoding.IsChecked == false && CheckBoxQueueEncoding.IsChecked == true)
+            {
+                SmallFunctions.Logging("QueueEncode()");
+                QueueEncode();
             }
         }
 
@@ -1264,9 +1372,10 @@ namespace NotEnoughAV1Encodes
             string directory = "";
             if (saveProfile) { directory = "Profiles\\" + saveName + ".xml"; }
             if (saveJob) { directory = "unfinishedjob.xml"; }
+            if (saveQueue) { directory = Path.Combine(Directory.GetCurrentDirectory(), "Queue", saveName + ".xml"); }
             XmlWriter writer = XmlWriter.Create(directory);
             writer.WriteStartElement("Settings");
-            if (saveJob)
+            if (saveJob || saveQueue)
             {
                 writer.WriteElementString("VideoInput",         videoInput);
                 writer.WriteElementString("VideoInputFilename", fileName);
@@ -1395,6 +1504,7 @@ namespace NotEnoughAV1Encodes
             string directory = "";
             if (saveProfile) { directory = "Profiles\\" + saveName; }
             if (saveJob) { directory = "unfinishedjob.xml"; }
+            if (saveQueue) { directory = Path.Combine(Directory.GetCurrentDirectory(), "Queue", saveName);  }
             XmlDocument doc = new XmlDocument();
             doc.Load(directory);
             XmlNodeList node = doc.GetElementsByTagName("Settings");

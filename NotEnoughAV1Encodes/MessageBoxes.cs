@@ -43,5 +43,10 @@ namespace NotEnoughAV1Encodes
         {
             MessageBox.Show("You need reencoding for deinterlacing to work!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        public static void MessageCustomSubtitleBatchMode()
+        {
+            MessageBox.Show("Custom Subtitles is not available in Batch Encoding Mode!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }
