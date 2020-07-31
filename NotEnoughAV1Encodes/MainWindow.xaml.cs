@@ -1439,10 +1439,6 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("CustomSettingsText", TextBoxAdvancedSettings.Text);
                 }
                 writer.WriteElementString("Threads", ComboBoxThreadsAomenc.SelectedIndex.ToString());
-                if  (ComboBoxEncoder.SelectedIndex == 0 || ComboBoxEncoder.SelectedIndex == 1 || ComboBoxEncoder.SelectedIndex == 2)
-                {
-                    writer.WriteElementString("Threads", CheckBoxAdvancedSettings.IsChecked.ToString());
-                }
                 writer.WriteElementString("TileColumns", ComboBoxTileColumns.SelectedIndex.ToString());
                 writer.WriteElementString("TileRows", ComboBoxTileRows.SelectedIndex.ToString());
                 writer.WriteElementString("MinKeyframeInterval", TextBoxMinKeyframeinterval.Text);
