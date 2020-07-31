@@ -27,10 +27,10 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsAom, allSettingsRav1e, allSettingsSVTAV1;
         public static string tempPath = ""; //Temp Path for Splitting and Encoding
         public static string[] videoChunks, SubtitleChunks; //Temp Chunk List
-        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, saveSettingString, localFileName;
+        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, saveSettingString, localFileName, ffmpegFramerateSplitting;
         public static int videoChunksCount; //Number of Chunks, mainly only for Progressbar
         public static int coreCount, workerCount, chunkLength; //Variable to set the Worker Count
-        public static int videoPasses, processPriority, videoLength, customsubtitleadded, counterQueue;
+        public static int videoPasses, processPriority, videoLength, customsubtitleadded, counterQueue, frameRateIndex;
         public static int audioBitrateTrackOne, audioBitrateTrackTwo, audioBitrateTrackThree, audioBitrateTrackFour;
         public static int audioChannelsTrackOne, audioChannelsTrackTwo, audioChannelsTrackThree, audioChannelsTrackFour;
         public static bool trackOne, trackTwo, trackThree, trackFour, audioEncoding;
@@ -341,6 +341,34 @@ namespace NotEnoughAV1Encodes
                 videoResize = "";
             }
             SmallFunctions.checkCreateFolder(tempPath);
+
+            if (ComboBoxFrameRate.SelectedIndex != frameRateIndex)
+            {
+                ffmpegFramerateSplitting = " -r " + setChangeFramerate() + " ";
+            }
+            else { ffmpegFramerateSplitting = ""; }
+        }
+
+        private string setChangeFramerate()
+        {
+            switch(ComboBoxFrameRate.SelectedIndex)
+            {
+                case 0: return "5";
+                case 1: return "10";
+                case 2: return "12";
+                case 3: return "15";
+                case 4: return "20";
+                case 5: return "24000/1001";
+                case 6: return "24";
+                case 7: return "25";
+                case 8: return "30000/1001";
+                case 9: return "30";
+                case 10: return "48";
+                case 11: return "50";
+                case 12: return "60000/1001";
+                case 13: return "60";
+                default: return "24";
+            }
         }
 
         private void setSubtitleParameters()
@@ -364,12 +392,14 @@ namespace NotEnoughAV1Encodes
                     subtitleFfmpegCommand = "-vf ass=" + '\u0022' + SubtitleChunks[0] + '\u0022';
                     subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
                     subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:");
-                    Console.WriteLine(subtitleFfmpegCommand);
-                }else if (ext == ".srt")
+                    SmallFunctions.Logging("Subtitle Hardcoding Parameters: " + subtitleFfmpegCommand);
+                }
+                else if (ext == ".srt")
                 {
                     subtitleFfmpegCommand = "-vf subtitles=" + '\u0022' + SubtitleChunks[0] + '\u0022';
                     subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
                     subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:");
+                    SmallFunctions.Logging("Subtitle Hardcoding Parameters: " + subtitleFfmpegCommand);
                 }
                 else
                 {
@@ -712,6 +742,7 @@ namespace NotEnoughAV1Encodes
                 default: MessageBoxes.MessageVideoBadFramerate(); break;
             }
             videoFrameRate = Convert.ToDouble(ComboBoxFrameRate.Text, CultureInfo.InvariantCulture);
+            frameRateIndex = ComboBoxFrameRate.SelectedIndex;
         }
 
         private void getAudioInformation()
@@ -774,7 +805,7 @@ namespace NotEnoughAV1Encodes
 
         private void CheckLogging()
         {
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\disablelogging.txt")) { CheckBoxLogging.IsChecked = false; Console.WriteLine("ka"); }
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\disablelogging.txt")) { CheckBoxLogging.IsChecked = false; }
         }
 
         private void CancelRoutine()
@@ -1205,6 +1236,17 @@ namespace NotEnoughAV1Encodes
         }
 
         //═══════════════════════════════════ Other UI Elements ═══════════════════════════════════
+
+        private void ComboBoxFrameRate_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (inputSet == true && ComboBoxFrameRate.SelectedIndex != frameRateIndex) {
+                if (CheckBoxReencodeBeforeSplitting.IsChecked == false && CheckBoxReencodeDuringSplitting.IsChecked == false)
+                {
+                    if (MessageBox.Show("Changing the Framerate requires reencoding! Activate Reencoding?", "Framerate", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    { CheckBoxReencodeBeforeSplitting.IsChecked = true; }
+                }
+            }
+        }
 
         private void CheckBoxLogging_Unchecked(object sender, RoutedEventArgs e)
         {
