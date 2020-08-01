@@ -557,8 +557,10 @@ namespace NotEnoughAV1Encodes
             {
                 if (CheckBoxCustomSettings.IsChecked == false || tempSettings)
                 {
-                    string aomencFrames = " -tile-columns " + ComboBoxTileColumns.Text + " -tile-rows " + ComboBoxTileRows.Text + " -g " + TextBoxMaxKeyframeinterval.Text;
-                    allSettingsAom = "-cpu-used " + SliderPreset.Value + " -threads " + ComboBoxThreadsAomenc.Text + aomencFrames + aomencQualityMode;
+                    string altref = " -auto-alt-ref 0 ";
+                    if (CheckBoxAltRefLibaom.IsChecked == true) { altref = " -auto-alt-ref 1 "; }
+                    string aomencFrames = " -tile-columns " + ComboBoxTileColumns.Text + " -tile-rows " + ComboBoxTileRows.Text + " -g " + TextBoxMaxKeyframeinterval.Text + " -lag-in-frames " + TextBoxLagInFramesLibaom.Text + " -aq-mode " + ComboBoxAqModeLibaom.SelectedIndex + " -tune " + ComboBoxTunelibaom.Text;
+                    allSettingsAom = "-cpu-used " + SliderPreset.Value + " -threads " + ComboBoxThreadsAomenc.Text + aomencFrames + aomencQualityMode + altref;
                 }
                 else
                 {
@@ -1506,8 +1508,6 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("TrackThreeChannels", ComboBoxTrackThreeChannels.SelectedIndex.ToString());
             writer.WriteElementString("TrackFourChannels",  ComboBoxTrackFourChannels.SelectedIndex.ToString());
             writer.WriteElementString("DarkMode",           CheckBoxDarkMode.IsChecked.ToString());
-            //writer.WriteElementString("CustomBackground",   customBackground.ToString());
-            //writer.WriteElementString("BackgroundPath",     PathToBackground);
             writer.WriteElementString("Subtitles",          CheckBoxSubtitleEncoding.IsChecked.ToString());
             writer.WriteElementString("SubtitlesCopy",      RadioButtonStreamCopySubtitles.IsChecked.ToString());
             writer.WriteElementString("SubtitlesCustom",    RadioButtonCustomSubtitles.IsChecked.ToString());
@@ -1527,7 +1527,7 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("TileRows", ComboBoxTileRows.SelectedIndex.ToString());
                 writer.WriteElementString("MinKeyframeInterval", TextBoxMinKeyframeinterval.Text);
                 writer.WriteElementString("MaxKeyframeInterval", TextBoxMaxKeyframeinterval.Text);
-                writer.WriteElementString("ColorFormatLibaom", ComboBoxColorFormatLibaom.SelectedIndex.ToString());
+                
                 if (ComboBoxEncoder.SelectedIndex == 0)
                 {
                     writer.WriteElementString("LagInFrames", TextBoxMaxLagInFrames.Text);
@@ -1573,6 +1573,13 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("HDRSVT", CheckBoxEnableHDRSVT.IsChecked.ToString());
                     writer.WriteElementString("AQModeSVT", ComboBoxAQModeSVT.SelectedIndex.ToString());
                     writer.WriteElementString("KeyintSVT", TextBoxkeyframeIntervalSVT.Text);
+                }else if (ComboBoxEncoder.SelectedIndex == 1)
+                {
+                    writer.WriteElementString("ColorFormatLibaom", ComboBoxColorFormatLibaom.SelectedIndex.ToString());
+                    writer.WriteElementString("AQModeLibaom", ComboBoxAqModeLibaom.SelectedIndex.ToString());
+                    writer.WriteElementString("LagFramesLibaom", TextBoxLagInFramesLibaom.Text);
+                    writer.WriteElementString("AutoAltRefLibaom", CheckBoxAltRefLibaom.IsChecked.ToString());
+                    writer.WriteElementString("TuneLibaom", ComboBoxTunelibaom.SelectedIndex.ToString());
                 }
             }
             writer.WriteEndElement();
@@ -1651,6 +1658,10 @@ namespace NotEnoughAV1Encodes
                     case "ChromaSubsampling":   ComboBoxChromaSubsamplingAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "Tune":                ComboBoxTuneAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "AQMode":              ComboBoxAQMode.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "AQModeLibaom":        ComboBoxAqModeLibaom.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "LagFramesLibaom":     TextBoxLagInFramesLibaom.Text = n.InnerText; break;
+                    case "AutoAltRefLibaom":    CheckBoxAltRefLibaom.IsChecked = n.InnerText == "True"; break;
+                    case "TuneLibaom":          ComboBoxTunelibaom.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "SharpnessLoopFilter": ComboBoxSharpnessFilterAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "Rowmt":               CheckBoxRowmt.IsChecked = n.InnerText == "True"; break;
                     case "KeyframeFiltering":   CheckBoxKeyframeFilteringAomenc.IsChecked = n.InnerText == "True"; break;
