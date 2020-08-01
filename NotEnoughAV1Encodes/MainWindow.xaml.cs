@@ -332,12 +332,12 @@ namespace NotEnoughAV1Encodes
             videoLength = Int16.Parse(SmallFunctions.getVideoLength(videoInput));
             SmallFunctions.Logging("Video Length: " + videoLength);
 
-            if (CheckBoxResize.IsChecked == true) { videoResize = "-vf scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text; } else { videoResize = ""; }
+            if (CheckBoxResize.IsChecked == true) { videoResize = "-vf scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + " -sws_flags " + ComboBoxResizeFilters.Text; } else { videoResize = ""; }
             if (CheckBoxCustomTempPath.IsChecked == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); } else { tempPath = Path.Combine(Directory.GetCurrentDirectory(), tempPath); }
             if (CheckBoxDeinterlaceYadif.IsChecked == true) { deinterlaceCommand = " -vf " + ComboBoxDeinterlace.Text; } else { deinterlaceCommand = ""; }
             if (CheckBoxDeinterlaceYadif.IsChecked == true && CheckBoxResize.IsChecked == true)
             {
-                deinterlaceCommand = " -vf " + '\u0022' + "scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + "," + ComboBoxDeinterlace.Text + '\u0022';
+                deinterlaceCommand = " -vf " + '\u0022' + "scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + "," + ComboBoxDeinterlace.Text + '\u0022' + " -sws_flags " + ComboBoxResizeFilters.Text;
                 videoResize = "";
             }
             SmallFunctions.checkCreateFolder(tempPath);
@@ -1485,6 +1485,7 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("Resize",             CheckBoxResize.IsChecked.ToString());
             writer.WriteElementString("ResizeWidth",        TextBoxImageWidth.Text);
             writer.WriteElementString("ResizeHeight",       TextBoxImageHeight.Text);
+            writer.WriteElementString("ResizeFilter",       ComboBoxResizeFilters.SelectedIndex.ToString());
             writer.WriteElementString("CustomTemp",         CheckBoxCustomTempPath.IsChecked.ToString());
             writer.WriteElementString("CustomTempPath",     TextBoxCustomTempPath.Text);
             writer.WriteElementString("DeleteTempFiles",    CheckBoxDeleteTempFiles.IsChecked.ToString());
@@ -1621,6 +1622,7 @@ namespace NotEnoughAV1Encodes
                     case "Resize":              CheckBoxResize.IsChecked = n.InnerText == "True"; break;
                     case "ResizeWidth":         TextBoxImageWidth.Text = n.InnerText; break;
                     case "ResizeHeight":        TextBoxImageHeight.Text = n.InnerText; break;
+                    case "ResizeFilter":        ComboBoxResizeFilters.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "CustomTemp":          CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
                     case "CustomTempPath":      TextBoxCustomTempPath.Text = n.InnerText; break;
                     case "DeleteTempFiles":     CheckBoxDeleteTempFiles.IsChecked = n.InnerText == "True"; break;
