@@ -127,10 +127,10 @@ namespace NotEnoughAV1Encodes
                         //ButtonSaveVideo.IsEnabled = true;
                         //ButtonOpenSource.IsEnabled = true;
                         buttonActive = true;
-                        ProgressBar.Foreground = System.Windows.Media.Brushes.Green;
-                        ButtonStartEncode.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(228, 228, 228));
+                        ProgressBar.Foreground = Brushes.Green;
+                        ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
                     }
-                    if (deleteTempFiles) { SmallFunctions.DeleteTempFiles(); }
+                    if (deleteTempFiles) { SmallFunctions.DeleteTempFiles(); SmallFunctions.DeleteLogFile(); }
                     if (CheckBoxFinishedSound.IsChecked == true && CheckBoxBatchEncoding.IsChecked == false) { SmallFunctions.PlayFinishedSound(); }
                     if (CheckBoxShutdownAfterEncode.IsChecked == true && CheckBoxBatchEncoding.IsChecked == false) { Process.Start("shutdown.exe", "/s /t 0"); }
                 }

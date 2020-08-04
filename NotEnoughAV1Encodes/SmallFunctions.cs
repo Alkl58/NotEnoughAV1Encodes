@@ -332,5 +332,11 @@ namespace NotEnoughAV1Encodes
                 WriteToFileThreadSafe(starttime.ToString() + " : " + log, Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log"));
             }
         }
+
+        public static void DeleteLogFile()
+        {
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log")))
+                File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log"));
+        }
     }
 }
