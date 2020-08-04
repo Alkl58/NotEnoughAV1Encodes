@@ -88,10 +88,11 @@
                     <Label Content="Video" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Encoder:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
                     <ComboBox x:Name="ComboBoxEncoder" HorizontalAlignment="Left" Margin="135,47,0,0" VerticalAlignment="Top" Width="139" Height="26" SelectionChanged="ComboBoxEncoder_SelectionChanged">
-                        <ComboBoxItem Content="aomenc" IsSelected="True" />
+                        <ComboBoxItem Content="aomenc" IsSelected="True"/>
                         <ComboBoxItem Content="aomenc (ffmpeg)"/>
                         <ComboBoxItem Content="rav1e"/>
                         <ComboBoxItem Content="svt-av1"/>
+                        <ComboBoxItem Content="vp9"/>
                     </ComboBox>
                     <Label Content="Framerate:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,84,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
                     <ComboBox x:Name="ComboBoxFrameRate" HorizontalAlignment="Left" Margin="135,86,0,0" VerticalAlignment="Top" Width="69" Height="26" ToolTip="Setting the Framerate won't change the framerate. The Encoder will sync the framerate from the input video." SelectionChanged="ComboBoxFrameRate_SelectionChanged">
@@ -120,7 +121,7 @@
                     <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="467,77,0,0" VerticalAlignment="Top" Width="445" TickPlacement="BottomRight" ClipToBounds="True" IsSnapToTickEnabled="True" Height="33" ToolTip="Sets the Constant Quality. It acts like Constant Rate Factor, thus have an dynamic quantizer. " Maximum="63" Value="30" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" />
                     <RadioButton x:Name="RadioButtonConstantQuality" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Constant Quality:" HorizontalAlignment="Left" Margin="448,51,0,0" VerticalAlignment="Top" IsChecked="True" RenderTransformOrigin="0.527,-0.267"/>
                     <RadioButton x:Name="RadioButtonBitrate" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="448,133,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="LabelQuality" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="{Binding Value, ElementName=SliderQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="561,45,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="LabelQuality" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="{Binding Value, ElementName=SliderQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="561,45,0,0" VerticalAlignment="Top" Width="26"/>
                     <TextBox x:Name="TextBoxBitrate"  Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="22" Margin="566,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="78" RenderTransformOrigin="0.543,0.45" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
                     <Label Content="| Highest Quality" HorizontalAlignment="Left" Margin="466,97,0,0" VerticalAlignment="Top" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" FontSize="11"/>
                     <Label Content="Lowest Quality |" HorizontalAlignment="Left" Margin="825,97,0,0" VerticalAlignment="Top" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" FontSize="11"/>
@@ -250,6 +251,10 @@
                       Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="2">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
+                                    <DataTrigger
+                      Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Label.Style>
@@ -286,6 +291,10 @@
                                     </DataTrigger>
                                     <DataTrigger
                       Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="2">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger
+                      Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -594,6 +603,19 @@
                                 <Style.Triggers>
                                     <DataTrigger
                       Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="0">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+                    <CheckBox x:Name="CheckBoxAutoAltRefVP9" Content="Automatic alt Reference Frames" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="486,80,0,0" VerticalAlignment="Top" ToolTip="Enables/Disables Keyframefiltering. Disable this if encoder produced colorbleeding/cursed blocking.">
+                        <CheckBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                      Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -1249,6 +1271,10 @@
                                         Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Label.Style>
@@ -1263,6 +1289,10 @@
                                 <Style.Triggers>
                                     <DataTrigger
                                         Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -1291,6 +1321,10 @@
                                         Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Label.Style>
@@ -1302,6 +1336,10 @@
                                 <Style.Triggers>
                                     <DataTrigger
                                         Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -1358,6 +1396,65 @@
                                 <Style.Triggers>
                                     <DataTrigger
                                         Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                        <ComboBoxItem Content="psnr" IsSelected="True"/>
+                        <ComboBoxItem Content="ssim"/>
+                    </ComboBox>
+                    <Label Content="AQ-Mode:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="263,76,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26">
+                        <Label.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <ComboBox x:Name="ComboBoxAQModeVP9" HorizontalAlignment="Left" Margin="334,76,0,0" VerticalAlignment="Top" Width="96" Height="26">
+                        <ComboBoxItem Content="0 - none" IsSelected="True"/>
+                        <ComboBoxItem Content="1 - variance"/>
+                        <ComboBoxItem Content="2 - complexity"/>
+                        <ComboBoxItem Content="3 - cyclic"/>
+                        <ComboBoxItem Content="4 - equator360"/>
+                        <ComboBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+                    <Label Content="Tune:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="38,231,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26">
+                        <Label.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <ComboBox x:Name="ComboBoxTuneVP9" HorizontalAlignment="Left" Margin="138,231,0,0" VerticalAlignment="Top" Width="80" Height="26">
+                        <ComboBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -1528,7 +1625,7 @@
                         <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="img/paypal.png"/>
                     </Button>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="598,14,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="661,16,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.104" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="661,16,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.105" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
                     <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="608,40,0,0" VerticalAlignment="Top"/>
                     <TextBlock HorizontalAlignment="Left" Margin="661,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
             <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>

@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -24,7 +25,7 @@ namespace NotEnoughAV1Encodes
         public static string ffprobePath, ffmpegPath, aomencPath, rav1ePath, svtav1Path;
         public static string videoInput, videoOutput, encoder, fileName, videoResize, pipeBitDepth = "yuv420p", reencoder;
         public static string audioCodecTrackOne, audioCodecTrackTwo, audioCodecTrackThree, audioCodecTrackFour;
-        public static string allSettingsAom, allSettingsRav1e, allSettingsSVTAV1;
+        public static string allSettingsAom, allSettingsRav1e, allSettingsSVTAV1, allSettingsVP9;
         public static string tempPath = ""; //Temp Path for Splitting and Encoding
         public static string[] videoChunks, SubtitleChunks; //Temp Chunk List
         public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, saveSettingString, localFileName, ffmpegFramerateSplitting;
@@ -478,6 +479,7 @@ namespace NotEnoughAV1Encodes
                 case "rav1e": SetRav1eParameters(tempSettings); break;
                 case "aomenc (ffmpeg)": SetLibaomParameters(tempSettings); break;
                 case "svt-av1": SetSVTAV1Parameters(tempSettings); break;
+                case "vp9": SetVP9Parameters(tempSettings); break;
                 default: break;
             }
         }
@@ -659,6 +661,51 @@ namespace NotEnoughAV1Encodes
                 allSettingsSVTAV1 = TextBoxAdvancedSettings.Text;
             }
             SmallFunctions.Logging("Parameters svt-av1: " + allSettingsSVTAV1);
+        }
+
+        private void SetVP9Parameters(bool tempSettings)
+        {
+            string vp9QualityMode;
+            switch (ComboBoxColorFormatLibaom.SelectedIndex)
+            {
+                case 0:
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le -strict -1"; }
+                    break;
+                case 1:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv422p -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv422p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv422p12le -strict -1"; }
+                    break;
+                case 2:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv444p -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv444p10le -strict -1"; }
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv444p12le -strict -1"; }
+                    break;
+                default: break;
+            }
+            if (RadioButtonConstantQuality.IsChecked == true) { vp9QualityMode = " -crf " + SliderQuality.Value + " -b:v 0 "; } 
+            else { vp9QualityMode = " -b:v " + TextBoxBitrate.Text + "k "; }
+            //Basic Settings
+            if (CheckBoxAdvancedSettings.IsChecked == false)
+            {
+                allSettingsVP9 = "-cpu-used " + SliderPreset.Value + " -g 240 -tile-columns 1 -tile-rows 1 " + vp9QualityMode;
+            }
+            else
+            {
+                if (CheckBoxCustomSettings.IsChecked == false || tempSettings)
+                {
+                    string altref = " -auto-alt-ref 0 ";
+                    if (CheckBoxAutoAltRefVP9.IsChecked == true) { altref = " -auto-alt-ref 1 "; }
+                    string vp9Frames = " -tile-columns " + ComboBoxTileColumns.Text + " -tile-rows " + ComboBoxTileRows.Text + " -g " + TextBoxMaxKeyframeinterval.Text + " -lag-in-frames " + TextBoxLagInFramesLibaom.Text + " -aq-mode " + ComboBoxAQModeVP9.SelectedIndex + " -tune " + ComboBoxTuneVP9.SelectedIndex;
+                    allSettingsVP9 = "-cpu-used " + SliderPreset.Value + vp9QualityMode + vp9Frames + altref;
+                }
+                else
+                {
+                    allSettingsVP9 = TextBoxAdvancedSettings.Text;
+                }
+                
+            }
         }
 
         private void getVideoInformation()
@@ -1044,6 +1091,7 @@ namespace NotEnoughAV1Encodes
             if (encoder == "aomenc") { inputSet = allSettingsAom; }
             if (encoder == "rav1e") { inputSet = allSettingsRav1e; }
             if (encoder == "svt-av1") { inputSet = allSettingsSVTAV1; }
+            if (encoder == "vp9") { inputSet = allSettingsVP9; }
             ShowSettings kappa = new ShowSettings(inputSet, CheckBoxDarkMode.IsChecked == true);
             kappa.Show();
         }
@@ -1346,6 +1394,7 @@ namespace NotEnoughAV1Encodes
             if (encoder == "aomenc" || encoder == "aomenc (ffmpeg)") { inputSet = allSettingsAom; }
             if (encoder == "rav1e") { inputSet = allSettingsRav1e; }
             if (encoder == "svt-av1") { inputSet = allSettingsSVTAV1; }
+            if (encoder == "vp9") { inputSet = allSettingsVP9; }
             TextBoxAdvancedSettings.Text = inputSet;
         }
 
@@ -1535,64 +1584,72 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("CustomSettings",     CheckBoxCustomSettings.IsChecked.ToString());
                     writer.WriteElementString("CustomSettingsText", TextBoxAdvancedSettings.Text);
                 }
-                writer.WriteElementString("Threads", ComboBoxThreadsAomenc.SelectedIndex.ToString());
-                writer.WriteElementString("TileColumns", ComboBoxTileColumns.SelectedIndex.ToString());
-                writer.WriteElementString("TileRows", ComboBoxTileRows.SelectedIndex.ToString());
-                writer.WriteElementString("MinKeyframeInterval", TextBoxMinKeyframeinterval.Text);
-                writer.WriteElementString("MaxKeyframeInterval", TextBoxMaxKeyframeinterval.Text);
+                writer.WriteElementString("Threads",                ComboBoxThreadsAomenc.SelectedIndex.ToString());
+                writer.WriteElementString("TileColumns",            ComboBoxTileColumns.SelectedIndex.ToString());
+                writer.WriteElementString("TileRows",               ComboBoxTileRows.SelectedIndex.ToString());
+                writer.WriteElementString("MinKeyframeInterval",    TextBoxMinKeyframeinterval.Text);
+                writer.WriteElementString("MaxKeyframeInterval",    TextBoxMaxKeyframeinterval.Text);
                 
                 if (ComboBoxEncoder.SelectedIndex == 0)
                 {
-                    writer.WriteElementString("LagInFrames", TextBoxMaxLagInFrames.Text);
-                    writer.WriteElementString("MaxRefFrames", ComboBoxMaxReferenceFramesAomenc.SelectedIndex.ToString());
-                    writer.WriteElementString("ColorPrimaries", ComboBoxColorPrimariesAomenc.SelectedIndex.ToString());
-                    writer.WriteElementString("ColorTransfer", ComboBoxColorTransferAomenc.SelectedIndex.ToString());
-                    writer.WriteElementString("ColorMatrix", ComboBoxColorMatrixAomenc.SelectedIndex.ToString());
-                    writer.WriteElementString("ChromaSubsampling", ComboBoxChromaSubsamplingAomenc.SelectedIndex.ToString());
-                    writer.WriteElementString("Tune", ComboBoxTuneAomenc.SelectedIndex.ToString());
-                    writer.WriteElementString("AQMode", ComboBoxAQMode.SelectedIndex.ToString());
+                    writer.WriteElementString("LagInFrames",        TextBoxMaxLagInFrames.Text);
+                    writer.WriteElementString("MaxRefFrames",       ComboBoxMaxReferenceFramesAomenc.SelectedIndex.ToString());
+                    writer.WriteElementString("ColorPrimaries",     ComboBoxColorPrimariesAomenc.SelectedIndex.ToString());
+                    writer.WriteElementString("ColorTransfer",      ComboBoxColorTransferAomenc.SelectedIndex.ToString());
+                    writer.WriteElementString("ColorMatrix",        ComboBoxColorMatrixAomenc.SelectedIndex.ToString());
+                    writer.WriteElementString("ChromaSubsampling",  ComboBoxChromaSubsamplingAomenc.SelectedIndex.ToString());
+                    writer.WriteElementString("Tune",               ComboBoxTuneAomenc.SelectedIndex.ToString());
+                    writer.WriteElementString("AQMode",             ComboBoxAQMode.SelectedIndex.ToString());
                     writer.WriteElementString("SharpnessLoopFilter", ComboBoxSharpnessFilterAomenc.SelectedIndex.ToString());
-                    writer.WriteElementString("Rowmt", CheckBoxRowmt.IsChecked.ToString());
-                    writer.WriteElementString("KeyframeFiltering", CheckBoxKeyframeFilteringAomenc.IsChecked.ToString());
-                    writer.WriteElementString("AutoAltRef", CheckBoxAutoAltRefAomenc.IsChecked.ToString());
+                    writer.WriteElementString("Rowmt",              CheckBoxRowmt.IsChecked.ToString());
+                    writer.WriteElementString("KeyframeFiltering",  CheckBoxKeyframeFilteringAomenc.IsChecked.ToString());
+                    writer.WriteElementString("AutoAltRef",         CheckBoxAutoAltRefAomenc.IsChecked.ToString());
                     writer.WriteElementString("FramePeriodicBoost", CheckBoxFrameBoostAomenc.IsChecked.ToString());
                 }else if (ComboBoxEncoder.SelectedIndex == 2)
                 {
-                    writer.WriteElementString("RDOLookahead", TextBoxRDOLookaheadRav1e.Text);
+                    writer.WriteElementString("RDOLookahead",       TextBoxRDOLookaheadRav1e.Text);
                     writer.WriteElementString("ColorPrimariesRav1e", ComboBoxColorPrimariesRav1e.SelectedIndex.ToString());
                     writer.WriteElementString("ColorTransferRav1e", ComboBoxColorTransferRav1e.SelectedIndex.ToString());
-                    writer.WriteElementString("ColorMatrixRav1e", ComboBoxColorMatrixRav1e.SelectedIndex.ToString());
-                    writer.WriteElementString("PixelRangeRav1e", ComboBoxPixelRangeRav1e.SelectedIndex.ToString());
-                    writer.WriteElementString("TuneRav1e", ComboBoxTuneRav1e.SelectedIndex.ToString());
-                    writer.WriteElementString("ContentLightBool", CheckBoxContentLightRav1e.IsChecked.ToString());
-                    writer.WriteElementString("ContentLightCll", TextBoxContentLightCllRav1e.Text);
-                    writer.WriteElementString("ContentLightFall", TextBoxContentLightFallRav1e.Text);
-                    writer.WriteElementString("MasteringDisplay", CheckBoxMasteringDisplayRav1e.IsChecked.ToString());
-                    writer.WriteElementString("MasteringGx", TextBoxMasteringGxRav1e.Text);
-                    writer.WriteElementString("MasteringGy", TextBoxMasteringGyRav1e.Text);
-                    writer.WriteElementString("MasteringBx", TextBoxMasteringBxRav1e.Text);
-                    writer.WriteElementString("MasteringBy", TextBoxMasteringByRav1e.Text);
-                    writer.WriteElementString("MasteringRx", TextBoxMasteringRxRav1e.Text);
-                    writer.WriteElementString("MasteringRy", TextBoxMasteringRyRav1e.Text);
-                    writer.WriteElementString("MasteringWPx", TextBoxMasteringWPxRav1e.Text);
-                    writer.WriteElementString("MasteringWPy", TextBoxMasteringWPyRav1e.Text);
-                    writer.WriteElementString("MasteringLmin", TextBoxMasteringLminRav1e.Text);
-                    writer.WriteElementString("MasteringLmax", TextBoxMasteringLmaxRav1e.Text);
-                    writer.WriteElementString("ColorFormatRav1e", ComboBoxColorFormatRav1e.SelectedIndex.ToString());
+                    writer.WriteElementString("ColorMatrixRav1e",   ComboBoxColorMatrixRav1e.SelectedIndex.ToString());
+                    writer.WriteElementString("PixelRangeRav1e",    ComboBoxPixelRangeRav1e.SelectedIndex.ToString());
+                    writer.WriteElementString("TuneRav1e",          ComboBoxTuneRav1e.SelectedIndex.ToString());
+                    writer.WriteElementString("ContentLightBool",   CheckBoxContentLightRav1e.IsChecked.ToString());
+                    writer.WriteElementString("ContentLightCll",    TextBoxContentLightCllRav1e.Text);
+                    writer.WriteElementString("ContentLightFall",   TextBoxContentLightFallRav1e.Text);
+                    writer.WriteElementString("MasteringDisplay",   CheckBoxMasteringDisplayRav1e.IsChecked.ToString());
+                    writer.WriteElementString("MasteringGx",        TextBoxMasteringGxRav1e.Text);
+                    writer.WriteElementString("MasteringGy",        TextBoxMasteringGyRav1e.Text);
+                    writer.WriteElementString("MasteringBx",        TextBoxMasteringBxRav1e.Text);
+                    writer.WriteElementString("MasteringBy",        TextBoxMasteringByRav1e.Text);
+                    writer.WriteElementString("MasteringRx",        TextBoxMasteringRxRav1e.Text);
+                    writer.WriteElementString("MasteringRy",        TextBoxMasteringRyRav1e.Text);
+                    writer.WriteElementString("MasteringWPx",       TextBoxMasteringWPxRav1e.Text);
+                    writer.WriteElementString("MasteringWPy",       TextBoxMasteringWPyRav1e.Text);
+                    writer.WriteElementString("MasteringLmin",      TextBoxMasteringLminRav1e.Text);
+                    writer.WriteElementString("MasteringLmax",      TextBoxMasteringLmaxRav1e.Text);
+                    writer.WriteElementString("ColorFormatRav1e",   ComboBoxColorFormatRav1e.SelectedIndex.ToString());
                 }
                 else if (ComboBoxEncoder.SelectedIndex == 3)
                 {
-                    writer.WriteElementString("ColorFormatSVT", ComboBoxColorFormatSVT.SelectedIndex.ToString());
-                    writer.WriteElementString("HDRSVT", CheckBoxEnableHDRSVT.IsChecked.ToString());
-                    writer.WriteElementString("AQModeSVT", ComboBoxAQModeSVT.SelectedIndex.ToString());
-                    writer.WriteElementString("KeyintSVT", TextBoxkeyframeIntervalSVT.Text);
+                    writer.WriteElementString("ColorFormatSVT",     ComboBoxColorFormatSVT.SelectedIndex.ToString());
+                    writer.WriteElementString("HDRSVT",             CheckBoxEnableHDRSVT.IsChecked.ToString());
+                    writer.WriteElementString("AQModeSVT",          ComboBoxAQModeSVT.SelectedIndex.ToString());
+                    writer.WriteElementString("KeyintSVT",          TextBoxkeyframeIntervalSVT.Text);
                 }else if (ComboBoxEncoder.SelectedIndex == 1)
                 {
-                    writer.WriteElementString("ColorFormatLibaom", ComboBoxColorFormatLibaom.SelectedIndex.ToString());
-                    writer.WriteElementString("AQModeLibaom", ComboBoxAqModeLibaom.SelectedIndex.ToString());
-                    writer.WriteElementString("LagFramesLibaom", TextBoxLagInFramesLibaom.Text);
-                    writer.WriteElementString("AutoAltRefLibaom", CheckBoxAltRefLibaom.IsChecked.ToString());
-                    writer.WriteElementString("TuneLibaom", ComboBoxTunelibaom.SelectedIndex.ToString());
+                    writer.WriteElementString("ColorFormatLibaom",  ComboBoxColorFormatLibaom.SelectedIndex.ToString());
+                    writer.WriteElementString("AQModeLibaom",       ComboBoxAqModeLibaom.SelectedIndex.ToString());
+                    writer.WriteElementString("LagFramesLibaom",    TextBoxLagInFramesLibaom.Text);
+                    writer.WriteElementString("AutoAltRefLibaom",   CheckBoxAltRefLibaom.IsChecked.ToString());
+                    writer.WriteElementString("TuneLibaom",         ComboBoxTunelibaom.SelectedIndex.ToString());
+                }else if(ComboBoxEncoder.SelectedIndex == 4)
+                {
+                    //It says Libaom, but both Encoders (ffmpeg) share the same arguments
+                    writer.WriteElementString("ColorFormatLibaom",  ComboBoxColorFormatLibaom.SelectedIndex.ToString());
+                    writer.WriteElementString("LagFramesLibaom",    TextBoxLagInFramesLibaom.Text);
+                    writer.WriteElementString("AutoAltRefVP9",      CheckBoxAutoAltRefVP9.IsChecked.ToString());
+                    writer.WriteElementString("TuneVP9",            ComboBoxTuneVP9.SelectedIndex.ToString());
+                    writer.WriteElementString("AQModeVP9",          ComboBoxAQModeVP9.SelectedIndex.ToString());
                 }
             }
             writer.WriteEndElement();
@@ -1616,6 +1673,9 @@ namespace NotEnoughAV1Encodes
                     case "VideoOutput":         videoOutput = n.InnerText; outputSet = true; LabelVideoOutput.Content = n.InnerText; break;
                     case "VideoInputFilename":  fileName = n.InnerText; break;
 
+                    case "AutoAltRefVP9":       CheckBoxAutoAltRefVP9.IsChecked = n.InnerText == "True"; break;
+                    case "TuneVP9":             ComboBoxTuneVP9.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "AQModeVP9":           ComboBoxAQModeVP9.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "Encoder":             ComboBoxEncoder.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "Framerate":           ComboBoxFrameRate.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "BitDepth":            ComboBoxBitDepth.SelectedIndex = Int16.Parse(n.InnerText); break;
@@ -1820,6 +1880,9 @@ namespace NotEnoughAV1Encodes
                                         case "svt-av1":
                                             startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
                                             break;
+                                        case "vp9":
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -c:v libvpx-vp9 " + allSettingsVP9 + " " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
+                                            break;
                                         default:
                                             break;
                                     }
@@ -1861,6 +1924,9 @@ namespace NotEnoughAV1Encodes
                                             case "svt-av1":
                                                 startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b NUL -output-stat-file " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1pass.stats") + '\u0022';
                                                 break;
+                                            case "vp9":
+                                                startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -c:v libvpx-vp9 " + allSettingsVP9 + " -pass 1 -passlogfile " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "_stats.log") + '\u0022' + " -f matroska NUL";
+                                                break;
                                             default:
                                                 break;
                                         }
@@ -1892,6 +1958,9 @@ namespace NotEnoughAV1Encodes
                                             break;
                                         case "svt-av1":
                                             startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022'+ " -input-stat-file " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1pass.stats") + '\u0022';
+                                            break;
+                                        case "vp9":
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -c:v libvpx-vp9 " + allSettingsVP9 + " -pass 2 -passlogfile " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "_stats.log") + '\u0022' + " " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
                                             break;
                                         default:
                                             break;

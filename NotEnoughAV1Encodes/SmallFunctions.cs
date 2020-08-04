@@ -83,6 +83,9 @@ namespace NotEnoughAV1Encodes
                 case "aomenc (ffmpeg)":
                     av1encoderexists = ffmpegExists;
                     break;
+                case "vp9":
+                    av1encoderexists = ffmpegExists;
+                    break;
                 default:
                     break;
             }
