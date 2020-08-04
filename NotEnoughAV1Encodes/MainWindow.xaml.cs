@@ -9,7 +9,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -28,7 +27,7 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsAom, allSettingsRav1e, allSettingsSVTAV1, allSettingsVP9;
         public static string tempPath = ""; //Temp Path for Splitting and Encoding
         public static string[] videoChunks, SubtitleChunks; //Temp Chunk List
-        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, saveSettingString, localFileName, ffmpegFramerateSplitting;
+        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, cropCommand, saveSettingString, localFileName, ffmpegFramerateSplitting;
         public static int videoChunksCount; //Number of Chunks, mainly only for Progressbar
         public static int coreCount, workerCount, chunkLength; //Variable to set the Worker Count
         public static int videoPasses, processPriority, videoLength, customsubtitleadded, counterQueue, frameRateIndex;
@@ -40,6 +39,7 @@ namespace NotEnoughAV1Encodes
         public static bool customBackground, programStartup = true, logging = true, buttonActive = true, saveSettings, found7z;
         public static double videoFrameRate;
         public DateTime starttimea;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -67,10 +67,10 @@ namespace NotEnoughAV1Encodes
                 setParameters();
                 setAudioParameters();
                 setSubtitleParameters();
-                if (resumeMode == false) { saveResumeJob(); }
                 if (resumeMode == true) { await AsyncClass(); } 
                 else
                 {
+                    saveResumeJob();
                     if (SmallFunctions.CheckFileFolder()) { await AsyncClass(); }
                     else
                     {
@@ -176,10 +176,7 @@ namespace NotEnoughAV1Encodes
         private async void QueueEncode()
         {
             List<object> queue = new List<object>();
-            foreach (var item in ListBoxQueue.Items)
-            {
-                queue.Add(item);
-            }
+            foreach (var item in ListBoxQueue.Items) { queue.Add(item); }
             foreach (var item in queue)
             {
                 while(SmallFunctions.Cancel.CancelAll == false)
@@ -211,123 +208,23 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxShutdownAfterEncode.IsChecked == true && SmallFunctions.Cancel.CancelAll == false) { Process.Start("shutdown.exe", "/s /t 0"); }
         }
 
-        //═══════════════════════════════════════ Functions ═══════════════════════════════════════
-
-        private void Check7zExtractor()
-        {
-            if (File.Exists(@"C:\Program Files\7-Zip\7zG.exe")) { found7z = true;}
-        }
-
-        public void CheckSubtitleTracks()
-        {
-            //Gets the SubtitleIndexes of the Input Video, because people may enable subtitles, even they don't exist
-            string input = '\u0022' + videoInput + '\u0022';
-            Process getSubtitleIndexes = new Process();
-            getSubtitleIndexes.StartInfo = new ProcessStartInfo()
-            {
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe",
-                WorkingDirectory = ffprobePath,
-                Arguments = "/C ffprobe.exe -i " + input + " -loglevel error -select_streams s -show_streams -show_entries stream=index:tags=:disposition= -of csv",
-                RedirectStandardError = true,
-                RedirectStandardOutput = true
-            };
-
-            getSubtitleIndexes.Start();
-
-            //Reads the Console Output
-            string subtitleIndexes = getSubtitleIndexes.StandardOutput.ReadToEnd();
-            SmallFunctions.Logging("Subtitle Indexes ffprobe: " + subtitleIndexes);
-            if (subtitleIndexes == "")
-            {
-                //If the Source video doesnt have Subtitles embedded, then Stream Copy Subtitles will be disabled.
-                RadioButtonStreamCopySubtitles.IsChecked = false;
-                RadioButtonStreamCopySubtitles.IsEnabled = false;
-            }
-            else if (subtitleIndexes != "")
-            {
-                RadioButtonStreamCopySubtitles.IsEnabled = true;
-            }
-            getSubtitleIndexes.WaitForExit();
-        }
-
-        private void MessageNoAudioOutput()
-        {
-            if (MessageBox.Show("No Audio Output detected! \nCancel?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes) { SmallFunctions.Cancel.CancelAll = true; CancelRoutine(); }
-            else { audioEncoding = false; }
-        }
-
-        private void MessageNoSubtitleOutput()
-        {
-            if (MessageBox.Show("No Subtitle Output detected! \nCancel?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes) { SmallFunctions.Cancel.CancelAll = true; CancelRoutine(); }
-            else { subtitleEncoding = false; }
-        }
-
-        private void getCoreCount()
-        {
-            //Gets CoreCount of Hostmachine
-            foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get()) { coreCount += int.Parse(item["NumberOfCores"].ToString()); }
-            for (int i = 1; i <= coreCount; i++) { ComboBoxWorkers.Items.Add(i); }
-            ComboBoxWorkers.SelectedItem = coreCount;
-            SmallFunctions.Logging("System Core Count: " + coreCount);
-        }
-
-        private void saveResumeJob()
-        {
-            SaveSettings(fileName, false, true, false);
-        }
-
-        private void setEncoderPath()
-        {
-            //aomenc
-            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "aomenc.exe"))) { aomencPath = Directory.GetCurrentDirectory(); }
-            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "aomenc.exe"))) { aomencPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
-            else if (SmallFunctions.ExistsOnPath("aomenc.exe")) { aomencPath = SmallFunctions.GetFullPathWithOutName("aomenc.exe"); }
-            SmallFunctions.Logging("Encoder aomenc Path: " + aomencPath);
-
-            //rav1e
-            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "rav1e.exe"))) { rav1ePath = Directory.GetCurrentDirectory(); }
-            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "rav1e.exe"))) { rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
-            else if (SmallFunctions.ExistsOnPath("rav1e.exe")) { rav1ePath = SmallFunctions.GetFullPathWithOutName("rav1e.exe"); }
-            SmallFunctions.Logging("Encoder rav1e Path: " + rav1ePath);
-
-            //svt-av1
-            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "SvtAv1EncApp.exe"))) { svtav1Path = Directory.GetCurrentDirectory(); }
-            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "SvtAv1EncApp.exe"))) { svtav1Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
-            else if (SmallFunctions.ExistsOnPath("SvtAv1EncApp.exe")) { svtav1Path = SmallFunctions.GetFullPathWithOutName("SvtAv1EncApp.exe");  }
-            SmallFunctions.Logging("Encoder svt-av1 Path: " + svtav1Path);
-
-            //ffmpeg
-            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "ffmpeg.exe"))) { ffmpegPath = Directory.GetCurrentDirectory(); }
-            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg", "ffmpeg.exe"))) { ffmpegPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"); }  
-            else if (SmallFunctions.ExistsOnPath("ffmpeg.exe")) { ffmpegPath = SmallFunctions.GetFullPathWithOutName("ffmpeg.exe"); }
-            SmallFunctions.Logging("Encoder ffmpeg Path: " + ffmpegPath);
-
-            //ffprobe
-            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "ffprobe.exe"))) { ffprobePath = Directory.GetCurrentDirectory(); }
-            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg", "ffprobe.exe"))) { ffprobePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"); }
-            else if (SmallFunctions.ExistsOnPath("ffprobe.exe")) { ffprobePath = SmallFunctions.GetFullPathWithOutName("ffprobe.exe"); }
-            SmallFunctions.Logging("Encoder ffprobe Path: " + ffprobePath);
-        }
+        //══════════════════════════════════ General Parameters ═══════════════════════════════════
 
         private void setParameters()
         {
             tempPath = "Temp\\" + fileName + "\\";
 
-            encoder = ComboBoxEncoder.Text;
-            SmallFunctions.Logging("Encoder: " + encoder);
-            reencoder = ComboBoxReencodeCodec.Text;
-            SmallFunctions.Logging("ReEncoder: " + reencoder);
+            encoder = ComboBoxEncoder.Text; reencoder = ComboBoxReencodeCodec.Text;
+            SmallFunctions.Logging("Encoder: " + encoder); SmallFunctions.Logging("ReEncoder: " + reencoder);
+
             processPriority = ComboBoxProcessPriority.SelectedIndex;
 
-            resumeMode = CheckBoxResumeMode.IsChecked == true ? true : false;
+            resumeMode = CheckBoxResumeMode.IsChecked == true;
             SmallFunctions.Logging("Resume Mode: " + resumeMode);
-            deleteTempFiles = CheckBoxDeleteTempFiles.IsChecked == true ? true : false;
-            reencode = CheckBoxReencodeDuringSplitting.IsChecked == true ? true : false;
+            deleteTempFiles = CheckBoxDeleteTempFiles.IsChecked == true;
+            reencode = CheckBoxReencodeDuringSplitting.IsChecked == true;
             SmallFunctions.Logging("Reencode: " + reencode);
-            beforereencode = CheckBoxReencodeBeforeSplitting.IsChecked == true ? true : false;
+            beforereencode = CheckBoxReencodeBeforeSplitting.IsChecked == true;
             SmallFunctions.Logging("PreReencode: " + beforereencode);
 
             videoPasses = Int16.Parse(ComboBoxPasses.Text);
@@ -339,14 +236,10 @@ namespace NotEnoughAV1Encodes
             videoLength = Int16.Parse(SmallFunctions.getVideoLength(videoInput));
             SmallFunctions.Logging("Video Length: " + videoLength);
 
-            if (CheckBoxResize.IsChecked == true) { videoResize = "-vf scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + " -sws_flags " + ComboBoxResizeFilters.Text; } else { videoResize = ""; }
+            setFilters();
+
             if (CheckBoxCustomTempPath.IsChecked == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); } else { tempPath = Path.Combine(Directory.GetCurrentDirectory(), tempPath); }
-            if (CheckBoxDeinterlaceYadif.IsChecked == true) { deinterlaceCommand = " -vf " + ComboBoxDeinterlace.Text; } else { deinterlaceCommand = ""; }
-            if (CheckBoxDeinterlaceYadif.IsChecked == true && CheckBoxResize.IsChecked == true)
-            {
-                deinterlaceCommand = " -vf " + '\u0022' + "scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + "," + ComboBoxDeinterlace.Text + '\u0022' + " -sws_flags " + ComboBoxResizeFilters.Text;
-                videoResize = "";
-            }
+
             SmallFunctions.checkCreateFolder(tempPath);
 
             if (ComboBoxFrameRate.SelectedIndex != frameRateIndex)
@@ -356,121 +249,50 @@ namespace NotEnoughAV1Encodes
             else { ffmpegFramerateSplitting = ""; }
         }
 
-        private string setChangeFramerate()
+        private void setFilters()
         {
-            switch(ComboBoxFrameRate.SelectedIndex)
+            if (CheckBoxResize.IsChecked == true) 
+            { 
+                videoResize = "-vf scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + " -sws_flags " + ComboBoxResizeFilters.Text; 
+            } else { videoResize = ""; }
+
+            if (CheckBoxDeinterlaceYadif.IsChecked == true) 
+            { 
+                deinterlaceCommand = " -vf " + ComboBoxDeinterlace.Text; 
+            } else { deinterlaceCommand = ""; }
+
+            if (CheckBoxCrop.IsChecked == true)
             {
-                case 0: return "5";
-                case 1: return "10";
-                case 2: return "12";
-                case 3: return "15";
-                case 4: return "20";
-                case 5: return "24000/1001";
-                case 6: return "24";
-                case 7: return "25";
-                case 8: return "30000/1001";
-                case 9: return "30";
-                case 10: return "48";
-                case 11: return "50";
-                case 12: return "60000/1001";
-                case 13: return "60";
-                default: return "24";
+                cropCommand = " -vf crop=in_w:in_h-" + TextBoxImageHeightCrop.Text;
+            } else { cropCommand = ""; }
+
+            if (CheckBoxDeinterlaceYadif.IsChecked == true && CheckBoxResize.IsChecked == true && CheckBoxCrop.IsChecked == false)
+            {
+                deinterlaceCommand = " -vf " + '\u0022' + "scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + "," + ComboBoxDeinterlace.Text + '\u0022' + " -sws_flags " + ComboBoxResizeFilters.Text;
+                videoResize = ""; cropCommand = "";
+            }
+
+            if (CheckBoxDeinterlaceYadif.IsChecked == true && CheckBoxResize.IsChecked == true && CheckBoxCrop.IsChecked == true)
+            {
+                deinterlaceCommand = " -vf " + '\u0022' + "scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + "," + ComboBoxDeinterlace.Text + ",crop=in_w:in_h-" + TextBoxImageHeightCrop.Text + '\u0022' + " -sws_flags " + ComboBoxResizeFilters.Text;
+                videoResize = ""; cropCommand = "";
+            }
+
+            if (CheckBoxDeinterlaceYadif.IsChecked == false && CheckBoxResize.IsChecked == true && CheckBoxCrop.IsChecked == true)
+            {
+                deinterlaceCommand = " -vf " + '\u0022' + "scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + ",crop=in_w:in_h-" + TextBoxImageHeightCrop.Text + '\u0022' + " -sws_flags " + ComboBoxResizeFilters.Text;
+                videoResize = ""; cropCommand = "";
+            }
+
+            if (CheckBoxDeinterlaceYadif.IsChecked == true && CheckBoxResize.IsChecked == false && CheckBoxCrop.IsChecked == true)
+            {
+                deinterlaceCommand = " -vf " + '\u0022' + ComboBoxDeinterlace.Text + ",crop=in_w:in_h-" + TextBoxImageHeightCrop.Text + '\u0022';
+                videoResize = ""; cropCommand = "";
             }
         }
 
-        private void setSubtitleParameters()
-        {
-            subtitleCopy = RadioButtonStreamCopySubtitles.IsChecked == true;
-            subtitleCustom = RadioButtonCustomSubtitles.IsChecked == true;
-            subtitleHardcoding = CheckBoxHardcodeSubtitle.IsChecked == true;
-            subtitleEncoding = CheckBoxSubtitleEncoding.IsChecked == true;
-            if (subtitleCustom) { SubtitleChunks = ListBoxSubtitles.Items.OfType<string>().ToArray(); }
-            if (subtitleHardcoding) { setSubtitleHardcodingParameters(); }
-            if (subtitleHardcoding == false) { subtitleFfmpegCommand = ""; } //If not set, it could create problems when a second job is running afterwards
-        }
-
-        private void setSubtitleHardcodingParameters()
-        {
-            if (subtitleCustom)
-            {
-                string ext = Path.GetExtension(SubtitleChunks[0]);
-                if (ext == ".ass" || ext == ".ssa")
-                {
-                    subtitleFfmpegCommand = "-vf ass=" + '\u0022' + SubtitleChunks[0] + '\u0022';
-                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
-                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:");
-                    SmallFunctions.Logging("Subtitle Hardcoding Parameters: " + subtitleFfmpegCommand);
-                }
-                else if (ext == ".srt")
-                {
-                    subtitleFfmpegCommand = "-vf subtitles=" + '\u0022' + SubtitleChunks[0] + '\u0022';
-                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
-                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:");
-                    SmallFunctions.Logging("Subtitle Hardcoding Parameters: " + subtitleFfmpegCommand);
-                }
-                else
-                {
-                    MessageBoxes.MessageCustomSubtitleHardCodeNotSupported();
-                }            
-            }
-            
-            if (subtitleCopy) { subtitleFfmpegCommand = "-vf subtitles=" + '\u0022' + videoInput + '\u0022'; subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c"); subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:"); }
-        }
-
-        private void setChunkLength()
-        {
-            if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (Int16.Parse(SmallFunctions.getVideoLength(videoInput)) / Int16.Parse(ComboBoxWorkers.Text)).ToString(); }
-        }
-
-        private void setAudioParameters()
-        {
-            trackOne = CheckBoxAudioTrackOne.IsChecked == true;
-            trackTwo = CheckBoxAudioTrackTwo.IsChecked == true;
-            trackThree = CheckBoxAudioTrackThree.IsChecked == true;
-            trackFour = CheckBoxAudioTrackFour.IsChecked == true;
-            audioEncoding = CheckBoxAudioEncoding.IsChecked == true;
-            audioCodecTrackOne = ComboBoxAudioCodec.Text;
-            audioCodecTrackTwo = ComboBoxAudioCodecTrackTwo.Text;
-            audioCodecTrackThree = ComboBoxAudioCodecTrackThree.Text;
-            audioCodecTrackFour = ComboBoxAudioCodecTrackFour.Text;
-            audioBitrateTrackOne = Int16.Parse(TextBoxAudioBitrate.Text);
-            audioBitrateTrackTwo = Int16.Parse(TextBoxAudioBitrateTrackTwo.Text);
-            audioBitrateTrackThree = Int16.Parse(TextBoxAudioBitrateTrackThree.Text);
-            audioBitrateTrackFour = Int16.Parse(TextBoxAudioBitrateTrackFour.Text);
-            switch (ComboBoxTrackOneChannels.SelectedIndex)
-            {
-                case 0: audioChannelsTrackOne = 1; break;
-                case 1: audioChannelsTrackOne = 2; break;
-                case 2: audioChannelsTrackOne = 6; break;
-                case 3: audioChannelsTrackOne = 8; break;
-                default: break;
-            }
-            switch (ComboBoxTrackTwoChannels.SelectedIndex)
-            {
-                case 0: audioChannelsTrackTwo = 1; break;
-                case 1: audioChannelsTrackTwo = 2; break;
-                case 2: audioChannelsTrackTwo = 6; break;
-                case 3: audioChannelsTrackTwo = 8; break;
-                default: break;
-            }
-            switch (ComboBoxTrackThreeChannels.SelectedIndex)
-            {
-                case 0: audioChannelsTrackThree = 1; break;
-                case 1: audioChannelsTrackThree = 2; break;
-                case 2: audioChannelsTrackThree = 6; break;
-                case 3: audioChannelsTrackThree = 8; break;
-                default: break;
-            }
-            switch (ComboBoxTrackFourChannels.SelectedIndex)
-            {
-                case 0: audioChannelsTrackFour = 1; break;
-                case 1: audioChannelsTrackFour = 2; break;
-                case 2: audioChannelsTrackFour = 6; break;
-                case 3: audioChannelsTrackFour = 8; break;
-                default: break;
-            }
-        }
-
+        //══════════════════════════════════ Encoder Parameters ═══════════════════════════════════
+        
         private void setEncoderParameters(bool tempSettings)
         {
             switch (encoder)
@@ -608,11 +430,11 @@ namespace NotEnoughAV1Encodes
             {
                 allSettingsRav1e = "--speed " + SliderPreset.Value + " --keyint 240 --tile-rows 1 --tile-cols 4 " + rav1eQualityMode;
             }
-            else if(CheckBoxCustomSettings.IsChecked == false || tempSettings)
+            else if (CheckBoxCustomSettings.IsChecked == false || tempSettings)
             {
                 string rav1eColor = " --primaries " + ComboBoxColorPrimariesRav1e.Text + " --transfer " + ComboBoxColorTransferRav1e.Text + " --matrix " + ComboBoxColorMatrixRav1e.Text + " --range " + ComboBoxPixelRangeRav1e.Text;
                 if (CheckBoxContentLightRav1e.IsChecked == true) { rav1eContentLight = " --content-light " + TextBoxContentLightCllRav1e.Text + "," + TextBoxContentLightFallRav1e.Text; }
-                if (CheckBoxMasteringDisplayRav1e.IsChecked == true) { rav1eMasteringDisplay = " --mastering-display G(" + TextBoxMasteringGxRav1e.Text + "," + TextBoxMasteringGyRav1e.Text + ")B("+TextBoxMasteringBxRav1e.Text + "," + TextBoxMasteringByRav1e.Text+")R("+TextBoxMasteringRxRav1e.Text + "," + TextBoxMasteringRyRav1e.Text + ")WP(" + TextBoxMasteringWPxRav1e.Text + "," + TextBoxMasteringWPyRav1e.Text + ")L(" + TextBoxMasteringLmaxRav1e.Text + "," + TextBoxMasteringLminRav1e.Text + ")"; }
+                if (CheckBoxMasteringDisplayRav1e.IsChecked == true) { rav1eMasteringDisplay = " --mastering-display G(" + TextBoxMasteringGxRav1e.Text + "," + TextBoxMasteringGyRav1e.Text + ")B(" + TextBoxMasteringBxRav1e.Text + "," + TextBoxMasteringByRav1e.Text + ")R(" + TextBoxMasteringRxRav1e.Text + "," + TextBoxMasteringRyRav1e.Text + ")WP(" + TextBoxMasteringWPxRav1e.Text + "," + TextBoxMasteringWPyRav1e.Text + ")L(" + TextBoxMasteringLmaxRav1e.Text + "," + TextBoxMasteringLminRav1e.Text + ")"; }
                 allSettingsRav1e = "--speed " + SliderPreset.Value + " " + rav1eQualityMode + " --threads " + ComboBoxThreadsAomenc.Text + " --min-keyint " + TextBoxMinKeyframeinterval.Text + " --keyint " + TextBoxMaxKeyframeinterval.Text + " --tile-rows " + ComboBoxTileRows.Text + " --tile-cols " + ComboBoxTileColumns.Text + " --tune " + ComboBoxTuneRav1e.Text + " --rdo-lookahead-frames " + TextBoxRDOLookaheadRav1e.Text + rav1eColor + rav1eContentLight + rav1eMasteringDisplay;
             }
             else
@@ -684,7 +506,7 @@ namespace NotEnoughAV1Encodes
                     break;
                 default: break;
             }
-            if (RadioButtonConstantQuality.IsChecked == true) { vp9QualityMode = " -crf " + SliderQuality.Value + " -b:v 0 "; } 
+            if (RadioButtonConstantQuality.IsChecked == true) { vp9QualityMode = " -crf " + SliderQuality.Value + " -b:v 0 "; }
             else { vp9QualityMode = " -b:v " + TextBoxBitrate.Text + "k "; }
             //Basic Settings
             if (CheckBoxAdvancedSettings.IsChecked == false)
@@ -704,8 +526,137 @@ namespace NotEnoughAV1Encodes
                 {
                     allSettingsVP9 = TextBoxAdvancedSettings.Text;
                 }
-                
+
             }
+        }
+
+        //═══════════════════════════════════ Audio Parameters ════════════════════════════════════
+       
+        private void setAudioParameters()
+        {
+            trackOne = CheckBoxAudioTrackOne.IsChecked == true;
+            trackTwo = CheckBoxAudioTrackTwo.IsChecked == true;
+            trackThree = CheckBoxAudioTrackThree.IsChecked == true;
+            trackFour = CheckBoxAudioTrackFour.IsChecked == true;
+            audioEncoding = CheckBoxAudioEncoding.IsChecked == true;
+            audioCodecTrackOne = ComboBoxAudioCodec.Text;
+            audioCodecTrackTwo = ComboBoxAudioCodecTrackTwo.Text;
+            audioCodecTrackThree = ComboBoxAudioCodecTrackThree.Text;
+            audioCodecTrackFour = ComboBoxAudioCodecTrackFour.Text;
+            audioBitrateTrackOne = Int16.Parse(TextBoxAudioBitrate.Text);
+            audioBitrateTrackTwo = Int16.Parse(TextBoxAudioBitrateTrackTwo.Text);
+            audioBitrateTrackThree = Int16.Parse(TextBoxAudioBitrateTrackThree.Text);
+            audioBitrateTrackFour = Int16.Parse(TextBoxAudioBitrateTrackFour.Text);
+            switch (ComboBoxTrackOneChannels.SelectedIndex)
+            {
+                case 0: audioChannelsTrackOne = 1; break;
+                case 1: audioChannelsTrackOne = 2; break;
+                case 2: audioChannelsTrackOne = 6; break;
+                case 3: audioChannelsTrackOne = 8; break;
+                default: break;
+            }
+            switch (ComboBoxTrackTwoChannels.SelectedIndex)
+            {
+                case 0: audioChannelsTrackTwo = 1; break;
+                case 1: audioChannelsTrackTwo = 2; break;
+                case 2: audioChannelsTrackTwo = 6; break;
+                case 3: audioChannelsTrackTwo = 8; break;
+                default: break;
+            }
+            switch (ComboBoxTrackThreeChannels.SelectedIndex)
+            {
+                case 0: audioChannelsTrackThree = 1; break;
+                case 1: audioChannelsTrackThree = 2; break;
+                case 2: audioChannelsTrackThree = 6; break;
+                case 3: audioChannelsTrackThree = 8; break;
+                default: break;
+            }
+            switch (ComboBoxTrackFourChannels.SelectedIndex)
+            {
+                case 0: audioChannelsTrackFour = 1; break;
+                case 1: audioChannelsTrackFour = 2; break;
+                case 2: audioChannelsTrackFour = 6; break;
+                case 3: audioChannelsTrackFour = 8; break;
+                default: break;
+            }
+        }
+
+        //═════════════════════════════════ Subtitles Parameters ══════════════════════════════════
+
+        private void setSubtitleParameters()
+        {
+            subtitleCopy = RadioButtonStreamCopySubtitles.IsChecked == true;
+            subtitleCustom = RadioButtonCustomSubtitles.IsChecked == true;
+            subtitleHardcoding = CheckBoxHardcodeSubtitle.IsChecked == true;
+            subtitleEncoding = CheckBoxSubtitleEncoding.IsChecked == true;
+            if (subtitleCustom) { SubtitleChunks = ListBoxSubtitles.Items.OfType<string>().ToArray(); }
+            if (subtitleHardcoding) { setSubtitleHardcodingParameters(); }
+            if (subtitleHardcoding == false) { subtitleFfmpegCommand = ""; } //If not set, it could create problems when a second job is running afterwards
+        }
+
+        private void setSubtitleHardcodingParameters()
+        {
+            if (subtitleCustom)
+            {
+                string ext = Path.GetExtension(SubtitleChunks[0]);
+                if (ext == ".ass" || ext == ".ssa")
+                {
+                    subtitleFfmpegCommand = "-vf ass=" + '\u0022' + SubtitleChunks[0] + '\u0022';
+                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
+                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:");
+                    SmallFunctions.Logging("Subtitle Hardcoding Parameters: " + subtitleFfmpegCommand);
+                }
+                else if (ext == ".srt")
+                {
+                    subtitleFfmpegCommand = "-vf subtitles=" + '\u0022' + SubtitleChunks[0] + '\u0022';
+                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
+                    subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:");
+                    SmallFunctions.Logging("Subtitle Hardcoding Parameters: " + subtitleFfmpegCommand);
+                }
+                else { MessageBoxes.MessageCustomSubtitleHardCodeNotSupported(); }
+            }
+            if (subtitleCopy) { subtitleFfmpegCommand = "-vf subtitles=" + '\u0022' + videoInput + '\u0022'; subtitleFfmpegCommand = subtitleFfmpegCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c"); subtitleFfmpegCommand = subtitleFfmpegCommand.Replace(":", "\u005c\u005c\u005c:"); }
+        }
+
+        //═══════════════════════════════════════ Functions ═══════════════════════════════════════
+
+        private void MessageNoAudioOutput()
+        {
+            if (MessageBox.Show("No Audio Output detected! \nCancel?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes) { SmallFunctions.Cancel.CancelAll = true; CancelRoutine(); }
+            else { audioEncoding = false; }
+        }
+
+        private void MessageNoSubtitleOutput()
+        {
+            if (MessageBox.Show("No Subtitle Output detected! \nCancel?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes) { SmallFunctions.Cancel.CancelAll = true; CancelRoutine(); }
+            else { subtitleEncoding = false; }
+        }
+
+        private string setChangeFramerate()
+        {
+            switch(ComboBoxFrameRate.SelectedIndex)
+            {
+                case 0: return "5";
+                case 1: return "10";
+                case 2: return "12";
+                case 3: return "15";
+                case 4: return "20";
+                case 5: return "24000/1001";
+                case 6: return "24";
+                case 7: return "25";
+                case 8: return "30000/1001";
+                case 9: return "30";
+                case 10: return "48";
+                case 11: return "50";
+                case 12: return "60000/1001";
+                case 13: return "60";
+                default: return "24";
+            }
+        }
+
+        private void setChunkLength()
+        {
+            if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (Int16.Parse(SmallFunctions.getVideoLength(videoInput)) / Int16.Parse(ComboBoxWorkers.Text)).ToString(); }
         }
 
         private void getVideoInformation()
@@ -718,7 +669,96 @@ namespace NotEnoughAV1Encodes
             setPixelFormat(pixelFormat);
             setChunkLength();
             fileName = SmallFunctions.getFilename(videoInput);
-            CheckSubtitleTracks();
+            if (CheckBoxBatchEncoding.IsChecked == false)
+                LabelVideoSource.Content = fileName + "  |  " + frameRate + " FPS  |  " + pixelFormat;
+            GetSubtitleTracks();
+        }
+
+        private void getCoreCount()
+        {
+            //Gets CoreCount of Hostmachine
+            foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get()) { coreCount += int.Parse(item["NumberOfCores"].ToString()); }
+            for (int i = 1; i <= coreCount; i++) { ComboBoxWorkers.Items.Add(i); }
+            ComboBoxWorkers.SelectedItem = coreCount;
+            SmallFunctions.Logging("System Core Count: " + coreCount);
+        }
+
+        private void getAudioInformation()
+        {
+            string input = '\u0022' + MainWindow.videoInput + '\u0022';
+            Process getAudioIndexes = new Process();
+            getAudioIndexes.StartInfo = new ProcessStartInfo()
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                WorkingDirectory = MainWindow.ffprobePath,
+                Arguments = "/C ffprobe.exe -i " + input + " -loglevel error -select_streams a -show_streams -show_entries stream=index:tags=:disposition= -of csv",
+                RedirectStandardError = true,
+                RedirectStandardOutput = true
+            };
+            getAudioIndexes.Start();
+            //Reads the Console Output
+            string audioIndexes = getAudioIndexes.StandardOutput.ReadToEnd();
+            SmallFunctions.Logging("Audio Indexes ffprobe: " + audioIndexes);
+            //Splits the Console Output
+            string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", "stream," }, StringSplitOptions.RemoveEmptyEntries);
+            int detectedTracks = 0;
+            bool trackone = false, tracktwo = false, trackthree = false, trackfour = false;
+            foreach (var item in audioIndexesFixed)
+            {
+                switch (detectedTracks)
+                {
+                    case 0: trackone = true; break;
+                    case 1: tracktwo = true; break;
+                    case 3: trackthree = true; break;
+                    case 4: trackfour = true; break;
+                    default: break;
+                }
+                detectedTracks += 1;
+            }
+            getAudioIndexes.WaitForExit();
+            if (trackone == false) { CheckBoxAudioTrackOne.IsChecked = false; CheckBoxAudioTrackOne.IsEnabled = false; }
+            if (tracktwo == false) { CheckBoxAudioTrackTwo.IsChecked = false; CheckBoxAudioTrackTwo.IsEnabled = false; }
+            if (trackthree == false) { CheckBoxAudioTrackThree.IsChecked = false; CheckBoxAudioTrackThree.IsEnabled = false; }
+            if (trackfour == false) { CheckBoxAudioTrackFour.IsChecked = false; CheckBoxAudioTrackFour.IsEnabled = false; }
+            if (CheckBoxAudioTrackOne.IsEnabled == false && CheckBoxAudioTrackTwo.IsEnabled == false && CheckBoxAudioTrackThree.IsEnabled == false && CheckBoxAudioTrackFour.IsEnabled == false) { CheckBoxAudioEncoding.IsChecked = false; CheckBoxAudioEncoding.IsEnabled = false; }
+        }
+
+        public void GetSubtitleTracks()
+        {
+            //Gets the SubtitleIndexes of the Input Video, because people may enable subtitles, even they don't exist
+            string input = '\u0022' + videoInput + '\u0022';
+            Process getSubtitleIndexes = new Process();
+            getSubtitleIndexes.StartInfo = new ProcessStartInfo()
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                WorkingDirectory = ffprobePath,
+                Arguments = "/C ffprobe.exe -i " + input + " -loglevel error -select_streams s -show_streams -show_entries stream=index:tags=:disposition= -of csv",
+                RedirectStandardError = true,
+                RedirectStandardOutput = true
+            };
+
+            getSubtitleIndexes.Start();
+
+            //Reads the Console Output
+            string subtitleIndexes = getSubtitleIndexes.StandardOutput.ReadToEnd();
+            SmallFunctions.Logging("Subtitle Indexes ffprobe: " + subtitleIndexes);
+            if (subtitleIndexes == "")
+            {
+                //If the Source video doesnt have Subtitles embedded, then Stream Copy Subtitles will be disabled.
+                RadioButtonStreamCopySubtitles.IsChecked = false;
+                RadioButtonStreamCopySubtitles.IsEnabled = false;
+            }
+            else if (subtitleIndexes != "")
+            {
+                RadioButtonStreamCopySubtitles.IsEnabled = true;
+            }
+            getSubtitleIndexes.WaitForExit();
         }
 
         private void setPixelFormat(string pixelFormat)
@@ -800,44 +840,6 @@ namespace NotEnoughAV1Encodes
             frameRateIndex = ComboBoxFrameRate.SelectedIndex;
         }
 
-        private void getAudioInformation()
-        {
-            string input = '\u0022' + MainWindow.videoInput + '\u0022';
-            Process getAudioIndexes = new Process();
-            getAudioIndexes.StartInfo = new ProcessStartInfo()
-            {
-                UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden, FileName = "cmd.exe", WorkingDirectory = MainWindow.ffprobePath,
-                Arguments = "/C ffprobe.exe -i " + input + " -loglevel error -select_streams a -show_streams -show_entries stream=index:tags=:disposition= -of csv",
-                RedirectStandardError = true, RedirectStandardOutput = true
-            };
-            getAudioIndexes.Start();
-            //Reads the Console Output
-            string audioIndexes = getAudioIndexes.StandardOutput.ReadToEnd();
-            SmallFunctions.Logging("Audio Indexes ffprobe: " + audioIndexes);
-            //Splits the Console Output
-            string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", "stream," }, StringSplitOptions.RemoveEmptyEntries);
-            int detectedTracks = 0;
-            bool trackone = false, tracktwo = false, trackthree = false, trackfour = false;
-            foreach (var item in audioIndexesFixed)
-            {
-                switch(detectedTracks)
-                {
-                    case 0: trackone = true; break;
-                    case 1: tracktwo = true; break;
-                    case 3: trackthree = true; break;
-                    case 4: trackfour = true; break;
-                    default: break;
-                }
-                detectedTracks += 1;
-            }
-            getAudioIndexes.WaitForExit();
-            if (trackone == false) { CheckBoxAudioTrackOne.IsChecked = false; CheckBoxAudioTrackOne.IsEnabled = false; }
-            if (tracktwo == false) { CheckBoxAudioTrackTwo.IsChecked = false; CheckBoxAudioTrackTwo.IsEnabled = false; }
-            if (trackthree == false) { CheckBoxAudioTrackThree.IsChecked = false; CheckBoxAudioTrackThree.IsEnabled = false; }
-            if (trackfour == false) { CheckBoxAudioTrackFour.IsChecked = false; CheckBoxAudioTrackFour.IsEnabled = false; }
-            if (CheckBoxAudioTrackOne.IsEnabled == false && CheckBoxAudioTrackTwo.IsEnabled == false && CheckBoxAudioTrackThree.IsEnabled == false && CheckBoxAudioTrackFour.IsEnabled == false) { CheckBoxAudioEncoding.IsChecked = false; CheckBoxAudioEncoding.IsEnabled = false; }
-        }
-
         private void setProgressBarLabel(string Text)
         {
             LabelProgressbar.Content = Text;
@@ -873,36 +875,6 @@ namespace NotEnoughAV1Encodes
             ProgressBar.Value = 100;
             LabelProgressbar.Content = "Cancelled";
             SmallFunctions.Logging("CancelRoutine()");
-        }
-
-        private void SetBackground()
-        {
-            if (CheckBoxDarkMode.IsChecked == true && customBackground)
-            {
-                SolidColorBrush transparentBlack = new SolidColorBrush(System.Windows.Media.Color.FromArgb(65, 30, 30, 30));
-                TabControl.Background = transparentBlack;
-                TabGrid.Background = transparentBlack;
-                TabGrid1.Background = transparentBlack;
-                TabGrid2.Background = transparentBlack;
-                TabGrid3.Background = transparentBlack;
-                TabGrid4.Background = transparentBlack;
-                TabGrid6.Background = transparentBlack;
-                TextBoxChunkLength.Background = transparentBlack;
-                ProgressBar.Background = transparentBlack;
-            }
-            else if (customBackground)
-            {
-                SolidColorBrush transparentWhite = new SolidColorBrush(System.Windows.Media.Color.FromArgb(65, 100, 100, 100));
-                TabControl.Background = transparentWhite;
-                TabGrid.Background = transparentWhite;
-                TabGrid1.Background = transparentWhite;
-                TabGrid2.Background = transparentWhite;
-                TabGrid3.Background = transparentWhite;
-                TabGrid4.Background = transparentWhite;
-                TabGrid6.Background = transparentWhite;
-                TextBoxChunkLength.Background = transparentWhite;
-                ProgressBar.Background = transparentWhite;
-            }
         }
 
         private void RadioButtonCustomSubtitles_Checked(object sender, RoutedEventArgs e)
@@ -969,6 +941,36 @@ namespace NotEnoughAV1Encodes
             GroupBox3.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(213, 223, 229));
         }
 
+        private void SetBackground()
+        {
+            if (CheckBoxDarkMode.IsChecked == true && customBackground)
+            {
+                SolidColorBrush transparentBlack = new SolidColorBrush(System.Windows.Media.Color.FromArgb(65, 30, 30, 30));
+                TabControl.Background = transparentBlack;
+                TabGrid.Background = transparentBlack;
+                TabGrid1.Background = transparentBlack;
+                TabGrid2.Background = transparentBlack;
+                TabGrid3.Background = transparentBlack;
+                TabGrid4.Background = transparentBlack;
+                TabGrid6.Background = transparentBlack;
+                TextBoxChunkLength.Background = transparentBlack;
+                ProgressBar.Background = transparentBlack;
+            }
+            else if (customBackground)
+            {
+                SolidColorBrush transparentWhite = new SolidColorBrush(System.Windows.Media.Color.FromArgb(65, 100, 100, 100));
+                TabControl.Background = transparentWhite;
+                TabGrid.Background = transparentWhite;
+                TabGrid1.Background = transparentWhite;
+                TabGrid2.Background = transparentWhite;
+                TabGrid3.Background = transparentWhite;
+                TabGrid4.Background = transparentWhite;
+                TabGrid6.Background = transparentWhite;
+                TextBoxChunkLength.Background = transparentWhite;
+                ProgressBar.Background = transparentWhite;
+            }
+        }
+
         private void AddToQueue()
         {
             SmallFunctions.checkCreateFolder(Path.Combine(Directory.GetCurrentDirectory(), "Queue"));
@@ -985,25 +987,8 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void LoadQueueStartup()
-        {
-            if (Directory.Exists("Queue") == true)
-            {
-                try
-                {
-                    DirectoryInfo queueFiles = new DirectoryInfo("Queue");
-                    foreach (var file in queueFiles.GetFiles())
-                    {
-                        ListBoxQueue.Items.Add(file);
-                        SmallFunctions.Logging("Found Queue file: " + file.ToString());
-                    }
-                }
-                catch { }
-            }
-        }
-
         //════════════════════════════════════════ Buttons ════════════════════════════════════════
-
+        
         private void ButtonUpdateDependencies_Click(object sender, RoutedEventArgs e)
         {
             if (found7z) {
@@ -1106,7 +1091,7 @@ namespace NotEnoughAV1Encodes
                     SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
                     saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;*.mp4";
                     Nullable<bool> result = saveVideoFileDialog.ShowDialog();
-                    if (result == true) { videoOutput = saveVideoFileDialog.FileName; outputSet = true; LabelVideoOutput.Content = videoOutput; SmallFunctions.Logging("Video Output: " + videoOutput); }
+                    if (result == true) { videoOutput = saveVideoFileDialog.FileName; outputSet = true; LabelVideoOutput.Content = SmallFunctions.getFilename(videoOutput); SmallFunctions.Logging("Video Output: " + videoOutput); }
                 }
                 else
                 {
@@ -1118,7 +1103,6 @@ namespace NotEnoughAV1Encodes
                         LabelVideoOutput.Content = videoOutput;
                         outputSet = true;
                     }
-
                 }
             }
         }
@@ -1137,7 +1121,7 @@ namespace NotEnoughAV1Encodes
                     if (result == true)
                     {
                         videoInput = openVideoFileDialog.FileName;
-                        LabelVideoSource.Content = videoInput;
+                        
                         SmallFunctions.Logging("Video Input: " + videoInput);
                         getVideoInformation();
                         getAudioInformation();
@@ -1297,19 +1281,8 @@ namespace NotEnoughAV1Encodes
             Process.Start("https://www.reddit.com/user/Al_kl");
         }
 
-        //═══════════════════════════════════ Other UI Elements ═══════════════════════════════════
-
-        private void ComboBoxFrameRate_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (inputSet == true && ComboBoxFrameRate.SelectedIndex != frameRateIndex) {
-                if (CheckBoxReencodeBeforeSplitting.IsChecked == false && CheckBoxReencodeDuringSplitting.IsChecked == false)
-                {
-                    if (MessageBox.Show("Changing the Framerate requires reencoding! Activate Reencoding?", "Framerate", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    { CheckBoxReencodeBeforeSplitting.IsChecked = true; }
-                }
-            }
-        }
-
+        //═══════════════════════════════════════ CheckBoxes ══════════════════════════════════════
+        
         private void CheckBoxLogging_Unchecked(object sender, RoutedEventArgs e)
         {
             SmallFunctions.WriteToFileThreadSafe("", "disablelogging.txt");
@@ -1361,32 +1334,23 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void TextBoxAdvancedSettings_TextChanged(object sender, TextChangedEventArgs e)
+        private void CheckBoxDarkMode_Checked(object sender, RoutedEventArgs e)
         {
-            string[] forbiddenWords = { "help", "cfg", "debug", "output", "passes", "pass", "fpf", "limit",
-            "skip", "webm", "ivf", "obu", "q-hist", "rate-hist", "fullhelp", "benchmark", "first-pass", "second-pass",
-            "reconstruction", "enc-mode-2p", "input-stat-file", "output-stat-file"};
-
-            foreach (var words in forbiddenWords)
-            {
-                if (CheckBoxDarkMode.IsChecked == false)
-                {
-                    TextBoxAdvancedSettings.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
-                }
-                else
-                {
-                    TextBoxAdvancedSettings.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255));
-                }
-                
-                if (TextBoxAdvancedSettings.Text.Contains(words))
-                {
-                    TextBoxAdvancedSettings.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 0, 0));
-                    break;
-                }
-            }
+            SetBackgroundColorBlack();
+            SetBackground();
+            SetBackgroundColorBlack();
+            if (File.Exists("darkmode.txt")) { File.Delete("darkmode.txt"); }
+            SmallFunctions.WriteToFileThreadSafe(CheckBoxDarkMode.IsChecked.ToString(), "darkmode.txt");
         }
 
-        private void CheckBoxCustomSettings_Checked(object sender, RoutedEventArgs e)
+        private void CheckBoxDarkMode_UnChecked(object sender, RoutedEventArgs e)
+        {
+            SetBackgroundColorWhite();
+            SetBackground();
+            if (File.Exists("darkmode.txt")) { File.Delete("darkmode.txt"); }
+        }
+
+         private void CheckBoxCustomSettings_Checked(object sender, RoutedEventArgs e)
         {
             encoder = ComboBoxEncoder.Text;
             setEncoderParameters(true);
@@ -1398,11 +1362,8 @@ namespace NotEnoughAV1Encodes
             TextBoxAdvancedSettings.Text = inputSet;
         }
 
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            Process.Start(e.Uri.ToString());
-        }
-
+        //═══════════════════════════════════════ ComboBoxes ══════════════════════════════════════
+        
         private void ComboBoxEncoder_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string comboitem = (e.AddedItems[0] as ComboBoxItem).Content as string;
@@ -1464,12 +1425,6 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
-        }
-
         private void ComboBoxPasses_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Due Rav1e Two Pass Still broken this will force one pass encoding
@@ -1481,9 +1436,38 @@ namespace NotEnoughAV1Encodes
             if (ComboBoxEncoder.SelectedIndex == 3 && ComboBoxWorkers.SelectedIndex != 0 && CheckBoxWorkerLimit.IsChecked == false) { ComboBoxWorkers.SelectedIndex = 0; MessageBoxes.MessageSVTWorkers(); }
         }
 
+        private void ComboBoxFrameRate_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (inputSet == true && ComboBoxFrameRate.SelectedIndex != frameRateIndex)
+            {
+                if (CheckBoxReencodeBeforeSplitting.IsChecked == false && CheckBoxReencodeDuringSplitting.IsChecked == false)
+                {
+                    if (MessageBox.Show("Changing the Framerate requires reencoding! Activate Reencoding?", "Framerate", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    { CheckBoxReencodeBeforeSplitting.IsChecked = true; }
+                }
+            }
+        }
+
+        //═══════════════════════════════════ Other UI Elements ═══════════════════════════════════
+
         private void TextBoxChunkLength_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (TextBoxChunkLength.Text == "0") { TextBoxChunkLength.Text = "1"; }
+        }
+
+        private void TextBoxAdvancedSettings_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string[] forbiddenWords = { "help", "cfg", "debug", "output", "passes", "pass", "fpf", "limit",
+            "skip", "webm", "ivf", "obu", "q-hist", "rate-hist", "fullhelp", "benchmark", "first-pass", "second-pass",
+            "reconstruction", "enc-mode-2p", "input-stat-file", "output-stat-file"};
+
+            foreach (var words in forbiddenWords)
+            {
+                if (CheckBoxDarkMode.IsChecked == false) { TextBoxAdvancedSettings.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0)); }
+                else { TextBoxAdvancedSettings.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255)); }
+
+                if (TextBoxAdvancedSettings.Text.Contains(words)) { TextBoxAdvancedSettings.Foreground = new SolidColorBrush(Color.FromRgb(255, 0, 0)); break; }
+            }
         }
 
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -1492,23 +1476,15 @@ namespace NotEnoughAV1Encodes
             TaskbarItemInfo.ProgressValue = (1.0 / taskMax) * taskVal;
         }
 
-        private void CheckBoxDarkMode_Checked(object sender, RoutedEventArgs e)
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-            SetBackgroundColorBlack();
-            SetBackground();
-
-            SetBackgroundColorBlack();
-            if (File.Exists("darkmode.txt")) { File.Delete("darkmode.txt"); }
-            SmallFunctions.WriteToFileThreadSafe(CheckBoxDarkMode.IsChecked.ToString(), "darkmode.txt");
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
 
-        private void CheckBoxDarkMode_UnChecked(object sender, RoutedEventArgs e)
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            SetBackgroundColorWhite();
-            SetBackground();
-            
-            if (File.Exists("darkmode.txt")) { File.Delete("darkmode.txt"); }
-            //SmallFunctions.WriteToFileThreadSafe(CheckBoxDarkMode.IsChecked.ToString(), "darkmode.txt");
+            Process.Start(e.Uri.ToString());
         }
 
         //═════════════════════════════════ Save / Load Settings ══════════════════════════════════
@@ -1543,6 +1519,8 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("PreReencode",        CheckBoxReencodeBeforeSplitting.IsChecked.ToString());
             writer.WriteElementString("ChunkCalc",          CheckBoxChunkLengthAutoCalculation.IsChecked.ToString());
             writer.WriteElementString("ChunkLength",        TextBoxChunkLength.Text);
+            writer.WriteElementString("Crop",               CheckBoxCrop.IsChecked.ToString());
+            writer.WriteElementString("CropAmount",         TextBoxImageHeightCrop.Text);
             writer.WriteElementString("Resize",             CheckBoxResize.IsChecked.ToString());
             writer.WriteElementString("ResizeWidth",        TextBoxImageWidth.Text);
             writer.WriteElementString("ResizeHeight",       TextBoxImageHeight.Text);
@@ -1691,6 +1669,8 @@ namespace NotEnoughAV1Encodes
                     case "PreReencode":         CheckBoxReencodeBeforeSplitting.IsChecked = n.InnerText == "True"; break;
                     case "ChunkCalc":           CheckBoxChunkLengthAutoCalculation.IsChecked = n.InnerText == "True"; break;
                     case "ChunkLength":         TextBoxChunkLength.Text = n.InnerText; break;
+                    case "Crop":                CheckBoxCrop.IsChecked = n.InnerText == "True"; break;
+                    case "CropAmount":          TextBoxImageHeightCrop.Text = n.InnerText; break;
                     case "Resize":              CheckBoxResize.IsChecked = n.InnerText == "True"; break;
                     case "ResizeWidth":         TextBoxImageWidth.Text = n.InnerText; break;
                     case "ResizeHeight":        TextBoxImageHeight.Text = n.InnerText; break;
@@ -1794,6 +1774,19 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
 
+        private void LoadQueueStartup()
+        {
+            if (Directory.Exists("Queue") == true)
+            {
+                try
+                {
+                    DirectoryInfo queueFiles = new DirectoryInfo("Queue");
+                    foreach (var file in queueFiles.GetFiles()) { ListBoxQueue.Items.Add(file); SmallFunctions.Logging("Found Queue file: " + file.ToString()); }
+                }
+                catch { }
+            }
+        }
+
         private void LoadBackground()
         {
             if (File.Exists("darkmode.txt"))
@@ -1835,6 +1828,49 @@ namespace NotEnoughAV1Encodes
                 }
             }
             catch { }
+        }
+
+        private void Check7zExtractor()
+        {
+            if (File.Exists(@"C:\Program Files\7-Zip\7zG.exe")) { found7z = true; }
+        }
+
+        public static void setEncoderPath()
+        {
+            //aomenc
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "aomenc.exe"))) { aomencPath = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "aomenc.exe"))) { aomencPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
+            else if (SmallFunctions.ExistsOnPath("aomenc.exe")) { aomencPath = SmallFunctions.GetFullPathWithOutName("aomenc.exe"); }
+            SmallFunctions.Logging("Encoder aomenc Path: " + aomencPath);
+
+            //rav1e
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "rav1e.exe"))) { rav1ePath = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "rav1e.exe"))) { rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
+            else if (SmallFunctions.ExistsOnPath("rav1e.exe")) { rav1ePath = SmallFunctions.GetFullPathWithOutName("rav1e.exe"); }
+            SmallFunctions.Logging("Encoder rav1e Path: " + rav1ePath);
+
+            //svt-av1
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "SvtAv1EncApp.exe"))) { svtav1Path = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "SvtAv1EncApp.exe"))) { svtav1Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
+            else if (SmallFunctions.ExistsOnPath("SvtAv1EncApp.exe")) { svtav1Path = SmallFunctions.GetFullPathWithOutName("SvtAv1EncApp.exe"); }
+            SmallFunctions.Logging("Encoder svt-av1 Path: " + svtav1Path);
+
+            //ffmpeg
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "ffmpeg.exe"))) { ffmpegPath = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg", "ffmpeg.exe"))) { ffmpegPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"); }
+            else if (SmallFunctions.ExistsOnPath("ffmpeg.exe")) { ffmpegPath = SmallFunctions.GetFullPathWithOutName("ffmpeg.exe"); }
+            SmallFunctions.Logging("Encoder ffmpeg Path: " + ffmpegPath);
+
+            //ffprobe
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "ffprobe.exe"))) { ffprobePath = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg", "ffprobe.exe"))) { ffprobePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"); }
+            else if (SmallFunctions.ExistsOnPath("ffprobe.exe")) { ffprobePath = SmallFunctions.GetFullPathWithOutName("ffprobe.exe"); }
+            SmallFunctions.Logging("Encoder ffprobe Path: " + ffprobePath);
+        }
+
+        private void saveResumeJob()
+        {
+            SaveSettings(fileName, false, true, false);
         }
 
         //═══════════════════════════════════════ Encoding ════════════════════════════════════════

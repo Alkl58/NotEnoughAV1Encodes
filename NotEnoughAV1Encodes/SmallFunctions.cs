@@ -58,6 +58,7 @@ namespace NotEnoughAV1Encodes
                     {
                         DownloadDependencies egg = new DownloadDependencies(false);
                         egg.ShowDialog();
+                        MainWindow.setEncoderPath();
                     }
                     else { MessageBoxes.Message7zNotFound(); }
                 }                
