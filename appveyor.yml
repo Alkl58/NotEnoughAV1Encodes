@@ -3,6 +3,9 @@ image: Visual Studio 2019
 configuration: Release
 build:
   verbosity: minimal
+before_build:
+  - nuget restore
+
 artifacts:
 - path: '\NotEnoughAV1Encodes\bin\Release\'
   name: NotEnoughAV1Encodes.exe
