@@ -53,5 +53,10 @@ namespace NotEnoughAV1Encodes
         {
             MessageBox.Show("The selected subtitle for hardcoding is currently not supported!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        public static void Message7zNotFound()
+        {
+            MessageBox.Show("It seems that you don't have 7zip installed. Please install 7zip to use the update functionality!", "7zip", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }

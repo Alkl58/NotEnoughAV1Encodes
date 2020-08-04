@@ -36,7 +36,7 @@ namespace NotEnoughAV1Encodes
         public static bool trackOne, trackTwo, trackThree, trackFour, audioEncoding;
         public static bool inputSet, outputSet, reencode, beforereencode, resumeMode, deleteTempFiles;
         public static bool subtitleCopy, subtitleCustom, subtitleHardcoding, subtitleEncoding;
-        public static bool customBackground, programStartup = true, logging = true, buttonActive = true, saveSettings;
+        public static bool customBackground, programStartup = true, logging = true, buttonActive = true, saveSettings, found7z;
         public static double videoFrameRate;
         public DateTime starttimea;
         public MainWindow()
@@ -49,10 +49,11 @@ namespace NotEnoughAV1Encodes
             LoadBackground();
             LoadDefaultProfile();
             setEncoderPath();
+            Check7zExtractor();
             CheckForResumeFile();
             SmallFunctions.checkDependeciesStartup();
             programStartup = false;            
-            LoadQueueStartup();
+            LoadQueueStartup();            
         }
 
         //════════════════════════════════════ Main Functions ═════════════════════════════════════
@@ -210,6 +211,11 @@ namespace NotEnoughAV1Encodes
         }
 
         //═══════════════════════════════════════ Functions ═══════════════════════════════════════
+
+        private void Check7zExtractor()
+        {
+            if (File.Exists(@"C:\Program Files\7-Zip\7zG.exe")) { found7z = true;}
+        }
 
         public void CheckSubtitleTracks()
         {
@@ -814,8 +820,6 @@ namespace NotEnoughAV1Encodes
         {
             ButtonCancelEncode.BorderBrush = Brushes.Red;
             ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
-            //ButtonOpenSource.IsEnabled = true;
-            //ButtonSaveVideo.IsEnabled = true;
             buttonActive = true;
             ProgressBar.Foreground = Brushes.Red;
             ProgressBar.Maximum = 100;
@@ -952,6 +956,14 @@ namespace NotEnoughAV1Encodes
         }
 
         //════════════════════════════════════════ Buttons ════════════════════════════════════════
+
+        private void ButtonUpdateDependencies_Click(object sender, RoutedEventArgs e)
+        {
+            if (found7z) {
+                DownloadDependencies egg = new DownloadDependencies(CheckBoxDarkMode.IsChecked == true);
+                egg.ShowDialog();
+            } else { MessageBoxes.Message7zNotFound(); }
+        }
 
         private void ButtonRemoveFromQueue_Click(object sender, RoutedEventArgs e)
         {

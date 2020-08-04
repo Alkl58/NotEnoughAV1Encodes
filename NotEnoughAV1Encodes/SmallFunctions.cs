@@ -52,7 +52,15 @@ namespace NotEnoughAV1Encodes
             ffprobeExists = File.Exists(MainWindow.ffprobePath + "\\ffprobe.exe");
             if (ffmpegExists == false || ffprobeExists == false)
             {
-                MessageBox.Show("Could not find all dependencies! Please check if the dependencies ffprobe and ffmpeg are located in: \n" + Directory.GetCurrentDirectory() + "\\Apps\\ffmpeg\\ \nor in the Windows PATH environment!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (MessageBox.Show("Could not find all dependencies! Please check if the dependencies ffprobe and ffmpeg are located in: \n" + Directory.GetCurrentDirectory() + "\\Apps\\ffmpeg\\ \nor in the Windows PATH environment! \nOpen Updater?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                {
+                    if (MainWindow.found7z)
+                    {
+                        DownloadDependencies egg = new DownloadDependencies(false);
+                        egg.ShowDialog();
+                    }
+                    else { MessageBoxes.Message7zNotFound(); }
+                }                
             }
         }
 
