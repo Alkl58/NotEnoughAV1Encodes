@@ -458,20 +458,19 @@ namespace NotEnoughAV1Encodes
             string svtav1QualityMode;
             switch (ComboBoxColorFormatSVT.SelectedIndex)
             {
-                case 0:
+                case 0: break; //yuv400p piping apparently does not work
+                case 1:
                     if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le -strict -1"; }
                     if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le -strict -1"; }
                     break;
-                case 1:
+                case 2:
                     if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv422p -strict -1"; }
                     if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv422p10le -strict -1"; }
-                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv422p12le -strict -1"; }
-                    break;
-                case 2:
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv422p12le -strict -1"; } break;
+                case 3:
                     if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv444p -strict -1"; }
                     if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv444p10le -strict -1"; }
-                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv444p12le -strict -1"; }
-                    break;
+                    if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv444p12le -strict -1"; } break;
                 default: break;
             }
             if (RadioButtonConstantQuality.IsChecked == true) { svtav1QualityMode = " --rc 0 -q " + SliderQuality.Value; }
@@ -485,7 +484,7 @@ namespace NotEnoughAV1Encodes
             {
                 string hdrSVT = "";
                 if (CheckBoxEnableHDRSVT.IsChecked == true) { hdrSVT = " --enable-hdr"; }
-                allSettingsSVTAV1 = "--preset " + SliderPreset.Value + " --input-depth " + ComboBoxBitDepth.Text + svtav1QualityMode + " --tile-rows " + ComboBoxTileRows.Text + " --tile-columns " + ComboBoxTileColumns.Text + " --color-format " + ComboBoxColorFormatSVT.Text + hdrSVT + " --adaptive-quantization " + ComboBoxAQModeSVT.SelectedIndex + " --keyint " + TextBoxkeyframeIntervalSVT.Text;
+                allSettingsSVTAV1 = "--preset " + SliderPreset.Value + " --input-depth " + ComboBoxBitDepth.Text + svtav1QualityMode + " --tile-rows " + ComboBoxTileRows.Text + " --tile-columns " + ComboBoxTileColumns.Text + " --color-format " + ComboBoxColorFormatSVT.SelectedIndex + hdrSVT + " --adaptive-quantization " + ComboBoxAQModeSVT.SelectedIndex + " --keyint " + TextBoxkeyframeIntervalSVT.Text;
             }
             else
             {
@@ -1374,6 +1373,7 @@ namespace NotEnoughAV1Encodes
                         SliderPreset.Value = 5;
                         SliderPreset.Maximum = 8;
                         if (CheckBoxWorkerLimit.IsChecked == false) { ComboBoxWorkers.SelectedIndex = 0; } //It's not necessary to have more than one Worker for SVT 
+                        if (ComboBoxBitDepth.SelectedIndex == 2) { ComboBoxBitDepth.SelectedIndex = 1; }
                     }
                     break;
                 default:
