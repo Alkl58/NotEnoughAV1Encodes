@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Settings" Height="214.198" Width="448.956">
     <Grid>
-        <Button Content="Close" Margin="0,0,10,10" Click="Button_Click" HorizontalAlignment="Right" Width="93" Height="30" VerticalAlignment="Bottom"/>
+        <Button x:Name="ButtonCloseWindow" Content="Close" Margin="0,0,10,10" Click="Button_Click" HorizontalAlignment="Right" Width="93" Height="30" VerticalAlignment="Bottom" Background="White"/>
         <TextBox x:Name="TextBoxSettings" Margin="10,10,10,55" TextWrapping="Wrap" IsReadOnly="True"/>
 
     </Grid>

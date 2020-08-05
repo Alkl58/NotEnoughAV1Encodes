@@ -15,7 +15,7 @@
     <Grid x:Name="Grid">
         <Image x:Name="imgDynamic" Stretch="UniformToFill">
         </Image>
-        <Button x:Name="ButtonOpenSource" HorizontalAlignment="Left" Margin="21.333,16,0,0" VerticalAlignment="Top" Width="138" Height="47.25" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" UseLayoutRounding="False" BorderBrush="#FFE4E4E4" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" Click="ButtonOpenSource_Click">
+        <Button x:Name="ButtonOpenSource" HorizontalAlignment="Left" Margin="21.333,16,0,0" VerticalAlignment="Top" Width="138" Height="47.25" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" UseLayoutRounding="False" BorderBrush="#FFE4E4E4" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" Click="ButtonOpenSource_Click">
             <StackPanel Height="50" Width="128" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-4,0,-3">
                 <Image Source="img/video1.png" Margin="0,0,0,3" Width="39"/>
                 <TextBlock x:Name="TextBlockOpenSource" Margin="0,16,0,0" Width="80" FontFamily="Segoe UI Symbol" Foreground="#FF15417E" FontWeight="Bold">
@@ -24,13 +24,13 @@
                 </TextBlock>
             </StackPanel>
         </Button>
-        <Button x:Name="ButtonSaveVideo" HorizontalAlignment="Left" Margin="164.333,16,0,0" VerticalAlignment="Top" Width="138" Height="47.25" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" UseLayoutRounding="False" BorderBrush="#FFE4E4E4" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" Click="ButtonSaveVideo_Click">
+        <Button x:Name="ButtonSaveVideo" HorizontalAlignment="Left" Margin="164.333,16,0,0" VerticalAlignment="Top" Width="138" Height="47.25" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" UseLayoutRounding="False" BorderBrush="#FFE4E4E4" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" Click="ButtonSaveVideo_Click">
             <StackPanel Height="46" Width="108" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,-3">
                 <Image Source="img/save.png" Margin="0,0,0,3" Width="37"/>
                 <TextBlock Margin="0,12,0,0" Width="69" FontFamily="Segoe UI Symbol" Foreground="{Binding ElementName=TextBlockOpenSource, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Text="Save To..."/>
             </StackPanel>
         </Button>
-        <Button x:Name="ButtonStartEncode" HorizontalAlignment="Left" Margin="307.333,16,0,0" VerticalAlignment="Top" Width="121.333" Height="47.25" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" UseLayoutRounding="False" BorderBrush="#FFE4E4E4" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" Click="ButtonStartEncode_Click">
+        <Button x:Name="ButtonStartEncode" HorizontalAlignment="Left" Margin="307.333,16,0,0" VerticalAlignment="Top" Width="121.333" Height="47.25" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" UseLayoutRounding="False" BorderBrush="#FFE4E4E4" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" Click="ButtonStartEncode_Click">
             <StackPanel Height="44" Width="112" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,-1">
                 <Image x:Name="ImageEncode" Source="img/play.png" Margin="0,0,0,3" Width="31"/>
                 <TextBlock x:Name="TextBlockEncode" Margin="0,12,0,0" Width="75" FontFamily="Segoe UI Symbol" Foreground="{Binding ElementName=TextBlockOpenSource, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Text="Start Encode"/>
@@ -39,11 +39,11 @@
         <TabControl x:Name="TabControl" HorizontalAlignment="Left" Height="402" Margin="21,119,0,0" VerticalAlignment="Top" Width="950">
             <TabItem x:Name="TabItem" Header="Overview">
                 <Grid x:Name="TabGrid" Background="White">
-                    <Label x:Name="LabelVideoSource1" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Video Source:" HorizontalAlignment="Left" Margin="42,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
-                    <Label x:Name="LabelVideoSource" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="" HorizontalAlignment="Left" Margin="137,45,0,0" VerticalAlignment="Top" Width="781"/>
-                    <Label x:Name="LabelVideoOutput1" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Video Output:" HorizontalAlignment="Left" Margin="42,76,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
-                    <Label x:Name="LabelVideoOutput" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="" HorizontalAlignment="Left" Margin="137,76,0,0" VerticalAlignment="Top" Width="781"/>
-                    <Label Content="Encoding Settings:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="41,141,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
+                    <Label x:Name="LabelVideoSource1" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Video Source:" HorizontalAlignment="Left" Margin="42,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26" FontWeight="Bold"/>
+                    <Label x:Name="LabelVideoSource" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="" HorizontalAlignment="Left" Margin="137,45,0,0" VerticalAlignment="Top" Width="731"/>
+                    <Label x:Name="LabelVideoOutput1" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Video Output:" HorizontalAlignment="Left" Margin="42,76,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26" FontWeight="Bold"/>
+                    <Label x:Name="LabelVideoOutput" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="" HorizontalAlignment="Left" Margin="137,76,0,0" VerticalAlignment="Top" Width="731"/>
+                    <Label Content="Encoding Settings:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="41,141,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26" FontWeight="Bold"/>
                     <Label Content="Encoder:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="164,172,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
                     <Label Content="{Binding ElementName=ComboBoxEncoder, Path=Text, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="225,172,0,0" VerticalAlignment="Top"/>
                     <Label Content="Bit-Depth:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="156,198,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
@@ -58,23 +58,69 @@
                 <Grid x:Name="TabGrid1" Background="White">
                     <Label Content="Splitting" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Chunk length:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
-                    <TextBox x:Name="TextBoxChunkLength" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="187,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox" ToolTip="Splits the Video into n-Seconds Chunks" IsTabStop="False" Text="20" TextChanged="TextBoxChunkLength_TextChanged"/>
+                    <TextBox x:Name="TextBoxChunkLength" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="187,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox" ToolTip="Splits the Video into n-Seconds Chunks. Should not be too short." IsTabStop="False" Text="20" TextChanged="TextBoxChunkLength_TextChanged"/>
                     <Label Content="Re-Encode:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
-                    <ComboBox x:Name="ComboBoxReencodeCodec" HorizontalAlignment="Left" Margin="187,90,0,0" VerticalAlignment="Top" Width="101" Height="26" VerticalContentAlignment="Center">
+                    <ComboBox x:Name="ComboBoxReencodeCodec" HorizontalAlignment="Left" Margin="187,90,0,0" VerticalAlignment="Top" Width="101" Height="26" VerticalContentAlignment="Center" ToolTip="Sets the Codec for reencoding.">
                         <ComboBoxItem Content="x264"/>
                         <ComboBoxItem Content="utvideo" IsSelected="True"/>
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxReencodeBeforeSplitting" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Before Splitting" HorizontalAlignment="Left" Margin="311,96,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="CheckBoxReencodeDuringSplitting" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="During Splitting" HorizontalAlignment="Left" Margin="428,96,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Workers" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,164,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Label Content="Parallel Encoding:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
+                    <CheckBox x:Name="CheckBoxReencodeBeforeSplitting" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Before Splitting" HorizontalAlignment="Left" Margin="311,96,0,0" VerticalAlignment="Top" Unchecked="CheckBoxReencodeBeforeSplitting_Unchecked" ToolTip="Enables Reencoding before the splitting process."/>
+                    <CheckBox x:Name="CheckBoxReencodeDuringSplitting" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="During Splitting" HorizontalAlignment="Left" Margin="428,96,0,0" VerticalAlignment="Top" Unchecked="CheckBoxReencodeDuringSplitting_Unchecked" ToolTip="Enables Reencoding during Splitting."/>
+                    <Label Content="Workers" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <Label Content="Parallel Encoding:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,238,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
                     <CheckBox x:Name="CheckBoxChunkLengthAutoCalculation" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Automatic Calculation" HorizontalAlignment="Left" Margin="311,51,0,0" VerticalAlignment="Top" IsChecked="True"/>
-                    <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="187,256,0,0" VerticalAlignment="Top" Width="101" Height="26" RenderTransformOrigin="0.495,0.462">
+                    <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="187,282,0,0" VerticalAlignment="Top" Width="101" Height="26" RenderTransformOrigin="0.495,0.462" ToolTip="Sets the Process Priority of each Worker.">
                         <ComboBoxItem Content="Normal" IsSelected="True"/>
                         <ComboBoxItem Content="Below Normal"/>
                     </ComboBox>
-                    <Label Content="Process Priority:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,256,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
-                    <ComboBox x:Name="ComboBoxWorkers" HorizontalAlignment="Left" Margin="187,212,0,0" VerticalAlignment="Top" Width="101" Height="26" SelectionChanged="ComboBoxWorkers_SelectionChanged"/>
+                    <Label Content="Process Priority:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,282,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
+                    <ComboBox x:Name="ComboBoxWorkers" HorizontalAlignment="Left" Margin="187,238,0,0" VerticalAlignment="Top" Width="101" Height="26" SelectionChanged="ComboBoxWorkers_SelectionChanged" ToolTip="Sets the amount of Workers which will encode parallel."/>
+                    <Label Content="Trim:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,133,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
+                    <TextBox x:Name="TextBoxTrimStart" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="187,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:00:00" TextChanged="TextBoxTrimEnd_TextChanged" />
+                    <Label Content="Start:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="147,133,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
+                    <Label Content="To:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="301,133,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
+                    <TextBox x:Name="TextBoxTrimEnd" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="330,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:23:00" TextChanged="TextBoxTrimEnd_TextChanged"/>
+                    <CheckBox x:Name="CheckBoxTrimming" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="" HorizontalAlignment="Left" Margin="130,139,0,0" VerticalAlignment="Top" Unchecked="CheckBoxTrimming_Unchecked" Checked="CheckBoxTrimming_Checked"/>
+                    <Image x:Name="ImagePreviewTrimStart" Visibility="{Binding ElementName=CheckBoxTrimming,Path=IsChecked,Converter={StaticResource b2v}}" HorizontalAlignment="Left" Height="175" Margin="634,10,0,0" VerticalAlignment="Top" Width="286" Stretch="UniformToFill"/>
+                    <Image x:Name="ImagePreviewTrimEnd" Visibility="{Binding ElementName=CheckBoxTrimming,Path=IsChecked,Converter={StaticResource b2v}}" HorizontalAlignment="Left" Height="179" Margin="634,185,0,0" VerticalAlignment="Top" Width="286" Stretch="UniformToFill"/>
+                    <Label Content="Trim Start:"  Visibility="{Binding ElementName=CheckBoxTrimming,Path=IsChecked,Converter={StaticResource b2v}}"  Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="567,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
+                    <Label Content="Trim End:"  Visibility="{Binding ElementName=CheckBoxTrimming,Path=IsChecked,Converter={StaticResource b2v}}"  Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="567,185,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Filters">
+                <Grid x:Name="TabGrid10" Background="{Binding ElementName=TabGrid1, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                    <Label Content="Deinterlacing" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="50,41,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <CheckBox x:Name="CheckBoxDeinterlaceYadif" Content="" HorizontalAlignment="Left" Margin="148,78,0,0" VerticalAlignment="Top" Checked="CheckBoxDeinterlaceYadif_Checked"/>
+                    <ComboBox x:Name="ComboBoxDeinterlace" HorizontalAlignment="Left" Margin="186,72,0,0" VerticalAlignment="Top" Width="120" Height="26" ToolTip="yadif=0 will drop half the frames, thus resulting in a poor substitute of the original footage.">
+                        <ComboBoxItem Content="yadif=0"/>
+                        <ComboBoxItem Content="yadif=1" IsSelected="True"/>
+                    </ComboBox>
+                    <Label Content="Filtering" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <Label Content="Resize" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="50,140,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <Label Content="Width:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="186,170,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxResize}"/>
+                    <Label Content="Height:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="323,170,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxResize}"/>
+                    <TextBox x:Name="TextBoxImageWidth" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="236,170,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxResize}"/>
+                    <TextBox x:Name="TextBoxImageHeight" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="376,170,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxResize}"/>
+                    <CheckBox x:Name="CheckBoxResize" Content="" HorizontalAlignment="Left" Margin="148,176,0,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="ComboBoxResizeFilters" HorizontalAlignment="Left" Margin="324,0,0,146.6" VerticalAlignment="Bottom" Width="108" Height="26">
+                        <ComboBoxItem Content="fast_bilinear"/>
+                        <ComboBoxItem Content="bilinear"/>
+                        <ComboBoxItem Content="bicubic" IsSelected="True"/>
+                        <ComboBoxItem Content="experimental"/>
+                        <ComboBoxItem Content="neighbor"/>
+                        <ComboBoxItem Content="area"/>
+                        <ComboBoxItem Content="bicublin"/>
+                        <ComboBoxItem Content="gauss"/>
+                        <ComboBoxItem Content="sinc"/>
+                        <ComboBoxItem Content="lanczos"/>
+                        <ComboBoxItem Content="spline"/>
+                    </ComboBox>
+                    <Label Content="Scaling Algorithm:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="186,201,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxResize}" Width="106"/>
+                    <Label Content="Crop" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="50,239,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <CheckBox x:Name="CheckBoxCrop" Content="" HorizontalAlignment="Left" Margin="148,269,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Amount of Pixels to Crop (height):" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="186,262,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxResize}"/>
+                    <Label Content="The filter will automatically center the crop" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="186,288,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxResize}" FontStyle="Italic" FontSize="10"/>
+                    <TextBox x:Name="TextBoxImageHeightCrop" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="376,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCrop}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Video">
@@ -82,13 +128,14 @@
                     <Label Content="Video" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Encoder:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
                     <ComboBox x:Name="ComboBoxEncoder" HorizontalAlignment="Left" Margin="135,47,0,0" VerticalAlignment="Top" Width="139" Height="26" SelectionChanged="ComboBoxEncoder_SelectionChanged">
-                        <ComboBoxItem Content="aomenc"  IsSelected="True"/>
+                        <ComboBoxItem Content="aomenc" IsSelected="True"/>
                         <ComboBoxItem Content="aomenc (ffmpeg)"/>
                         <ComboBoxItem Content="rav1e"/>
                         <ComboBoxItem Content="svt-av1"/>
+                        <ComboBoxItem Content="vp9"/>
                     </ComboBox>
                     <Label Content="Framerate:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,84,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
-                    <ComboBox x:Name="ComboBoxFrameRate" HorizontalAlignment="Left" Margin="135,86,0,0" VerticalAlignment="Top" Width="69" Height="26" ToolTip="Setting the Framerate won't change the framerate. The Encoder will sync the framerate from the input video.">
+                    <ComboBox x:Name="ComboBoxFrameRate" HorizontalAlignment="Left" Margin="135,86,0,0" VerticalAlignment="Top" Width="69" Height="26" ToolTip="Does only change the framerate if reencoding is activated." SelectionChanged="ComboBoxFrameRate_SelectionChanged">
                         <ComboBoxItem Content="5"/>
                         <ComboBoxItem Content="10"/>
                         <ComboBoxItem Content="12"/>
@@ -108,14 +155,38 @@
                     <ComboBox x:Name="ComboBoxBitDepth" HorizontalAlignment="Left" Margin="135,126,0,0" VerticalAlignment="Top" Width="69" Height="26">
                         <ComboBoxItem Content="8" IsSelected="True"/>
                         <ComboBoxItem Content="10"/>
-                        <ComboBoxItem Content="12"/>
+                        <ComboBoxItem Content="12">
+                            <ComboBoxItem.Style>
+                                <Style>
+                                    <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger
+                      Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="0">
+                                            <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger
+                      Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
+                                            <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger
+                      Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                            <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger
+                      Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="2">
+                                            <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBoxItem.Style>
+                        </ComboBoxItem>
                     </ComboBox>
                     <Label Content="Quality" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="385,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="467,77,0,0" VerticalAlignment="Top" Width="445" TickPlacement="BottomRight" ClipToBounds="True" IsSnapToTickEnabled="True" Height="33" ToolTip="Sets the Constant Quality. It acts like Constant Rate Factor, thus have an dynamic quantizer. " Maximum="63" Value="30" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" />
                     <RadioButton x:Name="RadioButtonConstantQuality" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Constant Quality:" HorizontalAlignment="Left" Margin="448,51,0,0" VerticalAlignment="Top" IsChecked="True" RenderTransformOrigin="0.527,-0.267"/>
                     <RadioButton x:Name="RadioButtonBitrate" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="448,133,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="LabelQuality" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="{Binding Value, ElementName=SliderQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="561,45,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="TextBoxBitrate"  Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="22" Margin="566,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="78" RenderTransformOrigin="0.543,0.45" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
+                    <Label x:Name="LabelQuality" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="{Binding Value, ElementName=SliderQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="561,45,0,0" VerticalAlignment="Top" Width="40"/>
+                    <TextBox x:Name="TextBoxBitrate"  Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="22" Margin="566,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="78" RenderTransformOrigin="0.543,0.45" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
                     <Label Content="| Highest Quality" HorizontalAlignment="Left" Margin="466,97,0,0" VerticalAlignment="Top" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" FontSize="11"/>
                     <Label Content="Lowest Quality |" HorizontalAlignment="Left" Margin="825,97,0,0" VerticalAlignment="Top" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" FontSize="11"/>
                     <Label Content="Optimization" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,188,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
@@ -124,12 +195,6 @@
                     <Label Content="{Binding Value, ElementName=SliderPreset, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="113,230,0,0" VerticalAlignment="Top"/>
                     <Label Content="| Slow" HorizontalAlignment="Left" Margin="134,253,0,0" VerticalAlignment="Top" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" FontSize="11"/>
                     <Label Content="Fast |" HorizontalAlignment="Left" Margin="240,253,0,0" VerticalAlignment="Top" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" FontSize="11"/>
-                    <Label Content="Resize" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="385,188,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Label Content="Width:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="470,230,0,0" VerticalAlignment="Top" IsEnabled="{Binding ElementName=CheckBoxResize, Path=IsChecked}"/>
-                    <Label Content="Height:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="590,230,0,0" VerticalAlignment="Top" IsEnabled="{Binding ElementName=CheckBoxResize, Path=IsChecked}"/>
-                    <TextBox x:Name="TextBoxImageWidth" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="520,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding ElementName=CheckBoxResize, Path=IsChecked}"/>
-                    <TextBox x:Name="TextBoxImageHeight" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="644,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="54" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding ElementName=CheckBoxResize, Path=IsChecked}"/>
-                    <CheckBox x:Name="CheckBoxResize" Content="" HorizontalAlignment="Left" Margin="448,235,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="ComboBoxPasses" HorizontalAlignment="Left" Margin="135,296,0,0" VerticalAlignment="Top" Width="69" Height="24" SelectionChanged="ComboBoxPasses_SelectionChanged" ToolTip="Number of encoding passes. Rav1e Two Pass is broken.">
                         <ComboBoxItem Content="1" IsSelected="True"/>
                         <ComboBoxItem Content="2"/>
@@ -137,13 +202,13 @@
                     <Label Content="Passes:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,294,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="CheckBoxAdvancedSettings" Content="" HorizontalAlignment="Left" Margin="181,338,0,0" VerticalAlignment="Top"/>
                     <Label Content="Advanced Settings:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,332,0,0" VerticalAlignment="Top"/>
-                    <Button Content="Show Command Line" HorizontalAlignment="Left" Margin="805,338,0,0" VerticalAlignment="Top" Width="129" Height="26" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Click="Button_Click"/>
+                    <Button Content="Show Command Line" HorizontalAlignment="Left" Margin="805,338,0,0" VerticalAlignment="Top" Width="129" Height="26" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Click="Button_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Advanced Settings" Visibility="{Binding ElementName=CheckBoxAdvancedSettings, Path=IsChecked, Converter={StaticResource b2v}}">
                 <Grid x:Name="TabGrid5" Background="{Binding Background, ElementName=TabGrid, UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="Advanced Settings" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBox x:Name="TextBoxAdvancedSettings" IsEnabled="{Binding ElementName=CheckBoxCustomSettings, Path=IsChecked}" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="48" Margin="10,316,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="924" TextChanged="TextBoxAdvancedSettings_TextChanged" BorderBrush="#FFB3ABAB"/>
+                    <TextBox x:Name="TextBoxAdvancedSettings" IsEnabled="{Binding ElementName=CheckBoxCustomSettings, Path=IsChecked}" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="48" Margin="10,316,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="924" TextChanged="TextBoxAdvancedSettings_TextChanged" BorderBrush="#FFB3ABAB" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
                     <Label Content="Threads:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="38,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26">
                         <Label.Style>
                             <Style>
@@ -165,7 +230,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <ComboBox x:Name="ComboBoxThreadsAomenc" HorizontalAlignment="Left" Margin="138,45,0,0" VerticalAlignment="Top" Width="80" Height="26">
+                    <ComboBox x:Name="ComboBoxThreadsAomenc" HorizontalAlignment="Left" Margin="138,45,0,0" VerticalAlignment="Top" Width="80" Height="26" ToolTip="Sets the amount of Threads on a per worker basis.">
                         <ComboBoxItem Content="1"/>
                         <ComboBoxItem Content="2" IsSelected="True"/>
                         <ComboBoxItem Content="3"/>
@@ -219,7 +284,7 @@
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
                                     <DataTrigger
-                      Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="0">
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="0">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
                                     <DataTrigger
@@ -230,11 +295,15 @@
                       Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="2">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
+                                    <DataTrigger
+                      Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Label.Style>
                     </Label>
-                    <TextBox x:Name="TextBoxMinKeyframeinterval" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="138,138,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Minimum keyframe interval (frames). This value, expressed as a number of frames, prevents the encoder from placing a keyframe nearer than kf_min_dist to the previous keyframe. Set kf_min_dist equal to kf_max_dist for a fixed interval.">
+                    <TextBox x:Name="TextBoxMinKeyframeinterval" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="138,138,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Minimum keyframe interval (frames). This value, expressed as a number of frames, prevents the encoder from placing a keyframe nearer than kf_min_dist to the previous keyframe. Set kf_min_dist equal to kf_max_dist for a fixed interval.">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -251,7 +320,7 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox x:Name="TextBoxMaxKeyframeinterval" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="138,169,0,0" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Maximum keyframe interval (frames). A value of 0 implies all frames will be keyframes.">
+                    <TextBox x:Name="TextBoxMaxKeyframeinterval" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="138,169,0,0" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Maximum keyframe interval (frames). A value of 0 implies all frames will be keyframes.">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -266,6 +335,10 @@
                                     </DataTrigger>
                                     <DataTrigger
                       Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="2">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger
+                      Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -285,7 +358,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <TextBox x:Name="TextBoxMaxLagInFrames" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="138,200,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                    <TextBox x:Name="TextBoxMaxLagInFrames" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="138,200,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                         <TextBox.ToolTip>
                             <TextBlock>
                 If set, this value allows the encoder to consume a number of input frames before producing output frames. <LineBreak />  This allows the encoder to base decisions for the current frame on future frames. This does increase the latency of the encoding pipeline, <LineBreak />  so it is not appropriate in all situations (ex: realtime encoding). Note that this is a maximum value -- the encoder may produce frames sooner than the given limit. <LineBreak />  Set this value to 0 to disable this feature.
@@ -320,7 +393,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <ComboBox x:Name="ComboBoxColorPrimariesAomenc" HorizontalAlignment="Left" Margin="405,45,0,0" VerticalAlignment="Top" Width="103" Height="26">
+                    <ComboBox x:Name="ComboBoxColorPrimariesAomenc" HorizontalAlignment="Left" Margin="405,45,0,0" VerticalAlignment="Top" Width="103" Height="26" ToolTip="Sets the Color Primaries. Generally BT.709 is used in most 1080p Videos.">
                         <ComboBoxItem Content="unspecified" IsSelected="True"/>
                         <ComboBoxItem Content="bt709"/>
                         <ComboBoxItem Content="bt601"/>
@@ -362,7 +435,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <ComboBox x:Name="ComboBoxColorTransferAomenc" HorizontalAlignment="Left" Margin="405,76,0,0" VerticalAlignment="Top" Width="103" Height="26">
+                    <ComboBox x:Name="ComboBoxColorTransferAomenc" HorizontalAlignment="Left" Margin="405,76,0,0" VerticalAlignment="Top" Width="103" Height="26" ToolTip="Sets the Color Transfer Characteristics. Generally BT.709 is used in most 1080p Videos.">
                         <ComboBoxItem Content="unspecified" IsSelected="True"/>
                         <ComboBoxItem Content="bt709"/>
                         <ComboBoxItem Content="bt470m"/>
@@ -409,7 +482,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <ComboBox x:Name="ComboBoxColorMatrixAomenc" HorizontalAlignment="Left" Margin="405,107,0,0" VerticalAlignment="Top" Width="103" Height="26">
+                    <ComboBox x:Name="ComboBoxColorMatrixAomenc" HorizontalAlignment="Left" Margin="405,107,0,0" VerticalAlignment="Top" Width="103" Height="26" ToolTip="Sets the Color Matrix Coefficients. Generally BT.709 is used in most 1080p Videos.">
                         <ComboBoxItem Content="unspecified" IsSelected="True"/>
                         <ComboBoxItem Content="identity"/>
                         <ComboBoxItem Content="bt709"/>
@@ -449,7 +522,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <ComboBox x:Name="ComboBoxChromaSubsamplingAomenc" HorizontalAlignment="Left" Margin="405,138,0,0" VerticalAlignment="Top" Width="103" Height="26">
+                    <ComboBox x:Name="ComboBoxChromaSubsamplingAomenc" HorizontalAlignment="Left" Margin="405,138,0,0" VerticalAlignment="Top" Width="103" Height="26" ToolTip="Sets the Color Format (Pixel Format). Most content is yuv420p">
                         <ComboBoxItem Content="i420" IsSelected="True"/>
                         <ComboBoxItem Content="i422"/>
                         <ComboBoxItem Content="i444"/>
@@ -478,7 +551,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <ComboBox x:Name="ComboBoxTuneAomenc" HorizontalAlignment="Left" Margin="405,169,0,0" VerticalAlignment="Top" Width="103" Height="26">
+                    <ComboBox x:Name="ComboBoxTuneAomenc" HorizontalAlignment="Left" Margin="405,169,0,0" VerticalAlignment="Top" Width="103" Height="26" ToolTip="Sets the tune of the encoder.">
                         <ComboBoxItem Content="psnr" IsSelected="True"/>
                         <ComboBoxItem Content="ssim"/>
                         <ComboBox.Style>
@@ -506,7 +579,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <ComboBox x:Name="ComboBoxAQMode" HorizontalAlignment="Left" Margin="405,200,0,0" VerticalAlignment="Top" Width="103" Height="26">
+                    <ComboBox x:Name="ComboBoxAQMode" HorizontalAlignment="Left" Margin="405,200,0,0" VerticalAlignment="Top" Width="103" Height="26" ToolTip="Sets the Adaptive Quantization Mode.">
                         <ComboBoxItem Content="0: off (default)" IsSelected="True"/>
                         <ComboBoxItem Content="1: Variance"/>
                         <ComboBoxItem Content="2: Complexity"/>
@@ -574,6 +647,19 @@
                                 <Style.Triggers>
                                     <DataTrigger
                       Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="0">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+                    <CheckBox x:Name="CheckBoxAutoAltRefVP9" Content="Automatic alt Reference Frames" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="486,80,0,0" VerticalAlignment="Top" ToolTip="Enables/Disables Keyframefiltering. Disable this if encoder produced colorbleeding/cursed blocking.">
+                        <CheckBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                      Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -735,7 +821,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <TextBox x:Name="TextBoxContentLightCllRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxContentLightRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,208,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxContentLightCllRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxContentLightRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,208,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -748,7 +834,7 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox x:Name="TextBoxContentLightFallRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxContentLightRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,208,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxContentLightFallRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxContentLightRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,208,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -787,7 +873,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <TextBox x:Name="TextBoxMasteringGxRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,45,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxMasteringGxRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,45,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -800,7 +886,7 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox x:Name="TextBoxMasteringGyRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,45,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxMasteringGyRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,45,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -826,7 +912,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <TextBox x:Name="TextBoxMasteringBxRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,76,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxMasteringBxRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,76,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -839,7 +925,7 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox x:Name="TextBoxMasteringByRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,76,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxMasteringByRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,76,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -865,7 +951,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <TextBox x:Name="TextBoxMasteringRxRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,107,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxMasteringRxRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,107,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -878,7 +964,7 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox x:Name="TextBoxMasteringRyRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,107,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxMasteringRyRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,107,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -904,7 +990,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <TextBox x:Name="TextBoxMasteringWPxRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,138,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxMasteringWPxRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,138,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -917,7 +1003,7 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox x:Name="TextBoxMasteringWPyRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,138,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxMasteringWPyRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,138,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -943,7 +1029,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <TextBox x:Name="TextBoxMasteringLmaxRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,169,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxMasteringLmaxRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="716,169,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -956,7 +1042,7 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBox x:Name="TextBoxMasteringLminRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,169,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
+                    <TextBox x:Name="TextBoxMasteringLminRav1e" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="776,169,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Content light level used to describe content luminosity (cll,fall)">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -1064,7 +1150,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <TextBox x:Name="TextBoxRDOLookaheadRav1e" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="138,200,0,0" TextWrapping="Wrap" Text="40" VerticalAlignment="Top" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Number of frames encoder should lookahead for RDO purposes">
+                    <TextBox x:Name="TextBoxRDOLookaheadRav1e" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="138,200,0,0" TextWrapping="Wrap" Text="40" VerticalAlignment="Top" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Number of frames encoder should lookahead for RDO purposes">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -1077,14 +1163,14 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <ComboBox x:Name="ComboBoxTileColumns" HorizontalAlignment="Left" Margin="138,76,0,0" VerticalAlignment="Top" Width="80" Height="26">
+                    <ComboBox x:Name="ComboBoxTileColumns" HorizontalAlignment="Left" Margin="138,76,0,0" VerticalAlignment="Top" Width="80" Height="26" ToolTip="Sets the amount of Tile Columns. log2">
                         <ComboBoxItem Content="0" IsSelected="True"/>
                         <ComboBoxItem Content="1"/>
                         <ComboBoxItem Content="2"/>
                         <ComboBoxItem Content="3"/>
                         <ComboBoxItem Content="4"/>
                     </ComboBox>
-                    <ComboBox x:Name="ComboBoxTileRows" HorizontalAlignment="Left" Margin="138,107,0,0" VerticalAlignment="Top" Width="80" Height="26">
+                    <ComboBox x:Name="ComboBoxTileRows" HorizontalAlignment="Left" Margin="138,107,0,0" VerticalAlignment="Top" Width="80" Height="26" ToolTip="Sets the amount of Tile Rows. log2">
                         <ComboBoxItem Content="0" IsSelected="True"/>
                         <ComboBoxItem Content="1"/>
                         <ComboBoxItem Content="2"/>
@@ -1120,9 +1206,10 @@
                         </Label.Style>
                     </Label>
                     <ComboBox x:Name="ComboBoxColorFormatSVT" HorizontalAlignment="Left" Margin="138,138,0,0" VerticalAlignment="Top" Width="90" Height="26">
-                        <ComboBoxItem Content="EB_YUV420" IsSelected="True"/>
-                        <ComboBoxItem Content="EB_YUV422"/>
-                        <ComboBoxItem Content="EB_YUV444"/>
+                        <ComboBoxItem Content="YUV400 DONT USE"/>
+                        <ComboBoxItem Content="YUV420" IsSelected="True"/>
+                        <ComboBoxItem Content="YUV422"/>
+                        <ComboBoxItem Content="YUV444"/>
                         <ComboBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -1190,7 +1277,7 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <CheckBox x:Name="CheckBoxCustomSettings" Content="Custom Settings" HorizontalAlignment="Left" Margin="10,296,0,0" VerticalAlignment="Top" Checked="CheckBoxCustomSettings_Checked"/>
+                    <CheckBox x:Name="CheckBoxCustomSettings" Content="Custom Settings" HorizontalAlignment="Left" Margin="10,296,0,0" VerticalAlignment="Top" Checked="CheckBoxCustomSettings_Checked" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
                     <Label Content="Color Format:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="264,138,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMasteringDisplayRav1e}" RenderTransformOrigin="0.504,0.442" Height="26">
                         <Label.Style>
                             <Style>
@@ -1229,6 +1316,10 @@
                                         Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Label.Style>
@@ -1245,9 +1336,177 @@
                                         Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </ComboBox.Style>
+                    </ComboBox>
+                    <CheckBox x:Name="CheckBoxAltRefLibaom" Content="Automatic Alt Reference Frames" HorizontalAlignment="Left" Margin="539,51,0,0" VerticalAlignment="Top" Foreground="{Binding ElementName=LabelPresets,Path=Foreground,UpdateSourceTrigger=PropertyChanged}" ToolTip="Enable use of alternate reference frames (2-pass only)">
+                        <CheckBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+                    <Label Content="Lag-in-frames:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="37,200,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26">
+                        <Label.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <TextBox x:Name="TextBoxLagInFramesLibaom" PreviewTextInput="NumberValidationTextBox" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="138,200,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Number of frames to look ahead at for alternate reference frame selection">
+                        <TextBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <Label Content="AQ-Mode:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="264,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26">
+                        <Label.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <ComboBox x:Name="ComboBoxAqModeLibaom" HorizontalAlignment="Left" Margin="334,45,0,0" VerticalAlignment="Top" Width="110" Height="26">
+                        <ComboBoxItem Content="0 - None" IsSelected="True"/>
+                        <ComboBoxItem Content="1 - Variance"/>
+                        <ComboBoxItem Content="2 - Complexity"/>
+                        <ComboBoxItem Content="3 - Cyclic Refresh"/>
+                        <ComboBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+                    <Label Content="Tune:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="264,76,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26">
+                        <Label.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <ComboBox x:Name="ComboBoxTunelibaom" HorizontalAlignment="Left" Margin="334,76,0,0" VerticalAlignment="Top" Width="110" Height="26">
+                        <ComboBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                        <ComboBoxItem Content="psnr" IsSelected="True"/>
+                        <ComboBoxItem Content="ssim"/>
+                    </ComboBox>
+                    <Label Content="AQ-Mode:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="263,76,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26">
+                        <Label.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <ComboBox x:Name="ComboBoxAQModeVP9" HorizontalAlignment="Left" Margin="334,76,0,0" VerticalAlignment="Top" Width="96" Height="26">
+                        <ComboBoxItem Content="0 - none" IsSelected="True"/>
+                        <ComboBoxItem Content="1 - variance"/>
+                        <ComboBoxItem Content="2 - complexity"/>
+                        <ComboBoxItem Content="3 - cyclic"/>
+                        <ComboBoxItem Content="4 - equator360"/>
+                        <ComboBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+                    <Label Content="Tune:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="38,231,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26">
+                        <Label.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <ComboBox x:Name="ComboBoxTuneVP9" HorizontalAlignment="Left" Margin="138,231,0,0" VerticalAlignment="Top" Width="80" Height="26">
+                        <ComboBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="4">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                        <ComboBoxItem Content="psnr" IsSelected="True"/>
+                        <ComboBoxItem Content="ssim"/>
                     </ComboBox>
                 </Grid>
             </TabItem>
@@ -1279,7 +1538,7 @@
                             <ToolTip Content="Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!"/>
                         </CheckBox.ToolTip>
                     </CheckBox>
-                    <Label Content="Bitrate:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="394,87,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" />
+                    <Label Content="Bitrate (kbps):" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="394,87,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" />
                     <CheckBox x:Name="CheckBoxAudioTrackThree" Content="" HorizontalAlignment="Left" Margin="115,210,0,0" VerticalAlignment="Top" Foreground="Black">
                         <CheckBox.ToolTip>
                             <ToolTip Content="Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!"/>
@@ -1290,7 +1549,7 @@
                             <ToolTip Content="Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!"/>
                         </CheckBox.ToolTip>
                     </CheckBox>
-                    <TextBox x:Name="TextBoxAudioBitrate" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="446,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" PreviewTextInput="NumberValidationTextBox">
+                    <TextBox x:Name="TextBoxAudioBitrate" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="477,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" PreviewTextInput="NumberValidationTextBox">
                         <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
                     </TextBox>
                     <ComboBox x:Name="ComboBoxAudioCodecTrackTwo" HorizontalAlignment="Left" Margin="257,160,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}">
@@ -1301,7 +1560,7 @@
                         <ComboBoxItem Content="MP3" />
                         <ComboBoxItem Content="Copy Audio" />
                     </ComboBox>
-                    <TextBox x:Name="TextBoxAudioBitrateTrackTwo" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="446,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" PreviewTextInput="NumberValidationTextBox">
+                    <TextBox x:Name="TextBoxAudioBitrateTrackTwo" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="477,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" PreviewTextInput="NumberValidationTextBox">
                         <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
                     </TextBox>
                     <ComboBox x:Name="ComboBoxAudioCodecTrackThree" HorizontalAlignment="Left" Margin="257,236,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}">
@@ -1312,7 +1571,7 @@
                         <ComboBoxItem Content="MP3" />
                         <ComboBoxItem Content="Copy Audio" />
                     </ComboBox>
-                    <TextBox x:Name="TextBoxAudioBitrateTrackThree" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="446,236,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" PreviewTextInput="NumberValidationTextBox">
+                    <TextBox x:Name="TextBoxAudioBitrateTrackThree" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="477,236,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" PreviewTextInput="NumberValidationTextBox">
                         <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
                     </TextBox>
                     <ComboBox x:Name="ComboBoxAudioCodecTrackFour" HorizontalAlignment="Left" Margin="257,313,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}">
@@ -1323,7 +1582,7 @@
                         <ComboBoxItem Content="MP3" />
                         <ComboBoxItem Content="Copy Audio" />
                     </ComboBox>
-                    <TextBox x:Name="TextBoxAudioBitrateTrackFour" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="446,313,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" PreviewTextInput="NumberValidationTextBox">
+                    <TextBox x:Name="TextBoxAudioBitrateTrackFour" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="477,313,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" PreviewTextInput="NumberValidationTextBox">
                         <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
                     </TextBox>
                     <Label Content="Channels:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="599,87,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" />
@@ -1352,70 +1611,90 @@
                         <ComboBoxItem Content="7.1" Tag="8"/>
                     </ComboBox>
                     <Label Content="Audio" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Label Content="Bitrate:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="394,160,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
+                    <Label Content="Bitrate (kbps):" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="394,160,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
                     <Label Content="Codec:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="206,160,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
                     <Label Content="Channels:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="599,160,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
                     <Label Content="Channels:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="599,236,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
-                    <Label Content="Bitrate:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="394,236,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
+                    <Label Content="Bitrate (kbps):" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="394,236,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
                     <Label Content="Codec:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="206,236,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
                     <Label Content="Channels:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="599,313,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" />
-                    <Label Content="Bitrate:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="394,313,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" />
+                    <Label Content="Bitrate (kbps):" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="394,313,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" />
                     <Label Content="Codec:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="206,313,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Subtitles">
+                <Grid x:Name="TabGrid6" Background="White">
+                    <Label Content="Subtitles" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <CheckBox x:Name="CheckBoxSubtitleEncoding" Content="Enable Subtitles" HorizontalAlignment="Left" Margin="74,16,0,0" VerticalAlignment="Top" Foreground="#FF36AC00" RenderTransformOrigin="0.413,0.467" />
+                    <RadioButton x:Name="RadioButtonStreamCopySubtitles" Content="Stream Copy Subtitles from Source" HorizontalAlignment="Left" Margin="74,57,0,0" VerticalAlignment="Top" IsChecked="True" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" />
+                    <RadioButton x:Name="RadioButtonCustomSubtitles" Content="Custom Subtitles" HorizontalAlignment="Left" Margin="74,87,0,0" VerticalAlignment="Top" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Checked="RadioButtonCustomSubtitles_Checked" />
+                    <CheckBox x:Name="CheckBoxHardcodeSubtitle" Content="Hardcode Subtitle (requires reencoding)" HorizontalAlignment="Left" Margin="199,16,0,0" VerticalAlignment="Top" Checked="CheckBoxHardcodeSubtitle_Checked" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ListBox x:Name="ListBoxSubtitles" HorizontalAlignment="Left" Height="205" Margin="10,159,0,0" VerticalAlignment="Top" Width="924" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" />
+                    <Button x:Name="ButtonAddCustomSubtitle" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Add Subtitle" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="90" Height="29" Click="ButtonAddCustomSubtitle_Click" />
+                    <Button x:Name="ButtonDeleteSubtitle" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Remove Subtitle" HorizontalAlignment="Left" Margin="105,125,0,0" VerticalAlignment="Top" Width="103" Height="29" Click="ButtonDeleteSubtitle_Click" />
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="TabItemQueue" Header="Queue" Visibility="Collapsed">
+                <Grid x:Name="TabGrid8" Background="{Binding ElementName=TabGrid1, Path=Background,UpdateSourceTrigger=PropertyChanged}">
+                    <ListBox x:Name="ListBoxQueue" HorizontalAlignment="Left" Height="289" Margin="10,75,0,0" VerticalAlignment="Top" Width="913" Foreground="{Binding ElementName=TextBoxAdvancedSettings, Path=Foreground,UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxAdvancedSettings,Path=Background,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button x:Name="ButtonAddToQueue" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Add" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="73" Height="26" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonAddToQueue_Click" />
+                    <Label Content="Queue" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <CheckBox x:Name="CheckBoxQueueEncoding" Content="Enable Queue" HorizontalAlignment="Left" Margin="74,16,0,0" VerticalAlignment="Top" Foreground="#FF36AC00" RenderTransformOrigin="0.413,0.467" />
+                    <Button x:Name="ButtonRemoveFromQueue" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Remove" HorizontalAlignment="Left" Margin="88,44,0,0" VerticalAlignment="Top" Width="73" Height="26" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonRemoveFromQueue_Click" />
+
                 </Grid>
             </TabItem>
             <TabItem Header="Program Settings">
                 <Grid x:Name="TabGrid4" Background="White">
-                    <Label Content="Presets" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="385,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBox x:Name="TextBoxPresetName" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="576,39,0,0" TextWrapping="Wrap" Text="PresetName" VerticalAlignment="Top" Width="244" RenderTransformOrigin="0.5,0.42" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-                    <Label Content="Save new Preset:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="445,39,0,0" VerticalAlignment="Top"/>
-                    <Button x:Name="ButtonSavePreset" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Save" HorizontalAlignment="Left" Margin="825,39,0,0" VerticalAlignment="Top" Width="75" Height="26" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonSavePreset_Click"/>
                     <Label Content="Temp Folder" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="13,300,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBox x:Name="TextBoxCustomTempPath" Background="{Binding Background, ElementName=TextBoxPresetName, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="23" Margin="106,329,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="717" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}"/>
+                    <TextBox x:Name="TextBoxCustomTempPath" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="23" Margin="106,329,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="717" VerticalContentAlignment="Center" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}"/>
                     <CheckBox x:Name="CheckBoxCustomTempPath" Content="" HorizontalAlignment="Left" Margin="81,337,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="ButtonSetTempPath" Content="..." HorizontalAlignment="Left" Margin="828,329,0,0" VerticalAlignment="Top" Width="75" Height="23" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}" Click="ButtonSetTempPath_Click"/>
-                    <ComboBox x:Name="ComboBoxPresetSettings" HorizontalAlignment="Left" Margin="576,70,0,0" VerticalAlignment="Top" Width="244" Height="25"/>
-                    <Button x:Name="ButtonDeleteProfile" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Delete" HorizontalAlignment="Left" Margin="825,70,0,0" VerticalAlignment="Top" Width="75" Height="25" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonDeleteProfile_Click"/>
-                    <CheckBox x:Name="CheckBoxDeleteTempFiles" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="26,45,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="CheckBoxShutdownAfterEncode" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="26,72,0,0" VerticalAlignment="Top" ToolTip="Can also be disabled during encoding!"/>
-                    <CheckBox x:Name="CheckBoxFinishedSound" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Play Finished Sound" HorizontalAlignment="Left" Margin="26,97,0,0" VerticalAlignment="Top" IsChecked="True"/>
-                    <CheckBox x:Name="CheckBoxWorkerLimit" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Overwrite Worker Limit for SVT-AV1" HorizontalAlignment="Left" Margin="26,124,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="CheckBoxDarkMode" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Darkmode" HorizontalAlignment="Left" Margin="26,153,0,0" VerticalAlignment="Top" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_UnChecked"/>
+                    <CheckBox x:Name="CheckBoxDeleteTempFiles" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="26,45,0,0" VerticalAlignment="Top" IsChecked="True" Unchecked="CheckBoxDeleteTempFiles_Unchecked" Checked="CheckBoxDeleteTempFiles_Checked" />
+                    <CheckBox x:Name="CheckBoxShutdownAfterEncode" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="26,96,0,0" VerticalAlignment="Top" ToolTip="Can also be disabled during encoding!" Checked="CheckBoxShutdownAfterEncode_Checked" Unchecked="CheckBoxShutdownAfterEncode_Checked"/>
+                    <CheckBox x:Name="CheckBoxFinishedSound" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Play Finished Sound" HorizontalAlignment="Left" Margin="26,121,0,0" VerticalAlignment="Top" IsChecked="True" Checked="CheckBoxFinishedSound_Checked" Unchecked="CheckBoxFinishedSound_Checked"/>
+                    <CheckBox x:Name="CheckBoxWorkerLimit" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Overwrite Worker Limit for SVT-AV1" HorizontalAlignment="Left" Margin="26,148,0,0" VerticalAlignment="Top" Checked="CheckBoxWorkerLimit_Checked" Unchecked="CheckBoxWorkerLimit_Checked"/>
+                    <CheckBox x:Name="CheckBoxDarkMode" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Darkmode" HorizontalAlignment="Left" Margin="26,177,0,0" VerticalAlignment="Top" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_UnChecked"/>
                     <Label Content="Settings" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Button x:Name="ButtonBackgroundImage" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Set Background Image" HorizontalAlignment="Left" Margin="15,194,0,0" VerticalAlignment="Top" Width="137" Height="30" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonBackgroundImage_Click"/>
-                    <Button x:Name="ButtonDiscord" HorizontalAlignment="Left" VerticalAlignment="Top" Width="62" Height="62" BorderBrush="{x:Null}" Margin="704,237,0,0" Background="{x:Null}" Click="ButtonDiscord_Click">
-                        <Image HorizontalAlignment="Left" Height="56" VerticalAlignment="Top" Width="56" Source="img/discord.png"/>
+                    <Button x:Name="ButtonBackgroundImage" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Set Background Image" HorizontalAlignment="Left" Margin="15,230,0,0" VerticalAlignment="Top" Width="128" Height="30" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonBackgroundImage_Click"/>
+                    <Button x:Name="ButtonDiscord" HorizontalAlignment="Left" VerticalAlignment="Top" Width="45" Height="45" BorderBrush="{x:Null}" Margin="758,250,0,0" Background="{x:Null}" Click="ButtonDiscord_Click">
+                        <Image HorizontalAlignment="Left" Height="42" VerticalAlignment="Top" Width="45" Source="img/discord.png"/>
                     </Button>
-                    <Button x:Name="ButtonGithub" HorizontalAlignment="Left" VerticalAlignment="Top" Width="62" Height="62" BorderBrush="{x:Null}" Margin="637,237,0,0" Background="{x:Null}" Click="ButtonGithub_Click">
-                        <Image HorizontalAlignment="Left" Height="56" VerticalAlignment="Top" Width="56" Source="img/github.png"/>
+                    <Button x:Name="ButtonGithub" HorizontalAlignment="Left" VerticalAlignment="Top" Width="45" Height="45" BorderBrush="{x:Null}" Margin="708,250,0,0" Background="{x:Null}" Click="ButtonGithub_Click">
+                        <Image HorizontalAlignment="Left" Height="42" VerticalAlignment="Top" Width="42" Source="img/github.png"/>
                     </Button>
-                    <Button x:Name="ButtonReddit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="62" Height="62" BorderBrush="{x:Null}" Margin="771,237,0,0" Background="{x:Null}" Click="ButtonReddit_Click">
-                        <Image HorizontalAlignment="Left" Height="56" VerticalAlignment="Top" Width="56" Source="img/reddit.png"/>
+                    <Button x:Name="ButtonReddit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="45" Height="45" BorderBrush="{x:Null}" Margin="808,250,0,0" Background="{x:Null}" Click="ButtonReddit_Click">
+                        <Image HorizontalAlignment="Left" Height="42" VerticalAlignment="Top" Width="42" Source="img/reddit.png"/>
                     </Button>
-                    <Button x:Name="ButtonSupportMePayPal" HorizontalAlignment="Left" VerticalAlignment="Top" Width="62" Height="62" BorderBrush="{x:Null}" Click="ButtonSupportMePayPal_Click" Margin="838,237,0,0" Background="{x:Null}">
-                        <Image HorizontalAlignment="Left" Height="56" VerticalAlignment="Top" Width="56" Source="img/paypal.png"/>
+                    <Button x:Name="ButtonSupportMePayPal" HorizontalAlignment="Left" VerticalAlignment="Top" Width="45" Height="45" BorderBrush="{x:Null}" Click="ButtonSupportMePayPal_Click" Margin="858,250,0,0" Background="{x:Null}">
+                        <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="img/paypal.png"/>
                     </Button>
-                    <Label Content="Version:" HorizontalAlignment="Left" Margin="574,129,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="637,131,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.74" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
-                    <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="584,155,0,0" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="637,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
+                    <Label Content="Version:" HorizontalAlignment="Left" Margin="598,14,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="661,16,0,0" TextWrapping="Wrap" Text="Pre-Release v0.9 - Appveyor 1.0.115" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="608,40,0,0" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="661,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
             <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
                     </TextBlock>
-                    <Label Content="Icons:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="592,181,0,0" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="637,186,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="92">
+                    <Label Content="Icons:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="616,66,0,0" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="661,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="92">
             <Hyperlink NavigateUri="https://icons8.de" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.de</Hyperlink>
                     </TextBlock>
-                    <Button x:Name="ButtonOpenProgramFolder" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Open Program Folder" HorizontalAlignment="Left" Margin="15,229,0,0" VerticalAlignment="Top" Width="137" Height="30" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonOpenProgramFolder_Click"/>
-                    <Button x:Name="ButtonOpenTempFolder" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="15,265,0,0" VerticalAlignment="Top" Width="137" Height="30" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonOpenTempFolder_Click"/>
+                    <Button x:Name="ButtonOpenProgramFolder" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Open Program Folder" HorizontalAlignment="Left" Margin="15,265,0,0" VerticalAlignment="Top" Width="162" Height="30" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonOpenProgramFolder_Click"/>
+                    <Button x:Name="ButtonOpenTempFolder" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="182,265,0,0" VerticalAlignment="Top" Width="137" Height="30" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonOpenTempFolder_Click"/>
+                    <Button x:Name="ButtonResetBackground" Content="Reset" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="142,230,0,0" VerticalAlignment="Top" Width="35" Height="30" Click="ButtonResetBackground_Click"/>
+                    <CheckBox x:Name="CheckBoxLogging" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Logging" HorizontalAlignment="Left" Margin="26,205,0,0" VerticalAlignment="Top" IsChecked="True" Unchecked="CheckBoxLogging_Unchecked" Checked="CheckBoxLogging_Checked"/>
+                    <Button x:Name="ButtonUpdateDependencies" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Check Updates" HorizontalAlignment="Left" Margin="182,230,0,0" VerticalAlignment="Top" Width="137" Height="29" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonUpdateDependencies_Click" />
+                    <CheckBox x:Name="CheckBoxDeleteTempFilesDynamically" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Dynamically delete temp files" HorizontalAlignment="Left" Margin="26,71,0,0" VerticalAlignment="Top" IsChecked="True" ToolTip="This will delete the temp chunk files dynamically, when the Worker finished encoding." Checked="CheckBoxDeleteTempFilesDynamically_Checked" Unchecked="CheckBoxDeleteTempFilesDynamically_Checked"/>
                 </Grid>
             </TabItem>
         </TabControl>
         <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="31" Margin="21,538,0,0" VerticalAlignment="Top" Width="950" Foreground="#FF0370C8" ValueChanged="ProgressBar_ValueChanged"/>
         <ComboBox x:Name="ComboBoxPresets" HorizontalAlignment="Left" Margin="76,78,0,0" VerticalAlignment="Top" Width="137" Height="26" SelectionChanged="ComboBoxPresets_SelectionChanged"/>
         <Label x:Name="LabelPresets" Content="Presets:" HorizontalAlignment="Left" Margin="21,78,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="ButtonSetDefaultPreset" Content="Set as default" HorizontalAlignment="Left" Margin="218,78,0,0" VerticalAlignment="Top" Width="84" Height="26" Background="{Binding ElementName=ButtonOpenSource, Path=Background, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Click="ButtonSetDefaultPreset_Click"/>
+        <Button x:Name="ButtonSetDefaultPreset" Content="Set as default" HorizontalAlignment="Left" Margin="315,78,0,0" VerticalAlignment="Top" Width="80" Height="26" Background="{Binding ElementName=ButtonOpenSource, Path=Background, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Click="ButtonSetDefaultPreset_Click"/>
         <Label x:Name="LabelProgressbar" Content="" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,538,0,0" VerticalAlignment="Top" Width="950" Height="31" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-        <CheckBox x:Name="CheckBoxResumeMode" Content="Resume Mode" HorizontalAlignment="Left" Margin="324,84,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="ButtonCancelEncode" HorizontalAlignment="Left" Margin="433.666,16,0,0" VerticalAlignment="Top" Width="121.333" Height="47.25" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" UseLayoutRounding="False" BorderBrush="#FFE4E4E4" Background="{Binding ElementName=TextBoxPresetName, Path=Background, UpdateSourceTrigger=PropertyChanged}" Click="ButtonCancelEncode_Click">
+        <CheckBox x:Name="CheckBoxResumeMode" Content="Resume Mode" HorizontalAlignment="Left" Margin="688,31,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="ButtonCancelEncode" HorizontalAlignment="Left" Margin="433.666,16,0,0" VerticalAlignment="Top" Width="121.333" Height="47.25" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" UseLayoutRounding="False" BorderBrush="#FFE4E4E4" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" Click="ButtonCancelEncode_Click">
             <StackPanel Height="44" Width="112" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,-1">
                 <Image x:Name="ImageEncode1" Source="img/stop.png" Margin="8,0,0,3" Width="32"/>
                 <TextBlock x:Name="TextBlockEncode1" Margin="0,12,0,0" Width="62" FontFamily="Segoe UI Symbol" Foreground="{Binding ElementName=TextBlockOpenSource, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold">
@@ -1424,6 +1703,14 @@
                 </TextBlock>
             </StackPanel>
         </Button>
-        <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="445,84,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="570,31,0,0" VerticalAlignment="Top" Checked="CheckBoxBatchEncoding_Checked"/>
+        <Button x:Name="ButtonSavePreset" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Save" HorizontalAlignment="Left" Margin="218,78,0,0" VerticalAlignment="Top" Width="59" Height="26" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonSavePreset_Click"/>
+        <Button x:Name="ButtonDeleteProfile" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Delete" HorizontalAlignment="Left" Margin="276,78,0,0" VerticalAlignment="Top" Width="40" Height="26" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonDeleteProfile_Click"/>
+        <Button x:Name="ButtonQueue" HorizontalAlignment="Left" Margin="889.667,16,0,0" VerticalAlignment="Top" Width="81.333" Height="47.25" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" UseLayoutRounding="False" BorderBrush="#FFE4E4E4" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Click="ButtonQueue_Click">
+            <StackPanel Height="44" Width="84" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,-1">
+                <Image x:Name="ImageEncode2" Source="img/queue.png" Margin="8,2,0,3" Width="24"/>
+                <TextBlock x:Name="TextBlockEncode2" Margin="0,12,0,0" Width="55" FontFamily="Segoe UI Symbol" Foreground="{Binding Foreground, ElementName=TextBlockOpenSource, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold"><Run Text=" "/><Run Text="Queue"/></TextBlock>
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes
 {
@@ -14,6 +10,7 @@ namespace NotEnoughAV1Encodes
         {
             if (SmallFunctions.Cancel.CancelAll == false)
             {
+                SmallFunctions.Logging("Rename Chunks");
                 string[] chunks;
                 string chunkDir = Path.Combine(MainWindow.tempPath, "Chunks");
                 //Add all Files in Chunks Folder to array
@@ -21,6 +18,7 @@ namespace NotEnoughAV1Encodes
                 DirectoryInfo d = new DirectoryInfo(chunkDir);
                 FileInfo[] infos = d.GetFiles();
                 int numberOfChunks = chunks.Count();
+                SmallFunctions.Logging("Rename Chunks Count: " + numberOfChunks);
                 if (numberOfChunks >= 10 && numberOfChunks <= 99) { foreach (FileInfo f in infos) { int count = f.ToString().Count(); if (count == 8) { File.Move(d + "\\" + f, d + "\\" + f.Name.Replace("out", "out0")); } } }
                 else if (numberOfChunks >= 100 && numberOfChunks <= 999) //If you have more than 100 Chunks and less than 999
                 {

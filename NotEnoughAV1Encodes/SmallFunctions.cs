@@ -48,31 +48,43 @@ namespace NotEnoughAV1Encodes
         public static void checkDependeciesStartup()
         {
             bool ffmpegExists, ffprobeExists;
-            ffmpegExists = File.Exists("Apps\\ffmpeg\\ffmpeg.exe");
-            ffprobeExists = File.Exists("Apps\\ffmpeg\\ffprobe.exe");
+            ffmpegExists = File.Exists(MainWindow.ffmpegPath + "\\ffmpeg.exe");
+            ffprobeExists = File.Exists(MainWindow.ffprobePath + "\\ffprobe.exe");
             if (ffmpegExists == false || ffprobeExists == false)
             {
-                MessageBox.Show("Could not find all dependencies! Please check if the dependencies ffprobe and ffmpeg are located in: " + Directory.GetCurrentDirectory() + "\\Apps\\ffmpeg\\", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (MessageBox.Show("Could not find all dependencies! Please check if the dependencies ffprobe and ffmpeg are located in: \n" + Directory.GetCurrentDirectory() + "\\Apps\\ffmpeg\\ \nor in the Windows PATH environment! \nOpen Updater?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                {
+                    if (MainWindow.found7z)
+                    {
+                        DownloadDependencies egg = new DownloadDependencies(false);
+                        egg.ShowDialog();
+                        MainWindow.setEncoderPath();
+                    }
+                    else { MessageBoxes.Message7zNotFound(); }
+                }                
             }
         }
 
         public static bool checkDependencies(string encoder)
         {
             bool av1encoderexists = false, ffmpegExists, ffprobeExists;
-            ffmpegExists = File.Exists("Apps\\ffmpeg\\ffmpeg.exe");
-            ffprobeExists = File.Exists("Apps\\ffmpeg\\ffprobe.exe");
+            ffmpegExists = File.Exists(MainWindow.ffmpegPath + "\\ffmpeg.exe");
+            ffprobeExists = File.Exists(MainWindow.ffprobePath + "\\ffprobe.exe");
             switch (encoder)
             {
                 case "aomenc":
-                    av1encoderexists = File.Exists("Apps\\Encoder\\aomenc.exe");
+                    av1encoderexists = File.Exists(MainWindow.aomencPath + "\\aomenc.exe");
                     break;
                 case "rav1e":
-                    av1encoderexists = File.Exists("Apps\\Encoder\\rav1e.exe");
+                    av1encoderexists = File.Exists(MainWindow.rav1ePath + "\\rav1e.exe");
                     break;
                 case "svt-av1":
-                    av1encoderexists = File.Exists("Apps\\Encoder\\SvtAv1EncApp.exe");
+                    av1encoderexists = File.Exists(MainWindow.svtav1Path + "\\SvtAv1EncApp.exe");
                     break;
                 case "aomenc (ffmpeg)":
+                    av1encoderexists = ffmpegExists;
+                    break;
+                case "vp9":
                     av1encoderexists = ffmpegExists;
                     break;
                 default:
@@ -226,6 +238,17 @@ namespace NotEnoughAV1Encodes
             }else { return true; }
         }
 
+        public static bool CheckSubtitleOutput()
+        {
+            if (MainWindow.subtitleEncoding && MainWindow.subtitleHardcoding == false)
+            {
+                if (File.Exists(Path.Combine(MainWindow.tempPath, "Subtitles", "subtitle.mkv")))
+                { return true; }
+                else { return false; }
+            }
+            else { return true; }
+        }
+
         public static bool CheckFileFolder()
         {
             try { 
@@ -244,6 +267,10 @@ namespace NotEnoughAV1Encodes
                 DirectoryInfo tmp2 = new DirectoryInfo(MainWindow.tempPath);
                 foreach (FileInfo file in tmp.GetFiles()) { file.Delete(); }
                 foreach (FileInfo file in tmp2.GetFiles()) { file.Delete(); }
+                if (Directory.Exists(Path.Combine(MainWindow.tempPath, "Subitles")))
+                    Directory.Delete(Path.Combine(MainWindow.tempPath, "Subitles"), true);
+                if (Directory.Exists(Path.Combine(MainWindow.tempPath, "AudioEncoded")))
+                    Directory.Delete(Path.Combine(MainWindow.tempPath, "AudioEncoded"), true);
             }
             catch (IOException ex) { MessageBox.Show(ex.Message); }
 
@@ -263,6 +290,57 @@ namespace NotEnoughAV1Encodes
         {
             SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
             playSound.Play();
+        }
+
+        public static bool ExistsOnPath(string fileName)
+        {
+            return GetFullPath(fileName) != null;
+        }
+
+        public static string GetFullPath(string fileName)
+        {
+            if (File.Exists(fileName))
+                return Path.GetFullPath(fileName);
+
+            var values = Environment.GetEnvironmentVariable("PATH");
+            foreach (var path in values.Split(Path.PathSeparator))
+            {
+                var fullPath = Path.Combine(path, fileName);
+                if (File.Exists(fullPath))
+                    return fullPath;
+            }
+            return null;
+        }
+
+        public static string GetFullPathWithOutName(string fileName)
+        {
+            if (File.Exists(fileName))
+                return Path.GetFullPath(fileName);
+
+            var values = Environment.GetEnvironmentVariable("PATH");
+            foreach (var path in values.Split(Path.PathSeparator))
+            {
+                var fullPath = Path.Combine(path, fileName);
+                if (File.Exists(fullPath))
+                    return path;
+            }
+            return null;
+        }
+
+        public static void Logging(string log)
+        {
+            if (MainWindow.logging)
+            {
+                DateTime starttime = DateTime.Now;
+                checkCreateFolder(Path.Combine(Directory.GetCurrentDirectory(), "Logging"));
+                WriteToFileThreadSafe(starttime.ToString() + " : " + log, Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log"));
+            }
+        }
+
+        public static void DeleteLogFile()
+        {
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log")))
+                File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log"));
         }
     }
 }
