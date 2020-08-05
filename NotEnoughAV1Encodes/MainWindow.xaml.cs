@@ -241,6 +241,7 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxTrimming.IsChecked == true)
             {
                 trimCommand = " -ss " + TextBoxTrimStart.Text + " -to " + TextBoxTrimEnd.Text + " ";
+                setVideoLengthTrimmed();
             } else { trimCommand = " "; }
 
             setFilters();
@@ -303,6 +304,28 @@ namespace NotEnoughAV1Encodes
                 deinterlaceCommand = " -vf " + '\u0022' + ComboBoxDeinterlace.Text + ",crop=in_w:in_h-" + TextBoxImageHeightCrop.Text + '\u0022';
                 videoResize = ""; cropCommand = "";
             }
+        }
+
+        private void setVideoLengthTrimmed()
+        {
+            try
+            {
+                DateTime start = DateTime.ParseExact(TextBoxTrimStart.Text, "hh:mm:ss", CultureInfo.InvariantCulture);
+                DateTime end = DateTime.ParseExact(TextBoxTrimEnd.Text, "hh:mm:ss", CultureInfo.InvariantCulture);
+                if (start < end)
+                {
+                    TextBoxTrimEnd.BorderBrush = new SolidColorBrush(Color.FromRgb(171, 173, 179));
+                    TextBoxTrimStart.BorderBrush = new SolidColorBrush(Color.FromRgb(171, 173, 179));
+                    TimeSpan result = end - start;
+                    videoLength = Convert.ToInt16(result.TotalSeconds);
+                    if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (videoLength / Int16.Parse(ComboBoxWorkers.Text)).ToString(); }
+                }
+                else
+                {
+                    TextBoxTrimEnd.BorderBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                    TextBoxTrimStart.BorderBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                }
+            } catch { }
         }
 
         //══════════════════════════════════ Encoder Parameters ═══════════════════════════════════
@@ -1423,6 +1446,14 @@ namespace NotEnoughAV1Encodes
         }
 
         //═══════════════════════════════════ Other UI Elements ═══════════════════════════════════
+
+        private void TextBoxTrimEnd_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (TextBoxTrimEnd != null)
+            {
+                setVideoLengthTrimmed();
+            }            
+        }
 
         private void TextBoxChunkLength_TextChanged(object sender, TextChangedEventArgs e)
         {
