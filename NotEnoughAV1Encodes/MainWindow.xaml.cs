@@ -34,7 +34,7 @@ namespace NotEnoughAV1Encodes
         public static int audioBitrateTrackOne, audioBitrateTrackTwo, audioBitrateTrackThree, audioBitrateTrackFour;
         public static int audioChannelsTrackOne, audioChannelsTrackTwo, audioChannelsTrackThree, audioChannelsTrackFour;
         public static bool trackOne, trackTwo, trackThree, trackFour, audioEncoding;
-        public static bool inputSet, outputSet, reencode, beforereencode, resumeMode, deleteTempFiles;
+        public static bool inputSet, outputSet, reencode, beforereencode, resumeMode, deleteTempFiles, deleteTempFilesDynamically;
         public static bool subtitleCopy, subtitleCustom, subtitleHardcoding, subtitleEncoding;
         public static bool customBackground, programStartup = true, logging = true, buttonActive = true, saveSettings, found7z;
         public static double videoFrameRate;
@@ -223,6 +223,7 @@ namespace NotEnoughAV1Encodes
             resumeMode = CheckBoxResumeMode.IsChecked == true;
             SmallFunctions.Logging("Resume Mode: " + resumeMode);
             deleteTempFiles = CheckBoxDeleteTempFiles.IsChecked == true;
+            deleteTempFilesDynamically = CheckBoxDeleteTempFilesDynamically.IsChecked == true;
             reencode = CheckBoxReencodeDuringSplitting.IsChecked == true;
             SmallFunctions.Logging("Reencode: " + reencode);
             beforereencode = CheckBoxReencodeBeforeSplitting.IsChecked == true;
@@ -1900,7 +1901,13 @@ namespace NotEnoughAV1Encodes
 
                                     process.WaitForExit();
 
-                                    if (SmallFunctions.Cancel.CancelAll == false) { SmallFunctions.WriteToFileThreadSafe(items, Path.Combine(tempPath, "encoded.log")); }
+                                    if (SmallFunctions.Cancel.CancelAll == false) 
+                                    { 
+                                        SmallFunctions.WriteToFileThreadSafe(items, Path.Combine(tempPath, "encoded.log"));
+                                        if (deleteTempFilesDynamically) {
+                                            try { File.Delete(Path.Combine(tempPath, "Chunks", items)); } catch { }
+                                        }
+                                    }
                                     else { SmallFunctions.KillInstances(); }
                                 }
                                 else if (videoPasses == 2)
@@ -1978,7 +1985,14 @@ namespace NotEnoughAV1Encodes
                                     if (processPriority == 1) { process.PriorityClass = ProcessPriorityClass.BelowNormal; }
                                     process.WaitForExit();
 
-                                    if (SmallFunctions.Cancel.CancelAll == false) { SmallFunctions.WriteToFileThreadSafe(items, Path.Combine(tempPath, "encoded.log")); }
+                                    if (SmallFunctions.Cancel.CancelAll == false) 
+                                    { 
+                                        SmallFunctions.WriteToFileThreadSafe(items, Path.Combine(tempPath, "encoded.log"));
+                                        if (deleteTempFilesDynamically)
+                                        {
+                                            try { File.Delete(Path.Combine(tempPath, "Chunks", items)); } catch { }
+                                        }
+                                    }
                                     else { SmallFunctions.KillInstances(); }
                                 }
                             }
