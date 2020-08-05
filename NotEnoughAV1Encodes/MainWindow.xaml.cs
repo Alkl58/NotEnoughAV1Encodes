@@ -43,8 +43,8 @@ namespace NotEnoughAV1Encodes
         public MainWindow()
         {
             InitializeComponent();
+            LoadSettingsTab();
             SmallFunctions.Logging("Program Version: " + TextBoxProgramVersion.Text);
-            CheckLogging();
             getCoreCount();            
             LoadPresetsIntoComboBox();
             LoadBackground();
@@ -806,11 +806,6 @@ namespace NotEnoughAV1Encodes
             ProgressBar.Maximum = Value;
         }
 
-        private void CheckLogging()
-        {
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\disablelogging.txt")) { CheckBoxLogging.IsChecked = false; }
-        }
-
         private void CancelRoutine()
         {
             ButtonCancelEncode.BorderBrush = Brushes.Red;
@@ -1220,19 +1215,46 @@ namespace NotEnoughAV1Encodes
         }
 
         //═══════════════════════════════════════ CheckBoxes ══════════════════════════════════════
-        
+
+        private void CheckBoxWorkerLimit_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxFinishedSound_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxDeleteTempFiles_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxDeleteTempFiles_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxDeleteTempFilesDynamically_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxShutdownAfterEncode_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
         private void CheckBoxLogging_Unchecked(object sender, RoutedEventArgs e)
         {
-            SmallFunctions.WriteToFileThreadSafe("", "disablelogging.txt");
+            SaveSettingsTab();
             logging = false;
         }
 
         private void CheckBoxLogging_Checked(object sender, RoutedEventArgs e)
         {
-            if (programStartup == false)
-            {
-                if (File.Exists("disablelogging.txt")) { File.Delete("disablelogging.txt"); logging = true; }
-            }            
+            if (programStartup == false) { SaveSettingsTab(); }            
         }
 
         private void CheckBoxHardcodeSubtitle_Checked(object sender, RoutedEventArgs e)
@@ -1287,15 +1309,14 @@ namespace NotEnoughAV1Encodes
             SetBackgroundColorBlack();
             SetBackground();
             SetBackgroundColorBlack();
-            if (File.Exists("darkmode.txt")) { File.Delete("darkmode.txt"); }
-            SmallFunctions.WriteToFileThreadSafe(CheckBoxDarkMode.IsChecked.ToString(), "darkmode.txt");
+            SaveSettingsTab();
         }
 
         private void CheckBoxDarkMode_UnChecked(object sender, RoutedEventArgs e)
         {
             SetBackgroundColorWhite();
             SetBackground();
-            if (File.Exists("darkmode.txt")) { File.Delete("darkmode.txt"); }
+            SaveSettingsTab();
         }
 
         private void CheckBoxCustomSettings_Checked(object sender, RoutedEventArgs e)
@@ -1485,11 +1506,6 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("ResizeWidth",        TextBoxImageWidth.Text);
             writer.WriteElementString("ResizeHeight",       TextBoxImageHeight.Text);
             writer.WriteElementString("ResizeFilter",       ComboBoxResizeFilters.SelectedIndex.ToString());
-            writer.WriteElementString("CustomTemp",         CheckBoxCustomTempPath.IsChecked.ToString());
-            writer.WriteElementString("CustomTempPath",     TextBoxCustomTempPath.Text);
-            writer.WriteElementString("DeleteTempFiles",    CheckBoxDeleteTempFiles.IsChecked.ToString());
-            writer.WriteElementString("PlayFinishedSound",  CheckBoxFinishedSound.IsChecked.ToString());
-            writer.WriteElementString("WorkerLimitSVT",     CheckBoxWorkerLimit.IsChecked.ToString());
             writer.WriteElementString("AudioEncoding",      CheckBoxAudioEncoding.IsChecked.ToString());
             writer.WriteElementString("AudioTrackOne",      CheckBoxAudioTrackOne.IsChecked.ToString());
             writer.WriteElementString("AudioTrackTwo",      CheckBoxAudioTrackTwo.IsChecked.ToString());
@@ -1507,7 +1523,6 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("TrackTwoChannels",   ComboBoxTrackTwoChannels.SelectedIndex.ToString());
             writer.WriteElementString("TrackThreeChannels", ComboBoxTrackThreeChannels.SelectedIndex.ToString());
             writer.WriteElementString("TrackFourChannels",  ComboBoxTrackFourChannels.SelectedIndex.ToString());
-            writer.WriteElementString("DarkMode",           CheckBoxDarkMode.IsChecked.ToString());
             writer.WriteElementString("Subtitles",          CheckBoxSubtitleEncoding.IsChecked.ToString());
             writer.WriteElementString("SubtitlesCopy",      RadioButtonStreamCopySubtitles.IsChecked.ToString());
             writer.WriteElementString("SubtitlesCustom",    RadioButtonCustomSubtitles.IsChecked.ToString());
@@ -1635,11 +1650,6 @@ namespace NotEnoughAV1Encodes
                     case "ResizeWidth":         TextBoxImageWidth.Text = n.InnerText; break;
                     case "ResizeHeight":        TextBoxImageHeight.Text = n.InnerText; break;
                     case "ResizeFilter":        ComboBoxResizeFilters.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "CustomTemp":          CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
-                    case "CustomTempPath":      TextBoxCustomTempPath.Text = n.InnerText; break;
-                    case "DeleteTempFiles":     CheckBoxDeleteTempFiles.IsChecked = n.InnerText == "True"; break;
-                    case "PlayFinishedSound":   CheckBoxFinishedSound.IsChecked = n.InnerText == "True"; break;
-                    case "WorkerLimitSVT":      CheckBoxWorkerLimit.IsChecked = n.InnerText == "True"; break;
                     case "AudioEncoding":       CheckBoxAudioEncoding.IsChecked = n.InnerText == "True"; break;
                     case "AudioTrackOne":       CheckBoxAudioTrackOne.IsChecked = n.InnerText == "True"; break;
                     case "AudioTrackTwo":       CheckBoxAudioTrackTwo.IsChecked = n.InnerText == "True"; break;
@@ -1718,6 +1728,52 @@ namespace NotEnoughAV1Encodes
                     default: break;
                 }
             }
+        }
+
+        private void SaveSettingsTab()
+        {
+            if (programStartup == false)
+            {
+                XmlWriter writer = XmlWriter.Create(Path.Combine(Directory.GetCurrentDirectory(), "tabsettings.xml"));
+                writer.WriteStartElement("Settings");
+                writer.WriteElementString("CustomTemp", CheckBoxCustomTempPath.IsChecked.ToString());
+                writer.WriteElementString("CustomTempPath", TextBoxCustomTempPath.Text);
+                writer.WriteElementString("DeleteTempFiles", CheckBoxDeleteTempFiles.IsChecked.ToString());
+                writer.WriteElementString("DeleteTempFilesDyn", CheckBoxDeleteTempFilesDynamically.IsChecked.ToString());
+                writer.WriteElementString("PlayFinishedSound", CheckBoxFinishedSound.IsChecked.ToString());
+                writer.WriteElementString("WorkerLimitSVT", CheckBoxWorkerLimit.IsChecked.ToString());
+                writer.WriteElementString("DarkMode", CheckBoxDarkMode.IsChecked.ToString());
+                writer.WriteElementString("Logging", CheckBoxLogging.IsChecked.ToString());
+                writer.WriteElementString("Shutdown", CheckBoxShutdownAfterEncode.IsChecked.ToString());
+                writer.WriteEndElement();
+                writer.Close();
+            }
+        }
+
+        private void LoadSettingsTab()
+        {
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "tabsettings.xml")))
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(Path.Combine(Directory.GetCurrentDirectory(), "tabsettings.xml"));
+                XmlNodeList node = doc.GetElementsByTagName("Settings");
+                foreach (XmlNode n in node[0].ChildNodes)
+                {
+                    switch (n.Name)
+                    {
+                        case "CustomTemp": CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
+                        case "CustomTempPath": TextBoxCustomTempPath.Text = n.InnerText; break;
+                        case "DeleteTempFiles": CheckBoxDeleteTempFiles.IsChecked = n.InnerText == "True"; break;
+                        case "DeleteTempFilesDyn": CheckBoxDeleteTempFilesDynamically.IsChecked = n.InnerText == "True"; break;
+                        case "PlayFinishedSound": CheckBoxFinishedSound.IsChecked = n.InnerText == "True"; break;
+                        case "WorkerLimitSVT": CheckBoxWorkerLimit.IsChecked = n.InnerText == "True"; break;
+                        case "DarkMode": CheckBoxDarkMode.IsChecked = n.InnerText == "True"; break;
+                        case "Logging": CheckBoxLogging.IsChecked = n.InnerText == "True"; break;
+                        case "Shutdown": CheckBoxShutdownAfterEncode.IsChecked = n.InnerText == "True"; break;
+                        default: break;
+                    }
+                }
+            }            
         }
 
         private void LoadPresetsIntoComboBox()
