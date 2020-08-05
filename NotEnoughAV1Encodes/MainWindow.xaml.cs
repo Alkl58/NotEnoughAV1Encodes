@@ -54,7 +54,8 @@ namespace NotEnoughAV1Encodes
             CheckForResumeFile();
             SmallFunctions.checkDependeciesStartup();
             programStartup = false;            
-            LoadQueueStartup();            
+            LoadQueueStartup();
+            FreeSpace();
         }
 
         //════════════════════════════════════ Main Functions ═════════════════════════════════════
@@ -912,8 +913,25 @@ namespace NotEnoughAV1Encodes
             else { localFileName += counterQueue; counterQueue += 1; AddToQueue(); }
         }
 
+        private void FreeSpace()
+        {
+            if (GetTotalFreeSpace("C:\\") < 53687091200 && CheckBoxCustomTempPath.IsChecked == false) //50GB
+            {
+                MessageBoxes.MessageSpaceOnDrive();
+            }            
+        }
+
+        private long GetTotalFreeSpace(string driveName)
+        {
+            foreach (DriveInfo drive in DriveInfo.GetDrives())
+            {
+                if (drive.IsReady && drive.Name == driveName) { return drive.AvailableFreeSpace; }
+            }
+            return -1;
+        }
+
         //════════════════════════════════════════ Buttons ════════════════════════════════════════
-        
+
         private void ButtonUpdateDependencies_Click(object sender, RoutedEventArgs e)
         {
             if (found7z) {
