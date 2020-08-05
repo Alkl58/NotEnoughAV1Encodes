@@ -1026,7 +1026,7 @@ namespace NotEnoughAV1Encodes
                     SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
                     saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;*.mp4";
                     Nullable<bool> result = saveVideoFileDialog.ShowDialog();
-                    if (result == true) { videoOutput = saveVideoFileDialog.FileName; outputSet = true; LabelVideoOutput.Content = SmallFunctions.getFilename(videoOutput); SmallFunctions.Logging("Video Output: " + videoOutput); }
+                    if (result == true) { videoOutput = saveVideoFileDialog.FileName; outputSet = true; LabelVideoOutput.Content = videoOutput; SmallFunctions.Logging("Video Output: " + videoOutput); }
                 }
                 else
                 {
