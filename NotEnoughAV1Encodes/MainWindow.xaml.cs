@@ -318,6 +318,7 @@ namespace NotEnoughAV1Encodes
                     TextBoxTrimStart.BorderBrush = new SolidColorBrush(Color.FromRgb(171, 173, 179));
                     TimeSpan result = end - start;
                     videoLength = Convert.ToInt16(result.TotalSeconds);
+                    if (CheckBoxCustomTempPath != null && inputSet){ setImagePreview(); }                    
                     if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (videoLength / Int16.Parse(ComboBoxWorkers.Text)).ToString(); }
                 }
                 else
@@ -674,6 +675,8 @@ namespace NotEnoughAV1Encodes
         private void setChunkLength()
         {
             if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (Int16.Parse(SmallFunctions.getVideoLength(videoInput)) / Int16.Parse(ComboBoxWorkers.Text)).ToString(); }
+            TimeSpan time = TimeSpan.FromSeconds(Convert.ToDouble(SmallFunctions.getVideoLength(videoInput)));
+            TextBoxTrimEnd.Text = time.ToString(@"hh\:mm\:ss");
         }
 
         private void getVideoInformation()
@@ -951,6 +954,65 @@ namespace NotEnoughAV1Encodes
                 if (drive.IsReady && drive.Name == driveName) { return drive.AvailableFreeSpace; }
             }
             return -1;
+        }
+
+        private void setImagePreview()
+        {
+            tempPath = "NEAV1E\\" + fileName + "\\";
+            if (CheckBoxCustomTempPath.IsChecked == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); }
+            else { tempPath = Path.Combine(Path.GetTempPath(), tempPath); }
+            SmallFunctions.checkCreateFolder(tempPath);
+
+            Process getStartFrame = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = ffmpegPath,
+                    Arguments = "/C ffmpeg.exe -y -ss " + TextBoxTrimStart.Text + " -i " + '\u0022' + videoInput + '\u0022' + " -vframes 1 -an " + Path.Combine(tempPath, "start.png"),
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            getStartFrame.Start();
+            getStartFrame.WaitForExit();
+            Process getEndFrame = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = ffmpegPath,
+                    Arguments = "/C ffmpeg.exe -y -ss " + TextBoxTrimEnd.Text + " -i " + '\u0022' + videoInput + '\u0022' + " -vframes 1 -an " + Path.Combine(tempPath, "end.png"),
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            getEndFrame.Start();
+            getEndFrame.WaitForExit();
+
+            var uriSource = new Uri(Path.Combine(tempPath, "start.png"));
+            BitmapImage imgTemp = new BitmapImage();
+            imgTemp.BeginInit();
+            imgTemp.CacheOption = BitmapCacheOption.OnLoad;
+            imgTemp.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+            imgTemp.UriSource = uriSource;
+            imgTemp.EndInit();
+            ImagePreviewTrimStart.Source = imgTemp;
+
+            var uriSourceEnd = new Uri(Path.Combine(tempPath, "end.png"));
+            BitmapImage imgTempEnd = new BitmapImage();
+            imgTempEnd.BeginInit();
+            imgTempEnd.CacheOption = BitmapCacheOption.OnLoad;
+            imgTempEnd.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+            imgTempEnd.UriSource = uriSourceEnd;
+            imgTempEnd.EndInit();
+            ImagePreviewTrimEnd.Source = imgTempEnd;
         }
 
         //════════════════════════════════════════ Buttons ════════════════════════════════════════
@@ -1243,6 +1305,18 @@ namespace NotEnoughAV1Encodes
 
         //═══════════════════════════════════════ CheckBoxes ══════════════════════════════════════
 
+        private void CheckBoxTrimming_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ImagePreviewTrimStart.Source = null;
+            ImagePreviewTrimEnd.Source = null;
+        }
+
+        private void CheckBoxTrimming_Checked(object sender, RoutedEventArgs e)
+        {
+            try { setVideoLengthTrimmed(); }
+            catch { }
+        }
+
         private void CheckBoxWorkerLimit_Checked(object sender, RoutedEventArgs e)
         {
             SaveSettingsTab();
@@ -1449,10 +1523,7 @@ namespace NotEnoughAV1Encodes
 
         private void TextBoxTrimEnd_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (TextBoxTrimEnd != null)
-            {
-                setVideoLengthTrimmed();
-            }            
+            if (TextBoxTrimEnd != null) { setVideoLengthTrimmed(); }            
         }
 
         private void TextBoxChunkLength_TextChanged(object sender, TextChangedEventArgs e)
