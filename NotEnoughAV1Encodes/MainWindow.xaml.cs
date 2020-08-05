@@ -27,7 +27,7 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsAom, allSettingsRav1e, allSettingsSVTAV1, allSettingsVP9;
         public static string tempPath = ""; //Temp Path for Splitting and Encoding
         public static string[] videoChunks, SubtitleChunks; //Temp Chunk List
-        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, cropCommand, saveSettingString, localFileName, ffmpegFramerateSplitting;
+        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, cropCommand, trimCommand, saveSettingString, localFileName, ffmpegFramerateSplitting;
         public static int videoChunksCount; //Number of Chunks, mainly only for Progressbar
         public static int coreCount, workerCount, chunkLength; //Variable to set the Worker Count
         public static int videoPasses, processPriority, videoLength, customsubtitleadded, counterQueue, frameRateIndex;
@@ -237,6 +237,11 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.Logging("Chunk Length: " + chunkLength);
             videoLength = Int16.Parse(SmallFunctions.getVideoLength(videoInput));
             SmallFunctions.Logging("Video Length: " + videoLength);
+
+            if (CheckBoxTrimming.IsChecked == true)
+            {
+                trimCommand = " -ss " + TextBoxTrimStart.Text + " -to " + TextBoxTrimEnd.Text + " ";
+            } else { trimCommand = " "; }
 
             setFilters();
 
@@ -1530,6 +1535,9 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("Deinterlacing",      CheckBoxDeinterlaceYadif.IsChecked.ToString());
             writer.WriteElementString("Deinterlacer",       ComboBoxDeinterlace.SelectedIndex.ToString());
             writer.WriteElementString("AdvancedSettings",   CheckBoxAdvancedSettings.IsChecked.ToString());
+            writer.WriteElementString("Trimming",           CheckBoxTrimming.IsChecked.ToString());
+            writer.WriteElementString("TrimStart",          TextBoxTrimStart.Text);
+            writer.WriteElementString("TrimEnd",            TextBoxTrimEnd.Text);
             if (CheckBoxAdvancedSettings.IsChecked == true)
             {
                 if (CheckBoxAdvancedSettings.IsChecked == true)
@@ -1725,6 +1733,9 @@ namespace NotEnoughAV1Encodes
                     case "Deinterlacer":        ComboBoxDeinterlace.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "CustomSettings":      CheckBoxCustomSettings.IsChecked = n.InnerText == "True"; break;
                     case "CustomSettingsText":  TextBoxAdvancedSettings.Text = n.InnerText; break;
+                    case "Trimming":            CheckBoxTrimming.IsChecked = n.InnerText == "True"; break;
+                    case "TrimStart":           TextBoxTrimStart.Text = n.InnerText; break;
+                    case "TrimEnd":             TextBoxTrimEnd.Text = n.InnerText; break;
                     default: break;
                 }
             }
