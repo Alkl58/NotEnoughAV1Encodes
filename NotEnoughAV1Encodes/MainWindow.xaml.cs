@@ -310,8 +310,8 @@ namespace NotEnoughAV1Encodes
         {
             try
             {
-                DateTime start = DateTime.ParseExact(TextBoxTrimStart.Text, "hh:mm:ss", CultureInfo.InvariantCulture);
-                DateTime end = DateTime.ParseExact(TextBoxTrimEnd.Text, "hh:mm:ss", CultureInfo.InvariantCulture);
+                DateTime start = DateTime.ParseExact(TextBoxTrimStart.Text, "hh:mm:ss.fff", CultureInfo.InvariantCulture);
+                DateTime end = DateTime.ParseExact(TextBoxTrimEnd.Text, "hh:mm:ss.fff", CultureInfo.InvariantCulture);
                 if (start < end)
                 {
                     TextBoxTrimEnd.BorderBrush = new SolidColorBrush(Color.FromRgb(171, 173, 179));
@@ -676,7 +676,7 @@ namespace NotEnoughAV1Encodes
         {
             if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (Int16.Parse(SmallFunctions.getVideoLength(videoInput)) / Int16.Parse(ComboBoxWorkers.Text)).ToString(); }
             TimeSpan time = TimeSpan.FromSeconds(Convert.ToDouble(SmallFunctions.getVideoLength(videoInput)));
-            TextBoxTrimEnd.Text = time.ToString(@"hh\:mm\:ss");
+            TextBoxTrimEnd.Text = time.ToString(@"hh\:mm\:ss\.fff");
         }
 
         private void getVideoInformation()
@@ -972,7 +972,7 @@ namespace NotEnoughAV1Encodes
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
                     WorkingDirectory = ffmpegPath,
-                    Arguments = "/C ffmpeg.exe -y -ss " + TextBoxTrimStart.Text + " -i " + '\u0022' + videoInput + '\u0022' + " -vframes 1 -an " + Path.Combine(tempPath, "start.png"),
+                    Arguments = "/C ffmpeg.exe -y -ss " + TextBoxTrimStart.Text + " -i " + '\u0022' + videoInput + '\u0022' + " -vframes 1 -an " + '\u0022' + Path.Combine(tempPath, "start.png") + '\u0022',
                     RedirectStandardError = true,
                     RedirectStandardOutput = true
                 }
@@ -988,7 +988,7 @@ namespace NotEnoughAV1Encodes
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
                     WorkingDirectory = ffmpegPath,
-                    Arguments = "/C ffmpeg.exe -y -ss " + TextBoxTrimEnd.Text + " -i " + '\u0022' + videoInput + '\u0022' + " -vframes 1 -an " + Path.Combine(tempPath, "end.png"),
+                    Arguments = "/C ffmpeg.exe -y -ss " + TextBoxTrimEnd.Text + " -i " + '\u0022' + videoInput + '\u0022' + " -vframes 1 -an " + '\u0022' + Path.Combine(tempPath, "end.png") + '\u0022',
                     RedirectStandardError = true,
                     RedirectStandardOutput = true
                 }
