@@ -75,7 +75,7 @@ namespace NotEnoughAV1Encodes
                     if (SmallFunctions.CheckFileFolder()) { await AsyncClass(); }
                     else
                     {
-                        if (MessageBox.Show("Temp Chunks Folder not Empty! Overwrite existing Data?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        if (MessageBox.Show("Temp Chunks Folder not Empty! Overwrite existing Data?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                         {
                             SmallFunctions.DeleteChunkFolderContent();
                             await AsyncClass();

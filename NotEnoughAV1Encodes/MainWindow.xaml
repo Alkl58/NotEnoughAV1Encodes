@@ -1670,7 +1670,7 @@
                         <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="img/paypal.png"/>
                     </Button>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="598,14,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="661,16,0,0" TextWrapping="Wrap" Text="1.0 - AppVeyor 1.0.119" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="661,16,0,0" TextWrapping="Wrap" Text="1.0 - AppVeyor 1.0.120" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
                     <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="608,40,0,0" VerticalAlignment="Top"/>
                     <TextBlock HorizontalAlignment="Left" Margin="661,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
             <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
