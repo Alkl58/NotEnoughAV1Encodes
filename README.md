@@ -9,8 +9,8 @@ At the end it will [Concatenate](https://trac.ffmpeg.org/wiki/Concatenate) the c
 
 This tool is Windows only. For multiplatform and more features check out the CLI Tool [Av1an](https://github.com/master-of-zen/Av1an).
 
-![alt text](https://i.imgur.com/UUiyvkV.png)
-![alt text](https://i.imgur.com/NQJPexQ.png)
+![alt text](https://i.imgur.com/AbVetfn.png)
+![alt text](https://i.imgur.com/SJsHBBc.png)
 
 ---
 
