@@ -731,8 +731,8 @@ namespace NotEnoughAV1Encodes
                 {
                     case 0: trackone = true; break;
                     case 1: tracktwo = true; break;
-                    case 3: trackthree = true; break;
-                    case 4: trackfour = true; break;
+                    case 2: trackthree = true; break;
+                    case 3: trackfour = true; break;
                     default: break;
                 }
                 detectedTracks += 1;
