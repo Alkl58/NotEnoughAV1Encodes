@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Windows;
 
 namespace NotEnoughAV1Encodes
 {
@@ -56,7 +59,26 @@ namespace NotEnoughAV1Encodes
 
         public static void Message7zNotFound()
         {
-            MessageBox.Show("It seems that you don't have 7zip installed. Please install 7zip to use the update functionality!", "7zip", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (MessageBox.Show("It seems that you don't have 7zip installed. To use the Updater function 7zip is required. \n\nDownload & Install 7zip now? (~5MB)", "7zip", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    using (WebClient webClient = new WebClient())
+                    {
+                        webClient.DownloadFile("https://www.7-zip.org/a/7z1900-x64.exe", Path.Combine(Path.GetTempPath(), "7z1900-x64.exe"));
+                        Process p = new Process();
+                        p.StartInfo.FileName = Path.Combine(Path.GetTempPath(), "7z1900-x64.exe");
+                        p.Start();
+                        p.WaitForExit();
+                        File.Delete(Path.Combine(Path.GetTempPath(), "7z1900-x64.exe"));
+                        if (File.Exists(@"C:\Program Files\7-Zip\7zG.exe")) { MainWindow.found7z = true; }
+                        DownloadDependencies egg = new DownloadDependencies(true);
+                        egg.ShowDialog();
+                        MainWindow.setEncoderPath();
+                    }
+                }
+                catch { }
+            }
         }
 
         public static void MessageSpaceOnDrive()

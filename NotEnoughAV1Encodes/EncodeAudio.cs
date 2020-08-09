@@ -33,22 +33,22 @@ namespace NotEnoughAV1Encodes
                 {
                     if (MainWindow.trackOne == true)
                     {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackOne, "0", indexinteger, MainWindow.audioCodecTrackOne, MainWindow.audioChannelsTrackOne);
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackOne, "0", indexinteger, MainWindow.audioCodecTrackOne, MainWindow.audioChannelsTrackOne, MainWindow.trackOneLang, MainWindow.trackOneLanguage);
                         indexinteger += 1;
                     }
                     if (MainWindow.trackTwo == true)
                     {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackTwo, "1", indexinteger, MainWindow.audioCodecTrackTwo, MainWindow.audioChannelsTrackTwo);
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackTwo, "1", indexinteger, MainWindow.audioCodecTrackTwo, MainWindow.audioChannelsTrackTwo, MainWindow.trackTwoLang, MainWindow.trackTwoLanguage);
                         indexinteger += 1;
                     }
                     if (MainWindow.trackThree == true)
                     {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackThree, "2", indexinteger, MainWindow.audioCodecTrackThree, MainWindow.audioChannelsTrackThree);
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackThree, "2", indexinteger, MainWindow.audioCodecTrackThree, MainWindow.audioChannelsTrackThree, MainWindow.trackThreeLang, MainWindow.trackThreeLanguage);
                         indexinteger += 1;
                     }
                     if (MainWindow.trackFour == true)
                     {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackFour, "3", indexinteger, MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour);
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackFour, "3", indexinteger, MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour, MainWindow.trackFourLang, MainWindow.trackFourLanguage);
                         indexinteger += 1;
                     }
                 }
@@ -89,16 +89,18 @@ namespace NotEnoughAV1Encodes
             audioCodecCommand += SwitchCodec(activtrackcodec, channellayout);
             if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -b:a " + activetrackbitrate + "k"; }
             audioCodecCommand += " -ac " + channellayout;
+            if (MainWindow.trackOneLang) { audioCodecCommand += " -metadata:s:a:0 language=" + MainWindow.trackOneLanguage + " "; }
             return audioCodecCommand;
         }
 
-        private static string MultipleTrackCommandGenerator(int activetrackbitrate, string activetrackindex, int activetrackaudioindex, string activtrackcodec, int channellayout)
+        private static string MultipleTrackCommandGenerator(int activetrackbitrate, string activetrackindex, int activetrackaudioindex, string activtrackcodec, int channellayout, bool activeLang, string lang)
         {
             //String Command Builder for multiple Audio Tracks
             audioCodecCommand = "-map 0:a:" + activetrackindex + " -c:a:" + activetrackaudioindex + " ";
             audioCodecCommand += SwitchCodec(activtrackcodec, channellayout);
             if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -b:a:" + activetrackaudioindex + " " + activetrackbitrate + "k"; }
             audioCodecCommand += " -ac:a:" + activetrackaudioindex + " " + channellayout + " ";
+            if (activeLang) { audioCodecCommand += " -metadata:s:a:" + activetrackaudioindex + " language=" + lang + " "; }
             return audioCodecCommand;
         }
     }

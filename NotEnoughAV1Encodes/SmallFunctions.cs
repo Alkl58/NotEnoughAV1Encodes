@@ -84,7 +84,7 @@ namespace NotEnoughAV1Encodes
                 case "aomenc (ffmpeg)":
                     av1encoderexists = ffmpegExists;
                     break;
-                case "vp9":
+                case "libvpx-vp9":
                     av1encoderexists = ffmpegExists;
                     break;
                 default:
@@ -169,6 +169,31 @@ namespace NotEnoughAV1Encodes
             return Convert.ToInt64(Math.Round(Convert.ToDouble(value))).ToString();
         }
 
+        public static string getVideoLengthAccurate(string videoInput)
+        {
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = MainWindow.ffprobePath,
+                    Arguments = "/C ffprobe.exe -i "+ '\u0022' + videoInput + '\u0022' + " -v error -sexagesimal -show_entries format=duration -of default=noprint_wrappers=1:nokey=1",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            process.Start();
+            string stream = "0";
+            stream += process.StandardOutput.ReadLine();
+            process.WaitForExit();
+            stream = stream.Substring(0, (stream.Length - 6));
+            stream += "000";
+            return stream;
+        }
+
         public static void checkCreateFolder(string folderPath)
         {
             if (!Directory.Exists(folderPath))
@@ -225,7 +250,7 @@ namespace NotEnoughAV1Encodes
 
         public static bool CheckVideoOutput()
         {
-            if(File.Exists(MainWindow.videoOutput)) { File.Delete("unfinishedjob.xml"); return true; } else { MessageBox.Show("No Output File found!"); return false; }
+            if(File.Exists(MainWindow.videoOutput)) { File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "UnfinishedJobs", MainWindow.fileName + ".xml")); return true; } else { MessageBox.Show("No Output File found!"); return false; }
         }
 
         public static bool CheckAudioOutput()

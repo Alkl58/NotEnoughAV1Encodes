@@ -17,7 +17,7 @@ namespace NotEnoughAV1Encodes
                 {
                     if(MainWindow.subtitleEncoding == false)
                     {
-                        ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "Chunks") + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                        ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "Chunks") + "\\chunks.txt" + '\u0022' + MainWindow.encoderMetadata + " -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
                         SmallFunctions.Logging("VideoMuxing() Command: " + ffmpegCommand);
                         await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
                     }
@@ -26,13 +26,13 @@ namespace NotEnoughAV1Encodes
                         ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "Chunks") + "\\chunks.txt" + '\u0022' + " -c copy " + '\u0022' + Path.Combine(MainWindow.tempPath, "withoutaudio.mkv") + '\u0022';
                         SmallFunctions.Logging("VideoMuxing() Command: " + ffmpegCommand);
                         await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
-                        ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "withoutaudio.mkv") + '\u0022' + " -i " + Path.Combine(MainWindow.tempPath, "Subtitles", "subtitle.mkv") + " -map_metadata -1 -map 0:v -map 1:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                        ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "withoutaudio.mkv") + '\u0022' + " -i " + Path.Combine(MainWindow.tempPath, "Subtitles", "subtitle.mkv") + MainWindow.encoderMetadata + " -map 0:v -map 1:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
                         SmallFunctions.Logging("VideoMuxing() Command: " + ffmpegCommand);
                         await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
                     }
                     else
                     {
-                        ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "Chunks", "chunks.txt") + '\u0022' + " -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                        ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "Chunks", "chunks.txt") + '\u0022' + MainWindow.encoderMetadata + " -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
                         SmallFunctions.Logging("VideoMuxing() Command: " + ffmpegCommand);
                         await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
                     }
@@ -44,19 +44,19 @@ namespace NotEnoughAV1Encodes
                     await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
                     if (MainWindow.subtitleEncoding == false)
                     {
-                        ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "withoutaudio.mkv") + '\u0022' + " -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + " -map_metadata -1 -map 0:v -map 1:a -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                        ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "withoutaudio.mkv") + '\u0022' + " -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + MainWindow.encoderMetadata + " -map 0:v -map 1:a -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
                         SmallFunctions.Logging("VideoMuxing() Command: " + ffmpegCommand);
                         await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
                     }
                     else if (MainWindow.subtitleHardcoding == false)
                     {
-                        ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "withoutaudio.mkv") + '\u0022' + " -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + " -i " + Path.Combine(MainWindow.tempPath, "Subtitles", "subtitle.mkv") + " -map_metadata -1 -map 0:v -map 1:a -map 2:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                        ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "withoutaudio.mkv") + '\u0022' + " -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + " -i " + Path.Combine(MainWindow.tempPath, "Subtitles", "subtitle.mkv") + MainWindow.encoderMetadata + " -map 0:v -map 1:a -map 2:s -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
                         SmallFunctions.Logging("VideoMuxing() Command: " + ffmpegCommand);
                         await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
                     }
                     else
                     {
-                        ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "withoutaudio.mkv") + '\u0022' + " -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + " -map_metadata -1 -map 0:v -map 1:a -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
+                        ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "withoutaudio.mkv") + '\u0022' + " -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + MainWindow.encoderMetadata + " -map 0:v -map 1:a -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
                         SmallFunctions.Logging("VideoMuxing() Command: " + ffmpegCommand);
                         await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
                     }

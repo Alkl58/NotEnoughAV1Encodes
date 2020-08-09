@@ -23,6 +23,7 @@ AppVeyor Builds: [Click](https://ci.appveyor.com/project/Alkl/notenoughav1encode
 
 1. Download [NotEnoughAV1Encodes](https://github.com/Alkl58/NotEnoughAV1Encodes/releases).
 2. Extract the archive to your desired location.
+3. Install Dependencies with the inbuild Updater (recommended) or follow instructions at program launch
 
 ### System Requirements:
 - [Microsoft .NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/net472)
@@ -39,7 +40,6 @@ AppVeyor Builds: [Click](https://ci.appveyor.com/project/Alkl/notenoughav1encode
 - Subtitles: Stream Copy HDMV-PGS Subs won't work (ffmpeg)
 - Audio: Opus 5.1 Channellayout problem with multiple audio tracks
 - Audio: Bluray_PCM Stream Copy won't work
-- Resuming: The unfinished Job will be saved in one resume file. Running multiple instances with different encodes will run the resume mode useless, as it overwrites itself
 
 ### Other Information:
 
