@@ -1,11 +1,12 @@
 # NotEnoughAV1Encodes (NEAV1E)
 
-NotEnoughAV1Encodes is a small GUI Handler for aomenc, rav1e and SVT-AV1 (AV1).
+NEAV1E is a GUI for aomenc, rav1e, SVT-AV1 and VP9. 
 
-NEAV1E is a tool to make encoding easier and faster for AV1 encoders.
+It is a tool to make encoding easier and faster for AV1 encoders.
 
-It splits the Source Video into multiple chunks and encodes them parallel with the same given settings.
-At the end it will [Concatenate](https://trac.ffmpeg.org/wiki/Concatenate) the chunks into a single video.
+### How does this program work?:
+This program will split the given video file into roughly equal chunks. The splitting process is not reencoding the video, if not specified in the settings.
+After splitting, it will encode the chunks with n-amount of workers. When finished, it will [Concatenate](https://trac.ffmpeg.org/wiki/Concatenate) the encoded files together in one output file.
 
 This tool is Windows only. For multiplatform and more features check out the CLI Tool [Av1an](https://github.com/master-of-zen/Av1an).
 
@@ -34,6 +35,14 @@ AppVeyor Builds: [Click](https://ci.appveyor.com/project/Alkl/notenoughav1encode
 4. Edit the encoding settings. (You can save the settings by clicking on "Save Settings". Saving/Loading multiple presets is possible!)
 5. Click on "Start Encode".
 
+### Known Issues:
+- Subtitles: Stream Copy HDMV-PGS Subs won't work (ffmpeg)
+- Audio: Opus 5.1 Channellayout problem with multiple audio tracks
+- Audio: Bluray_PCM Stream Copy won't work
+- Resuming: The unfinished Job will be saved in one resume file. Running multiple instances with different encodes will run the resume mode useless, as it overwrites itself
+
+### Other Information:
+
 NEAV1E has a resume feature, with which you can resume cancelled encodes. (unfinished chunks will be overwritten!)
 
 If you press on cancel, the program will terminate ALL aomenc/rav1e/SVT-AV1 and ffmpeg processes. Don't press it if you have other encodes/instances running!
@@ -43,9 +52,6 @@ SVT-AV1 encoding is limited to one instance. This limitation can be overwritten 
 If you experience framelosses you may have a slightly corrupted video. Using the option "Reencode Lossless" might help with this issue. (Video will be reencoded - this may take a lot of disk space)
 
 ---
-### How does this program work?:
-This program will split the given video file into roughly equally chunks. This splitting process is not reencoding the video, except specified in the settings.
-After splitting, it will encode the chunks with x amount of workers. When finished, it will mux the encoded files together in one output file.
 
 ### Submit a Bugreport:
 I need lots of information in order to recreate Bugs.
