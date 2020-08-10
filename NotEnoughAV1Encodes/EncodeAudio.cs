@@ -73,7 +73,9 @@ namespace NotEnoughAV1Encodes
                 case "AC3": audiocodecswitch = "ac3"; break;
                 case "AAC": audiocodecswitch = "aac"; break;
                 case "MP3": audiocodecswitch = "libmp3lame"; break;
-                case "Copy Audio": audiocodecswitch = "copy"; break;
+                case "Copy Audio":
+                    if (MainWindow.pcmBluray) { audiocodecswitch = "pcm_s16le"; } else { audiocodecswitch = "copy"; }                    
+                    break;
                 default:
                     break;
             }

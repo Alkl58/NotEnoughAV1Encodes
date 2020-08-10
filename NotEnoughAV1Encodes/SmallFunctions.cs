@@ -122,6 +122,28 @@ namespace NotEnoughAV1Encodes
             return framerate;
         }
 
+        public static string getAudioInfo(string videoInput)
+        {
+            Process getStreamFps = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = MainWindow.ffprobePath,
+                    Arguments = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            getStreamFps.Start();
+            string audio = getStreamFps.StandardOutput.ReadLine();
+            getStreamFps.WaitForExit();
+            return audio;
+        }
+
         public static string getPixelFormat(string videoInput)
         {
             string input = '\u0022' + videoInput + '\u0022';

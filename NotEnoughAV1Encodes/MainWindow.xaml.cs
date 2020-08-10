@@ -36,7 +36,7 @@ namespace NotEnoughAV1Encodes
         public static int videoPasses, processPriority, videoLength, customsubtitleadded, counterQueue, frameRateIndex;
         public static int audioBitrateTrackOne, audioBitrateTrackTwo, audioBitrateTrackThree, audioBitrateTrackFour;
         public static int audioChannelsTrackOne, audioChannelsTrackTwo, audioChannelsTrackThree, audioChannelsTrackFour;
-        public static bool trackOne, trackTwo, trackThree, trackFour, audioEncoding;
+        public static bool trackOne, trackTwo, trackThree, trackFour, audioEncoding, pcmBluray;
         public static bool trackOneLang, trackTwoLang, trackThreeLang, trackFourLang;
         public static bool inputSet, outputSet, reencode, beforereencode, resumeMode, deleteTempFiles, deleteTempFilesDynamically;
         public static bool subtitleCopy, subtitleCustom, subtitleHardcoding, subtitleEncoding;
@@ -786,6 +786,7 @@ namespace NotEnoughAV1Encodes
             if (trackthree == false) { CheckBoxAudioTrackThree.IsChecked = false; CheckBoxAudioTrackThree.IsEnabled = false; }
             if (trackfour == false) { CheckBoxAudioTrackFour.IsChecked = false; CheckBoxAudioTrackFour.IsEnabled = false; }
             if (CheckBoxAudioTrackOne.IsEnabled == false && CheckBoxAudioTrackTwo.IsEnabled == false && CheckBoxAudioTrackThree.IsEnabled == false && CheckBoxAudioTrackFour.IsEnabled == false) { CheckBoxAudioEncoding.IsChecked = false; CheckBoxAudioEncoding.IsEnabled = false; }
+            if (SmallFunctions.getAudioInfo(videoInput) == "pcm_bluray") { MessageBoxes.MessagePCMBluray(); pcmBluray = true; } else { pcmBluray = false; }
         }
 
         public void GetSubtitleTracks()

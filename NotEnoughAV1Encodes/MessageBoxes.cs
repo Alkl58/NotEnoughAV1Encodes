@@ -85,5 +85,10 @@ namespace NotEnoughAV1Encodes
         {
             MessageBox.Show("It seems that you have less than 50GB Free space. \nDepending on the Content Length and the Splitting Method, it is recommended to have at least 100GB excluding some extra spare space.\nThis program is not stopping you from Encoding, regardless of this message. \nYou can also select a custom Temp Path on another Drive if you want.", "Free Space", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        public static void MessagePCMBluray()
+        {
+            MessageBox.Show("Detected PCM_Bluray Audio Format! \n\nIf you want to Stream Copy, it will reencode to pcm_s16le. \n\nElse feel free to use a lossy format.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }
