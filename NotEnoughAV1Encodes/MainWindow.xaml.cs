@@ -354,6 +354,7 @@ namespace NotEnoughAV1Encodes
             switch (ComboBoxChromaSubsamplingAomenc.SelectedIndex)
             {
                 case 0:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv420p"; }
                     if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le -strict -1"; }
                     if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le -strict -1"; }
                     break;
@@ -409,6 +410,7 @@ namespace NotEnoughAV1Encodes
             switch (ComboBoxColorFormatLibaom.SelectedIndex)
             {
                 case 0:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv420p"; }
                     if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le -strict -1"; }
                     if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le -strict -1"; }
                     break;
@@ -461,6 +463,7 @@ namespace NotEnoughAV1Encodes
             switch (ComboBoxColorFormatRav1e.SelectedIndex)
             {
                 case 0:
+                    if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p"; }
                     if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le -strict -1"; }
                     if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le -strict -1"; }
                     break;
@@ -509,6 +512,7 @@ namespace NotEnoughAV1Encodes
             {
                 case 0: break; //yuv400p piping apparently does not work
                 case 1:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv420p"; }
                     if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le -strict -1"; }
                     if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le -strict -1"; }
                     break;
@@ -553,6 +557,7 @@ namespace NotEnoughAV1Encodes
             switch (ComboBoxColorFormatLibaom.SelectedIndex)
             {
                 case 0:
+                    if (ComboBoxBitDepth.SelectedIndex == 0) { pipeBitDepth = "yuv420p"; }
                     if (ComboBoxBitDepth.SelectedIndex == 1) { pipeBitDepth = "yuv420p10le -strict -1"; }
                     if (ComboBoxBitDepth.SelectedIndex == 2) { pipeBitDepth = "yuv420p12le -strict -1"; }
                     break;
