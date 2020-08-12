@@ -1672,6 +1672,9 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("VideoInput",         videoInput);
                 writer.WriteElementString("VideoInputFilename", fileName);
                 writer.WriteElementString("VideoOutput",        videoOutput);
+                writer.WriteElementString("Trimming",           CheckBoxTrimming.IsChecked.ToString());
+                writer.WriteElementString("TrimStart",          TextBoxTrimStart.Text);
+                writer.WriteElementString("TrimEnd",            TextBoxTrimEnd.Text);
             }
             writer.WriteElementString("Encoder",            ComboBoxEncoder.SelectedIndex.ToString());
             writer.WriteElementString("Framerate",          ComboBoxFrameRate.SelectedIndex.ToString());
@@ -1721,9 +1724,6 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("Deinterlacing",      CheckBoxDeinterlaceYadif.IsChecked.ToString());
             writer.WriteElementString("Deinterlacer",       ComboBoxDeinterlace.SelectedIndex.ToString());
             writer.WriteElementString("AdvancedSettings",   CheckBoxAdvancedSettings.IsChecked.ToString());
-            writer.WriteElementString("Trimming",           CheckBoxTrimming.IsChecked.ToString());
-            writer.WriteElementString("TrimStart",          TextBoxTrimStart.Text);
-            writer.WriteElementString("TrimEnd",            TextBoxTrimEnd.Text);
             if (CheckBoxAdvancedSettings.IsChecked == true)
             {
                 if (CheckBoxAdvancedSettings.IsChecked == true)
