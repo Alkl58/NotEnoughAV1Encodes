@@ -1525,8 +1525,8 @@ namespace NotEnoughAV1Encodes
                     {
                         SliderQuality.Maximum = 63;
                         SliderQuality.Value = 30;
-                        SliderPreset.Maximum = 8;
-                        SliderPreset.Value = 3;
+                        SliderPreset.Maximum = 9;
+                        SliderPreset.Value = 4;
                     }
                     break;
                 case "aomenc (ffmpeg)":
@@ -1534,8 +1534,8 @@ namespace NotEnoughAV1Encodes
                     {
                         SliderQuality.Maximum = 63;
                         SliderQuality.Value = 30;
-                        SliderPreset.Maximum = 8;
-                        SliderPreset.Value = 3;
+                        SliderPreset.Maximum = 9;
+                        SliderPreset.Value = 4;
                     }
                     break;
                 case "rav1e":
