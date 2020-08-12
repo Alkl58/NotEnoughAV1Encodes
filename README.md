@@ -37,9 +37,8 @@ AppVeyor Builds: [Click](https://ci.appveyor.com/project/Alkl/notenoughav1encode
 5. Click on "Start Encode".
 
 ### Known Issues:
-- Subtitles: Stream Copy HDMV-PGS Subs won't work (ffmpeg)
 - Audio: Opus 5.1 Channellayout problem with multiple audio tracks
-- Audio: Bluray_PCM Stream Copy won't work
+
 
 ### Other Information:
 
