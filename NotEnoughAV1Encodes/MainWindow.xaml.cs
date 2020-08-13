@@ -146,28 +146,30 @@ namespace NotEnoughAV1Encodes
             DirectoryInfo batchfiles = new DirectoryInfo(videoInput);
             foreach (var file in batchfiles.GetFiles())
             {
-                SmallFunctions.Cancel.CancelAll = false;
-
-                ProgressBar.Maximum = 100;
-                ProgressBar.Value = 0;
-                setProgressBarLabel("Encoding: " + file);
-
-                videoInput = LabelVideoSource.Content + "\\" + file;
-                videoOutput = LabelVideoOutput.Content + "\\" + file + "_av1.mkv";
-
-                getVideoInformation();
-                getAudioInformation();
-
-                setChunkLength();
-                setParameters();
-                setAudioParameters();
-                setSubtitleParameters();
-
-                if (SmallFunctions.Cancel.CancelAll == false)
+                if (CheckFileType(file.ToString()) == true && SmallFunctions.Cancel.CancelAll == false)
                 {
-                    await AsyncClass();
-                }
+                    SmallFunctions.Cancel.CancelAll = false;
 
+                    ProgressBar.Maximum = 100;
+                    ProgressBar.Value = 0;
+                    setProgressBarLabel("Encoding: " + file);
+
+                    videoInput = LabelVideoSource.Content + "\\" + file;
+                    videoOutput = LabelVideoOutput.Content + "\\" + file + "_av1.mkv";
+
+                    getVideoInformation();
+                    getAudioInformation();
+
+                    setChunkLength();
+                    setParameters();
+                    setAudioParameters();
+                    setSubtitleParameters();
+
+                    if (SmallFunctions.Cancel.CancelAll == false)
+                    {
+                        await AsyncClass();
+                    }
+                }
             }
             buttonActive = true;
             ProgressBar.Foreground = Brushes.Green;
@@ -1067,6 +1069,38 @@ namespace NotEnoughAV1Encodes
             }           
         }
 
+        private bool CheckFileType(string fileName)
+        {
+            string ext = Path.GetExtension(fileName);
+            switch (ext.ToLower())
+            {
+                case ".mp4":
+                    return true;
+                case ".m4v":
+                    return true;
+                case ".mkv":
+                    return true;
+                case ".webm":
+                    return true;
+                case ".m2ts":
+                    return true;
+                case ".flv":
+                    return true;
+                case ".avi":
+                    return true;
+                case ".wmv":
+                    return true;
+                case ".ts":
+                    return true;
+                case ".yuv":
+                    return true;
+                case ".mov":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         //════════════════════════════════════════ Buttons ════════════════════════════════════════
 
         private void ButtonUpdateDependencies_Click(object sender, RoutedEventArgs e)
@@ -1193,7 +1227,7 @@ namespace NotEnoughAV1Encodes
                 {
                     //Opens OpenFileDialog for the Input Video
                     OpenFileDialog openVideoFileDialog = new OpenFileDialog();
-                    openVideoFileDialog.Filter = "Video Files|*.mp4;*.m4v;*.mkv;*.webm;*.m2ts;*.flv;*.avi;*.wmv;*.ts;*.yuv|All Files|*.*";
+                    openVideoFileDialog.Filter = "Video Files|*.mp4;*.m4v;*.mkv;*.webm;*.m2ts;*.flv;*.mov;*.avi;*.wmv;*.ts;*.yuv|All Files|*.*";
                     Nullable<bool> result = openVideoFileDialog.ShowDialog();
                     if (result == true)
                     {
