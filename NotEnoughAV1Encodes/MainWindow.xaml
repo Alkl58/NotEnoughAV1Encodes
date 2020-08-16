@@ -61,8 +61,8 @@
                     <TextBox x:Name="TextBoxChunkLength" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="26" Margin="187,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox" ToolTip="Splits the Video into n-Seconds Chunks. Should not be too short." IsTabStop="False" Text="20" TextChanged="TextBoxChunkLength_TextChanged"/>
                     <Label Content="Re-Encode:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
                     <ComboBox x:Name="ComboBoxReencodeCodec" HorizontalAlignment="Left" Margin="187,90,0,0" VerticalAlignment="Top" Width="101" Height="26" VerticalContentAlignment="Center" ToolTip="Sets the Codec for reencoding.">
-                        <ComboBoxItem Content="x264"/>
-                        <ComboBoxItem Content="utvideo" IsSelected="True"/>
+                        <ComboBoxItem Content="x264" IsSelected="True"/>
+                        <ComboBoxItem Content="utvideo"/>
                     </ComboBox>
                     <CheckBox x:Name="CheckBoxReencodeBeforeSplitting" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="Before Splitting" HorizontalAlignment="Left" Margin="311,96,0,0" VerticalAlignment="Top" Unchecked="CheckBoxReencodeBeforeSplitting_Unchecked" ToolTip="Enables Reencoding before the splitting process."/>
                     <CheckBox x:Name="CheckBoxReencodeDuringSplitting" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Content="During Splitting" HorizontalAlignment="Left" Margin="428,96,0,0" VerticalAlignment="Top" Unchecked="CheckBoxReencodeDuringSplitting_Unchecked" ToolTip="Enables Reencoding during Splitting."/>
@@ -672,7 +672,7 @@
                             </Style>
                         </CheckBox.Style>
                     </CheckBox>
-                    <CheckBox x:Name="CheckBoxFrameBoostAomenc" Content="Frame Periodic Boost" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="589,142,0,0" VerticalAlignment="Top" ToolTip="Enables/Disables Keyframefiltering. Disable this if encoder produced colorbleeding/cursed blocking.">
+                    <CheckBox x:Name="CheckBoxFrameBoostAomenc" Content="Frame Periodic Boost" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="589,142,0,0" VerticalAlignment="Top" ToolTip="Enable/Disable frame periodic boost">
                         <CheckBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -719,7 +719,7 @@
                             </Style>
                         </ComboBox.Style>
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxRowmt" Content="Row based Multi-Threading" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="589,49,0,0" VerticalAlignment="Top" ToolTip="Enables/Disables Keyframefiltering. Disable this if encoder produced colorbleeding/cursed blocking." IsChecked="True">
+                    <CheckBox x:Name="CheckBoxRowmt" Content="Row based Multi-Threading" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="589,49,0,0" VerticalAlignment="Top" ToolTip="Enables/Disables Tile-Row based Multithreading" IsChecked="True">
                         <CheckBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -1726,7 +1726,7 @@
                         <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="img/paypal.png"/>
                     </Button>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="598,14,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="661,16,0,0" TextWrapping="Wrap" Text="1.1 - AppVeyor 1.0.130" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="661,16,0,0" TextWrapping="Wrap" Text="1.1 - AppVeyor 1.0.131" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
                     <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="608,40,0,0" VerticalAlignment="Top"/>
                     <TextBlock HorizontalAlignment="Left" Margin="661,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
             <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
@@ -1759,7 +1759,7 @@
                 </TextBlock>
             </StackPanel>
         </Button>
-        <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="570,31,0,0" VerticalAlignment="Top" Checked="CheckBoxBatchEncoding_Checked"/>
+        <CheckBox x:Name="CheckBoxBatchEncoding" Content="Batch Encoding" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="570,31,0,0" VerticalAlignment="Top" Checked="CheckBoxBatchEncoding_Checked" Unchecked="CheckBoxBatchEncoding_Unchecked"/>
         <Button x:Name="ButtonSavePreset" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Save" HorizontalAlignment="Left" Margin="218,78,0,0" VerticalAlignment="Top" Width="59" Height="26" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonSavePreset_Click"/>
         <Button x:Name="ButtonDeleteProfile" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Delete" HorizontalAlignment="Left" Margin="276,78,0,0" VerticalAlignment="Top" Width="40" Height="26" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Click="ButtonDeleteProfile_Click"/>
         <Button x:Name="ButtonQueue" HorizontalAlignment="Left" Margin="889.667,16,0,0" VerticalAlignment="Top" Width="81.333" Height="47.25" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" UseLayoutRounding="False" BorderBrush="#FFE4E4E4" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Click="ButtonQueue_Click">

@@ -319,7 +319,7 @@ namespace NotEnoughAV1Encodes
                 if (Directory.Exists(Path.Combine(MainWindow.tempPath, "AudioEncoded")))
                     Directory.Delete(Path.Combine(MainWindow.tempPath, "AudioEncoded"), true);
             }
-            catch (IOException ex) { MessageBox.Show(ex.Message); }
+            catch { }
 
         }
 

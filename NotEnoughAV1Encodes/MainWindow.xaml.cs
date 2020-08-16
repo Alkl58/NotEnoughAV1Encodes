@@ -40,7 +40,7 @@ namespace NotEnoughAV1Encodes
         public static bool trackOneLang, trackTwoLang, trackThreeLang, trackFourLang;
         public static bool inputSet, outputSet, reencode, beforereencode, resumeMode, deleteTempFiles, deleteTempFilesDynamically;
         public static bool subtitleCopy, subtitleCustom, subtitleHardcoding, subtitleEncoding;
-        public static bool customBackground, programStartup = true, logging = true, buttonActive = true, saveSettings, found7z, startupTrim = false, trimButtons = false;
+        public static bool customBackground, programStartup = true, logging = true, buttonActive = true, saveSettings, found7z, startupTrim = false, trimButtons = false, encodeStarted;
         public static double videoFrameRate;
         public DateTime starttimea;
 
@@ -64,8 +64,43 @@ namespace NotEnoughAV1Encodes
 
         //════════════════════════════════════ Main Functions ═════════════════════════════════════
 
+        private void PreStart()
+        {
+            SmallFunctions.Logging("Button Start encode");
+            SmallFunctions.Cancel.CancelAll = false;
+            if (inputSet && outputSet)
+            {
+                ProgressBar.Value = 0;
+                ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(3, 112, 200));
+                resumeMode = CheckBoxResumeMode.IsChecked == true;
+                ButtonStartEncode.BorderBrush = Brushes.Green;
+                ButtonCancelEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
+                buttonActive = false;
+                if (CheckBoxBatchEncoding.IsChecked == false && CheckBoxQueueEncoding.IsChecked == false)
+                {
+                    MainEntry();
+                }
+                else if (CheckBoxBatchEncoding.IsChecked == true && CheckBoxQueueEncoding.IsChecked == false)
+                {
+                    SmallFunctions.Logging("BatchEncode()");
+                    BatchEncode();
+                }
+            }
+            else if (CheckBoxQueueEncoding.IsChecked == false)
+            {
+                if (inputSet == false) { MessageBoxes.MessageVideoInput(); SmallFunctions.Logging("Video Input not set"); }
+                if (outputSet == false) { MessageBoxes.MessageVideoOutput(); SmallFunctions.Logging("Video Output not set"); }
+            }
+            else if (CheckBoxBatchEncoding.IsChecked == false && CheckBoxQueueEncoding.IsChecked == true)
+            {
+                SmallFunctions.Logging("QueueEncode()");
+                QueueEncode();
+            }
+        }
+
         private async void MainEntry()
         {
+            encodeStarted = true;
             encoder = ComboBoxEncoder.Text;
             if (SmallFunctions.checkDependencies(encoder) && SmallFunctions.Cancel.CancelAll == false)
             {
@@ -139,17 +174,19 @@ namespace NotEnoughAV1Encodes
                     if (CheckBoxShutdownAfterEncode.IsChecked == true && CheckBoxBatchEncoding.IsChecked == false) { Process.Start("shutdown.exe", "/s /t 0"); }
                 }
             }
+            encodeStarted = false;
         }
 
         private async void BatchEncode()
         {
+            videoInput = LabelVideoSource.Content.ToString();  // Both are set, to avoid problems when people retry the batch encoding in the same instance
+            videoOutput = LabelVideoOutput.Content.ToString(); // -^
+            encodeStarted = true;
             DirectoryInfo batchfiles = new DirectoryInfo(videoInput);
             foreach (var file in batchfiles.GetFiles())
             {
                 if (CheckFileType(file.ToString()) == true && SmallFunctions.Cancel.CancelAll == false)
                 {
-                    SmallFunctions.Cancel.CancelAll = false;
-
                     ProgressBar.Maximum = 100;
                     ProgressBar.Value = 0;
                     setProgressBarLabel("Encoding: " + file);
@@ -165,6 +202,22 @@ namespace NotEnoughAV1Encodes
                     setAudioParameters();
                     setSubtitleParameters();
 
+                    if (CheckBoxSubtitleEncoding.IsChecked == true)
+                    {
+                        if (RadioButtonStreamCopySubtitles.IsChecked == false)
+                        {
+                            subtitleEncoding = false;
+                            subtitleHardcoding = false;
+                        }
+                    }
+
+                    try
+                    {
+                        if (SmallFunctions.CheckFileFolder())
+                            SmallFunctions.DeleteChunkFolderContent(); // Avoids Temp file issues, as the majaroity of safeguards are not used during Batch encoding
+                    } catch { }
+
+
                     if (SmallFunctions.Cancel.CancelAll == false)
                     {
                         await AsyncClass();
@@ -175,11 +228,13 @@ namespace NotEnoughAV1Encodes
             ProgressBar.Foreground = Brushes.Green;
             ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
             if (CheckBoxFinishedSound.IsChecked == true) { SmallFunctions.PlayFinishedSound(); }
+            encodeStarted = false;
             if (CheckBoxShutdownAfterEncode.IsChecked == true) { Process.Start("shutdown.exe", "/s /t 0"); }
         }
 
         private async void QueueEncode()
         {
+            encodeStarted = true;
             List<object> queue = new List<object>();
             foreach (var item in ListBoxQueue.Items) { queue.Add(item); }
             foreach (var item in queue)
@@ -209,6 +264,7 @@ namespace NotEnoughAV1Encodes
             buttonActive = true;
             ProgressBar.Foreground = Brushes.Green;
             ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
+            encodeStarted = false;
             if (CheckBoxFinishedSound.IsChecked == true) { SmallFunctions.PlayFinishedSound(); }
             if (CheckBoxShutdownAfterEncode.IsChecked == true && SmallFunctions.Cancel.CancelAll == false) { Process.Start("shutdown.exe", "/s /t 0"); }
         }
@@ -1072,33 +1128,8 @@ namespace NotEnoughAV1Encodes
         private bool CheckFileType(string fileName)
         {
             string ext = Path.GetExtension(fileName);
-            switch (ext.ToLower())
-            {
-                case ".mp4":
-                    return true;
-                case ".m4v":
-                    return true;
-                case ".mkv":
-                    return true;
-                case ".webm":
-                    return true;
-                case ".m2ts":
-                    return true;
-                case ".flv":
-                    return true;
-                case ".avi":
-                    return true;
-                case ".wmv":
-                    return true;
-                case ".ts":
-                    return true;
-                case ".yuv":
-                    return true;
-                case ".mov":
-                    return true;
-                default:
-                    return false;
-            }
+            string[] exts = { ".mp4", ".m4v", ".mkv", ".webm", ".m2ts", ".flv", ".avi", ".wmv", ".ts", ".yuv", ".mov" };
+            return exts.Contains(ext.ToLower());
         }
 
         //════════════════════════════════════════ Buttons ════════════════════════════════════════
@@ -1268,35 +1299,17 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
-            SmallFunctions.Logging("Button Start encode");
-            SmallFunctions.Cancel.CancelAll = false;
-            if (inputSet && outputSet)
+            if (encodeStarted == false)
             {
-                ProgressBar.Value = 0;
-                ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(3, 112, 200));
-                resumeMode = CheckBoxResumeMode.IsChecked == true;
-                ButtonStartEncode.BorderBrush = Brushes.Green;
-                ButtonCancelEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
-                buttonActive = false;
-                if (CheckBoxBatchEncoding.IsChecked == false && CheckBoxQueueEncoding.IsChecked == false)
-                {
-                    MainEntry();
-                }
-                else if (CheckBoxBatchEncoding.IsChecked == true && CheckBoxQueueEncoding.IsChecked == false)
-                {
-                    SmallFunctions.Logging("BatchEncode()");
-                    BatchEncode();
-                }
+                PreStart();
             }
-            else if (CheckBoxQueueEncoding.IsChecked == false)
+            else
             {
-                if (inputSet == false) { MessageBoxes.MessageVideoInput(); SmallFunctions.Logging("Video Input not set"); }
-                if (outputSet == false) { MessageBoxes.MessageVideoOutput(); SmallFunctions.Logging("Video Output not set"); }
-            }
-            else if (CheckBoxBatchEncoding.IsChecked == false && CheckBoxQueueEncoding.IsChecked == true)
-            {
-                SmallFunctions.Logging("QueueEncode()");
-                QueueEncode();
+                if (MessageBox.Show("Encode already started. \n\nStart process anyway?", "Encode already started!", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    encodeStarted = false;
+                    PreStart();
+                }
             }
         }
 
@@ -1517,7 +1530,14 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxBatchEncoding_Checked(object sender, RoutedEventArgs e)
         {
-            RadioButtonCustomSubtitles.IsChecked = false; RadioButtonStreamCopySubtitles.IsChecked = true;
+            RadioButtonCustomSubtitles.IsChecked = false; 
+            RadioButtonCustomSubtitles.IsEnabled = false;
+            RadioButtonStreamCopySubtitles.IsChecked = true;
+        }
+
+        private void CheckBoxBatchEncoding_Unchecked(object sender, RoutedEventArgs e)
+        {
+            RadioButtonCustomSubtitles.IsEnabled = true;
         }
 
         private void CheckBoxDarkMode_Checked(object sender, RoutedEventArgs e)
@@ -1626,10 +1646,10 @@ namespace NotEnoughAV1Encodes
         {
             if (inputSet == true && ComboBoxFrameRate.SelectedIndex != frameRateIndex)
             {
-                if (CheckBoxReencodeBeforeSplitting.IsChecked == false && CheckBoxReencodeDuringSplitting.IsChecked == false)
+                if (CheckBoxReencodeBeforeSplitting.IsChecked == false && CheckBoxReencodeDuringSplitting.IsChecked == false && CheckBoxBatchEncoding.IsChecked == false)
                 {
                     if (MessageBox.Show("Changing the Framerate requires reencoding! Activate Reencoding?", "Framerate", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    { CheckBoxReencodeBeforeSplitting.IsChecked = true; }
+                    { CheckBoxReencodeDuringSplitting.IsChecked = true; }
                 }
             }
         }
@@ -1770,7 +1790,8 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("TileRows",               ComboBoxTileRows.SelectedIndex.ToString());
                 writer.WriteElementString("MinKeyframeInterval",    TextBoxMinKeyframeinterval.Text);
                 writer.WriteElementString("MaxKeyframeInterval",    TextBoxMaxKeyframeinterval.Text);
-                
+                writer.WriteElementString("CommentHeader",          CheckBoxCommentHeaderSettings.IsChecked.ToString());
+
                 if (ComboBoxEncoder.SelectedIndex == 0)
                 {
                     writer.WriteElementString("LagInFrames",        TextBoxMaxLagInFrames.Text);
@@ -1870,6 +1891,7 @@ namespace NotEnoughAV1Encodes
                     case "ReencodeCodec":       ComboBoxReencodeCodec.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "Reencode":            CheckBoxReencodeDuringSplitting.IsChecked = n.InnerText == "True"; break;
                     case "PreReencode":         CheckBoxReencodeBeforeSplitting.IsChecked = n.InnerText == "True"; break;
+                    case "CommentHeader":       CheckBoxCommentHeaderSettings.IsChecked = n.InnerText == "True"; break;
                     case "ChunkCalc":           CheckBoxChunkLengthAutoCalculation.IsChecked = n.InnerText == "True"; break;
                     case "ChunkLength":         TextBoxChunkLength.Text = n.InnerText; break;
                     case "Crop":                CheckBoxCrop.IsChecked = n.InnerText == "True"; break;
