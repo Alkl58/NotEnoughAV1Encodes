@@ -68,7 +68,12 @@ namespace NotEnoughAV1Encodes
         {
             SmallFunctions.Logging("Button Start encode");
             SmallFunctions.Cancel.CancelAll = false;
-            if (inputSet && outputSet)
+
+            if (CheckBoxBatchEncoding.IsChecked == false && CheckBoxQueueEncoding.IsChecked == true)
+            {
+                SmallFunctions.Logging("QueueEncode()");
+                QueueEncode();
+            }else if(inputSet && outputSet)
             {
                 ProgressBar.Value = 0;
                 ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(3, 112, 200));
@@ -76,25 +81,20 @@ namespace NotEnoughAV1Encodes
                 ButtonStartEncode.BorderBrush = Brushes.Green;
                 ButtonCancelEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
                 buttonActive = false;
-                if (CheckBoxBatchEncoding.IsChecked == false && CheckBoxQueueEncoding.IsChecked == false)
+                if (CheckBoxBatchEncoding.IsChecked == false)
                 {
                     MainEntry();
                 }
-                else if (CheckBoxBatchEncoding.IsChecked == true && CheckBoxQueueEncoding.IsChecked == false)
+                else
                 {
                     SmallFunctions.Logging("BatchEncode()");
                     BatchEncode();
                 }
             }
-            else if (CheckBoxQueueEncoding.IsChecked == false)
+            else
             {
                 if (inputSet == false) { MessageBoxes.MessageVideoInput(); SmallFunctions.Logging("Video Input not set"); }
                 if (outputSet == false) { MessageBoxes.MessageVideoOutput(); SmallFunctions.Logging("Video Output not set"); }
-            }
-            else if (CheckBoxBatchEncoding.IsChecked == false && CheckBoxQueueEncoding.IsChecked == true)
-            {
-                SmallFunctions.Logging("QueueEncode()");
-                QueueEncode();
             }
         }
 
@@ -239,11 +239,12 @@ namespace NotEnoughAV1Encodes
             foreach (var item in ListBoxQueue.Items) { queue.Add(item); }
             foreach (var item in queue)
             {
-                while(SmallFunctions.Cancel.CancelAll == false)
+                if(SmallFunctions.Cancel.CancelAll == false)
                 {
                     LoadSettings(item.ToString(), false, false, true);
                     ProgressBar.Maximum = 100;
                     ProgressBar.Value = 0;
+                    ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(3, 112, 200));
                     setChunkLength();
                     setParameters();
                     SmallFunctions.DeleteChunkFolderContent();
@@ -256,13 +257,13 @@ namespace NotEnoughAV1Encodes
                         await AsyncClass();
                     }
 
-                    File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Queue", item.ToString()));
+                    File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Queue", item.ToString() + ".xml"));
                     ListBoxQueue.Items.Clear();
                     LoadQueueStartup();
                 }
             }
             buttonActive = true;
-            ProgressBar.Foreground = Brushes.Green;
+            ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(3, 112, 200));
             ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
             encodeStarted = false;
             if (CheckBoxFinishedSound.IsChecked == true) { SmallFunctions.PlayFinishedSound(); }
@@ -839,11 +840,12 @@ namespace NotEnoughAV1Encodes
                 detectedTracks += 1;
             }
             getAudioIndexes.WaitForExit();
-            if (trackone == false) { CheckBoxAudioTrackOne.IsChecked = false; CheckBoxAudioTrackOne.IsEnabled = false; }
-            if (tracktwo == false) { CheckBoxAudioTrackTwo.IsChecked = false; CheckBoxAudioTrackTwo.IsEnabled = false; }
-            if (trackthree == false) { CheckBoxAudioTrackThree.IsChecked = false; CheckBoxAudioTrackThree.IsEnabled = false; }
-            if (trackfour == false) { CheckBoxAudioTrackFour.IsChecked = false; CheckBoxAudioTrackFour.IsEnabled = false; }
+            if (trackone == false) { CheckBoxAudioTrackOne.IsChecked = false; CheckBoxAudioTrackOne.IsEnabled = false; } else { CheckBoxAudioTrackOne.IsEnabled = true; }
+            if (tracktwo == false) { CheckBoxAudioTrackTwo.IsChecked = false; CheckBoxAudioTrackTwo.IsEnabled = false; } else { CheckBoxAudioTrackTwo.IsEnabled = true; }
+            if (trackthree == false) { CheckBoxAudioTrackThree.IsChecked = false; CheckBoxAudioTrackThree.IsEnabled = false; } else { CheckBoxAudioTrackThree.IsEnabled = true; }
+            if (trackfour == false) { CheckBoxAudioTrackFour.IsChecked = false; CheckBoxAudioTrackFour.IsEnabled = false; } else { CheckBoxAudioTrackFour.IsEnabled = true; }
             if (CheckBoxAudioTrackOne.IsEnabled == false && CheckBoxAudioTrackTwo.IsEnabled == false && CheckBoxAudioTrackThree.IsEnabled == false && CheckBoxAudioTrackFour.IsEnabled == false) { CheckBoxAudioEncoding.IsChecked = false; CheckBoxAudioEncoding.IsEnabled = false; }
+            else { CheckBoxAudioEncoding.IsEnabled = true; }
             if (SmallFunctions.getAudioInfo(videoInput) == "pcm_bluray") { MessageBoxes.MessagePCMBluray(); pcmBluray = true; } else { pcmBluray = false; }
         }
 
@@ -922,7 +924,7 @@ namespace NotEnoughAV1Encodes
                 case "50/1": ComboBoxFrameRate.SelectedIndex = 11; break;
                 case "60000/1001": ComboBoxFrameRate.SelectedIndex = 12; break;
                 case "60/1": ComboBoxFrameRate.SelectedIndex = 13; break;
-                default: MessageBoxes.MessageVideoBadFramerate(); break;
+                default: if (CheckBoxQueueEncoding.IsChecked == false && CheckBoxBatchEncoding.IsChecked == false) { MessageBoxes.MessageVideoBadFramerate(); } break;
             }
             videoFrameRate = Convert.ToDouble(ComboBoxFrameRate.Text, CultureInfo.InvariantCulture);
             frameRateIndex = ComboBoxFrameRate.SelectedIndex;
@@ -1646,7 +1648,7 @@ namespace NotEnoughAV1Encodes
         {
             if (inputSet == true && ComboBoxFrameRate.SelectedIndex != frameRateIndex)
             {
-                if (CheckBoxReencodeBeforeSplitting.IsChecked == false && CheckBoxReencodeDuringSplitting.IsChecked == false && CheckBoxBatchEncoding.IsChecked == false)
+                if (CheckBoxReencodeBeforeSplitting.IsChecked == false && CheckBoxReencodeDuringSplitting.IsChecked == false && CheckBoxBatchEncoding.IsChecked == false && CheckBoxQueueEncoding.IsChecked == false)
                 {
                     if (MessageBox.Show("Changing the Framerate requires reencoding! Activate Reencoding?", "Framerate", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     { CheckBoxReencodeDuringSplitting.IsChecked = true; }
@@ -1863,7 +1865,7 @@ namespace NotEnoughAV1Encodes
             string directory = "";
             if (saveProfile) { directory = "Profiles\\" + saveName; }
             if (saveJob) { directory = "UnfinishedJobs\\" + saveName; }
-            if (saveQueue) { directory = Path.Combine(Directory.GetCurrentDirectory(), "Queue", saveName);  }
+            if (saveQueue) { directory = Path.Combine(Directory.GetCurrentDirectory(), "Queue", saveName + ".xml");  }
             XmlDocument doc = new XmlDocument();
             doc.Load(directory);
             XmlNodeList node = doc.GetElementsByTagName("Settings");
@@ -2053,7 +2055,7 @@ namespace NotEnoughAV1Encodes
                 try
                 {
                     DirectoryInfo queueFiles = new DirectoryInfo("Queue");
-                    foreach (var file in queueFiles.GetFiles()) { ListBoxQueue.Items.Add(file); SmallFunctions.Logging("Found Queue file: " + file.ToString()); }
+                    foreach (var file in queueFiles.GetFiles()) { ListBoxQueue.Items.Add(Path.GetFileNameWithoutExtension(file.ToString())); SmallFunctions.Logging("Found Queue file: " + file.ToString()); }
                 }
                 catch { }
             }
