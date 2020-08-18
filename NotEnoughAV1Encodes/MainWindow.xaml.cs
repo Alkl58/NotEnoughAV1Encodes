@@ -460,7 +460,7 @@ namespace NotEnoughAV1Encodes
                 encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: aomenc " + allSettingsAom + '\u0022' + " ";
             }
             else { encoderMetadata = ""; }
-            
+            if (CheckBoxRealtimeMode.IsChecked == true) { allSettingsAom += " --rt "; }
         }
 
         private void SetLibaomParameters(bool tempSettings)
@@ -511,7 +511,8 @@ namespace NotEnoughAV1Encodes
             {
                 encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: libaom " + allSettingsAom + '\u0022' + " ";
             }
-            else { encoderMetadata = ""; }              
+            else { encoderMetadata = ""; }    
+            if (CheckBoxRealtimeMode.IsChecked == true) { allSettingsAom += " -usage realtime "; }
         }
 
         private void SetRav1eParameters(bool tempSettings)
@@ -1203,6 +1204,30 @@ namespace NotEnoughAV1Encodes
             try { Process.Start(Directory.GetCurrentDirectory()); } catch { }            
         }
 
+        private void SliderPreset_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (CheckBoxRealtimeMode != null)
+            {
+                if (ComboBoxEncoder.SelectedIndex == 0 || ComboBoxEncoder.SelectedIndex == 1)
+                {
+                    if (SliderPreset.Value == 5 || SliderPreset.Value == 6 || SliderPreset.Value == 7 || SliderPreset.Value == 8 || SliderPreset.Value == 9)
+                    {
+                        CheckBoxRealtimeMode.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        CheckBoxRealtimeMode.Visibility = Visibility.Collapsed;
+                        CheckBoxRealtimeMode.IsChecked = false;
+                    }
+                }
+                else
+                {
+                    CheckBoxRealtimeMode.Visibility = Visibility.Collapsed;
+                    CheckBoxRealtimeMode.IsChecked = false;
+                }
+            }
+        }
+
         private void ButtonOpenTempFolder_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -1218,6 +1243,7 @@ namespace NotEnoughAV1Encodes
             setEncoderParameters(true);
             string inputSet = "Error";
             if (encoder == "aomenc") { inputSet = allSettingsAom; }
+            if (encoder == "aomenc (ffmpeg)") { inputSet = allSettingsAom; }
             if (encoder == "rav1e") { inputSet = allSettingsRav1e; }
             if (encoder == "svt-av1") { inputSet = allSettingsSVTAV1; }
             if (encoder == "libvpx-vp9") { inputSet = allSettingsVP9; }
@@ -1740,6 +1766,7 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("Quality",            SliderQuality.Value.ToString());
             writer.WriteElementString("Bitrate",            TextBoxBitrate.Text);
             writer.WriteElementString("Passes",             ComboBoxPasses.SelectedIndex.ToString());
+            writer.WriteElementString("RealTime",           CheckBoxRealtimeMode.IsChecked.ToString());
             writer.WriteElementString("Workers",            ComboBoxWorkers.SelectedIndex.ToString());
             writer.WriteElementString("Priority",           ComboBoxProcessPriority.SelectedIndex.ToString());
             writer.WriteElementString("ReencodeCodec",      ComboBoxReencodeCodec.SelectedIndex.ToString());
@@ -1888,6 +1915,7 @@ namespace NotEnoughAV1Encodes
                     case "Quality":             SliderQuality.Value = Int16.Parse(n.InnerText); break;
                     case "Bitrate":             TextBoxBitrate.Text = n.InnerText; break;
                     case "Passes":              ComboBoxPasses.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "RealTime":            CheckBoxRealtimeMode.IsChecked = n.InnerText == "True"; break;
                     case "Workers":             ComboBoxWorkers.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "Priority":            ComboBoxProcessPriority.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "ReencodeCodec":       ComboBoxReencodeCodec.SelectedIndex = Int16.Parse(n.InnerText); break;
