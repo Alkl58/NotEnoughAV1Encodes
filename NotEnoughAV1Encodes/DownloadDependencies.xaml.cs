@@ -397,13 +397,13 @@ namespace NotEnoughAV1Encodes
                 ProcessStartInfo pro = new ProcessStartInfo();
                 pro.WindowStyle = ProcessWindowStyle.Hidden;
                 pro.FileName = zPath;
-                pro.Arguments = "x \"" + source + "\" -o" + destination;
+                pro.Arguments = "x \"" +  source + "\" -o" + '\u0022' + destination + '\u0022';
                 Process x = Process.Start(pro);
                 x.WaitForExit();
             }
-            catch (System.Exception Ex)
+            catch (Exception Ex)
             {
-                System.Windows.MessageBox.Show(Ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
