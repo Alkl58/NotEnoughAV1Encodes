@@ -634,19 +634,6 @@
                             </Style>
                         </ComboBox.Style>
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxKeyframeFilteringAomenc" Content="Keyframe Filtering" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="589,80,0,0" VerticalAlignment="Top" IsChecked="True" ToolTip="Enables/Disables Keyframefiltering. Disable this if encoder produced colorbleeding/cursed blocking.">
-                        <CheckBox.Style>
-                            <Style>
-                                <Setter Property="CheckBox.Visibility" Value="Collapsed"></Setter>
-                                <Style.Triggers>
-                                    <DataTrigger
-                      Binding="{Binding ElementName=ComboBoxEncoder, Path=SelectedIndex}" Value="0">
-                                        <Setter Property="CheckBox.Visibility" Value="Visible"></Setter>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </CheckBox.Style>
-                    </CheckBox>
                     <CheckBox x:Name="CheckBoxAutoAltRefAomenc" Content="Automatic alt Reference Frames" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="589,111,0,0" VerticalAlignment="Top" ToolTip="Disable this if you want a completely shit encode." IsChecked="True">
                         <CheckBox.Style>
                             <Style>
@@ -660,7 +647,7 @@
                             </Style>
                         </CheckBox.Style>
                     </CheckBox>
-                    <CheckBox x:Name="CheckBoxAutoAltRefVP9" Content="Automatic alt Reference Frames" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="486,80,0,0" VerticalAlignment="Top" ToolTip="Enables/Disables Keyframefiltering. Disable this if encoder produced colorbleeding/cursed blocking.">
+                    <CheckBox x:Name="CheckBoxAutoAltRefVP9" Content="Automatic alt Reference Frames" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="486,80,0,0" VerticalAlignment="Top" ToolTip="Enables/Disables Automatic alternate reference frames." IsChecked="True">
                         <CheckBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -720,7 +707,7 @@
                             </Style>
                         </ComboBox.Style>
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxRowmt" Content="Row based Multi-Threading" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="589,49,0,0" VerticalAlignment="Top" ToolTip="Enables/Disables Tile-Row based Multithreading" IsChecked="True">
+                    <CheckBox x:Name="CheckBoxRowmt" Content="Row based Multi-Threading" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="589,80,0,0" VerticalAlignment="Top" ToolTip="Enables/Disables Tile-Row based Multithreading" IsChecked="True">
                         <CheckBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -1186,7 +1173,7 @@
                         <ComboBoxItem Content="5"/>
                         <ComboBoxItem Content="6"/>
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxEnableHDRSVT" Content="HDR" HorizontalAlignment="Left" Margin="273,144,0,0" VerticalAlignment="Top">
+                    <CheckBox x:Name="CheckBoxEnableHDRSVT" Content="HDR" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="273,144,0,0" VerticalAlignment="Top">
                         <CheckBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -1516,6 +1503,40 @@
                         <ComboBoxItem Content="ssim"/>
                     </ComboBox>
                     <CheckBox x:Name="CheckBoxCommentHeaderSettings" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Write settings in the comment header of the output video" HorizontalAlignment="Left" Margin="605,296,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Keyframe Filtering:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="584,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26">
+                        <Label.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="0">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <ComboBox x:Name="ComboBoxAomKeyframeFiltering" HorizontalAlignment="Left" Margin="698,45,0,0" VerticalAlignment="Top" Width="56" Height="26">
+                        <ComboBox.ToolTip>
+                            <TextBlock>
+                Apply temporal filtering on key frame(0: no filter, 1: filter without overlay (default),2: filter with overlay) <LineBreak />  0 and 1 have quality problems (cursed keyframes). Thats why 2 has been introduced lately.
+                            </TextBlock>
+                        </ComboBox.ToolTip>
+                        <ComboBoxItem Content="0"/>
+                        <ComboBoxItem Content="1"/>
+                        <ComboBoxItem Content="2" IsSelected="True"/>
+                        <ComboBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding SelectedIndex, ElementName=ComboBoxEncoder}" Value="0">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Audio">
@@ -1727,7 +1748,7 @@
                         <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="img/paypal.png"/>
                     </Button>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="598,14,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="661,16,0,0" TextWrapping="Wrap" Text="1.1 - AppVeyor 1.0.134" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="661,16,0,0" TextWrapping="Wrap" Text="1.1 - AppVeyor 1.0.135" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
                     <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="608,40,0,0" VerticalAlignment="Top"/>
                     <TextBlock HorizontalAlignment="Left" Margin="661,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
             <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>

@@ -441,7 +441,7 @@ namespace NotEnoughAV1Encodes
                 if (CheckBoxCustomSettings.IsChecked == false || tempSettings)
                 {
                     string rowmt = (CheckBoxRowmt.IsChecked == false) ? "0" : "1";
-                    string keyfiltering = (CheckBoxKeyframeFilteringAomenc.IsChecked == false) ? "0" : "1";
+                    string keyfiltering = ComboBoxAomKeyframeFiltering.SelectedIndex.ToString();
                     string autoAltRef = (CheckBoxAutoAltRefAomenc.IsChecked == false) ? "0" : "1";
                     string frameBoost = (CheckBoxFrameBoostAomenc.IsChecked == false) ? "0" : "1";
                     string aomencFrames = " --tile-columns=" + ComboBoxTileColumns.Text + " --tile-rows=" + ComboBoxTileRows.Text + " --kf-min-dist=" + TextBoxMinKeyframeinterval.Text + " --kf-max-dist=" + TextBoxMaxKeyframeinterval.Text + " --lag-in-frames=" + TextBoxMaxLagInFrames.Text + " --max-reference-frames=" + ComboBoxMaxReferenceFramesAomenc.Text;
@@ -1833,7 +1833,7 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("AQMode",             ComboBoxAQMode.SelectedIndex.ToString());
                     writer.WriteElementString("SharpnessLoopFilter", ComboBoxSharpnessFilterAomenc.SelectedIndex.ToString());
                     writer.WriteElementString("Rowmt",              CheckBoxRowmt.IsChecked.ToString());
-                    writer.WriteElementString("KeyframeFiltering",  CheckBoxKeyframeFilteringAomenc.IsChecked.ToString());
+                    writer.WriteElementString("KeyframeFiltering",  ComboBoxAomKeyframeFiltering.SelectedIndex.ToString());
                     writer.WriteElementString("AutoAltRef",         CheckBoxAutoAltRefAomenc.IsChecked.ToString());
                     writer.WriteElementString("FramePeriodicBoost", CheckBoxFrameBoostAomenc.IsChecked.ToString());
                 }else if (ComboBoxEncoder.SelectedIndex == 2)
@@ -1971,7 +1971,7 @@ namespace NotEnoughAV1Encodes
                     case "TuneLibaom":          ComboBoxTunelibaom.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "SharpnessLoopFilter": ComboBoxSharpnessFilterAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "Rowmt":               CheckBoxRowmt.IsChecked = n.InnerText == "True"; break;
-                    case "KeyframeFiltering":   CheckBoxKeyframeFilteringAomenc.IsChecked = n.InnerText == "True"; break;
+                    case "KeyframeFiltering":   ComboBoxAomKeyframeFiltering.SelectedIndex = Int16.Parse(n.InnerText); break;
                     case "AutoAltRef":          CheckBoxAutoAltRefAomenc.IsChecked = n.InnerText == "True"; break;
                     case "FramePeriodicBoost":  CheckBoxFrameBoostAomenc.IsChecked = n.InnerText == "True"; break;
                     case "RDOLookahead":        TextBoxRDOLookaheadRav1e.Text = n.InnerText; break;
