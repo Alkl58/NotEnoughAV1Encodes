@@ -10,6 +10,10 @@ After splitting, it will encode the chunks with n-amount of workers. When finish
 
 This tool is Windows only. For multiplatform and more features check out the CLI Tool [Av1an](https://github.com/master-of-zen/Av1an).
 
+### Known Issues:
+- No Video Output when "--enable-keyframe-filtering=2" in aomenc. (ffmpeg muxing issue)
+- Audio: Opus 5.1 channel layout problem with multiple audio tracks
+
 ![alt text](https://i.imgur.com/AbVetfn.png)
 ![alt text](https://i.imgur.com/SJsHBBc.png)
 
@@ -35,10 +39,6 @@ AppVeyor Builds: [Click](https://ci.appveyor.com/project/Alkl/notenoughav1encode
 3. Select the Chunk length in seconds.
 4. Edit the encoding settings. (You can save the settings by clicking on "Save Settings". Saving/Loading multiple presets is possible!)
 5. Click on "Start Encode".
-
-### Known Issues:
-- Audio: Opus 5.1 Channellayout problem with multiple audio tracks
-
 
 ### Other Information:
 
