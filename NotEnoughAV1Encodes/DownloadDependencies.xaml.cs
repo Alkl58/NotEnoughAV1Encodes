@@ -154,42 +154,44 @@ namespace NotEnoughAV1Encodes
 
         private void CompareVersion()
         {
-            try
+            if (LabelCurrentVersionAomenc != null)
             {
-                if (LabelCurrentVersionAomenc != null)
+                if (ComboBoxUpdateSource.SelectedIndex == 0)
                 {
-                    if (ComboBoxUpdateSource.SelectedIndex == 0)
-                    {
-                        if (ParseDate(aomVersionUpdate) > ParseDate(aomVersionCurrent)) { LabelCurrentVersionAomenc.Foreground = Brushes.Red; LabelUpdateAomenc.Foreground = Brushes.Green; }
-                        else { LabelCurrentVersionAomenc.Foreground = Brushes.Green; }
-                        if (ParseDate(rav1eVersionUpdate) > ParseDate(rav1eVersionCurrent)) { LabelCurrentVersionRav1e.Foreground = Brushes.Red; LabelUpdateRav1e.Foreground = Brushes.Green; }
-                        else { LabelCurrentVersionRav1e.Foreground = Brushes.Green; }
-                        if (ParseDate(svtav1VersionUpdate) > ParseDate(svtav1VersionCurrent)) { LabelCurrentVersionSVT.Foreground = Brushes.Red; LabelUpdateSvtav1.Foreground = Brushes.Green; }
-                        else { LabelCurrentVersionSVT.Foreground = Brushes.Green; }
-                        if (ParseDate(ffmpegVersionUpdate) > ParseDate(ffmpegVersionCurrent)) { LabelCurrentVersionffmpeg.Foreground = Brushes.Red; LabelUpdateFfmpeg.Foreground = Brushes.Green; }
-                        else { LabelCurrentVersionffmpeg.Foreground = Brushes.Green; }
-                    }
-                    else
-                    {
-                        if (ParseDate(aomVersionUpdateJeremy) > ParseDate(aomVersionCurrent)) { LabelCurrentVersionAomenc.Foreground = Brushes.Red; LabelUpdateAomenc.Foreground = Brushes.Green; }
-                        else { LabelCurrentVersionAomenc.Foreground = Brushes.Green; }
-                        if (ParseDate(rav1eVersionUpdateJeremy) > ParseDate(rav1eVersionCurrent)) { LabelCurrentVersionRav1e.Foreground = Brushes.Red; LabelUpdateRav1e.Foreground = Brushes.Green; }
-                        else { LabelCurrentVersionRav1e.Foreground = Brushes.Green; }
-                        if (ParseDate(svtav1VersionUpdateJeremy) > ParseDate(svtav1VersionCurrent)) { LabelCurrentVersionSVT.Foreground = Brushes.Red; LabelUpdateSvtav1.Foreground = Brushes.Green; }
-                        else { LabelCurrentVersionSVT.Foreground = Brushes.Green; }
-                        if (ParseDate(ffmpegVersionUpdateJeremy) > ParseDate(ffmpegVersionCurrent)) { LabelCurrentVersionffmpeg.Foreground = Brushes.Red; LabelUpdateFfmpeg.Foreground = Brushes.Green; }
-                        else { LabelCurrentVersionffmpeg.Foreground = Brushes.Green; }
-                    }
+                    if (ParseDate(aomVersionUpdate) > ParseDate(aomVersionCurrent)) { LabelCurrentVersionAomenc.Foreground = Brushes.Red; LabelUpdateAomenc.Foreground = Brushes.Green; }
+                    else { LabelCurrentVersionAomenc.Foreground = Brushes.Green; }
+                    if (ParseDate(rav1eVersionUpdate) > ParseDate(rav1eVersionCurrent)) { LabelCurrentVersionRav1e.Foreground = Brushes.Red; LabelUpdateRav1e.Foreground = Brushes.Green; }
+                    else { LabelCurrentVersionRav1e.Foreground = Brushes.Green; }
+                    if (ParseDate(svtav1VersionUpdate) > ParseDate(svtav1VersionCurrent)) { LabelCurrentVersionSVT.Foreground = Brushes.Red; LabelUpdateSvtav1.Foreground = Brushes.Green; }
+                    else { LabelCurrentVersionSVT.Foreground = Brushes.Green; }
+                    if (ParseDate(ffmpegVersionUpdate) > ParseDate(ffmpegVersionCurrent)) { LabelCurrentVersionffmpeg.Foreground = Brushes.Red; LabelUpdateFfmpeg.Foreground = Brushes.Green; }
+                    else { LabelCurrentVersionffmpeg.Foreground = Brushes.Green; }
+                }
+                else
+                {
+                    if (ParseDate(aomVersionUpdateJeremy) > ParseDate(aomVersionCurrent)) { LabelCurrentVersionAomenc.Foreground = Brushes.Red; LabelUpdateAomenc.Foreground = Brushes.Green; }
+                    else { LabelCurrentVersionAomenc.Foreground = Brushes.Green; }
+                    if (ParseDate(rav1eVersionUpdateJeremy) > ParseDate(rav1eVersionCurrent)) { LabelCurrentVersionRav1e.Foreground = Brushes.Red; LabelUpdateRav1e.Foreground = Brushes.Green; }
+                    else { LabelCurrentVersionRav1e.Foreground = Brushes.Green; }
+                    if (ParseDate(svtav1VersionUpdateJeremy) > ParseDate(svtav1VersionCurrent)) { LabelCurrentVersionSVT.Foreground = Brushes.Red; LabelUpdateSvtav1.Foreground = Brushes.Green; }
+                    else { LabelCurrentVersionSVT.Foreground = Brushes.Green; }
+                    if (ParseDate(ffmpegVersionUpdateJeremy) > ParseDate(ffmpegVersionCurrent)) { LabelCurrentVersionffmpeg.Foreground = Brushes.Red; LabelUpdateFfmpeg.Foreground = Brushes.Green; }
+                    else { LabelCurrentVersionffmpeg.Foreground = Brushes.Green; }
                 }
             }
-            catch { }
-
         }
 
-        private DateTime ParseDate(string input)
-        {
-            DateTime myDate = DateTime.ParseExact(input, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
-            return myDate;
+        private DateTime? ParseDate(string input) {
+
+            try
+            {
+                DateTime myDate = DateTime.ParseExact(input, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
+                return myDate;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private async void ButtonUpdateAom_Click(object sender, RoutedEventArgs e)
@@ -343,6 +345,10 @@ namespace NotEnoughAV1Encodes
                 {
                     if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg.zip")))
                         File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg.zip"));
+                    if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe")))
+                        File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe"));
+                    if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffprobe.exe")))
+                        File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", "ffprobe.exe"));
                     File.Move(Path.Combine(currentDir, "Apps", "ffmpeg", archiveName, "bin", "ffmpeg.exe"), Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe"));
                     File.Move(Path.Combine(currentDir, "Apps", "ffmpeg", archiveName, "bin", "ffprobe.exe"), Path.Combine(currentDir, "Apps", "ffmpeg", "ffprobe.exe"));
                     if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt")))
