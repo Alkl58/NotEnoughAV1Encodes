@@ -366,7 +366,7 @@ namespace NotEnoughAV1Encodes
                 case "aomenc": av1encoderexists = File.Exists(MainWindow.aomencPath + "\\aomenc.exe"); break;
                 case "rav1e": av1encoderexists = File.Exists(MainWindow.rav1ePath + "\\rav1e.exe"); break;
                 case "svt-av1": av1encoderexists = File.Exists(MainWindow.svtav1Path + "\\SvtAv1EncApp.exe"); break;
-                case "aomenc (ffmpeg)": av1encoderexists = ffmpegExists; break;
+                case "libaom": av1encoderexists = ffmpegExists; break;
                 case "libvpx-vp9": av1encoderexists = ffmpegExists; break;
                 default: break;
             }
