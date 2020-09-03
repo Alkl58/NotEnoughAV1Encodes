@@ -1229,7 +1229,7 @@ namespace NotEnoughAV1Encodes
         {
             if (CheckBoxRealtimeMode != null)
             {
-                if (ComboBoxEncoder.SelectedIndex == 0 || ComboBoxEncoder.SelectedIndex == 1)
+                if (ComboBoxEncoder.SelectedIndex == 0) //libaom does not work with realtime mode, I don't know why
                 {
                     if (SliderPreset.Value == 5 || SliderPreset.Value == 6 || SliderPreset.Value == 7 || SliderPreset.Value == 8 || SliderPreset.Value == 9)
                     {
@@ -1661,7 +1661,7 @@ namespace NotEnoughAV1Encodes
                     {
                         SliderQuality.Maximum = 63;
                         SliderQuality.Value = 30;
-                        SliderPreset.Maximum = 9;
+                        SliderPreset.Maximum = 8; //Technically it should be 9, BUT it is still not implemented in ffmpeg
                         SliderPreset.Value = 4;
                     }
                     break;
