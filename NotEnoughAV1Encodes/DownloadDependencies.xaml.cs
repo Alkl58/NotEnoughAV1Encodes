@@ -422,7 +422,7 @@ namespace NotEnoughAV1Encodes
             var latest = releases[0];
             string rav1eUrlRepo = latest.HtmlUrl;
 
-            rav1eUrlGithub = rav1eUrlRepo + "/rav1e.exe"; //The download Path for the latest rav1e build (hopefully)
+            rav1eUrlGithub = rav1eUrlRepo.Replace("tag", "download") + "/rav1e.exe"; //The download Path for the latest rav1e build (hopefully)
             rav1eVersionUpdate = latest.CreatedAt.ToString("yyyy.MM.dd");
         }
 
@@ -435,8 +435,8 @@ namespace NotEnoughAV1Encodes
             string svtUrlRepo = latest.HtmlUrl;
 
             svtav1VersionUpdate = latest.CreatedAt.ToString("yyyy.MM.dd");
-            svtav1UrlGithub = svtUrlRepo + "/SvtAv1EncApp.exe"; //The download Path for the latest rav1e build (hopefully)
-            svtav1UrlGithubLib = svtUrlRepo + "/SvtAv1Enc.lib";
+            svtav1UrlGithub = svtUrlRepo.Replace("tag", "download") + "/SvtAv1EncApp.exe"; //The download url for the latest svt-av1 build (hopefully)
+            svtav1UrlGithubLib = svtUrlRepo.Replace("tag", "download") + "/SvtAv1Enc.lib";
         }
     }
 }
