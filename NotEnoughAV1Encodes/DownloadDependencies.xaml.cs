@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Octokit;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -12,7 +13,7 @@ namespace NotEnoughAV1Encodes
 {
     public partial class DownloadDependencies : Window
     {
-        public static string aomUrlAppVeyor, rav1eUrlAppVeyorGithub, svtav1UrlAppveyorGithub, svtav1UrlAppveyorGithubLib, ffmpegUrlAppveyor;
+        public static string aomUrlAppVeyor, rav1eUrlGithub, svtav1UrlGithub, svtav1UrlGithubLib, ffmpegUrlAppveyor;
         public static string aomVersionUpdate, rav1eVersionUpdate, svtav1VersionUpdate, ffmpegVersionUpdate;
         public static string aomVersionUpdateJeremy, rav1eVersionUpdateJeremy, svtav1VersionUpdateJeremy, ffmpegVersionUpdateJeremy;
         public static string aomVersionCurrent, rav1eVersionCurrent, svtav1VersionCurrent, ffmpegVersionCurrent;
@@ -56,7 +57,9 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.checkCreateFolder(Path.Combine(currentDir, "Apps"));
             DownloadUpdateXML();
             ParseUpdateXML();
-            ParseHTML();
+            ParseHTMLJeremylee();
+            ParseRav1eGithub();
+            ParseSVTAV1Github();
             getLocalVersion();
             setVersionLabels();
             CompareVersion();            
@@ -80,6 +83,7 @@ namespace NotEnoughAV1Encodes
 
         private void ParseUpdateXML()
         {
+            //The only reason for this is, that I have not figured out yet, how to parse directly from appveyor
             if (File.Exists(Path.Combine(currentDir, "Apps", "update.xml")))
             {
                 XmlDocument doc = new XmlDocument();
@@ -91,13 +95,6 @@ namespace NotEnoughAV1Encodes
                     {
                         case "AppVeyorAomVersion": aomVersionUpdate = n.InnerText;  break;
                         case "AppVeyorAomUrl": aomUrlAppVeyor = n.InnerText; break;
-                        case "GithubRav1eVersion": rav1eVersionUpdate = n.InnerText; break;
-                        case "GithubRav1eUrl":  rav1eUrlAppVeyorGithub = n.InnerText; break;
-                        case "GithubSVTVersion":   svtav1VersionUpdate = n.InnerText; break;
-                        case "GihubSVTUrlEnc": svtav1UrlAppveyorGithub = n.InnerText; break;
-                        case "GithubSVTUrlLib": svtav1UrlAppveyorGithubLib = n.InnerText; break;
-                        case "ZeranoeVersion": ffmpegVersionUpdate = n.InnerText; break;
-                        case "ZeranoeVersionUrl": ffmpegUrlAppveyor = n.InnerText; break;
                     }
                 }
             }
@@ -135,19 +132,18 @@ namespace NotEnoughAV1Encodes
                 LabelCurrentVersionRav1e.Content = "Current Version: " + rav1eVersionCurrent;
                 LabelCurrentVersionSVT.Content = "Current Version: " + svtav1VersionCurrent;
                 LabelCurrentVersionffmpeg.Content = "Current Version: " + ffmpegVersionCurrent;
+                LabelUpdateFfmpeg.Content = "Update Version: " + ffmpegVersionUpdateJeremy;
                 if (ComboBoxUpdateSource.SelectedIndex == 0)
                 {
                     LabelUpdateAomenc.Content = "Update Version: " + aomVersionUpdate;
                     LabelUpdateRav1e.Content = "Update Version: " + rav1eVersionUpdate;
                     LabelUpdateSvtav1.Content = "Update Version: " + svtav1VersionUpdate;
-                    LabelUpdateFfmpeg.Content = "Update Version: " + ffmpegVersionUpdate;
                 }
                 else
                 {
                     LabelUpdateAomenc.Content = "Update Version: " + aomVersionUpdateJeremy;
                     LabelUpdateRav1e.Content = "Update Version: " + rav1eVersionUpdateJeremy;
                     LabelUpdateSvtav1.Content = "Update Version: " + svtav1VersionUpdateJeremy;
-                    LabelUpdateFfmpeg.Content = "Update Version: " + ffmpegVersionUpdateJeremy;
                 }
             }
         }
@@ -164,8 +160,6 @@ namespace NotEnoughAV1Encodes
                     else { LabelCurrentVersionRav1e.Foreground = Brushes.Green; }
                     if (ParseDate(svtav1VersionUpdate) > ParseDate(svtav1VersionCurrent)) { LabelCurrentVersionSVT.Foreground = Brushes.Red; LabelUpdateSvtav1.Foreground = Brushes.Green; }
                     else { LabelCurrentVersionSVT.Foreground = Brushes.Green; }
-                    if (ParseDate(ffmpegVersionUpdate) > ParseDate(ffmpegVersionCurrent)) { LabelCurrentVersionffmpeg.Foreground = Brushes.Red; LabelUpdateFfmpeg.Foreground = Brushes.Green; }
-                    else { LabelCurrentVersionffmpeg.Foreground = Brushes.Green; }
                 }
                 else
                 {
@@ -175,9 +169,9 @@ namespace NotEnoughAV1Encodes
                     else { LabelCurrentVersionRav1e.Foreground = Brushes.Green; }
                     if (ParseDate(svtav1VersionUpdateJeremy) > ParseDate(svtav1VersionCurrent)) { LabelCurrentVersionSVT.Foreground = Brushes.Red; LabelUpdateSvtav1.Foreground = Brushes.Green; }
                     else { LabelCurrentVersionSVT.Foreground = Brushes.Green; }
-                    if (ParseDate(ffmpegVersionUpdateJeremy) > ParseDate(ffmpegVersionCurrent)) { LabelCurrentVersionffmpeg.Foreground = Brushes.Red; LabelUpdateFfmpeg.Foreground = Brushes.Green; }
-                    else { LabelCurrentVersionffmpeg.Foreground = Brushes.Green; }
                 }
+                if (ParseDate(ffmpegVersionUpdateJeremy) > ParseDate(ffmpegVersionCurrent)) { LabelCurrentVersionffmpeg.Foreground = Brushes.Red; LabelUpdateFfmpeg.Foreground = Brushes.Green; }
+                else { LabelCurrentVersionffmpeg.Foreground = Brushes.Green; }
             }
         }
 
@@ -200,7 +194,7 @@ namespace NotEnoughAV1Encodes
             ProgressBarDownload.IsIndeterminate = true;
             if (ComboBoxUpdateSource.SelectedIndex == 0)
             {
-                await Task.Run(() => DownloadAom(aomUrlAppVeyor, Path.Combine(currentDir, "Apps", "Encoder", "aomencnew.exe")));
+                await Task.Run(() => DownloadBin(aomUrlAppVeyor, Path.Combine(currentDir, "Apps", "Encoder", "aomencnew.exe")));
                 if (File.Exists(Path.Combine(currentDir, "Apps", "Encoder", "aomencnew.exe"))) 
                 {
                     File.Delete(Path.Combine(currentDir, "Apps", "Encoder", "aomenc.exe"));
@@ -215,7 +209,7 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                await Task.Run(() => DownloadAom("https://jeremylee.sh/data/bin/aom.7z", Path.Combine(currentDir, "Apps", "aom.7z")));
+                await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/aom.7z", Path.Combine(currentDir, "Apps", "aom.7z")));
                 if (File.Exists(Path.Combine(currentDir, "Apps", "aom.7z")))
                 {
                     ExtractFile(Path.Combine(currentDir, "Apps", "aom.7z"), Path.Combine(currentDir, "Apps", "Encoder"));
@@ -244,7 +238,7 @@ namespace NotEnoughAV1Encodes
             ProgressBarDownload.IsIndeterminate = true;
             if (ComboBoxUpdateSource.SelectedIndex == 0)
             {
-                await Task.Run(() => DownloadAom(rav1eUrlAppVeyorGithub, Path.Combine(currentDir, "Apps", "Encoder", "rav1enew.exe")));
+                await Task.Run(() => DownloadBin(rav1eUrlGithub, Path.Combine(currentDir, "Apps", "Encoder", "rav1enew.exe")));
                 if (File.Exists(Path.Combine(currentDir, "Apps", "Encoder", "rav1enew.exe")))
                 {
                     File.Delete(Path.Combine(currentDir, "Apps", "Encoder", "rav1e.exe"));
@@ -259,7 +253,7 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                await Task.Run(() => DownloadAom("https://jeremylee.sh/data/bin/rav1e.7z", Path.Combine(currentDir, "Apps", "rav1e.7z")));
+                await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/rav1e.7z", Path.Combine(currentDir, "Apps", "rav1e.7z")));
                 ExtractFile(Path.Combine(currentDir, "Apps", "rav1e.7z"), Path.Combine(currentDir, "Apps", "Encoder"));
                 if (File.Exists(Path.Combine(currentDir, "Apps", "rav1e.7z")))
                     File.Delete(Path.Combine(currentDir, "Apps", "rav1e.7z"));
@@ -283,8 +277,8 @@ namespace NotEnoughAV1Encodes
             ProgressBarDownload.IsIndeterminate = true;
             if (ComboBoxUpdateSource.SelectedIndex == 0)
             {
-                await Task.Run(() => DownloadAom(svtav1UrlAppveyorGithub, Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncAppnew.exe")));
-                await Task.Run(() => DownloadAom(svtav1UrlAppveyorGithubLib, Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Encnew.lib")));
+                await Task.Run(() => DownloadBin(svtav1UrlGithub, Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncAppnew.exe")));
+                await Task.Run(() => DownloadBin(svtav1UrlGithubLib, Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Encnew.lib")));
                 if (File.Exists(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncAppnew.exe")))
                 {
                     File.Delete(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncApp.exe"));
@@ -308,7 +302,7 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                await Task.Run(() => DownloadAom("https://jeremylee.sh/data/bin/svt-av1.7z", Path.Combine(currentDir, "Apps", "svtav1.7z")));
+                await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/svt-av1.7z", Path.Combine(currentDir, "Apps", "svtav1.7z")));
                 ExtractFile(Path.Combine(currentDir, "Apps", "svtav1.7z"), Path.Combine(currentDir, "Apps", "Encoder"));
                 if (File.Exists(Path.Combine(currentDir, "Apps", "svtav1.7z")))
                     File.Delete(Path.Combine(currentDir, "Apps", "svtav1.7z"));
@@ -334,45 +328,20 @@ namespace NotEnoughAV1Encodes
         {
             SmallFunctions.checkCreateFolder(Path.Combine(currentDir, "Apps", "ffmpeg"));
             ProgressBarDownload.IsIndeterminate = true;
-            if (ComboBoxUpdateSource.SelectedIndex == 0)
+
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/ffmpeg.7z", Path.Combine(currentDir, "Apps", "ffmpeg.7z")));
+            ExtractFile(Path.Combine(currentDir, "Apps", "ffmpeg.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"));
+            if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg.7z")))
+                File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg.7z"));
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/ffprobe.7z", Path.Combine(currentDir, "Apps", "ffprobe.7z")));
+            ExtractFile(Path.Combine(currentDir, "Apps", "ffprobe.7z"), Path.Combine(currentDir, "Apps", "ffmpeg"));
+            if (File.Exists(Path.Combine(currentDir, "Apps", "ffprobe.7z")))
+                File.Delete(Path.Combine(currentDir, "Apps", "ffprobe.7z"));
+            if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe")))
             {
-                await Task.Run(() => DownloadAom(ffmpegUrlAppveyor, Path.Combine(currentDir, "Apps", "ffmpeg.zip")));
-                ExtractFile(Path.Combine(currentDir, "Apps", "ffmpeg.zip"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"));
-                string archiveName = ffmpegUrlAppveyor;
-                archiveName = archiveName.Replace("https://ffmpeg.zeranoe.com/builds/win64/static/", "");
-                archiveName = archiveName.Replace(".zip", "");
-                if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", archiveName, "bin", "ffmpeg.exe")))
-                {
-                    if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg.zip")))
-                        File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg.zip"));
-                    if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe")))
-                        File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe"));
-                    if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffprobe.exe")))
-                        File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", "ffprobe.exe"));
-                    File.Move(Path.Combine(currentDir, "Apps", "ffmpeg", archiveName, "bin", "ffmpeg.exe"), Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe"));
-                    File.Move(Path.Combine(currentDir, "Apps", "ffmpeg", archiveName, "bin", "ffprobe.exe"), Path.Combine(currentDir, "Apps", "ffmpeg", "ffprobe.exe"));
-                    if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt")))
-                        File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"));
-                    File.WriteAllText(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"), ffmpegVersionUpdate);
-                    Directory.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", archiveName), true);
-                }                
-            }
-            else
-            {
-                await Task.Run(() => DownloadAom("https://jeremylee.sh/data/bin/ffmpeg.7z", Path.Combine(currentDir, "Apps", "ffmpeg.7z")));
-                ExtractFile(Path.Combine(currentDir, "Apps", "ffmpeg.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"));
-                if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg.7z")))
-                    File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg.7z"));
-                await Task.Run(() => DownloadAom("https://jeremylee.sh/data/bin/ffprobe.7z", Path.Combine(currentDir, "Apps", "ffprobe.7z")));
-                ExtractFile(Path.Combine(currentDir, "Apps", "ffprobe.7z"), Path.Combine(currentDir, "Apps", "ffmpeg"));
-                if (File.Exists(Path.Combine(currentDir, "Apps", "ffprobe.7z")))
-                    File.Delete(Path.Combine(currentDir, "Apps", "ffprobe.7z"));
-                if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe")))
-                {
-                    if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt")))
-                        File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"));
-                    File.WriteAllText(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"), ffmpegVersionUpdateJeremy);
-                }
+                if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt")))
+                    File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"));
+                File.WriteAllText(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"), ffmpegVersionUpdateJeremy);
             }
 
             ProgressBarDownload.IsIndeterminate = false;
@@ -381,7 +350,7 @@ namespace NotEnoughAV1Encodes
             CompareVersion();
         }
 
-        private async Task DownloadAom(string DownloadURL, string PathToFile)
+        private async Task DownloadBin(string DownloadURL, string PathToFile)
         {
             try
             {
@@ -413,17 +382,18 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void ParseHTML()
+        private void ParseHTMLJeremylee()
         {
             try
             {
                 HtmlWeb web = new HtmlWeb();
-                HtmlAgilityPack.HtmlDocument doc = web.Load("https://jeremylee.sh/bin.html");
+                HtmlDocument doc = web.Load("https://jeremylee.sh/bin.html");
 
+                //Full XPATH Node selection - will break if owner of website rearrange stuff
                 var nodeffmpeg = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[1]");
-                var nodeAom = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[19]");
-                var nodeRav1e = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[25]");
-                var nodeSvtav1 = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[31]");
+                var nodeAom = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[14]");
+                var nodeRav1e = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[19]");
+                var nodeSvtav1 = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[30]");
 
                 string ffmpegVersion = nodeffmpeg.InnerHtml;
                 ffmpegVersion = ffmpegVersion.Replace("-", ".");
@@ -442,6 +412,31 @@ namespace NotEnoughAV1Encodes
                 svtav1VersionUpdateJeremy = svtav1Version.Split(' ')[0];
             }
             catch { }
+        }
+
+        private void ParseRav1eGithub()
+        {
+            //Parses the latest rav1e Release directly from Github
+            var client = new GitHubClient(new ProductHeaderValue("neav1e"));
+            var releases = client.Repository.Release.GetAll("xiph", "rav1e").Result;
+            var latest = releases[0];
+            string rav1eUrlRepo = latest.HtmlUrl;
+
+            rav1eUrlGithub = rav1eUrlRepo + "/rav1e.exe"; //The download Path for the latest rav1e build (hopefully)
+            rav1eVersionUpdate = latest.CreatedAt.ToString("yyyy.MM.dd");
+        }
+
+        private void ParseSVTAV1Github()
+        {
+            //Parses the latest SVT-AV1 Release directly from Github
+            var client = new GitHubClient(new ProductHeaderValue("neav1e"));
+            var releases = client.Repository.Release.GetAll("OpenVisualCloud", "SVT-AV1").Result;
+            var latest = releases[0];
+            string svtUrlRepo = latest.HtmlUrl;
+
+            svtav1VersionUpdate = latest.CreatedAt.ToString("yyyy.MM.dd");
+            svtav1UrlGithub = svtUrlRepo + "/SvtAv1EncApp.exe"; //The download Path for the latest rav1e build (hopefully)
+            svtav1UrlGithubLib = svtUrlRepo + "/SvtAv1Enc.lib";
         }
     }
 }

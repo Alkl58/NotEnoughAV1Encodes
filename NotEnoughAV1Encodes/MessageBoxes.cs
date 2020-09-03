@@ -90,5 +90,10 @@ namespace NotEnoughAV1Encodes
         {
             MessageBox.Show("Detected PCM_Bluray Audio Format! \n\nIf you want to Stream Copy, it will reencode to pcm_s16le. \n\nElse feel free to use a lossy format.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        public static void MessageCountNotAvailableWhenTrimming()
+        {
+            MessageBox.Show("The frame count option is not available when trimming! \n\nFrame counting is now disabled.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }

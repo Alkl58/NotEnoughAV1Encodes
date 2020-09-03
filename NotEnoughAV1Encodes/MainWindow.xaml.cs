@@ -31,7 +31,7 @@ namespace NotEnoughAV1Encodes
         public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, cropCommand, trimCommand, saveSettingString, localFileName, ffmpegFramerateSplitting;
         public static string trimEndTemp, trimEndTempMax;
         public static string encoderMetadata;
-        public static int videoChunksCount; //Number of Chunks, mainly only for Progressbar
+        public static int videoChunksCount, frameCountSource, frameCountChunks;
         public static int coreCount, workerCount, chunkLength; //Variable to set the Worker Count
         public static int videoPasses, processPriority, videoLength, customsubtitleadded, counterQueue, frameRateIndex;
         public static int audioBitrateTrackOne, audioBitrateTrackTwo, audioBitrateTrackThree, audioBitrateTrackFour;
@@ -54,7 +54,7 @@ namespace NotEnoughAV1Encodes
             LoadBackground();
             LoadDefaultProfile();
             setEncoderPath();
-            Check7zExtractor();
+            SmallFunctions.Check7zExtractor();
             CheckForResumeFile();
             SmallFunctions.checkDependeciesStartup();
             programStartup = false;            
@@ -107,6 +107,9 @@ namespace NotEnoughAV1Encodes
                 setParameters();
                 setAudioParameters();
                 setSubtitleParameters();
+                if(CheckBoxCheckFrameCount.IsChecked == true) {
+                    setProgressBarLabel("Calculating Source Frame Count...");
+                    await Task.Run(() => SmallFunctions.GetSourceFrameCount(videoInput)); }
                 if (resumeMode == true) { await AsyncClass(); } 
                 else
                 {
@@ -135,7 +138,7 @@ namespace NotEnoughAV1Encodes
                     await Task.Run(() => Subtitles.EncSubtitles());
                     if (SmallFunctions.CheckSubtitleOutput() == false) { MessageNoSubtitleOutput(); }                    
                 }
-                else if (RadioButtonStreamCopySubtitles.IsChecked == true)
+                else if (RadioButtonStreamCopySubtitles.IsChecked == true && CheckBoxSubtitleEncoding.IsChecked == true)
                 {
                     setProgressBarLabel("Started Subtitle Encoding / Demuxing");
                     await Task.Run(() => Subtitles.EncSubtitles());
@@ -148,6 +151,12 @@ namespace NotEnoughAV1Encodes
                 setProgressBarLabel("Started Video Splitting");
                 await Task.Run(() => VideoSplitting.SplitVideo(videoInput, chunkLength, reencoder, reencode, beforereencode));
                 await Task.Run(() => RenameChunks.Rename());
+                if (CheckBoxCheckFrameCount.IsChecked == true)
+                {
+                    setProgressBarLabel("Calculating Chunk Frame Count...");
+                    await Task.Run(() => SmallFunctions.GetChunksFrameCount(tempPath));
+                    CompareFrameCount();
+                }
             }
 
             SmallFunctions.CountVideoChunks();
@@ -290,13 +299,13 @@ namespace NotEnoughAV1Encodes
             beforereencode = CheckBoxReencodeBeforeSplitting.IsChecked == true;
             SmallFunctions.Logging("PreReencode: " + beforereencode);
 
-            videoPasses = Int16.Parse(ComboBoxPasses.Text);
+            videoPasses = int.Parse(ComboBoxPasses.Text);
             SmallFunctions.Logging("Encoding Passes: " + videoPasses);
-            workerCount = Int16.Parse(ComboBoxWorkers.Text);
+            workerCount = int.Parse(ComboBoxWorkers.Text);
             SmallFunctions.Logging("Worker Count: " + workerCount);
-            chunkLength = Int16.Parse(TextBoxChunkLength.Text);
+            chunkLength = int.Parse(TextBoxChunkLength.Text);
             SmallFunctions.Logging("Chunk Length: " + chunkLength);
-            videoLength = Int16.Parse(SmallFunctions.getVideoLength(videoInput));
+            videoLength = int.Parse(SmallFunctions.getVideoLength(videoInput));
             SmallFunctions.Logging("Video Length: " + videoLength);
 
             if (CheckBoxTrimming.IsChecked == true)
@@ -327,8 +336,8 @@ namespace NotEnoughAV1Encodes
 
         private void setFilters()
         {
-            string widthNew = (Int16.Parse(TextBoxCropRight.Text) + Int16.Parse(TextBoxCropLeft.Text)).ToString();
-            string hieghtNew = (Int16.Parse(TextBoxCropTop.Text) + Int16.Parse(TextBoxCropBottom.Text)).ToString();
+            string widthNew = (int.Parse(TextBoxCropRight.Text) + int.Parse(TextBoxCropLeft.Text)).ToString();
+            string hieghtNew = (int.Parse(TextBoxCropTop.Text) + int.Parse(TextBoxCropBottom.Text)).ToString();
             if (CheckBoxResize.IsChecked == true) 
             { 
                 videoResize = "-vf scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + " -sws_flags " + ComboBoxResizeFilters.Text; 
@@ -382,7 +391,7 @@ namespace NotEnoughAV1Encodes
                     TimeSpan result = end - start;
                     videoLength = Convert.ToInt16(result.TotalSeconds);
                     if (CheckBoxCustomTempPath != null && inputSet){ setImagePreview(); }                    
-                    if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (videoLength / Int16.Parse(ComboBoxWorkers.Text)).ToString(); }
+                    if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (videoLength / int.Parse(ComboBoxWorkers.Text)).ToString(); }
                 }
                 else
                 {
@@ -400,7 +409,7 @@ namespace NotEnoughAV1Encodes
             {
                 case "aomenc": SetAomencParameters(tempSettings); break;
                 case "rav1e": SetRav1eParameters(tempSettings); break;
-                case "aomenc (ffmpeg)": SetLibaomParameters(tempSettings); break;
+                case "libaom": SetLibaomParameters(tempSettings); break;
                 case "svt-av1": SetSVTAV1Parameters(tempSettings); break;
                 case "libvpx-vp9": SetVP9Parameters(tempSettings); break;
                 default: break;
@@ -434,7 +443,7 @@ namespace NotEnoughAV1Encodes
             //Basic Settings
             if (CheckBoxAdvancedSettings.IsChecked == false)
             {
-                allSettingsAom = "--cpu-used=" + SliderPreset.Value + " --bit-depth=" + ComboBoxBitDepth.Text + " --threads=2 --kf-max-dist=240 " + aomencQualityMode;
+                allSettingsAom = "--cpu-used=" + SliderPreset.Value + " --bit-depth=" + ComboBoxBitDepth.Text + " --threads=4 --tile-columns=2 --tile-rows=1 --kf-max-dist=240 " + aomencQualityMode;
             }
             else
             {
@@ -490,14 +499,14 @@ namespace NotEnoughAV1Encodes
             //Basic Settings
             if (CheckBoxAdvancedSettings.IsChecked == false)
             {
-                allSettingsAom = "-cpu-used " + SliderPreset.Value + " -threads 2 -g 240 -tile-columns 1 -tile-rows 1 " + aomencQualityMode;
+                allSettingsAom = "-cpu-used " + SliderPreset.Value + " -threads 4 -g 240 -tile-columns 2 -tile-rows 1 " + aomencQualityMode;
             }
             else
             {
                 if (CheckBoxCustomSettings.IsChecked == false || tempSettings)
                 {
-                    string altref = " -auto-alt-ref 0 ";
-                    if (CheckBoxAltRefLibaom.IsChecked == true) { altref = " -auto-alt-ref 1 "; }
+                    string altref = " -auto-alt-ref 1 ";
+                    if (CheckBoxAltRefLibaom.IsChecked == false) { altref = " -auto-alt-ref 0 "; }
                     string aomencFrames = " -tile-columns " + ComboBoxTileColumns.Text + " -tile-rows " + ComboBoxTileRows.Text + " -g " + TextBoxMaxKeyframeinterval.Text + " -lag-in-frames " + TextBoxLagInFramesLibaom.Text + " -aq-mode " + ComboBoxAqModeLibaom.SelectedIndex + " -tune " + ComboBoxTunelibaom.Text;
                     allSettingsAom = "-cpu-used " + SliderPreset.Value + " -threads " + ComboBoxThreadsAomenc.Text + aomencFrames + aomencQualityMode + altref;
                 }
@@ -682,10 +691,10 @@ namespace NotEnoughAV1Encodes
             audioCodecTrackTwo = ComboBoxAudioCodecTrackTwo.Text;
             audioCodecTrackThree = ComboBoxAudioCodecTrackThree.Text;
             audioCodecTrackFour = ComboBoxAudioCodecTrackFour.Text;
-            audioBitrateTrackOne = Int16.Parse(TextBoxAudioBitrate.Text);
-            audioBitrateTrackTwo = Int16.Parse(TextBoxAudioBitrateTrackTwo.Text);
-            audioBitrateTrackThree = Int16.Parse(TextBoxAudioBitrateTrackThree.Text);
-            audioBitrateTrackFour = Int16.Parse(TextBoxAudioBitrateTrackFour.Text);
+            audioBitrateTrackOne = int.Parse(TextBoxAudioBitrate.Text);
+            audioBitrateTrackTwo = int.Parse(TextBoxAudioBitrateTrackTwo.Text);
+            audioBitrateTrackThree = int.Parse(TextBoxAudioBitrateTrackThree.Text);
+            audioBitrateTrackFour = int.Parse(TextBoxAudioBitrateTrackFour.Text);
             switch (ComboBoxTrackOneChannels.SelectedIndex)
             {
                 case 0: audioChannelsTrackOne = 1; break;
@@ -770,13 +779,14 @@ namespace NotEnoughAV1Encodes
                 case 8: return "30000/1001"; case 9: return "30";
                 case 10: return "48"; case 11: return "50";
                 case 12: return "60000/1001"; case 13: return "60";
+                case 14: return "120";
                 default: return "24";
             }
         }
 
         private void setChunkLength()
         {
-            if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (Int16.Parse(SmallFunctions.getVideoLength(videoInput)) / Int16.Parse(ComboBoxWorkers.Text)).ToString(); }
+            if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (int.Parse(SmallFunctions.getVideoLength(videoInput)) / int.Parse(ComboBoxWorkers.Text)).ToString(); }
             TextBoxTrimEnd.Text = SmallFunctions.getVideoLengthAccurate(videoInput);
             trimEndTemp = TextBoxTrimEnd.Text;
             trimEndTempMax = TextBoxTrimEnd.Text;
@@ -925,6 +935,7 @@ namespace NotEnoughAV1Encodes
                 case "50/1": ComboBoxFrameRate.SelectedIndex = 11; break;
                 case "60000/1001": ComboBoxFrameRate.SelectedIndex = 12; break;
                 case "60/1": ComboBoxFrameRate.SelectedIndex = 13; break;
+                case "120": ComboBoxFrameRate.SelectedIndex = 14; break;
                 default: if (CheckBoxQueueEncoding.IsChecked == false && CheckBoxBatchEncoding.IsChecked == false) { MessageBoxes.MessageVideoBadFramerate(); } break;
             }
             videoFrameRate = Convert.ToDouble(ComboBoxFrameRate.Text, CultureInfo.InvariantCulture);
@@ -955,6 +966,7 @@ namespace NotEnoughAV1Encodes
 
         private void SetBackgroundColorBlack()
         {
+            //Sets the Background to dark and or dark transparent
             SolidColorBrush white = new SolidColorBrush(Color.FromRgb(255, 255, 255));
             SolidColorBrush dark = new SolidColorBrush(Color.FromRgb(33, 33, 33));
             SolidColorBrush darker = new SolidColorBrush(Color.FromRgb(25, 25, 25));
@@ -963,15 +975,9 @@ namespace NotEnoughAV1Encodes
                 Window.Background = darker;
                 TabControl.Background = dark;
                 TabGrid.Background = dark;
-                TabGrid1.Background = dark;
-                TabGrid2.Background = dark;
-                TabGrid3.Background = dark;
-                TabGrid4.Background = dark;
-                TabGrid6.Background = dark;
                 TextBoxChunkLength.Background = new SolidColorBrush(Color.FromRgb(44, 44, 44));
                 ProgressBar.Background = new SolidColorBrush(Color.FromRgb(25, 25, 25));
             }
-
             LabelPresets.Foreground = white;
             CheckBoxResumeMode.Foreground = white;
             TextBlockOpenSource.Foreground = new SolidColorBrush(Color.FromRgb(240, 240, 240));
@@ -983,28 +989,25 @@ namespace NotEnoughAV1Encodes
 
         private void SetBackgroundColorWhite()
         {
+            //Sets the Background to white and or white transparent
             SolidColorBrush white = new SolidColorBrush(Color.FromRgb(255, 255, 255));
             SolidColorBrush black = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            SolidColorBrush border = new SolidColorBrush(Color.FromRgb(213, 223, 229));
             if (customBackground != true)
             {
                 Window.Background = white;
                 TabControl.Background = white;
                 TabGrid.Background = white;
-                TabGrid1.Background = white;
-                TabGrid2.Background = white;
-                TabGrid3.Background = white;
-                TabGrid4.Background = white;
-                TabGrid6.Background = white;
                 TextBoxChunkLength.Background = white;
                 ProgressBar.Background = new SolidColorBrush(Color.FromRgb(230, 230, 230));
             }
             LabelPresets.Foreground = black;
             CheckBoxResumeMode.Foreground = black;
             TextBlockOpenSource.Foreground = new SolidColorBrush(Color.FromRgb(21, 65, 126));
-            GroupBox.BorderBrush = new SolidColorBrush(Color.FromRgb(213, 223, 229));
-            GroupBox1.BorderBrush = new SolidColorBrush(Color.FromRgb(213, 223, 229));
-            GroupBox2.BorderBrush = new SolidColorBrush(Color.FromRgb(213, 223, 229));
-            GroupBox3.BorderBrush = new SolidColorBrush(Color.FromRgb(213, 223, 229));
+            GroupBox.BorderBrush = border;
+            GroupBox1.BorderBrush = border;
+            GroupBox2.BorderBrush = border;
+            GroupBox3.BorderBrush = border;
         }
 
         private void SetBackground()
@@ -1049,7 +1052,13 @@ namespace NotEnoughAV1Encodes
             if (GetTotalFreeSpace("C:\\") < 53687091200 && CheckBoxCustomTempPath.IsChecked == false) //50GB
             {
                 MessageBoxes.MessageSpaceOnDrive();
-            }            
+            }
+            else if(CheckBoxCustomTempPath.IsChecked == true)
+            {
+                FileInfo f = new FileInfo(TextBoxCustomTempPath.Text);
+                if (GetTotalFreeSpace(Path.GetPathRoot(f.FullName)) < 53687091200)
+                { MessageBoxes.MessageSpaceOnDrive(); }
+            }
         }
 
         private long GetTotalFreeSpace(string driveName)
@@ -1133,6 +1142,18 @@ namespace NotEnoughAV1Encodes
             string ext = Path.GetExtension(fileName);
             string[] exts = { ".mp4", ".m4v", ".mkv", ".webm", ".m2ts", ".flv", ".avi", ".wmv", ".ts", ".yuv", ".mov" };
             return exts.Contains(ext.ToLower());
+        }
+
+        private void CompareFrameCount()
+        {
+            if (frameCountChunks != frameCountSource)
+            {
+                if (MessageBox.Show("The Framecount is different! \n\nSource Framecount: " + frameCountSource + "\n\nChunk Framecount: " + frameCountChunks + "\n\nProceed anyway?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                {
+                    SmallFunctions.Cancel.CancelAll = true;
+                    CancelRoutine();
+                }
+            }
         }
 
         //════════════════════════════════════════ Buttons ════════════════════════════════════════
@@ -1230,11 +1251,10 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonOpenTempFolder_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (CheckBoxCustomTempPath.IsChecked == false) { Process.Start(Path.Combine(Path.GetTempPath(), "NEAV1E")); }
-                else { Process.Start(TextBoxCustomTempPath.Text); }
-            } catch { }
+            //Creates the temp directoy if not existent
+            if (Directory.Exists(Path.Combine(Path.GetTempPath(), "NEAV1E")) == false) { Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "NEAV1E")); }
+            if (CheckBoxCustomTempPath.IsChecked == false) { Process.Start(Path.Combine(Path.GetTempPath(), "NEAV1E")); }
+            else { Process.Start(TextBoxCustomTempPath.Text); }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -1242,8 +1262,7 @@ namespace NotEnoughAV1Encodes
             encoder = ComboBoxEncoder.Text;
             setEncoderParameters(true);
             string inputSet = "Error";
-            if (encoder == "aomenc") { inputSet = allSettingsAom; }
-            if (encoder == "aomenc (ffmpeg)") { inputSet = allSettingsAom; }
+            if (encoder == "aomenc" || encoder == "libaom") { inputSet = allSettingsAom; }
             if (encoder == "rav1e") { inputSet = allSettingsRav1e; }
             if (encoder == "svt-av1") { inputSet = allSettingsSVTAV1; }
             if (encoder == "libvpx-vp9") { inputSet = allSettingsVP9; }
@@ -1381,7 +1400,7 @@ namespace NotEnoughAV1Encodes
         {
             //Sets a custom Temp Folder
             System.Windows.Forms.FolderBrowserDialog browseTempFolder = new System.Windows.Forms.FolderBrowserDialog();
-            if (browseTempFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK) { TextBoxCustomTempPath.Text = browseTempFolder.SelectedPath; }
+            if (browseTempFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK) { TextBoxCustomTempPath.Text = browseTempFolder.SelectedPath; SaveSettingsTab(); FreeSpace(); }
         }
 
         private void ButtonDeleteProfile_Click(object sender, RoutedEventArgs e)
@@ -1461,6 +1480,25 @@ namespace NotEnoughAV1Encodes
 
         //═══════════════════════════════════════ CheckBoxes ══════════════════════════════════════
 
+        private void CheckBoxCheckFrameCount_Checked(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxTrimming.IsChecked == true)
+            {
+                MessageBoxes.MessageCountNotAvailableWhenTrimming();
+                CheckBoxCheckFrameCount.IsChecked = false;
+            }
+        }
+
+        private void CheckBoxCustomTempPath_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxCustomTempPath_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
         private void CheckBoxTrimming_Unchecked(object sender, RoutedEventArgs e)
         {
             ImagePreviewTrimStart.Source = null;
@@ -1471,6 +1509,7 @@ namespace NotEnoughAV1Encodes
         {
             try { setVideoLengthTrimmed(); }
             catch { }
+            if (CheckBoxCheckFrameCount.IsChecked == true) { CheckBoxCheckFrameCount.IsChecked = false; MessageBoxes.MessageCountNotAvailableWhenTrimming(); }
         }
 
         private void CheckBoxWorkerLimit_Checked(object sender, RoutedEventArgs e)
@@ -1588,15 +1627,21 @@ namespace NotEnoughAV1Encodes
             encoder = ComboBoxEncoder.Text;
             setEncoderParameters(true);
             string inputSet = "Error";
-            if (encoder == "aomenc" || encoder == "aomenc (ffmpeg)") { inputSet = allSettingsAom; }
+            if (encoder == "aomenc" || encoder == "libaom") { inputSet = allSettingsAom; }
             if (encoder == "rav1e") { inputSet = allSettingsRav1e; }
             if (encoder == "svt-av1") { inputSet = allSettingsSVTAV1; }
             if (encoder == "libvpx-vp9") { inputSet = allSettingsVP9; }
             TextBoxAdvancedSettings.Text = inputSet;
         }
 
+        private void CheckBoxRealtimeMode_Checked(object sender, RoutedEventArgs e)
+        {
+            //Because aomenc does not support 2pass realtime mode
+            if (ComboBoxPasses.SelectedIndex == 1) { ComboBoxPasses.SelectedIndex = 0; }
+        }
+
         //═══════════════════════════════════════ ComboBoxes ══════════════════════════════════════
-        
+
         private void ComboBoxEncoder_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string comboitem = (e.AddedItems[0] as ComboBoxItem).Content as string;
@@ -1611,7 +1656,7 @@ namespace NotEnoughAV1Encodes
                         SliderPreset.Value = 4;
                     }
                     break;
-                case "aomenc (ffmpeg)":
+                case "libaom":
                     if (SliderQuality != null)
                     {
                         SliderQuality.Maximum = 63;
@@ -1641,6 +1686,17 @@ namespace NotEnoughAV1Encodes
                         if (ComboBoxBitDepth.SelectedIndex == 2) { ComboBoxBitDepth.SelectedIndex = 1; }
                     }
                     break;
+                case "libvpx-vp9":
+                    if (SliderQuality != null)
+                    {
+                        SliderQuality.Maximum = 63;
+                        SliderQuality.Value = 30;
+                        SliderPreset.Value = 3;
+                        SliderPreset.Maximum = 5;
+                        if (CheckBoxWorkerLimit.IsChecked == false) { ComboBoxWorkers.SelectedIndex = 0; } //It's not necessary to have more than one Worker for SVT 
+                        if (ComboBoxBitDepth.SelectedIndex == 2) { ComboBoxBitDepth.SelectedIndex = 1; }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -1663,6 +1719,10 @@ namespace NotEnoughAV1Encodes
         {
             //Due Rav1e Two Pass Still broken this will force one pass encoding
             if (ComboBoxEncoder.SelectedIndex == 2) { ComboBoxPasses.SelectedIndex = 0; }
+            if (CheckBoxRealtimeMode != null)
+            {
+                if (CheckBoxRealtimeMode.IsChecked == true && ComboBoxPasses.SelectedIndex == 1) { ComboBoxPasses.SelectedIndex = 0; }
+            }            
         }
 
         private void ComboBoxWorkers_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1757,6 +1817,10 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("Trimming",           CheckBoxTrimming.IsChecked.ToString());
                 writer.WriteElementString("TrimStart",          TextBoxTrimStart.Text);
                 writer.WriteElementString("TrimEnd",            TextBoxTrimEnd.Text);
+                writer.WriteElementString("AudioLangOne",       ComboBoxTrackOneLanguage.SelectedIndex.ToString());
+                writer.WriteElementString("AudioLangTwo",       ComboBoxTrackTwoLanguage.SelectedIndex.ToString());
+                writer.WriteElementString("AudioLangThree",     ComboBoxTrackThreeLanguage.SelectedIndex.ToString());
+                writer.WriteElementString("AudioLangFour",      ComboBoxTrackFourLanguage.SelectedIndex.ToString());
             }
             writer.WriteElementString("Encoder",            ComboBoxEncoder.SelectedIndex.ToString());
             writer.WriteElementString("Framerate",          ComboBoxFrameRate.SelectedIndex.ToString());
@@ -1905,20 +1969,20 @@ namespace NotEnoughAV1Encodes
                     case "VideoInputFilename":  fileName = n.InnerText; break;
 
                     case "AutoAltRefVP9":       CheckBoxAutoAltRefVP9.IsChecked = n.InnerText == "True"; break;
-                    case "TuneVP9":             ComboBoxTuneVP9.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "AQModeVP9":           ComboBoxAQModeVP9.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "Encoder":             ComboBoxEncoder.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "Framerate":           ComboBoxFrameRate.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "BitDepth":            ComboBoxBitDepth.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "Preset":              SliderPreset.Value = Int16.Parse(n.InnerText); break;
+                    case "TuneVP9":             ComboBoxTuneVP9.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "AQModeVP9":           ComboBoxAQModeVP9.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "Encoder":             ComboBoxEncoder.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "Framerate":           ComboBoxFrameRate.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "BitDepth":            ComboBoxBitDepth.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "Preset":              SliderPreset.Value = int.Parse(n.InnerText); break;
                     case "QualityMode":         if (n.InnerText == "True") { RadioButtonConstantQuality.IsChecked = true; RadioButtonBitrate.IsChecked = false; } else { RadioButtonConstantQuality.IsChecked = false; RadioButtonBitrate.IsChecked = true; } break;
-                    case "Quality":             SliderQuality.Value = Int16.Parse(n.InnerText); break;
+                    case "Quality":             SliderQuality.Value = int.Parse(n.InnerText); break;
                     case "Bitrate":             TextBoxBitrate.Text = n.InnerText; break;
-                    case "Passes":              ComboBoxPasses.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "Passes":              ComboBoxPasses.SelectedIndex = int.Parse(n.InnerText); break;
                     case "RealTime":            CheckBoxRealtimeMode.IsChecked = n.InnerText == "True"; break;
-                    case "Workers":             ComboBoxWorkers.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "Priority":            ComboBoxProcessPriority.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "ReencodeCodec":       ComboBoxReencodeCodec.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "Workers":             ComboBoxWorkers.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "Priority":            ComboBoxProcessPriority.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "ReencodeCodec":       ComboBoxReencodeCodec.SelectedIndex = int.Parse(n.InnerText); break;
                     case "Reencode":            CheckBoxReencodeDuringSplitting.IsChecked = n.InnerText == "True"; break;
                     case "PreReencode":         CheckBoxReencodeBeforeSplitting.IsChecked = n.InnerText == "True"; break;
                     case "CommentHeader":       CheckBoxCommentHeaderSettings.IsChecked = n.InnerText == "True"; break;
@@ -1932,58 +1996,62 @@ namespace NotEnoughAV1Encodes
                     case "Resize":              CheckBoxResize.IsChecked = n.InnerText == "True"; break;
                     case "ResizeWidth":         TextBoxImageWidth.Text = n.InnerText; break;
                     case "ResizeHeight":        TextBoxImageHeight.Text = n.InnerText; break;
-                    case "ResizeFilter":        ComboBoxResizeFilters.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "ResizeFilter":        ComboBoxResizeFilters.SelectedIndex = int.Parse(n.InnerText); break;
                     case "AudioEncoding":       CheckBoxAudioEncoding.IsChecked = n.InnerText == "True"; break;
                     case "AudioTrackOne":       CheckBoxAudioTrackOne.IsChecked = n.InnerText == "True"; break;
                     case "AudioTrackTwo":       CheckBoxAudioTrackTwo.IsChecked = n.InnerText == "True"; break;
                     case "AudioTrackThree":     CheckBoxAudioTrackThree.IsChecked = n.InnerText == "True"; break;
                     case "AudioTrackFour":      CheckBoxAudioTrackFour.IsChecked = n.InnerText == "True"; break;
-                    case "TrackOneCodec":       ComboBoxAudioCodec.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "TrackTwoCodec":       ComboBoxAudioCodecTrackTwo.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "TrackThreeCodec":     ComboBoxAudioCodecTrackThree.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "TrackFourCodec":      ComboBoxAudioCodecTrackFour.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "AudioLangOne":        ComboBoxTrackOneLanguage.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "AudioLangTwo":        ComboBoxTrackTwoLanguage.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "AudioLangThree":      ComboBoxTrackThreeLanguage.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "AudioLangFour":       ComboBoxTrackFourLanguage.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "TrackOneCodec":       ComboBoxAudioCodec.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "TrackTwoCodec":       ComboBoxAudioCodecTrackTwo.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "TrackThreeCodec":     ComboBoxAudioCodecTrackThree.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "TrackFourCodec":      ComboBoxAudioCodecTrackFour.SelectedIndex = int.Parse(n.InnerText); break;
                     case "TrackOneBitrate":     TextBoxAudioBitrate.Text = n.InnerText; break;
                     case "TrackTwoBitrate":     TextBoxAudioBitrateTrackTwo.Text = n.InnerText; break;
                     case "TrackThreeBitrate":   TextBoxAudioBitrateTrackThree.Text = n.InnerText; break;
                     case "TrackFourBitrate":    TextBoxAudioBitrateTrackFour.Text = n.InnerText; break;
-                    case "TrackOneChannels":    ComboBoxTrackOneChannels.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "TrackTwoChannels":    ComboBoxTrackTwoChannels.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "TrackThreeChannels":  ComboBoxTrackThreeChannels.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "TrackFourChannels":   ComboBoxTrackFourChannels.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "TrackOneChannels":    ComboBoxTrackOneChannels.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "TrackTwoChannels":    ComboBoxTrackTwoChannels.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "TrackThreeChannels":  ComboBoxTrackThreeChannels.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "TrackFourChannels":   ComboBoxTrackFourChannels.SelectedIndex = int.Parse(n.InnerText); break;
                     case "DarkMode":            CheckBoxDarkMode.IsChecked = n.InnerText == "True"; break;
                     case "AdvancedSettings":    CheckBoxAdvancedSettings.IsChecked = n.InnerText == "True"; break;
-                    case "Threads":             ComboBoxThreadsAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "TileColumns":         ComboBoxTileColumns.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "TileRows":            ComboBoxTileRows.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "Threads":             ComboBoxThreadsAomenc.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "TileColumns":         ComboBoxTileColumns.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "TileRows":            ComboBoxTileRows.SelectedIndex = int.Parse(n.InnerText); break;
                     case "MinKeyframeInterval": TextBoxMinKeyframeinterval.Text = n.InnerText; break;
                     case "MaxKeyframeInterval": TextBoxMaxKeyframeinterval.Text = n.InnerText; break;
                     case "LagInFrames":         TextBoxMaxLagInFrames.Text = n.InnerText; break;
-                    case "MaxRefFrames":        ComboBoxMaxReferenceFramesAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "ColorPrimaries":      ComboBoxColorPrimariesAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "ColorTransfer":       ComboBoxColorTransferAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "ColorMatrix":         ComboBoxColorMatrixAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "ChromaSubsampling":   ComboBoxChromaSubsamplingAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "Tune":                ComboBoxTuneAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "AQMode":              ComboBoxAQMode.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "AQModeLibaom":        ComboBoxAqModeLibaom.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "MaxRefFrames":        ComboBoxMaxReferenceFramesAomenc.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "ColorPrimaries":      ComboBoxColorPrimariesAomenc.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "ColorTransfer":       ComboBoxColorTransferAomenc.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "ColorMatrix":         ComboBoxColorMatrixAomenc.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "ChromaSubsampling":   ComboBoxChromaSubsamplingAomenc.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "Tune":                ComboBoxTuneAomenc.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "AQMode":              ComboBoxAQMode.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "AQModeLibaom":        ComboBoxAqModeLibaom.SelectedIndex = int.Parse(n.InnerText); break;
                     case "LagFramesLibaom":     TextBoxLagInFramesLibaom.Text = n.InnerText; break;
                     case "AutoAltRefLibaom":    CheckBoxAltRefLibaom.IsChecked = n.InnerText == "True"; break;
-                    case "TuneLibaom":          ComboBoxTunelibaom.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "SharpnessLoopFilter": ComboBoxSharpnessFilterAomenc.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "TuneLibaom":          ComboBoxTunelibaom.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "SharpnessLoopFilter": ComboBoxSharpnessFilterAomenc.SelectedIndex = int.Parse(n.InnerText); break;
                     case "Rowmt":               CheckBoxRowmt.IsChecked = n.InnerText == "True"; break;
-                    case "KeyframeFiltering":   ComboBoxAomKeyframeFiltering.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "KeyframeFiltering":   ComboBoxAomKeyframeFiltering.SelectedIndex = int.Parse(n.InnerText); break;
                     case "AutoAltRef":          CheckBoxAutoAltRefAomenc.IsChecked = n.InnerText == "True"; break;
                     case "FramePeriodicBoost":  CheckBoxFrameBoostAomenc.IsChecked = n.InnerText == "True"; break;
                     case "RDOLookahead":        TextBoxRDOLookaheadRav1e.Text = n.InnerText; break;
-                    case "ColorPrimariesRav1e": ComboBoxColorPrimariesRav1e.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "ColorTransferRav1e":  ComboBoxColorTransferRav1e.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "ColorMatrixRav1e":    ComboBoxColorMatrixRav1e.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "PixelRangeRav1e":     ComboBoxPixelRangeRav1e.SelectedIndex = Int16.Parse(n.InnerText); break;
-                    case "TuneRav1e":           ComboBoxTuneRav1e.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "ColorPrimariesRav1e": ComboBoxColorPrimariesRav1e.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "ColorTransferRav1e":  ComboBoxColorTransferRav1e.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "ColorMatrixRav1e":    ComboBoxColorMatrixRav1e.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "PixelRangeRav1e":     ComboBoxPixelRangeRav1e.SelectedIndex = int.Parse(n.InnerText); break;
+                    case "TuneRav1e":           ComboBoxTuneRav1e.SelectedIndex = int.Parse(n.InnerText); break;
                     case "ContentLightBool":    CheckBoxContentLightRav1e.IsChecked = n.InnerText == "True"; break;
                     case "ContentLightCll":     TextBoxContentLightCllRav1e.Text = n.InnerText; break;
                     case "ContentLightFall":    TextBoxContentLightFallRav1e.Text = n.InnerText; break;
-                    case "ColorFormatRav1e":    ComboBoxColorFormatRav1e.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "ColorFormatRav1e":    ComboBoxColorFormatRav1e.SelectedIndex = int.Parse(n.InnerText); break;
                     case "MasteringDisplay":    CheckBoxMasteringDisplayRav1e.IsChecked = n.InnerText == "True"; break;
                     case "MasteringGx":         TextBoxMasteringGxRav1e.Text = n.InnerText; break;
                     case "MasteringGy":         TextBoxMasteringGyRav1e.Text = n.InnerText; break;
@@ -1995,17 +2063,17 @@ namespace NotEnoughAV1Encodes
                     case "MasteringWPy":        TextBoxMasteringWPyRav1e.Text = n.InnerText; break;
                     case "MasteringLmin":       TextBoxMasteringLminRav1e.Text = n.InnerText; break;
                     case "MasteringLmax":       TextBoxMasteringLmaxRav1e.Text = n.InnerText; break;
-                    case "ColorFormatSVT":      ComboBoxAQModeSVT.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "ColorFormatSVT":      ComboBoxAQModeSVT.SelectedIndex = int.Parse(n.InnerText); break;
                     case "HDRSVT":              CheckBoxEnableHDRSVT.IsChecked = n.InnerText == "True"; break;
-                    case "AQModeSVT":           ComboBoxAQModeSVT.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "AQModeSVT":           ComboBoxAQModeSVT.SelectedIndex = int.Parse(n.InnerText); break;
                     case "KeyintSVT":           TextBoxkeyframeIntervalSVT.Text = n.InnerText; break;
-                    case "ColorFormatLibaom":   ComboBoxColorFormatLibaom.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "ColorFormatLibaom":   ComboBoxColorFormatLibaom.SelectedIndex = int.Parse(n.InnerText); break;
                     case "Subtitles":           CheckBoxSubtitleEncoding.IsChecked = n.InnerText == "True"; break;
                     case "SubtitlesCopy":       RadioButtonStreamCopySubtitles.IsChecked = n.InnerText == "True"; break;
                     case "SubtitlesCustom":     RadioButtonCustomSubtitles.IsChecked = n.InnerText == "True"; break;
                     case "SubtitlesHardSub":    CheckBoxHardcodeSubtitle.IsChecked = n.InnerText == "True"; break;
                     case "Deinterlacing":       CheckBoxDeinterlaceYadif.IsChecked = n.InnerText == "True"; break;
-                    case "Deinterlacer":        ComboBoxDeinterlace.SelectedIndex = Int16.Parse(n.InnerText); break;
+                    case "Deinterlacer":        ComboBoxDeinterlace.SelectedIndex = int.Parse(n.InnerText); break;
                     case "CustomSettings":      CheckBoxCustomSettings.IsChecked = n.InnerText == "True"; break;
                     case "CustomSettingsText":  TextBoxAdvancedSettings.Text = n.InnerText; break;
                     case "Trimming":            CheckBoxTrimming.IsChecked = n.InnerText == "True"; break;
@@ -2018,19 +2086,22 @@ namespace NotEnoughAV1Encodes
 
         private void SaveSettingsTab()
         {
+            //Saves the Settings of the SettingsTab
             if (programStartup == false)
             {
                 XmlWriter writer = XmlWriter.Create(Path.Combine(Directory.GetCurrentDirectory(), "tabsettings.xml"));
                 writer.WriteStartElement("Settings");
-                writer.WriteElementString("CustomTemp", CheckBoxCustomTempPath.IsChecked.ToString());
-                writer.WriteElementString("CustomTempPath", TextBoxCustomTempPath.Text);
-                writer.WriteElementString("DeleteTempFiles", CheckBoxDeleteTempFiles.IsChecked.ToString());
+                writer.WriteElementString("CustomTemp",         CheckBoxCustomTempPath.IsChecked.ToString());
+                writer.WriteElementString("CustomTempPath",     TextBoxCustomTempPath.Text);
+                writer.WriteElementString("DeleteTempFiles",    CheckBoxDeleteTempFiles.IsChecked.ToString());
                 writer.WriteElementString("DeleteTempFilesDyn", CheckBoxDeleteTempFilesDynamically.IsChecked.ToString());
-                writer.WriteElementString("PlayFinishedSound", CheckBoxFinishedSound.IsChecked.ToString());
-                writer.WriteElementString("WorkerLimitSVT", CheckBoxWorkerLimit.IsChecked.ToString());
-                writer.WriteElementString("DarkMode", CheckBoxDarkMode.IsChecked.ToString());
-                writer.WriteElementString("Logging", CheckBoxLogging.IsChecked.ToString());
-                writer.WriteElementString("Shutdown", CheckBoxShutdownAfterEncode.IsChecked.ToString());
+                writer.WriteElementString("PlayFinishedSound",  CheckBoxFinishedSound.IsChecked.ToString());
+                writer.WriteElementString("WorkerLimitSVT",     CheckBoxWorkerLimit.IsChecked.ToString());
+                writer.WriteElementString("DarkMode",           CheckBoxDarkMode.IsChecked.ToString());
+                writer.WriteElementString("Logging",            CheckBoxLogging.IsChecked.ToString());
+                writer.WriteElementString("Shutdown",           CheckBoxShutdownAfterEncode.IsChecked.ToString());
+                writer.WriteElementString("TempPathActive",     CheckBoxCustomTempPath.IsChecked.ToString());
+                writer.WriteElementString("TempPath",           TextBoxCustomTempPath.Text);
                 writer.WriteEndElement();
                 writer.Close();
             }
@@ -2047,15 +2118,17 @@ namespace NotEnoughAV1Encodes
                 {
                     switch (n.Name)
                     {
-                        case "CustomTemp": CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
-                        case "CustomTempPath": TextBoxCustomTempPath.Text = n.InnerText; break;
-                        case "DeleteTempFiles": CheckBoxDeleteTempFiles.IsChecked = n.InnerText == "True"; break;
-                        case "DeleteTempFilesDyn": CheckBoxDeleteTempFilesDynamically.IsChecked = n.InnerText == "True"; break;
-                        case "PlayFinishedSound": CheckBoxFinishedSound.IsChecked = n.InnerText == "True"; break;
-                        case "WorkerLimitSVT": CheckBoxWorkerLimit.IsChecked = n.InnerText == "True"; break;
-                        case "DarkMode": CheckBoxDarkMode.IsChecked = n.InnerText == "True"; break;
-                        case "Logging": CheckBoxLogging.IsChecked = n.InnerText == "True"; break;
-                        case "Shutdown": CheckBoxShutdownAfterEncode.IsChecked = n.InnerText == "True"; break;
+                        case "CustomTemp":          CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
+                        case "CustomTempPath":      TextBoxCustomTempPath.Text = n.InnerText; break;
+                        case "DeleteTempFiles":     CheckBoxDeleteTempFiles.IsChecked = n.InnerText == "True"; break;
+                        case "DeleteTempFilesDyn":  CheckBoxDeleteTempFilesDynamically.IsChecked = n.InnerText == "True"; break;
+                        case "PlayFinishedSound":   CheckBoxFinishedSound.IsChecked = n.InnerText == "True"; break;
+                        case "WorkerLimitSVT":      CheckBoxWorkerLimit.IsChecked = n.InnerText == "True"; break;
+                        case "DarkMode":            CheckBoxDarkMode.IsChecked = n.InnerText == "True"; break;
+                        case "Logging":             CheckBoxLogging.IsChecked = n.InnerText == "True"; break;
+                        case "Shutdown":            CheckBoxShutdownAfterEncode.IsChecked = n.InnerText == "True"; break;
+                        case "TempPathActive":      CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
+                        case "TempPath":            TextBoxCustomTempPath.Text = n.InnerText; break;
                         default: break;
                     }
                 }
@@ -2130,11 +2203,6 @@ namespace NotEnoughAV1Encodes
                 }
             }
             catch { }
-        }
-
-        private void Check7zExtractor()
-        {
-            if (File.Exists(@"C:\Program Files\7-Zip\7zG.exe")) { found7z = true; }
         }
 
         public static void setEncoderPath()
@@ -2237,7 +2305,7 @@ namespace NotEnoughAV1Encodes
                                         case "rav1e":
                                             startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(rav1ePath, "rav1e.exe") + '\u0022' + " - " + allSettingsRav1e + " --output " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
                                             break;
-                                        case "aomenc (ffmpeg)":
+                                        case "libaom":
                                             startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
                                             break;
                                         case "svt-av1":
@@ -2287,7 +2355,7 @@ namespace NotEnoughAV1Encodes
                                             //case "rav1e": !!! RAV1E TWO PASS IS STILL BROKEN !!!
                                                 //startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + rav1ePath + '\u0022' + " - " + allSettingsRav1e + " --first-pass " + '\u0022' + tempPath + "\\Chunks\\" + items + "_stats.log" + '\u0022';
                                                 //break;
-                                            case "aomenc (ffmpeg)":
+                                            case "libaom":
                                                 startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 1 -passlogfile " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "_stats.log") + '\u0022' + " -f matroska NUL";
                                                 break;
                                             case "svt-av1":
@@ -2322,7 +2390,7 @@ namespace NotEnoughAV1Encodes
                                         //case "rav1e": !!! RAV1E TWO PASS IS STILL BROKEN !!!
                                         //startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + rav1ePath + '\u0022' + " - " + allSettingsRav1e + " --second-pass " + '\u0022' + tempPath + "\\Chunks\\" + items + "_stats.log" + '\u0022' + " --output " + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1.ivf" + '\u0022';
                                         //break;
-                                        case "aomenc (ffmpeg)":
+                                        case "libaom":
                                             startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + Path.Combine(tempPath, "Chunks", items) + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 2 -passlogfile " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "_stats.log") + '\u0022' + " " + '\u0022' + Path.Combine(tempPath, "Chunks", items + "-av1.ivf") + '\u0022';
                                             break;
                                         case "svt-av1":

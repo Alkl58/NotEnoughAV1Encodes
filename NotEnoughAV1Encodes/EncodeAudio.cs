@@ -54,7 +54,7 @@ namespace NotEnoughAV1Encodes
                 }
                 //----------------------------------------------------------------------------------------||
                 //Audio Encoding -------------------------------------------------------------------------||
-                string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn " + audioCodec + MainWindow.trimCommand + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022';
+                string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " -map_metadata -1 -vn -sn -dn " + audioCodec + MainWindow.trimCommand + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022';
                 SmallFunctions.Logging("AudioEncode() Command: " + ffmpegAudioCommands);
                 SmallFunctions.ExecuteFfmpegTask(ffmpegAudioCommands);
                 //----------------------------------------------------------------------------------------||
@@ -65,21 +65,13 @@ namespace NotEnoughAV1Encodes
         {
             switch (Codec)
             {
-                case "Opus":
-                    if (track == 2 || track == 1) { audiocodecswitch = "libopus"; }
-                    else if (track == 6) { audiocodecswitch = "libopus -af channelmap=channel_layout=5.1"; }
-                    else if (track == 8) { audiocodecswitch = "libopus -af channelmap=channel_layout=7.1"; }
-                    break;
+                case "Opus": audiocodecswitch = "libopus"; break;
                 case "AC3": audiocodecswitch = "ac3"; break;
                 case "AAC": audiocodecswitch = "aac"; break;
                 case "MP3": audiocodecswitch = "libmp3lame"; break;
-                case "Copy Audio":
-                    if (MainWindow.pcmBluray) { audiocodecswitch = "pcm_s16le"; } else { audiocodecswitch = "copy"; }                    
-                    break;
-                default:
-                    break;
+                case "Copy Audio": if (MainWindow.pcmBluray) { audiocodecswitch = "pcm_s16le"; } else { audiocodecswitch = "copy"; } break;
+                default: break;
             }
-
             return audiocodecswitch;
         }
 

@@ -40,68 +40,55 @@ namespace NotEnoughAV1Encodes
             public static bool CancelAll = false;
         }
 
-        public static string getFilename(string videoInput)
+        public static void KillInstances()
         {
-            return Path.GetFileNameWithoutExtension(videoInput);
+            //Kills all aomenc and ffmpeg instances
+            try
+            {
+                foreach (var process in Process.GetProcessesByName("aomenc")) { process.Kill(); }
+                foreach (var process in Process.GetProcessesByName("rav1e")) { process.Kill(); }
+                foreach (var process in Process.GetProcessesByName("SvtAv1EncApp")) { process.Kill(); }
+                foreach (var process in Process.GetProcessesByName("ffmpeg")) { process.Kill(); }
+            }
+            catch { }
         }
 
-        public static void checkDependeciesStartup()
+        public static void PlayFinishedSound()
         {
-            bool ffmpegExists, ffprobeExists;
-            ffmpegExists = File.Exists(MainWindow.ffmpegPath + "\\ffmpeg.exe");
-            ffprobeExists = File.Exists(MainWindow.ffprobePath + "\\ffprobe.exe");
-            if (ffmpegExists == false || ffprobeExists == false)
+            SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
+            playSound.Play();
+        }
+
+        public static void Logging(string log)
+        {
+            if (MainWindow.logging)
             {
-                if (MessageBox.Show("Could not find ffmpeg or ffprobe! \n\nOpen dependency installer? \n\nFor manual installation, place ffmpeg and ffprobe in: \n" + Directory.GetCurrentDirectory() + "\\Apps\\ffmpeg\\ \n\nEncoders can be placed in \\Apps\\Encoder\\. \n\nAlternatively all dependencies can be placed in the root directory next to the exe.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                {
-                    if (MainWindow.found7z)
-                    {
-                        DownloadDependencies egg = new DownloadDependencies(false);
-                        egg.ShowDialog();
-                        MainWindow.setEncoderPath();
-                    }
-                    else { MessageBoxes.Message7zNotFound(); }
-                }                
+                DateTime starttime = DateTime.Now;
+                checkCreateFolder(Path.Combine(Directory.GetCurrentDirectory(), "Logging"));
+                WriteToFileThreadSafe(starttime.ToString() + " : " + log, Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log"));
             }
         }
 
-        public static bool checkDependencies(string encoder)
+        public static void ExecuteFfmpegTask(string ffmpegCommand)
         {
-            bool av1encoderexists = false, ffmpegExists, ffprobeExists;
-            ffmpegExists = File.Exists(MainWindow.ffmpegPath + "\\ffmpeg.exe");
-            ffprobeExists = File.Exists(MainWindow.ffprobePath + "\\ffprobe.exe");
-            switch (encoder)
+            //Run ffmpeg command
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo
             {
-                case "aomenc":
-                    av1encoderexists = File.Exists(MainWindow.aomencPath + "\\aomenc.exe");
-                    break;
-                case "rav1e":
-                    av1encoderexists = File.Exists(MainWindow.rav1ePath + "\\rav1e.exe");
-                    break;
-                case "svt-av1":
-                    av1encoderexists = File.Exists(MainWindow.svtav1Path + "\\SvtAv1EncApp.exe");
-                    break;
-                case "aomenc (ffmpeg)":
-                    av1encoderexists = ffmpegExists;
-                    break;
-                case "libvpx-vp9":
-                    av1encoderexists = ffmpegExists;
-                    break;
-                default:
-                    break;
-            }
-            if (ffmpegExists && ffprobeExists && av1encoderexists) { return true; }
-            else 
-            {
-                MessageBox.Show("Could not find all dependencies: \n ffmpeg found: " + ffmpegExists + " \n ffprobe found: " + ffprobeExists + " \n " + encoder + " found: " + av1encoderexists, "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                return false; 
-            }
-            
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                WorkingDirectory = MainWindow.ffmpegPath,
+                Arguments = ffmpegCommand
+            };
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
         }
+
+        //--------------------------- Video Information ---------------------------
 
         public static string getFrameRate(string videoInput)
         {
-            string input = '\u0022' + videoInput + '\u0022';
             Process getStreamFps = new Process
             {
                 StartInfo = new ProcessStartInfo()
@@ -111,7 +98,7 @@ namespace NotEnoughAV1Encodes
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
                     WorkingDirectory = MainWindow.ffprobePath,
-                    Arguments = "/C ffprobe.exe -i " + input + " -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate",
+                    Arguments = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate",
                     RedirectStandardError = true,
                     RedirectStandardOutput = true
                 }
@@ -146,7 +133,6 @@ namespace NotEnoughAV1Encodes
 
         public static string getPixelFormat(string videoInput)
         {
-            string input = '\u0022' + videoInput + '\u0022';
             Process getPixelFormat = new Process
             {
                 StartInfo = new ProcessStartInfo()
@@ -156,7 +142,7 @@ namespace NotEnoughAV1Encodes
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
                     WorkingDirectory = MainWindow.ffprobePath,
-                    Arguments = "/C ffprobe.exe -i " + input + " -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=pix_fmt",
+                    Arguments = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=pix_fmt",
                     RedirectStandardError = true,
                     RedirectStandardOutput = true
                 }
@@ -169,7 +155,6 @@ namespace NotEnoughAV1Encodes
 
         public static string getVideoLength(string videoInput)
         {
-            string input = '\u0022' + videoInput + '\u0022';
             Process process = new Process
             {
                 StartInfo = new ProcessStartInfo()
@@ -179,7 +164,7 @@ namespace NotEnoughAV1Encodes
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
                     WorkingDirectory = MainWindow.ffprobePath,
-                    Arguments = "/C ffprobe.exe -i " + input + " -show_entries format=duration -v quiet -of csv=" + '\u0022' + "p=0" + '\u0022',
+                    Arguments = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -show_entries format=duration -v quiet -of csv=" + '\u0022' + "p=0" + '\u0022',
                     RedirectStandardError = true,
                     RedirectStandardOutput = true
                 }
@@ -216,28 +201,6 @@ namespace NotEnoughAV1Encodes
             return stream;
         }
 
-        public static void checkCreateFolder(string folderPath)
-        {
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
-        }
-
-        public static void ExecuteFfmpegTask(string ffmpegCommand)
-        {
-            //Run ffmpeg command
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo
-            {
-                WindowStyle = ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe",
-                WorkingDirectory = MainWindow.ffmpegPath,
-                Arguments = ffmpegCommand
-            };
-            process.StartInfo = startInfo;
-            process.Start();
-            process.WaitForExit();
-        }
-
         public static void CountVideoChunks()
         {
             MainWindow.videoChunks = Directory.GetFiles(Path.Combine(MainWindow.tempPath, "Chunks"), "*mkv", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
@@ -257,22 +220,86 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        public static void KillInstances()
+        public static void GetChunksFrameCount(string PathTemp)
         {
-            //Kills all aomenc and ffmpeg instances
-            try
+            int frameCount = 0;
+            foreach(var files in Directory.GetFiles(Path.Combine(MainWindow.tempPath, "Chunks"), "*mkv", SearchOption.AllDirectories))
             {
-                foreach (var process in Process.GetProcessesByName("aomenc")) { process.Kill(); }
-                foreach (var process in Process.GetProcessesByName("rav1e")) { process.Kill(); }
-                foreach (var process in Process.GetProcessesByName("SvtAv1EncApp")) { process.Kill(); }
-                foreach (var process in Process.GetProcessesByName("ffmpeg")) { process.Kill(); }
+                Process process = new Process
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = "cmd.exe",
+                        WorkingDirectory = MainWindow.ffmpegPath,
+                        Arguments = "/C ffmpeg.exe -i " + '\u0022' + files + '\u0022' + " -hide_banner -loglevel 32 -map 0:v:0 -c copy -f null -",
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true
+                    }
+                };
+                process.Start();
+                string stream = process.StandardError.ReadToEnd();
+                process.WaitForExit();
+                string tempStream = stream.Substring(stream.LastIndexOf("frame="));
+                string data = getBetween(tempStream, "frame=", "fps=");
+                frameCount += int.Parse(data);
             }
-            catch { }
+            MainWindow.frameCountChunks = frameCount;
+            Logging("Total Frame Count Chunks: " + frameCount);
+        }
+
+        public static void GetSourceFrameCount(string videoInput)
+        {
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = MainWindow.ffmpegPath,
+                    Arguments = "/C ffmpeg.exe -i " + '\u0022' + videoInput + '\u0022' + " -hide_banner -loglevel 32 -map 0:v:0 -c copy -f null -",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            process.Start();
+            string stream = process.StandardError.ReadToEnd();
+            process.WaitForExit();
+            string tempStream = stream.Substring(stream.LastIndexOf("frame="));
+            string data = getBetween(tempStream, "frame=", "fps=");
+            MainWindow.frameCountSource = int.Parse(data);
+            Logging("Total Frame Count Source: " + data);
+        }
+
+        public static string getBetween(string strSource, string strStart, string strEnd)
+        {
+            if (strSource.Contains(strStart) && strSource.Contains(strEnd))
+            {
+                int Start, End;
+                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+                End = strSource.IndexOf(strEnd, Start);
+                return strSource.Substring(Start, End - Start);
+            }
+
+            return "";
+        }
+
+        //-------------------------------------------------------------------------
+        //--------------------------------- Checks --------------------------------
+
+        public static void checkCreateFolder(string folderPath)
+        {
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
         }
 
         public static bool CheckVideoOutput()
         {
-            if(File.Exists(MainWindow.videoOutput)) { File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "UnfinishedJobs", MainWindow.fileName + ".xml")); return true; } else { MessageBox.Show("No Output File found!"); return false; }
+            if (File.Exists(MainWindow.videoOutput)) { File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "UnfinishedJobs", MainWindow.fileName + ".xml")); return true; } else { MessageBox.Show("No Output File found!"); return false; }
         }
 
         public static bool CheckAudioOutput()
@@ -282,7 +309,8 @@ namespace NotEnoughAV1Encodes
                 if (File.Exists(Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv")))
                 { return true; }
                 else { return false; }
-            }else { return true; }
+            }
+            else { return true; }
         }
 
         public static bool CheckSubtitleOutput()
@@ -298,12 +326,61 @@ namespace NotEnoughAV1Encodes
 
         public static bool CheckFileFolder()
         {
-            try { 
-                if (!Directory.EnumerateFiles(Path.Combine(MainWindow.tempPath, "Chunks")).Any()) 
-                { return true; } else { return false; } 
-            } catch { return true; }
-            
+            try
+            {
+                if (!Directory.EnumerateFiles(Path.Combine(MainWindow.tempPath, "Chunks")).Any())
+                { return true; }
+                else { return false; }
+            }
+            catch { return true; }
+
         }
+
+        public static void checkDependeciesStartup()
+        {
+            bool ffmpegExists, ffprobeExists;
+            ffmpegExists = File.Exists(MainWindow.ffmpegPath + "\\ffmpeg.exe");
+            ffprobeExists = File.Exists(MainWindow.ffprobePath + "\\ffprobe.exe");
+            if (ffmpegExists == false || ffprobeExists == false)
+            {
+                if (MessageBox.Show("Could not find ffmpeg or ffprobe! \n\nOpen dependency installer? \n\nFor manual installation, place ffmpeg and ffprobe in: \n" + Directory.GetCurrentDirectory() + "\\Apps\\ffmpeg\\ \n\nEncoders can be placed in \\Apps\\Encoder\\. \n\nAlternatively all dependencies can be placed in the root directory next to the exe.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    if (MainWindow.found7z)
+                    {
+                        DownloadDependencies egg = new DownloadDependencies(false);
+                        egg.ShowDialog();
+                        MainWindow.setEncoderPath();
+                    }
+                    else { MessageBoxes.Message7zNotFound(); }
+                }
+            }
+        }
+
+        public static bool checkDependencies(string encoder)
+        {
+            bool av1encoderexists = false, ffmpegExists, ffprobeExists;
+            ffmpegExists = File.Exists(MainWindow.ffmpegPath + "\\ffmpeg.exe");
+            ffprobeExists = File.Exists(MainWindow.ffprobePath + "\\ffprobe.exe");
+            switch (encoder)
+            {
+                case "aomenc": av1encoderexists = File.Exists(MainWindow.aomencPath + "\\aomenc.exe"); break;
+                case "rav1e": av1encoderexists = File.Exists(MainWindow.rav1ePath + "\\rav1e.exe"); break;
+                case "svt-av1": av1encoderexists = File.Exists(MainWindow.svtav1Path + "\\SvtAv1EncApp.exe"); break;
+                case "aomenc (ffmpeg)": av1encoderexists = ffmpegExists; break;
+                case "libvpx-vp9": av1encoderexists = ffmpegExists; break;
+                default: break;
+            }
+            if (ffmpegExists && ffprobeExists && av1encoderexists) { return true; }
+            else
+            {
+                MessageBox.Show("Could not find all dependencies: \n ffmpeg found: " + ffmpegExists + " \n ffprobe found: " + ffprobeExists + " \n " + encoder + " found: " + av1encoderexists, "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return false;
+            }
+
+        }
+
+        //-------------------------------------------------------------------------
+        //----------------------------------- IO ----------------------------------
 
         public static void DeleteChunkFolderContent()
         {
@@ -322,7 +399,7 @@ namespace NotEnoughAV1Encodes
             catch { }
 
         }
-
+        //I don't know why I have two delete temp functions... For now I won't touch
         public static void DeleteTempFiles()
         {
             try
@@ -331,17 +408,6 @@ namespace NotEnoughAV1Encodes
                 tmp.Delete(true);
             }
             catch (IOException ex) { MessageBox.Show("Could not delete all files: " + ex.Message); }
-        }
-
-        public static void PlayFinishedSound()
-        {
-            SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
-            playSound.Play();
-        }
-
-        public static bool ExistsOnPath(string fileName)
-        {
-            return GetFullPath(fileName) != null;
         }
 
         public static string GetFullPath(string fileName)
@@ -374,20 +440,28 @@ namespace NotEnoughAV1Encodes
             return null;
         }
 
-        public static void Logging(string log)
-        {
-            if (MainWindow.logging)
-            {
-                DateTime starttime = DateTime.Now;
-                checkCreateFolder(Path.Combine(Directory.GetCurrentDirectory(), "Logging"));
-                WriteToFileThreadSafe(starttime.ToString() + " : " + log, Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log"));
-            }
-        }
-
         public static void DeleteLogFile()
         {
             if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log")))
                 File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log"));
         }
+
+        public static void Check7zExtractor()
+        {
+            if (File.Exists(@"C:\Program Files\7-Zip\7zG.exe")) { MainWindow.found7z = true; }
+        }
+
+        public static string getFilename(string videoInput)
+        {
+            //Mostly only used for knowing the name, for temp folder naming
+            return Path.GetFileNameWithoutExtension(videoInput);
+        }
+
+        public static bool ExistsOnPath(string fileName)
+        {
+            return GetFullPath(fileName) != null;
+        }
+        //-------------------------------------------------------------------------
+
     }
 }

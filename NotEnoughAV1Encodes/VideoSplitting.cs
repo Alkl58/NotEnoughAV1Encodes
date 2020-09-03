@@ -10,6 +10,7 @@ namespace NotEnoughAV1Encodes
         {
             if (reencodeCodec == "x264") { reencodeCodec = "libx264 -crf 0 -preset ultrafast -g 9 -sc_threshold 0 -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * 9)" + '\u0022'; }
             if (reencodeCodec == "utvideo") { reencodeCodec = "utvideo"; }
+            if (reencodeCodec == "ffv1") { reencodeCodec = "ffv1 -level 3 -threads 4 -coder 1 -context 1 -g 1 -slicecrc 0 -slices 4"; }
 
             SmallFunctions.checkCreateFolder(Path.Combine(MainWindow.tempPath, "Chunks"));
 
