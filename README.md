@@ -10,9 +10,6 @@ After splitting, it will encode the chunks with n-amount of workers. When finish
 
 This tool is Windows only. For multiplatform and more features check out the CLI Tool [Av1an](https://github.com/master-of-zen/Av1an).
 
-### Known Issues:
-- Audio: Opus 5.1 channel layout problem with multiple audio tracks
-
 ![alt text](https://i.imgur.com/AbVetfn.png)
 ![alt text](https://i.imgur.com/SJsHBBc.png)
 
