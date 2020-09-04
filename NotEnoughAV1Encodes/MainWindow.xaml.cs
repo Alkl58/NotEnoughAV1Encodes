@@ -60,6 +60,7 @@ namespace NotEnoughAV1Encodes
             programStartup = false;            
             LoadQueueStartup();
             FreeSpace();
+            LoadWindowStartupLocation();
         }
 
         //════════════════════════════════════ Main Functions ═════════════════════════════════════
@@ -2265,6 +2266,23 @@ namespace NotEnoughAV1Encodes
                         { try { File.Delete(file.FullName); } catch { } }
                     }
                 }
+            }
+        }
+
+        private void LoadWindowStartupLocation()
+        {
+            //This function sets the Window Location on startup - this will be a hidden feature for now
+            //First Line of txt file is left pixel count - second line is top pixel count
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "location.txt")))
+            {
+                try
+                {
+                    //Reads it from location.txt file
+                    string[] lines = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "location.txt"));
+                    Application.Current.MainWindow.Left = int.Parse(lines[0]);
+                    Application.Current.MainWindow.Top = int.Parse(lines[1]);
+                }
+                catch (Exception ex) { SmallFunctions.Logging(ex.Message); }
             }
         }
 
