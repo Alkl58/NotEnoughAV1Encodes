@@ -55,6 +55,12 @@ namespace NotEnoughAV1Encodes
                 LabelCurrentVersionSVT.Foreground = white;
             }
             SmallFunctions.checkCreateFolder(Path.Combine(currentDir, "Apps"));
+
+            //Most websites require SSL/TLS, but .NET does not support it by default on Windows 7
+            //It has to be manually activated, inorder to avoid webclient exception / crash for the update parsing
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12; 
+            //-----------------------------------------------------------------
+
             DownloadUpdateXML();
             ParseUpdateXML();
             ParseHTMLJeremylee();
@@ -411,32 +417,42 @@ namespace NotEnoughAV1Encodes
                 svtav1Version = svtav1Version.Replace("-", ".");
                 svtav1VersionUpdateJeremy = svtav1Version.Split(' ')[0];
             }
-            catch { }
+            catch (Exception ex) { SmallFunctions.Logging(ex.Message); }
         }
 
         private void ParseRav1eGithub()
         {
-            //Parses the latest rav1e Release directly from Github
-            var client = new GitHubClient(new ProductHeaderValue("neav1e"));
-            var releases = client.Repository.Release.GetAll("xiph", "rav1e").Result;
-            var latest = releases[0];
-            string rav1eUrlRepo = latest.HtmlUrl;
+            try
+            {
+                //Parses the latest rav1e Release directly from Github
+                var client = new GitHubClient(new ProductHeaderValue("neav1e"));
+                var releases = client.Repository.Release.GetAll("xiph", "rav1e").Result;
+                var latest = releases[0];
+                string rav1eUrlRepo = latest.HtmlUrl;
 
-            rav1eUrlGithub = rav1eUrlRepo.Replace("tag", "download") + "/rav1e.exe"; //The download Path for the latest rav1e build (hopefully)
-            rav1eVersionUpdate = latest.CreatedAt.ToString("yyyy.MM.dd");
+                rav1eUrlGithub = rav1eUrlRepo.Replace("tag", "download") + "/rav1e.exe"; //The download Path for the latest rav1e build (hopefully)
+                rav1eVersionUpdate = latest.CreatedAt.ToString("yyyy.MM.dd");
+            }
+            catch (Exception ex) { SmallFunctions.Logging(ex.Message); }
+
         }
 
         private void ParseSVTAV1Github()
         {
-            //Parses the latest SVT-AV1 Release directly from Github
-            var client = new GitHubClient(new ProductHeaderValue("neav1e"));
-            var releases = client.Repository.Release.GetAll("OpenVisualCloud", "SVT-AV1").Result;
-            var latest = releases[0];
-            string svtUrlRepo = latest.HtmlUrl;
+            try
+            {
+                //Parses the latest SVT-AV1 Release directly from Github
+                var client = new GitHubClient(new ProductHeaderValue("neav1e"));
+                var releases = client.Repository.Release.GetAll("OpenVisualCloud", "SVT-AV1").Result;
+                var latest = releases[0];
+                string svtUrlRepo = latest.HtmlUrl;
 
-            svtav1VersionUpdate = latest.CreatedAt.ToString("yyyy.MM.dd");
-            svtav1UrlGithub = svtUrlRepo.Replace("tag", "download") + "/SvtAv1EncApp.exe"; //The download url for the latest svt-av1 build (hopefully)
-            svtav1UrlGithubLib = svtUrlRepo.Replace("tag", "download") + "/SvtAv1Enc.lib";
+                svtav1VersionUpdate = latest.CreatedAt.ToString("yyyy.MM.dd");
+                svtav1UrlGithub = svtUrlRepo.Replace("tag", "download") + "/SvtAv1EncApp.exe"; //The download url for the latest svt-av1 build (hopefully)
+                svtav1UrlGithubLib = svtUrlRepo.Replace("tag", "download") + "/SvtAv1Enc.lib";
+            }
+            catch (Exception ex) { SmallFunctions.Logging(ex.Message); }
+
         }
     }
 }
