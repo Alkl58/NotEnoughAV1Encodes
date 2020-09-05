@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="NotEnoughAV1Encodes" Height="621" Width="1008.333" ResizeMode="CanMinimize" WindowStartupLocation="Manual">
+        Title="NotEnoughAV1Encodes" Height="621" Width="1008.333" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="b2v" />
     </Window.Resources>
