@@ -135,7 +135,7 @@
                 <Grid x:Name="TabGrid2" Background="{Binding ElementName=TabGrid,Path=Background,UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="Video" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Encoder:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
-                    <ComboBox x:Name="ComboBoxEncoder" HorizontalAlignment="Left" Margin="135,47,0,0" VerticalAlignment="Top" Width="139" Height="26" SelectionChanged="ComboBoxEncoder_SelectionChanged">
+                    <ComboBox x:Name="ComboBoxEncoder" HorizontalAlignment="Left" Margin="135,47,0,0" VerticalAlignment="Top" Width="116" Height="26" SelectionChanged="ComboBoxEncoder_SelectionChanged">
                         <ComboBoxItem Content="aomenc" IsSelected="True"/>
                         <ComboBoxItem Content="libaom"/>
                         <ComboBoxItem Content="rav1e"/>
@@ -143,13 +143,14 @@
                         <ComboBoxItem Content="libvpx-vp9"/>
                     </ComboBox>
                     <Label Content="Framerate:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,84,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.504,0.442" Height="26"/>
-                    <ComboBox x:Name="ComboBoxFrameRate" HorizontalAlignment="Left" Margin="135,86,0,0" VerticalAlignment="Top" Width="69" Height="26" ToolTip="Does only change the framerate if reencoding is activated." SelectionChanged="ComboBoxFrameRate_SelectionChanged">
+                    <ComboBox x:Name="ComboBoxFrameRate" HorizontalAlignment="Left" Margin="135,86,0,0" VerticalAlignment="Top" Width="116" Height="26" ToolTip="Does only change the framerate if reencoding is activated." SelectionChanged="ComboBoxFrameRate_SelectionChanged">
+                        <ComboBoxItem Content="Same as Source" IsSelected="True"/>
                         <ComboBoxItem Content="5"/>
                         <ComboBoxItem Content="10"/>
                         <ComboBoxItem Content="12"/>
                         <ComboBoxItem Content="15"/>
                         <ComboBoxItem Content="20"/>
-                        <ComboBoxItem Content="23.976" IsSelected="True"/>
+                        <ComboBoxItem Content="23.976"/>
                         <ComboBoxItem Content="24"/>
                         <ComboBoxItem Content="25"/>
                         <ComboBoxItem Content="29.97"/>
@@ -1751,7 +1752,7 @@
                         <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="img/paypal.png"/>
                     </Button>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="598,14,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="661,16,0,0" TextWrapping="Wrap" Text="1.2 - AppVeyor 1.0.142" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="661,16,0,0" TextWrapping="Wrap" Text="1.2 - AppVeyor 1.0.145" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
                     <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="608,40,0,0" VerticalAlignment="Top"/>
                     <TextBlock HorizontalAlignment="Left" Margin="661,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
             <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>

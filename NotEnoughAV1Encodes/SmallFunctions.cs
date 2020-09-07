@@ -463,5 +463,29 @@ namespace NotEnoughAV1Encodes
         }
         //-------------------------------------------------------------------------
 
+        public static double FractionToDouble(string fraction)
+        {
+            //Converts the Video Framerate from a fraction to a double value for later eta calculation
+            if (double.TryParse(fraction, out double result))
+            {
+                return result;
+            }
+            string[] split = fraction.Split(new char[] { ' ', '/' });
+            if (split.Length == 2 || split.Length == 3)
+            {
+                if (int.TryParse(split[0], out int a) && int.TryParse(split[1], out int b))
+                {
+                    if (split.Length == 2)
+                    {
+                        return (double)a / b;
+                    }
+                    if (int.TryParse(split[2], out int c))
+                    {
+                        return a + (double)b / c;
+                    }
+                }
+            }
+            return 24;
+        }
     }
 }

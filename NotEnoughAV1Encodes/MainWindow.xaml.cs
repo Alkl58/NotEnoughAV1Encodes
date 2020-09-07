@@ -772,15 +772,15 @@ namespace NotEnoughAV1Encodes
         {
             switch(ComboBoxFrameRate.SelectedIndex)
             {
-                case 0: return "5"; case 1: return "10";
-                case 2: return "12"; case 3: return "15";
-                case 4: return "20"; case 5: return "24000/1001";
-                case 6: return "24"; case 7: return "25";
-                case 8: return "30000/1001"; case 9: return "30";
-                case 10: return "48"; case 11: return "50";
-                case 12: return "60000/1001"; case 13: return "60";
-                case 14: return "120";
-                default: return "24";
+                case 1: return "5"; case 2: return "10";
+                case 3: return "12"; case 4: return "15";
+                case 5: return "20"; case 6: return "24000/1001";
+                case 7: return "24"; case 8: return "25";
+                case 9: return "30000/1001"; case 10: return "30";
+                case 11: return "48"; case 12: return "50";
+                case 13: return "60000/1001"; case 14: return "60";
+                case 15: return "120";
+                default: return videoFrameRate.ToString();
             }
         }
 
@@ -921,24 +921,24 @@ namespace NotEnoughAV1Encodes
             //Sets the Combobox Framerate
             switch (frameRate)
             {
-                case "5/1": ComboBoxFrameRate.SelectedIndex = 0; break;
-                case "10/1": ComboBoxFrameRate.SelectedIndex = 1; break;
-                case "12/1": ComboBoxFrameRate.SelectedIndex = 2; break;
-                case "15/1": ComboBoxFrameRate.SelectedIndex = 3; break;
-                case "20/1": ComboBoxFrameRate.SelectedIndex = 4; break;
-                case "24000/1001": ComboBoxFrameRate.SelectedIndex = 5; break;
-                case "24/1": ComboBoxFrameRate.SelectedIndex = 6; break;
-                case "25/1": ComboBoxFrameRate.SelectedIndex = 7; break;
-                case "30000/1001": ComboBoxFrameRate.SelectedIndex = 8; break;
-                case "30/1": ComboBoxFrameRate.SelectedIndex = 9; break;
-                case "48/1": ComboBoxFrameRate.SelectedIndex = 10; break;
-                case "50/1": ComboBoxFrameRate.SelectedIndex = 11; break;
-                case "60000/1001": ComboBoxFrameRate.SelectedIndex = 12; break;
-                case "60/1": ComboBoxFrameRate.SelectedIndex = 13; break;
-                case "120": ComboBoxFrameRate.SelectedIndex = 14; break;
-                default: if (CheckBoxQueueEncoding.IsChecked == false && CheckBoxBatchEncoding.IsChecked == false) { MessageBoxes.MessageVideoBadFramerate(); } break;
+                case "5/1": ComboBoxFrameRate.SelectedIndex = 1; break;
+                case "10/1": ComboBoxFrameRate.SelectedIndex = 2; break;
+                case "12/1": ComboBoxFrameRate.SelectedIndex = 3; break;
+                case "15/1": ComboBoxFrameRate.SelectedIndex = 4; break;
+                case "20/1": ComboBoxFrameRate.SelectedIndex = 5; break;
+                case "24000/1001": ComboBoxFrameRate.SelectedIndex = 6; break;
+                case "24/1": ComboBoxFrameRate.SelectedIndex = 7; break;
+                case "25/1": ComboBoxFrameRate.SelectedIndex = 8; break;
+                case "30000/1001": ComboBoxFrameRate.SelectedIndex = 9; break;
+                case "30/1": ComboBoxFrameRate.SelectedIndex = 10; break;
+                case "48/1": ComboBoxFrameRate.SelectedIndex = 11; break;
+                case "50/1": ComboBoxFrameRate.SelectedIndex = 12; break;
+                case "60000/1001": ComboBoxFrameRate.SelectedIndex = 13; break;
+                case "60/1": ComboBoxFrameRate.SelectedIndex = 14; break;
+                case "120/1": ComboBoxFrameRate.SelectedIndex = 15; break;
+                default: ComboBoxFrameRate.SelectedIndex = 0; break;
             }
-            videoFrameRate = Convert.ToDouble(ComboBoxFrameRate.Text, CultureInfo.InvariantCulture);
+            videoFrameRate = Convert.ToDouble(SmallFunctions.FractionToDouble(frameRate), CultureInfo.InvariantCulture);
             frameRateIndex = ComboBoxFrameRate.SelectedIndex;
         }
 
