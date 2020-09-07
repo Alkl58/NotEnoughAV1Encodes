@@ -446,7 +446,7 @@ namespace NotEnoughAV1Encodes
             {
                 //Parses the latest SVT-AV1 Release directly from Github
                 var client = new GitHubClient(new ProductHeaderValue("neav1e"));
-                var releases = client.Repository.Release.GetAll("OpenVisualCloud", "SVT-AV1").Result;
+                var releases = client.Repository.Release.GetAll("AOMediaCodec", "SVT-AV1").Result;
                 var latest = releases[0];
                 string svtUrlRepo = latest.HtmlUrl;
 
