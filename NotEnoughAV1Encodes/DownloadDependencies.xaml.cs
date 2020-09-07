@@ -283,21 +283,24 @@ namespace NotEnoughAV1Encodes
             ProgressBarDownload.IsIndeterminate = true;
             if (ComboBoxUpdateSource.SelectedIndex == 0)
             {
-                await Task.Run(() => DownloadBin(svtav1UrlGithub, Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncAppnew.exe")));
-                await Task.Run(() => DownloadBin(svtav1UrlGithubLib, Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Encnew.lib")));
-                if (File.Exists(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncAppnew.exe")))
+                await Task.Run(() => DownloadBin(svtav1UrlGithub, Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncApp.zip")));
+                await Task.Run(() => DownloadBin(svtav1UrlGithubLib, Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Enclib.zip")));
+                if (File.Exists(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncApp.zip")))
                 {
-                    File.Delete(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncApp.exe"));
-                    File.Move(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncAppnew.exe"), Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncApp.exe"));
 
-                    if (File.Exists(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Encnew.lib")))
-                    {
-                        if (File.Exists(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Enc.lib")))
-                            File.Delete(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Enc.lib"));
-                        File.Move(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Encnew.lib"), Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Enc.lib"));
-                    }
-                    
-                    
+                    File.Delete(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncApp.exe"));
+
+                    //Extracts the downloaded zip files
+                    ExtractFile(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncApp.zip"), Path.Combine(currentDir, "Apps", "Encoder"));
+                    ExtractFile(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Enclib.zip"), Path.Combine(currentDir, "Apps", "Encoder"));
+
+                    //Deletes the zip files if it finds the extracted dependencies
+                    if (File.Exists(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncApp.exe")))
+                        File.Delete(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncApp.zip"));
+                    if (File.Exists(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Enc.lib")))
+                        File.Delete(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1Enclib.zip"));
+
+                    //Writes the Version to txt file
                     if (File.Exists(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncApp.exe")))
                     {
                         if (File.Exists(Path.Combine(currentDir, "Apps", "Encoder", "SvtAv1EncApp.txt")))
@@ -448,8 +451,8 @@ namespace NotEnoughAV1Encodes
                 string svtUrlRepo = latest.HtmlUrl;
 
                 svtav1VersionUpdate = latest.CreatedAt.ToString("yyyy.MM.dd");
-                svtav1UrlGithub = svtUrlRepo.Replace("tag", "download") + "/SvtAv1EncApp.exe"; //The download url for the latest svt-av1 build (hopefully)
-                svtav1UrlGithubLib = svtUrlRepo.Replace("tag", "download") + "/SvtAv1Enc.lib";
+                svtav1UrlGithub = svtUrlRepo.Replace("tag", "download") + "/SvtAv1EncApp.zip"; //The download url for the latest svt-av1 build (hopefully)
+                svtav1UrlGithubLib = svtUrlRepo.Replace("tag", "download") + "/SvtAv1Enclib.zip";
             }
             catch (Exception ex) { SmallFunctions.Logging(ex.Message); }
 
