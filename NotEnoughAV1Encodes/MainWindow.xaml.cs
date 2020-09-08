@@ -28,7 +28,7 @@ namespace NotEnoughAV1Encodes
         public static string allSettingsAom, allSettingsRav1e, allSettingsSVTAV1, allSettingsVP9;
         public static string tempPath = ""; //Temp Path for Splitting and Encoding
         public static string[] videoChunks, SubtitleChunks; //Temp Chunk List
-        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, cropCommand, trimCommand, saveSettingString, localFileName, ffmpegFramerateSplitting;
+        public static string PathToBackground, subtitleFfmpegCommand, deinterlaceCommand, cropCommand, trimCommand, saveSettingString, localFileName, ffmpegFramerateSplitting, frameRateTemp;
         public static string trimEndTemp, trimEndTempMax;
         public static string encoderMetadata;
         public static int videoChunksCount, frameCountSource, frameCountChunks;
@@ -780,7 +780,7 @@ namespace NotEnoughAV1Encodes
                 case 11: return "48"; case 12: return "50";
                 case 13: return "60000/1001"; case 14: return "60";
                 case 15: return "120";
-                default: return videoFrameRate.ToString();
+                default: return frameRateTemp.ToString();
             }
         }
 
@@ -938,7 +938,8 @@ namespace NotEnoughAV1Encodes
                 case "120/1": ComboBoxFrameRate.SelectedIndex = 15; break;
                 default: ComboBoxFrameRate.SelectedIndex = 0; break;
             }
-            videoFrameRate = Convert.ToDouble(SmallFunctions.FractionToDouble(frameRate), CultureInfo.InvariantCulture);
+            videoFrameRate = Convert.ToDouble(SmallFunctions.FractionToDouble(frameRate), CultureInfo.InvariantCulture); //for eta calculation
+            frameRateTemp = frameRate; //For Splitting
             frameRateIndex = ComboBoxFrameRate.SelectedIndex;
         }
 
