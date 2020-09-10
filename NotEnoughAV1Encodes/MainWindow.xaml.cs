@@ -259,7 +259,7 @@ namespace NotEnoughAV1Encodes
                     SmallFunctions.DeleteChunkFolderContent();
                     setAudioParameters();
                     setSubtitleParameters();
-                    setFrameRate(SmallFunctions.getFrameRate(videoInput));
+                    setFrameRate(Ffprobe.GetFrameRate(videoInput));
 
                     if (SmallFunctions.Cancel.CancelAll == false)
                     {
@@ -305,7 +305,7 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.Logging("Worker Count: " + workerCount);
             chunkLength = int.Parse(TextBoxChunkLength.Text);
             SmallFunctions.Logging("Chunk Length: " + chunkLength);
-            videoLength = int.Parse(SmallFunctions.getVideoLength(videoInput));
+            videoLength = int.Parse(Ffprobe.GetVideoLength(videoInput));
             SmallFunctions.Logging("Video Length: " + videoLength);
 
             if (CheckBoxTrimming.IsChecked == true)
@@ -786,16 +786,16 @@ namespace NotEnoughAV1Encodes
 
         private void setChunkLength()
         {
-            if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (int.Parse(SmallFunctions.getVideoLength(videoInput)) / int.Parse(ComboBoxWorkers.Text)).ToString(); }
-            TextBoxTrimEnd.Text = SmallFunctions.getVideoLengthAccurate(videoInput);
+            if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (int.Parse(Ffprobe.GetVideoLength(videoInput)) / int.Parse(ComboBoxWorkers.Text)).ToString(); }
+            TextBoxTrimEnd.Text = Ffprobe.GetVideoLengthAccurate(videoInput);
             trimEndTemp = TextBoxTrimEnd.Text;
             trimEndTempMax = TextBoxTrimEnd.Text;
         }
 
         private void getVideoInformation()
         {
-            string frameRate = SmallFunctions.getFrameRate(videoInput);
-            string pixelFormat = SmallFunctions.getPixelFormat(videoInput);
+            string frameRate = Ffprobe.GetFrameRate(videoInput);
+            string pixelFormat = Ffprobe.GetPixelFormat(videoInput);
             fileName = SmallFunctions.getFilename(videoInput);
             SmallFunctions.Logging("Video Framerate: " + frameRate);
             setFrameRate(frameRate);
@@ -857,7 +857,56 @@ namespace NotEnoughAV1Encodes
             if (trackfour == false) { CheckBoxAudioTrackFour.IsChecked = false; CheckBoxAudioTrackFour.IsEnabled = false; } else { CheckBoxAudioTrackFour.IsEnabled = true; }
             if (CheckBoxAudioTrackOne.IsEnabled == false && CheckBoxAudioTrackTwo.IsEnabled == false && CheckBoxAudioTrackThree.IsEnabled == false && CheckBoxAudioTrackFour.IsEnabled == false) { CheckBoxAudioEncoding.IsChecked = false; CheckBoxAudioEncoding.IsEnabled = false; }
             else { CheckBoxAudioEncoding.IsEnabled = true; }
-            if (SmallFunctions.getAudioInfo(videoInput) == "pcm_bluray") { MessageBoxes.MessagePCMBluray(); pcmBluray = true; } else { pcmBluray = false; }
+            if (Ffprobe.GetAudioInfo(videoInput) == "pcm_bluray") { MessageBoxes.MessagePCMBluray(); pcmBluray = true; } else { pcmBluray = false; }
+            GetAudioLanguage(videoInput);
+        }
+
+        private void GetAudioLanguage(string videoInput)
+        {
+            //This function gets the Audio Languages from ffprobe and sets the ComboBoxes in the Audio Tab
+            Process getAudioLang = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = MainWindow.ffprobePath,
+                    Arguments = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams a -show_entries stream=index:stream_tags=language -of csv=p=0",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            getAudioLang.Start();
+            string audio = getAudioLang.StandardOutput.ReadToEnd();
+            string[] audioLanguages = audio.Split(new string[] { "1", "2", "3", "4", "," }, StringSplitOptions.RemoveEmptyEntries);
+            audioLanguages = audioLanguages.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            getAudioLang.WaitForExit();
+            int index = 0;
+            foreach (string line in audioLanguages)
+            {
+                string resultcropped = line.Replace(" ", "").Substring(0, 3);
+                int indexLang;
+                switch (resultcropped)
+                {
+                    case "eng": indexLang = 1; break;
+                    case "deu": indexLang = 2; break;
+                    case "fre": indexLang = 3; break;
+                    case "ita": indexLang = 4; break;
+                    case "spa": indexLang = 5; break;
+                    case "jpn": indexLang = 6; break;
+                    case "chi": indexLang = 7; break;
+                    case "kor": indexLang = 8; break;
+                    default: indexLang = 0; break;
+                }
+                if (index == 0) { ComboBoxTrackOneLanguage.SelectedIndex = indexLang; }
+                if (index == 1) { ComboBoxTrackTwoLanguage.SelectedIndex = indexLang; }
+                if (index == 2) { ComboBoxTrackThreeLanguage.SelectedIndex = indexLang; }
+                if (index == 3) { ComboBoxTrackFourLanguage.SelectedIndex = indexLang; }
+                index += 1;
+            }
+
         }
 
         public void GetSubtitleTracks()
@@ -2256,7 +2305,7 @@ namespace NotEnoughAV1Encodes
                     SmallFunctions.Logging("Unfinished Job File found" + file.Name);
                     if (MessageBox.Show("Unfinished Job detected! Load unfinished Job: " + file.Name + "?", "Resume", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     { 
-                        LoadSettings(file.Name, false, true, false); CheckBoxResumeMode.IsChecked = true; setFrameRate(SmallFunctions.getFrameRate(videoInput));
+                        LoadSettings(file.Name, false, true, false); CheckBoxResumeMode.IsChecked = true; setFrameRate(Ffprobe.GetFrameRate(videoInput));
                         break;
                     }
                     else 

@@ -91,6 +91,7 @@
     <Compile Include="DownloadDependencies.xaml.cs">
       <DependentUpon>DownloadDependencies.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ffprobe.cs" />
     <Compile Include="RenameChunks.cs" />
     <Compile Include="SavePreset.xaml.cs">
       <DependentUpon>SavePreset.xaml</DependentUpon>
