@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes
 {
-    class Ffprobe
+    class ffprobe
     {
         public static string GetFrameRate(string videoInput)
         {

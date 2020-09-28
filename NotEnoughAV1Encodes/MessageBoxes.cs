@@ -95,5 +95,10 @@ namespace NotEnoughAV1Encodes
         {
             MessageBox.Show("The frame count option is not available when trimming! \n\nFrame counting is now disabled.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        public static void MessageMoreSubtitles()
+        {
+            MessageBox.Show("More than four subtitles extracted. \nYou can select the other subtitles manually.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }

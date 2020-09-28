@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
 
@@ -224,9 +225,10 @@ namespace NotEnoughAV1Encodes
 
         public static void checkDependeciesStartup()
         {
-            bool ffmpegExists, ffprobeExists;
+            bool ffmpegExists, ffprobeExists, mkvmergeExists;
             ffmpegExists = File.Exists(MainWindow.ffmpegPath + "\\ffmpeg.exe");
             ffprobeExists = File.Exists(MainWindow.ffprobePath + "\\ffprobe.exe");
+            mkvmergeExists = File.Exists(MainWindow.mkvToolNixPath + "\\mkvmerge.exe");
             if (ffmpegExists == false || ffprobeExists == false)
             {
                 if (MessageBox.Show("Could not find ffmpeg or ffprobe! \n\nOpen dependency installer? \n\nFor manual installation, place ffmpeg and ffprobe in: \n" + Directory.GetCurrentDirectory() + "\\Apps\\ffmpeg\\ \n\nEncoders can be placed in \\Apps\\Encoder\\. \n\nAlternatively all dependencies can be placed in the root directory next to the exe.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
@@ -240,13 +242,21 @@ namespace NotEnoughAV1Encodes
                     else { MessageBoxes.Message7zNotFound(); }
                 }
             }
+            if (mkvmergeExists != true)
+            {
+                if (MessageBox.Show("Could not find mkvmerge!\n\nIt should have been included with NEAV1E.\n\nOpen mkvtoolnix download site?\n\nYou have three options now:\n1. Download and Install MKVToolNix (it's free!)\n2. Download the portable MKVToolNix version and place mkvmerge.exe in the root directory next to the exe, or under /Apps/mkvtoolnix/ \n3. Place the mkvmerge.exe in the PATH environment.", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    Process.Start("https://www.fosshub.com/MKVToolNix.html");
+                }
+            }
         }
 
         public static bool checkDependencies(string encoder)
         {
-            bool av1encoderexists = false, ffmpegExists, ffprobeExists;
+            bool av1encoderexists = false, ffmpegExists, ffprobeExists, mkvmergeExists;
             ffmpegExists = File.Exists(MainWindow.ffmpegPath + "\\ffmpeg.exe");
             ffprobeExists = File.Exists(MainWindow.ffprobePath + "\\ffprobe.exe");
+            mkvmergeExists = File.Exists(MainWindow.mkvToolNixPath + "\\mkvmerge.exe");
             switch (encoder)
             {
                 case "aomenc": av1encoderexists = File.Exists(MainWindow.aomencPath + "\\aomenc.exe"); break;
@@ -259,10 +269,9 @@ namespace NotEnoughAV1Encodes
             if (ffmpegExists && ffprobeExists && av1encoderexists) { return true; }
             else
             {
-                MessageBox.Show("Could not find all dependencies: \n ffmpeg found: " + ffmpegExists + " \n ffprobe found: " + ffprobeExists + " \n " + encoder + " found: " + av1encoderexists, "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show("Could not find all dependencies: \nffmpeg found: " + ffmpegExists + " \nffprobe found: " + ffprobeExists + " \nmkvmerge found: " + mkvmergeExists + " \n" + encoder + " found: " + av1encoderexists, "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return false;
             }
-
         }
 
         //-------------------------------------------------------------------------
