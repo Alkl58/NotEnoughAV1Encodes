@@ -216,6 +216,11 @@ namespace NotEnoughAV1Encodes
                             SmallFunctions.DeleteChunkFolderContent(); // Avoids Temp file issues, as the majaroity of safeguards are not used during Batch encoding
                     } catch { }
 
+                    if (CheckBoxCheckFrameCount.IsChecked == true)
+                    {
+                        setProgressBarLabel("Calculating Source Frame Count...");
+                        await Task.Run(() => SmallFunctions.GetSourceFrameCount(videoInput));
+                    }
 
                     if (SmallFunctions.Cancel.CancelAll == false)
                     {
