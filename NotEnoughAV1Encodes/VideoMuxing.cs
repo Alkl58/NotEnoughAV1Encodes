@@ -75,7 +75,7 @@ namespace NotEnoughAV1Encodes
                             Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.videoOutput + '\u0022' + " --no-track-tags --no-global-tags --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + " " + MainWindow.subtitleMuxingInput
                         };
                         mkvToolNix.StartInfo = startInfo;
-                        Console.WriteLine("mkvmerge.exe --output " + '\u0022' + MainWindow.videoOutput + '\u0022' + " --no-track-tags --no-global-tags --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + " " + MainWindow.subtitleMuxingInput);
+                        SmallFunctions.Logging("mkvmerge.exe --output " + '\u0022' + MainWindow.videoOutput + '\u0022' + " --no-track-tags --no-global-tags --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + " " + MainWindow.subtitleMuxingInput);
                         mkvToolNix.Start();
                         mkvToolNix.WaitForExit();
                     }

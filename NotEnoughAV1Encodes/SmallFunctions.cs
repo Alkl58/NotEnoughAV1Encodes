@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -90,7 +91,15 @@ namespace NotEnoughAV1Encodes
 
         public static void CountVideoChunks()
         {
-            MainWindow.videoChunks = Directory.GetFiles(Path.Combine(MainWindow.tempPath, "Chunks"), "*mkv", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
+            if (MainWindow.skipSplitting == false)
+            {
+                MainWindow.videoChunks = Directory.GetFiles(Path.Combine(MainWindow.tempPath, "Chunks"), "*mkv", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
+            }
+            else
+            {
+                List<string> list = new List<string> { MainWindow.videoInput };
+                MainWindow.videoChunks = list.ToArray();
+            }
             MainWindow.videoChunksCount = MainWindow.videoChunks.Count();
             //Removes all chunks from chunklist which are in encoded.log
             if (MainWindow.resumeMode == true)
