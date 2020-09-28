@@ -919,12 +919,12 @@ namespace NotEnoughAV1Encodes
                 detectedTracks += 1;
             }
             getAudioIndexes.WaitForExit();
-            if (trackone == false) { CheckBoxAudioTrackOne.IsChecked = false; CheckBoxAudioTrackOne.IsEnabled = false; } else { CheckBoxAudioTrackOne.IsEnabled = true; }
-            if (tracktwo == false) { CheckBoxAudioTrackTwo.IsChecked = false; CheckBoxAudioTrackTwo.IsEnabled = false; } else { CheckBoxAudioTrackTwo.IsEnabled = true; }
-            if (trackthree == false) { CheckBoxAudioTrackThree.IsChecked = false; CheckBoxAudioTrackThree.IsEnabled = false; } else { CheckBoxAudioTrackThree.IsEnabled = true; }
-            if (trackfour == false) { CheckBoxAudioTrackFour.IsChecked = false; CheckBoxAudioTrackFour.IsEnabled = false; } else { CheckBoxAudioTrackFour.IsEnabled = true; }
+            if (trackone == false) { CheckBoxAudioTrackOne.IsChecked = false; CheckBoxAudioTrackOne.IsEnabled = false; } else { CheckBoxAudioTrackOne.IsEnabled = true; CheckBoxAudioTrackOne.IsChecked = true; }
+            if (tracktwo == false) { CheckBoxAudioTrackTwo.IsChecked = false; CheckBoxAudioTrackTwo.IsEnabled = false; } else { CheckBoxAudioTrackTwo.IsEnabled = true; CheckBoxAudioTrackTwo.IsChecked = true; }
+            if (trackthree == false) { CheckBoxAudioTrackThree.IsChecked = false; CheckBoxAudioTrackThree.IsEnabled = false; } else { CheckBoxAudioTrackThree.IsEnabled = true; CheckBoxAudioTrackThree.IsChecked = true; }
+            if (trackfour == false) { CheckBoxAudioTrackFour.IsChecked = false; CheckBoxAudioTrackFour.IsEnabled = false; } else { CheckBoxAudioTrackFour.IsEnabled = true; CheckBoxAudioTrackFour.IsChecked = true; }
             if (CheckBoxAudioTrackOne.IsEnabled == false && CheckBoxAudioTrackTwo.IsEnabled == false && CheckBoxAudioTrackThree.IsEnabled == false && CheckBoxAudioTrackFour.IsEnabled == false) { CheckBoxAudioEncoding.IsChecked = false; CheckBoxAudioEncoding.IsEnabled = false; }
-            else { CheckBoxAudioEncoding.IsEnabled = true; }
+            else { CheckBoxAudioEncoding.IsEnabled = true; CheckBoxAudioEncoding.IsChecked = true; }
             if (ffprobe.GetAudioInfo(videoInput) == "pcm_bluray") { MessageBoxes.MessagePCMBluray(); pcmBluray = true; } else { pcmBluray = false; }
             GetAudioLanguage(videoInput);
         }
