@@ -49,12 +49,16 @@ namespace NotEnoughAV1Encodes
                     if (MainWindow.trackFour == true)
                     {
                         audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackFour, "3", indexinteger, MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour, MainWindow.trackFourLang, MainWindow.trackFourLanguage);
-                        indexinteger += 1;
+                        //indexinteger += 1;
+                    }
+                    if (MainWindow.audioCodecTrackOne != "Copy Audio" && MainWindow.audioCodecTrackTwo != "Copy Audio" && MainWindow.audioCodecTrackThree != "Copy Audio" && MainWindow.audioCodecTrackFour != "Copy Audio")
+                    {
+                        audioCodec += " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " ";
                     }
                 }
                 //----------------------------------------------------------------------------------------||
                 //Audio Encoding -------------------------------------------------------------------------||
-                string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " -map_metadata -1 -vn -sn -dn " + audioCodec + MainWindow.trimCommand + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022';
+                string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.videoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn " + audioCodec + MainWindow.trimCommand + " " + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022';
                 SmallFunctions.Logging("AudioEncode() Command: " + ffmpegAudioCommands);
                 SmallFunctions.ExecuteFfmpegTask(ffmpegAudioCommands);
                 //----------------------------------------------------------------------------------------||
@@ -81,7 +85,7 @@ namespace NotEnoughAV1Encodes
             //String Command Builder for a single Audio Track
             audioCodecCommand = "-map 0:a:" + activetrackindex + " -c:a ";
             audioCodecCommand += SwitchCodec(activtrackcodec, channellayout);
-            if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -b:a " + activetrackbitrate + "k"; }
+            if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " -b:a " + activetrackbitrate + "k"; }
             audioCodecCommand += " -ac " + channellayout;
             if (MainWindow.trackOneLang) { audioCodecCommand += " -metadata:s:a:0 language=" + MainWindow.trackOneLanguage + " "; }
             return audioCodecCommand;
