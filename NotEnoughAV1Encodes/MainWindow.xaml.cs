@@ -954,7 +954,10 @@ namespace NotEnoughAV1Encodes
             int index = 0;
             foreach (string line in audioLanguages)
             {
-                string resultcropped = line.Replace(" ", "").Substring(0, 3);
+                string resultcropped;
+                try { resultcropped = line.Replace(" ", "").Substring(0, 3); }
+                catch { resultcropped = "und"; }
+                
                 int indexLang;
                 switch (resultcropped)
                 {
