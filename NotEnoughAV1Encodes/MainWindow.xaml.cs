@@ -1095,6 +1095,7 @@ namespace NotEnoughAV1Encodes
             {
                 MessageBoxes.MessageMoreSubtitles();
             }
+            if (!Directory.EnumerateFiles(tempPath).Any()) { try { Directory.Delete(tempPath); }catch(Exception ex) { SmallFunctions.Logging(ex.Message); }}
         }
 
         private void setPixelFormat(string pixelFormat)
