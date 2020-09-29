@@ -1129,6 +1129,25 @@ namespace NotEnoughAV1Encodes
             //Sets the Combobox Framerate
             switch (frameRate)
             {
+                case "5/1": frameRateIndex = 1; break;
+                case "10/1": frameRateIndex = 2; break;
+                case "12/1": frameRateIndex = 3; break;
+                case "15/1": frameRateIndex = 4; break;
+                case "20/1": frameRateIndex = 5; break;
+                case "24000/1001": frameRateIndex = 6; break;
+                case "24/1": frameRateIndex = 7; break;
+                case "25/1": frameRateIndex = 8; break;
+                case "30000/1001": frameRateIndex = 9; break;
+                case "30/1": frameRateIndex = 10; break;
+                case "48/1": frameRateIndex = 11; break;
+                case "50/1": frameRateIndex = 12; break;
+                case "60000/1001": frameRateIndex = 13; break;
+                case "60/1": frameRateIndex = 14; break;
+                case "120/1": frameRateIndex = 15; break;
+                default: frameRateIndex = 0; break;
+            }
+            switch (frameRate)
+            {
                 case "5/1": ComboBoxFrameRate.SelectedIndex = 1; break;
                 case "10/1": ComboBoxFrameRate.SelectedIndex = 2; break;
                 case "12/1": ComboBoxFrameRate.SelectedIndex = 3; break;
@@ -1148,7 +1167,7 @@ namespace NotEnoughAV1Encodes
             }
             videoFrameRate = Convert.ToDouble(SmallFunctions.FractionToDouble(frameRate), CultureInfo.InvariantCulture); //for eta calculation
             frameRateTemp = frameRate; //For Splitting
-            frameRateIndex = ComboBoxFrameRate.SelectedIndex;
+            //frameRateIndex = ComboBoxFrameRate.SelectedIndex;
         }
 
         private void setProgressBarLabel(string Text)
@@ -1281,7 +1300,7 @@ namespace NotEnoughAV1Encodes
 
         private void setImagePreview()
         {
-            if (trimButtons != true)
+            if (trimButtons == true)
             {
                 tempPath = "NEAV1E\\" + fileName + "\\";
                 if (CheckBoxCustomTempPath.IsChecked == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); }
@@ -1796,12 +1815,14 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxTrimming_Unchecked(object sender, RoutedEventArgs e)
         {
+            trimButtons = false;
             ImagePreviewTrimStart.Source = null;
             ImagePreviewTrimEnd.Source = null;
         }
 
         private void CheckBoxTrimming_Checked(object sender, RoutedEventArgs e)
         {
+            trimButtons = true;
             try { setVideoLengthTrimmed(); }
             catch { }
             if (CheckBoxCheckFrameCount.IsChecked == true) { CheckBoxCheckFrameCount.IsChecked = false; MessageBoxes.MessageCountNotAvailableWhenTrimming(); }
