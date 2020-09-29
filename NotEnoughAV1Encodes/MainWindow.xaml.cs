@@ -1017,7 +1017,7 @@ namespace NotEnoughAV1Encodes
             //Splits the output from ffprobe
             var result = subs.Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
 
-            tempPath = "NEAV1E\\" + fileName + "\\TempSubtitle\\";
+            tempPath = "NEAV1E\\" + fileName + "\\Subitles\\";
             if (CheckBoxCustomTempPath.IsChecked == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); }
             else { tempPath = Path.Combine(Path.GetTempPath(), tempPath); }
             SmallFunctions.checkCreateFolder(tempPath);
