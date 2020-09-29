@@ -2659,7 +2659,7 @@ namespace NotEnoughAV1Encodes
                                     if (SmallFunctions.Cancel.CancelAll == false) 
                                     { 
                                         SmallFunctions.WriteToFileThreadSafe(items, Path.Combine(tempPath, "encoded.log"));
-                                        if (deleteTempFilesDynamically) {
+                                        if (deleteTempFilesDynamically && skipChunking == false) {
                                             try { File.Delete(Path.Combine(tempPath, "Chunks", items)); } catch { }
                                         }
                                     }
@@ -2758,7 +2758,7 @@ namespace NotEnoughAV1Encodes
                                     {
                                         SmallFunctions.WriteToFileThreadSafe(items, Path.Combine(tempPath, "encoded.log"));
 
-                                        if (deleteTempFilesDynamically)
+                                        if (deleteTempFilesDynamically && skipChunking == false)
                                         {
                                             try { File.Delete(Path.Combine(tempPath, "Chunks", items)); } catch { }
                                         }
