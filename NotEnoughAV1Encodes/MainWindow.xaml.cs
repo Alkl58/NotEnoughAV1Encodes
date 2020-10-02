@@ -469,7 +469,7 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.Logging("Parameters aomenc: " + allSettingsAom);
             if (CheckBoxCommentHeaderSettings.IsChecked == true)
             {
-                encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: aomenc " + allSettingsAom + '\u0022' + " ";
+                encoderMetadata = " --track-name 0:" + '\u0022' + "NotEnoughAV1Encodes - Encoder: aomenc " + allSettingsAom + '\u0022' + " ";
             }
             else { encoderMetadata = ""; }
             if (CheckBoxRealtimeMode.IsChecked == true) { allSettingsAom += " --rt "; }
@@ -521,7 +521,7 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.Logging("Parameters libaom: " + allSettingsAom);
             if (CheckBoxCommentHeaderSettings.IsChecked == true)
             {
-                encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: libaom " + allSettingsAom + '\u0022' + " ";
+                encoderMetadata = " --track-name 0:" + '\u0022' + "NotEnoughAV1Encodes - Encoder: libaom " + allSettingsAom + '\u0022' + " ";
             }
             else { encoderMetadata = ""; }    
             if (CheckBoxRealtimeMode.IsChecked == true) { allSettingsAom += " -usage realtime "; }
@@ -572,7 +572,7 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.Logging("Parameters rav1e: " + allSettingsRav1e);
             if (CheckBoxCommentHeaderSettings.IsChecked == true)
             {
-                encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: rav1e " + allSettingsRav1e + '\u0022' + " ";
+                encoderMetadata = " --track-name 0:" + '\u0022' + "NotEnoughAV1Encodes - Encoder: rav1e " + allSettingsRav1e + '\u0022' + " ";
             }
             else { encoderMetadata = ""; }                
         }
@@ -618,7 +618,7 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.Logging("Parameters svt-av1: " + allSettingsSVTAV1);
             if (CheckBoxCommentHeaderSettings.IsChecked == true)
             {
-                encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: SVT-AV1 " + allSettingsSVTAV1 + '\u0022' + " ";
+                encoderMetadata = " --track-name 0:" + '\u0022' + "NotEnoughAV1Encodes - Encoder: SVT-AV1 " + allSettingsSVTAV1 + '\u0022' + " ";
             }
             else { encoderMetadata = ""; }              
         }
@@ -668,7 +668,7 @@ namespace NotEnoughAV1Encodes
             }
             if (CheckBoxCommentHeaderSettings.IsChecked == true)
             {
-                encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: VP9 " + allSettingsVP9 + '\u0022' + " ";
+                encoderMetadata = " --track-name 0:" + '\u0022' + "NotEnoughAV1Encodes - Encoder: VP9 " + allSettingsVP9 + '\u0022' + " ";
             }
             else { encoderMetadata = ""; }                
         }
