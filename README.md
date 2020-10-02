@@ -5,6 +5,7 @@
 It is a tool to make encoding easier and faster for AV1 encoders.
 
 ![alt text](https://i.imgur.com/TjN27T4.png "Happy Spooktober!")
+
 [![Build status](https://ci.appveyor.com/api/projects/status/f3wd2kr5i8eofj88/branch/master?svg=true)](https://ci.appveyor.com/project/Alkl/notenoughav1encodes/branch/master)
 
 ---
