@@ -421,7 +421,6 @@ namespace NotEnoughAV1Encodes
 
         private void SetAomencParameters(bool tempSettings)
         {
-            string aomencQualityMode = "";
             switch (ComboBoxChromaSubsamplingAomenc.SelectedIndex)
             {
                 case 0:
@@ -441,6 +440,7 @@ namespace NotEnoughAV1Encodes
                     break;
                 default: break;
             }
+            string aomencQualityMode;
             if (RadioButtonConstantQuality.IsChecked == true) { aomencQualityMode = "--end-usage=q --cq-level=" + SliderQuality.Value; }
             else { aomencQualityMode = "--end-usage=vbr --target-bitrate=" + TextBoxBitrate.Text; }
             //Basic Settings
@@ -469,7 +469,7 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.Logging("Parameters aomenc: " + allSettingsAom);
             if (CheckBoxCommentHeaderSettings.IsChecked == true)
             {
-                encoderMetadata = " --track-name 0:" + '\u0022' + "NotEnoughAV1Encodes - Encoder: aomenc " + allSettingsAom + '\u0022' + " ";
+                encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: aomenc " + allSettingsAom + '\u0022';
             }
             else { encoderMetadata = ""; }
             if (CheckBoxRealtimeMode.IsChecked == true) { allSettingsAom += " --rt "; }
@@ -477,7 +477,6 @@ namespace NotEnoughAV1Encodes
 
         private void SetLibaomParameters(bool tempSettings)
         {
-            string aomencQualityMode = "";
             switch (ComboBoxColorFormatLibaom.SelectedIndex)
             {
                 case 0:
@@ -497,6 +496,7 @@ namespace NotEnoughAV1Encodes
                     break;
                 default: break;
             }
+            string aomencQualityMode;
             if (RadioButtonConstantQuality.IsChecked == true) { aomencQualityMode = " -crf " + SliderQuality.Value + " -b:v 0"; }
             else { aomencQualityMode = " -b:v " + TextBoxBitrate.Text + "k"; }
             //Basic Settings
@@ -521,7 +521,7 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.Logging("Parameters libaom: " + allSettingsAom);
             if (CheckBoxCommentHeaderSettings.IsChecked == true)
             {
-                encoderMetadata = " --track-name 0:" + '\u0022' + "NotEnoughAV1Encodes - Encoder: libaom " + allSettingsAom + '\u0022' + " ";
+                encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: libaom " + allSettingsAom + '\u0022';
             }
             else { encoderMetadata = ""; }    
             if (CheckBoxRealtimeMode.IsChecked == true) { allSettingsAom += " -usage realtime "; }
@@ -529,7 +529,6 @@ namespace NotEnoughAV1Encodes
 
         private void SetRav1eParameters(bool tempSettings)
         {
-            string rav1eQualityMode = "";
             string rav1eContentLight = "";
             string rav1eMasteringDisplay = "";
             switch (ComboBoxColorFormatRav1e.SelectedIndex)
@@ -551,6 +550,7 @@ namespace NotEnoughAV1Encodes
                     break;
                 default: break;
             }
+            string rav1eQualityMode;
             if (RadioButtonConstantQuality.IsChecked == true) { rav1eQualityMode = "--quantizer " + SliderQuality.Value; }
             else { rav1eQualityMode = "--bitrate " + TextBoxBitrate.Text; }
             //Basic Settings
@@ -572,7 +572,7 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.Logging("Parameters rav1e: " + allSettingsRav1e);
             if (CheckBoxCommentHeaderSettings.IsChecked == true)
             {
-                encoderMetadata = " --track-name 0:" + '\u0022' + "NotEnoughAV1Encodes - Encoder: rav1e " + allSettingsRav1e + '\u0022' + " ";
+                encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: rav1e " + allSettingsRav1e + '\u0022';
             }
             else { encoderMetadata = ""; }                
         }
@@ -618,7 +618,7 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.Logging("Parameters svt-av1: " + allSettingsSVTAV1);
             if (CheckBoxCommentHeaderSettings.IsChecked == true)
             {
-                encoderMetadata = " --track-name 0:" + '\u0022' + "NotEnoughAV1Encodes - Encoder: SVT-AV1 " + allSettingsSVTAV1 + '\u0022' + " ";
+                encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: SVT-AV1 " + allSettingsSVTAV1 + '\u0022';
             }
             else { encoderMetadata = ""; }              
         }
@@ -668,7 +668,7 @@ namespace NotEnoughAV1Encodes
             }
             if (CheckBoxCommentHeaderSettings.IsChecked == true)
             {
-                encoderMetadata = " --track-name 0:" + '\u0022' + "NotEnoughAV1Encodes - Encoder: VP9 " + allSettingsVP9 + '\u0022' + " ";
+                encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: VP9 " + allSettingsVP9 + '\u0022';
             }
             else { encoderMetadata = ""; }                
         }
