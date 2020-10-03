@@ -47,6 +47,7 @@ namespace NotEnoughAV1Encodes
         public static bool skipSplitting = false;
         public static double videoFrameRate;
         public DateTime starttimea;
+        private CancellationTokenSource cancellationTokenSource;
 
         public MainWindow()
         {
@@ -104,6 +105,7 @@ namespace NotEnoughAV1Encodes
 
         private async void MainEntry()
         {
+            cancellationTokenSource = new CancellationTokenSource();
             encodeStarted = true;
             encoder = ComboBoxEncoder.Text;
             if (SmallFunctions.checkDependencies(encoder) && SmallFunctions.Cancel.CancelAll == false)
@@ -114,17 +116,17 @@ namespace NotEnoughAV1Encodes
                 if(CheckBoxCheckFrameCount.IsChecked == true && CheckBoxSplitting.IsChecked == true) {
                     setProgressBarLabel("Calculating Source Frame Count...");
                     await Task.Run(() => SmallFunctions.GetSourceFrameCount(videoInput)); }
-                if (resumeMode == true) { await AsyncClass(); } 
+                if (resumeMode == true) { await AsyncClass(cancellationTokenSource.Token); } 
                 else
                 {
                     saveResumeJob();
-                    if (SmallFunctions.CheckFileFolder()) { await AsyncClass(); }
+                    if (SmallFunctions.CheckFileFolder()) { await AsyncClass(cancellationTokenSource.Token); }
                     else
                     {
                         if (MessageBox.Show("Temp Chunks Folder not Empty! Overwrite existing Data?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                         {
                             SmallFunctions.DeleteChunkFolderContent();
-                            await AsyncClass();
+                            await AsyncClass(cancellationTokenSource.Token);
                         }
                         else { SmallFunctions.Cancel.CancelAll = true; CancelRoutine(); }
                     }
@@ -132,56 +134,60 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private async Task AsyncClass()
+        private async Task AsyncClass(CancellationToken token)
         {
-            if (SmallFunctions.Cancel.CancelAll == false && resumeMode == false)
+            try
             {
-                Console.WriteLine(tempPath);
-                setProgressBarLabel("Started Audio Encoding");
-                await Task.Run(() => EncodeAudio.AudioEncode());
-                if (SmallFunctions.CheckAudioOutput() == false) { MessageNoAudioOutput(); }
-                
-                if (CheckBoxSplitting.IsChecked == true)
+                if (SmallFunctions.Cancel.CancelAll == false && resumeMode == false)
                 {
-                    setProgressBarLabel("Started Video Splitting");
-                    await Task.Run(() => VideoSplitting.SplitVideo(videoInput, chunkLength, reencoder, reencode, beforereencode));
-                    await Task.Run(() => RenameChunks.Rename());
-                    if (CheckBoxCheckFrameCount.IsChecked == true)
-                    {
-                        setProgressBarLabel("Calculating Chunk Frame Count...");
-                        await Task.Run(() => SmallFunctions.GetChunksFrameCount(tempPath));
-                        CompareFrameCount();
-                    }
-                }
-                else
-                {
-                    SmallFunctions.checkCreateFolder(Path.Combine(tempPath, "Chunks"));
-                }
-            }
-            SmallFunctions.CountVideoChunks();
-            setProgressBar(videoChunksCount);
-            setProgressBarLabel("0 / " + videoChunksCount.ToString());
-            setEncoderParameters(false);
-            await Task.Run(() => Encode());
+                    Console.WriteLine(tempPath);
+                    setProgressBarLabel("Started Audio Encoding");
+                    await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeAudio.AudioEncode(); }, token);
+                    if (SmallFunctions.CheckAudioOutput() == false) { MessageNoAudioOutput(); }
 
-            if (SmallFunctions.Cancel.CancelAll == false)
-            {
-                await Task.Run(() => VideoMuxing.Concat());
-                if (SmallFunctions.CheckVideoOutput())
-                {
-                    if (CheckBoxBatchEncoding.IsChecked == false)
+                    if (CheckBoxSplitting.IsChecked == true)
                     {
-                        LabelProgressbar.Dispatcher.Invoke(() => LabelProgressbar.Content = "Encoding completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString("hh\\:mm\\:ss") + " - " + Math.Round(Convert.ToDecimal((((videoLength * videoFrameRate) / (DateTime.Now - starttimea).TotalSeconds))), 2).ToString() + "fps", DispatcherPriority.Background);
-                        buttonActive = true;
-                        ProgressBar.Foreground = Brushes.Green;
-                        ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
+                        setProgressBarLabel("Started Video Splitting");
+                        await Task.Run(() => { token.ThrowIfCancellationRequested(); VideoSplitting.SplitVideo(videoInput, chunkLength, reencoder, reencode, beforereencode); }, token);
+                        await Task.Run(() => { token.ThrowIfCancellationRequested(); RenameChunks.Rename(); }, token);
+                        if (CheckBoxCheckFrameCount.IsChecked == true)
+                        {
+                            setProgressBarLabel("Calculating Chunk Frame Count...");
+                            await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetChunksFrameCount(tempPath); }, token);
+                            CompareFrameCount();
+                        }
                     }
-                    if (deleteTempFiles) { SmallFunctions.DeleteTempFiles(); SmallFunctions.DeleteLogFile(); }
-                    if (CheckBoxFinishedSound.IsChecked == true && CheckBoxBatchEncoding.IsChecked == false) { SmallFunctions.PlayFinishedSound(); }
-                    if (CheckBoxShutdownAfterEncode.IsChecked == true && CheckBoxBatchEncoding.IsChecked == false) { Process.Start("shutdown.exe", "/s /t 0"); }
+                    else
+                    {
+                        SmallFunctions.checkCreateFolder(Path.Combine(tempPath, "Chunks"));
+                    }
                 }
+                SmallFunctions.CountVideoChunks();
+                setProgressBar(videoChunksCount);
+                setProgressBarLabel("0 / " + videoChunksCount.ToString());
+                setEncoderParameters(false);
+                await Task.Run(() => { token.ThrowIfCancellationRequested(); Encode(); }, token);
+
+                if (SmallFunctions.Cancel.CancelAll == false)
+                {
+                    await Task.Run(() => VideoMuxing.Concat());
+                    if (SmallFunctions.CheckVideoOutput())
+                    {
+                        if (CheckBoxBatchEncoding.IsChecked == false)
+                        {
+                            LabelProgressbar.Dispatcher.Invoke(() => LabelProgressbar.Content = "Encoding completed! Elapsed Time: " + (DateTime.Now - starttimea).ToString("hh\\:mm\\:ss") + " - " + Math.Round(Convert.ToDecimal((((videoLength * videoFrameRate) / (DateTime.Now - starttimea).TotalSeconds))), 2).ToString() + "fps", DispatcherPriority.Background);
+                            buttonActive = true;
+                            ProgressBar.Foreground = Brushes.Green;
+                            ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
+                        }
+                        if (deleteTempFiles) { SmallFunctions.DeleteTempFiles(); SmallFunctions.DeleteLogFile(); }
+                        if (CheckBoxFinishedSound.IsChecked == true && CheckBoxBatchEncoding.IsChecked == false) { SmallFunctions.PlayFinishedSound(); }
+                        if (CheckBoxShutdownAfterEncode.IsChecked == true && CheckBoxBatchEncoding.IsChecked == false) { Process.Start("shutdown.exe", "/s /t 0"); }
+                    }
+                }
+                encodeStarted = false;
             }
-            encodeStarted = false;
+            catch (Exception e){ SmallFunctions.Logging(e.Message); }
         }
 
         private async void BatchEncode()
@@ -232,7 +238,7 @@ namespace NotEnoughAV1Encodes
 
                     if (SmallFunctions.Cancel.CancelAll == false)
                     {
-                        await AsyncClass();
+                        await AsyncClass(cancellationTokenSource.Token);
                     }
                 }
             }
@@ -266,7 +272,7 @@ namespace NotEnoughAV1Encodes
 
                     if (SmallFunctions.Cancel.CancelAll == false)
                     {
-                        await AsyncClass();
+                        await AsyncClass(cancellationTokenSource.Token);
                     }
 
                     File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Queue", item.ToString() + ".xml"));
@@ -1624,6 +1630,7 @@ namespace NotEnoughAV1Encodes
         private void ButtonCancelEncode_Click(object sender, RoutedEventArgs e)
         {
             SmallFunctions.Cancel.CancelAll = true;
+            cancellationTokenSource.Cancel();
             SmallFunctions.KillInstances();
             CancelRoutine();
         }
