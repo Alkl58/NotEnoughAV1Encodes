@@ -1902,9 +1902,6 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxBatchEncoding_Checked(object sender, RoutedEventArgs e)
         {
-            //RadioButtonCustomSubtitles.IsChecked = false; 
-            //RadioButtonCustomSubtitles.IsEnabled = false;
-            //RadioButtonStreamCopySubtitles.IsChecked = true;
             CheckBoxSubOneBurn.IsChecked = false;
             CheckBoxSubTwoBurn.IsChecked = false;
             CheckBoxSubThreeBurn.IsChecked = false;
@@ -2612,8 +2609,16 @@ namespace NotEnoughAV1Encodes
                     else 
                     { 
                         SmallFunctions.Logging("Unfinished Job File found but not loaded " + file.Name);
-                        if (MessageBox.Show("Delete Unfinished Job File: " + file.Name + "?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                        { try { File.Delete(file.FullName); } catch { } }
+                        if (MessageBox.Show("Delete Unfinished Job File: " + file.Name + "? \nThis also deletes the temp files.", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        { 
+                            try 
+                            {
+                                File.Delete(file.FullName);
+                                if (CheckBoxCustomTempPath.IsChecked == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, "NEAV1E" ,Path.GetFileNameWithoutExtension(file.Name)); }
+                                else { tempPath = Path.Combine(Path.GetTempPath(), "NEAV1E", Path.GetFileNameWithoutExtension(file.Name)); }
+                                SmallFunctions.DeleteTempFiles();
+                            } catch { } 
+                        }
                     }
                 }
             }

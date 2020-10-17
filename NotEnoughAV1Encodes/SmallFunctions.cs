@@ -300,7 +300,7 @@ namespace NotEnoughAV1Encodes
                 if (Directory.Exists(Path.Combine(MainWindow.tempPath, "AudioEncoded")))
                     Directory.Delete(Path.Combine(MainWindow.tempPath, "AudioEncoded"), true);
             }
-            catch { }
+            catch (IOException ex) { Logging(ex.Message); }
 
         }
         //I don't know why I have two delete temp functions... For now I won't touch
@@ -311,7 +311,7 @@ namespace NotEnoughAV1Encodes
                 DirectoryInfo tmp = new DirectoryInfo(MainWindow.tempPath);
                 tmp.Delete(true);
             }
-            catch (IOException ex) { MessageBox.Show("Could not delete all files: " + ex.Message); }
+            catch (IOException ex) { Logging(ex.Message); }
         }
 
         public static string GetFullPath(string fileName)
