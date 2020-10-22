@@ -45,6 +45,7 @@ namespace NotEnoughAV1Encodes
         public static bool subtitleCopy, subtitleCustom, subtitleHardcoding, subtitleEncoding;
         public static bool customBackground, programStartup = true, logging = true, buttonActive = true, saveSettings, found7z, startupTrim = false, trimButtons = false, encodeStarted;
         public static bool skipSplitting = false;
+        public static bool showTerminalDuringEncode;
         public static double videoFrameRate;
         public DateTime starttimea;
         private CancellationTokenSource cancellationTokenSource;
@@ -298,6 +299,7 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.Logging("Encoder: " + encoder); SmallFunctions.Logging("ReEncoder: " + reencoder);
 
             processPriority = ComboBoxProcessPriority.SelectedIndex;
+            showTerminalDuringEncode = CheckBoxEncodingTerminal.IsChecked == true;
 
             resumeMode = CheckBoxResumeMode.IsChecked == true;
             SmallFunctions.Logging("Resume Mode: " + resumeMode);
@@ -1820,6 +1822,11 @@ namespace NotEnoughAV1Encodes
             SaveSettingsTab();
         }
 
+        private void CheckBoxEncodingTerminal_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
         private void CheckBoxTrimming_Unchecked(object sender, RoutedEventArgs e)
         {
             trimButtons = false;
@@ -2441,6 +2448,7 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("TempPath",           TextBoxCustomTempPath.Text);
                 writer.WriteElementString("FrameCountActive",   CheckBoxCheckFrameCount.IsChecked.ToString());
                 writer.WriteElementString("Splitting",          CheckBoxSplitting.IsChecked.ToString());
+                writer.WriteElementString("Terminal",           CheckBoxEncodingTerminal.IsChecked.ToString());
                 writer.WriteEndElement();
                 writer.Close();
             }
@@ -2470,6 +2478,7 @@ namespace NotEnoughAV1Encodes
                         case "TempPath":            TextBoxCustomTempPath.Text = n.InnerText; break;
                         case "FrameCountActive":    CheckBoxCheckFrameCount.IsChecked = n.InnerText == "True"; break;
                         case "Splitting":           CheckBoxSplitting.IsChecked = n.InnerText == "True"; break;
+                        case "Terminal":            CheckBoxEncodingTerminal.IsChecked = n.InnerText == "True"; break;
                         default: break;
                     }
                 }
@@ -2652,7 +2661,8 @@ namespace NotEnoughAV1Encodes
                                 {
                                     Process process = new Process();
                                     ProcessStartInfo startInfo = new ProcessStartInfo();
-                                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                    if (showTerminalDuringEncode == false)
+                                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                     startInfo.UseShellExecute = true;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = ffmpegPath + "\\";
@@ -2722,7 +2732,8 @@ namespace NotEnoughAV1Encodes
 
                                     if (FileExistFirstPass != true)
                                     {
-                                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                        if (showTerminalDuringEncode == false)
+                                            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                         startInfo.FileName = "cmd.exe";
                                         startInfo.WorkingDirectory = ffmpegPath + "\\";
 
@@ -2757,7 +2768,8 @@ namespace NotEnoughAV1Encodes
                                         if (SmallFunctions.Cancel.CancelAll == false) { SmallFunctions.WriteToFileThreadSafe("", logPath); }
                                     }
 
-                                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                    if (showTerminalDuringEncode == false)
+                                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = ffmpegPath + "\\";
 
