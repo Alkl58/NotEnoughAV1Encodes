@@ -1500,6 +1500,11 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void ComboBoxAomKeyframeFiltering_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ComboBoxAomKeyframeFiltering.SelectedIndex == 2) { MessageBox.Show("Keyframe Filtering 2 is known to not produce video output due to ffmpeg muxing issues. \nAvoid this option for now!", "Keyframe Filtering", MessageBoxButton.OK, MessageBoxImage.Warning); }
+        }
+
         private void ButtonOpenTempFolder_Click(object sender, RoutedEventArgs e)
         {
             //Creates the temp directoy if not existent

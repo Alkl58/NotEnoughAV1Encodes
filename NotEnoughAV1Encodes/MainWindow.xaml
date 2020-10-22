@@ -211,7 +211,7 @@
                         <ComboBoxItem Content="2"/>
                     </ComboBox>
                     <Label Content="Passes:" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,294,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="" HorizontalAlignment="Left" Margin="181,338,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckBoxAdvancedSettings" Content="" HorizontalAlignment="Left" Margin="181,338,0,0" VerticalAlignment="Top" IsChecked="True"/>
                     <Label Content="Advanced Settings:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="65,332,0,0" VerticalAlignment="Top"/>
                     <Button Content="Show Command Line" HorizontalAlignment="Left" Margin="805,338,0,0" VerticalAlignment="Top" Width="129" Height="26" Background="{Binding ElementName=TextBoxChunkLength, Path=Background, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" Click="Button_Click"/>
                     <CheckBox x:Name="CheckBoxRealtimeMode" Content="Real-Time Mode" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="290,236,0,0" VerticalAlignment="Top" Visibility="Collapsed" Checked="CheckBoxRealtimeMode_Checked" />
@@ -1521,7 +1521,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <ComboBox x:Name="ComboBoxAomKeyframeFiltering" HorizontalAlignment="Left" Margin="698,45,0,0" VerticalAlignment="Top" Width="56" Height="26" SelectedIndex="1">
+                    <ComboBox x:Name="ComboBoxAomKeyframeFiltering" HorizontalAlignment="Left" Margin="698,45,0,0" VerticalAlignment="Top" Width="56" Height="26" SelectedIndex="1" SelectionChanged="ComboBoxAomKeyframeFiltering_SelectionChanged">
                         <ComboBox.ToolTip>
                             <TextBlock>
                 Apply temporal filtering on key frame(0: no filter, 1: filter without overlay (default),2: filter with overlay)<LineBreak/>aomenc versions after 2020.08.26 have fixed a major bug which produces cursed keyframes.<LineBreak/>Subjectively for me 0 looks better for animation/anime.<LineBreak/>Selecting 2 might result in no muxing.
@@ -1828,7 +1828,7 @@
                         <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="img/paypal.png"/>
                     </Button>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="598,14,0,0" VerticalAlignment="Top" FontSize="14" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="657,16,0,0" TextWrapping="Wrap" Text="1.3 - 1.0.170" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <TextBox x:Name="TextBoxProgramVersion" HorizontalAlignment="Left" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="657,16,0,0" TextWrapping="Wrap" Text="1.3 - 1.0.171" VerticalAlignment="Top" Width="237" IsReadOnly="True" FontSize="14" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}"/>
                     <Label Content="Github:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="608,40,0,0" VerticalAlignment="Top"/>
                     <TextBlock HorizontalAlignment="Left" Margin="661,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="272">
             <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
