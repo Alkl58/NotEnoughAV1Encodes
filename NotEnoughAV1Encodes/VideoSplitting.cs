@@ -24,6 +24,9 @@ namespace NotEnoughAV1Encodes
                 ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.tempPath + "\\temp_prereencode.mkv" + '\u0022' + " -c:v " + reencodeCodec + " -f segment -segment_time " + chunkLength + " -map_metadata -1 -an " + '\u0022' + MainWindow.tempPath + "\\Chunks\\out%0d.mkv" + '\u0022';
                 SmallFunctions.Logging("VideoSplitting() ReencodeCommand: " + ffmpegCommand);
                 SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
+                MainWindow.cropCommand = "";
+                MainWindow.deinterlaceCommand = "";
+                MainWindow.videoResize = "";
             }
             else if(reencode && beforereencode == false)
             {
@@ -31,6 +34,9 @@ namespace NotEnoughAV1Encodes
                 ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + videoInput + '\u0022' + " " + MainWindow.subtitleFfmpegCommand + " " + MainWindow.ffmpegFramerateSplitting + " " + MainWindow.trimCommand + MainWindow.deinterlaceCommand + MainWindow.cropCommand + " -map_metadata -1 -c:v " + reencodeCodec + " -f segment -segment_time " + chunkLength + " -an " + '\u0022' + MainWindow.tempPath + "\\Chunks\\out%0d.mkv" + '\u0022';
                 SmallFunctions.Logging("VideoSplitting() ReencodeCommand: " + ffmpegCommand);
                 SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
+                MainWindow.cropCommand = "";
+                MainWindow.deinterlaceCommand = "";
+                MainWindow.videoResize = "";
             }
             else if(reencode == false && beforereencode)
             {
@@ -41,6 +47,9 @@ namespace NotEnoughAV1Encodes
                 ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.tempPath + "\\temp_prereencode.mkv" + '\u0022' + " -map_metadata -1 -vcodec copy -f segment -segment_time " + chunkLength + " -an " + '\u0022' + MainWindow.tempPath + "\\Chunks\\out%0d.mkv" + '\u0022';
                 SmallFunctions.Logging("VideoSplitting() ReencodeCommand: " + ffmpegCommand);
                 SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
+                MainWindow.cropCommand = "";
+                MainWindow.deinterlaceCommand = "";
+                MainWindow.videoResize = "";
             }
             else if(reencode == false && beforereencode == false)
             {

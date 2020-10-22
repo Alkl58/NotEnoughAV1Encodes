@@ -348,7 +348,8 @@ namespace NotEnoughAV1Encodes
         private void setFilters()
         {
             string widthNew = (int.Parse(TextBoxCropRight.Text) + int.Parse(TextBoxCropLeft.Text)).ToString();
-            string hieghtNew = (int.Parse(TextBoxCropTop.Text) + int.Parse(TextBoxCropBottom.Text)).ToString();
+            string heightNew = (int.Parse(TextBoxCropTop.Text) + int.Parse(TextBoxCropBottom.Text)).ToString();
+
             if (CheckBoxResize.IsChecked == true) 
             { 
                 videoResize = "-vf scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + " -sws_flags " + ComboBoxResizeFilters.Text; 
@@ -361,8 +362,9 @@ namespace NotEnoughAV1Encodes
 
             if (CheckBoxCrop.IsChecked == true)
             {
-                cropCommand = " -vf crop=iw-" + widthNew + ":ih-" + hieghtNew + ":" + TextBoxCropLeft.Text + ":" + TextBoxCropTop.Text;
+                cropCommand = " -vf crop=iw-" + widthNew + ":ih-" + heightNew + ":" + TextBoxCropLeft.Text + ":" + TextBoxCropTop.Text;
             } else { cropCommand = ""; }
+
 
             if (CheckBoxDeinterlaceYadif.IsChecked == true && CheckBoxResize.IsChecked == true && CheckBoxCrop.IsChecked == false)
             {
@@ -372,19 +374,19 @@ namespace NotEnoughAV1Encodes
 
             if (CheckBoxDeinterlaceYadif.IsChecked == true && CheckBoxResize.IsChecked == true && CheckBoxCrop.IsChecked == true)
             {
-                deinterlaceCommand = " -vf " + '\u0022' + "scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + "," + ComboBoxDeinterlace.Text + ",crop=iw-" + widthNew + ":ih-" + hieghtNew + ":" + TextBoxCropLeft.Text + ":" + TextBoxCropTop.Text + '\u0022' + " -sws_flags " + ComboBoxResizeFilters.Text;
+                deinterlaceCommand = " -vf " + '\u0022' + "scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + "," + ComboBoxDeinterlace.Text + ",crop=iw-" + widthNew + ":ih-" + heightNew + ":" + TextBoxCropLeft.Text + ":" + TextBoxCropTop.Text + '\u0022' + " -sws_flags " + ComboBoxResizeFilters.Text;
                 videoResize = ""; cropCommand = "";
             }
 
             if (CheckBoxDeinterlaceYadif.IsChecked == false && CheckBoxResize.IsChecked == true && CheckBoxCrop.IsChecked == true)
             {
-                deinterlaceCommand = " -vf " + '\u0022' + "scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + ",crop=iw-" + widthNew + ":ih-" + hieghtNew + ":" + TextBoxCropLeft.Text + ":" + TextBoxCropTop.Text + '\u0022' + " -sws_flags " + ComboBoxResizeFilters.Text;
+                deinterlaceCommand = " -vf " + '\u0022' + "scale=" + TextBoxImageWidth.Text + ":" + TextBoxImageHeight.Text + ",crop=iw-" + widthNew + ":ih-" + heightNew + ":" + TextBoxCropLeft.Text + ":" + TextBoxCropTop.Text + '\u0022' + " -sws_flags " + ComboBoxResizeFilters.Text;
                 videoResize = ""; cropCommand = "";
             }
 
             if (CheckBoxDeinterlaceYadif.IsChecked == true && CheckBoxResize.IsChecked == false && CheckBoxCrop.IsChecked == true)
             {
-                deinterlaceCommand = " -vf " + '\u0022' + ComboBoxDeinterlace.Text + ",crop=iw-" + widthNew + ":ih-" + hieghtNew + ":" + TextBoxCropLeft.Text + ":" + TextBoxCropTop.Text + '\u0022';
+                deinterlaceCommand = " -vf " + '\u0022' + ComboBoxDeinterlace.Text + ",crop=iw-" + widthNew + ":ih-" + heightNew + ":" + TextBoxCropLeft.Text + ":" + TextBoxCropTop.Text + '\u0022';
                 videoResize = ""; cropCommand = "";
             }
         }
@@ -2684,19 +2686,19 @@ namespace NotEnoughAV1Encodes
                                     switch (encoder)
                                     {
                                         case "aomenc":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(aomencPath, "aomenc.exe") + '\u0022' + " - --passes=1 " + allSettingsAom + " --output=" + '\u0022' + outputPath + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(aomencPath, "aomenc.exe") + '\u0022' + " - --passes=1 " + allSettingsAom + " --output=" + '\u0022' + outputPath + '\u0022';
                                             break;
                                         case "rav1e":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(rav1ePath, "rav1e.exe") + '\u0022' + " - " + allSettingsRav1e + " --output " + '\u0022' + outputPath + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(rav1ePath, "rav1e.exe") + '\u0022' + " - " + allSettingsRav1e + " --output " + '\u0022' + outputPath + '\u0022';
                                             break;
                                         case "libaom":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " " + '\u0022' + outputPath + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " " + '\u0022' + outputPath + '\u0022';
                                             break;
                                         case "svt-av1":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " --passes 1 -b " + '\u0022' + outputPath + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " --passes 1 -b " + '\u0022' + outputPath + '\u0022';
                                             break;
                                         case "libvpx-vp9":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -c:v libvpx-vp9 " + allSettingsVP9 + " " + '\u0022' + outputPath + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -c:v libvpx-vp9 " + allSettingsVP9 + " " + '\u0022' + outputPath + '\u0022';
                                             break;
                                         default:
                                             break;
@@ -2749,19 +2751,19 @@ namespace NotEnoughAV1Encodes
                                         switch (encoder)
                                         {
                                             case "aomenc":
-                                                startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(aomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=1 --fpf=" + '\u0022' + outputPathStats + '\u0022' + " " + allSettingsAom + " --output=NUL";
+                                                startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(aomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=1 --fpf=" + '\u0022' + outputPathStats + '\u0022' + " " + allSettingsAom + " --output=NUL";
                                                 break;
                                             //case "rav1e": !!! RAV1E TWO PASS IS STILL BROKEN !!!
                                                 //startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + rav1ePath + '\u0022' + " - " + allSettingsRav1e + " --first-pass " + '\u0022' + tempPath + "\\Chunks\\" + items + "_stats.log" + '\u0022';
                                                 //break;
                                             case "libaom":
-                                                startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 1 -passlogfile " + '\u0022' + outputPathStats + '\u0022' + " -f matroska NUL";
+                                                startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 1 -passlogfile " + '\u0022' + outputPathStats + '\u0022' + " -f matroska NUL";
                                                 break;
                                             case "svt-av1":
-                                                startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b NUL --pass 1 --irefresh-type 2 --stats " + '\u0022' + outputPathStats + '\u0022';
+                                                startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b NUL --pass 1 --irefresh-type 2 --stats " + '\u0022' + outputPathStats + '\u0022';
                                                 break;
                                             case "libvpx-vp9":
-                                                startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -c:v libvpx-vp9 " + allSettingsVP9 + " -pass 1 -passlogfile " + '\u0022' + outputPathStats + '\u0022' + " -f matroska NUL";
+                                                startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -c:v libvpx-vp9 " + allSettingsVP9 + " -pass 1 -passlogfile " + '\u0022' + outputPathStats + '\u0022' + " -f matroska NUL";
                                                 break;
                                             default:
                                                 break;
@@ -2785,19 +2787,19 @@ namespace NotEnoughAV1Encodes
                                     switch (encoder)
                                     {
                                         case "aomenc":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(aomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + outputPathStats + '\u0022' + " " + allSettingsAom + " --output=" + '\u0022' + outputPath + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(aomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=2 --fpf=" + '\u0022' + outputPathStats + '\u0022' + " " + allSettingsAom + " --output=" + '\u0022' + outputPath + '\u0022';
                                             break;
                                         //case "rav1e": !!! RAV1E TWO PASS IS STILL BROKEN !!!
                                         //startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + tempPath + "\\Chunks\\" + items + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + rav1ePath + '\u0022' + " - " + allSettingsRav1e + " --second-pass " + '\u0022' + tempPath + "\\Chunks\\" + items + "_stats.log" + '\u0022' + " --output " + '\u0022' + tempPath + "\\Chunks\\" + items + "-av1.ivf" + '\u0022';
                                         //break;
                                         case "libaom":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 2 -passlogfile " + '\u0022' + outputPathStats + '\u0022' + " " + '\u0022' + outputPath + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -strict experimental -c:v libaom-av1 " + allSettingsAom + " -pass 2 -passlogfile " + '\u0022' + outputPathStats + '\u0022' + " " + '\u0022' + outputPath + '\u0022';
                                             break;
                                         case "svt-av1":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b " + '\u0022' + outputPath + '\u0022'+ " --pass 2 --irefresh-type 2 --stats " + '\u0022' + outputPathStats + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -nostdin -vsync 0 -f yuv4mpegpipe - | " + '\u0022' + Path.Combine(svtav1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + allSettingsSVTAV1 + " -b " + '\u0022' + outputPath + '\u0022'+ " --pass 2 --irefresh-type 2 --stats " + '\u0022' + outputPathStats + '\u0022';
                                             break;
                                         case "libvpx-vp9":
-                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + " -pix_fmt " + pipeBitDepth + " -c:v libvpx-vp9 " + allSettingsVP9 + " -pass 2 -passlogfile " + '\u0022' + outputPathStats + '\u0022' + " " + '\u0022' + outputPath + '\u0022';
+                                            startInfo.Arguments = "/C ffmpeg.exe -i " + '\u0022' + inputPath + '\u0022' + " " + videoResize + deinterlaceCommand + cropCommand + " -pix_fmt " + pipeBitDepth + " -c:v libvpx-vp9 " + allSettingsVP9 + " -pass 2 -passlogfile " + '\u0022' + outputPathStats + '\u0022' + " " + '\u0022' + outputPath + '\u0022';
                                             break;
                                         default:
                                             break;
