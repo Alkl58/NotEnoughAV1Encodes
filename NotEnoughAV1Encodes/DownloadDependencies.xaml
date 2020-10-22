@@ -12,9 +12,9 @@
         <Button x:Name="ButtonUpdateSVT" Content="Update SVT-AV1" HorizontalAlignment="Left" Margin="13,113,0,0" VerticalAlignment="Top" Width="108" Height="28" Background="White" Click="ButtonUpdateSVT_Click"/>
         <Button x:Name="ButtonUpdateFfmpeg" Content="Update ffmpeg" HorizontalAlignment="Left" Margin="13,146,0,0" VerticalAlignment="Top" Width="108" Height="28" Background="White" Click="ButtonUpdateFfmpeg_Click"/>
         <ProgressBar x:Name="ProgressBarDownload" HorizontalAlignment="Left" Height="29" Margin="10,181,0,0" VerticalAlignment="Top" Width="431"/>
-        <ComboBox x:Name="ComboBoxUpdateSource" HorizontalAlignment="Left" Margin="292,10,0,0" VerticalAlignment="Top" Width="149" SelectionChanged="ComboBoxUpdateSource_SelectionChanged" Height="25">
-            <ComboBoxItem Content="AppVeyor (Public)" IsSelected="True"/>
-            <ComboBoxItem Content="jeremylee.sh (inofficial)"/>
+        <ComboBox x:Name="ComboBoxUpdateSource" HorizontalAlignment="Left" Margin="268,10,0,0" VerticalAlignment="Top" Width="173" SelectionChanged="ComboBoxUpdateSource_SelectionChanged" Height="25">
+            <ComboBoxItem Content="AppVeyor / Github (official)" IsSelected="True"/>
+            <ComboBoxItem Content="jeremylee.sh (unofficial)"/>
         </ComboBox>
         <Label x:Name="LabelCurrentVersionAomenc" Content="Current Version:" HorizontalAlignment="Left" Margin="126,49,0,0" VerticalAlignment="Top"/>
         <Label x:Name="LabelCurrentVersionRav1e" Content="Current Version:" HorizontalAlignment="Left" Margin="126,80,0,0" VerticalAlignment="Top"/>
@@ -24,7 +24,7 @@
         <Label x:Name="LabelUpdateRav1e" Content="Update Version:" HorizontalAlignment="Left" Margin="288,80,0,0" VerticalAlignment="Top"/>
         <Label x:Name="LabelUpdateSvtav1" Content="Update Version:" HorizontalAlignment="Left" Margin="288,113,0,0" VerticalAlignment="Top"/>
         <Label x:Name="LabelUpdateFfmpeg" Content="Update Version:" HorizontalAlignment="Left" Margin="288,146,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelSource" Content="Source:" HorizontalAlignment="Left" Margin="239,10,0,0" VerticalAlignment="Top" Height="25"/>
+        <Label x:Name="LabelSource" Content="Source:" HorizontalAlignment="Left" Margin="219,8,0,0" VerticalAlignment="Top" Height="25"/>
 
     </Grid>
 </Window>
