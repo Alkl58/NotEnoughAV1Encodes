@@ -402,7 +402,7 @@ namespace NotEnoughAV1Encodes
                     TimeSpan result = end - start;
                     videoLength = Convert.ToInt16(result.TotalSeconds);
                     if (CheckBoxCustomTempPath != null && inputSet){ setImagePreview(); }                    
-                    if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (videoLength / int.Parse(ComboBoxWorkers.Text)).ToString(); }
+                    if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = ((videoLength / int.Parse(ComboBoxWorkers.Text)) + 2).ToString(); }
                 }
                 else
                 {
@@ -875,7 +875,16 @@ namespace NotEnoughAV1Encodes
 
         private void setChunkLength()
         {
-            if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { TextBoxChunkLength.Text = (int.Parse(ffprobe.GetVideoLength(videoInput)) / int.Parse(ComboBoxWorkers.Text)).ToString(); }
+            if (CheckBoxChunkLengthAutoCalculation.IsChecked == true) { 
+                if ((int.Parse(ffprobe.GetVideoLength(videoInput)) / int.Parse(ComboBoxWorkers.Text)) == 0)
+                {
+                    TextBoxChunkLength.Text = "2";
+                }
+                else 
+                {
+                    TextBoxChunkLength.Text = ((int.Parse(ffprobe.GetVideoLength(videoInput)) / int.Parse(ComboBoxWorkers.Text)) + 1).ToString();
+                }
+            }
             TextBoxTrimEnd.Text = ffprobe.GetVideoLengthAccurate(videoInput);
             trimEndTemp = TextBoxTrimEnd.Text;
             trimEndTempMax = TextBoxTrimEnd.Text;
