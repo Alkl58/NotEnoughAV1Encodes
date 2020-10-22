@@ -18,6 +18,7 @@ namespace NotEnoughAV1Encodes
         public static string aomVersionUpdateJeremy, rav1eVersionUpdateJeremy, svtav1VersionUpdateJeremy, ffmpegVersionUpdateJeremy;
         public static string aomVersionCurrent, rav1eVersionCurrent, svtav1VersionCurrent, ffmpegVersionCurrent;
         public static string currentDir = Directory.GetCurrentDirectory();
+        public static string gyanDevffmpegName; //Because of the annoying subfolder structure it needs the complete git build name
         bool startup = true;
 
         private void ComboBoxUpdateSource_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -66,6 +67,7 @@ namespace NotEnoughAV1Encodes
             ParseHTMLJeremylee();
             ParseRav1eGithub();
             ParseSVTAV1Github();
+            ParseFFMPEGGyanDev();
             getLocalVersion();
             setVersionLabels();
             CompareVersion();            
@@ -138,18 +140,20 @@ namespace NotEnoughAV1Encodes
                 LabelCurrentVersionRav1e.Content = "Current Version: " + rav1eVersionCurrent;
                 LabelCurrentVersionSVT.Content = "Current Version: " + svtav1VersionCurrent;
                 LabelCurrentVersionffmpeg.Content = "Current Version: " + ffmpegVersionCurrent;
-                LabelUpdateFfmpeg.Content = "Update Version: " + ffmpegVersionUpdateJeremy;
+                
                 if (ComboBoxUpdateSource.SelectedIndex == 0)
                 {
                     LabelUpdateAomenc.Content = "Update Version: " + aomVersionUpdate;
                     LabelUpdateRav1e.Content = "Update Version: " + rav1eVersionUpdate;
                     LabelUpdateSvtav1.Content = "Update Version: " + svtav1VersionUpdate;
+                    LabelUpdateFfmpeg.Content = "Update Version: " + ffmpegVersionUpdate;
                 }
                 else
                 {
                     LabelUpdateAomenc.Content = "Update Version: " + aomVersionUpdateJeremy;
                     LabelUpdateRav1e.Content = "Update Version: " + rav1eVersionUpdateJeremy;
                     LabelUpdateSvtav1.Content = "Update Version: " + svtav1VersionUpdateJeremy;
+                    LabelUpdateFfmpeg.Content = "Update Version: " + ffmpegVersionUpdateJeremy;
                 }
             }
         }
@@ -166,6 +170,8 @@ namespace NotEnoughAV1Encodes
                     else { LabelCurrentVersionRav1e.Foreground = Brushes.Green; }
                     if (ParseDate(svtav1VersionUpdate) > ParseDate(svtav1VersionCurrent)) { LabelCurrentVersionSVT.Foreground = Brushes.Red; LabelUpdateSvtav1.Foreground = Brushes.Green; }
                     else { LabelCurrentVersionSVT.Foreground = Brushes.Green; }
+                    if (ParseDate(ffmpegVersionUpdate) > ParseDate(ffmpegVersionCurrent)) { LabelCurrentVersionffmpeg.Foreground = Brushes.Red; LabelUpdateFfmpeg.Foreground = Brushes.Green; }
+                    else { LabelCurrentVersionffmpeg.Foreground = Brushes.Green; }
                 }
                 else
                 {
@@ -175,9 +181,10 @@ namespace NotEnoughAV1Encodes
                     else { LabelCurrentVersionRav1e.Foreground = Brushes.Green; }
                     if (ParseDate(svtav1VersionUpdateJeremy) > ParseDate(svtav1VersionCurrent)) { LabelCurrentVersionSVT.Foreground = Brushes.Red; LabelUpdateSvtav1.Foreground = Brushes.Green; }
                     else { LabelCurrentVersionSVT.Foreground = Brushes.Green; }
+                    if (ParseDate(ffmpegVersionUpdateJeremy) > ParseDate(ffmpegVersionCurrent)) { LabelCurrentVersionffmpeg.Foreground = Brushes.Red; LabelUpdateFfmpeg.Foreground = Brushes.Green; }
+                    else { LabelCurrentVersionffmpeg.Foreground = Brushes.Green; }
                 }
-                if (ParseDate(ffmpegVersionUpdateJeremy) > ParseDate(ffmpegVersionCurrent)) { LabelCurrentVersionffmpeg.Foreground = Brushes.Red; LabelUpdateFfmpeg.Foreground = Brushes.Green; }
-                else { LabelCurrentVersionffmpeg.Foreground = Brushes.Green; }
+                
             }
         }
 
@@ -338,21 +345,37 @@ namespace NotEnoughAV1Encodes
             SmallFunctions.checkCreateFolder(Path.Combine(currentDir, "Apps", "ffmpeg"));
             ProgressBarDownload.IsIndeterminate = true;
 
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/ffmpeg.7z", Path.Combine(currentDir, "Apps", "ffmpeg.7z")));
-            ExtractFile(Path.Combine(currentDir, "Apps", "ffmpeg.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"));
+            if (ComboBoxUpdateSource.SelectedIndex == 0)
+            {
+                await Task.Run(() => DownloadBin("https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z", Path.Combine(currentDir, "Apps", "ffmpeg.7z")));
+                ExtractFile(Path.Combine(currentDir, "Apps", "ffmpeg.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"));
+                File.Move(Path.Combine(currentDir, "Apps", "ffmpeg", gyanDevffmpegName, "bin", "ffmpeg.exe"), Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe"));
+                File.Move(Path.Combine(currentDir, "Apps", "ffmpeg", gyanDevffmpegName, "bin", "ffprobe.exe"), Path.Combine(currentDir, "Apps", "ffmpeg", "ffprobe.exe"));
+                if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe")))
+                {
+                    if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt")))
+                        File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"));
+                    File.WriteAllText(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"), ffmpegVersionUpdate);
+                    Directory.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", gyanDevffmpegName), true);
+                }
+            }
+            else
+            {
+                await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/ffmpeg.7z", Path.Combine(currentDir, "Apps", "ffmpeg.7z")));
+                ExtractFile(Path.Combine(currentDir, "Apps", "ffmpeg.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"));
+                await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/ffprobe.7z", Path.Combine(currentDir, "Apps", "ffprobe.7z")));
+                ExtractFile(Path.Combine(currentDir, "Apps", "ffprobe.7z"), Path.Combine(currentDir, "Apps", "ffmpeg"));
+                if (File.Exists(Path.Combine(currentDir, "Apps", "ffprobe.7z")))
+                    File.Delete(Path.Combine(currentDir, "Apps", "ffprobe.7z"));
+                if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe")))
+                {
+                    if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt")))
+                        File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"));
+                    File.WriteAllText(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"), ffmpegVersionUpdateJeremy);
+                }
+            }
             if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg.7z")))
                 File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg.7z"));
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/ffprobe.7z", Path.Combine(currentDir, "Apps", "ffprobe.7z")));
-            ExtractFile(Path.Combine(currentDir, "Apps", "ffprobe.7z"), Path.Combine(currentDir, "Apps", "ffmpeg"));
-            if (File.Exists(Path.Combine(currentDir, "Apps", "ffprobe.7z")))
-                File.Delete(Path.Combine(currentDir, "Apps", "ffprobe.7z"));
-            if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.exe")))
-            {
-                if (File.Exists(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt")))
-                    File.Delete(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"));
-                File.WriteAllText(Path.Combine(currentDir, "Apps", "ffmpeg", "ffmpeg.txt"), ffmpegVersionUpdateJeremy);
-            }
-
             ProgressBarDownload.IsIndeterminate = false;
             getLocalVersion();
             setVersionLabels();
@@ -399,10 +422,10 @@ namespace NotEnoughAV1Encodes
                 HtmlDocument doc = web.Load("https://jeremylee.sh/bin.html");
 
                 //Full XPATH Node selection - will break if owner of website rearrange stuff
-                var nodeffmpeg = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[1]");
-                var nodeAom = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[14]");
-                var nodeRav1e = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[19]");
-                var nodeSvtav1 = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[30]");
+                var nodeffmpeg = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[2]");
+                var nodeAom = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[33]");
+                var nodeRav1e = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[45]");
+                var nodeSvtav1 = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[71]");
 
                 string ffmpegVersion = nodeffmpeg.InnerHtml;
                 ffmpegVersion = ffmpegVersion.Replace("-", ".");
@@ -456,6 +479,16 @@ namespace NotEnoughAV1Encodes
             }
             catch (Exception ex) { SmallFunctions.Logging(ex.Message); }
 
+        }
+
+        private void ParseFFMPEGGyanDev()
+        {
+            //Parses the version info from GyanDev
+            WebClient wc = new WebClient();
+            byte[] raw = wc.DownloadData("https://www.gyan.dev/ffmpeg/builds/git-version");
+            string GyanDev = System.Text.Encoding.UTF8.GetString(raw);
+            ffmpegVersionUpdate = GyanDev.Replace("-", ".").Remove(GyanDev.Length - 15); // Some basic formatting
+            gyanDevffmpegName = "ffmpeg-" + GyanDev + "-full_build"; //For later correct exe extracting the complete name of the folder is needed
         }
     }
 }
