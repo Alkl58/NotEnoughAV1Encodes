@@ -473,7 +473,7 @@ namespace NotEnoughAV1Encodes
                 }
             }
             SmallFunctions.Logging("Parameters aomenc: " + allSettingsAom);
-            if (CheckBoxCommentHeaderSettings.IsChecked == true)
+            if (CheckBoxCommentHeaderSettings.IsChecked == true && CheckBoxAdvancedSettings.IsChecked == true)
             {
                 encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: aomenc " + allSettingsAom + '\u0022';
             }
@@ -525,7 +525,7 @@ namespace NotEnoughAV1Encodes
                 }
             }
             SmallFunctions.Logging("Parameters libaom: " + allSettingsAom);
-            if (CheckBoxCommentHeaderSettings.IsChecked == true)
+            if (CheckBoxCommentHeaderSettings.IsChecked == true && CheckBoxAdvancedSettings.IsChecked == true)
             {
                 encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: libaom " + allSettingsAom + '\u0022';
             }
@@ -576,7 +576,7 @@ namespace NotEnoughAV1Encodes
                 allSettingsRav1e = TextBoxAdvancedSettings.Text;
             }
             SmallFunctions.Logging("Parameters rav1e: " + allSettingsRav1e);
-            if (CheckBoxCommentHeaderSettings.IsChecked == true)
+            if (CheckBoxCommentHeaderSettings.IsChecked == true && CheckBoxAdvancedSettings.IsChecked == true)
             {
                 encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: rav1e " + allSettingsRav1e + '\u0022';
             }
@@ -622,7 +622,7 @@ namespace NotEnoughAV1Encodes
                 allSettingsSVTAV1 = TextBoxAdvancedSettings.Text;
             }
             SmallFunctions.Logging("Parameters svt-av1: " + allSettingsSVTAV1);
-            if (CheckBoxCommentHeaderSettings.IsChecked == true)
+            if (CheckBoxCommentHeaderSettings.IsChecked == true && CheckBoxAdvancedSettings.IsChecked == true)
             {
                 encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: SVT-AV1 " + allSettingsSVTAV1 + '\u0022';
             }
@@ -672,7 +672,7 @@ namespace NotEnoughAV1Encodes
                     allSettingsVP9 = TextBoxAdvancedSettings.Text;
                 }
             }
-            if (CheckBoxCommentHeaderSettings.IsChecked == true)
+            if (CheckBoxCommentHeaderSettings.IsChecked == true && CheckBoxAdvancedSettings.IsChecked == true)
             {
                 encoderMetadata = " -metadata description=" + '\u0022' + "NotEnoughAV1Encodes - Encoder: VP9 " + allSettingsVP9 + '\u0022';
             }
