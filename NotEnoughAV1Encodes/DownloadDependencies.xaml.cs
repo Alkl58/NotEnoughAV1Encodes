@@ -1,4 +1,4 @@
-﻿using HtmlAgilityPack;
+﻿using Newtonsoft.Json;
 using Octokit;
 using System;
 using System.Diagnostics;
@@ -64,7 +64,7 @@ namespace NotEnoughAV1Encodes
 
             DownloadUpdateXML();
             ParseUpdateXML();
-            ParseHTMLJeremylee();
+            ParseJeremyleeJSON();
             ParseRav1eGithub();
             ParseSVTAV1Github();
             ParseFFMPEGGyanDev();
@@ -414,38 +414,6 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void ParseHTMLJeremylee()
-        {
-            try
-            {
-                HtmlWeb web = new HtmlWeb();
-                HtmlDocument doc = web.Load("https://jeremylee.sh/bin.html");
-
-                //Full XPATH Node selection - will break if owner of website rearrange stuff
-                var nodeffmpeg = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[2]");
-                var nodeAom = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[33]");
-                var nodeRav1e = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[45]");
-                var nodeSvtav1 = doc.DocumentNode.SelectSingleNode("/html/body/fieldset/pre[1]/span[71]");
-
-                string ffmpegVersion = nodeffmpeg.InnerHtml;
-                ffmpegVersion = ffmpegVersion.Replace("-", ".");
-                ffmpegVersionUpdateJeremy = ffmpegVersion.Split(' ')[0];
-
-                string aomencVersion = nodeAom.InnerHtml;
-                aomencVersion = aomencVersion.Replace("-", ".");
-                aomVersionUpdateJeremy = aomencVersion.Split(' ')[0];
-
-                string rav1eVersion = nodeRav1e.InnerHtml;
-                rav1eVersion = rav1eVersion.Replace("-", ".");
-                rav1eVersionUpdateJeremy = rav1eVersion.Split(' ')[0];
-
-                string svtav1Version = nodeSvtav1.InnerHtml;
-                svtav1Version = svtav1Version.Replace("-", ".");
-                svtav1VersionUpdateJeremy = svtav1Version.Split(' ')[0];
-            }
-            catch (Exception ex) { SmallFunctions.Logging(ex.Message); }
-        }
-
         private void ParseRav1eGithub()
         {
             try
@@ -489,6 +457,27 @@ namespace NotEnoughAV1Encodes
             string GyanDev = System.Text.Encoding.UTF8.GetString(raw);
             ffmpegVersionUpdate = GyanDev.Replace("-", ".").Remove(GyanDev.Length - 15); // Some basic formatting
             gyanDevffmpegName = "ffmpeg-" + GyanDev + "-full_build"; //For later correct exe extracting the complete name of the folder is needed
+        }
+    
+        private void ParseJeremyleeJSON()
+        {
+            try
+            {
+                var jsonWeb = new WebClient().DownloadString("https://jeremylee.sh/data/bin/packages.json");
+                dynamic json = JsonConvert.DeserializeObject(jsonWeb);
+
+                string ffmpegVersion = json.apps["ffmpeg.exe"].datetime;
+                ffmpegVersionUpdateJeremy = ffmpegVersion.Replace("-", ".").Remove(ffmpegVersion.Length - 6);
+
+                string aomencVersion = json.apps["aomenc.exe"].datetime;
+                aomVersionUpdateJeremy = aomencVersion.Replace("-", ".").Remove(aomencVersion.Length - 6);
+
+                string rav1eVersion = json.apps["rav1e.exe"].datetime;
+                rav1eVersionUpdateJeremy = rav1eVersion.Replace("-", ".").Remove(rav1eVersion.Length - 6);
+
+                string svtav1Version = json.apps["SvtAv1EncApp.exe"].datetime;
+                svtav1VersionUpdateJeremy = svtav1Version.Replace("-", ".").Remove(svtav1Version.Length - 6);
+            }catch(Exception ex){ SmallFunctions.Logging(ex.Message); }
         }
     }
 }
