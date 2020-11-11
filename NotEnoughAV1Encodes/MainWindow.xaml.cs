@@ -193,6 +193,7 @@ namespace NotEnoughAV1Encodes
 
         private async void BatchEncode()
         {
+            cancellationTokenSource = new CancellationTokenSource();
             videoInput = LabelVideoSource.Content.ToString();  // Both are set, to avoid problems when people retry the batch encoding in the same instance
             videoOutput = LabelVideoOutput.Content.ToString(); // -^
             encodeStarted = true;
@@ -253,6 +254,7 @@ namespace NotEnoughAV1Encodes
 
         private async void QueueEncode()
         {
+            cancellationTokenSource = new CancellationTokenSource();
             encodeStarted = true;
             List<object> queue = new List<object>();
             foreach (var item in ListBoxQueue.Items) { queue.Add(item); }

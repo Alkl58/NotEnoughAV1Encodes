@@ -38,7 +38,7 @@ namespace NotEnoughAV1Encodes
                         {
                             WindowStyle = ProcessWindowStyle.Hidden,
                             FileName = "cmd.exe",
-                            WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "mkvtoolnix"),
+                            WorkingDirectory = MainWindow.mkvToolNixPath,
                             Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.videoOutput + '\u0022' + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "temp.mkv") + '\u0022' + " " + MainWindow.subtitleMuxingInput
                         };
                         mkvToolNix.StartInfo = startInfo;
@@ -70,7 +70,7 @@ namespace NotEnoughAV1Encodes
                         {
                             WindowStyle = ProcessWindowStyle.Hidden,
                             FileName = "cmd.exe",
-                            WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "mkvtoolnix"),
+                            WorkingDirectory = MainWindow.mkvToolNixPath,
                             Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.videoOutput + '\u0022' + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + " " + MainWindow.subtitleMuxingInput
                         };
                         mkvToolNix.StartInfo = startInfo;
