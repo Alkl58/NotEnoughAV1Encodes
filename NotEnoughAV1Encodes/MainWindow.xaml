@@ -60,8 +60,65 @@
                         <ComboBoxItem Content="x264" IsSelected="True"/>
                         <ComboBoxItem Content="ffv1"/>
                         <ComboBoxItem Content="utvideo"/>
+                        <ComboBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
                     </ComboBox>
-                    <CheckBox x:Name="CheckBoxSplittingReencode" Content="Re-Encode" HorizontalAlignment="Left" Margin="397,63,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                    <CheckBox x:Name="CheckBoxSplittingReencode" Content="Re-Encode" HorizontalAlignment="Left" Margin="397,63,0,0" VerticalAlignment="Top" IsChecked="True">
+                        <CheckBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+                    <Label Content="Chunk-Length:" HorizontalAlignment="Left" Margin="57,107,0,0" VerticalAlignment="Top">
+                        <Label.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <TextBox x:Name="TextBoxSplittingChunkLength" HorizontalAlignment="Left" Height="27" Margin="179,109,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="81" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                        <TextBox.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <Label Content="(in seconds)" HorizontalAlignment="Left" Margin="265,107,0,0" VerticalAlignment="Top" FontStyle="Italic" Foreground="#FF4D4D4D">
+                        <Label.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
                 </Grid>
             </TabItem>
             <TabItem Header="Filters" FontSize="14">

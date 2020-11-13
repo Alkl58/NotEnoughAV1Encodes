@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace NotEnoughAV1Encodes
@@ -20,6 +21,25 @@ namespace NotEnoughAV1Encodes
         {
             InitializeComponent();
             CheckDependencies.Check();
+        }
+
+        // ══════════════════════════════════════ Main Logic ══════════════════════════════════════
+
+        public async void MainEntry()
+        {
+            SplitVideo();
+        }
+
+        private void SplitVideo()
+        {
+            // Temp Arguments for Splitting / Scenedetection
+            bool reencodesplit = CheckBoxSplittingReencode.IsChecked == true;
+            int splitmethod = ComboBoxSplittingMethod.SelectedIndex;
+            int reencodeMethod = ComboBoxSplittingReencodeMethod.SelectedIndex;
+            string ffmpegThreshold = TextBoxSplittingThreshold.Text;
+            string chunkLength = TextBoxSplittingChunkLength.Text;
+            VideoSplittingWindow videoSplittingWindow = new VideoSplittingWindow(splitmethod, reencodesplit, reencodeMethod, ffmpegThreshold, chunkLength);
+            videoSplittingWindow.ShowDialog();
         }
 
         // ════════════════════════════════════ Video Filters ═════════════════════════════════════
@@ -134,14 +154,7 @@ namespace NotEnoughAV1Encodes
             if (!Directory.Exists(Path.Combine(TempPath, TempPathFileName, "Chunks")))
                 Directory.CreateDirectory(Path.Combine(TempPath, TempPathFileName, "Chunks"));
 
-            bool reencodesplit = CheckBoxSplittingReencode.IsChecked == true;
-            int splitmethod = ComboBoxSplittingMethod.SelectedIndex;
-            int reencodeMethod = ComboBoxSplittingReencodeMethod.SelectedIndex;
-            string ffmpegThreshold = TextBoxSplittingThreshold.Text;
-
-            VideoSplittingWindow videoSplittingWindow = new VideoSplittingWindow(splitmethod, reencodesplit, reencodeMethod, ffmpegThreshold);
-            videoSplittingWindow.ShowDialog();
-
+            MainEntry();
         }
     }
 }

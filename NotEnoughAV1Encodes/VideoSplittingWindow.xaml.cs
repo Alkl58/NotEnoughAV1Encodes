@@ -10,34 +10,44 @@ namespace NotEnoughAV1Encodes
 {
     public partial class VideoSplittingWindow : Window
     {
+        // Temp variables
         public string FFmpegThreshold = "0.4";
+        public string ChunkLength = "10"; // chunking (length in seconds)
         public int DetectMethod = 0; // scene detect ffmpeg
         public int ReencodeMethod = 0; // x264
         public bool Reencode = false;
-        public VideoSplittingWindow(int method, bool reencode, int reencodemethod, string thresholdFfmpeg)
+
+        public VideoSplittingWindow(int method, bool reencode, int reencodemethod, string thresholdFfmpeg, string chunk)
         {
             InitializeComponent();
 
+            // Sets the values from constructor
             FFmpegThreshold = thresholdFfmpeg;
-            DetectMethod = method;
             ReencodeMethod = reencodemethod;
+            DetectMethod = method;
             Reencode = reencode;
+            ChunkLength = chunk;
 
+            // Starts the Main Function
             StartDetect();
         }
 
         private async void StartDetect()
         {
+            // Main Function
             if (DetectMethod == 0)
                 await Task.Run(() => FFmpegSceneDetect());
             if (DetectMethod == 1)
                 await Task.Run(() => PySceneDetect());
-
-            await Task.Run(() => FFmpegSceneSplit());
-            await Task.Run(() => RenameSplits.Rename());
+            if (DetectMethod == 2)
+                await Task.Run(() => FFmpegChunking());
             this.Close();
         }
+
         List<string> FFmpegArgs = new List<string>();
+
+        // ═════════════════════════════════ FFMmpeg Scene Detect ═══════════════════════════════════
+
         private void FFmpegSceneDetect()
         {
             TextBoxConsole.Dispatcher.Invoke(() => TextBoxConsole.Text = "Detecting Scenes... this might take a while!");
@@ -54,7 +64,7 @@ namespace NotEnoughAV1Encodes
                 WorkingDirectory = MainWindow.FFmpegPath,
                 RedirectStandardError = true,
                 FileName = "cmd.exe",
-                Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -progress " + '\u0022' + Path.Combine(MainWindow.TempPath, "progress.txt") + '\u0022' + " -hide_banner -loglevel 32 -filter_complex select=" + '\u0022' + "gt(scene\\," + FFmpegThreshold + "),select=eq(key\\,1),showinfo" + '\u0022' + " -an -f null -"
+                Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -hide_banner -loglevel 32 -filter_complex select=" + '\u0022' + "gt(scene\\," + FFmpegThreshold + "),select=eq(key\\,1),showinfo" + '\u0022' + " -an -f null -"
             };
             FFmpegSceneDetect.StartInfo = startInfo;
             FFmpegSceneDetect.Start();
@@ -73,7 +83,7 @@ namespace NotEnoughAV1Encodes
             // Temporary value for Arg creation
             string previousScene = "0.000";
 
-            // Creates the seeking args for ffmpeg
+            // Creates the seeking args for ffmpeg piping
             foreach (string sc in scenes)
             {
                 FFmpegArgs.Add("-ss " + previousScene + " -to " + sc);
@@ -81,50 +91,24 @@ namespace NotEnoughAV1Encodes
             }
             // Argument for seeking until the end of the video
             FFmpegArgs.Add("-ss " + previousScene);
-        }
 
-        private void FFmpegSceneSplit()
-        {
-            TextBoxConsole.Dispatcher.Invoke(() => TextBoxConsole.Text = "Started Splitting... this might take a while!");
-
-            string EncodeCMD = "";
-
-            if (Reencode == true)
+            // Writes splitting arguments to text file
+            foreach (string line in FFmpegArgs)
             {
-                if (ReencodeMethod == 0)
-                    EncodeCMD = "-c:v libx264 -crf 0 -preset ultrafast -g 9 -sc_threshold 0 -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * 9)" + '\u0022';
-                if (ReencodeMethod == 1)
-                    EncodeCMD = "-c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -g 1 -slicecrc 0 -slices 4";
-                if (ReencodeMethod == 2)
-                    EncodeCMD = "-c:v utvideo";
-            }
-            else
-            {
-                EncodeCMD = "-c:v copy";
-            }
-
-
-            int counter = 0;
-            foreach (string arg in FFmpegArgs)
-            {
-                //Run ffmpeg command
-                Process process = new Process();
-                ProcessStartInfo startInfo = new ProcessStartInfo
+                using (StreamWriter sw = File.AppendText(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "splits.txt")))
                 {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "cmd.exe",
-                    WorkingDirectory = MainWindow.FFmpegPath,
-                    Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " " + arg + " -map_metadata -1 -an " + EncodeCMD + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "split" + counter + ".mkv") + '\u0022'
-                };
-                process.StartInfo = startInfo;
-                process.Start();
-                process.WaitForExit();
-                counter += 1;
+                    sw.WriteLine(line);
+                    sw.Close();
+                }
             }
         }
 
+        // ════════════════════════════════════ PySceneDetect ═══════════════════════════════════════
+        
         private void PySceneDetect()
         {
+            // Detects the Scenes with PySceneDetect
+
             Process pySceneDetect = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -139,6 +123,7 @@ namespace NotEnoughAV1Encodes
 
             pySceneDetect.Start();
 
+            // Reads the Stderr and sets the TextBox
             do { TextBoxConsole.Dispatcher.Invoke(() => TextBoxConsole.Text = pySceneDetect.StandardError.ReadLine()); } while (!pySceneDetect.HasExited);
 
             pySceneDetect.WaitForExit();
@@ -151,16 +136,77 @@ namespace NotEnoughAV1Encodes
             // Reads first line of the csv file generated by pyscenedetect
             string line = File.ReadLines(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, MainWindow.TempPathFileName + "-Scenes.csv")).First();
 
+            // Splits the line after "," and skips the first line, then adds the result to list
             List<string> scenes = line.Split(',').Skip(1).ToList<string>();
 
+            // Temporary value used for creating the ffmpeg command line
             string previousScene = "00:00:00.000";
 
+            // Iterates over the list of time codes and creates the args for ffmpeg
             foreach (string sc in scenes)
             {
                 FFmpegArgs.Add("-ss " + previousScene + " -to " + sc);
                 previousScene = sc;
             }
+
+            // Has to be last, to "tell" ffmpeg to seek / encode until end of video
             FFmpegArgs.Add("-ss " + previousScene);
+
+            // Writes splitting arguments to text file
+            foreach (string lineArg in FFmpegArgs)
+            {
+                using (StreamWriter sw = File.AppendText(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "splits.txt")))
+                {
+                    sw.WriteLine(lineArg);
+                    sw.Close();
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════ Chunking ═════════════════════════════════════════
+
+        private void FFmpegChunking()
+        {
+            // This function is used to split the source video into parts (chunking method)
+
+            // Sets the label, has to be done as Dispatcher, else it will lock up the thread
+            LabelSplittingMethod.Dispatcher.Invoke(() => LabelSplittingMethod.Content = "Splitting with Chunking Method");
+
+            // Sets the TextBox, has to be done as Dispatcher, else it will lock up the thread
+            TextBoxConsole.Dispatcher.Invoke(() => TextBoxConsole.Text = "Started Splitting... this might take a while!");
+
+            string EncodeCMD = null;
+
+            // Sets the Reencode Params
+            if (Reencode == true)
+            {
+                if (ReencodeMethod == 0)
+                    EncodeCMD = "-c:v libx264 -crf 0 -preset ultrafast -g 9 -sc_threshold 0 -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * 9)" + '\u0022';
+                if (ReencodeMethod == 1)
+                    EncodeCMD = "-c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -g 1 -slicecrc 0 -slices 4";
+                if (ReencodeMethod == 2)
+                    EncodeCMD = "-c:v utvideo";
+            }
+            else
+            {
+                EncodeCMD = "-c:v copy";
+            }
+
+            //Run ffmpeg command
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                WorkingDirectory = MainWindow.FFmpegPath,
+                Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -map_metadata -1 -an " + EncodeCMD + " -f segment -segment_time " + ChunkLength + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "split%0d.mkv") + '\u0022'
+            };
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+
+            // Starts renaming the splits
+            RenameSplits.Rename();
         }
     }
 }

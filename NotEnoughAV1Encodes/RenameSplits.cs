@@ -7,6 +7,8 @@ namespace NotEnoughAV1Encodes
     {
         public static void Rename()
         {
+            // This Function is only used when the Splitting Method is set to chunking
+
             // Sets the Path of the Directory with the Video Chunks
             string chunkDir = Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks");
 

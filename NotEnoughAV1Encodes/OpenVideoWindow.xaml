@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Title="NotEnoughAV1Encodes" Height="251.264" Width="328.611" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Button x:Name="ButtonSingleFile" Content="➔ Single File" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" Width="293" Height="43" FontSize="18" Background="{x:Null}" HorizontalContentAlignment="Left" Foreground="Black" BorderBrush="#FFE4E4E4" Click="ButtonOpenSingleSource_Click"/>
+        <Button x:Name="ButtonSingleFile" Content="➔ Single File" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" Width="293" Height="43" FontSize="16" Background="{x:Null}" HorizontalContentAlignment="Left" Foreground="Black" BorderBrush="#FFE4E4E4" Click="ButtonOpenSingleSource_Click"/>
         <Label Content="Method for opening a source." HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="39" Width="237" FontSize="16"/>
-        <Button x:Name="ButtonBatchFile" Content="➔ Batch File" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Width="293" Height="42" FontSize="18" Background="{x:Null}" HorizontalContentAlignment="Left" Foreground="Black" BorderBrush="#FFE4E4E4" IsEnabled="False"/>
-        <Button x:Name="ButtonProjectFile" Content="➔ Project File" HorizontalAlignment="Left" Margin="10,149,0,0" VerticalAlignment="Top" Width="293" Height="42" FontSize="18" Background="{x:Null}" HorizontalContentAlignment="Left" Foreground="Black" BorderBrush="#FFE4E4E4" IsEnabled="False"/>
+        <Button x:Name="ButtonBatchFile" Content="➔ Batch File" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Width="293" Height="42" FontSize="16" Background="{x:Null}" HorizontalContentAlignment="Left" Foreground="Black" BorderBrush="#FFE4E4E4" IsEnabled="False"/>
+        <Button x:Name="ButtonProjectFile" Content="➔ Project File" HorizontalAlignment="Left" Margin="10,149,0,0" VerticalAlignment="Top" Width="293" Height="42" FontSize="16" Background="{x:Null}" HorizontalContentAlignment="Left" Foreground="Black" BorderBrush="#FFE4E4E4" IsEnabled="False"/>
 
     </Grid>
 </Window>
