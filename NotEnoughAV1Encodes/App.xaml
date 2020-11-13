@@ -1,6 +1,9 @@
-﻿<Application x:Class="NotEnoughAV1Encodes.App"
+﻿<Application x:Class="NyaAV1.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:NotEnoughAV1Encodes"
+             xmlns:local="clr-namespace:NyaAV1"
              StartupUri="MainWindow.xaml">
-</Application>   
+    <Application.Resources>
+
+    </Application.Resources>
+</Application>

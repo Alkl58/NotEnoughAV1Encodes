@@ -1,0 +1,19 @@
+﻿<Window x:Class="NotEnoughAV1Encodes.VideoSplittingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NyaAV1"
+        mc:Ignorable="d"
+        Title="Scene Detect" Height="153.282" Width="617.467" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="422*"/>
+            <ColumnDefinition Width="189*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="TextBoxConsole" HorizontalAlignment="Left" Height="23" Margin="10,49,0,0" TextWrapping="Wrap" Text="Starting Splitting..." VerticalAlignment="Top" Width="583" FontFamily="Consolas" FontSize="16" Grid.ColumnSpan="2" BorderBrush="{x:Null}" IsReadOnly="True"/>
+        <Label Content="Splitting with Scene Detection" HorizontalAlignment="Left" Margin="6,10,0,0" VerticalAlignment="Top" Height="39" Width="306" FontSize="14" FontWeight="Bold"/>
+        <Label Content="Window will close automatically. Please wait." HorizontalAlignment="Left" Margin="317,10,0,0" VerticalAlignment="Top" Height="39" Width="284" FontSize="14" FontStyle="Italic" Grid.ColumnSpan="2" Foreground="#FF5F5F5F"/>
+        <ProgressBar HorizontalAlignment="Left" Height="29" Margin="10,77,0,0" VerticalAlignment="Top" Width="583" Grid.ColumnSpan="2" IsIndeterminate="True"/>
+    </Grid>
+</Window>
