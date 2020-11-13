@@ -20,7 +20,7 @@ namespace NotEnoughAV1Encodes
             foreach (FileInfo file in infos)
             {
                 // Gets the length of the filename
-                int count = f.ToString().Count();
+                int count = file.ToString().Count();
 
                 // Depending on the file length it will rename them
                 switch (count)
