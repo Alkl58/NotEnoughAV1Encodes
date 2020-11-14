@@ -31,6 +31,8 @@ namespace NotEnoughAV1Encodes
         public static string TempPathFileName = null;
         public static string VideoInput = null;     // Video Input Path
         public static string VideoOutput = null;    // Video Output Path
+        public static bool VideoInputSet = false;
+        public static bool VideoOutputSet = false;
         // Dependencies Paths
         public static string FFmpegPath = null; // Path to ffmpeg
         public static string AomencPath = null; // Path to aomenc
@@ -92,6 +94,8 @@ namespace NotEnoughAV1Encodes
 
         public async void MainEntry()
         {
+            if (!Directory.Exists(Path.Combine(TempPath, TempPathFileName, "Chunks")))
+                Directory.CreateDirectory(Path.Combine(TempPath, TempPathFileName, "Chunks"));
             SetEncoderSettings();
             SetVideoFilters();
             SplitVideo();
@@ -284,6 +288,8 @@ namespace NotEnoughAV1Encodes
             this.Show();
             // Uses the public get method in OpenVideoSource window to get variable
             string result = WindowVideoSource.VideoPath;
+            if (result != null)
+                VideoInputSet = true;
             // Sets the label in the user interface
             // Note that this has to be edited once batch encoding is added as function
             LabelVideoSource.Content = result;
@@ -303,15 +309,14 @@ namespace NotEnoughAV1Encodes
             {
                 LabelVideoDestination.Content = saveVideoFileDialog.FileName;
                 VideoOutput = saveVideoFileDialog.FileName;
+                VideoOutputSet = true;
             }
         }
 
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
-            if (!Directory.Exists(Path.Combine(TempPath, TempPathFileName, "Chunks")))
-                Directory.CreateDirectory(Path.Combine(TempPath, TempPathFileName, "Chunks"));
-
-            MainEntry();
+            if (VideoInputSet == true && VideoOutputSet == true) { MainEntry(); }
+            else { MessageBox.Show("Input or Output not set!", "IO", MessageBoxButton.OK); }
         }
 
         // ══════════════════════════════════ Video Encoding ══════════════════════════════════════
