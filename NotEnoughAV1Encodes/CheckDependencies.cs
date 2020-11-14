@@ -17,6 +17,11 @@ namespace NotEnoughAV1Encodes
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "aomenc.exe"))) { MainWindow.AomencPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
             else if (ExistsOnPath("aomenc.exe")) { MainWindow.AomencPath = GetFullPathWithOutName("aomenc.exe"); }
 
+            // Sets / Checks rav1e Path
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "rav1e.exe"))) { MainWindow.Rav1ePath = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "rav1e.exe"))) { MainWindow.Rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
+            else if (ExistsOnPath("rav1e.exe")) { MainWindow.Rav1ePath = GetFullPathWithOutName("rav1e.exe"); }
+
         }
 
         private static bool ExistsOnPath(string fileName)

@@ -17,6 +17,7 @@ namespace NotEnoughAV1Encodes
         public static string FilterCommand = null;
         public static string PipeBitDepthCommand = null;
         public static string EncoderAomencCommand = null;
+        public static string EncoderRav1eCommand = null;
         // Temp Settings
         public static int WorkerCount = 0;  // amount of workers
         public static int EncodeMethod = 0; // 0 = aomenc, 1 = rav1e, 2 = svt-av1...
@@ -32,6 +33,7 @@ namespace NotEnoughAV1Encodes
         // Dependencie Path
         public static string FFmpegPath = null; // Path to ffmpeg
         public static string AomencPath = null; // Path to aomenc
+        public static string Rav1ePath = null;  // Path to rav1e
 
         public MainWindow()
         {
@@ -49,6 +51,30 @@ namespace NotEnoughAV1Encodes
             int corecount = SmallFunctions.getCoreCount();
             for (int i = 1; i <= corecount; i++) { ComboBoxWorkerCount.Items.Add(i); }
             ComboBoxWorkerCount.SelectedItem = Convert.ToInt32(corecount * 75 / 100);
+
+        }
+
+        private void ComboBoxVideoEncoder_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (SliderVideoSpeed != null)
+            {
+                if (ComboBoxVideoEncoder.SelectedIndex == 0)
+                {
+                    // aomenc
+                    SliderVideoSpeed.Maximum = 9;
+                    SliderVideoSpeed.Value = 4;
+                    SliderVideoQuality.Value = 28;
+                    SliderVideoQuality.Maximum = 63;
+                }
+                else if (ComboBoxVideoEncoder.SelectedIndex == 1)
+                {
+                    // rav1e
+                    SliderVideoSpeed.Maximum = 10;
+                    SliderVideoSpeed.Value = 6;
+                    SliderVideoQuality.Maximum = 255;
+                    SliderVideoQuality.Value = 100;
+                }
+            }
 
         }
 
@@ -84,6 +110,7 @@ namespace NotEnoughAV1Encodes
             OnePass = ComboBoxVideoPasses.SelectedIndex == 0;       // Sets the amount of passes (true = 1, false = 2)
             Priority = ComboBoxProcessPriority.SelectedIndex == 0;  // Sets the Process Priority
             SplitMethod = ComboBoxSplittingMethod.SelectedIndex;    // Sets the Splitmethod, used for VideoEncode() function
+            EncodeMethod = ComboBoxVideoEncoder.SelectedIndex;      // Sets the encoder (0 aomenc; 1 rav1e; 2 svt-av1)
             SmallFunctions.setVideoChunks(SplitMethod);             // Sets the array of videochunks/commands
             SetPipeCommand();
         }
@@ -184,21 +211,35 @@ namespace NotEnoughAV1Encodes
 
         private void SetEncoderSettings()
         {
+            // Sets the Encoder Settings
             if (ComboBoxVideoEncoder.SelectedIndex == 0) { EncoderAomencCommand = SetAomencCommand(); }
+            if (ComboBoxVideoEncoder.SelectedIndex == 1) { EncoderRav1eCommand = SetRav1eCommand(); }
         }
 
         private string SetAomencCommand()
         {
+            // Aomenc Command
             string cmd = "";
             cmd += " --bit-depth=" + ComboBoxVideoBitDepth.Text;    // Bit-Depth
             cmd += " --cpu-used=" + SliderVideoSpeed.Value;         // Speed
-            if (RadioButtonVideoConstantQuality.IsChecked == true)
-            {
-                cmd += " --end-usage=q --cq-level=" + SliderVideoQuality.Value; // Constant Quality
-            }else if (RadioButtonVideoBitrate.IsChecked == true)
-            {
-                cmd += " --end-usage=vbr --target-bitrate=" + TextBoxVideoBitrate.Text; // Target Bitrate (VBR)
-            }
+
+            // Constant Quality or Target Bitrate
+            if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " --end-usage=q --cq-level=" + SliderVideoQuality.Value; }
+            else if (RadioButtonVideoBitrate.IsChecked == true) { cmd += " --end-usage=vbr --target-bitrate=" + TextBoxVideoBitrate.Text; }
+
+            return cmd;
+        }
+
+        private string SetRav1eCommand()
+        {
+            // Rav1e Command
+            string cmd = "";
+            cmd += " --speed " + SliderVideoSpeed.Value;    // Speed
+
+            // Constant Quality or Target Bitrate
+            if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " --quantizer " + SliderVideoQuality.Value; }
+            else if (RadioButtonVideoBitrate.IsChecked == true) { cmd += " --bitrate " + TextBoxVideoBitrate.Text; }
+
             return cmd;
         }
 
@@ -303,6 +344,15 @@ namespace NotEnoughAV1Encodes
                                         }
                                         Console.WriteLine("/C ffmpeg.exe" + ffmpegPipe + aomencCMD + output);
                                         startInfo.Arguments = "/C ffmpeg.exe" + ffmpegPipe + aomencCMD + output;
+                                    }
+                                    else if (EncodeMethod == 1) // rav1e
+                                    {
+
+                                        string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -vsync 0 -f yuv4mpegpipe - | ";
+                                        string rav1eCMD = '\u0022' + Path.Combine(Rav1ePath, "rav1e.exe") + '\u0022' + " - " + EncoderRav1eCommand + " --output ";
+                                        string output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                        Console.WriteLine("/C ffmpeg.exe" + ffmpegPipe + rav1eCMD + output);
+                                        startInfo.Arguments = "/C ffmpeg.exe" + ffmpegPipe + rav1eCMD + output;
                                     }
 
                                     ffmpegProcess.StartInfo = startInfo;

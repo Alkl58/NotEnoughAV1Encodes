@@ -185,7 +185,7 @@
                 <Grid Background="White">
                     <Label Content="Video" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Encoder:" HorizontalAlignment="Left" Margin="57,57,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="138,57,0,0" VerticalAlignment="Top" Width="127" Height="29" VerticalContentAlignment="Center">
+                    <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="138,57,0,0" VerticalAlignment="Top" Width="127" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
                         <ComboBoxItem Content="aomenc" IsSelected="True"/>
                         <ComboBoxItem Content="rav1e"/>
                         <ComboBoxItem Content="svt-av1"/>
