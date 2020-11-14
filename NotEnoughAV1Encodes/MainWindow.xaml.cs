@@ -18,11 +18,12 @@ namespace NotEnoughAV1Encodes
         public static string PipeBitDepthCommand = null;
         public static string EncoderAomencCommand = null;
         // Temp Settings
-        public static int WorkerCount = 0;
+        public static int WorkerCount = 0;  // amount of workers
         public static int EncodeMethod = 0; // 0 = aomenc, 1 = rav1e, 2 = svt-av1...
         public static int SplitMethod = 0;  // 0 = ffmpeg; 1 = pyscenedetect; 2 = chunking
-        public static bool OnePass = true;
-        public static string[] VideoChunks;
+        public static bool OnePass = true;  // true = Onepass, false = Twopass
+        public static bool Priority = true; // true = normal, false = below normal (process priority)
+        public static string[] VideoChunks; // Array of command/videochunks
         // IO Paths
         public static string TempPath = Path.Combine(Path.GetTempPath(), "NEAV1E");
         public static string TempPathFileName = null;
@@ -79,6 +80,7 @@ namespace NotEnoughAV1Encodes
         {
             WorkerCount = int.Parse(ComboBoxWorkerCount.Text);      // Sets the worker count
             OnePass = ComboBoxVideoPasses.SelectedIndex == 0;       // Sets the amount of passes (true = 1, false = 2)
+            Priority = ComboBoxProcessPriority.SelectedIndex == 0;  // Sets the Process Priority
             SplitMethod = ComboBoxSplittingMethod.SelectedIndex;    // Sets the Splitmethod, used for VideoEncode() function
             SmallFunctions.setVideoChunks(SplitMethod);             // Sets the array of videochunks/commands
             SetPipeCommand();
@@ -302,6 +304,11 @@ namespace NotEnoughAV1Encodes
 
                                     ffmpegProcess.StartInfo = startInfo;
                                     ffmpegProcess.Start();
+
+                                    // Sets the process priority
+                                    if (Priority == false)
+                                        ffmpegProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
+
                                     ffmpegProcess.WaitForExit();
 
                                     if (OnePass == false)
@@ -327,6 +334,11 @@ namespace NotEnoughAV1Encodes
 
                                     ffmpegProcess.StartInfo = startInfo;
                                     ffmpegProcess.Start();
+
+                                    // Sets the process priority
+                                    if (Priority == false)
+                                        ffmpegProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
+
                                     ffmpegProcess.WaitForExit();
                                 }
                                 // This function will write finished encodes to a log file, to be able to skip them if in resume mode

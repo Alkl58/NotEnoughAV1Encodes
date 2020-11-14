@@ -121,7 +121,12 @@
                     </Label>
                     <Label Content="Workers" HorizontalAlignment="Left" Margin="10,217,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Worker Count:" HorizontalAlignment="Left" Margin="57,265,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxWorkerCount" HorizontalAlignment="Left" Margin="179,265,0,0" VerticalAlignment="Top" Width="81" Height="29"/>
+                    <ComboBox x:Name="ComboBoxWorkerCount" HorizontalAlignment="Left" Margin="179,265,0,0" VerticalAlignment="Top" Width="86" Height="29"/>
+                    <Label Content="Process Priority:" HorizontalAlignment="Left" Margin="57,308,0,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="179,308,0,0" VerticalAlignment="Top" Width="168" Height="29">
+                        <ComboBoxItem Content="Normal" IsSelected="True"/>
+                        <ComboBoxItem Content="Below Normal"/>
+                    </ComboBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Filters" FontSize="14">
