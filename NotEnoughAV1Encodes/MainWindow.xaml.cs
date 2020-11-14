@@ -329,10 +329,12 @@ namespace NotEnoughAV1Encodes
 
         private void ProgressBarUpdating()
         {
+            // Gets all Progress Files of ffmpeg
             string[] filePaths = Directory.GetFiles(Path.Combine(TempPath, TempPathFileName, "Progress"), "*.log", SearchOption.AllDirectories);
 
             int totalencodedframes = 0;
 
+            // Sets the total framecount
             int totalframes = TotalFrames;
 
             // The amount of frames doubles when in two pass mode
@@ -341,46 +343,53 @@ namespace NotEnoughAV1Encodes
 
             foreach (string file in filePaths)
             {
+                // Reads the progress file of ffmpeg without locking it up
                 Stream stream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-
                 TextReader objstream = new StreamReader(stream);
 
+                // Reads the content of the stream
                 string text = objstream.ReadToEnd();
 
+                // Closes the stream reader
                 stream.Close();
 
+                // Splits every line
                 string[] lines = text.Split( new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None );
 
                 string tempvalue = "";
+
+                // Iterates over all lines
                 foreach (var line in lines)
                 {
+                    // Checks if the line contains the word "frame="
                     if (line.Contains("frame=")) { tempvalue = line.Remove(0, 6); }
                 }
 
                 try
                 {
+                    // Adds the framecount to the total encoded frames
                     totalencodedframes += int.Parse(tempvalue);
                 }
                 catch { }
-                
-
                 objstream.Close();
             }
 
+            // Gets the so far spent time
             TimeSpan timespent = DateTime.Now - StartTime;
             try
             {
+                // Setting Label & Progressbar
                 LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = totalencodedframes + " / " + totalframes + " Frames - " + Math.Round(totalencodedframes / timespent.TotalSeconds, 2) + "fps - " + Math.Round(((timespent.TotalSeconds / totalencodedframes) * (totalframes - totalencodedframes)) / 60, MidpointRounding.ToEven) + "min left");
                 ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = totalencodedframes);
             }
             catch { }
-            
         }
 
         // ══════════════════════════════════ Video Encoding ══════════════════════════════════════
 
         private void EncodeVideo()
         {
+            // Starts "a timer" for eta / fps calculation
             DateTime starttime = DateTime.Now;
             StartTime = starttime;
             bool encodeStarted = true;
@@ -389,7 +398,8 @@ namespace NotEnoughAV1Encodes
                 while (encodeStarted)
                 {
                     ProgressBarUpdating();
-                    Thread.Sleep(1000);
+                    // Waits 1s before updating
+                    Thread.Sleep(1000); 
                 }
             });
             taskProgressBar.Start();
@@ -425,6 +435,8 @@ namespace NotEnoughAV1Encodes
                                 if (SplitMethod == 0 || SplitMethod == 1) { InputVideo = " -i " + '\u0022' + VideoInput + '\u0022' + " " + command; }
                                 else if (SplitMethod == 2) { InputVideo = " -i " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", command) + '\u0022'; } // Chunk based splitting
 
+                                string FFmpegProgress = " -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022';
+
                                 // Logic to skip first pass encoding if "_finished" log file exists
                                 if (File.Exists(Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log" + "_finished.log")) == false)
                                 {
@@ -444,8 +456,8 @@ namespace NotEnoughAV1Encodes
                                             aomencCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=1" + EncoderAomencCommand + " --fpf=";
                                             output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
                                         }
-                                        Console.WriteLine("/C ffmpeg.exe -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022' + ffmpegPipe + aomencCMD + output);
-                                        startInfo.Arguments = "/C ffmpeg.exe -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022' + ffmpegPipe + aomencCMD + output;
+                                        Console.WriteLine("/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + aomencCMD + output);
+                                        startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + aomencCMD + output;
                                     }
                                     else if (EncodeMethod == 1) // rav1e
                                     {
@@ -453,8 +465,8 @@ namespace NotEnoughAV1Encodes
                                         string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -vsync 0 -f yuv4mpegpipe - | ";
                                         string rav1eCMD = '\u0022' + Path.Combine(Rav1ePath, "rav1e.exe") + '\u0022' + " - " + EncoderRav1eCommand + " --output ";
                                         string output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-                                        Console.WriteLine("/C ffmpeg.exe" + ffmpegPipe + rav1eCMD + output);
-                                        startInfo.Arguments = "/C ffmpeg.exe" + ffmpegPipe + rav1eCMD + output;
+                                        Console.WriteLine("/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + rav1eCMD + output);
+                                        startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + rav1eCMD + output;
                                     }
                                     else if (EncodeMethod == 2) // svt-av1
                                     {
@@ -474,8 +486,8 @@ namespace NotEnoughAV1Encodes
                                             output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                         }
                                         
-                                        Console.WriteLine("/C ffmpeg.exe -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022' + ffmpegPipe + svtav1CMD + output);
-                                        startInfo.Arguments = "/C ffmpeg.exe -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022' + ffmpegPipe + svtav1CMD + output;
+                                        Console.WriteLine("/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + svtav1CMD + output);
+                                        startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + svtav1CMD + output;
                                     }
 
                                     ffmpegProcess.StartInfo = startInfo;
@@ -504,8 +516,8 @@ namespace NotEnoughAV1Encodes
                                         string aomencCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=2" + EncoderAomencCommand + " --fpf=";
                                         string outputLog = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                         string outputVid = " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-                                        Console.WriteLine("/C ffmpeg.exe" + ffmpegPipe + aomencCMD + outputLog + outputVid);
-                                        startInfo.Arguments = "/C ffmpeg.exe" + ffmpegPipe + aomencCMD + outputLog + outputVid;
+                                        Console.WriteLine("/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + aomencCMD + outputLog + outputVid);
+                                        startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + aomencCMD + outputLog + outputVid;
                                     }
                                     else if (EncodeMethod == 1) // rav1e
                                     {
@@ -517,8 +529,8 @@ namespace NotEnoughAV1Encodes
                                         string svtav1CMD = '\u0022' + Path.Combine(Rav1ePath, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 2 --stats ";
                                         string stats = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                         string outputVid = " -b " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-                                        Console.WriteLine("/C ffmpeg.exe" + ffmpegPipe + svtav1CMD + stats + outputVid);
-                                        startInfo.Arguments = "/C ffmpeg.exe" + ffmpegPipe + svtav1CMD + stats + outputVid;
+                                        Console.WriteLine("/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + svtav1CMD + stats + outputVid);
+                                        startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + svtav1CMD + stats + outputVid;
                                     }
 
                                     ffmpegProcess.StartInfo = startInfo;
