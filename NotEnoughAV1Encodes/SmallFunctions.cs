@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -54,6 +55,22 @@ namespace NotEnoughAV1Encodes
                 // Release lock
                 _readWriteLock.ExitWriteLock();
             }
+        }
+
+        public static void ExecuteFfmpegTask(string ffmpegCommand)
+        {
+            //Run ffmpeg command
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                WorkingDirectory = MainWindow.FFmpegPath,
+                Arguments = ffmpegCommand
+            };
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
         }
     }
 }

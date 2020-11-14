@@ -27,10 +27,11 @@ namespace NotEnoughAV1Encodes
         // IO Paths
         public static string TempPath = Path.Combine(Path.GetTempPath(), "NEAV1E");
         public static string TempPathFileName = null;
-        public static string VideoInput = null;
+        public static string VideoInput = null;     // Video Input Path
+        public static string VideoOutput = null;    // Video Output Path
         // Dependencie Path
-        public static string FFmpegPath = null;
-        public static string AomencPath = null;
+        public static string FFmpegPath = null; // Path to ffmpeg
+        public static string AomencPath = null; // Path to aomenc
 
         public MainWindow()
         {
@@ -60,6 +61,7 @@ namespace NotEnoughAV1Encodes
             SplitVideo();
             SetTempSettings();
             await Task.Run(() => EncodeVideo());
+            await Task.Run(() => VideoMuxing.Concat());
         }
 
         private void SplitVideo()
@@ -232,6 +234,7 @@ namespace NotEnoughAV1Encodes
             if (result == true)
             {
                 LabelVideoDestination.Content = saveVideoFileDialog.FileName;
+                VideoOutput = saveVideoFileDialog.FileName;
             }
         }
 
