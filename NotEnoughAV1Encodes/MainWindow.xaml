@@ -189,32 +189,9 @@
                         <ComboBoxItem Content="aomenc" IsSelected="True"/>
                         <ComboBoxItem Content="rav1e"/>
                         <ComboBoxItem Content="svt-av1"/>
-                        <ComboBoxItem Content="libvpx-vp9"/>
                     </ComboBox>
-                    <Label Content="Framerate:" HorizontalAlignment="Left" Margin="57,102,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxVideoFramerate" HorizontalAlignment="Left" Margin="138,102,0,0" VerticalAlignment="Top" Width="127" Height="29" VerticalContentAlignment="Center">
-                        <ComboBoxItem Content="Same as Source" IsSelected="True"/>
-                        <ComboBoxItem Content="5"/>
-                        <ComboBoxItem Content="10"/>
-                        <ComboBoxItem Content="12"/>
-                        <ComboBoxItem Content="15"/>
-                        <ComboBoxItem Content="20"/>
-                        <ComboBoxItem Content="23.976"/>
-                        <ComboBoxItem Content="24"/>
-                        <ComboBoxItem Content="25"/>
-                        <ComboBoxItem Content="29.97"/>
-                        <ComboBoxItem Content="30"/>
-                        <ComboBoxItem Content="48"/>
-                        <ComboBoxItem Content="50"/>
-                        <ComboBoxItem Content="59.94"/>
-                        <ComboBoxItem Content="60"/>
-                        <ComboBoxItem Content="75"/>
-                        <ComboBoxItem Content="120"/>
-                        <ComboBoxItem Content="144"/>
-                        <ComboBoxItem Content="240"/>
-                    </ComboBox>
-                    <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="57,147,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="138,147,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center">
+                    <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="57,98,0,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="138,98,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center">
                         <ComboBoxItem Content="8" IsSelected="True"/>
                         <ComboBoxItem Content="10"/>
                         <ComboBoxItem Content="12"/>
