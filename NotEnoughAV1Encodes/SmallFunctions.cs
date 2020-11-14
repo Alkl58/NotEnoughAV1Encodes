@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Linq;
+using System.Threading;
 
 namespace NotEnoughAV1Encodes
 {
@@ -29,6 +31,28 @@ namespace NotEnoughAV1Encodes
             {
                 // Chunk based splitting
                 MainWindow.VideoChunks = Directory.GetFiles(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks"), "*mkv", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
+            }
+        }
+
+        private static ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
+        public static void WriteToFileThreadSafe(string text, string path)
+        {
+            // Some smaller Blackmagic, so parallel Workers won't deadlock files
+            // Set Status to Locked
+            _readWriteLock.EnterWriteLock();
+            try
+            {
+                // Append text to the file
+                using (StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine(text);
+                    sw.Close();
+                }
+            }
+            finally
+            {
+                // Release lock
+                _readWriteLock.ExitWriteLock();
             }
         }
     }
