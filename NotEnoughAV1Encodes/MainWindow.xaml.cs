@@ -38,6 +38,9 @@ namespace NotEnoughAV1Encodes
         public static string AomencPath = null; // Path to aomenc
         public static string Rav1ePath = null;  // Path to rav1e
         public static string SvtAV1Path = null; // Path to svt-av1
+        // Temp Variables
+        public static int TotalFrames = 0;      // used for progressbar and frame check
+        public DateTime StartTime;              // used for eta calculation
 
         public MainWindow()
         {
@@ -96,10 +99,13 @@ namespace NotEnoughAV1Encodes
         {
             if (!Directory.Exists(Path.Combine(TempPath, TempPathFileName, "Chunks")))
                 Directory.CreateDirectory(Path.Combine(TempPath, TempPathFileName, "Chunks"));
+                Directory.CreateDirectory(Path.Combine(TempPath, TempPathFileName, "Progress"));
             SetEncoderSettings();
             SetVideoFilters();
             SplitVideo();
             SetTempSettings();
+            await Task.Run(() => SmallFunctions.GetSourceFrameCount());
+            ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames);
             await Task.Run(() => EncodeVideo());
             await Task.Run(() => VideoMuxing.Concat());
         }
@@ -275,7 +281,7 @@ namespace NotEnoughAV1Encodes
         }
 
         // ══════════════════════════════════════ Buttons ═════════════════════════════════════════
-        
+
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
         {
             // Creates a new object of the type "OpenVideoWindow"
@@ -319,10 +325,74 @@ namespace NotEnoughAV1Encodes
             else { MessageBox.Show("Input or Output not set!", "IO", MessageBoxButton.OK); }
         }
 
+        // ═══════════════════════════════════ Progress Bar ═══════════════════════════════════════
+
+        private void ProgressBarUpdating()
+        {
+            string[] filePaths = Directory.GetFiles(Path.Combine(TempPath, TempPathFileName, "Progress"), "*.log", SearchOption.AllDirectories);
+
+            int totalencodedframes = 0;
+
+            int totalframes = TotalFrames;
+
+            // The amount of frames doubles when in two pass mode
+            if (OnePass != true)
+                totalframes = totalframes * 2;
+
+            foreach (string file in filePaths)
+            {
+                Stream stream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+                TextReader objstream = new StreamReader(stream);
+
+                string text = objstream.ReadToEnd();
+
+                stream.Close();
+
+                string[] lines = text.Split( new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None );
+
+                string tempvalue = "";
+                foreach (var line in lines)
+                {
+                    if (line.Contains("frame=")) { tempvalue = line.Remove(0, 6); }
+                }
+
+                try
+                {
+                    totalencodedframes += int.Parse(tempvalue);
+                }
+                catch { }
+                
+
+                objstream.Close();
+            }
+
+            TimeSpan timespent = DateTime.Now - StartTime;
+            try
+            {
+                LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = totalencodedframes + " / " + totalframes + " Frames - " + Math.Round(totalencodedframes / timespent.TotalSeconds, 2) + "fps - " + Math.Round(((timespent.TotalSeconds / totalencodedframes) * (totalframes - totalencodedframes)) / 60, MidpointRounding.ToEven) + "min left");
+                ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = totalencodedframes);
+            }
+            catch { }
+            
+        }
+
         // ══════════════════════════════════ Video Encoding ══════════════════════════════════════
 
         private void EncodeVideo()
         {
+            DateTime starttime = DateTime.Now;
+            StartTime = starttime;
+            bool encodeStarted = true;
+            Task taskProgressBar = new Task(() =>
+            {
+                while (encodeStarted)
+                {
+                    ProgressBarUpdating();
+                    Thread.Sleep(1000);
+                }
+            });
+            taskProgressBar.Start();
             // Main Encoding Function
             // Creates a new Thread Pool
             using (SemaphoreSlim concurrencySemaphore = new SemaphoreSlim(WorkerCount))
@@ -374,8 +444,8 @@ namespace NotEnoughAV1Encodes
                                             aomencCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=1" + EncoderAomencCommand + " --fpf=";
                                             output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
                                         }
-                                        Console.WriteLine("/C ffmpeg.exe" + ffmpegPipe + aomencCMD + output);
-                                        startInfo.Arguments = "/C ffmpeg.exe" + ffmpegPipe + aomencCMD + output;
+                                        Console.WriteLine("/C ffmpeg.exe -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022' + ffmpegPipe + aomencCMD + output);
+                                        startInfo.Arguments = "/C ffmpeg.exe -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022' + ffmpegPipe + aomencCMD + output;
                                     }
                                     else if (EncodeMethod == 1) // rav1e
                                     {
@@ -404,8 +474,8 @@ namespace NotEnoughAV1Encodes
                                             output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                         }
                                         
-                                        Console.WriteLine("/C ffmpeg.exe" + ffmpegPipe + svtav1CMD + output);
-                                        startInfo.Arguments = "/C ffmpeg.exe" + ffmpegPipe + svtav1CMD + output;
+                                        Console.WriteLine("/C ffmpeg.exe -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022' + ffmpegPipe + svtav1CMD + output);
+                                        startInfo.Arguments = "/C ffmpeg.exe -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022' + ffmpegPipe + svtav1CMD + output;
                                     }
 
                                     ffmpegProcess.StartInfo = startInfo;
@@ -470,7 +540,8 @@ namespace NotEnoughAV1Encodes
                 }
                 Task.WaitAll(tasks.ToArray());
             }
-        }
 
+            encodeStarted = false;
+        }
     }
 }

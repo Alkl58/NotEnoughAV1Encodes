@@ -237,5 +237,6 @@
             </Canvas>
         </Button>
         <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="34" Margin="21,536,0,0" VerticalAlignment="Top" Width="953"/>
+        <Label x:Name="LabelProgressBar" Content="" HorizontalAlignment="Left" Margin="21,536,0,0" VerticalAlignment="Top" Width="953" Height="34" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
     </Grid>
 </Window>
