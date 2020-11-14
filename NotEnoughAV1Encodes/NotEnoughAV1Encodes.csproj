@@ -83,6 +83,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="RenameSplits.cs" />
+    <Compile Include="SmallFunctions.cs" />
     <Compile Include="VideoSplittingWindow.xaml.cs">
       <DependentUpon>VideoSplittingWindow.xaml</DependentUpon>
     </Compile>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NyaAV1"
         mc:Ignorable="d"
-        Title="NyaAV1" Height="620" Width="1000" ResizeMode="CanMinimize">
+        Title="NotEnoughAV1Encodes" Height="620" Width="1000" ResizeMode="CanMinimize">
     <Grid>
         <Button x:Name="ButtonOpenSource" Margin="21,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="138" Background="{x:Null}" Click="ButtonOpenSource_Click" BorderBrush="#FFE4E4E4">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
@@ -22,7 +22,7 @@
                     <Label x:Name="LabelVideoDestination" Content="No Destination Selected" HorizontalAlignment="Left" Margin="103,39,0,0" VerticalAlignment="Top" Width="480" FontStyle="Italic" Foreground="#FF404040"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="NyaAV1 Specific Settings" FontSize="14">
+            <TabItem Header="General Settings" FontSize="14">
                 <Grid Background="White">
                     <Label Content="Splitting" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <CheckBox Content="" HorizontalAlignment="Left" Margin="78,18,0,0" VerticalAlignment="Top" IsChecked="True"/>
@@ -119,6 +119,9 @@
                             </Style>
                         </Label.Style>
                     </Label>
+                    <Label Content="Workers" HorizontalAlignment="Left" Margin="10,217,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <Label Content="Worker Count:" HorizontalAlignment="Left" Margin="57,265,0,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="ComboBoxWorkerCount" HorizontalAlignment="Left" Margin="179,265,0,0" VerticalAlignment="Top" Width="81" Height="29"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Filters" FontSize="14">
@@ -214,8 +217,8 @@
                     </ComboBox>
                     <Label Content="Quality" HorizontalAlignment="Left" Margin="395,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="Constant Quality:" HorizontalAlignment="Left" Margin="457,56,0,0" VerticalAlignment="Top" Height="29" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True"/>
-                    <Slider x:Name="SliderVideoQuality" HorizontalAlignment="Left" Margin="475,90,0,0" VerticalAlignment="Top" Width="431" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959"/>
-                    <Label x:Name="LabelVideoQuality" Content="{Binding Value, ElementName=SliderVideoQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="587,55,0,0" VerticalAlignment="Top"/>
+                    <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" HorizontalAlignment="Left" Margin="475,90,0,0" VerticalAlignment="Top" Width="431" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959"/>
+                    <Label x:Name="LabelVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Content="{Binding Value, ElementName=SliderVideoQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="587,55,0,0" VerticalAlignment="Top"/>
                     <Label Content="| Lowest Quality" HorizontalAlignment="Left" Margin="474,113,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
                     <Label Content="Highest Quality |" HorizontalAlignment="Left" Margin="831,113,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
                     <Label Content="Optimisation" HorizontalAlignment="Left" Margin="10,216,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
@@ -229,6 +232,8 @@
                     </ComboBox>
                     <Label Content="| Slowest" HorizontalAlignment="Left" Margin="137,292,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
                     <Label Content="Fastest |" HorizontalAlignment="Left" Margin="224,292,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
+                    <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="457,156,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center"/>
+                    <TextBox x:Name="TextBoxVideoBitrate" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="582,156,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Audio" FontSize="14">
