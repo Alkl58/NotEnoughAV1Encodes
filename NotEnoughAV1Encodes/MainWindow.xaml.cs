@@ -77,21 +77,10 @@ namespace NotEnoughAV1Encodes
 
         private void SetTempSettings()
         {
-            WorkerCount = int.Parse(ComboBoxWorkerCount.Text);  // Sets the worker count
-            OnePass = ComboBoxVideoPasses.SelectedIndex == 0;   // Sets the amount of passes (true = 1, false = 2)
+            WorkerCount = int.Parse(ComboBoxWorkerCount.Text);      // Sets the worker count
+            OnePass = ComboBoxVideoPasses.SelectedIndex == 0;       // Sets the amount of passes (true = 1, false = 2)
             SplitMethod = ComboBoxSplittingMethod.SelectedIndex;    // Sets the Splitmethod, used for VideoEncode() function
-            if (SplitMethod == 0 || SplitMethod == 1)
-            {
-                // Scene based splitting
-                if (File.Exists(Path.Combine(TempPath, TempPathFileName, "splits.txt")))
-                    VideoChunks = File.ReadAllLines(Path.Combine(TempPath, TempPathFileName, "splits.txt")); // Reads the split file for VideoEncode() function
-            }
-            else if (SplitMethod == 2)
-            {
-                // Chunk based splitting
-                VideoChunks = Directory.GetFiles(Path.Combine(TempPath, TempPathFileName, "Chunks"), "*mkv", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
-            }
-
+            SmallFunctions.setVideoChunks(SplitMethod);             // Sets the array of videochunks/commands
             SetPipeCommand();
         }
 
