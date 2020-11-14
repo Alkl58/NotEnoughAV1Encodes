@@ -18,6 +18,7 @@ namespace NotEnoughAV1Encodes
         public static string PipeBitDepthCommand = null;
         public static string EncoderAomencCommand = null;
         public static string EncoderRav1eCommand = null;
+        public static string EncoderSvtAV1Command = null;
         // Temp Settings
         public static int WorkerCount = 0;  // amount of workers
         public static int EncodeMethod = 0; // 0 = aomenc, 1 = rav1e, 2 = svt-av1...
@@ -30,10 +31,11 @@ namespace NotEnoughAV1Encodes
         public static string TempPathFileName = null;
         public static string VideoInput = null;     // Video Input Path
         public static string VideoOutput = null;    // Video Output Path
-        // Dependencie Path
+        // Dependencies Paths
         public static string FFmpegPath = null; // Path to ffmpeg
         public static string AomencPath = null; // Path to aomenc
         public static string Rav1ePath = null;  // Path to rav1e
+        public static string SvtAV1Path = null; // Path to svt-av1
 
         public MainWindow()
         {
@@ -73,6 +75,14 @@ namespace NotEnoughAV1Encodes
                     SliderVideoSpeed.Value = 6;
                     SliderVideoQuality.Maximum = 255;
                     SliderVideoQuality.Value = 100;
+                }
+                else if (ComboBoxVideoEncoder.SelectedIndex == 2)
+                {
+                    // svt-av1
+                    SliderVideoSpeed.Maximum = 8;
+                    SliderVideoSpeed.Value = 8;
+                    SliderVideoQuality.Value = 50;
+                    SliderVideoQuality.Maximum = 63;
                 }
             }
 
@@ -214,6 +224,7 @@ namespace NotEnoughAV1Encodes
             // Sets the Encoder Settings
             if (ComboBoxVideoEncoder.SelectedIndex == 0) { EncoderAomencCommand = SetAomencCommand(); }
             if (ComboBoxVideoEncoder.SelectedIndex == 1) { EncoderRav1eCommand = SetRav1eCommand(); }
+            if (ComboBoxVideoEncoder.SelectedIndex == 2) { EncoderSvtAV1Command = SetSvtAV1Command(); }
         }
 
         private string SetAomencCommand()
@@ -239,6 +250,22 @@ namespace NotEnoughAV1Encodes
             // Constant Quality or Target Bitrate
             if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " --quantizer " + SliderVideoQuality.Value; }
             else if (RadioButtonVideoBitrate.IsChecked == true) { cmd += " --bitrate " + TextBoxVideoBitrate.Text; }
+
+            return cmd;
+        }
+
+        private string SetSvtAV1Command()
+        {
+            string cmd = "";
+            cmd += " --preset " + SliderVideoSpeed.Value;
+
+            // Constant Quality or Target Bitrate
+            if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " --rc 0 -q " + SliderVideoQuality.Value; }
+            else if (RadioButtonVideoBitrate.IsChecked == true) 
+            {
+                cmd += " --rc 1";
+                cmd += " --tbr " + TextBoxVideoBitrate.Text; 
+            }
 
             return cmd;
         }
@@ -354,6 +381,27 @@ namespace NotEnoughAV1Encodes
                                         Console.WriteLine("/C ffmpeg.exe" + ffmpegPipe + rav1eCMD + output);
                                         startInfo.Arguments = "/C ffmpeg.exe" + ffmpegPipe + rav1eCMD + output;
                                     }
+                                    else if (EncodeMethod == 2) // svt-av1
+                                    {
+                                        string svtav1CMD = "";
+                                        string output = "";
+                                        string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -nostdin -vsync 0 -f yuv4mpegpipe - | ";
+                                        if (OnePass)
+                                        {
+                                            // One Pass Encoding
+                                            svtav1CMD = '\u0022' + Path.Combine(Rav1ePath, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --passes 1 -b ";
+                                            output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                        }
+                                        else
+                                        {
+                                            // Two Pass Encoding First Pass
+                                            svtav1CMD = '\u0022' + Path.Combine(Rav1ePath, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 1 -b NUL --stats ";
+                                            output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
+                                        }
+                                        
+                                        Console.WriteLine("/C ffmpeg.exe" + ffmpegPipe + svtav1CMD + output);
+                                        startInfo.Arguments = "/C ffmpeg.exe" + ffmpegPipe + svtav1CMD + output;
+                                    }
 
                                     ffmpegProcess.StartInfo = startInfo;
                                     ffmpegProcess.Start();
@@ -383,6 +431,19 @@ namespace NotEnoughAV1Encodes
                                         string outputVid = " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                         Console.WriteLine("/C ffmpeg.exe" + ffmpegPipe + aomencCMD + outputLog + outputVid);
                                         startInfo.Arguments = "/C ffmpeg.exe" + ffmpegPipe + aomencCMD + outputLog + outputVid;
+                                    }
+                                    else if (EncodeMethod == 1) // rav1e
+                                    {
+                                        // Rav1e 2 Pass still broken
+                                    }
+                                    else if (EncodeMethod == 2) // svt-av1
+                                    {
+                                        string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -nostdin -vsync 0 -f yuv4mpegpipe - | ";
+                                        string svtav1CMD = '\u0022' + Path.Combine(Rav1ePath, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 2 --stats ";
+                                        string stats = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
+                                        string outputVid = " -b " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                        Console.WriteLine("/C ffmpeg.exe" + ffmpegPipe + svtav1CMD + stats + outputVid);
+                                        startInfo.Arguments = "/C ffmpeg.exe" + ffmpegPipe + svtav1CMD + stats + outputVid;
                                     }
 
                                     ffmpegProcess.StartInfo = startInfo;

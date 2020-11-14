@@ -190,7 +190,6 @@
                         <ComboBoxItem Content="rav1e"/>
                         <ComboBoxItem Content="svt-av1"/>
                         <ComboBoxItem Content="libvpx-vp9"/>
-                        <ComboBoxItem Content="libx265"/>
                     </ComboBox>
                     <Label Content="Framerate:" HorizontalAlignment="Left" Margin="57,102,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="ComboBoxVideoFramerate" HorizontalAlignment="Left" Margin="138,102,0,0" VerticalAlignment="Top" Width="127" Height="29" VerticalContentAlignment="Center">
