@@ -109,6 +109,7 @@ namespace NotEnoughAV1Encodes
             await Task.Run(() => EncodeVideo());
             await Task.Run(() => VideoMuxing.Concat());
             SmallFunctions.CheckVideoOutput();
+            SmallFunctions.PlayFinishedSound();
         }
 
         private void SplitVideo()

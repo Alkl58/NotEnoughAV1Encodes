@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Threading;
 using System.Windows;
 
@@ -128,6 +129,13 @@ namespace NotEnoughAV1Encodes
             {
                 MessageBox.Show("Muxing failed. Video output not detected!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+        }
+
+        public static void PlayFinishedSound()
+        {
+            // Plays a sound when program has finished encoding / muxing
+            SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
+            playSound.Play();
         }
     }
 }
