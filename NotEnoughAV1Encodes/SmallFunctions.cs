@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 
 namespace NotEnoughAV1Encodes
 {
@@ -110,6 +111,23 @@ namespace NotEnoughAV1Encodes
                 return strSource.Substring(Start, End - Start);
             }
             return "";
+        }
+
+        public static void CheckVideoOutput()
+        {
+            // This checks if the video muxer created an output file
+            if (File.Exists(MainWindow.VideoInput))
+            {
+                FileInfo VideoOutput = new FileInfo(MainWindow.VideoInput);
+                if (VideoOutput.Length <= 50000)
+                {
+                    MessageBox.Show("Video Output is " + (VideoOutput.Length /1000) + "KB.\nThere could be a muxing error.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Muxing failed. Video output not detected!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }

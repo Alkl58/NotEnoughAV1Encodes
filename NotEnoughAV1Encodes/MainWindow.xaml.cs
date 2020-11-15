@@ -108,6 +108,7 @@ namespace NotEnoughAV1Encodes
             ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames);
             await Task.Run(() => EncodeVideo());
             await Task.Run(() => VideoMuxing.Concat());
+            SmallFunctions.CheckVideoOutput();
         }
 
         private void SplitVideo()
