@@ -20,27 +20,27 @@ namespace NotEnoughAV1Encodes
         public static string EncoderRav1eCommand = null;
         public static string EncoderSvtAV1Command = null;
         // Temp Settings
-        public static int WorkerCount = 0;  // amount of workers
-        public static int EncodeMethod = 0; // 0 = aomenc, 1 = rav1e, 2 = svt-av1...
-        public static int SplitMethod = 0;  // 0 = ffmpeg; 1 = pyscenedetect; 2 = chunking
-        public static bool OnePass = true;  // true = Onepass, false = Twopass
-        public static bool Priority = true; // true = normal, false = below normal (process priority)
-        public static string[] VideoChunks; // Array of command/videochunks
+        public static int WorkerCount = 0;          // amount of workers
+        public static int EncodeMethod = 0;         // 0 = aomenc, 1 = rav1e, 2 = svt-av1...
+        public static int SplitMethod = 0;          // 0 = ffmpeg; 1 = pyscenedetect; 2 = chunking
+        public static bool OnePass = true;          // true = Onepass, false = Twopass
+        public static bool Priority = true;         // true = normal, false = below normal (process priority)
+        public static string[] VideoChunks;         // Array of command/videochunks
         // IO Paths
         public static string TempPath = Path.Combine(Path.GetTempPath(), "NEAV1E");
         public static string TempPathFileName = null;
         public static string VideoInput = null;     // Video Input Path
         public static string VideoOutput = null;    // Video Output Path
-        public static bool VideoInputSet = false;
-        public static bool VideoOutputSet = false;
+        public static bool VideoInputSet = false;   // Video Input Set Boolean
+        public static bool VideoOutputSet = false;  // Video Output Set Boolean
         // Dependencies Paths
-        public static string FFmpegPath = null; // Path to ffmpeg
-        public static string AomencPath = null; // Path to aomenc
-        public static string Rav1ePath = null;  // Path to rav1e
-        public static string SvtAV1Path = null; // Path to svt-av1
+        public static string FFmpegPath = null;     // Path to ffmpeg
+        public static string AomencPath = null;     // Path to aomenc
+        public static string Rav1ePath = null;      // Path to rav1e
+        public static string SvtAV1Path = null;     // Path to svt-av1
         // Temp Variables
-        public static int TotalFrames = 0;      // used for progressbar and frame check
-        public DateTime StartTime;              // used for eta calculation
+        public static int TotalFrames = 0;          // used for progressbar and frame check
+        public DateTime StartTime;                  // used for eta calculation
 
         public MainWindow()
         {
@@ -91,6 +91,18 @@ namespace NotEnoughAV1Encodes
                 }
             }
 
+        }
+
+        private void CheckBoxCustomVideoSettings_Checked(object sender, RoutedEventArgs e)
+        {
+            // When Checking the custom encoding settings checkbox it will write the current settings to it
+            if (CheckBoxCustomVideoSettings.IsChecked == true)
+            {
+                // Sets the Encoder Settings
+                if (ComboBoxVideoEncoder.SelectedIndex == 0) { TextBoxCustomVideoSettings.Text = SetAomencCommand(); }
+                if (ComboBoxVideoEncoder.SelectedIndex == 1) { TextBoxCustomVideoSettings.Text = SetRav1eCommand(); }
+                if (ComboBoxVideoEncoder.SelectedIndex == 2) { TextBoxCustomVideoSettings.Text = SetSvtAV1Command(); }
+            }
         }
 
         // ══════════════════════════════════════ Main Logic ══════════════════════════════════════
@@ -285,10 +297,21 @@ namespace NotEnoughAV1Encodes
 
         private void SetEncoderSettings()
         {
-            // Sets the Encoder Settings
-            if (ComboBoxVideoEncoder.SelectedIndex == 0) { EncoderAomencCommand = SetAomencCommand(); }
-            if (ComboBoxVideoEncoder.SelectedIndex == 1) { EncoderRav1eCommand = SetRav1eCommand(); }
-            if (ComboBoxVideoEncoder.SelectedIndex == 2) { EncoderSvtAV1Command = SetSvtAV1Command(); }
+            if (CheckBoxCustomVideoSettings.IsChecked == false)
+            {
+                // Sets the Encoder Settings
+                if (ComboBoxVideoEncoder.SelectedIndex == 0) { EncoderAomencCommand = SetAomencCommand(); }
+                if (ComboBoxVideoEncoder.SelectedIndex == 1) { EncoderRav1eCommand = SetRav1eCommand(); }
+                if (ComboBoxVideoEncoder.SelectedIndex == 2) { EncoderSvtAV1Command = SetSvtAV1Command(); }
+            }
+            else
+            {
+                // Custom Encoding Settings
+                if (ComboBoxVideoEncoder.SelectedIndex == 0) { EncoderAomencCommand = " " + TextBoxCustomVideoSettings.Text; }
+                if (ComboBoxVideoEncoder.SelectedIndex == 1) { EncoderRav1eCommand = " " + TextBoxCustomVideoSettings.Text; }
+                if (ComboBoxVideoEncoder.SelectedIndex == 2) { EncoderSvtAV1Command = " " + TextBoxCustomVideoSettings.Text; }
+            }
+
         }
 
         private string SetAomencCommand()
@@ -734,5 +757,6 @@ namespace NotEnoughAV1Encodes
 
             encodeStarted = false;
         }
+
     }
 }

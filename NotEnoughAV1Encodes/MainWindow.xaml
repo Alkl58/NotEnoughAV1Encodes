@@ -309,7 +309,7 @@
                             <ComboBoxItem Content="9"/>
                             <ComboBoxItem Content="10"/>
                         </ComboBox>
-                        <CheckBox x:Name="CheckBoxSVTAV1HDR" Content="HDR" HorizontalAlignment="Left" Margin="589,64,0,0" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="CheckBoxSVTAV1HDR" Content="HDR" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="591" Canvas.Top="23"/>
                     </Canvas>
                     <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="947" Margin="0,41,0,0">
                         <Canvas.Style>
@@ -605,7 +605,8 @@
                             <ComboBoxItem Content="0"/>
                         </ComboBox>
                     </Canvas>
-                    
+                    <TextBox x:Name="TextBoxCustomVideoSettings" HorizontalAlignment="Left" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Height="85" Margin="10,313,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="927"/>
+                    <CheckBox x:Name="CheckBoxCustomVideoSettings" Content="Custom Settings" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Checked="CheckBoxCustomVideoSettings_Checked"/>
                 </Grid>
             </TabItem>
         </TabControl>
