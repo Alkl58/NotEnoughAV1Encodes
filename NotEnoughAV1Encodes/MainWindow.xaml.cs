@@ -250,6 +250,57 @@ namespace NotEnoughAV1Encodes
             if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " --end-usage=q --cq-level=" + SliderVideoQuality.Value; }
             else if (RadioButtonVideoBitrate.IsChecked == true) { cmd += " --end-usage=vbr --target-bitrate=" + TextBoxVideoBitrate.Text; }
 
+            if (CheckBoxVideoAdvancedSettings.IsChecked == false)
+            {
+                // Default params when User don't select advanced settings
+                cmd += " --threads=4 --tile-columns=2 --tile-rows=1";
+            }
+            else
+            {
+                // Advanced Settings
+                cmd += " --threads=" + ComboBoxAomencThreads.Text;                                      // Threads
+                cmd += " --tile-columns=" + ComboBoxAomencTileColumns.Text;                             // Tile Columns
+                cmd += " --tile-rows=" + ComboBoxAomencTileRows.Text;                                   // Tile Rows
+                cmd += " --lag-in-frames=" + TextBoxAomencLagInFrames.Text;                             // Lag in Frames
+                cmd += " --sharpness=" + ComboBoxAomencSharpness.Text;                                  // Sharpness (Filter)
+                cmd += " --aq-mode=" + ComboBoxAomencAQMode.SelectedIndex;                              // AQ-Mode
+                cmd += " --enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex;      // Key Frame Filtering
+                cmd += " --tune=" + ComboBoxAomencTune.Text;                                            // Tune
+                if (TextBoxAomencMaxGOP.Text != "0")
+                {
+                    cmd += " --kf-max-dist=" + TextBoxAomencMaxGOP.Text;                                // Keyframe Interval
+                }
+                if (CheckBoxAomencRowMT.IsChecked == false)
+                {
+                    cmd += " --row-mt=0";                                                               // Row Based Multithreading
+                }
+                if (CheckBoxAomencCDEF.IsChecked == false)
+                {
+                    cmd += " --enable-cdef=0";                                                          // Constrained Directional Enhancement Filter
+                }
+                if (ComboBoxAomencColorPrimaries.SelectedIndex != 0)
+                {
+                    cmd += " --color-primaries=" + ComboBoxAomencColorPrimaries.Text;                   // Color Primaries
+                }
+                if (ComboBoxAomencColorTransfer.SelectedIndex != 0)
+                {
+                    cmd += " --transfer-characteristics=" + ComboBoxAomencColorTransfer.Text;           // Color Transfer
+                }
+                if (ComboBoxAomencColorMatrix.SelectedIndex != 0)
+                {
+                    cmd += " --matrix-coefficients=" + ComboBoxAomencColorMatrix.Text;                  // Color Matrix
+                }
+                if (ComboBoxAomencColorFormat.SelectedIndex != 0)
+                {
+                    cmd += " --" + ComboBoxAomencColorFormat.Text;                                      // Color Space
+                }
+                if (CheckBoxAomencARNRMax.IsChecked == true)
+                {
+                    cmd += " --arnr-maxframes=" + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
+                    cmd += " --arnr-strength=" + ComboBoxAomencARNRStrength.Text;                       // ARNR Strength
+                }
+            }
+
             return cmd;
         }
 
