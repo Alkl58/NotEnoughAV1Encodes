@@ -605,7 +605,7 @@
                             <ComboBoxItem Content="0"/>
                         </ComboBox>
                     </Canvas>
-                    <TextBox x:Name="TextBoxCustomVideoSettings" HorizontalAlignment="Left" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Height="85" Margin="10,313,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="927"/>
+                    <TextBox x:Name="TextBoxCustomVideoSettings" HorizontalAlignment="Left" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Height="85" Margin="10,313,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="927" TextChanged="TextBoxCustomVideoSettings_TextChanged"/>
                     <CheckBox x:Name="CheckBoxCustomVideoSettings" Content="Custom Settings" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Checked="CheckBoxCustomVideoSettings_Checked"/>
                 </Grid>
             </TabItem>

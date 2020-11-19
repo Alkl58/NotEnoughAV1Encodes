@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace NotEnoughAV1Encodes
 {
@@ -102,6 +103,25 @@ namespace NotEnoughAV1Encodes
                 if (ComboBoxVideoEncoder.SelectedIndex == 0) { TextBoxCustomVideoSettings.Text = SetAomencCommand(); }
                 if (ComboBoxVideoEncoder.SelectedIndex == 1) { TextBoxCustomVideoSettings.Text = SetRav1eCommand(); }
                 if (ComboBoxVideoEncoder.SelectedIndex == 2) { TextBoxCustomVideoSettings.Text = SetSvtAV1Command(); }
+            }
+        }
+
+        private void TextBoxCustomVideoSettings_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            // Verifies the arguments the user inputs into the encoding settings textbox
+            // If the users writes a "forbidden" argument, it will display the text red
+            string[] forbiddenWords = { "help", "cfg", "debug", "output", "passes", "pass", "fpf", "limit",
+            "skip", "webm", "ivf", "obu", "q-hist", "rate-hist", "fullhelp", "benchmark", "first-pass", "second-pass",
+            "reconstruction", "enc-mode-2p", "input-stat-file", "output-stat-file" };
+
+            foreach (var word in forbiddenWords)
+            {
+                TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+                if (TextBoxCustomVideoSettings.Text.Contains(word))
+                {
+                    TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                    break;
+                }
             }
         }
 
