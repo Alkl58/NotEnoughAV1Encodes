@@ -190,8 +190,8 @@
                     <Label Content="Encoder:" HorizontalAlignment="Left" Margin="57,57,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="138,57,0,0" VerticalAlignment="Top" Width="127" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
                         <ComboBoxItem Content="aomenc"/>
-                        <ComboBoxItem Content="rav1e" IsSelected="True"/>
-                        <ComboBoxItem Content="svt-av1"/>
+                        <ComboBoxItem Content="rav1e"/>
+                        <ComboBoxItem Content="svt-av1" IsSelected="True"/>
                     </ComboBox>
                     <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="57,98,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="138,98,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center">
@@ -225,6 +225,102 @@
                 <Grid Background="White">
                     <Label Content="Advanced Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="947" Margin="0,41,0,0">
+                        <Canvas.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="2">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Canvas.Style>
+                        <Label x:Name="LabelSVTAV1TileColumns" Content="Tile Columns:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="17" FontSize="14"/>
+                        <Label x:Name="LabelSVTAV1TileRows" Content="Tile Rows:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="51" FontSize="14"/>
+                        <ComboBox x:Name="ComboBoxSVTAV1TileColumns" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="17" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="0" IsSelected="True"/>
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                            <ComboBoxItem Content="6"/>
+                        </ComboBox>
+                        <ComboBox x:Name="ComboBoxSVTAV1TileRows" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="51" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="0" IsSelected="True"/>
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                            <ComboBoxItem Content="6"/>
+                        </ComboBox>
+                        <Label x:Name="LabelSVTAV1MaxGOP" FontSize="14" Content="Max GOP Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="85"/>
+                        <TextBox x:Name="TextBoxSVTAV1MaxGOP" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="-2" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="85" FontSize="14" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label x:Name="LabelSVTAV1Lookahead" FontSize="14" Content="Lookahead:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="119"/>
+                        <TextBox x:Name="TextBoxSVTAV1Lookahead" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="33" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="119" FontSize="14" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label x:Name="LabelSVTAV1AQMode" FontSize="14" Content="AQ-Mode:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="153"/>
+                        <ComboBox x:Name="ComboBoxSVTAV1AQMode" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="153" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="0 - OFF" IsSelected="True"/>
+                            <ComboBoxItem Content="1 - Variance Base Using Segments"/>
+                            <ComboBoxItem Content="2 - Deltaq Pred Efficiency"/>
+                        </ComboBox>
+                        <Label x:Name="LabelSVTAV1ColorFormat" Content="Color Format:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="337" Canvas.Top="17" FontSize="14"/>
+                        <ComboBox x:Name="ComboBoxSVTAV1ColorFormat" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="452" Canvas.Top="17" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="4:2:0" IsSelected="True"/>
+                            <ComboBoxItem Content="4:2:2"/>
+                            <ComboBoxItem Content="4:4:4"/>
+                        </ComboBox>
+                        <Label x:Name="LabelSVTAV1Profile" Content="Profile:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="337" Canvas.Top="51" FontSize="14"/>
+                        <ComboBox x:Name="ComboBoxSVTAV1Profile" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="452" Canvas.Top="51" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="Main" IsSelected="True"/>
+                            <ComboBoxItem Content="High"/>
+                            <ComboBoxItem Content="Professional"/>
+                        </ComboBox>
+                        <Label x:Name="LabelSVTAV1AltRefLevel" Content="AltRef Level:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="337" Canvas.Top="85" FontSize="14"/>
+                        <ComboBox x:Name="ComboBoxSVTAV1AltRefLevel" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="452" Canvas.Top="85" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="-1" IsSelected="True"/>
+                            <ComboBoxItem Content="0"/>
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                        </ComboBox>
+                        <Label x:Name="LabelSVTAV1AltRefStrength" Content="AltRef Strength:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="337" Canvas.Top="119" FontSize="14"/>
+                        <ComboBox x:Name="ComboBoxSVTAV1AltRefStrength" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="452" Canvas.Top="119" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="0"/>
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5" IsSelected="True"/>
+                            <ComboBoxItem Content="6"/>
+                        </ComboBox>
+                        <Label x:Name="LabelSVTAV1AltRefStrength_Copy" Content="AltRef Frames:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="337" Canvas.Top="153" FontSize="14"/>
+                        <ComboBox x:Name="ComboBoxSVTAV1AltRefFrames" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="452" Canvas.Top="153" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="0"/>
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                            <ComboBoxItem Content="6"/>
+                            <ComboBoxItem Content="7" IsSelected="True"/>
+                            <ComboBoxItem Content="8"/>
+                            <ComboBoxItem Content="9"/>
+                            <ComboBoxItem Content="10"/>
+                        </ComboBox>
+                    </Canvas>
+                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="947" Margin="0,41,0,0">
+                        <Canvas.Style>
+                            <Style>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Canvas.Style>
                         <Label x:Name="LabelRav1eThreads" Content="Threads:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="17" FontSize="14"/>
                         <ComboBox x:Name="ComboBoxRav1eThreads" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="17" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="0"/>
@@ -508,6 +604,7 @@
                             <ComboBoxItem Content="0"/>
                         </ComboBox>
                     </Canvas>
+                    <CheckBox x:Name="CheckBoxSVTAV1HDR" Content="HDR" HorizontalAlignment="Left" Margin="589,64,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </TabControl>

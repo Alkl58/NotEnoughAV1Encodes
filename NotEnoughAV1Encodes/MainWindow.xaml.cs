@@ -378,6 +378,32 @@ namespace NotEnoughAV1Encodes
                 cmd += " --tbr " + TextBoxVideoBitrate.Text; 
             }
 
+            if (CheckBoxVideoAdvancedSettings.IsChecked == true)
+            {
+                cmd += " --tile-columns " + ComboBoxSVTAV1TileColumns.Text;                             // Tile Columns
+                cmd += " --tile-rows " + ComboBoxSVTAV1TileRows.Text;                                   // Tile Rows
+                cmd += " --keyint " + TextBoxSVTAV1MaxGOP.Text;                                         // Keyframe Interval
+                cmd += " --lookahead " + TextBoxSVTAV1Lookahead.Text;                                   // Lookahead
+                cmd += " --adaptive-quantization " + ComboBoxSVTAV1AQMode.SelectedIndex;                // AQ-Mode
+                cmd += " --profile " + ComboBoxSVTAV1Profile.SelectedIndex;                             // Bitstream Profile
+                if (ComboBoxSVTAV1AltRefLevel.SelectedIndex != 0)
+                {
+                    cmd += " --tf-level " + ComboBoxSVTAV1AltRefLevel.Text;                             // AltRef Level
+                }
+                if (ComboBoxSVTAV1AltRefStrength.SelectedIndex != 5)
+                {
+                    cmd += " --altref-strength " + ComboBoxSVTAV1AltRefStrength.SelectedIndex;          // AltRef Strength
+                }
+                if (ComboBoxSVTAV1AltRefFrames.SelectedIndex != 7)
+                {
+                    cmd += " --altref-nframes " + ComboBoxSVTAV1AltRefFrames.SelectedIndex;             // AltRef Frames
+                }
+                if (CheckBoxSVTAV1HDR.IsChecked == true)
+                {
+                    cmd += " --enable-hdr 1";                                                           // HDR
+                }
+            }
+
             return cmd;
         }
 
