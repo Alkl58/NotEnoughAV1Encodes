@@ -189,9 +189,9 @@
                     <Label Content="Video" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Encoder:" HorizontalAlignment="Left" Margin="57,57,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="138,57,0,0" VerticalAlignment="Top" Width="127" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
-                        <ComboBoxItem Content="aomenc"/>
+                        <ComboBoxItem Content="aomenc" IsSelected="True"/>
                         <ComboBoxItem Content="rav1e"/>
-                        <ComboBoxItem Content="svt-av1" IsSelected="True"/>
+                        <ComboBoxItem Content="svt-av1"/>
                     </ComboBox>
                     <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="57,98,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="138,98,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center">
@@ -309,6 +309,7 @@
                             <ComboBoxItem Content="9"/>
                             <ComboBoxItem Content="10"/>
                         </ComboBox>
+                        <CheckBox x:Name="CheckBoxSVTAV1HDR" Content="HDR" HorizontalAlignment="Left" Margin="589,64,0,0" VerticalAlignment="Top"/>
                     </Canvas>
                     <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="947" Margin="0,41,0,0">
                         <Canvas.Style>
@@ -604,7 +605,7 @@
                             <ComboBoxItem Content="0"/>
                         </ComboBox>
                     </Canvas>
-                    <CheckBox x:Name="CheckBoxSVTAV1HDR" Content="HDR" HorizontalAlignment="Left" Margin="589,64,0,0" VerticalAlignment="Top"/>
+                    
                 </Grid>
             </TabItem>
         </TabControl>

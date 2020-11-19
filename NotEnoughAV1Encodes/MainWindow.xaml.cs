@@ -139,8 +139,60 @@ namespace NotEnoughAV1Encodes
 
         private void SetPipeCommand()
         {
+            // Potential breaking point: 422p 8bit / 444p 8bit not being "-strict -1"
+
             PipeBitDepthCommand = " -pix_fmt yuv";
-            PipeBitDepthCommand += "420p";
+            if (ComboBoxVideoEncoder.SelectedIndex == 0)
+            {
+                // aomenc
+                if (ComboBoxAomencColorFormat.SelectedIndex == 0)
+                {
+                    PipeBitDepthCommand += "420p";
+                }
+                else if (ComboBoxAomencColorFormat.SelectedIndex == 1)
+                {
+                    PipeBitDepthCommand += "422p";
+                }
+                else if (ComboBoxAomencColorFormat.SelectedIndex == 2)
+                {
+                    PipeBitDepthCommand += "444p";
+                }
+            }
+
+            if (ComboBoxVideoEncoder.SelectedIndex == 1)
+            {
+                // rav1e
+                if (ComboBoxRav1eColorFormat.SelectedIndex == 0)
+                {
+                    PipeBitDepthCommand += "420p";
+                }
+                else if (ComboBoxRav1eColorFormat.SelectedIndex == 1)
+                {
+                    PipeBitDepthCommand += "422p";
+                }
+                else if (ComboBoxRav1eColorFormat.SelectedIndex == 2)
+                {
+                    PipeBitDepthCommand += "444p";
+                }
+            }
+
+            if (ComboBoxVideoEncoder.SelectedIndex == 1)
+            {
+                // svt-av1
+                if (ComboBoxSVTAV1ColorFormat.SelectedIndex == 0)
+                {
+                    PipeBitDepthCommand += "420p";
+                }
+                else if (ComboBoxSVTAV1ColorFormat.SelectedIndex == 1)
+                {
+                    PipeBitDepthCommand += "422p";
+                }
+                else if (ComboBoxSVTAV1ColorFormat.SelectedIndex == 2)
+                {
+                    PipeBitDepthCommand += "444p";
+                }
+            }
+
             if (ComboBoxVideoBitDepth.SelectedIndex == 1)
             {
                 // 10bit
