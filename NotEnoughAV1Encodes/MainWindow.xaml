@@ -20,9 +20,9 @@
             <TabItem Header="Summary" FontSize="14">
                 <Grid Background="White">
                     <Label Content="Source:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Label x:Name="LabelVideoSource" Content="No Source Selected" HorizontalAlignment="Left" Margin="103,10,0,0" VerticalAlignment="Top" Width="480" FontStyle="Italic" Foreground="#FF404040"/>
                     <Label Content="Destination:" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Label x:Name="LabelVideoDestination" Content="No Destination Selected" HorizontalAlignment="Left" Margin="103,39,0,0" VerticalAlignment="Top" Width="480" FontStyle="Italic" Foreground="#FF404040"/>
+                    <TextBox x:Name="TextBoxVideoSource" HorizontalAlignment="Left" Height="29" Margin="105,10,0,0" TextWrapping="Wrap" Text="No Source Selected" VerticalAlignment="Top" Width="480" FontStyle="Italic" VerticalContentAlignment="Center" Foreground="#FF404040" IsReadOnly="True" BorderBrush="{x:Null}"/>
+                    <TextBox x:Name="TextBoxVideoDestination" HorizontalAlignment="Left" Height="29" Margin="105,39,0,0" TextWrapping="Wrap" Text="No Destination Selected" VerticalAlignment="Top" Width="480" FontStyle="Italic" VerticalContentAlignment="Center" Foreground="#FF404040" IsReadOnly="True" BorderBrush="{x:Null}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="General Settings" FontSize="14">

@@ -351,7 +351,7 @@ namespace NotEnoughAV1Encodes
                 VideoInputSet = true;
             // Sets the label in the user interface
             // Note that this has to be edited once batch encoding is added as function
-            LabelVideoSource.Content = result;
+            TextBoxVideoSource.Text = result;
             VideoInput = result;
             TempPathFileName = Path.GetFileNameWithoutExtension(result);
         }
@@ -366,7 +366,7 @@ namespace NotEnoughAV1Encodes
             Nullable<bool> result = saveVideoFileDialog.ShowDialog();
             if (result == true)
             {
-                LabelVideoDestination.Content = saveVideoFileDialog.FileName;
+                TextBoxVideoDestination.Text = saveVideoFileDialog.FileName;
                 VideoOutput = saveVideoFileDialog.FileName;
                 VideoOutputSet = true;
             }
