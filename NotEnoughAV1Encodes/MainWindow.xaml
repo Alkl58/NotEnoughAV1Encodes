@@ -624,5 +624,11 @@
         </Button>
         <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="34" Margin="21,536,0,0" VerticalAlignment="Top" Width="953"/>
         <Label x:Name="LabelProgressBar" Content="" HorizontalAlignment="Left" Margin="21,536,0,0" VerticalAlignment="Top" Width="953" Height="34" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Button x:Name="ButtonStopEncode" Margin="447,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="135" Background="{x:Null}" BorderBrush="#FFE4E4E4" Click="ButtonStopEncode_Click">
+            <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
+                <Image HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="47" Source="img/stop.png" Canvas.Top="-4" Canvas.Left="-9"/>
+                <Label Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="38" Height="30" Canvas.Top="4" FontSize="14"/>
+            </Canvas>
+        </Button>
     </Grid>
 </Window>

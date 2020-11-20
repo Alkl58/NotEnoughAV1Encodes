@@ -131,10 +131,36 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        public static void KillInstances()
+        {
+            //Kills all ffmpeg instances
+            try
+            {
+                foreach (var process in Process.GetProcessesByName("aomenc")) { process.Kill(); }
+                foreach (var process in Process.GetProcessesByName("rav1e")) { process.Kill(); }
+                foreach (var process in Process.GetProcessesByName("SvtAv1EncApp")) { process.Kill(); }
+                foreach (var process in Process.GetProcessesByName("ffmpeg")) { process.Kill(); }
+            }
+            catch { }
+        }
+
+        public static class Cancel
+        {
+            //Public Cancel boolean
+            public static bool CancelAll = false;
+        }
+
         public static void PlayFinishedSound()
         {
             // Plays a sound when program has finished encoding / muxing
             SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
+            playSound.Play();
+        }
+
+        public static void PlayStopSound()
+        {
+            // Plays a sound when program has finished encoding / muxing
+            SoundPlayer playSound = new SoundPlayer(Properties.Resources.stop);
             playSound.Play();
         }
     }

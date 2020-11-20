@@ -68,5 +68,14 @@ namespace NotEnoughAV1Encodes.Properties {
                 return ResourceManager.GetStream("finished", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream stop {
+            get {
+                return ResourceManager.GetStream("stop", resourceCulture);
+            }
+        }
     }
 }

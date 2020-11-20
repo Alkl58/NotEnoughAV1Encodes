@@ -174,5 +174,8 @@
   <ItemGroup>
     <Resource Include="logo.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stop.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
