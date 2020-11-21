@@ -172,15 +172,21 @@ namespace NotEnoughAV1Encodes
         public static void PlayFinishedSound()
         {
             // Plays a sound when program has finished encoding / muxing
-            SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
-            playSound.Play();
+            if (MainWindow.PlayUISounds == true)
+            {
+                SoundPlayer playSound = new SoundPlayer(Properties.Resources.finished);
+                playSound.Play();
+            }
         }
 
         public static void PlayStopSound()
         {
             // Plays a sound when program has finished encoding / muxing
-            SoundPlayer playSound = new SoundPlayer(Properties.Resources.stop);
-            playSound.Play();
+            if (MainWindow.PlayUISounds == true)
+            {
+                SoundPlayer playSound = new SoundPlayer(Properties.Resources.stop);
+                playSound.Play();
+            }
         }
     }
 }

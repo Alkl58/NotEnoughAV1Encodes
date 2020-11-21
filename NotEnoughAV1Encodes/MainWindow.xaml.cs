@@ -42,6 +42,7 @@ namespace NotEnoughAV1Encodes
         // Temp Variables
         public static bool EncodeStarted = false;   // Encode Started Boolean
         public static bool DeleteTempFiles = false; // Temp File Deletion
+        public static bool PlayUISounds = false;    // UI Sounds (Finished Encoding / Error)
         public static int TotalFrames = 0;          // used for progressbar and frame check
         public DateTime StartTime;                  // used for eta calculation
         // Progress Cancellation
@@ -108,6 +109,11 @@ namespace NotEnoughAV1Encodes
                 if (ComboBoxVideoEncoder.SelectedIndex == 1) { TextBoxCustomVideoSettings.Text = SetRav1eCommand(); }
                 if (ComboBoxVideoEncoder.SelectedIndex == 2) { TextBoxCustomVideoSettings.Text = SetSvtAV1Command(); }
             }
+        }
+
+        private void CheckBoxSettingsUISounds_Checked(object sender, RoutedEventArgs e)
+        {
+            PlayUISounds = CheckBoxSettingsUISounds.IsChecked == true;
         }
 
         private void TextBoxCustomVideoSettings_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -181,6 +187,11 @@ namespace NotEnoughAV1Encodes
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeVideo(); }, token);
                 await Task.Run(async () => { token.ThrowIfCancellationRequested(); await VideoMuxing.Concat(); }, token);
                 SmallFunctions.CheckVideoOutput();
+
+                // Progressbar Label when encoding finished
+                TimeSpan timespent = DateTime.Now - StartTime;
+                LabelProgressBar.Content = "Finished Encoding - Elapsed Time " + timespent.ToString("hh\\:mm\\:ss") + " - avg " + Math.Round(TotalFrames / timespent.TotalSeconds, 2) + "fps";
+                // Plays a sound if encoding has finished
                 SmallFunctions.PlayFinishedSound();
             }
             catch { SmallFunctions.PlayStopSound(); }
@@ -279,9 +290,6 @@ namespace NotEnoughAV1Encodes
                 // 12bit
                 PipeBitDepthCommand += "12le -strict -1";
             }
-            // To-Do:
-            // 422 / 444
-            // Will be implemented once Subsampling in GUI has been implemented
         }
 
         // ════════════════════════════════════ Video Filters ═════════════════════════════════════

@@ -613,6 +613,7 @@
                 <Grid Background="White">
                     <CheckBox x:Name="CheckBoxSettingsDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="63,67,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="213" IsChecked="True"/>
                     <Label Content="Program Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <CheckBox x:Name="CheckBoxSettingsUISounds" Content="Enable UI Sounds (Finished Encoding / Error)" HorizontalAlignment="Left" Margin="63,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Checked="CheckBoxSettingsUISounds_Checked"/>
                 </Grid>
             </TabItem>
         </TabControl>
