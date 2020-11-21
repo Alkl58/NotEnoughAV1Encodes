@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace NotEnoughAV1Encodes
 {
@@ -133,6 +134,12 @@ namespace NotEnoughAV1Encodes
                     break;
                 }
             }
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            // Opens a Hyperlink in the browser
+            Process.Start(e.Uri.ToString());
         }
 
         private void CancelRoutine()

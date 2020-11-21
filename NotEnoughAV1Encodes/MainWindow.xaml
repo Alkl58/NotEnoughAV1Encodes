@@ -218,7 +218,7 @@
                     <Label Content="Fastest |" HorizontalAlignment="Left" Margin="224,292,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
                     <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="457,156,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center"/>
                     <TextBox x:Name="TextBoxVideoBitrate" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="582,156,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <CheckBox x:Name="CheckBoxVideoAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="59,142,0,0" VerticalAlignment="Top" Width="139" IsChecked="True"/>
+                    <CheckBox x:Name="CheckBoxVideoAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="59,142,0,0" VerticalAlignment="Top" Width="139"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Advanced Settings" FontSize="14" Visibility="{Binding ElementName=CheckBoxVideoAdvancedSettings, Path=IsChecked, Converter={StaticResource b2v}}">
@@ -614,6 +614,12 @@
                     <CheckBox x:Name="CheckBoxSettingsDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="63,67,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="213" IsChecked="True"/>
                     <Label Content="Program Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <CheckBox x:Name="CheckBoxSettingsUISounds" Content="Enable UI Sounds (Finished Encoding / Error)" HorizontalAlignment="Left" Margin="63,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Checked="CheckBoxSettingsUISounds_Checked"/>
+                    <Label Content="Version: 1.4 (Rebegin Branch)" HorizontalAlignment="Left" Margin="597,56,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Github:" HorizontalAlignment="Left" Margin="607,85,0,0" VerticalAlignment="Top" FontSize="12"/>
+                    <TextBlock Margin="655,90,15,297" FontSize="12">
+                        <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
+                    </TextBlock>
+                    
                 </Grid>
             </TabItem>
         </TabControl>
