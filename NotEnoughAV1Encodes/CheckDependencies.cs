@@ -14,17 +14,17 @@ namespace NotEnoughAV1Encodes
 
             // Sets / Checks aomenc Path
             if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "aomenc.exe"))) { MainWindow.AomencPath = Directory.GetCurrentDirectory(); }
-            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "aomenc.exe"))) { MainWindow.AomencPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "aomenc", "aomenc.exe"))) { MainWindow.AomencPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "aomenc"); }
             else if (ExistsOnPath("aomenc.exe")) { MainWindow.AomencPath = GetFullPathWithOutName("aomenc.exe"); }
 
             // Sets / Checks rav1e Path
             if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "rav1e.exe"))) { MainWindow.Rav1ePath = Directory.GetCurrentDirectory(); }
-            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "rav1e.exe"))) { MainWindow.Rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e", "rav1e.exe"))) { MainWindow.Rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e"); }
             else if (ExistsOnPath("rav1e.exe")) { MainWindow.Rav1ePath = GetFullPathWithOutName("rav1e.exe"); }
 
             // Sets / Checks svt-av1 Path
             if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "SvtAv1EncApp.exe"))) { MainWindow.Rav1ePath = Directory.GetCurrentDirectory(); }
-            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder", "SvtAv1EncApp.exe"))) { MainWindow.Rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "Encoder"); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1", "SvtAv1EncApp.exe"))) { MainWindow.Rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1"); }
             else if (ExistsOnPath("rav1e.exe")) { MainWindow.Rav1ePath = GetFullPathWithOutName("SvtAv1EncApp.exe"); }
 
         }

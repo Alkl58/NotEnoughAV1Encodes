@@ -124,6 +124,11 @@ namespace NotEnoughAV1Encodes
                 {
                     MessageBox.Show("Video Output is " + (VideoOutput.Length /1000) + "KB.\nThere could be a muxing error.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
+                else
+                {
+                    // Deletes Temp Files only if output exists which is bigger than 50KB
+                    DeleteTempFiles();
+                }
             }
             else
             {
@@ -142,6 +147,20 @@ namespace NotEnoughAV1Encodes
                 foreach (var process in Process.GetProcessesByName("ffmpeg")) { process.Kill(); }
             }
             catch { }
+        }
+
+        public static void DeleteTempFiles()
+        {
+            // Deletes Temp Files
+            try
+            {
+                if (MainWindow.DeleteTempFiles == true)
+                {
+                    DirectoryInfo tmp = new DirectoryInfo(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName));
+                    tmp.Delete(true);
+                }
+            }
+            catch {  }
         }
 
         public static class Cancel

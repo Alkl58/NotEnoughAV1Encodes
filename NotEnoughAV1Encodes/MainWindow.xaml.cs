@@ -40,7 +40,8 @@ namespace NotEnoughAV1Encodes
         public static string Rav1ePath = null;      // Path to rav1e
         public static string SvtAV1Path = null;     // Path to svt-av1
         // Temp Variables
-        public static bool EncodeStarted = false;
+        public static bool EncodeStarted = false;   // Encode Started Boolean
+        public static bool DeleteTempFiles = false; // Temp File Deletion
         public static int TotalFrames = 0;          // used for progressbar and frame check
         public DateTime StartTime;                  // used for eta calculation
         // Progress Cancellation
@@ -181,9 +182,9 @@ namespace NotEnoughAV1Encodes
                 await Task.Run(async () => { token.ThrowIfCancellationRequested(); await VideoMuxing.Concat(); }, token);
                 SmallFunctions.CheckVideoOutput();
                 SmallFunctions.PlayFinishedSound();
-
             }
             catch { SmallFunctions.PlayStopSound(); }
+            EncodeStarted = false;
         }
 
         private void SplitVideo()
@@ -202,12 +203,13 @@ namespace NotEnoughAV1Encodes
 
         private void SetTempSettings()
         {
-            WorkerCount = int.Parse(ComboBoxWorkerCount.Text);      // Sets the worker count
-            OnePass = ComboBoxVideoPasses.SelectedIndex == 0;       // Sets the amount of passes (true = 1, false = 2)
-            Priority = ComboBoxProcessPriority.SelectedIndex == 0;  // Sets the Process Priority
-            SplitMethod = ComboBoxSplittingMethod.SelectedIndex;    // Sets the Splitmethod, used for VideoEncode() function
-            EncodeMethod = ComboBoxVideoEncoder.SelectedIndex;      // Sets the encoder (0 aomenc; 1 rav1e; 2 svt-av1)
-            SmallFunctions.setVideoChunks(SplitMethod);             // Sets the array of videochunks/commands
+            WorkerCount = int.Parse(ComboBoxWorkerCount.Text);                      // Sets the worker count
+            OnePass = ComboBoxVideoPasses.SelectedIndex == 0;                       // Sets the amount of passes (true = 1, false = 2)
+            Priority = ComboBoxProcessPriority.SelectedIndex == 0;                  // Sets the Process Priority
+            SplitMethod = ComboBoxSplittingMethod.SelectedIndex;                    // Sets the Splitmethod, used for VideoEncode() function
+            EncodeMethod = ComboBoxVideoEncoder.SelectedIndex;                      // Sets the encoder (0 aomenc; 1 rav1e; 2 svt-av1)
+            DeleteTempFiles = CheckBoxSettingsDeleteTempFiles.IsChecked == true;    // Sets if Temp Files should be deleted
+            SmallFunctions.setVideoChunks(SplitMethod);                             // Sets the array of videochunks/commands
             SetPipeCommand();
         }
 
