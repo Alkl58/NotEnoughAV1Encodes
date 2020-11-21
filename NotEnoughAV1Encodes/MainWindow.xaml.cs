@@ -642,6 +642,14 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void ButtonUpdater_Click(object sender, RoutedEventArgs e)
+        {
+            // Opens the program Updater
+            Updater updater = new Updater();
+            updater.ShowDialog();
+            CheckDependencies.Check();
+        }
+
         // ═══════════════════════════════════ Progress Bar ═══════════════════════════════════════
 
         private void ProgressBarUpdating()
