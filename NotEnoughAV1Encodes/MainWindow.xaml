@@ -5,18 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NyaAV1"
         mc:Ignorable="d"
-        Title="NotEnoughAV1Encodes" Height="620" Width="1000" ResizeMode="CanMinimize">
+        Title="NotEnoughAV1Encodes" Height="650" Width="1000" ResizeMode="CanMinimize">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="b2v"/>
     </Window.Resources>
     <Grid>
-        <Button x:Name="ButtonOpenSource" Margin="21,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="138" Background="{x:Null}" Click="ButtonOpenSource_Click" BorderBrush="#FFE4E4E4">
+        <Button x:Name="ButtonOpenSource" Margin="21,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="138" Background="{x:Null}" Click="ButtonOpenSource_Click" BorderBrush="#FF707070">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
                 <Image HorizontalAlignment="Left" Height="51" VerticalAlignment="Top" Width="48" Source="img/video1.png" Canvas.Top="-5" Canvas.Left="-4"/>
                 <Label Content="Source" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="44" Height="30" Canvas.Top="4" FontSize="14"/>
             </Canvas>
         </Button>
-        <TabControl HorizontalAlignment="Left" Height="439" Margin="21,92,0,0" VerticalAlignment="Top" Width="953">
+        <TabControl HorizontalAlignment="Left" Height="439" Margin="21,116,0,0" VerticalAlignment="Top" Width="953">
             <TabItem Header="Summary" FontSize="14">
                 <Grid Background="White">
                     <Label Content="Source:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
@@ -28,7 +28,6 @@
             <TabItem Header="General Settings" FontSize="14">
                 <Grid Background="White">
                     <Label Content="Splitting" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <CheckBox Content="" HorizontalAlignment="Left" Margin="78,18,0,0" VerticalAlignment="Top" IsChecked="True"/>
                     <Label Content="Splitting Method:" HorizontalAlignment="Left" Margin="57,57,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="ComboBoxSplittingMethod" HorizontalAlignment="Left" Margin="179,57,0,0" VerticalAlignment="Top" Width="168" Height="29" VerticalContentAlignment="Center">
                         <ComboBoxItem Content="Scene Detect (ffmpeg)" IsSelected="True"/>
@@ -624,25 +623,30 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="ButtonOpenDestination" Margin="164,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="138" Background="{x:Null}" Click="ButtonOpenDestination_Click" BorderBrush="#FFE4E4E4">
+        <Button x:Name="ButtonOpenDestination" Margin="164,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="138" Background="{x:Null}" Click="ButtonOpenDestination_Click" BorderBrush="#FF707070">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
-                <Image HorizontalAlignment="Left" Height="51" VerticalAlignment="Top" Width="48" Source="img/save.png" Canvas.Top="-5" Canvas.Left="-9"/>
+                <Image HorizontalAlignment="Left" Height="51" VerticalAlignment="Top" Width="48" Source="img/save.png" Canvas.Top="-4" Canvas.Left="-10"/>
                 <Label Content="Destination" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="34" Height="30" Canvas.Top="5" FontSize="14"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonStartEncode" Margin="307,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="135" Background="{x:Null}" BorderBrush="#FFE4E4E4" Click="ButtonStartEncode_Click">
+        <Button x:Name="ButtonStartEncode" Margin="307,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="135" Background="{x:Null}" BorderBrush="#FF707070" Click="ButtonStartEncode_Click">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
                 <Image HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="47" Source="img/play.png" Canvas.Top="-4" Canvas.Left="-14"/>
                 <Label Content="Start Encode" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="26" Height="30" Canvas.Top="4" FontSize="14"/>
             </Canvas>
         </Button>
-        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="34" Margin="21,536,0,0" VerticalAlignment="Top" Width="953"/>
-        <Label x:Name="LabelProgressBar" Content="" HorizontalAlignment="Left" Margin="21,536,0,0" VerticalAlignment="Top" Width="953" Height="34" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-        <Button x:Name="ButtonStopEncode" Margin="447,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="135" Background="{x:Null}" BorderBrush="#FFE4E4E4" Click="ButtonStopEncode_Click">
+        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="34" Margin="21,570,0,0" VerticalAlignment="Top" Width="953"/>
+        <Label x:Name="LabelProgressBar" Content="" HorizontalAlignment="Left" Margin="21,570,0,0" VerticalAlignment="Top" Width="953" Height="34" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Button x:Name="ButtonStopEncode" Margin="447,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="135" Background="{x:Null}" BorderBrush="#FF707070" Click="ButtonStopEncode_Click">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
                 <Image HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="47" Source="img/stop.png" Canvas.Top="-4" Canvas.Left="-9"/>
                 <Label Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="38" Height="30" Canvas.Top="4" FontSize="14"/>
             </Canvas>
         </Button>
+        <Label Content="Preset:" HorizontalAlignment="Left" Margin="21,78,0,0" VerticalAlignment="Top" FontSize="14"/>
+        <ComboBox x:Name="ComboBoxPresets" HorizontalAlignment="Left" Margin="77,78,0,0" VerticalAlignment="Top" Width="186" Height="29" VerticalContentAlignment="Center" FontSize="14" SelectionChanged="ComboBoxPresets_SelectionChanged"/>
+        <Button x:Name="ButtonSavePreset" Content="Save" HorizontalAlignment="Left" Margin="268,78,0,0" VerticalAlignment="Top" Width="50" Height="29" Background="White" FontSize="14" Click="ButtonSavePreset_Click"/>
+        <Button x:Name="ButtonSetDefaultPreset" Content="Set Default" HorizontalAlignment="Left" Margin="317,78,0,0" VerticalAlignment="Top" Width="76" Height="29" Background="White" FontSize="14" Click="ButtonSetDefaultPreset_Click"/>
+        <Button x:Name="ButtonDeletePreset" Content="Delete" HorizontalAlignment="Left" Margin="392,78,0,0" VerticalAlignment="Top" Width="50" Height="29" Background="White" FontSize="14" Click="ButtonDeletePreset_Click" />
     </Grid>
 </Window>

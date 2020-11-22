@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Navigation;
+using System.Xml;
 
 namespace NotEnoughAV1Encodes
 {
@@ -66,6 +67,85 @@ namespace NotEnoughAV1Encodes
             for (int i = 1; i <= corecount; i++) { ComboBoxWorkerCount.Items.Add(i); }
             ComboBoxWorkerCount.SelectedItem = Convert.ToInt32(corecount * 75 / 100);
 
+            LoadPresetsIntoComboBox();
+            LoadDefaultProfile();
+        }
+
+        private void LoadPresetsIntoComboBox()
+        {
+            // Loads all Presets into ComboBox
+            try
+            {
+                if (Directory.Exists("Profiles"))
+                {
+                    DirectoryInfo profiles = new DirectoryInfo("Profiles");
+                    FileInfo[] Files = profiles.GetFiles("*.xml");
+                    ComboBoxPresets.ItemsSource = Files;
+                }
+            }
+            catch { }
+        }
+
+        private void LoadDefaultProfile()
+        {
+            // Loads the default profile
+            try
+            {
+                // If the default.xml file exist, it will try to load it
+                bool fileExist = File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Profiles", "Default", "default.xml"));
+                if (fileExist)
+                {
+                    XmlDocument doc = new XmlDocument();
+                    string directory = Path.Combine(Directory.GetCurrentDirectory(), "Profiles", "Default", "default.xml");
+                    doc.Load(directory);
+                    XmlNodeList node = doc.GetElementsByTagName("Settings");
+                    foreach (XmlNode n in node[0].ChildNodes) { if (n.Name == "DefaultProfile") { ComboBoxPresets.Text = n.InnerText; } }
+                }
+            }
+            catch { }
+        }
+
+        private void ButtonSetDefaultPreset_Click(object sender, RoutedEventArgs e)
+        {
+            // Sets the default Profile
+            try
+            {
+                if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Profiles", "Default")))
+                    Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "Profiles", "Default"));
+
+                string directory = Path.Combine(Directory.GetCurrentDirectory(), "Profiles", "Default", "default.xml");
+                XmlWriter writer = XmlWriter.Create(directory);
+                writer.WriteStartElement("Settings");
+                writer.WriteElementString("DefaultProfile", ComboBoxPresets.Text);
+                writer.WriteEndElement();
+                writer.Close();
+            }
+            catch { }
+        }
+
+        private void ButtonDeletePreset_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Deletes the Preset File
+                File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Profiles", ComboBoxPresets.SelectedItem.ToString()));
+                // Reloads ComboBox
+                LoadPresetsIntoComboBox(); 
+            }
+            catch { }
+        }
+
+        private void ComboBoxPresets_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (ComboBoxPresets.SelectedItem != null)
+                {
+                    // To-Do: Load Settings
+                }
+                else { }
+            }
+            catch { }
         }
 
         private void ComboBoxVideoEncoder_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -562,6 +642,13 @@ namespace NotEnoughAV1Encodes
         }
 
         // ══════════════════════════════════════ Buttons ═════════════════════════════════════════
+
+        private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
+        {
+            SavePreset savePreset = new SavePreset();
+            savePreset.ShowDialog();
+            LoadPresetsIntoComboBox();
+        }
 
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
         {
