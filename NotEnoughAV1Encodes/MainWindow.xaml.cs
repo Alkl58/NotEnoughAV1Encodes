@@ -1017,6 +1017,9 @@ namespace NotEnoughAV1Encodes
             // Write Start Element
             writer.WriteStartElement("Settings");
 
+            writer.WriteElementString("WorkerCount",                    ComboBoxWorkerCount.SelectedIndex.ToString());                  // Worker Count
+            writer.WriteElementString("WorkerPriority",                 ComboBoxProcessPriority.SelectedIndex.ToString());              // Worker Priority
+
             // ═════════════════════════════════════════════════════════════════ Splitting ═════════════════════════════════════════════════════════════════
             writer.WriteElementString("SplittingMethod",                ComboBoxSplittingMethod.SelectedIndex.ToString());              // Splitting Method
             if (ComboBoxSplittingMethod.SelectedIndex == 0)
@@ -1034,7 +1037,6 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("SplittingReencodeActive",    CheckBoxSplittingReencode.IsChecked.ToString());                // Splitting Reencode Active
                 writer.WriteElementString("SplittingReencodeLength",    TextBoxSplittingChunkLength.Text);                              // Splitting Chunk Length
             }
-
             // ══════════════════════════════════════════════════════════════════ Filters ══════════════════════════════════════════════════════════════════
 
             writer.WriteElementString("FilterCrop",                 CheckBoxFiltersCrop.IsChecked.ToString());                          // Filter Crop (Boolean)
@@ -1195,14 +1197,93 @@ namespace NotEnoughAV1Encodes
             {
                 switch (n.Name)
                 {
-
+                    case "WorkerCount":                     ComboBoxWorkerCount.SelectedIndex = int.Parse(n.InnerText);             break;  // Worker Count
+                    case "WorkerPriority":                  ComboBoxProcessPriority.SelectedIndex = int.Parse(n.InnerText);         break;  // Worker Priority
                     // ═════════════════════════════════════════════════════════════════ Splitting ═════════════════════════════════════════════════════════════════
-                    case "SplittingMethod":             ComboBoxSplittingMethod.SelectedIndex = int.Parse(n.InnerText); break;          // Splitting Method
-                    case "SplittingThreshold":          TextBoxSplittingThreshold.Text = n.InnerText; break;                            // Splitting Threshold
-                    case "SplittingReencode":           ComboBoxSplittingReencodeMethod.SelectedIndex = int.Parse(n.InnerText); break;  // Splitting Reencode Codec
-                    case "SplittingReencodeActive":     CheckBoxSplittingReencode.IsChecked = n.InnerText == "True"; break;             // Splitting Reencode Active
-                    case "SplittingReencodeLength":     TextBoxSplittingChunkLength.Text = n.InnerText; break;                          // Splitting Chunk Length
+                    case "SplittingMethod":                 ComboBoxSplittingMethod.SelectedIndex = int.Parse(n.InnerText);         break;  // Splitting Method
+                    case "SplittingThreshold":              TextBoxSplittingThreshold.Text = n.InnerText;                           break;  // Splitting Threshold
+                    case "SplittingReencode":               ComboBoxSplittingReencodeMethod.SelectedIndex = int.Parse(n.InnerText); break;  // Splitting Reencode Codec
+                    case "SplittingReencodeActive":         CheckBoxSplittingReencode.IsChecked = n.InnerText == "True";            break;  // Splitting Reencode Active
+                    case "SplittingReencodeLength":         TextBoxSplittingChunkLength.Text = n.InnerText;                         break;  // Splitting Chunk Length
                     // ══════════════════════════════════════════════════════════════════ Filters ══════════════════════════════════════════════════════════════════
+                    case "FilterCrop":                      CheckBoxFiltersCrop.IsChecked = n.InnerText == "True";                  break;  // Filter Crop (Boolean)
+                    case "FilterCropTop":                   TextBoxFiltersCropTop.Text = n.InnerText;                               break;  // Filter Crop Top
+                    case "FilterCropBottom":                TextBoxFiltersCropBottom.Text = n.InnerText;                            break;  // Filter Crop Bottom
+                    case "FilterCropLeft":                  TextBoxFiltersCropLeft.Text = n.InnerText;                              break;  // Filter Crop Left
+                    case "FilterCropRight":                 TextBoxFiltersCropRight.Text = n.InnerText;                             break;  // Filter Crop Right
+                    case "FilterResize":                    CheckBoxFiltersResize.IsChecked = n.InnerText == "True";                break;  // Filter Resize (Boolean)
+                    case "FilterResizeWidth":               TextBoxFiltersResizeWidth.Text = n.InnerText;                           break;  // Filter Resize Width
+                    case "FilterResizeHeight":              TextBoxFiltersResizeHeight.Text = n.InnerText;                          break;  // Filter Resize Height
+                    case "FilterResizeAlgo":                ComboBoxFiltersScaling.SelectedIndex = int.Parse(n.InnerText);          break;  // Filter Resize Scaling Algorithm
+                    case "FilterRotate":                    CheckBoxFiltersRotate.IsChecked = n.InnerText == "True";                break;  // Filter Rotate (Boolean)
+                    case "FilterRotateAmount":              ComboBoxFiltersRotate.SelectedIndex = int.Parse(n.InnerText);           break;  // Filter Rotate
+                    case "FilterDeinterlace":               CheckBoxFiltersDeinterlace.IsChecked = n.InnerText == "True";           break;  // Filter Deinterlace (Boolean)
+                    case "FilterDeinterlaceType":           ComboBoxFiltersDeinterlace.SelectedIndex = int.Parse(n.InnerText);      break;  // Filter Deinterlace
+                    // ═══════════════════════════════════════════════════════════ Basic Video Settings ════════════════════════════════════════════════════════════
+                    case "VideoEncoder":                    ComboBoxVideoEncoder.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Encoder
+                    case "VideoBitDepth":                   ComboBoxVideoBitDepth.SelectedIndex = int.Parse(n.InnerText);           break;  // Video BitDepth
+                    case "VideoSpeed":                      SliderVideoSpeed.Value = int.Parse(n.InnerText);                        break;  // Video Speed
+                    case "VideoPasses":                     ComboBoxVideoPasses.SelectedIndex = int.Parse(n.InnerText);             break;  // Video Passes
+                    case "VideoQuality":                    SliderVideoQuality.Value = int.Parse(n.InnerText);
+                                                            RadioButtonVideoConstantQuality.IsChecked = true;                       break;  // Video Quality
+                    case "VideoBitrate":                    TextBoxVideoBitrate.Text = n.InnerText;
+                                                            RadioButtonVideoBitrate.IsChecked = true;                               break;  // Video Bitrate
+                    // ═════════════════════════════════════════════════════════ Advanced Video Settings ═══════════════════════════════════════════════════════════
+                    case "VideoAdvanced":                   CheckBoxVideoAdvancedSettings.IsChecked = n.InnerText == "True";        break;  // Video Advanced Settings
+                    case "VideoAdvancedCustom":             CheckBoxCustomVideoSettings.IsChecked = n.InnerText == "True";          break;  // Video Advanced Settings Custom
+                    case "VideoAdvancedAomencThreads":      ComboBoxAomencThreads.SelectedIndex = int.Parse(n.InnerText);           break;  // Video Advanced Settings Aomenc Threads
+                    case "VideoAdvancedAomencTileCols":     ComboBoxAomencTileColumns.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings Aomenc Tile Columns
+                    case "VideoAdvancedAomencTileRows":     ComboBoxAomencTileRows.SelectedIndex = int.Parse(n.InnerText);          break;  // Video Advanced Settings Aomenc Tile Rows
+                    case "VideoAdvancedAomencGOP":          TextBoxAomencMaxGOP.Text = n.InnerText;                                 break;  // Video Advanced Settings Aomenc GOP
+                    case "VideoAdvancedAomencLag":          TextBoxAomencLagInFrames.Text = n.InnerText;                            break;  // Video Advanced Settings Aomenc Lag in Frames
+                    case "VideoAdvancedAomencSharpness":    ComboBoxAomencSharpness.SelectedIndex = int.Parse(n.InnerText);         break;  // Video Advanced Settings Aomenc Sharpness
+                    case "VideoAdvancedAomencColorPrim":    ComboBoxAomencColorPrimaries.SelectedIndex = int.Parse(n.InnerText);    break;  // Video Advanced Settings Aomenc Color Primaries
+                    case "VideoAdvancedAomencColorTrans":   ComboBoxAomencColorTransfer.SelectedIndex = int.Parse(n.InnerText);     break;  // Video Advanced Settings Aomenc Color Transfer
+                    case "VideoAdvancedAomencColorMatrix":  ComboBoxAomencColorMatrix.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings Aomenc Color Matrix
+                    case "VideoAdvancedAomencColorFormat":  ComboBoxAomencColorFormat.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings Aomenc Color Format
+                    case "VideoAdvancedAomencAQMode":       ComboBoxAomencAQMode.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Advanced Settings Aomenc AQ Mode
+                    case "VideoAdvancedAomencKFFiltering":  ComboBoxAomencKeyFiltering.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings Aomenc Keyframe Filtering
+                    case "VideoAdvancedAomencTune":         ComboBoxAomencTune.SelectedIndex = int.Parse(n.InnerText);              break;  // Video Advanced Settings Aomenc Tune
+                    case "VideoAdvancedAomencARNR":         CheckBoxAomencARNRMax.IsChecked = n.InnerText == "True";                break;  // Video Advanced Settings Aomenc ARNR
+                    case "VideoAdvancedAomencARNRMax":      ComboBoxAomencARNRMax.SelectedIndex = int.Parse(n.InnerText);           break;  // Video Advanced Settings Aomenc ARNR Max
+                    case "VideoAdvancedAomencARNRStre":     ComboBoxAomencARNRStrength.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings Aomenc ARNR Strength
+                    case "VideoAdvancedAomencRowMT":        CheckBoxAomencRowMT.IsChecked = n.InnerText == "True";                  break;  // Video Advanced Settings Aomenc Row Mt
+                    case "VideoAdvancedAomencCDEF":         CheckBoxAomencCDEF.IsChecked = n.InnerText == "True";                   break;  // Video Advanced Settings Aomenc CDEF
+                    case "VideoAdvancedRav1eThreads":       ComboBoxRav1eThreads.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Advanced Settings Rav1e Threads
+                    case "VideoAdvancedRav1eTileCols":      ComboBoxRav1eTileColumns.SelectedIndex = int.Parse(n.InnerText);        break;  // Video Advanced Settings Rav1e Tile Columns
+                    case "VideoAdvancedRav1eTileRows":      ComboBoxRav1eTileRows.SelectedIndex = int.Parse(n.InnerText);           break;  // Video Advanced Settings Rav1e Tile Rows
+                    case "VideoAdvancedRav1eGOP":           TextBoxRav1eMaxGOP.Text = n.InnerText;                                  break;  // Video Advanced Settings Rav1e GOP
+                    case "VideoAdvancedRav1eRDO":           TextBoxRav1eLookahead.Text = n.InnerText;                               break;  // Video Advanced Settings Rav1e RDO Lookahead
+                    case "VideoAdvancedRav1eColorPrim":     ComboBoxRav1eColorPrimaries.SelectedIndex = int.Parse(n.InnerText);     break;  // Video Advanced Settings Rav1e Color Primaries
+                    case "VideoAdvancedRav1eColorTrans":    ComboBoxRav1eColorTransfer.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings Rav1e Color Transfer
+                    case "VideoAdvancedRav1eColorMatrix":   ComboBoxRav1eColorMatrix.SelectedIndex = int.Parse(n.InnerText);        break;  // Video Advanced Settings Rav1e Color Matrix
+                    case "VideoAdvancedRav1eColorFormat":   ComboBoxRav1eColorFormat.SelectedIndex = int.Parse(n.InnerText);        break;  // Video Advanced Settings Rav1e Color Format
+                    case "VideoAdvancedRav1eTune":          ComboBoxRav1eTune.SelectedIndex = int.Parse(n.InnerText);               break;  // Video Advanced Settings Rav1e Tune
+                    case "VideoAdvancedRav1eMastering":     CheckBoxRav1eMasteringDisplay.IsChecked = n.InnerText == "True";        break;  // Video Advanced Settings Rav1e Mastering Display
+                    case "VideoAdvancedRav1eMasteringGx":   TextBoxRav1eMasteringGx.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Gx
+                    case "VideoAdvancedRav1eMasteringGy":   TextBoxRav1eMasteringGy.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Gy
+                    case "VideoAdvancedRav1eMasteringBx":   TextBoxRav1eMasteringBx.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Bx
+                    case "VideoAdvancedRav1eMasteringBy":   TextBoxRav1eMasteringBy.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display By
+                    case "VideoAdvancedRav1eMasteringRx":   TextBoxRav1eMasteringRx.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Rx
+                    case "VideoAdvancedRav1eMasteringRy":   TextBoxRav1eMasteringRy.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Ry
+                    case "VideoAdvancedRav1eMasteringWPx":  TextBoxRav1eMasteringWPx.Text = n.InnerText;                            break;  // Video Advanced Settings Rav1e Mastering Display WPx
+                    case "VideoAdvancedRav1eMasteringWPy":  TextBoxRav1eMasteringWPy.Text = n.InnerText;                            break;  // Video Advanced Settings Rav1e Mastering Display WPy
+                    case "VideoAdvancedRav1eMasteringLx":   TextBoxRav1eMasteringLx.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Lx
+                    case "VideoAdvancedRav1eMasteringLy":   TextBoxRav1eMasteringLy.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Ly
+                    case "VideoAdvancedRav1eLight":         CheckBoxRav1eContentLight.IsChecked = n.InnerText == "True";            break;  // Video Advanced Settings Rav1e Mastering Content Light
+                    case "VideoAdvancedRav1eLightCll":      TextBoxRav1eContentLightCll.Text = n.InnerText;                         break;  // Video Advanced Settings Rav1e Mastering Content Light Cll
+                    case "VideoAdvancedRav1eLightFall":     TextBoxRav1eContentLightFall.Text = n.InnerText;                        break;  // Video Advanced Settings Rav1e Mastering Content Light Fall
+                    case "VideoAdvancedSVTAV1TileCols":     ComboBoxSVTAV1TileColumns.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings SVT-AV1 Tile Columns
+                    case "VideoAdvancedSVTAV1TileRows":     ComboBoxSVTAV1TileRows.SelectedIndex = int.Parse(n.InnerText);          break;  // Video Advanced Settings SVT-AV1 Tile Rows
+                    case "VideoAdvancedSVTAV1GOP":          TextBoxSVTAV1MaxGOP.Text = n.InnerText;                                 break;  // Video Advanced Settings SVT-AV1 GOP
+                    case "VideoAdvancedSVTAV1AQMode":       ComboBoxSVTAV1AQMode.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Advanced Settings SVT-AV1 AQ-Mode
+                    case "VideoAdvancedSVTAV1ColorFmt":     ComboBoxSVTAV1ColorFormat.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings SVT-AV1 Color Format
+                    case "VideoAdvancedSVTAV1Profile":      ComboBoxSVTAV1Profile.SelectedIndex = int.Parse(n.InnerText);           break;  // Video Advanced Settings SVT-AV1 Profile
+                    case "VideoAdvancedSVTAV1AltRefLevel":  ComboBoxSVTAV1AltRefLevel.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings SVT-AV1 Alt Ref Level
+                    case "VideoAdvancedSVTAV1AltRefStren":  ComboBoxSVTAV1AltRefStrength.SelectedIndex = int.Parse(n.InnerText);    break;  // Video Advanced Settings SVT-AV1 Alt Ref Strength
+                    case "VideoAdvancedSVTAV1AltRefFrame":  ComboBoxSVTAV1AltRefFrames.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings SVT-AV1 Alt Ref Frames
+                    case "VideoAdvancedSVTAV1HDR":          CheckBoxSVTAV1HDR.IsChecked = n.InnerText == "True";                    break;  // Video Advanced Settings SVT-AV1 HDR
+                    case "VideoAdvancedCustomString":       TextBoxCustomVideoSettings.Text = n.InnerText;                          break;  // Video Advanced Settings Custom String
                     default: break;
                 }
             }
