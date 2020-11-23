@@ -50,55 +50,59 @@ namespace NotEnoughAV1Encodes
 
         private void FFmpegSceneDetect()
         {
-            TextBoxConsole.Dispatcher.Invoke(() => TextBoxConsole.Text = "Detecting Scenes... this might take a while!");
-
-            List<string> scenes = new List<string>();
-
-            // Starts FFmpeg Process
-            Process FFmpegSceneDetect = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo
+            // Skip Scene Detect if the file already exist
+            if (File.Exists(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "splits.txt")) == false)
             {
-                WindowStyle = ProcessWindowStyle.Hidden,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = MainWindow.FFmpegPath,
-                RedirectStandardError = true,
-                FileName = "cmd.exe",
-                Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -hide_banner -loglevel 32 -filter_complex select=" + '\u0022' + "gt(scene\\," + FFmpegThreshold + "),select=eq(key\\,1),showinfo" + '\u0022' + " -an -f null -"
-            };
-            FFmpegSceneDetect.StartInfo = startInfo;
-            FFmpegSceneDetect.Start();
+                TextBoxConsole.Dispatcher.Invoke(() => TextBoxConsole.Text = "Detecting Scenes... this might take a while!");
 
-            // Reads Standard Err from FFmpeg Output
-            string stream = FFmpegSceneDetect.StandardError.ReadToEnd();
+                List<string> scenes = new List<string>();
 
-            FFmpegSceneDetect.WaitForExit();
-
-            // Splits the Console Output by spaces
-            string[] array = stream.Split(' ');
-
-            // Searches for pts_time, if found it removes "pts_time:" to get only values
-            foreach (string value in array) { if (value.Contains("pts_time:")) { scenes.Add(value.Remove(0, 9)); } }
-
-            // Temporary value for Arg creation
-            string previousScene = "0.000";
-
-            // Creates the seeking args for ffmpeg piping
-            foreach (string sc in scenes)
-            {
-                FFmpegArgs.Add("-ss " + previousScene + " -to " + sc);
-                previousScene = sc;
-            }
-            // Argument for seeking until the end of the video
-            FFmpegArgs.Add("-ss " + previousScene);
-
-            // Writes splitting arguments to text file
-            foreach (string line in FFmpegArgs)
-            {
-                using (StreamWriter sw = File.AppendText(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "splits.txt")))
+                // Starts FFmpeg Process
+                Process FFmpegSceneDetect = new Process();
+                ProcessStartInfo startInfo = new ProcessStartInfo
                 {
-                    sw.WriteLine(line);
-                    sw.Close();
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WorkingDirectory = MainWindow.FFmpegPath,
+                    RedirectStandardError = true,
+                    FileName = "cmd.exe",
+                    Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -hide_banner -loglevel 32 -filter_complex select=" + '\u0022' + "gt(scene\\," + FFmpegThreshold + "),select=eq(key\\,1),showinfo" + '\u0022' + " -an -f null -"
+                };
+                FFmpegSceneDetect.StartInfo = startInfo;
+                FFmpegSceneDetect.Start();
+
+                // Reads Standard Err from FFmpeg Output
+                string stream = FFmpegSceneDetect.StandardError.ReadToEnd();
+
+                FFmpegSceneDetect.WaitForExit();
+
+                // Splits the Console Output by spaces
+                string[] array = stream.Split(' ');
+
+                // Searches for pts_time, if found it removes "pts_time:" to get only values
+                foreach (string value in array) { if (value.Contains("pts_time:")) { scenes.Add(value.Remove(0, 9)); } }
+
+                // Temporary value for Arg creation
+                string previousScene = "0.000";
+
+                // Creates the seeking args for ffmpeg piping
+                foreach (string sc in scenes)
+                {
+                    FFmpegArgs.Add("-ss " + previousScene + " -to " + sc);
+                    previousScene = sc;
+                }
+                // Argument for seeking until the end of the video
+                FFmpegArgs.Add("-ss " + previousScene);
+
+                // Writes splitting arguments to text file
+                foreach (string line in FFmpegArgs)
+                {
+                    using (StreamWriter sw = File.AppendText(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "splits.txt")))
+                    {
+                        sw.WriteLine(line);
+                        sw.Close();
+                    }
                 }
             }
         }
@@ -107,28 +111,32 @@ namespace NotEnoughAV1Encodes
         
         private void PySceneDetect()
         {
-            // Detects the Scenes with PySceneDetect
-
-            Process pySceneDetect = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo
+            // Skip Scene Detect if the file already exist
+            if (File.Exists(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "splits.txt")) == false)
             {
-                WindowStyle = ProcessWindowStyle.Hidden,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                FileName = "cmd.exe",
-                Arguments = "/C scenedetect -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -o " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName) + '\u0022' + " detect-content list-scenes"
-            };
-            pySceneDetect.StartInfo = startInfo;
+                // Detects the Scenes with PySceneDetect
+                Process pySceneDetect = new Process();
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    FileName = "cmd.exe",
+                    Arguments = "/C scenedetect -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -o " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName) + '\u0022' + " detect-content list-scenes"
+                };
+                pySceneDetect.StartInfo = startInfo;
 
-            pySceneDetect.Start();
+                pySceneDetect.Start();
 
-            // Reads the Stderr and sets the TextBox
-            do { TextBoxConsole.Dispatcher.Invoke(() => TextBoxConsole.Text = pySceneDetect.StandardError.ReadLine()); } while (!pySceneDetect.HasExited);
+                // Reads the Stderr and sets the TextBox
+                do { TextBoxConsole.Dispatcher.Invoke(() => TextBoxConsole.Text = pySceneDetect.StandardError.ReadLine()); } while (!pySceneDetect.HasExited);
 
-            pySceneDetect.WaitForExit();
+                pySceneDetect.WaitForExit();
 
-            PySceneDetectParse();
+                PySceneDetectParse();
+            }
+
         }
 
         private void PySceneDetectParse()
@@ -167,46 +175,52 @@ namespace NotEnoughAV1Encodes
 
         private void FFmpegChunking()
         {
-            // This function is used to split the source video into parts (chunking method)
-
-            // Sets the label, has to be done as Dispatcher, else it will lock up the thread
-            LabelSplittingMethod.Dispatcher.Invoke(() => LabelSplittingMethod.Content = "Splitting with Chunking Method");
-
-            // Sets the TextBox, has to be done as Dispatcher, else it will lock up the thread
-            TextBoxConsole.Dispatcher.Invoke(() => TextBoxConsole.Text = "Started Splitting... this might take a while!");
-
-            string EncodeCMD = null;
-
-            // Sets the Reencode Params
-            if (Reencode == true)
+            // Skip splitting if already splitted
+            if (File.Exists(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "finished_splitting.log")) == false)
             {
-                if (ReencodeMethod == 0)
-                    EncodeCMD = "-c:v libx264 -crf 0 -preset ultrafast -g 9 -sc_threshold 0 -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * 9)" + '\u0022';
-                if (ReencodeMethod == 1)
-                    EncodeCMD = "-c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -g 1 -slicecrc 0 -slices 4";
-                if (ReencodeMethod == 2)
-                    EncodeCMD = "-c:v utvideo";
+                // This function is used to split the source video into parts (chunking method)
+
+                // Sets the label, has to be done as Dispatcher, else it will lock up the thread
+                LabelSplittingMethod.Dispatcher.Invoke(() => LabelSplittingMethod.Content = "Splitting with Chunking Method");
+
+                // Sets the TextBox, has to be done as Dispatcher, else it will lock up the thread
+                TextBoxConsole.Dispatcher.Invoke(() => TextBoxConsole.Text = "Started Splitting... this might take a while!");
+
+                string EncodeCMD = null;
+
+                // Sets the Reencode Params
+                if (Reencode == true)
+                {
+                    if (ReencodeMethod == 0)
+                        EncodeCMD = "-c:v libx264 -crf 0 -preset ultrafast -g 9 -sc_threshold 0 -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * 9)" + '\u0022';
+                    if (ReencodeMethod == 1)
+                        EncodeCMD = "-c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -g 1 -slicecrc 0 -slices 4";
+                    if (ReencodeMethod == 2)
+                        EncodeCMD = "-c:v utvideo";
+                }
+                else
+                {
+                    EncodeCMD = "-c:v copy";
+                }
+
+                //Run ffmpeg command
+                Process process = new Process();
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = MainWindow.FFmpegPath,
+                    Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -map_metadata -1 -an " + EncodeCMD + " -f segment -segment_time " + ChunkLength + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "split%0d.mkv") + '\u0022'
+                };
+                process.StartInfo = startInfo;
+                process.Start();
+                process.WaitForExit();
+
+                // Starts renaming the splits
+                RenameSplits.Rename();
             }
-            else
-            {
-                EncodeCMD = "-c:v copy";
-            }
-
-            //Run ffmpeg command
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo
-            {
-                WindowStyle = ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe",
-                WorkingDirectory = MainWindow.FFmpegPath,
-                Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -map_metadata -1 -an " + EncodeCMD + " -f segment -segment_time " + ChunkLength + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "split%0d.mkv") + '\u0022'
-            };
-            process.StartInfo = startInfo;
-            process.Start();
-            process.WaitForExit();
-
-            // Starts renaming the splits
-            RenameSplits.Rename();
+            // Resume stuff to skip splitting in resume mode
+            SmallFunctions.WriteToFileThreadSafe("", Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName,  "finished_splitting.log"));
         }
     }
 }

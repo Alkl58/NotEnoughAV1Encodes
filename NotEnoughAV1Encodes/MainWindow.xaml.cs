@@ -853,7 +853,6 @@ namespace NotEnoughAV1Encodes
                             {
                                 // We need the index of the command in the array
                                 var index = Array.FindIndex(VideoChunks, row => row.Contains(command));
-
                                 // Logic for resume mode - skips already encoded files
                                 if (File.Exists(Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf" + "_finished.log")) == false)
                                 {
