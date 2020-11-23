@@ -92,7 +92,6 @@
     <Compile Include="SavePreset.xaml.cs">
       <DependentUpon>SavePreset.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SaveSettings.cs" />
     <Compile Include="SmallFunctions.cs" />
     <Compile Include="Updater.xaml.cs">
       <DependentUpon>Updater.xaml</DependentUpon>

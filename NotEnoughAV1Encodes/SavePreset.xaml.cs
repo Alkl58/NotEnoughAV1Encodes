@@ -4,12 +4,15 @@ namespace NotEnoughAV1Encodes
 {
     public partial class SavePreset : Window
     {
+        public string SaveName { get; set; }
+        public bool cancel { get; set; }
         public SavePreset()
         {
             InitializeComponent();
         }
         private void ButtonCloseWindow_Click(object sender, RoutedEventArgs e)
         {
+            cancel = true;
             // Closes the Window
             this.Close();
         }
@@ -17,7 +20,9 @@ namespace NotEnoughAV1Encodes
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
         {
             // Saves the Preset
-            SaveSettings saveSettings = new SaveSettings(true, TextBoxPresetName.Text);
+            SaveName = TextBoxPresetName.Text;
+            cancel = false;
+
             // Closes the Window
             this.Close();
         }
