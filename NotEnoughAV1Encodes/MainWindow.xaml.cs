@@ -707,6 +707,37 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void ButtonOpenTempFolder_Click(object sender, RoutedEventArgs e)
+        {
+            // Opens the Temp Folder
+            if (CheckBoxCustomTempPath.IsChecked == false) 
+            {
+                //Creates the temp directoy if not existent
+                if (Directory.Exists(Path.Combine(Path.GetTempPath(), "NEAV1E")) == false) { Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "NEAV1E")); }
+                Process.Start(Path.Combine(Path.GetTempPath(), "NEAV1E")); 
+            }
+            else 
+            { 
+                Process.Start(TextBoxCustomTempPath.Text); 
+            }
+        }
+
+        private void ButtonSetTempPath_Click(object sender, RoutedEventArgs e)
+        {
+            // Custom Temp Path
+            System.Windows.Forms.FolderBrowserDialog browseOutputFolder = new System.Windows.Forms.FolderBrowserDialog();
+            if (browseOutputFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                TextBoxCustomTempPath.Text = browseOutputFolder.SelectedPath;
+            }
+        }
+
+        private void ButtonOpenProgramFolder_Click(object sender, RoutedEventArgs e)
+        {
+            // Opens Program Folder
+            try { Process.Start(Directory.GetCurrentDirectory()); } catch { }
+        }
+
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
             if (VideoInputSet == true && VideoOutputSet == true) 

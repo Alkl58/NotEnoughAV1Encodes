@@ -610,15 +610,21 @@
             </TabItem>
             <TabItem Header="Program Settings" FontSize="14">
                 <Grid Background="White">
-                    <CheckBox x:Name="CheckBoxSettingsDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="63,67,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="213" IsChecked="True"/>
+                    <CheckBox x:Name="CheckBoxSettingsDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="33,44,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="213" IsChecked="True"/>
                     <Label Content="Program Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <CheckBox x:Name="CheckBoxSettingsUISounds" Content="Enable UI Sounds (Finished Encoding / Error)" HorizontalAlignment="Left" Margin="63,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Checked="CheckBoxSettingsUISounds_Checked"/>
+                    <CheckBox x:Name="CheckBoxSettingsUISounds" Content="Enable UI Sounds (Finished Encoding / Error)" HorizontalAlignment="Left" Margin="33,67,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Checked="CheckBoxSettingsUISounds_Checked"/>
                     <Label Content="Version: 1.4 (Rebegin Branch)" HorizontalAlignment="Left" Margin="597,56,0,0" VerticalAlignment="Top"/>
                     <Label Content="Github:" HorizontalAlignment="Left" Margin="607,85,0,0" VerticalAlignment="Top" FontSize="12"/>
                     <TextBlock Margin="655,90,15,297" FontSize="12">
                         <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
                     </TextBlock>
-                    <Button x:Name="ButtonUpdater" Content="Updater" HorizontalAlignment="Left" Margin="10,360,0,0" VerticalAlignment="Top" Width="125" Height="38" Background="White" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click"/>
+                    <Button x:Name="ButtonUpdater" Content="Updater" HorizontalAlignment="Left" Margin="15,243,0,0" VerticalAlignment="Top" Width="125" Height="38" Background="White" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click"/>
+                    <Button x:Name="ButtonOpenTempFolder" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="15,286,0,0" VerticalAlignment="Top" Width="125" Height="38" Background="White" Click="ButtonOpenTempFolder_Click"/>
+                    <CheckBox x:Name="CheckBoxCustomTempPath" Content="" HorizontalAlignment="Left" Margin="82,363,0,0" VerticalAlignment="Top" Width="20" Height="27" VerticalContentAlignment="Center"/>
+                    <TextBox x:Name="TextBoxCustomTempPath" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}" HorizontalAlignment="Left" Height="27" Margin="107,363,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="711" VerticalContentAlignment="Center"/>
+                    <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}" HorizontalAlignment="Left" Margin="823,363,0,0" VerticalAlignment="Top" Width="73" Height="27" Background="White" Click="ButtonSetTempPath_Click"/>
+                    <Label Content="Temp Folder" HorizontalAlignment="Left" Margin="10,329,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <Button x:Name="ButtonOpenProgramFolder" Content="Open Program Folder" HorizontalAlignment="Left" Margin="145,286,0,0" VerticalAlignment="Top" Width="150" Height="38" Background="White" Click="ButtonOpenProgramFolder_Click"/>
 
                 </Grid>
             </TabItem>
