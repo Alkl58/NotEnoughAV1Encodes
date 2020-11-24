@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Xml;
@@ -57,6 +59,13 @@ namespace NotEnoughAV1Encodes
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            // Validates that the TextBox Input are only numbers
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
 
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -475,6 +484,106 @@ namespace NotEnoughAV1Encodes
             return "scale=" + TextBoxFiltersResizeWidth.Text + ":" + TextBoxFiltersResizeHeight.Text + " -sws_flags " + ComboBoxFiltersScaling.Text;
         }
 
+        // ═════════════════════════════════════ Audio Logic ══════════════════════════════════════
+
+        private void GetAudioInformation()
+        {
+            Process getAudioIndexes = new Process();
+            getAudioIndexes.StartInfo = new ProcessStartInfo()
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                WorkingDirectory = FFmpegPath,
+                Arguments = "/C ffprobe.exe -i " + '\u0022' + VideoInput + '\u0022' + " -loglevel error -select_streams a -show_streams -show_entries stream=index:tags=:disposition= -of csv",
+                RedirectStandardError = true,
+                RedirectStandardOutput = true
+            };
+            getAudioIndexes.Start();
+            //Reads the Console Output
+            string audioIndexes = getAudioIndexes.StandardOutput.ReadToEnd();
+            getAudioIndexes.WaitForExit();
+            //Splits the Console Output
+            string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", "stream," }, StringSplitOptions.RemoveEmptyEntries);
+            int detectedTracks = 0;
+            bool trackone = false, tracktwo = false, trackthree = false, trackfour = false;
+            // Iterates over the audioIndexesFixed Array
+            foreach (var item in audioIndexesFixed)
+            {
+                switch (detectedTracks)
+                {
+                    case 0: trackone = true; break;
+                    case 1: tracktwo = true; break;
+                    case 2: trackthree = true; break;
+                    case 3: trackfour = true; break;
+                    default: break;
+                }
+                detectedTracks += 1;
+            }
+            // Enable / Disable CheckBoxes
+            if (trackone) { CheckBoxAudioTrackOne.IsEnabled = true; CheckBoxAudioTrackOne.IsChecked = true; }
+            else { CheckBoxAudioTrackOne.IsChecked = false; CheckBoxAudioTrackOne.IsEnabled = false; }
+            if (tracktwo) { CheckBoxAudioTrackTwo.IsEnabled = true; CheckBoxAudioTrackTwo.IsChecked = true; }
+            else { CheckBoxAudioTrackTwo.IsChecked = false; CheckBoxAudioTrackTwo.IsEnabled = false; }
+            if (trackthree) { CheckBoxAudioTrackThree.IsEnabled = true; CheckBoxAudioTrackThree.IsChecked = true; }
+            else { CheckBoxAudioTrackThree.IsChecked = false; CheckBoxAudioTrackThree.IsEnabled = false; }
+            if (trackfour) { CheckBoxAudioTrackFour.IsEnabled = true; CheckBoxAudioTrackFour.IsChecked = true; }
+            else { CheckBoxAudioTrackFour.IsChecked = false; CheckBoxAudioTrackFour.IsEnabled = false; }
+            GetAudioLanguage();
+        }
+
+        private void GetAudioLanguage()
+        {
+            //This function gets the Audio Languages from ffprobe and sets the ComboBoxes in the Audio Tab
+            Process getAudioLang = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = FFmpegPath,
+                    Arguments = "/C ffprobe.exe -i " + '\u0022' + VideoInput + '\u0022' + " -v error -select_streams a -show_entries stream=index:stream_tags=language -of csv=p=0",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            getAudioLang.Start();
+            string audio = getAudioLang.StandardOutput.ReadToEnd();
+            string[] audioLanguages = audio.Split(new string[] { "1", "2", "3", "4", "," }, StringSplitOptions.RemoveEmptyEntries);
+            audioLanguages = audioLanguages.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            getAudioLang.WaitForExit();
+            int index = 0;
+            foreach (string line in audioLanguages)
+            {
+                string resultcropped;
+                try { resultcropped = line.Replace(" ", "").Substring(0, 3); }
+                catch { resultcropped = "und"; }
+
+                int indexLang;
+                switch (resultcropped)
+                {
+                    case "eng": indexLang = 1; break;
+                    case "deu": indexLang = 2; break;
+                    case "fre": indexLang = 3; break;
+                    case "ita": indexLang = 4; break;
+                    case "spa": indexLang = 5; break;
+                    case "jpn": indexLang = 6; break;
+                    case "chi": indexLang = 7; break;
+                    case "kor": indexLang = 8; break;
+                    default: indexLang = 0; break;
+                }
+                if (index == 0) { ComboBoxTrackOneLanguage.SelectedIndex = indexLang; }
+                if (index == 1) { ComboBoxTrackTwoLanguage.SelectedIndex = indexLang; }
+                if (index == 2) { ComboBoxTrackThreeLanguage.SelectedIndex = indexLang; }
+                if (index == 3) { ComboBoxTrackFourLanguage.SelectedIndex = indexLang; }
+                index += 1;
+            }
+
+        }
+
         // ══════════════════════════════════ Encoder Settings ════════════════════════════════════
 
         private void SetEncoderSettings()
@@ -710,7 +819,7 @@ namespace NotEnoughAV1Encodes
             {
                 LoadSettings(true, result);
             }
-
+            GetAudioInformation();
         }
 
         private void ButtonOpenDestination_Click(object sender, RoutedEventArgs e)
