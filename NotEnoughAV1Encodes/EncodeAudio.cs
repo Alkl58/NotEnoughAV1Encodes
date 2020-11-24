@@ -80,22 +80,61 @@ namespace NotEnoughAV1Encodes
         private static string audioCodecCommand = "";
         private static string OneTrackCommandGenerator(int activetrackbitrate, string activetrackindex, string activtrackcodec, int channellayout)
         {
-            //String Command Builder for a single Audio Track
+            // String Command Builder for a single Audio Track
+            // Audio Mapping
             audioCodecCommand = "-map 0:a:" + activetrackindex + " -c:a ";
+            // Codec
             audioCodecCommand += SwitchCodec(activtrackcodec, channellayout);
+            // Channel Layout / Bitrate
             if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " -b:a " + activetrackbitrate + "k"; }
             audioCodecCommand += " -ac " + channellayout;
-            if (MainWindow.trackOneLanguage != "unknown") { audioCodecCommand += " -metadata:s:a:0 language=" + MainWindow.trackOneLanguage + " "; }
+            // Metadata
+            if (MainWindow.trackOneLanguage != "unknown") 
+            { 
+                // Sets Language Metadata
+                audioCodecCommand += " -metadata:s:a:0 language=" + MainWindow.trackOneLanguage;
+                if (activtrackcodec != "Copy Audio")
+                {
+                    // Sets Track Name e.g. "[GER] Opus 128kbps"
+                    audioCodecCommand += " -metadata:s:a:0 title=" + '\u0022' + "[" + MainWindow.trackOneLanguage.ToUpper() + "] " + activtrackcodec + " " + activetrackbitrate + "kbps" + '\u0022' + " ";
+                }
+            }
+            else
+            {
+                if (activtrackcodec != "Copy Audio")
+                {
+                    audioCodecCommand += " -metadata:s:a:0 title=" + '\u0022' + "[UND] " + activtrackcodec + " " + activetrackbitrate + "kbps" + '\u0022' + " ";
+                }  
+            }
+            
             return audioCodecCommand;
         }
         private static string MultipleTrackCommandGenerator(int activetrackbitrate, string activetrackindex, int activetrackaudioindex, string activtrackcodec, int channellayout, string lang)
         {
-            //String Command Builder for multiple Audio Tracks
+            // String Command Builder for multiple Audio Tracks
+            // Audio Mapping
             audioCodecCommand = "-map 0:a:" + activetrackindex + " -c:a:" + activetrackaudioindex + " ";
+            // Codec
             audioCodecCommand += SwitchCodec(activtrackcodec, channellayout);
+            // Channel Layout / Bitrate
             if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -b:a:" + activetrackaudioindex + " " + activetrackbitrate + "k"; }
             audioCodecCommand += " -ac:a:" + activetrackaudioindex + " " + channellayout + " ";
-            if (lang != "unknown") { audioCodecCommand += " -metadata:s:a:" + activetrackaudioindex + " language=" + lang + " "; }
+            // Metadata
+            if (lang != "unknown") 
+            { 
+                audioCodecCommand += " -metadata:s:a:" + activetrackaudioindex + " language=" + lang;
+                if (activtrackcodec != "Copy Audio")
+                {
+                    audioCodecCommand += " -metadata:s:a:" + activetrackaudioindex + " title=" + '\u0022' + "[" + lang.ToUpper() + "] " + activtrackcodec + " " + activetrackbitrate + "kbps" + '\u0022' + " ";
+                } 
+            }
+            else
+            {
+                if (activtrackcodec != "Copy Audio")
+                {
+                    audioCodecCommand += " -metadata:s:a:" + activetrackaudioindex + " title=" + '\u0022' + "[UND] " + activtrackcodec + " " + activetrackbitrate + "kbps" + '\u0022' + " ";
+                }     
+            }
             return audioCodecCommand;
         }
     }
