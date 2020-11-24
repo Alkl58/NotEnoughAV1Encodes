@@ -277,6 +277,9 @@ namespace NotEnoughAV1Encodes
                 // Sets Temp Settings
                 SetEncoderSettings();
                 SetVideoFilters();
+                // Saves the Project as file
+                SaveSettings(false, TempPathFileName);
+                // Split Video
                 SplitVideo();
                 SetTempSettings();
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetSourceFrameCount(); }, token);
@@ -682,13 +685,22 @@ namespace NotEnoughAV1Encodes
             this.Show();
             // Uses the public get method in OpenVideoSource window to get variable
             string result = WindowVideoSource.VideoPath;
-            if (result != null)
-                VideoInputSet = true;
-            // Sets the label in the user interface
-            // Note that this has to be edited once batch encoding is added as function
-            TextBoxVideoSource.Text = result;
-            VideoInput = result;
-            TempPathFileName = Path.GetFileNameWithoutExtension(result);
+            bool resultProject = WindowVideoSource.ProjectFile;
+            if (resultProject == false)
+            {
+                if (result != null)
+                    VideoInputSet = true;
+                // Sets the label in the user interface
+                // Note that this has to be edited once batch encoding is added as function
+                TextBoxVideoSource.Text = result;
+                VideoInput = result;
+                TempPathFileName = Path.GetFileNameWithoutExtension(result);
+            }
+            else
+            {
+                LoadSettings(true, result);
+            }
+
         }
 
         private void ButtonOpenDestination_Click(object sender, RoutedEventArgs e)
@@ -1041,11 +1053,26 @@ namespace NotEnoughAV1Encodes
                 if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Profiles")))
                     Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "Profiles"));
             }
+            else
+            {
+                // Path to Project File
+                directory = Path.Combine(Directory.GetCurrentDirectory(), "Jobs", SaveName + ".xml");
+                // Check Creates Profile Folder
+                if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Jobs")))
+                    Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "Jobs"));
+            }
 
             // New XmlWriter instance
             XmlWriter writer = XmlWriter.Create(directory);
             // Write Start Element
             writer.WriteStartElement("Settings");
+
+            if (SaveProfile == false)
+            {
+                // Project File / Resume File
+                writer.WriteElementString("VideoInput",                 VideoInput);                                                    // Video Input
+                writer.WriteElementString("VideoOutput",                VideoOutput);                                                   // Video Output
+            }
 
             writer.WriteElementString("WorkerCount",                    ComboBoxWorkerCount.SelectedIndex.ToString());                  // Worker Count
             writer.WriteElementString("WorkerPriority",                 ComboBoxProcessPriority.SelectedIndex.ToString());              // Worker Priority
@@ -1215,6 +1242,11 @@ namespace NotEnoughAV1Encodes
                 // Path to Profile Save
                 directory = Path.Combine(Directory.GetCurrentDirectory(), "Profiles", SaveName);
             }
+            else
+            {
+                // Path to Project Save File
+                directory = SaveName;
+            }
 
             // Init XML Reader
             XmlDocument doc = new XmlDocument();
@@ -1227,6 +1259,10 @@ namespace NotEnoughAV1Encodes
             {
                 switch (n.Name)
                 {
+                    case "VideoInput":                      VideoInput = n.InnerText; TextBoxVideoSource.Text = n.InnerText; VideoInputSet = true;
+                                                            TempPathFileName = Path.GetFileNameWithoutExtension(n.InnerText);       break;  // Video Input
+                    case "VideoOutput":                     VideoOutput = n.InnerText; VideoOutputSet = true;
+                                                            TextBoxVideoDestination.Text = n.InnerText;                             break;  // Video Output
                     case "WorkerCount":                     ComboBoxWorkerCount.SelectedIndex = int.Parse(n.InnerText);             break;  // Worker Count
                     case "WorkerPriority":                  ComboBoxProcessPriority.SelectedIndex = int.Parse(n.InnerText);         break;  // Worker Priority
                     // ═════════════════════════════════════════════════════════════════ Splitting ═════════════════════════════════════════════════════════════════

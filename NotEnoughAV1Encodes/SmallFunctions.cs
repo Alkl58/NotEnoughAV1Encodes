@@ -77,27 +77,37 @@ namespace NotEnoughAV1Encodes
 
         public static void GetSourceFrameCount()
         {
-            // This function calculates the total number of frames
-            Process process = new Process
+            // Skip Framecount Calculation if it already "exists" (Resume Mode)
+            if (File.Exists(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "framecount.log")) == false)
             {
-                StartInfo = new ProcessStartInfo()
+                // This function calculates the total number of frames
+                Process process = new Process
                 {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "cmd.exe",
-                    WorkingDirectory = MainWindow.FFmpegPath,
-                    Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -hide_banner -loglevel 32 -map 0:v:0 -c copy -f null -",
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true
-                }
-            };
-            process.Start();
-            string stream = process.StandardError.ReadToEnd();
-            process.WaitForExit();
-            string tempStream = stream.Substring(stream.LastIndexOf("frame="));
-            string data = getBetween(tempStream, "frame=", "fps=");
-            MainWindow.TotalFrames = int.Parse(data);
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = "cmd.exe",
+                        WorkingDirectory = MainWindow.FFmpegPath,
+                        Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -hide_banner -loglevel 32 -map 0:v:0 -c copy -f null -",
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true
+                    }
+                };
+                process.Start();
+                string stream = process.StandardError.ReadToEnd();
+                process.WaitForExit();
+                string tempStream = stream.Substring(stream.LastIndexOf("frame="));
+                string data = getBetween(tempStream, "frame=", "fps=");
+                MainWindow.TotalFrames = int.Parse(data);
+                WriteToFileThreadSafe(data, Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "framecount.log"));
+            }
+            else
+            {
+                // Reads the first line of the framecount file
+                MainWindow.TotalFrames = int.Parse(File.ReadLines(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "framecount.log")).First());
+            }
 
         }
 
