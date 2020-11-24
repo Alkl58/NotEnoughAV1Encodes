@@ -5,10 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NyaAV1"
         mc:Ignorable="d"
-        Title="NotEnoughAV1Encodes" Height="650" Width="1000" ResizeMode="CanMinimize">
+        Title="NotEnoughAV1Encodes" Height="655" Width="1010" ResizeMode="CanMinimize">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="b2v"/>
     </Window.Resources>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="Normal"/>
+    </Window.TaskbarItemInfo>
     <Grid>
         <Button x:Name="ButtonOpenSource" Margin="21,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="138" Background="{x:Null}" Click="ButtonOpenSource_Click" BorderBrush="#FF707070">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
@@ -21,8 +24,17 @@
                 <Grid Background="White">
                     <Label Content="Source:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Destination:" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBox x:Name="TextBoxVideoSource" HorizontalAlignment="Left" Height="29" Margin="105,10,0,0" TextWrapping="Wrap" Text="No Source Selected" VerticalAlignment="Top" Width="480" FontStyle="Italic" VerticalContentAlignment="Center" Foreground="#FF404040" IsReadOnly="True" BorderBrush="{x:Null}"/>
-                    <TextBox x:Name="TextBoxVideoDestination" HorizontalAlignment="Left" Height="29" Margin="105,39,0,0" TextWrapping="Wrap" Text="No Destination Selected" VerticalAlignment="Top" Width="480" FontStyle="Italic" VerticalContentAlignment="Center" Foreground="#FF404040" IsReadOnly="True" BorderBrush="{x:Null}"/>
+                    <TextBox x:Name="TextBoxVideoSource" HorizontalAlignment="Left" Height="29" Margin="105,10,0,0" TextWrapping="Wrap" Text="No Source Selected" VerticalAlignment="Top" Width="700" FontStyle="Italic" VerticalContentAlignment="Center" Foreground="#FF404040" IsReadOnly="True" BorderBrush="{x:Null}"/>
+                    <TextBox x:Name="TextBoxVideoDestination" HorizontalAlignment="Left" Height="29" Margin="105,39,0,0" TextWrapping="Wrap" Text="No Destination Selected" VerticalAlignment="Top" Width="700" FontStyle="Italic" VerticalContentAlignment="Center" Foreground="#FF404040" IsReadOnly="True" BorderBrush="{x:Null}"/>
+                    <Label Content="Encoding Settings:" HorizontalAlignment="Left" Margin="10,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <Label Content="Encoder:" HorizontalAlignment="Left" Margin="105,211,0,0" VerticalAlignment="Top"/>
+                    <Label Content="{Binding Text, ElementName=ComboBoxVideoEncoder, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="184,211,0,0" VerticalAlignment="Top" Width="140"/>
+                    <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="105,240,0,0" VerticalAlignment="Top"/>
+                    <Label Content="{Binding Text, ElementName=ComboBoxVideoBitDepth, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="184,240,0,0" VerticalAlignment="Top" Width="140"/>
+                    <Label Content="Speed:" HorizontalAlignment="Left" Margin="105,269,0,0" VerticalAlignment="Top"/>
+                    <Label Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="184,269,0,0" VerticalAlignment="Top" Width="140"/>
+                    <Label Content="Passes:" HorizontalAlignment="Left" Margin="105,298,0,0" VerticalAlignment="Top"/>
+                    <Label Content="{Binding Text, ElementName=ComboBoxVideoPasses, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="184,298,0,0" VerticalAlignment="Top" Width="140"/>
                 </Grid>
             </TabItem>
             <TabItem Header="General Settings" FontSize="14">
@@ -641,7 +653,7 @@
                 <Label Content="Start Encode" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="26" Height="30" Canvas.Top="4" FontSize="14"/>
             </Canvas>
         </Button>
-        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="34" Margin="21,570,0,0" VerticalAlignment="Top" Width="953"/>
+        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="34" Margin="21,570,0,0" VerticalAlignment="Top" Width="953" ValueChanged="ProgressBar_ValueChanged"/>
         <Label x:Name="LabelProgressBar" Content="" HorizontalAlignment="Left" Margin="21,570,0,0" VerticalAlignment="Top" Width="953" Height="34" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         <Button x:Name="ButtonStopEncode" Margin="447,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="135" Background="{x:Null}" BorderBrush="#FF707070" Click="ButtonStopEncode_Click">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">

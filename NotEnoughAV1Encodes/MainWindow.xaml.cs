@@ -58,6 +58,13 @@ namespace NotEnoughAV1Encodes
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
 
+        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            // Sets the TaskBar Progressbar
+            double taskMax = ProgressBar.Maximum, taskVal = ProgressBar.Value;
+            TaskbarItemInfo.ProgressValue = (1.0 / taskMax) * taskVal;
+        }
+
         private void Startup()
         {
             CheckDependencies.Check();
@@ -291,6 +298,9 @@ namespace NotEnoughAV1Encodes
                 // Progressbar Label when encoding finished
                 TimeSpan timespent = DateTime.Now - StartTime;
                 LabelProgressBar.Content = "Finished Encoding - Elapsed Time " + timespent.ToString("hh\\:mm\\:ss") + " - avg " + Math.Round(TotalFrames / timespent.TotalSeconds, 2) + "fps";
+                // Progressbar Cleanup
+                ProgressBar.Value = 0;
+                ProgressBar.Maximum = 10;
                 // Plays a sound if encoding has finished
                 SmallFunctions.PlayFinishedSound();
             }
