@@ -69,6 +69,7 @@ namespace NotEnoughAV1Encodes
         public static bool EncodeStarted = false;   // Encode Started Boolean
         public static bool DeleteTempFiles = false; // Temp File Deletion
         public static bool PlayUISounds = false;    // UI Sounds (Finished Encoding / Error)
+        public static bool ShowTerminal = false;    // Show / Hide Encoding Terminal
         public static int TotalFrames = 0;          // used for progressbar and frame check
         public DateTime StartTime;                  // used for eta calculation
         // Progress Cancellation
@@ -364,6 +365,7 @@ namespace NotEnoughAV1Encodes
             SplitMethod = ComboBoxSplittingMethod.SelectedIndex;                    // Sets the Splitmethod, used for VideoEncode() function
             EncodeMethod = ComboBoxVideoEncoder.SelectedIndex;                      // Sets the encoder (0 aomenc; 1 rav1e; 2 svt-av1)
             DeleteTempFiles = CheckBoxSettingsDeleteTempFiles.IsChecked == true;    // Sets if Temp Files should be deleted
+            ShowTerminal = CheckBoxSettingsTerminal.IsChecked == false;             // Sets if Terminal shall be shown during encode
             SmallFunctions.setVideoChunks(SplitMethod);                             // Sets the array of videochunks/commands
             SetPipeCommand();
         }
@@ -1137,6 +1139,9 @@ namespace NotEnoughAV1Encodes
                                     startInfo.UseShellExecute = true;
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = FFmpegPath;
+
+                                    if (ShowTerminal == false)
+                                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
                                     string InputVideo = "";
                                     // FFmpeg Scene Detect or PySceneDetect

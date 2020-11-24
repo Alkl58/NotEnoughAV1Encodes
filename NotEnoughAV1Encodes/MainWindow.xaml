@@ -795,6 +795,7 @@
                     <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}" HorizontalAlignment="Left" Margin="823,363,0,0" VerticalAlignment="Top" Width="73" Height="27" Background="White" Click="ButtonSetTempPath_Click"/>
                     <Label Content="Temp Folder" HorizontalAlignment="Left" Margin="10,329,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Button x:Name="ButtonOpenProgramFolder" Content="Open Program Folder" HorizontalAlignment="Left" Margin="145,286,0,0" VerticalAlignment="Top" Width="150" Height="38" Background="White" Click="ButtonOpenProgramFolder_Click"/>
+                    <CheckBox x:Name="CheckBoxSettingsTerminal" Content="Hide Terminal" HorizontalAlignment="Left" Margin="33,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Checked="CheckBoxSettingsUISounds_Checked"/>
 
                 </Grid>
             </TabItem>
