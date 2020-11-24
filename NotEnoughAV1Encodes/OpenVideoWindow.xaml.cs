@@ -9,6 +9,7 @@ namespace NotEnoughAV1Encodes
     {
         public string VideoPath { get; set; }
         public bool ProjectFile { get; set; }
+        public bool QuitCorrectly { get; set; }
         public OpenVideoWindow()
         {
             InitializeComponent();
@@ -26,6 +27,7 @@ namespace NotEnoughAV1Encodes
                 // with the function at the beginning
                 VideoPath = openVideoFileDialog.FileName;
                 ProjectFile = false;
+                QuitCorrectly = true;
                 // Closes the Window
                 this.Close();
             }
@@ -50,6 +52,7 @@ namespace NotEnoughAV1Encodes
                 // with the function at the beginning
                 VideoPath = openVideoFileDialog.FileName;
                 ProjectFile = true;
+                QuitCorrectly = true;
                 // Closes the Window
                 this.Close();
             }

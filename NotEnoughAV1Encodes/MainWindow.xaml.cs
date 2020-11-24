@@ -31,6 +31,28 @@ namespace NotEnoughAV1Encodes
         public static bool OnePass = true;          // true = Onepass, false = Twopass
         public static bool Priority = true;         // true = normal, false = below normal (process priority)
         public static string[] VideoChunks;         // Array of command/videochunks
+        // Temp Settings Audio
+        public static bool trackOne;                // Audio Track One active
+        public static bool trackTwo;                // Audio Track Two active
+        public static bool trackThree;              // Audio Track Three active
+        public static bool trackFour;               // Audio Track Four active
+        public static bool pcmBluray;               // Audio PCM Copy
+        public static string trackOneLanguage;      // Audio Track One Language
+        public static string trackTwoLanguage;      // Audio Track Two Language
+        public static string trackThreeLanguage;    // Audio Track Three Language
+        public static string trackFourLanguage;     // Audio Track Four Language
+        public static string audioCodecTrackOne;    // Audio Track One Codec
+        public static string audioCodecTrackTwo;    // Audio Track Two Codec
+        public static string audioCodecTrackThree;  // Audio Track Three Codec
+        public static string audioCodecTrackFour;   // Audio Track Four Codec
+        public static int audioBitrateTrackOne;     // Audio Track One Bitrate
+        public static int audioBitrateTrackTwo;     // Audio Track Two Bitrate
+        public static int audioBitrateTrackThree;   // Audio Track Three Bitrate
+        public static int audioBitrateTrackFour;    // Audio Track Four Bitrate
+        public static int audioChannelsTrackOne;    // Audio Track One Channels
+        public static int audioChannelsTrackTwo;    // Audio Track Two Channels
+        public static int audioChannelsTrackThree;  // Audio Track Three Channels
+        public static int audioChannelsTrackFour;   // Audio Track Four Channels
         // IO Paths
         public static string TempPath = Path.Combine(Path.GetTempPath(), "NEAV1E");
         public static string TempPathFileName = null;
@@ -293,12 +315,15 @@ namespace NotEnoughAV1Encodes
                 // Sets Temp Settings
                 SetEncoderSettings();
                 SetVideoFilters();
+                SetAudioSettings();
                 // Saves the Project as file
                 SaveSettings(false, TempPathFileName);
                 // Split Video
                 SplitVideo();
                 SetTempSettings();
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetSourceFrameCount(); }, token);
+                LabelProgressBar.Content = "Encoding Audio...";
+                await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeAudio.Encode(); }, token);
                 ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames);
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeVideo(); }, token);
                 await Task.Run(async () => { token.ThrowIfCancellationRequested(); await VideoMuxing.Concat(); }, token);
@@ -408,6 +433,63 @@ namespace NotEnoughAV1Encodes
             {
                 // 12bit
                 PipeBitDepthCommand += "12le -strict -1";
+            }
+        }
+
+        private void SetAudioSettings()
+        {
+            // Sets Active Audio Tracks
+            trackOne = CheckBoxAudioTrackOne.IsChecked == true;
+            trackTwo = CheckBoxAudioTrackTwo.IsChecked == true;
+            trackThree = CheckBoxAudioTrackThree.IsChecked == true;
+            trackFour = CheckBoxAudioTrackFour.IsChecked == true;
+            // Sets Audio Language
+            trackOneLanguage = ComboBoxTrackOneLanguage.Text;
+            trackTwoLanguage = ComboBoxTrackTwoLanguage.Text;
+            trackThreeLanguage = ComboBoxTrackThreeLanguage.Text;
+            trackFourLanguage = ComboBoxTrackFourLanguage.Text;
+            // Sets Audio Bitrate
+            audioBitrateTrackOne = int.Parse(TextBoxAudioBitrate.Text);
+            audioBitrateTrackTwo = int.Parse(TextBoxAudioBitrateTrackTwo.Text);
+            audioBitrateTrackThree = int.Parse(TextBoxAudioBitrateTrackThree.Text);
+            audioBitrateTrackFour = int.Parse(TextBoxAudioBitrateTrackFour.Text);
+            // Sets Audio Codec
+            audioCodecTrackOne = ComboBoxAudioCodec.Text;
+            audioCodecTrackTwo = ComboBoxAudioCodecTrackTwo.Text;
+            audioCodecTrackThree = ComboBoxAudioCodecTrackThree.Text;
+            audioCodecTrackFour = ComboBoxAudioCodecTrackFour.Text;
+            // Sets Audio Channels
+            switch (ComboBoxTrackOneChannels.SelectedIndex)
+            {
+                case 0: audioChannelsTrackOne = 1; break;
+                case 1: audioChannelsTrackOne = 2; break;
+                case 2: audioChannelsTrackOne = 6; break;
+                case 3: audioChannelsTrackOne = 8; break;
+                default: break;
+            }
+            switch (ComboBoxTrackTwoChannels.SelectedIndex)
+            {
+                case 0: audioChannelsTrackTwo = 1; break;
+                case 1: audioChannelsTrackTwo = 2; break;
+                case 2: audioChannelsTrackTwo = 6; break;
+                case 3: audioChannelsTrackTwo = 8; break;
+                default: break;
+            }
+            switch (ComboBoxTrackThreeChannels.SelectedIndex)
+            {
+                case 0: audioChannelsTrackThree = 1; break;
+                case 1: audioChannelsTrackThree = 2; break;
+                case 2: audioChannelsTrackThree = 6; break;
+                case 3: audioChannelsTrackThree = 8; break;
+                default: break;
+            }
+            switch (ComboBoxTrackFourChannels.SelectedIndex)
+            {
+                case 0: audioChannelsTrackFour = 1; break;
+                case 1: audioChannelsTrackFour = 2; break;
+                case 2: audioChannelsTrackFour = 6; break;
+                case 3: audioChannelsTrackFour = 8; break;
+                default: break;
             }
         }
 
@@ -530,7 +612,31 @@ namespace NotEnoughAV1Encodes
             else { CheckBoxAudioTrackThree.IsChecked = false; CheckBoxAudioTrackThree.IsEnabled = false; }
             if (trackfour) { CheckBoxAudioTrackFour.IsEnabled = true; CheckBoxAudioTrackFour.IsChecked = true; }
             else { CheckBoxAudioTrackFour.IsChecked = false; CheckBoxAudioTrackFour.IsEnabled = false; }
+            // This is needed if user encodes a bluray with pcm audio stream and wants to copy audio
+            if (GetAudioInfo() == "pcm_bluray") { pcmBluray = true; } else { pcmBluray = false; }
             GetAudioLanguage();
+        }
+
+        public static string GetAudioInfo()
+        {
+            Process getAudioInfo = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = FFmpegPath,
+                    Arguments = "/C ffprobe.exe -i " + '\u0022' + VideoInput + '\u0022' + " -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            getAudioInfo.Start();
+            string audio = getAudioInfo.StandardOutput.ReadLine();
+            getAudioInfo.WaitForExit();
+            return audio;
         }
 
         private void GetAudioLanguage()
@@ -807,19 +913,26 @@ namespace NotEnoughAV1Encodes
             bool resultProject = WindowVideoSource.ProjectFile;
             if (resultProject == false)
             {
-                if (result != null)
-                    VideoInputSet = true;
                 // Sets the label in the user interface
                 // Note that this has to be edited once batch encoding is added as function
-                TextBoxVideoSource.Text = result;
-                VideoInput = result;
-                TempPathFileName = Path.GetFileNameWithoutExtension(result);
+                if (WindowVideoSource.QuitCorrectly)
+                {
+                    VideoInputSet = true;
+                    TextBoxVideoSource.Text = result;
+                    VideoInput = result;
+                    TempPathFileName = Path.GetFileNameWithoutExtension(result);
+                    GetAudioInformation();
+                }
             }
             else
             {
-                LoadSettings(true, result);
+                if (WindowVideoSource.QuitCorrectly)
+                {
+                    LoadSettings(true, result);
+                    GetAudioInformation();
+                }
             }
-            GetAudioInformation();
+            
         }
 
         private void ButtonOpenDestination_Click(object sender, RoutedEventArgs e)
