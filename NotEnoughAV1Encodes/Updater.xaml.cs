@@ -229,6 +229,8 @@ namespace NotEnoughAV1Encodes
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "ffmpeg"));
             // Downloads ffmpeg
             await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/ffmpeg.7z", Path.Combine(CurrentDir, "Apps", "ffmpeg.7z")));
+            // Downloads ffprobe
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/ffprobe.7z", Path.Combine(CurrentDir, "Apps", "ffprobe.7z")));
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z")))
             {
                 // Extracts ffmpeg
@@ -245,6 +247,14 @@ namespace NotEnoughAV1Encodes
                 if (File.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z")))
                     File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z"));
                 CompareLocalVersion();
+            }
+            if (File.Exists(Path.Combine(CurrentDir, "Apps", "ffprobe.7z")))
+            {
+                // Extracts ffprobe
+                ExtractFile(Path.Combine(CurrentDir, "Apps", "ffprobe.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"));
+                // Deletes downloaded archive
+                if (File.Exists(Path.Combine(CurrentDir, "Apps", "ffprobe.7z")))
+                    File.Delete(Path.Combine(CurrentDir, "Apps", "ffprobe.7z"));
             }
             ProgressBar.IsIndeterminate = false;
         }

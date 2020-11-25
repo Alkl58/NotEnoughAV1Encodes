@@ -33,6 +33,7 @@
         <Label x:Name="LabelCurrentSVTAV1Version" Content="" HorizontalAlignment="Left" Margin="241,195,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
         <Label x:Name="LabelUpdateSVTAV1Version" Content="" HorizontalAlignment="Left" Margin="439,195,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
         <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="30" Margin="10,241,0,0" VerticalAlignment="Top" Width="517"/>
+        <Label Content="Builds are provided by jeremylee.sh and are released under gplv3." HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="403" Height="48" VerticalContentAlignment="Center" FontStyle="Italic"/>
 
     </Grid>
 </Window>
