@@ -101,7 +101,8 @@ namespace NotEnoughAV1Encodes
         private void Startup()
         {
             // Sets the GUI Version
-            LabelVersion.Content = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            LabelVersion.Content = version.Remove(version.Length - 2);
 
             CheckDependencies.Check();
 
