@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,6 +100,9 @@ namespace NotEnoughAV1Encodes
 
         private void Startup()
         {
+            // Sets the GUI Version
+            LabelVersion.Content = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
             CheckDependencies.Check();
 
             // Sets the workercount combobox

@@ -783,7 +783,7 @@
                     <CheckBox x:Name="CheckBoxSettingsDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="33,44,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="213" IsChecked="True"/>
                     <Label Content="Program Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <CheckBox x:Name="CheckBoxSettingsUISounds" Content="Enable UI Sounds (Finished Encoding / Error)" HorizontalAlignment="Left" Margin="33,67,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Checked="CheckBoxSettingsUISounds_Checked"/>
-                    <Label Content="Version: 1.4 (Rebegin Branch)" HorizontalAlignment="Left" Margin="607,26,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="LabelVersion" Content="" HorizontalAlignment="Left" Margin="655,26,0,0" VerticalAlignment="Top" Width="100"/>
                     <Label Content="Github:" HorizontalAlignment="Left" Margin="607,52,0,0" VerticalAlignment="Top" FontSize="12"/>
                     <TextBlock Margin="660,57,10,303" FontSize="12">
                         <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
@@ -796,6 +796,7 @@
                     <Label Content="Temp Folder" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Button x:Name="ButtonOpenProgramFolder" Content="Open Program Folder" HorizontalAlignment="Left" Margin="149,273,0,0" VerticalAlignment="Top" Width="150" Height="38" Background="White" Click="ButtonOpenProgramFolder_Click"/>
                     <CheckBox x:Name="CheckBoxSettingsTerminal" Content="Hide Terminal" HorizontalAlignment="Left" Margin="33,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Checked="CheckBoxSettingsUISounds_Checked"/>
+                    <Label Content="Version:" HorizontalAlignment="Left" Margin="603,26,0,0" VerticalAlignment="Top" FontSize="12"/>
 
                 </Grid>
             </TabItem>
