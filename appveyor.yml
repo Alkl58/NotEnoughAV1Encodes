@@ -7,7 +7,7 @@ before_build:
   - nuget restore
 artifacts:
 - path: '\NotEnoughAV1Encodes\bin\Release\'
-  name: NotEnoughAV1Encodes_{build}
+  name: NotEnoughAV1Encodes
 skip_commits:
   files:
     - README.md
