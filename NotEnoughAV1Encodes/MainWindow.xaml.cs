@@ -1051,10 +1051,6 @@ namespace NotEnoughAV1Encodes
             // Sets the total framecount
             int totalframes = TotalFrames;
 
-            // The amount of frames doubles when in two pass mode
-            if (OnePass != true)
-                totalframes = totalframes * 2;
-
             foreach (string file in filePaths)
             {
                 // Reads the progress file of ffmpeg without locking it up
