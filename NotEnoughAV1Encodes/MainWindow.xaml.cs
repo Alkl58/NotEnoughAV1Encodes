@@ -328,8 +328,11 @@ namespace NotEnoughAV1Encodes
                 SplitVideo();
                 SetTempSettings();
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetSourceFrameCount(); }, token);
-                LabelProgressBar.Content = "Encoding Audio...";
-                await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeAudio.Encode(); }, token);
+                if (trackOne || trackTwo || trackThree || trackFour)
+                {
+                    LabelProgressBar.Content = "Encoding Audio...";
+                    await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeAudio.Encode(); }, token);
+                }
                 ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames);
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeVideo(); }, token);
                 await Task.Run(async () => { token.ThrowIfCancellationRequested(); await VideoMuxing.Concat(); }, token);
