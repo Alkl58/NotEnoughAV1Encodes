@@ -891,6 +891,11 @@ namespace NotEnoughAV1Encodes
 
         // ══════════════════════════════════════ Buttons ═════════════════════════════════════════
 
+        private void ButtonDeleteTempFiles_Click(object sender, RoutedEventArgs e)
+        {
+            SmallFunctions.DeleteTempFilesButton();
+        }
+
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
         {
             // Creates a new SavePreset Window

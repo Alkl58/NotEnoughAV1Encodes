@@ -794,9 +794,10 @@
                     <TextBox x:Name="TextBoxCustomTempPath" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}" HorizontalAlignment="Left" Height="27" Margin="107,345,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="711" VerticalContentAlignment="Center"/>
                     <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}" HorizontalAlignment="Left" Margin="823,345,0,0" VerticalAlignment="Top" Width="73" Height="27" Background="White" Click="ButtonSetTempPath_Click"/>
                     <Label Content="Temp Folder" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Button x:Name="ButtonOpenProgramFolder" Content="Open Program Folder" HorizontalAlignment="Left" Margin="149,273,0,0" VerticalAlignment="Top" Width="150" Height="38" Background="White" Click="ButtonOpenProgramFolder_Click"/>
+                    <Button x:Name="ButtonOpenProgramFolder" Content="Open Program Folder" HorizontalAlignment="Left" Margin="149,230,0,0" VerticalAlignment="Top" Width="150" Height="38" Background="White" Click="ButtonOpenProgramFolder_Click"/>
                     <CheckBox x:Name="CheckBoxSettingsTerminal" Content="Hide Terminal" HorizontalAlignment="Left" Margin="33,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Checked="CheckBoxSettingsUISounds_Checked"/>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="603,26,0,0" VerticalAlignment="Top" FontSize="12"/>
+                    <Button x:Name="ButtonDeleteTempFiles" Content="Delete Temp Files" HorizontalAlignment="Left" Margin="149,273,0,0" VerticalAlignment="Top" Width="150" Height="38" Background="White" Click="ButtonDeleteTempFiles_Click"/>
 
                 </Grid>
             </TabItem>

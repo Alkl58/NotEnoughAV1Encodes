@@ -173,6 +173,17 @@ namespace NotEnoughAV1Encodes
             catch {  }
         }
 
+        public static void DeleteTempFilesButton()
+        {
+            // Deletes Temp Files
+            try
+            {
+                DirectoryInfo tmp = new DirectoryInfo(Path.Combine(MainWindow.TempPath));
+                tmp.Delete(true);
+            }
+            catch { }
+        }
+
         public static class Cancel
         {
             //Public Cancel boolean
