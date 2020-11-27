@@ -110,7 +110,7 @@ namespace NotEnoughAV1Encodes
             {
                 if (ComboBoxVideoEncoder.SelectedIndex == 0)
                 {
-                    if (SliderVideoSpeed.Value >= 6)
+                    if (SliderVideoSpeed.Value >= 5)
                     {
                         CheckBoxVideoAomencRealTime.Visibility = Visibility.Visible;
                     }
