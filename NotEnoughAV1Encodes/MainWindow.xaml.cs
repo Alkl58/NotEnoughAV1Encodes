@@ -333,6 +333,7 @@ namespace NotEnoughAV1Encodes
                     LabelProgressBar.Content = "Encoding Audio...";
                     await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeAudio.Encode(); }, token);
                 }
+                ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(3, 112, 200));
                 ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames);
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeVideo(); }, token);
                 await Task.Run(async () => { token.ThrowIfCancellationRequested(); await VideoMuxing.Concat(); }, token);
@@ -341,8 +342,8 @@ namespace NotEnoughAV1Encodes
                 // Progressbar Label when encoding finished
                 TimeSpan timespent = DateTime.Now - StartTime;
                 LabelProgressBar.Content = "Finished Encoding - Elapsed Time " + timespent.ToString("hh\\:mm\\:ss") + " - avg " + Math.Round(TotalFrames / timespent.TotalSeconds, 2) + "fps";
-                // Progressbar Cleanup
-                ProgressBar.Value = 0;
+                ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(6, 176, 37));
+                ProgressBar.Value = 10;
                 ProgressBar.Maximum = 10;
                 // Plays a sound if encoding has finished
                 SmallFunctions.PlayFinishedSound();
