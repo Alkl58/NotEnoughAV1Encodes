@@ -218,10 +218,10 @@
                     <Label Content="Highest Quality |" HorizontalAlignment="Left" Margin="831,113,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
                     <Label Content="Optimisation" HorizontalAlignment="Left" Margin="10,216,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Speed:" HorizontalAlignment="Left" Margin="57,263,0,0" VerticalAlignment="Top"/>
-                    <Slider x:Name="SliderVideoSpeed" HorizontalAlignment="Left" Margin="138,270,0,0" VerticalAlignment="Top" Width="127" Height="29" TickPlacement="BottomRight" Foreground="#FF595959" Maximum="9" Value="4" SmallChange="0" IsSnapToTickEnabled="True"/>
+                    <Slider x:Name="SliderVideoSpeed" HorizontalAlignment="Left" Margin="138,270,0,0" VerticalAlignment="Top" Width="127" Height="29" TickPlacement="BottomRight" Foreground="#FF595959" Maximum="9" Value="4" SmallChange="0" IsSnapToTickEnabled="True" ValueChanged="SliderVideoSpeed_ValueChanged"/>
                     <Label x:Name="LabelVideoSpeed" Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="109,263,0,0" VerticalAlignment="Top"/>
                     <Label Content="Passes:" HorizontalAlignment="Left" Margin="57,323,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxVideoPasses" HorizontalAlignment="Left" Margin="138,323,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center">
+                    <ComboBox x:Name="ComboBoxVideoPasses" HorizontalAlignment="Left" Margin="138,323,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoPasses_SelectionChanged">
                         <ComboBoxItem Content="1" IsSelected="True"/>
                         <ComboBoxItem Content="2"/>
                     </ComboBox>
@@ -230,6 +230,7 @@
                     <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="457,156,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center"/>
                     <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="582,156,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                     <CheckBox x:Name="CheckBoxVideoAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="59,142,0,0" VerticalAlignment="Top" Width="139"/>
+                    <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="281,272,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Collapsed"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Audio">

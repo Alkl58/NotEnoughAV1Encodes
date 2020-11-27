@@ -83,6 +83,49 @@ namespace NotEnoughAV1Encodes
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
+        private void ComboBoxVideoPasses_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            // Reverts to 1 Pass encoding if Real Time Mode is activated 
+            if (CheckBoxVideoAomencRealTime != null)
+            {
+                if (CheckBoxVideoAomencRealTime.IsChecked == true && ComboBoxVideoPasses.SelectedIndex == 1)
+                {
+                    ComboBoxVideoPasses.SelectedIndex = 0;
+                }
+            } 
+        }
+        private void CheckBoxVideoAomencRealTime_Checked(object sender, RoutedEventArgs e)
+        {
+            // Reverts to 1 Pass encoding if Real Time Mode is activated 
+            if (CheckBoxVideoAomencRealTime.IsChecked == true && ComboBoxVideoPasses.SelectedIndex == 1)
+            {
+                ComboBoxVideoPasses.SelectedIndex = 0;
+            }
+        }
+
+        private void SliderVideoSpeed_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            // Shows / Hides Real Time Mode CheckBox
+            if (CheckBoxVideoAomencRealTime != null)
+            {
+                if (ComboBoxVideoEncoder.SelectedIndex == 0)
+                {
+                    if (SliderVideoSpeed.Value >= 6)
+                    {
+                        CheckBoxVideoAomencRealTime.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        CheckBoxVideoAomencRealTime.IsChecked = false;
+                        CheckBoxVideoAomencRealTime.Visibility = Visibility.Collapsed;
+                    }
+                }
+                else
+                {
+                    CheckBoxVideoAomencRealTime.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
@@ -782,6 +825,10 @@ namespace NotEnoughAV1Encodes
                     cmd += " --arnr-maxframes=" + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
                     cmd += " --arnr-strength=" + ComboBoxAomencARNRStrength.Text;                       // ARNR Strength
                 }
+                if (CheckBoxVideoAomencRealTime.IsChecked == true)
+                {
+                    cmd += " --rt";                                                                     // Real Time Mode
+                }
             }
 
             return cmd;
@@ -1386,7 +1433,8 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("VideoQuality",       SliderVideoQuality.Value.ToString());                                   // Video Quality
             if (RadioButtonVideoBitrate.IsChecked == true)
                 writer.WriteElementString("VideoBitrate",       TextBoxVideoBitrate.Text);                                              // Video Bitrate
-
+            if (ComboBoxVideoEncoder.SelectedIndex == 0)
+                writer.WriteElementString("VideoAomencRT",      CheckBoxVideoAomencRealTime.IsChecked.ToString());                      // Video Aomenc Real Time Mode
             // ══════════════════════════════════════════════════════════ Advanced Video Settings ══════════════════════════════════════════════════════════
 
             writer.WriteElementString("VideoAdvanced",          CheckBoxVideoAdvancedSettings.IsChecked.ToString());                    // Video Advanced Settings
@@ -1541,6 +1589,7 @@ namespace NotEnoughAV1Encodes
                                                             RadioButtonVideoConstantQuality.IsChecked = true;                       break;  // Video Quality
                     case "VideoBitrate":                    TextBoxVideoBitrate.Text = n.InnerText;
                                                             RadioButtonVideoBitrate.IsChecked = true;                               break;  // Video Bitrate
+                    case "VideoAomencRT":                   CheckBoxVideoAomencRealTime.IsChecked = n.InnerText == "True";          break;  // Video Aomenc Real Time Mode
                     // ═════════════════════════════════════════════════════════ Advanced Video Settings ═══════════════════════════════════════════════════════════
                     case "VideoAdvanced":                   CheckBoxVideoAdvancedSettings.IsChecked = n.InnerText == "True";        break;  // Video Advanced Settings
                     case "VideoAdvancedCustom":             CheckBoxCustomVideoSettings.IsChecked = n.InnerText == "True";          break;  // Video Advanced Settings Custom
