@@ -54,6 +54,13 @@ namespace NotEnoughAV1Encodes
         public static int audioChannelsTrackTwo;    // Audio Track Two Channels
         public static int audioChannelsTrackThree;  // Audio Track Three Channels
         public static int audioChannelsTrackFour;   // Audio Track Four Channels
+        // Temp Settings Subtitles
+        public static string subTrackOnePath;       // Subtitle Track One Path
+        public static string subTrackTwoPath;       // Subtitle Track Two Path
+        public static string subTrackThreePath;     // Subtitle Track Three Path
+        public static string subTrackFourPath;      // Subtitle Track Four Path
+        public static string subCommand;            // Subtitle Muxing Command
+        public static bool subSoftSubEnabled;       // Subtitle Toggle for later Muxing
         // IO Paths
         public static string TempPath = Path.Combine(Path.GetTempPath(), "NEAV1E");
         public static string TempPathFileName = null;
@@ -66,6 +73,7 @@ namespace NotEnoughAV1Encodes
         public static string AomencPath = null;     // Path to aomenc
         public static string Rav1ePath = null;      // Path to rav1e
         public static string SvtAV1Path = null;     // Path to svt-av1
+        public static string MKVToolNixPath = null; // Path to mkvtoolnix
         // Temp Variables
         public static bool EncodeStarted = false;   // Encode Started Boolean
         public static bool DeleteTempFiles = false; // Temp File Deletion
@@ -83,6 +91,134 @@ namespace NotEnoughAV1Encodes
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
+
+        private string SubtitleFiledialog()
+        {
+            // Opens OpenFileDialog for subtitles
+            OpenFileDialog openSubtitleFileDialog = new OpenFileDialog();
+            openSubtitleFileDialog.Filter = "Subtitle Files|*.pgs;*.srt;*.sup;*.ass;*.ssa;|All Files|*.*";
+            Nullable<bool> result = openSubtitleFileDialog.ShowDialog();
+            if (result == true)
+            {
+                return openSubtitleFileDialog.FileName;
+            }
+            return null;
+        }
+
+        private void ButtonSubtitleTrackOne_Click(object sender, RoutedEventArgs e)
+        {
+            subTrackOnePath = SubtitleFiledialog();
+            TextBoxSubtitleTrackOne.Text = subTrackOnePath;
+        }
+
+        private void ButtonSubtitleTrackTwo_Click(object sender, RoutedEventArgs e)
+        {
+            subTrackTwoPath = SubtitleFiledialog();
+            TextBoxSubtitleTrackTwo.Text = subTrackTwoPath;
+        }
+
+        private void ButtonSubtitleTrackThree_Click(object sender, RoutedEventArgs e)
+        {
+            subTrackThreePath = SubtitleFiledialog();
+            TextBoxSubtitleTrackThree.Text = subTrackThreePath;
+        }
+
+        private void ButtonSubtitleTrackFour_Click(object sender, RoutedEventArgs e)
+        {
+            subTrackFourPath = SubtitleFiledialog();
+            TextBoxSubtitleTrackFour.Text = subTrackFourPath;
+        }
+
+        private void CheckBoxSubOneBurn_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSubTwoBurn.IsChecked = false;
+            CheckBoxSubThreeBurn.IsChecked = false;
+            CheckBoxSubFourBurn.IsChecked = false;
+            CheckBoxSubFiveBurn.IsChecked = false;
+            CheckBoxSubOneDefault.IsChecked = false;
+        }
+
+        private void CheckBoxSubTwoBurn_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSubOneBurn.IsChecked = false;
+            CheckBoxSubThreeBurn.IsChecked = false;
+            CheckBoxSubFourBurn.IsChecked = false;
+            CheckBoxSubFiveBurn.IsChecked = false;
+            CheckBoxSubTwoDefault.IsChecked = false;
+        }
+
+        private void CheckBoxSubThreeBurn_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSubOneBurn.IsChecked = false;
+            CheckBoxSubTwoBurn.IsChecked = false;
+            CheckBoxSubFourBurn.IsChecked = false;
+            CheckBoxSubFiveBurn.IsChecked = false;
+            CheckBoxSubThreeDefault.IsChecked = false;
+        }
+
+        private void CheckBoxSubFourBurn_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSubOneBurn.IsChecked = false;
+            CheckBoxSubTwoBurn.IsChecked = false;
+            CheckBoxSubThreeBurn.IsChecked = false;
+            CheckBoxSubFiveBurn.IsChecked = false;
+            CheckBoxSubFourDefault.IsChecked = false;
+        }
+
+        private void CheckBoxSubFiveBurn_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSubOneBurn.IsChecked = false;
+            CheckBoxSubTwoBurn.IsChecked = false;
+            CheckBoxSubThreeBurn.IsChecked = false;
+            CheckBoxSubFourBurn.IsChecked = false;
+            CheckBoxSubFiveDefault.IsChecked = false;
+        }
+
+        private void CheckBoxSubOneDefault_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSubTwoDefault.IsChecked = false;
+            CheckBoxSubThreeDefault.IsChecked = false;
+            CheckBoxSubFourDefault.IsChecked = false;
+            CheckBoxSubFiveDefault.IsChecked = false;
+            CheckBoxSubOneBurn.IsChecked = false;
+        }
+
+        private void CheckBoxSubTwoDefault_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSubOneDefault.IsChecked = false;
+            CheckBoxSubThreeDefault.IsChecked = false;
+            CheckBoxSubFourDefault.IsChecked = false;
+            CheckBoxSubFiveDefault.IsChecked = false;
+            CheckBoxSubTwoBurn.IsChecked = false;
+        }
+
+        private void CheckBoxSubThreeDefault_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSubOneDefault.IsChecked = false;
+            CheckBoxSubTwoDefault.IsChecked = false;
+            CheckBoxSubFourDefault.IsChecked = false;
+            CheckBoxSubFiveDefault.IsChecked = false;
+            CheckBoxSubThreeBurn.IsChecked = false;
+        }
+
+        private void CheckBoxSubFourDefault_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSubOneDefault.IsChecked = false;
+            CheckBoxSubTwoDefault.IsChecked = false;
+            CheckBoxSubThreeDefault.IsChecked = false;
+            CheckBoxSubFiveDefault.IsChecked = false;
+            CheckBoxSubFourBurn.IsChecked = false;
+        }
+
+        private void CheckBoxSubFiveDefault_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSubOneDefault.IsChecked = false;
+            CheckBoxSubTwoDefault.IsChecked = false;
+            CheckBoxSubThreeDefault.IsChecked = false;
+            CheckBoxSubFourDefault.IsChecked = false;
+            CheckBoxSubFiveBurn.IsChecked = false;
+        }
+
         private void ComboBoxVideoPasses_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             // Reverts to 1 Pass encoding if Real Time Mode is activated 
@@ -94,6 +230,7 @@ namespace NotEnoughAV1Encodes
                 }
             } 
         }
+
         private void CheckBoxVideoAomencRealTime_Checked(object sender, RoutedEventArgs e)
         {
             // Reverts to 1 Pass encoding if Real Time Mode is activated 
@@ -363,8 +500,12 @@ namespace NotEnoughAV1Encodes
                 Directory.CreateDirectory(Path.Combine(TempPath, TempPathFileName, "Progress"));
                 // Sets Temp Settings
                 SetEncoderSettings();
+                // Set Video Filters
                 SetVideoFilters();
+                // Set Audio Parameters
                 SetAudioSettings();
+                // Set Subtitle Parameters
+                SetSubtitleParameters();
                 // Saves the Project as file
                 SaveSettings(false, TempPathFileName);
                 // Split Video
@@ -744,6 +885,200 @@ namespace NotEnoughAV1Encodes
 
         }
 
+        // ════════════════════════════════════ Subtitle Logic ════════════════════════════════════
+
+        private void SetSubtitleParameters()
+        {
+            // Has to be set, else it could create problems when running another encode in the same instance
+            subSoftSubEnabled = false;
+
+            if (CheckBoxSubtitleActivatedOne.IsChecked == true)
+            {
+                // 1st Subtitle
+                subSoftSubEnabled = true;
+                string subDefault = "no";
+                if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
+                subCommand += " --language 0:" + ComboBoxSubTrackOneLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubOneName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackOne.Text + '\u0022';
+            }
+
+            if (CheckBoxSubtitleActivatedTwo.IsChecked == true)
+            {
+                // 2nd Subtitle
+                subSoftSubEnabled = true;
+                string subDefault = "no";
+                if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
+                subCommand += " --language 0:" + ComboBoxSubTrackTwoLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubTwoName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackTwo.Text + '\u0022';
+            }
+
+            if (CheckBoxSubtitleActivatedThree.IsChecked == true)
+            {
+                // 3rd Subtitle
+                subSoftSubEnabled = true;
+                string subDefault = "no";
+                if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
+                subCommand += " --language 0:" + ComboBoxSubTrackThreeLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubThreeName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackThree.Text + '\u0022';
+            }
+
+            if (CheckBoxSubtitleActivatedFour.IsChecked == true)
+            {
+                // 4th Subtitle
+                subSoftSubEnabled = true;
+                string subDefault = "no";
+                if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
+                subCommand += " --language 0:" + ComboBoxSubTrackFourLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubFourName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackFour.Text + '\u0022';
+            }
+
+            if (CheckBoxSubtitleActivatedFive.IsChecked == true)
+            {
+                // 5th Subtitle
+                subSoftSubEnabled = true;
+                string subDefault = "no";
+                if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
+                subCommand += " --language 0:" + ComboBoxSubTrackFiveLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubFourName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackFive.Text + '\u0022';
+            }
+        }
+
+        public void GetSubtitleTracks()
+        {
+            //Creates Audio Directory in the temp dir
+            if (!Directory.Exists(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Subtitles")))
+                Directory.CreateDirectory(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Subtitles"));
+
+            //This function gets subtitle information
+            Process getSubtitles = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = FFmpegPath,
+                    Arguments = "/C ffprobe.exe -i " + '\u0022' + VideoInput + '\u0022' + " -v error -select_streams s -show_entries stream=codec_name:stream_tags=language -of csv=p=0",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            getSubtitles.Start();
+            string subs = getSubtitles.StandardOutput.ReadToEnd();
+            getSubtitles.WaitForExit();
+
+            //Splits the output from ffprobe
+            var result = subs.Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
+            int a = 0;
+            int b = 0;
+            //Iterates over the lines from the splitted output
+            foreach (var line in result)
+            {
+                if (line.Contains("hdmv_pgs_subtitle") || line.Contains("ass") || line.Contains("ssa") || line.Contains("subrip") || line.Contains("dvd_subtitle"))
+                {
+
+                    string tempName = "";
+                    Process process = new Process();
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.UseShellExecute = true;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.WorkingDirectory = FFmpegPath;
+
+                    if (line.Contains("hdmv_pgs_subtitle"))
+                    {
+                        startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + VideoInput + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Subtitles", "pgs_" + b + ".sup") + '\u0022';
+                        tempName = Path.Combine(TempPath, TempPathFileName, "Subtitles", "pgs_" + b + ".sup");
+                    }
+                    else if (line.Contains("ass"))
+                    {
+                        startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + VideoInput + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Subtitles", "ass_" + b + ".ass") + '\u0022';
+                        tempName = Path.Combine(TempPath, TempPathFileName, "Subtitles", "ass_" + b + ".ass");
+                    }
+                    else if (line.Contains("subrip"))
+                    {
+                        startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + VideoInput + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Subtitles", "subrip_" + b + ".srt") + '\u0022';
+                        tempName = Path.Combine(TempPath, TempPathFileName, "Subtitles", "subrip_" + b + ".srt");
+                    }
+                    else if (line.Contains("ssa"))
+                    {
+                        startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + VideoInput + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Subtitles", "ssa_" + b + ".ssa") + '\u0022';
+                        tempName = Path.Combine(TempPath, TempPathFileName, "Subtitles", "ssa_" + b + ".ssa");
+                    }
+                    else if (line.Contains("dvd_subtitle"))
+                    {
+                        startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + VideoInput + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Subtitles", "dvdsub_" + b + ".mkv") + '\u0022';
+                    }
+
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+
+                    if (line.Contains("dvd_subtitle") == true)
+                    {
+                        // Extract dvdsub from mkv with mkvextract
+                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        startInfo.UseShellExecute = true;
+                        startInfo.FileName = "cmd.exe";
+                        startInfo.WorkingDirectory = MKVToolNixPath;
+
+                        startInfo.Arguments = "/C mkvextract.exe " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Subtitles", "dvdsub_" + b + ".mkv") + '\u0022' + " tracks 0:" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Subtitles", "dvdsub_" + b + ".sub") + '\u0022';
+                        
+                        process.StartInfo = startInfo;
+                        process.Start();
+                        process.WaitForExit();
+
+                        // Convert dvdsub to bluraysub
+                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        startInfo.UseShellExecute = true;
+                        startInfo.FileName = "cmd.exe";
+                        startInfo.WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "bdsup2sub");
+
+                        startInfo.Arguments = "/C bdsup2sub.exe -o " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Subtitles", "pgs_dvd_" + b + ".sup") + '\u0022' + " " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Subtitles", "dvdsub_" + b + ".sub") + '\u0022';
+                        process.StartInfo = startInfo;
+                        process.Start();
+                        process.WaitForExit();
+
+                        // Cleanup
+                        if (File.Exists(Path.Combine(TempPath, TempPathFileName, "Subtitles", "pgs_dvd_" + b + ".sup")))
+                        {
+                            try
+                            {
+                                File.Delete(Path.Combine(TempPath, TempPathFileName, "Subtitles", "dvdsub_" + b + ".sub"));
+                                File.Delete(Path.Combine(TempPath, TempPathFileName, "Subtitles", "dvdsub_" + b + ".idx"));
+                                File.Delete(Path.Combine(TempPath, TempPathFileName, "Subtitles", "dvdsub_" + b + ".mkv"));
+                            }
+                            catch { }
+                        }
+
+                        tempName = Path.Combine(TempPath, TempPathFileName, "Subtitles", "pgs_dvd_" + b + ".sup");
+                    }
+
+                    string resultcropped = line.Substring(line.LastIndexOf(',') + 1).Substring(0, 3);
+                    int indexLang;
+                    switch (resultcropped)
+                    {
+                        case "eng": indexLang = 1; break;
+                        case "deu": indexLang = 2; break;
+                        case "ger": indexLang = 2; break;
+                        case "fre": indexLang = 3; break;
+                        case "ita": indexLang = 4; break;
+                        case "spa": indexLang = 5; break;
+                        case "jpn": indexLang = 6; break;
+                        case "chi": indexLang = 7; break;
+                        case "kor": indexLang = 8; break;
+                        default: indexLang = 0; break;
+                    }
+
+                    //Sets the TextBoxes
+                    if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; ComboBoxSubTrackOneLanguage.SelectedIndex = indexLang; CheckBoxSubtitleActivatedOne.IsChecked = true; }
+                    if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; ComboBoxSubTrackTwoLanguage.SelectedIndex = indexLang; CheckBoxSubtitleActivatedTwo.IsChecked = true; }
+                    if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; ComboBoxSubTrackThreeLanguage.SelectedIndex = indexLang; CheckBoxSubtitleActivatedThree.IsChecked = true; }
+                    if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; ComboBoxSubTrackFourLanguage.SelectedIndex = indexLang; CheckBoxSubtitleActivatedFour.IsChecked = true; }
+                    if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; ComboBoxSubTrackFiveLanguage.SelectedIndex = indexLang; CheckBoxSubtitleActivatedFive.IsChecked = true; }
+                    b++;
+                }
+                a++;
+            }
+        }
+
         // ══════════════════════════════════ Encoder Settings ════════════════════════════════════
 
         private void SetEncoderSettings()
@@ -985,6 +1320,7 @@ namespace NotEnoughAV1Encodes
                     VideoInput = result;
                     TempPathFileName = Path.GetFileNameWithoutExtension(result);
                     GetAudioInformation();
+                    GetSubtitleTracks();
                 }
             }
             else
@@ -993,6 +1329,7 @@ namespace NotEnoughAV1Encodes
                 {
                     LoadSettings(true, result);
                     GetAudioInformation();
+                    GetSubtitleTracks();
                 }
             }
             
@@ -1366,6 +1703,27 @@ namespace NotEnoughAV1Encodes
                 // Project File / Resume File
                 writer.WriteElementString("VideoInput",                 VideoInput);                                                    // Video Input
                 writer.WriteElementString("VideoOutput",                VideoOutput);                                                   // Video Output
+                // Subtitles
+                writer.WriteElementString("SubOne",                     CheckBoxSubtitleActivatedOne.IsChecked.ToString());             // Subtitle Track One Active
+                writer.WriteElementString("SubTwo",                     CheckBoxSubtitleActivatedTwo.IsChecked.ToString());             // Subtitle Track Two Active
+                writer.WriteElementString("SubThree",                   CheckBoxSubtitleActivatedThree.IsChecked.ToString());           // Subtitle Track Three Active
+                writer.WriteElementString("SubFour",                    CheckBoxSubtitleActivatedFour.IsChecked.ToString());            // Subtitle Track Four Active
+                writer.WriteElementString("SubFive",                    CheckBoxSubtitleActivatedFive.IsChecked.ToString());            // Subtitle Track Five Active
+                writer.WriteElementString("SubOnePath",                 TextBoxSubtitleTrackOne.Text);                                  // Subtitle Track One Path
+                writer.WriteElementString("SubTwoPath",                 TextBoxSubtitleTrackTwo.Text);                                  // Subtitle Track Two Path
+                writer.WriteElementString("SubThreePath",               TextBoxSubtitleTrackThree.Text);                                // Subtitle Track Three Path
+                writer.WriteElementString("SubFourPath",                TextBoxSubtitleTrackFour.Text);                                 // Subtitle Track Four Path
+                writer.WriteElementString("SubFivePath",                TextBoxSubtitleTrackFive.Text);                                 // Subtitle Track Five Path
+                writer.WriteElementString("SubOneName",                 TextBoxSubOneName.Text);                                        // Subtitle Track One Name
+                writer.WriteElementString("SubTwoName",                 TextBoxSubTwoName.Text);                                        // Subtitle Track Two Name
+                writer.WriteElementString("SubThreeName",               TextBoxSubThreeName.Text);                                      // Subtitle Track Three Name
+                writer.WriteElementString("SubFourName",                TextBoxSubFourName.Text);                                       // Subtitle Track Four Name
+                writer.WriteElementString("SubFiveName",                TextBoxSubFiveName.Text);                                       // Subtitle Track Five Name
+                writer.WriteElementString("SubOneLanguage",             ComboBoxSubTrackOneLanguage.SelectedIndex.ToString());          // Subtitle Track One Language
+                writer.WriteElementString("SubTwoLanguage",             ComboBoxSubTrackTwoLanguage.SelectedIndex.ToString());          // Subtitle Track Two Language
+                writer.WriteElementString("SubThreeLanguage",           ComboBoxSubTrackThreeLanguage.SelectedIndex.ToString());        // Subtitle Track Three Language
+                writer.WriteElementString("SubFourLanguage",            ComboBoxSubTrackFourLanguage.SelectedIndex.ToString());         // Subtitle Track Four Language
+                writer.WriteElementString("SubFFiveLanguage",           ComboBoxSubTrackFiveLanguage.SelectedIndex.ToString());         // Subtitle Track Five Language
             }
 
             writer.WriteElementString("WorkerCount",                    ComboBoxWorkerCount.SelectedIndex.ToString());                  // Worker Count
@@ -1646,6 +2004,27 @@ namespace NotEnoughAV1Encodes
                     case "VideoAdvancedSVTAV1AltRefFrame":  ComboBoxSVTAV1AltRefFrames.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings SVT-AV1 Alt Ref Frames
                     case "VideoAdvancedSVTAV1HDR":          CheckBoxSVTAV1HDR.IsChecked = n.InnerText == "True";                    break;  // Video Advanced Settings SVT-AV1 HDR
                     case "VideoAdvancedCustomString":       TextBoxCustomVideoSettings.Text = n.InnerText;                          break;  // Video Advanced Settings Custom String
+                    // Subtitles
+                    case "SubOne":                          CheckBoxSubtitleActivatedOne.IsChecked = n.InnerText == "True";         break;  // Subtitle Track One Active
+                    case "SubTwo":                          CheckBoxSubtitleActivatedTwo.IsChecked = n.InnerText == "True";         break;  // Subtitle Track Two Active
+                    case "SubThree":                        CheckBoxSubtitleActivatedThree.IsChecked = n.InnerText == "True";       break;  // Subtitle Track Three Active
+                    case "SubFour":                         CheckBoxSubtitleActivatedFour.IsChecked = n.InnerText == "True";        break;  // Subtitle Track Four Active
+                    case "SubFive":                         CheckBoxSubtitleActivatedFive.IsChecked = n.InnerText == "True";        break;  // Subtitle Track Five Active
+                    case "SubOnePath":                      TextBoxSubtitleTrackOne.Text = n.InnerText;                             break;  // Subtitle Track One Path
+                    case "SubTwoPath":                      TextBoxSubtitleTrackTwo.Text = n.InnerText;                             break;  // Subtitle Track Two Path
+                    case "SubThreePath":                    TextBoxSubtitleTrackThree.Text = n.InnerText;                           break;  // Subtitle Track Three Path
+                    case "SubFourPath":                     TextBoxSubtitleTrackFour.Text = n.InnerText;                            break;  // Subtitle Track Four Path
+                    case "SubFivePath":                     TextBoxSubtitleTrackFive.Text = n.InnerText;                            break;  // Subtitle Track Five Path
+                    case "SubOneName":                      TextBoxSubOneName.Text = n.InnerText;                                   break;  // Subtitle Track One Name
+                    case "SubTwoName":                      TextBoxSubTwoName.Text = n.InnerText;                                   break;  // Subtitle Track Two Name
+                    case "SubThreeName":                    TextBoxSubThreeName.Text = n.InnerText;                                 break;  // Subtitle Track Three Name
+                    case "SubFourName":                     TextBoxSubFourName.Text = n.InnerText;                                  break;  // Subtitle Track Four Name
+                    case "SubFiveName":                     TextBoxSubFiveName.Text = n.InnerText;                                  break;  // Subtitle Track Five Name
+                    case "SubOneLanguage":                  ComboBoxSubTrackOneLanguage.SelectedIndex = int.Parse(n.InnerText);     break;  // Subtitle Track One Language
+                    case "SubTwoLanguage":                  ComboBoxSubTrackTwoLanguage.SelectedIndex = int.Parse(n.InnerText);     break;  // Subtitle Track Two Language
+                    case "SubThreeLanguage":                ComboBoxSubTrackThreeLanguage.SelectedIndex = int.Parse(n.InnerText);   break;  // Subtitle Track Three Language
+                    case "SubFourLanguage":                 ComboBoxSubTrackFourLanguage.SelectedIndex = int.Parse(n.InnerText);    break;  // Subtitle Track Four Language
+                    case "SubFiveLanguage":                 ComboBoxSubTrackFiveLanguage.SelectedIndex = int.Parse(n.InnerText);    break;  // Subtitle Track Five Language
                     default: break;
                 }
             }

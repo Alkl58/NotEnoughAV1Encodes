@@ -27,6 +27,11 @@ namespace NotEnoughAV1Encodes
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1", "SvtAv1EncApp.exe"))) { MainWindow.Rav1ePath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1"); }
             else if (ExistsOnPath("rav1e.exe")) { MainWindow.Rav1ePath = GetFullPathWithOutName("SvtAv1EncApp.exe"); }
 
+            // Sets / Checks mkvtoolnix Path
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "mkvmerge.exe"))) { MainWindow.MKVToolNixPath = Directory.GetCurrentDirectory(); }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "mkvtoolnix", "mkvmerge.exe"))) { MainWindow.MKVToolNixPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "mkvtoolnix"); }
+            else if (ExistsOnPath("mkvmerge.exe")) { MainWindow.MKVToolNixPath = GetFullPathWithOutName("mkvmerge.exe"); }
+            else if (File.Exists(@"C:\Program Files\MKVToolNix\mkvmerge.exe")) { MainWindow.MKVToolNixPath = @"C:\Program Files\MKVToolNix\"; }
         }
 
         private static bool ExistsOnPath(string fileName)
