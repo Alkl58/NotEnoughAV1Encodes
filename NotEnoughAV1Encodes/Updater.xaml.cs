@@ -373,7 +373,7 @@ namespace NotEnoughAV1Encodes
                 ProcessStartInfo pro = new ProcessStartInfo();
                 pro.WindowStyle = ProcessWindowStyle.Hidden;
                 pro.FileName = zPath;
-                pro.Arguments = "x \"" + source + "\" -o" + '\u0022' + destination + '\u0022';
+                pro.Arguments = "x \"" + source + "\" -aoa -o" + '\u0022' + destination + '\u0022';
                 Process x = Process.Start(pro);
                 x.WaitForExit();
             }
