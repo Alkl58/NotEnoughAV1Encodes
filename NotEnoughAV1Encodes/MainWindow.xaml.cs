@@ -543,8 +543,9 @@ namespace NotEnoughAV1Encodes
                 TimeSpan timespent = DateTime.Now - StartTime;
                 LabelProgressBar.Content = "Finished Encoding - Elapsed Time " + timespent.ToString("hh\\:mm\\:ss") + " - avg " + Math.Round(TotalFrames / timespent.TotalSeconds, 2) + "fps";
                 ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(6, 176, 37));
-                ProgressBar.Value = 10;
+                ProgressBar.Value = 0;
                 ProgressBar.Maximum = 10;
+                ProgressBar.Value = 10;
                 // Plays a sound if encoding has finished
                 SmallFunctions.PlayFinishedSound();
             }
@@ -570,7 +571,7 @@ namespace NotEnoughAV1Encodes
             // Skip Reencode if Chunking Method has been used, as it already hardcoded the subs
             if (ComboBoxSplittingReencodeMethod.SelectedIndex != 2)
             {
-                LabelProgressBar.Content = "Reencoding Video for Hardsubbing...";
+                ProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Reencoding Video for Hardsubbing...");
                 string ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + VideoInput + '\u0022' + " " + subHardCommand + " -map_metadata -1 -c:v libx264 -crf 0 -preset veryfast -an " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "tmpsub.mkv") + '\u0022';
                 SmallFunctions.Logging("Subtitle Hardcoding Command: " + ffmpegCommand);
                 // Reencodes the Video
