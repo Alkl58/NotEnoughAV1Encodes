@@ -11,13 +11,15 @@ namespace NotEnoughAV1Encodes
     public partial class VideoSplittingWindow : Window
     {
         // Temp variables
-        public string FFmpegThreshold = "0.4";
-        public string ChunkLength = "10"; // chunking (length in seconds)
-        public int DetectMethod = 0; // scene detect ffmpeg
-        public int ReencodeMethod = 0; // x264
-        public bool Reencode = false;
+        public string FFmpegThreshold = "0.4";  // scene threshold
+        public string ChunkLength = "10";       // chunking (length in seconds)
+        public string HardSubCMD = "";          // Hardsub FFmpeg Command (only chunking method)
+        public int DetectMethod = 0;            // scene detect ffmpeg
+        public int ReencodeMethod = 0;          // x264
+        public bool Reencode = false;           // reencoding boolean
+        public bool HardSub = false;            // hardsub boolean (only chunking method)
 
-        public VideoSplittingWindow(int method, bool reencode, int reencodemethod, string thresholdFfmpeg, string chunk)
+        public VideoSplittingWindow(int method, bool reencode, int reencodemethod, string thresholdFfmpeg, string chunk, bool subHardSub, string subHardSubCMD)
         {
             InitializeComponent();
 
@@ -27,6 +29,8 @@ namespace NotEnoughAV1Encodes
             DetectMethod = method;
             Reencode = reencode;
             ChunkLength = chunk;
+            HardSub = subHardSub;
+            HardSubCMD = subHardSubCMD;
 
             // Starts the Main Function
             StartDetect();
@@ -210,7 +214,7 @@ namespace NotEnoughAV1Encodes
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
                     WorkingDirectory = MainWindow.FFmpegPath,
-                    Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -map_metadata -1 -an " + EncodeCMD + " -f segment -segment_time " + ChunkLength + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "split%0d.mkv") + '\u0022'
+                    Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " " + HardSubCMD + " -map_metadata -1 -an " + EncodeCMD + " -f segment -segment_time " + ChunkLength + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "split%0d.mkv") + '\u0022'
                 };
                 process.StartInfo = startInfo;
                 process.Start();

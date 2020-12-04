@@ -60,7 +60,9 @@ namespace NotEnoughAV1Encodes
         public static string subTrackThreePath;     // Subtitle Track Three Path
         public static string subTrackFourPath;      // Subtitle Track Four Path
         public static string subCommand;            // Subtitle Muxing Command
+        public static string subHardCommand;        // Subtitle Hardcoding Command
         public static bool subSoftSubEnabled;       // Subtitle Toggle for later Muxing
+        public static bool subHardSubEnabled;       // Subtitle Toggle for hardsub
         // IO Paths
         public static string TempPath = Path.Combine(Path.GetTempPath(), "NEAV1E");
         public static string TempPathFileName = null;
@@ -91,6 +93,8 @@ namespace NotEnoughAV1Encodes
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
+
+        // Subtitle UI
 
         private string SubtitleFiledialog()
         {
@@ -219,6 +223,7 @@ namespace NotEnoughAV1Encodes
             CheckBoxSubFiveBurn.IsChecked = false;
         }
 
+        // ----------
         private void ComboBoxVideoPasses_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             // Reverts to 1 Pass encoding if Real Time Mode is activated 
@@ -474,6 +479,10 @@ namespace NotEnoughAV1Encodes
             // Button Click is not async and thus can't await MainEntry
             // Thats why we have this function "inbetween"
 
+            // Sets the Temp Path
+            if (CheckBoxCustomTempPath.IsChecked == true)
+                TempPath = TextBoxCustomTempPath.Text;
+
             // Resets the global Cancellation Boolean
             SmallFunctions.Cancel.CancelAll = false;
             // Reset Progressbar
@@ -517,6 +526,12 @@ namespace NotEnoughAV1Encodes
                     LabelProgressBar.Content = "Encoding Audio...";
                     await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeAudio.Encode(); }, token);
                 }
+                if (subHardSubEnabled)
+                {                    
+                    // Sets the new video input
+                    VideoInput = Path.Combine(TempPath, TempPathFileName, "tmpsub.mkv");
+                }
+
                 ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(3, 112, 200));
                 ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames);
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeVideo(); }, token);
@@ -544,8 +559,22 @@ namespace NotEnoughAV1Encodes
             int reencodeMethod = ComboBoxSplittingReencodeMethod.SelectedIndex;
             string ffmpegThreshold = TextBoxSplittingThreshold.Text;
             string chunkLength = TextBoxSplittingChunkLength.Text;
-            VideoSplittingWindow videoSplittingWindow = new VideoSplittingWindow(splitmethod, reencodesplit, reencodeMethod, ffmpegThreshold, chunkLength);
+            VideoSplittingWindow videoSplittingWindow = new VideoSplittingWindow(splitmethod, reencodesplit, reencodeMethod, ffmpegThreshold, chunkLength, subHardSubEnabled, subHardCommand);
             videoSplittingWindow.ShowDialog();
+        }
+
+        private void FFmpegHardsub()
+        {
+            // This function reencodes the input video with subtitles
+            // Skip Reencode if Chunking Method has been used, as it already hardcoded the subs
+            if (ComboBoxSplittingReencodeMethod.SelectedIndex != 2)
+            {
+                LabelProgressBar.Content = "Reencoding Video for Hardsubbing...";
+                string ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + VideoInput + '\u0022' + " " + subHardCommand + " -map_metadata -1 -c:v libx264 -crf 0 -preset veryfast -an " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "tmpsub.mkv") + '\u0022';
+                // Reencodes the Video
+                SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
+                subHardSubEnabled = true;
+            }
         }
 
         // ════════════════════════════════════ Temp Settings ═════════════════════════════════════
@@ -891,51 +920,127 @@ namespace NotEnoughAV1Encodes
         {
             // Has to be set, else it could create problems when running another encode in the same instance
             subSoftSubEnabled = false;
+            subHardSubEnabled = false;
+            subCommand = "";
 
             if (CheckBoxSubtitleActivatedOne.IsChecked == true)
             {
                 // 1st Subtitle
-                subSoftSubEnabled = true;
-                string subDefault = "no";
-                if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
-                subCommand += " --language 0:" + ComboBoxSubTrackOneLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubOneName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackOne.Text + '\u0022';
+                if (CheckBoxSubOneBurn.IsChecked == false)
+                {
+                    // Softsub
+                    subSoftSubEnabled = true;
+                    string subDefault = "no";
+                    if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
+                    subCommand += " --language 0:" + ComboBoxSubTrackOneLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubOneName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackOne.Text + '\u0022';
+                }
+                else
+                {
+                    // Hardsub
+                    HardSubCMDGenerator(TextBoxSubtitleTrackOne.Text);
+                }
+               
             }
 
-            if (CheckBoxSubtitleActivatedTwo.IsChecked == true)
+            if (CheckBoxSubtitleActivatedTwo.IsChecked == true && CheckBoxSubTwoBurn.IsChecked != true)
             {
                 // 2nd Subtitle
-                subSoftSubEnabled = true;
-                string subDefault = "no";
-                if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
-                subCommand += " --language 0:" + ComboBoxSubTrackTwoLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubTwoName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackTwo.Text + '\u0022';
+                if (CheckBoxSubTwoBurn.IsChecked == false)
+                {
+                    // Softsub
+                    subSoftSubEnabled = true;
+                    string subDefault = "no";
+                    if (CheckBoxSubTwoDefault.IsChecked == true) { subDefault = "yes"; }
+                    subCommand += " --language 0:" + ComboBoxSubTrackTwoLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubTwoName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackTwo.Text + '\u0022';
+                }
+                else
+                {
+                    // Hardsub
+                    HardSubCMDGenerator(TextBoxSubtitleTrackTwo.Text);
+                }
             }
 
-            if (CheckBoxSubtitleActivatedThree.IsChecked == true)
+            if (CheckBoxSubtitleActivatedThree.IsChecked == true && CheckBoxSubThreeBurn.IsChecked != true)
             {
                 // 3rd Subtitle
-                subSoftSubEnabled = true;
-                string subDefault = "no";
-                if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
-                subCommand += " --language 0:" + ComboBoxSubTrackThreeLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubThreeName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackThree.Text + '\u0022';
+                if (CheckBoxSubThreeBurn.IsChecked == false)
+                {
+                    // Softsub
+                    subSoftSubEnabled = true;
+                    string subDefault = "no";
+                    if (CheckBoxSubThreeDefault.IsChecked == true) { subDefault = "yes"; }
+                    subCommand += " --language 0:" + ComboBoxSubTrackThreeLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubThreeName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackThree.Text + '\u0022';
+                }
+                else
+                {
+                    // Hardsub
+                    HardSubCMDGenerator(TextBoxSubtitleTrackThree.Text);
+                }
+
             }
 
-            if (CheckBoxSubtitleActivatedFour.IsChecked == true)
+            if (CheckBoxSubtitleActivatedFour.IsChecked == true && CheckBoxSubFourBurn.IsChecked != true)
             {
                 // 4th Subtitle
-                subSoftSubEnabled = true;
-                string subDefault = "no";
-                if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
-                subCommand += " --language 0:" + ComboBoxSubTrackFourLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubFourName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackFour.Text + '\u0022';
+                if (CheckBoxSubFourBurn.IsChecked == false)
+                {
+                    // Softsub
+                    subSoftSubEnabled = true;
+                    string subDefault = "no";
+                    if (CheckBoxSubFourDefault.IsChecked == true) { subDefault = "yes"; }
+                    subCommand += " --language 0:" + ComboBoxSubTrackFourLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubFourName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackFour.Text + '\u0022';
+                }
+                else
+                {
+                    // Hardsub
+                    HardSubCMDGenerator(TextBoxSubtitleTrackFour.Text);
+                }
+                
             }
 
-            if (CheckBoxSubtitleActivatedFive.IsChecked == true)
+            if (CheckBoxSubtitleActivatedFive.IsChecked == true && CheckBoxSubFiveBurn.IsChecked != true)
             {
                 // 5th Subtitle
-                subSoftSubEnabled = true;
-                string subDefault = "no";
-                if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
-                subCommand += " --language 0:" + ComboBoxSubTrackFiveLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubFourName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackFive.Text + '\u0022';
+                if (CheckBoxSubFiveBurn.IsChecked == false)
+                {
+                    // Softsub
+                    subSoftSubEnabled = true;
+                    string subDefault = "no";
+                    if (CheckBoxSubFiveDefault.IsChecked == true) { subDefault = "yes"; }
+                    subCommand += " --language 0:" + ComboBoxSubTrackFiveLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubFiveName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackFive.Text + '\u0022';
+                }
+                else
+                {
+                    // Hardsub
+                    HardSubCMDGenerator(TextBoxSubtitleTrackFive.Text);
+                }
+                
             }
+        }
+
+        private void HardSubCMDGenerator(string subInput)
+        {
+            // Hardsub
+            string ext = Path.GetExtension(subInput);
+            if (ext == ".ass" || ext == ".ssa")
+            {
+                subHardCommand = "-vf ass=" + '\u0022' + subInput + '\u0022';
+                subHardCommand = subHardCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
+                subHardCommand = subHardCommand.Replace(":", "\u005c\u005c\u005c:");
+            }
+            else if (ext == ".srt")
+            {
+                subHardCommand = "-vf subtitles=" + '\u0022' + subInput + '\u0022';
+                subHardCommand = subHardCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
+                subHardCommand = subHardCommand.Replace(":", "\u005c\u005c\u005c:");
+            }
+            // Theoretically PGS Subtitles can be hardcoded
+            // The Problem is that ffmpeg disregards the potential offset
+            // thus resulting in too early appearing subtitles
+            // Softsub works, as it is handled by mkvmerge and not ffmpeg
+
+            // Reencodes the video
+            FFmpegHardsub();
         }
 
         public void GetSubtitleTracks()
