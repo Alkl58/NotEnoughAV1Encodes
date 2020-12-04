@@ -549,6 +549,7 @@ namespace NotEnoughAV1Encodes
                 ProgressBar.Value = 10;
                 // Plays a sound if encoding has finished
                 SmallFunctions.PlayFinishedSound();
+                if (CheckBoxSettingsShutdownAfterEncode.IsChecked == true) { Process.Start("shutdown.exe", "/s /t 0"); }
             }
             catch { SmallFunctions.PlayStopSound(); }
             EncodeStarted = false;
