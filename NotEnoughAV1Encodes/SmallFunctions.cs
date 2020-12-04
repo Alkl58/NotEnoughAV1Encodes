@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -56,6 +57,18 @@ namespace NotEnoughAV1Encodes
             {
                 // Release lock
                 _readWriteLock.ExitWriteLock();
+            }
+        }
+
+        public static void Logging(string log)
+        {
+            // Logging Function
+            if (MainWindow.Logging)
+            {
+                DateTime starttime = DateTime.Now;
+                if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Logging")))
+                    Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "Logging"));
+                WriteToFileThreadSafe(starttime.ToString() + " : " + log, Path.Combine(Directory.GetCurrentDirectory(), "Logging", "program.log"));
             }
         }
 

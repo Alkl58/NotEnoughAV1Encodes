@@ -31,6 +31,7 @@ namespace NotEnoughAV1Encodes
         public static int SplitMethod = 0;          // 0 = ffmpeg; 1 = pyscenedetect; 2 = chunking
         public static bool OnePass = true;          // true = Onepass, false = Twopass
         public static bool Priority = true;         // true = normal, false = below normal (process priority)
+        public static bool Logging = true;          // Program Logging
         public static string[] VideoChunks;         // Array of command/videochunks
         // Temp Settings Audio
         public static bool trackOne;                // Audio Track One active
@@ -482,7 +483,7 @@ namespace NotEnoughAV1Encodes
             // Sets the Temp Path
             if (CheckBoxCustomTempPath.IsChecked == true)
                 TempPath = TextBoxCustomTempPath.Text;
-
+            SmallFunctions.Logging("Temp Path: " + TempPath);
             // Resets the global Cancellation Boolean
             SmallFunctions.Cancel.CancelAll = false;
             // Reset Progressbar
@@ -571,6 +572,7 @@ namespace NotEnoughAV1Encodes
             {
                 LabelProgressBar.Content = "Reencoding Video for Hardsubbing...";
                 string ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + VideoInput + '\u0022' + " " + subHardCommand + " -map_metadata -1 -c:v libx264 -crf 0 -preset veryfast -an " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "tmpsub.mkv") + '\u0022';
+                SmallFunctions.Logging("Subtitle Hardcoding Command: " + ffmpegCommand);
                 // Reencodes the Video
                 SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
                 subHardSubEnabled = true;
@@ -759,6 +761,7 @@ namespace NotEnoughAV1Encodes
                 // If not set it would give issues when encoding another video in same ui instance
                 FilterCommand = "";
             }
+            SmallFunctions.Logging("Filter Command: " + FilterCommand);
         }
 
         private string VideoFiltersCrop()
@@ -930,9 +933,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    string subDefault = "no";
-                    if (CheckBoxSubOneDefault.IsChecked == true) { subDefault = "yes"; }
-                    subCommand += " --language 0:" + ComboBoxSubTrackOneLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubOneName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackOne.Text + '\u0022';
+                    subCommand += SoftSubCMDGenerator(ComboBoxSubTrackOneLanguage.Text, TextBoxSubOneName.Text, TextBoxSubtitleTrackOne.Text, CheckBoxSubOneDefault.IsChecked == true);
                 }
                 else
                 {
@@ -949,9 +950,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    string subDefault = "no";
-                    if (CheckBoxSubTwoDefault.IsChecked == true) { subDefault = "yes"; }
-                    subCommand += " --language 0:" + ComboBoxSubTrackTwoLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubTwoName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackTwo.Text + '\u0022';
+                    subCommand += SoftSubCMDGenerator(ComboBoxSubTrackTwoLanguage.Text, TextBoxSubTwoName.Text, TextBoxSubtitleTrackTwo.Text, CheckBoxSubTwoDefault.IsChecked == true);
                 }
                 else
                 {
@@ -967,9 +966,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    string subDefault = "no";
-                    if (CheckBoxSubThreeDefault.IsChecked == true) { subDefault = "yes"; }
-                    subCommand += " --language 0:" + ComboBoxSubTrackThreeLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubThreeName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackThree.Text + '\u0022';
+                    subCommand += SoftSubCMDGenerator(ComboBoxSubTrackThreeLanguage.Text, TextBoxSubThreeName.Text, TextBoxSubtitleTrackThree.Text, CheckBoxSubThreeDefault.IsChecked == true);
                 }
                 else
                 {
@@ -986,9 +983,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    string subDefault = "no";
-                    if (CheckBoxSubFourDefault.IsChecked == true) { subDefault = "yes"; }
-                    subCommand += " --language 0:" + ComboBoxSubTrackFourLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubFourName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackFour.Text + '\u0022';
+                    subCommand += SoftSubCMDGenerator(ComboBoxSubTrackFourLanguage.Text, TextBoxSubFourName.Text, TextBoxSubtitleTrackFour.Text, CheckBoxSubFourDefault.IsChecked == true);
                 }
                 else
                 {
@@ -1005,9 +1000,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    string subDefault = "no";
-                    if (CheckBoxSubFiveDefault.IsChecked == true) { subDefault = "yes"; }
-                    subCommand += " --language 0:" + ComboBoxSubTrackFiveLanguage.Text + " --track-name 0:" + '\u0022' + TextBoxSubFiveName.Text + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + TextBoxSubtitleTrackFive.Text + '\u0022';
+                    subCommand += SoftSubCMDGenerator(ComboBoxSubTrackFiveLanguage.Text, TextBoxSubFiveName.Text, TextBoxSubtitleTrackFive.Text, CheckBoxSubFiveDefault.IsChecked == true);
                 }
                 else
                 {
@@ -1016,6 +1009,14 @@ namespace NotEnoughAV1Encodes
                 }
                 
             }
+            SmallFunctions.Logging("Subtitle Command: " + subCommand);
+        }
+
+        private string SoftSubCMDGenerator(string lang, string name, string input, bool defaultSub)
+        {
+            string subDefault = "no";
+            if (defaultSub) { subDefault = "yes"; }
+            return " --language 0:" + lang + " --track-name 0:" + '\u0022' + name + '\u0022' + " --default-track 0:" + subDefault + " " + '\u0022' + input + '\u0022';
         }
 
         private void HardSubCMDGenerator(string subInput)
@@ -1191,16 +1192,40 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxCustomVideoSettings.IsChecked == false)
             {
                 // Sets the Encoder Settings
-                if (ComboBoxVideoEncoder.SelectedIndex == 0) { EncoderAomencCommand = SetAomencCommand(); }
-                if (ComboBoxVideoEncoder.SelectedIndex == 1) { EncoderRav1eCommand = SetRav1eCommand(); }
-                if (ComboBoxVideoEncoder.SelectedIndex == 2) { EncoderSvtAV1Command = SetSvtAV1Command(); }
+                if (ComboBoxVideoEncoder.SelectedIndex == 0) 
+                { 
+                    EncoderAomencCommand = SetAomencCommand();
+                    SmallFunctions.Logging("Aomenc Settings : " + EncoderAomencCommand);
+                }
+                if (ComboBoxVideoEncoder.SelectedIndex == 1) 
+                { 
+                    EncoderRav1eCommand = SetRav1eCommand();
+                    SmallFunctions.Logging("Rav1e Settings : " + EncoderRav1eCommand);
+                }
+                if (ComboBoxVideoEncoder.SelectedIndex == 2) 
+                { 
+                    EncoderSvtAV1Command = SetSvtAV1Command();
+                    SmallFunctions.Logging("SVT-AV1 Settings : " + EncoderSvtAV1Command);
+                }
             }
             else
             {
                 // Custom Encoding Settings
-                if (ComboBoxVideoEncoder.SelectedIndex == 0) { EncoderAomencCommand = " " + TextBoxCustomVideoSettings.Text; }
-                if (ComboBoxVideoEncoder.SelectedIndex == 1) { EncoderRav1eCommand = " " + TextBoxCustomVideoSettings.Text; }
-                if (ComboBoxVideoEncoder.SelectedIndex == 2) { EncoderSvtAV1Command = " " + TextBoxCustomVideoSettings.Text; }
+                if (ComboBoxVideoEncoder.SelectedIndex == 0) 
+                { 
+                    EncoderAomencCommand = " " + TextBoxCustomVideoSettings.Text;
+                    SmallFunctions.Logging("Aomenc Custom Settings : " + EncoderAomencCommand);
+                }
+                if (ComboBoxVideoEncoder.SelectedIndex == 1) 
+                { 
+                    EncoderRav1eCommand = " " + TextBoxCustomVideoSettings.Text;
+                    SmallFunctions.Logging("Rav1e Custom Settings : " + EncoderRav1eCommand);
+                }
+                if (ComboBoxVideoEncoder.SelectedIndex == 2) 
+                { 
+                    EncoderSvtAV1Command = " " + TextBoxCustomVideoSettings.Text;
+                    SmallFunctions.Logging("SVT-AV1 Custom Settings : " + EncoderSvtAV1Command);
+                }
             }
 
         }
@@ -1668,7 +1693,6 @@ namespace NotEnoughAV1Encodes
                                                 aomencCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=1" + EncoderAomencCommand + " --fpf=";
                                                 output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
                                             }
-                                            Console.WriteLine("/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + aomencCMD + output);
                                             startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + aomencCMD + output;
                                         }
                                         else if (EncodeMethod == 1) // rav1e
@@ -1677,7 +1701,6 @@ namespace NotEnoughAV1Encodes
                                             string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -vsync 0 -f yuv4mpegpipe - | ";
                                             string rav1eCMD = '\u0022' + Path.Combine(Rav1ePath, "rav1e.exe") + '\u0022' + " - " + EncoderRav1eCommand + " --output ";
                                             string output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-                                            Console.WriteLine("/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + rav1eCMD + output);
                                             startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + rav1eCMD + output;
                                         }
                                         else if (EncodeMethod == 2) // svt-av1
@@ -1697,11 +1720,9 @@ namespace NotEnoughAV1Encodes
                                                 svtav1CMD = '\u0022' + Path.Combine(Rav1ePath, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 1 -b NUL --stats ";
                                                 output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                             }
-
-                                            Console.WriteLine("/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + svtav1CMD + output);
                                             startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + svtav1CMD + output;
                                         }
-
+                                        SmallFunctions.Logging("Encoding Video: " + startInfo.Arguments);
                                         ffmpegProcess.StartInfo = startInfo;
                                         ffmpegProcess.Start();
 
@@ -1728,7 +1749,6 @@ namespace NotEnoughAV1Encodes
                                             string aomencCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=2" + EncoderAomencCommand + " --fpf=";
                                             string outputLog = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                             string outputVid = " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-                                            Console.WriteLine("/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + aomencCMD + outputLog + outputVid);
                                             startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + aomencCMD + outputLog + outputVid;
                                         }
                                         else if (EncodeMethod == 1) // rav1e
@@ -1741,10 +1761,9 @@ namespace NotEnoughAV1Encodes
                                             string svtav1CMD = '\u0022' + Path.Combine(Rav1ePath, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 2 --stats ";
                                             string stats = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                             string outputVid = " -b " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-                                            Console.WriteLine("/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + svtav1CMD + stats + outputVid);
                                             startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + svtav1CMD + stats + outputVid;
                                         }
-
+                                        SmallFunctions.Logging("Encoding Video: " + startInfo.Arguments);
                                         ffmpegProcess.StartInfo = startInfo;
                                         ffmpegProcess.Start();
 

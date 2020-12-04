@@ -19,12 +19,14 @@ namespace NotEnoughAV1Encodes
             {
                 // First Concats the video to a temp.mkv file
                 ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "chunks.txt") + '\u0022' + " -c copy " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022';
+                SmallFunctions.Logging("Muxing: " + ffmpegCommand);
                 await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
 
                 if (MainWindow.subSoftSubEnabled != true)
                 {
                     // Muxes Video & Audio together
                     ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022' + " -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022' + " -map 0:v -map 1:a -c copy " + '\u0022' + MainWindow.VideoOutput + '\u0022';
+                    SmallFunctions.Logging("Muxing: " + ffmpegCommand);
                     await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
                 }
                 else
@@ -39,7 +41,7 @@ namespace NotEnoughAV1Encodes
                         WorkingDirectory = MainWindow.MKVToolNixPath,
                         Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.VideoOutput + '\u0022' + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022' + " " + MainWindow.subCommand
                     };
-                    Console.WriteLine("/C mkvmerge.exe --output " + '\u0022' + MainWindow.VideoOutput + '\u0022' + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022' + " " + MainWindow.subCommand);
+                    SmallFunctions.Logging("Muxing: " + startInfo.Arguments);
                     mkvToolNix.StartInfo = startInfo;
                     mkvToolNix.Start();
                     mkvToolNix.WaitForExit();
@@ -70,7 +72,7 @@ namespace NotEnoughAV1Encodes
                         WorkingDirectory = MainWindow.MKVToolNixPath,
                         Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.VideoOutput + '\u0022' + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022' + " " + MainWindow.subCommand
                     };
-                    
+                    SmallFunctions.Logging("Muxing: " + startInfo.Arguments);
                     mkvToolNix.StartInfo = startInfo;
                     mkvToolNix.Start();
                     mkvToolNix.WaitForExit();

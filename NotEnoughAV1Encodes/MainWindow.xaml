@@ -905,6 +905,7 @@
                     <CheckBox x:Name="CheckBoxSettingsTerminal" Content="Hide Terminal" HorizontalAlignment="Left" Margin="33,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Checked="CheckBoxSettingsUISounds_Checked"/>
                     <Label Content="Version:" HorizontalAlignment="Left" Margin="603,26,0,0" VerticalAlignment="Top" FontSize="12"/>
                     <Button x:Name="ButtonDeleteTempFiles" Content="Delete Temp Files" HorizontalAlignment="Left" Margin="149,273,0,0" VerticalAlignment="Top" Width="150" Height="38" Background="White" Click="ButtonDeleteTempFiles_Click"/>
+                    <CheckBox x:Name="CheckBoxSettingsLogging" Content="Logging" HorizontalAlignment="Left" Margin="33,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True"/>
 
                 </Grid>
             </TabItem>

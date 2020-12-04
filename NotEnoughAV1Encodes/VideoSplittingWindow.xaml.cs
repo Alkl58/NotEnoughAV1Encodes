@@ -57,6 +57,7 @@ namespace NotEnoughAV1Encodes
             // Skip Scene Detect if the file already exist
             if (File.Exists(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "splits.txt")) == false)
             {
+                SmallFunctions.Logging("Scene Detection with FFmpeg");
                 TextBoxConsole.Dispatcher.Invoke(() => TextBoxConsole.Text = "Detecting Scenes... this might take a while!");
 
                 List<string> scenes = new List<string>();
@@ -118,6 +119,7 @@ namespace NotEnoughAV1Encodes
             // Skip Scene Detect if the file already exist
             if (File.Exists(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "splits.txt")) == false)
             {
+                SmallFunctions.Logging("Scene Detection with PySceneDetect");
                 // Detects the Scenes with PySceneDetect
                 Process pySceneDetect = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo
@@ -183,7 +185,6 @@ namespace NotEnoughAV1Encodes
             if (File.Exists(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "finished_splitting.log")) == false)
             {
                 // This function is used to split the source video into parts (chunking method)
-
                 // Sets the label, has to be done as Dispatcher, else it will lock up the thread
                 LabelSplittingMethod.Dispatcher.Invoke(() => LabelSplittingMethod.Content = "Splitting with Chunking Method");
 
@@ -216,6 +217,7 @@ namespace NotEnoughAV1Encodes
                     WorkingDirectory = MainWindow.FFmpegPath,
                     Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " " + HardSubCMD + " -map_metadata -1 -an " + EncodeCMD + " -f segment -segment_time " + ChunkLength + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "split%0d.mkv") + '\u0022'
                 };
+                SmallFunctions.Logging("Splitting with FFmpeg Chunking: " + startInfo.Arguments);
                 process.StartInfo = startInfo;
                 process.Start();
                 process.WaitForExit();

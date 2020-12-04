@@ -57,6 +57,7 @@ namespace NotEnoughAV1Encodes
 
                 // ══════════════════════════════════════ Audio Encoding ══════════════════════════════════════
                 string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -map_metadata -1 -vn -sn -dn " + audioCodec + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022';
+                SmallFunctions.Logging("Encoding Audio: " + ffmpegAudioCommands);
                 SmallFunctions.ExecuteFfmpegTask(ffmpegAudioCommands);
                 // ════════════════════════════════════════════════════════════════════════════════════════════
             }
