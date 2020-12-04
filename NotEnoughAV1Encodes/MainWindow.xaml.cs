@@ -415,6 +415,7 @@ namespace NotEnoughAV1Encodes
                     SliderVideoSpeed.Value = 8;
                     SliderVideoQuality.Value = 50;
                     SliderVideoQuality.Maximum = 63;
+                    ComboBoxWorkerCount.SelectedIndex = 0;
                 }
             }
 
