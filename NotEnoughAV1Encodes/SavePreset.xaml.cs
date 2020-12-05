@@ -1,14 +1,17 @@
 ﻿using System.Windows;
+using ControlzEx.Theming;
+using MahApps.Metro.Controls;
 
 namespace NotEnoughAV1Encodes
 {
-    public partial class SavePreset : Window
+    public partial class SavePreset : MetroWindow
     {
         public string SaveName { get; set; }
         public bool cancel { get; set; }
-        public SavePreset()
+        public SavePreset(string baseTheme, string accentTheme)
         {
             InitializeComponent();
+            ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
         }
         private void ButtonCloseWindow_Click(object sender, RoutedEventArgs e)
         {

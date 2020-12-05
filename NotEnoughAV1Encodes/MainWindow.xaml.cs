@@ -1511,7 +1511,7 @@ namespace NotEnoughAV1Encodes
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
         {
             // Creates a new SavePreset Window
-            SavePreset savePreset = new SavePreset();
+            SavePreset savePreset = new SavePreset(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
             // Displays the Window and awaits exit
             savePreset.ShowDialog();
             // Gets the Data from the SavePreset Window
