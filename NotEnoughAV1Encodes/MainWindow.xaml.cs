@@ -16,6 +16,7 @@ using MahApps.Metro.Controls;
 using System.Xml;
 using ControlzEx.Theming;
 using System.Windows.Media.Imaging;
+using System.Globalization;
 
 namespace NotEnoughAV1Encodes
 {
@@ -35,7 +36,9 @@ namespace NotEnoughAV1Encodes
         public static bool OnePass = true;          // true = Onepass, false = Twopass
         public static bool Priority = true;         // true = normal, false = below normal (process priority)
         public static bool Logging = true;          // Program Logging
+        public static bool TrimEnabled = false;     // Trim Boolean
         public static string[] VideoChunks;         // Array of command/videochunks
+        public static string TrimCommand;           // Trim Parameters
         // Temp Settings Audio
         public static bool trackOne;                // Audio Track One active
         public static bool trackTwo;                // Audio Track Two active
@@ -84,6 +87,8 @@ namespace NotEnoughAV1Encodes
         public static bool ShowTerminal = false;    // Show / Hide Encoding Terminal
         public static bool CustomBG = false;        // Custom Image Background
         public static bool StartUp = true;          // Avoids conflicts with Settings Tab
+        public static bool ReadTimeCode = false;    // Skips creating an image preview at start
+        public static string TrimEndTemp = "00:23:00.000"; // Sets the maximum trim time
         public static int TotalFrames = 0;          // used for progressbar and frame check
         public DateTime StartTime;                  // used for eta calculation
         // Progress Cancellation
@@ -629,6 +634,140 @@ namespace NotEnoughAV1Encodes
             LabelProgressBar.Content = "Cancelled";
         }
 
+        // ════════════════════════════════════ Video Trimming ════════════════════════════════════
+        private void ButtonTrimPlus_Click(object sender, RoutedEventArgs e)
+        {
+            TextBoxTrimStart.Text = DateTime.ParseExact(TextBoxTrimStart.Text, "HH:mm:ss.fff", CultureInfo.InvariantCulture).AddSeconds(1).ToString("HH:mm:ss.fff");
+        }
+
+        private void ButtonTrimMinus_Click(object sender, RoutedEventArgs e)
+        {
+            if (DateTime.ParseExact(TextBoxTrimStart.Text, "HH:mm:ss.fff", CultureInfo.InvariantCulture) > DateTime.ParseExact("00:00:00.999", "HH:mm:ss.fff", CultureInfo.InvariantCulture))
+            {
+                TextBoxTrimStart.Text = DateTime.ParseExact(TextBoxTrimStart.Text, "HH:mm:ss.fff", CultureInfo.InvariantCulture).AddSeconds(-1).ToString("HH:mm:ss.fff");
+            }
+            else { TextBoxTrimStart.Text = "00:00:00.000"; }
+        }
+
+        private void ButtonTrimPlusEnd_Click(object sender, RoutedEventArgs e)
+        {
+            if (DateTime.ParseExact(TextBoxTrimEnd.Text, "HH:mm:ss.fff", CultureInfo.InvariantCulture) < DateTime.ParseExact(TrimEndTemp, "HH:mm:ss.fff", CultureInfo.InvariantCulture))
+            {
+                TextBoxTrimEnd.Text = DateTime.ParseExact(TextBoxTrimEnd.Text, "HH:mm:ss.fff", CultureInfo.InvariantCulture).AddSeconds(1).ToString("HH:mm:ss.fff");
+            }
+            else { TextBoxTrimEnd.Text = TrimEndTemp; }
+        }
+
+        private void ButtonTrimMinusEnd_Click(object sender, RoutedEventArgs e)
+        {
+            TextBoxTrimEnd.Text = DateTime.ParseExact(TextBoxTrimEnd.Text, "HH:mm:ss.fff", CultureInfo.InvariantCulture).AddSeconds(-1).ToString("HH:mm:ss.fff");
+        }
+
+        private void TextBoxTrimEnd_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            // Main Entry for Changing the image preview
+            if (TextBoxTrimEnd != null && ReadTimeCode && CheckBoxTrimming.IsChecked == true) { setVideoLengthTrimmed(); }
+        }
+
+        private void setVideoLengthTrimmed()
+        {
+            if (StartUp == false)
+            {
+                try
+                {
+                    DateTime start = DateTime.ParseExact(TextBoxTrimStart.Text, "hh:mm:ss.fff", CultureInfo.InvariantCulture);
+                    DateTime end = DateTime.ParseExact(TextBoxTrimEnd.Text, "hh:mm:ss.fff", CultureInfo.InvariantCulture);
+                    if (start < end)
+                    {
+                        TextBoxTrimEnd.BorderBrush = new SolidColorBrush(Color.FromRgb(171, 173, 179));
+                        TextBoxTrimStart.BorderBrush = new SolidColorBrush(Color.FromRgb(171, 173, 179));
+                        TimeSpan result = end - start;
+                        if (CheckBoxCustomTempPath != null && VideoInputSet) { setImagePreview(); }
+                    }
+                    else
+                    {
+                        TextBoxTrimEnd.BorderBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                        TextBoxTrimStart.BorderBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private void setImagePreview()
+        {
+            string tempPath = Path.Combine("NEAV1E", TempPathFileName);
+            if (CheckBoxCustomTempPath.IsChecked == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); }
+            else { tempPath = Path.Combine(Path.GetTempPath(), tempPath); }
+
+
+
+            Process getStartFrame = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = FFmpegPath,
+                    Arguments = "/C ffmpeg.exe -y -ss " + TextBoxTrimStart.Text + " -loglevel error -i " + '\u0022' + VideoInput + '\u0022' + " -vframes 1 -vf scale=\"min(240\\, iw):-1" + '\u0022' + " -sws_flags neighbor -threads 4 " + '\u0022' + Path.Combine(tempPath, "start.jpg") + '\u0022',
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            getStartFrame.Start();
+            getStartFrame.WaitForExit();
+
+            var uriSource = new Uri(Path.Combine(tempPath, "start.jpg"));
+            BitmapImage imgTemp = new BitmapImage();
+            imgTemp.BeginInit();
+            imgTemp.CacheOption = BitmapCacheOption.OnLoad;
+            imgTemp.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+            imgTemp.UriSource = uriSource;
+            imgTemp.EndInit();
+            ImagePreviewTrimStart.Source = imgTemp;
+
+            if (TrimEndTemp != TextBoxTrimEnd.Text)
+            {
+                Process getEndFrame = new Process
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = "cmd.exe",
+                        WorkingDirectory = FFmpegPath,
+                        Arguments = "/C ffmpeg.exe -y -ss " + TextBoxTrimEnd.Text + " -loglevel error -i " + '\u0022' + VideoInput + '\u0022' + " -vframes 1 -vf scale=\"min(240\\, iw):-1" + '\u0022' + " -sws_flags neighbor -threads 4 " + '\u0022' + Path.Combine(tempPath, "end.jpg") + '\u0022',
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true
+                    }
+                };
+                getEndFrame.Start();
+                getEndFrame.WaitForExit();
+                var uriSourceEnd = new Uri(Path.Combine(tempPath, "end.jpg"));
+                BitmapImage imgTempEnd = new BitmapImage();
+                imgTempEnd.BeginInit();
+                imgTempEnd.CacheOption = BitmapCacheOption.OnLoad;
+                imgTempEnd.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                imgTempEnd.UriSource = uriSourceEnd;
+                imgTempEnd.EndInit();
+                ImagePreviewTrimEnd.Source = imgTempEnd;
+                TrimEndTemp = TextBoxTrimEnd.Text;
+            }
+        }
+
+        private void CheckBoxTrimming_Checked(object sender, RoutedEventArgs e)
+        {
+            if (TextBoxTrimEnd != null && ReadTimeCode && CheckBoxTrimming.IsChecked == true) { setVideoLengthTrimmed(); }
+            CheckBoxSubtitleActivatedOne.IsChecked = false;
+            CheckBoxSubtitleActivatedTwo.IsChecked = false;
+            CheckBoxSubtitleActivatedThree.IsChecked = false;
+            CheckBoxSubtitleActivatedFour.IsChecked = false;
+            CheckBoxSubtitleActivatedFive.IsChecked = false;
+        }
+        
         // ══════════════════════════════════════ Main Logic ══════════════════════════════════════
 
         private async void PreStart()
@@ -653,6 +792,19 @@ namespace NotEnoughAV1Encodes
             cancellationTokenSource = new CancellationTokenSource();
             // Sets that the encode has started
             EncodeStarted = true;
+            // Sets the encoder (0 aomenc; 1 rav1e; 2 svt-av1)
+            EncodeMethod = ComboBoxVideoEncoder.SelectedIndex;                      
+            // Sets Trim Params
+            TrimEnabled = CheckBoxTrimming.IsChecked == true;
+            if (TrimEnabled)
+            {
+                TrimCommand = "-ss " + TextBoxTrimStart.Text + " -to " + TextBoxTrimEnd.Text;
+            }
+            else
+            {
+                TrimCommand = "";
+            }
+
             // Starts the Main Function
             if (BatchEncoding == false)
             {
@@ -723,7 +875,14 @@ namespace NotEnoughAV1Encodes
                 SetSubtitleParameters();
                 // Saves the Project as file
                 SaveSettings(false, TempPathFileName);
-                // Split Video
+
+                if (subHardSubEnabled || TrimEnabled)
+                {
+                    // Reencodes the Video
+                    await Task.Run(() => ReEncode());
+                }
+
+                // Split Video / Scene Detection
                 SplitVideo();
                 SetTempSettings();
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetSourceFrameCount(); }, token);
@@ -732,7 +891,8 @@ namespace NotEnoughAV1Encodes
                     LabelProgressBar.Content = "Encoding Audio...";
                     await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeAudio.Encode(); }, token);
                 }
-                if (subHardSubEnabled)
+
+                if (subHardSubEnabled || TrimEnabled)
                 {                    
                     // Sets the new video input
                     VideoInput = Path.Combine(TempPath, TempPathFileName, "tmpsub.mkv");
@@ -769,23 +929,34 @@ namespace NotEnoughAV1Encodes
             int reencodeMethod = ComboBoxSplittingReencodeMethod.SelectedIndex;
             string ffmpegThreshold = TextBoxSplittingThreshold.Text;
             string chunkLength = TextBoxSplittingChunkLength.Text;
-            VideoSplittingWindow videoSplittingWindow = new VideoSplittingWindow(splitmethod, reencodesplit, reencodeMethod, ffmpegThreshold, chunkLength, subHardSubEnabled, subHardCommand, ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
+            VideoSplittingWindow videoSplittingWindow = new VideoSplittingWindow(splitmethod, reencodesplit, reencodeMethod, ffmpegThreshold, chunkLength, subHardSubEnabled, TrimCommand + subHardCommand, ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
             videoSplittingWindow.ShowDialog();
         }
 
-        private void FFmpegHardsub()
+        private void ReEncode()
         {
-            // This function reencodes the input video with subtitles
-            // Skip Reencode if Chunking Method has been used, as it already hardcoded the subs
-            if (ComboBoxSplittingReencodeMethod.SelectedIndex != 2)
+            // It skips reencoding if chunking method is being used
+            if (EncodeMethod != 2)
             {
-                ProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Reencoding Video for Hardsubbing...");
-                string ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + VideoInput + '\u0022' + " " + subHardCommand + " -map_metadata -1 -c:v libx264 -crf 0 -preset veryfast -an " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "tmpsub.mkv") + '\u0022';
-                SmallFunctions.Logging("Subtitle Hardcoding Command: " + ffmpegCommand);
-                // Reencodes the Video
-                SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
-                subHardSubEnabled = true;
+                // Skips reencoding if the file already exists
+                if (File.Exists(Path.Combine(TempPath, TempPathFileName, "tmpsub.mkv")) == false)
+                {
+                    ProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Reencoding Video for Hardsubbing...");
+                    string ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + VideoInput + '\u0022' + " " + TrimCommand + " " + subHardCommand + " -map_metadata -1 -c:v libx264 -crf 0 -preset veryfast -an " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "tmpsub.mkv") + '\u0022';
+                    SmallFunctions.Logging("Subtitle Hardcoding Command: " + ffmpegCommand);
+                    // Reencodes the Video
+                    SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
+                }
+                else if (MessageBox.Show("The temp reencode seems to already exists!\nSkip reencoding?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                {
+                    ProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Reencoding Video for Hardsubbing...");
+                    string ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + VideoInput + '\u0022' + " " + TrimCommand + " " + subHardCommand + " -map_metadata -1 -c:v libx264 -crf 0 -preset veryfast -an " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "tmpsub.mkv") + '\u0022';
+                    SmallFunctions.Logging("Subtitle Hardcoding Command: " + ffmpegCommand);
+                    // Reencodes the Video
+                    SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
+                }
             }
+
         }
 
         // ════════════════════════════════════ Temp Settings ═════════════════════════════════════
@@ -796,7 +967,6 @@ namespace NotEnoughAV1Encodes
             OnePass = ComboBoxVideoPasses.SelectedIndex == 0;                       // Sets the amount of passes (true = 1, false = 2)
             Priority = ComboBoxProcessPriority.SelectedIndex == 0;                  // Sets the Process Priority
             SplitMethod = ComboBoxSplittingMethod.SelectedIndex;                    // Sets the Splitmethod, used for VideoEncode() function
-            EncodeMethod = ComboBoxVideoEncoder.SelectedIndex;                      // Sets the encoder (0 aomenc; 1 rav1e; 2 svt-av1)
             DeleteTempFiles = CheckBoxSettingsDeleteTempFiles.IsChecked == true;    // Sets if Temp Files should be deleted
             ShowTerminal = CheckBoxSettingsTerminal.IsChecked == false;             // Sets if Terminal shall be shown during encode
             SmallFunctions.setVideoChunks(SplitMethod);                             // Sets the array of videochunks/commands
@@ -1268,9 +1438,7 @@ namespace NotEnoughAV1Encodes
             // The Problem is that ffmpeg disregards the potential offset
             // thus resulting in too early appearing subtitles
             // Softsub works, as it is handled by mkvmerge and not ffmpeg
-
-            // Reencodes the video
-            FFmpegHardsub();
+            subHardSubEnabled = true;
         }
 
         public void GetSubtitleTracks()
@@ -1747,6 +1915,9 @@ namespace NotEnoughAV1Encodes
                     BatchEncoding = false;
                     GetAudioInformation();
                     GetSubtitleTracks();
+                    TextBoxTrimEnd.Text = SmallFunctions.GetVideoLengthAccurate(result);
+                    TrimEndTemp = TextBoxTrimEnd.Text;
+                    ReadTimeCode = true;
                 }
             }
             else if (batchFolder == false && resultProject == true)
@@ -1757,6 +1928,9 @@ namespace NotEnoughAV1Encodes
                     LoadSettings(true, result);
                     GetAudioInformation();
                     GetSubtitleTracks();
+                    TextBoxTrimEnd.Text = SmallFunctions.GetVideoLengthAccurate(result);
+                    TrimEndTemp = TextBoxTrimEnd.Text;
+                    ReadTimeCode = true;
                 }
             }else if (batchFolder == true && resultProject == false)
             {
@@ -2589,5 +2763,6 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
+
     }
 }

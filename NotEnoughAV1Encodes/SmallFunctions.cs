@@ -230,5 +230,31 @@ namespace NotEnoughAV1Encodes
             string[] exts = { ".mp4", ".m4v", ".mkv", ".webm", ".m2ts", ".flv", ".avi", ".wmv", ".ts", ".yuv", ".mov" };
             return exts.Contains(ext.ToLower());
         }
+
+        public static string GetVideoLengthAccurate(string videoInput)
+        {
+            // Gets the Video Length for trimming purposes
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = MainWindow.FFmpegPath,
+                    Arguments = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -sexagesimal -show_entries format=duration -of default=noprint_wrappers=1:nokey=1",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            process.Start();
+            string stream = "0";
+            stream += process.StandardOutput.ReadLine();
+            process.WaitForExit();
+            stream = stream.Substring(0, (stream.Length - 6));
+            stream += "000";
+            return stream;
+        }
     }
 }

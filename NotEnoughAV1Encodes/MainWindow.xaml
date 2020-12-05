@@ -41,12 +41,25 @@
             </TabItem>
             <TabItem Header="Splitting">
                 <Grid>
+                    <GroupBox Header="Trim Start" HorizontalAlignment="Left" Height="211" Margin="390,51,0,0" VerticalAlignment="Top" Width="311">
+                        <Image x:Name="ImagePreviewTrimStart" Margin="0,0,0,0" Height="180" VerticalAlignment="Top" HorizontalAlignment="Right" Width="300" Stretch="Fill" Source="img\offline.png"/>
+                    </GroupBox>
+                    <GroupBox Header="Trim End" HorizontalAlignment="Left" Height="211" Margin="706,51,0,0" VerticalAlignment="Top" Width="311">
+                        <Image x:Name="ImagePreviewTrimEnd" Margin="0,0,0,0" HorizontalAlignment="Right" Stretch="Fill" Width="300" Source="img\offline.png"/>
+                    </GroupBox>
+                    <TextBox x:Name="TextBoxTrimStart"  HorizontalAlignment="Left" Height="26" Margin="492,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:00:00.000" TextChanged="TextBoxTrimEnd_TextChanged" />
+                    <TextBox x:Name="TextBoxTrimEnd" HorizontalAlignment="Left" Height="26" Margin="811,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:23:00.000" TextChanged="TextBoxTrimEnd_TextChanged"/>
+                    <Button x:Name="ButtonTrimPlus" Content="+" HorizontalAlignment="Left" Margin="592,51,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlus_Click"/>
+                    <Button x:Name="ButtonTrimMinus" Content="-" HorizontalAlignment="Left" Margin="467,51,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinus_Click"/>
+                    <Button x:Name="ButtonTrimPlusEnd" Content="+" HorizontalAlignment="Left" Margin="912,51,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlusEnd_Click" />
+                    <Button x:Name="ButtonTrimMinusEnd" Content="-" HorizontalAlignment="Left" Margin="786,51,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinusEnd_Click"  />
+                    <CheckBox x:Name="CheckBoxTrimming" Content="Trim" HorizontalAlignment="Left" Margin="390,18,0,0" VerticalAlignment="Top"  Width="109" FontWeight="Bold" Checked="CheckBoxTrimming_Checked"/>
                     <Label Content="Splitting" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Splitting Method:" HorizontalAlignment="Left" Margin="57,57,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="ComboBoxSplittingMethod" HorizontalAlignment="Left" Margin="179,57,0,0" VerticalAlignment="Top" Width="168" Height="29" VerticalContentAlignment="Center">
-                        <ComboBoxItem Content="Scene Detect (ffmpeg)"/>
+                        <ComboBoxItem Content="Scene Detect (ffmpeg)" IsSelected="True"/>
                         <ComboBoxItem Content="PySceneDetect"/>
-                        <ComboBoxItem Content="Equal Chunking"  IsSelected="True"/>
+                        <ComboBoxItem Content="Equal Chunking"/>
                     </ComboBox>
                     <Label Content="Threshold:" HorizontalAlignment="Left" Margin="57,107,0,0" VerticalAlignment="Top">
                         <Label.Style>
@@ -73,9 +86,6 @@
                         </TextBox.Style>
                     </TextBox>
                     <ComboBox x:Name="ComboBoxSplittingReencodeMethod" HorizontalAlignment="Left" Margin="179,149,0,0" VerticalAlignment="Top" Width="81" Height="29" VerticalContentAlignment="Center">
-                        <ComboBoxItem Content="x264" IsSelected="True"/>
-                        <ComboBoxItem Content="ffv1"/>
-                        <ComboBoxItem Content="utvideo"/>
                         <ComboBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -86,6 +96,9 @@
                                 </Style.Triggers>
                             </Style>
                         </ComboBox.Style>
+                        <ComboBoxItem Content="x264" IsSelected="True"/>
+                        <ComboBoxItem Content="ffv1"/>
+                        <ComboBoxItem Content="utvideo"/>
                     </ComboBox>
                     <CheckBox x:Name="CheckBoxSplittingReencode" Content="Re-Encode:" HorizontalAlignment="Left" Margin="60,156,0,0" VerticalAlignment="Top" IsChecked="True">
                         <CheckBox.Style>
@@ -143,6 +156,7 @@
                         <ComboBoxItem Content="Normal" IsSelected="True"/>
                         <ComboBoxItem Content="Below Normal"/>
                     </ComboBox>
+                    <Label Content="(Soft Subs not supported)" HorizontalAlignment="Left" Margin="446,10,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Filters">
