@@ -1125,7 +1125,7 @@ namespace NotEnoughAV1Encodes
                 if (deinterlace == true)
                 {
                     if (tempCounter != 0) { FilterCommand += ","; }
-                    FilterCommand = VideoFiltersDeinterlace();
+                    FilterCommand += VideoFiltersDeinterlace();
                     tempCounter += 1;
                 }
                 if (resize == true)
