@@ -364,14 +364,17 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonDeletePreset_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (MessageBox.Show("Are you sure you want to delete the selected preset?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                // Deletes the Preset File
-                File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Profiles", ComboBoxPresets.SelectedItem.ToString()));
-                // Reloads ComboBox
-                LoadPresetsIntoComboBox(); 
+                try
+                {
+                    // Deletes the Preset File
+                    File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Profiles", ComboBoxPresets.SelectedItem.ToString()));
+                    // Reloads ComboBox
+                    LoadPresetsIntoComboBox();
+                }
+                catch { }
             }
-            catch { }
         }
 
         private void ButtonExpandCollapseWindow_Click(object sender, RoutedEventArgs e)
