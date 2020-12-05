@@ -1531,7 +1531,7 @@ namespace NotEnoughAV1Encodes
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
         {
             // Creates a new object of the type "OpenVideoWindow"
-            OpenVideoWindow WindowVideoSource = new OpenVideoWindow();
+            OpenVideoWindow WindowVideoSource = new OpenVideoWindow(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
             // Hides the main user interface
             this.Hide();
             // Shows the just created window object and awaits its exit

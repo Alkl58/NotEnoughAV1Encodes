@@ -2,17 +2,20 @@
 using System;
 using System.IO;
 using System.Windows;
+using MahApps.Metro.Controls;
+using ControlzEx.Theming;
 
 namespace NotEnoughAV1Encodes
 {
-    public partial class OpenVideoWindow : Window
+    public partial class OpenVideoWindow : MetroWindow
     {
         public string VideoPath { get; set; }
         public bool ProjectFile { get; set; }
         public bool QuitCorrectly { get; set; }
-        public OpenVideoWindow()
+        public OpenVideoWindow(string baseTheme, string accentTheme)
         {
             InitializeComponent();
+            ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
         }
         private void ButtonOpenSingleSource_Click(object sender, RoutedEventArgs e)
         {
