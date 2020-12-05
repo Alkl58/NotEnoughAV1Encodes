@@ -222,5 +222,13 @@ namespace NotEnoughAV1Encodes
                 playSound.Play();
             }
         }
+
+        public static bool CheckFileType(string fileName)
+        {
+            // Checks if the input is a video (batch encoding)
+            string ext = Path.GetExtension(fileName);
+            string[] exts = { ".mp4", ".m4v", ".mkv", ".webm", ".m2ts", ".flv", ".avi", ".wmv", ".ts", ".yuv", ".mov" };
+            return exts.Contains(ext.ToLower());
+        }
     }
 }

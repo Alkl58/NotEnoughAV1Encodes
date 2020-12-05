@@ -77,6 +77,7 @@ namespace NotEnoughAV1Encodes
         public static string MKVToolNixPath = null; // Path to mkvtoolnix
         // Temp Variables
         public static bool EncodeStarted = false;   // Encode Started Boolean
+        public static bool BatchEncoding = false;   // Batch Encoding
         public static bool DeleteTempFiles = false; // Temp File Deletion
         public static bool PlayUISounds = false;    // UI Sounds (Finished Encoding / Error)
         public static bool ShowTerminal = false;    // Show / Hide Encoding Terminal
@@ -89,6 +90,34 @@ namespace NotEnoughAV1Encodes
         {
             InitializeComponent();
             Startup();
+        }
+
+        private void Startup()
+        {
+            // Sets the GUI Version
+            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            LabelVersion.Content = version.Remove(version.Length - 2);
+
+            CheckDependencies.Check();
+
+            // Sets the workercount combobox
+            int corecount = SmallFunctions.getCoreCount();
+            for (int i = 1; i <= corecount; i++) { ComboBoxWorkerCount.Items.Add(i); }
+            ComboBoxWorkerCount.SelectedItem = Convert.ToInt32(corecount * 75 / 100);
+
+            LoadPresetsIntoComboBox();
+            LoadDefaultProfile();
+            LoadSettingsTab();
+
+            if (FFmpegPath == null)
+            {
+                if (MessageBox.Show("Could not find ffmpeg!\nOpen Updater?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
+                    updater.ShowDialog();
+                    CheckDependencies.Check();
+                }
+            }
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
@@ -286,34 +315,6 @@ namespace NotEnoughAV1Encodes
             // Sets the TaskBar Progressbar
             double taskMax = ProgressBar.Maximum, taskVal = ProgressBar.Value;
             TaskbarItemInfo.ProgressValue = (1.0 / taskMax) * taskVal;
-        }
-
-        private void Startup()
-        {
-            // Sets the GUI Version
-            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            LabelVersion.Content = version.Remove(version.Length - 2);
-
-            CheckDependencies.Check();
-
-            // Sets the workercount combobox
-            int corecount = SmallFunctions.getCoreCount();
-            for (int i = 1; i <= corecount; i++) { ComboBoxWorkerCount.Items.Add(i); }
-            ComboBoxWorkerCount.SelectedItem = Convert.ToInt32(corecount * 75 / 100);
-
-            LoadPresetsIntoComboBox();
-            LoadDefaultProfile();
-            LoadSettingsTab();
-
-            if (FFmpegPath == null)
-            {
-                if (MessageBox.Show("Could not find ffmpeg!\nOpen Updater?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                {
-                    Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
-                    updater.ShowDialog();
-                    CheckDependencies.Check();
-                }
-            }
         }
 
         private void LoadPresetsIntoComboBox()
@@ -570,7 +571,55 @@ namespace NotEnoughAV1Encodes
             // Sets that the encode has started
             EncodeStarted = true;
             // Starts the Main Function
-            await MainEntry(cancellationTokenSource.Token);
+            if (BatchEncoding == false)
+            {
+                await MainEntry(cancellationTokenSource.Token);
+            }
+            else
+            {
+                // Batch Encoding
+                BatchEncode(cancellationTokenSource.Token);
+            }
+            
+        }
+
+        private async void BatchEncode(CancellationToken token)
+        {
+            // Gets all files in folder
+            DirectoryInfo batchfiles = new DirectoryInfo(VideoInput);
+            // Loops over all files in folder
+            foreach (var file in batchfiles.GetFiles())
+            {
+                if (SmallFunctions.CheckFileType(file.ToString()) == true && SmallFunctions.Cancel.CancelAll == false)
+                {
+                    SmallFunctions.Logging("Batch Encoding: " + file);
+                    // Reset Progressbar
+                    ProgressBar.Maximum = 100;
+                    ProgressBar.Value = 0;
+                    EncodeStarted = true;
+                    // Sets Input / Output
+                    VideoInput = TextBoxVideoSource.Text + "\\" + file;
+                    VideoOutput = TextBoxVideoDestination.Text + "\\" + file + "_av1.mkv";
+                    // Sets Temp Filename for temp folder
+                    TempPathFileName = Path.GetFileNameWithoutExtension(VideoInput);
+                    // Get Source Information
+                    GetAudioInformation();
+                    // Reset Subtitle
+                    
+                    GetSubtitleTracks();
+                    // Don't want to burn in subtitles in Batch Encoding
+                    CheckBoxSubOneBurn.IsChecked = false;
+                    CheckBoxSubTwoBurn.IsChecked = false;
+                    CheckBoxSubThreeBurn.IsChecked = false;
+                    CheckBoxSubFourBurn.IsChecked = false;
+
+                    // Start encoding process
+                    await MainEntry(cancellationTokenSource.Token);
+
+                    SmallFunctions.Logging("Batch Encoding Finished: " + file);
+                }
+            }
+            SmallFunctions.PlayFinishedSound();
         }
 
         public async Task MainEntry(CancellationToken token)
@@ -615,13 +664,15 @@ namespace NotEnoughAV1Encodes
                 // Progressbar Label when encoding finished
                 TimeSpan timespent = DateTime.Now - StartTime;
                 LabelProgressBar.Content = "Finished Encoding - Elapsed Time " + timespent.ToString("hh\\:mm\\:ss") + " - avg " + Math.Round(TotalFrames / timespent.TotalSeconds, 2) + "fps";
+                SmallFunctions.Logging(LabelProgressBar.Content.ToString());
                 ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(6, 176, 37));
                 ProgressBar.Value = 0;
                 ProgressBar.Maximum = 10;
                 ProgressBar.Value = 10;
                 // Plays a sound if encoding has finished
-                SmallFunctions.PlayFinishedSound();
-                if (CheckBoxSettingsShutdownAfterEncode.IsChecked == true) { Process.Start("shutdown.exe", "/s /t 0"); }
+                if (BatchEncoding == false)
+                    SmallFunctions.PlayFinishedSound();
+                if (CheckBoxSettingsShutdownAfterEncode.IsChecked == true && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
             }
             catch { SmallFunctions.PlayStopSound(); }
             EncodeStarted = false;
@@ -994,6 +1045,26 @@ namespace NotEnoughAV1Encodes
 
         // ════════════════════════════════════ Subtitle Logic ════════════════════════════════════
 
+        private void ResetSubtitles()
+        {
+            // Clears Temp Subtitles information from GUI
+            CheckBoxSubtitleActivatedOne.IsChecked = false;
+            CheckBoxSubtitleActivatedTwo.IsChecked = false;
+            CheckBoxSubtitleActivatedThree.IsChecked = false;
+            CheckBoxSubtitleActivatedFour.IsChecked = false;
+            CheckBoxSubtitleActivatedFive.IsChecked = false;
+            TextBoxSubtitleTrackOne.Text = "";
+            TextBoxSubtitleTrackTwo.Text = "";
+            TextBoxSubtitleTrackThree.Text = "";
+            TextBoxSubtitleTrackFour.Text = "";
+            TextBoxSubtitleTrackFive.Text = "";
+            ComboBoxSubTrackOneLanguage.SelectedIndex = 0;
+            ComboBoxSubTrackTwoLanguage.SelectedIndex = 0;
+            ComboBoxSubTrackThreeLanguage.SelectedIndex = 0;
+            ComboBoxSubTrackFourLanguage.SelectedIndex = 0;
+            ComboBoxSubTrackFiveLanguage.SelectedIndex = 0;
+        }
+
         private void SetSubtitleParameters()
         {
             // Has to be set, else it could create problems when running another encode in the same instance
@@ -1124,6 +1195,8 @@ namespace NotEnoughAV1Encodes
             //Creates Audio Directory in the temp dir
             if (!Directory.Exists(Path.Combine(TempPath, TempPathFileName, "Subtitles")))
                 Directory.CreateDirectory(Path.Combine(TempPath, TempPathFileName, "Subtitles"));
+
+            ResetSubtitles();
 
             //This function gets subtitle information
             Process getSubtitles = new Process
@@ -1585,7 +1658,8 @@ namespace NotEnoughAV1Encodes
             // Uses the public get method in OpenVideoSource window to get variable
             string result = WindowVideoSource.VideoPath;
             bool resultProject = WindowVideoSource.ProjectFile;
-            if (resultProject == false)
+            bool batchFolder = WindowVideoSource.BatchFolder;
+            if (resultProject == false && batchFolder == false)
             {
                 // Sets the label in the user interface
                 // Note that this has to be edited once batch encoding is added as function
@@ -1595,36 +1669,64 @@ namespace NotEnoughAV1Encodes
                     TextBoxVideoSource.Text = result;
                     VideoInput = result;
                     TempPathFileName = Path.GetFileNameWithoutExtension(result);
+                    BatchEncoding = false;
                     GetAudioInformation();
                     GetSubtitleTracks();
                 }
             }
-            else
+            else if (batchFolder == false && resultProject == true)
             {
                 if (WindowVideoSource.QuitCorrectly)
                 {
+                    BatchEncoding = false;
                     LoadSettings(true, result);
                     GetAudioInformation();
                     GetSubtitleTracks();
                 }
+            }else if (batchFolder == true && resultProject == false)
+            {
+                // Batch Folder Input
+                if (WindowVideoSource.QuitCorrectly)
+                {
+                    VideoInputSet = true;
+                    TextBoxVideoSource.Text = result;
+                    VideoInput = result;
+                    BatchEncoding = true;
+                }
+
             }
             
         }
 
         private void ButtonOpenDestination_Click(object sender, RoutedEventArgs e)
         {
-            // Note that this has to be edited once batch encoding is being implemented
-            // Save File Dialog for single file saving
-            SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
-            saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;*.mp4";
-            // Avoid NULL being returned resulting in crash
-            Nullable<bool> result = saveVideoFileDialog.ShowDialog();
-            if (result == true)
+            if (BatchEncoding == false)
             {
-                TextBoxVideoDestination.Text = saveVideoFileDialog.FileName;
-                VideoOutput = saveVideoFileDialog.FileName;
-                VideoOutputSet = true;
+                // Save File Dialog for single file saving
+                SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
+                saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;*.mp4";
+                // Avoid NULL being returned resulting in crash
+                Nullable<bool> result = saveVideoFileDialog.ShowDialog();
+                if (result == true)
+                {
+                    TextBoxVideoDestination.Text = saveVideoFileDialog.FileName;
+                    VideoOutput = saveVideoFileDialog.FileName;
+                    VideoOutputSet = true;
+                }
             }
+            else
+            {
+                // Batch Encoding Output
+                //Sets the Batch Encoding Output Folder
+                System.Windows.Forms.FolderBrowserDialog browseOutputFolder = new System.Windows.Forms.FolderBrowserDialog();
+                if (browseOutputFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    VideoOutput = browseOutputFolder.SelectedPath;
+                    TextBoxVideoDestination.Text = VideoOutput;
+                    VideoOutputSet = true;
+                }
+            }
+
         }
 
         private void ButtonOpenTempFolder_Click(object sender, RoutedEventArgs e)
@@ -1758,7 +1860,10 @@ namespace NotEnoughAV1Encodes
             try
             {
                 // Setting Label & Progressbar
-                LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = totalencodedframes + " / " + totalframes + " Frames - " + Math.Round(totalencodedframes / timespent.TotalSeconds, 2) + "fps - " + Math.Round(((timespent.TotalSeconds / totalencodedframes) * (totalframes - totalencodedframes)) / 60, MidpointRounding.ToEven) + "min left");
+                string fileName = "";
+                if (BatchEncoding == true)
+                    fileName = "Encoding: " + TempPathFileName + " - ";
+                LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = fileName + totalencodedframes + " / " + totalframes + " Frames - " + Math.Round(totalencodedframes / timespent.TotalSeconds, 2) + "fps - " + Math.Round(((timespent.TotalSeconds / totalencodedframes) * (totalframes - totalencodedframes)) / 60, MidpointRounding.ToEven) + "min left");
                 ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = totalencodedframes);
             }
             catch { }
