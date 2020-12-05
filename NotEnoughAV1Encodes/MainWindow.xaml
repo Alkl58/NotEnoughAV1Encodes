@@ -6,7 +6,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
-        Title="NotEnoughAV1Encodes" Height="650" Width="1010" ResizeMode="CanResizeWithGrip">
+        Title="NotEnoughAV1Encodes" Height="650" Width="1085" ResizeMode="CanResizeWithGrip">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="b2v"/>
     </Window.Resources>
@@ -246,7 +246,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Advanced Settings" Visibility="{Binding ElementName=CheckBoxVideoAdvancedSettings, Path=IsChecked, Converter={StaticResource b2v}}">
-                <Grid Background="White">
+                <Grid>
                     <Label Content="Advanced Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="947" Margin="0,41,0,0">
                         <Canvas.Style>
@@ -919,27 +919,27 @@
                     <CheckBox x:Name="CheckBoxSettingsUISounds" Content="Enable UI Sounds (Finished Encoding / Error)" HorizontalAlignment="Left" Margin="33,67,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Checked="CheckBoxSettingsUISounds_Checked"/>
                     <Label x:Name="LabelVersion" Content="" Margin="0,26,197,0" HorizontalAlignment="Right" Width="100" Height="26" VerticalAlignment="Top"/>
                     <Label Content="Github:" HorizontalAlignment="Right" Margin="0,52,297,0" VerticalAlignment="Top" FontSize="12"/>
-                    <TextBlock Margin="0,57,10,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top">
+                    <TextBlock Margin="0,56,10,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top">
                         <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
                     </TextBlock>
-                    <Button x:Name="ButtonUpdater" Content="Updater" HorizontalAlignment="Left" Margin="19,0,0,114" Width="125" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click" Height="38" VerticalAlignment="Bottom"/>
+                    <Button x:Name="ButtonUpdater" Content="Updater" Margin="0,166,56,0" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click" HorizontalAlignment="Right" Width="125" Height="38" VerticalAlignment="Top"/>
                     <Button x:Name="ButtonOpenTempFolder" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="19,0,0,71" Width="125" Background="{x:Null}" Click="ButtonOpenTempFolder_Click" Height="38" VerticalAlignment="Bottom"/>
                     <CheckBox x:Name="CheckBoxCustomTempPath" Content="" HorizontalAlignment="Left" Margin="82,0,0,10" Width="20" VerticalContentAlignment="Center" Height="27" VerticalAlignment="Bottom"/>
                     <TextBox x:Name="TextBoxCustomTempPath" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}" Margin="107,0,134,10" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="27" VerticalAlignment="Bottom"/>
-                    <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}" Margin="0,0,56,10" Background="White" Click="ButtonSetTempPath_Click" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="73"/>
+                    <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}" Margin="0,0,56,10" Click="ButtonSetTempPath_Click" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="73"/>
                     <Label Content="Temp Folder" HorizontalAlignment="Left" Margin="10,0,0,40" FontWeight="Bold" Height="26" VerticalAlignment="Bottom"/>
-                    <Button x:Name="ButtonOpenProgramFolder" Content="Open Program Folder" HorizontalAlignment="Left" Margin="149,0,0,114" Width="150" Background="{x:Null}" Click="ButtonOpenProgramFolder_Click" Height="38" VerticalAlignment="Bottom"/>
+                    <Button x:Name="ButtonOpenProgramFolder" Content="Open Program Folder" HorizontalAlignment="Left" Margin="149,0,0,71" Width="150" Background="{x:Null}" Click="ButtonOpenProgramFolder_Click" Height="38" VerticalAlignment="Bottom"/>
                     <CheckBox x:Name="CheckBoxSettingsTerminal" Content="Hide Terminal" HorizontalAlignment="Left" Margin="33,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Checked="CheckBoxSettingsUISounds_Checked"/>
                     <Label Content="Version:" Margin="0,24,293,0" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Right" Width="62"/>
-                    <Button x:Name="ButtonDeleteTempFiles" Content="Delete Temp Files" HorizontalAlignment="Left" Margin="149,0,0,71" Width="150" Background="{x:Null}" Click="ButtonDeleteTempFiles_Click" Height="38" VerticalAlignment="Bottom"/>
+                    <Button x:Name="ButtonDeleteTempFiles" Content="Delete Temp Files" HorizontalAlignment="Left" Margin="304,0,0,71" Width="150" Background="{x:Null}" Click="ButtonDeleteTempFiles_Click" Height="38" VerticalAlignment="Bottom"/>
                     <CheckBox x:Name="CheckBoxSettingsLogging" Content="Logging" HorizontalAlignment="Left" Margin="33,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True"/>
                     <CheckBox x:Name="CheckBoxSettingsShutdownAfterEncode" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="33,136,0,0" VerticalAlignment="Top"/>
-                    <Button x:Name="ButtonSetTheme" Content="Set Theme" HorizontalAlignment="Right" Margin="0,312,56,0" VerticalAlignment="Top" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetTheme_Click"/>
-                    <ComboBox x:Name="ComboBoxBaseTheme" HorizontalAlignment="Right" Margin="0,285,56,0" VerticalAlignment="Top" Width="91">
+                    <Button x:Name="ButtonSetTheme" Content="Set Theme" HorizontalAlignment="Right" Margin="0,0,56,71" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetTheme_Click"/>
+                    <ComboBox x:Name="ComboBoxBaseTheme" HorizontalAlignment="Right" Margin="0,0,56,105" VerticalAlignment="Bottom" Width="91">
                         <ComboBoxItem Content="Light" IsSelected="True"/>
                         <ComboBoxItem Content="Dark"/>
                     </ComboBox>
-                    <ComboBox x:Name="ComboBoxAccentTheme" HorizontalAlignment="Right" Margin="0,258,56,0" VerticalAlignment="Top" Width="91">
+                    <ComboBox x:Name="ComboBoxAccentTheme" HorizontalAlignment="Right" Margin="0,0,56,132" VerticalAlignment="Bottom" Width="91">
                         <ComboBoxItem Content="Blue" IsSelected="True"/>
                         <ComboBoxItem Content="Red" Foreground="#EA4333"/>
                         <ComboBoxItem Content="Green" Foreground="#80BA45"/>
@@ -964,6 +964,11 @@
                         <ComboBoxItem Content="Taupe" Foreground="#9F9471"/>
                         <ComboBoxItem Content="Sienna" Foreground="#B37557"/>
                     </ComboBox>
+                    <Label Content="Theme:" HorizontalAlignment="Right" Margin="0,83,297,0" VerticalAlignment="Top" FontSize="12"/>
+                    <TextBlock Margin="0,87,10,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top"><Hyperlink NavigateUri="https://mahapps.com/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://mahapps.com/"/></Hyperlink></TextBlock>
+                    <Label Content="Icon:" HorizontalAlignment="Right" Margin="0,110,297,0" VerticalAlignment="Top" FontSize="12"/>
+                    <TextBlock Margin="0,114,10,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top"><Hyperlink NavigateUri="https://icons8.de/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://icons8.de/"/></Hyperlink></TextBlock>
+                    <Button x:Name="ButtonSaveSettings" Content="Save Settings" HorizontalAlignment="Left" Margin="19,166,0,0" Width="125" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonSaveSettings_Click" Height="38" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </mah:MetroTabControl>
