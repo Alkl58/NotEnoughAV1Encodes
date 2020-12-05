@@ -233,6 +233,11 @@ namespace NotEnoughAV1Encodes
                 {
                     ComboBoxVideoPasses.SelectedIndex = 0;
                 }
+                if (ComboBoxVideoEncoder.SelectedIndex == 1)
+                {
+                    // rav1e
+                    ComboBoxVideoPasses.SelectedIndex = 0;
+                }
             } 
         }
 
@@ -299,6 +304,16 @@ namespace NotEnoughAV1Encodes
             LoadPresetsIntoComboBox();
             LoadDefaultProfile();
             LoadSettingsTab();
+
+            if (FFmpegPath == null)
+            {
+                if (MessageBox.Show("Could not find ffmpeg!\nOpen Updater?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
+                    updater.ShowDialog();
+                    CheckDependencies.Check();
+                }
+            }
         }
 
         private void LoadPresetsIntoComboBox()
@@ -417,6 +432,15 @@ namespace NotEnoughAV1Encodes
                     SliderVideoSpeed.Value = 4;
                     SliderVideoQuality.Value = 28;
                     SliderVideoQuality.Maximum = 63;
+                    if (AomencPath == null)
+                    {
+                        if (MessageBox.Show("Could not find aomenc!\nOpen Updater?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        {
+                            Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
+                            updater.ShowDialog();
+                            CheckDependencies.Check();
+                        }
+                    }
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex == 1)
                 {
@@ -425,6 +449,17 @@ namespace NotEnoughAV1Encodes
                     SliderVideoSpeed.Value = 6;
                     SliderVideoQuality.Maximum = 255;
                     SliderVideoQuality.Value = 100;
+                    // rav1e can only do 1pass atm
+                    ComboBoxVideoPasses.SelectedIndex = 0;
+                    if (Rav1ePath == null)
+                    {
+                        if (MessageBox.Show("Could not find rav1e!\nOpen Updater?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        {
+                            Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
+                            updater.ShowDialog();
+                            CheckDependencies.Check();
+                        }
+                    }
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex == 2)
                 {
@@ -434,6 +469,15 @@ namespace NotEnoughAV1Encodes
                     SliderVideoQuality.Value = 50;
                     SliderVideoQuality.Maximum = 63;
                     ComboBoxWorkerCount.SelectedIndex = 0;
+                    if (SvtAV1Path == null)
+                    {
+                        if (MessageBox.Show("Could not find SVT-AV1!\nOpen Updater?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        {
+                            Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
+                            updater.ShowDialog();
+                            CheckDependencies.Check();
+                        }
+                    }
                 }
             }
 
