@@ -14,13 +14,14 @@
         <TaskbarItemInfo ProgressState="Normal"/>
     </Window.TaskbarItemInfo>
     <Grid>
+        <Image x:Name="imgDynamic" Stretch="UniformToFill"/>
         <Button x:Name="ButtonOpenSource" Margin="21,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="138" Background="{x:Null}" Click="ButtonOpenSource_Click" BorderBrush="#FF707070">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
                 <Image HorizontalAlignment="Left" Height="51" VerticalAlignment="Top" Width="48" Source="img/video1.png" Canvas.Top="-7" Canvas.Left="-4"/>
                 <Label Content="Source" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="44" Height="30" Canvas.Top="2" FontSize="13" />
             </Canvas>
         </Button>
-        <mah:MetroTabControl Margin="21,116,23,63" Background="{x:Null}">
+        <mah:MetroTabControl x:Name="MetroTab" Margin="21,116,23,63" Background="{x:Null}">
             <TabItem Header="Summary">
                 <Grid>
                     <Label Content="Source:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
@@ -223,7 +224,7 @@
                         <ComboBoxItem Content="12"/>
                     </ComboBox>
                     <Label Content="Quality" HorizontalAlignment="Left" Margin="395,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="Constant Quality:" HorizontalAlignment="Left" Margin="457,56,0,0" VerticalAlignment="Top" Height="29" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True"/>
+                    <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="Constant Quality:" HorizontalAlignment="Left" Margin="457,56,0,0" VerticalAlignment="Top" Height="29" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True" Background="{x:Null}"/>
                     <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" HorizontalAlignment="Left" Margin="475,90,0,0" VerticalAlignment="Top" Width="431" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959"/>
                     <Label x:Name="LabelVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Content="{Binding Value, ElementName=SliderVideoQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="587,55,0,0" VerticalAlignment="Top"/>
                     <Label Content="| Lowest Quality" HorizontalAlignment="Left" Margin="474,113,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
@@ -239,7 +240,7 @@
                     </ComboBox>
                     <Label Content="| Slowest" HorizontalAlignment="Left" Margin="137,292,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
                     <Label Content="Fastest |" HorizontalAlignment="Left" Margin="224,292,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
-                    <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="457,156,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center"/>
+                    <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="457,156,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center" Background="{x:Null}"/>
                     <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="582,156,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                     <CheckBox x:Name="CheckBoxVideoAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="59,142,0,0" VerticalAlignment="Top" Width="139"/>
                     <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="281,272,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Collapsed"/>
@@ -969,6 +970,7 @@
                     <Label Content="Icon:" HorizontalAlignment="Right" Margin="0,110,297,0" VerticalAlignment="Top" FontSize="12"/>
                     <TextBlock Margin="0,114,10,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top"><Hyperlink NavigateUri="https://icons8.de/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://icons8.de/"/></Hyperlink></TextBlock>
                     <Button x:Name="ButtonSaveSettings" Content="Save Settings" HorizontalAlignment="Left" Margin="19,166,0,0" Width="125" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonSaveSettings_Click" Height="38" VerticalAlignment="Top"/>
+                    <Button x:Name="ButtonSetBGImage" Content="Set BG Image" HorizontalAlignment="Right" Margin="0,0,152,71" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetBGImage_Click"/>
                 </Grid>
             </TabItem>
         </mah:MetroTabControl>

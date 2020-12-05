@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using MahApps.Metro.Controls;
 using System.Xml;
 using ControlzEx.Theming;
+using System.Windows.Media.Imaging;
 
 namespace NotEnoughAV1Encodes
 {
@@ -81,6 +82,7 @@ namespace NotEnoughAV1Encodes
         public static bool DeleteTempFiles = false; // Temp File Deletion
         public static bool PlayUISounds = false;    // UI Sounds (Finished Encoding / Error)
         public static bool ShowTerminal = false;    // Show / Hide Encoding Terminal
+        public static bool CustomBG = false;        // Custom Image Background
         public static int TotalFrames = 0;          // used for progressbar and frame check
         public DateTime StartTime;                  // used for eta calculation
         // Progress Cancellation
@@ -117,6 +119,19 @@ namespace NotEnoughAV1Encodes
                     updater.ShowDialog();
                     CheckDependencies.Check();
                 }
+            }
+
+            // Custom BG
+            if (File.Exists("background.txt"))
+            {
+                try
+                {
+                    Uri fileUri = new Uri(File.ReadAllText("background.txt"));
+                    imgDynamic.Source = new BitmapImage(fileUri);
+                    CustomBG = true;
+                    SetBackGroundColor();
+                }
+                catch { }
             }
         }
 
@@ -1620,7 +1635,50 @@ namespace NotEnoughAV1Encodes
                 // Darkmode
                 TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
             }
+            if (CustomBG)
+                SetBackGroundColor();
+        }
 
+        private void ButtonSetBGImage_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    Uri fileUri = new Uri(openFileDialog.FileName);
+                    imgDynamic.Source = new BitmapImage(fileUri);
+                    CustomBG = true;
+                    SetBackGroundColor();
+                    if (File.Exists("background.txt")) { File.Delete("background.txt"); }
+                    SmallFunctions.WriteToFileThreadSafe(openFileDialog.FileName, "background.txt");
+                }
+                else
+                {
+                    // Reset BG Image
+                    if (File.Exists("background.txt")) { try { File.Delete("background.txt"); } catch { } }
+                    imgDynamic.Source = null;
+                    CustomBG = false;
+                    SolidColorBrush transparent = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+                    MetroTab.Background = transparent;
+                }
+            }
+            catch { }
+        }
+
+        private void SetBackGroundColor()
+        {
+            if (ComboBoxBaseTheme.SelectedIndex == 0)
+            {
+                // Light Theme
+                SolidColorBrush transparentWhite = new SolidColorBrush(Color.FromArgb(65, 100, 100, 100));
+                MetroTab.Background = transparentWhite;
+            }
+            else
+            {
+                SolidColorBrush transparentBlack = new SolidColorBrush(Color.FromArgb(65, 30, 30, 30));
+                MetroTab.Background = transparentBlack;
+            }
         }
 
         private void ButtonDeleteTempFiles_Click(object sender, RoutedEventArgs e)
@@ -2448,6 +2506,5 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
-
     }
 }
