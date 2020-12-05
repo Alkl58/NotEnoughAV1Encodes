@@ -145,53 +145,64 @@
             </TabItem>
             <TabItem Header="Filters">
                 <Grid Background="White">
-                    <GroupBox Header="Crop" HorizontalAlignment="Left" Height="203" Margin="47,62,0,0" VerticalAlignment="Top" Width="275" />
-                    <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Height="27" Margin="96,157,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Height="27" Margin="207,157,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Height="27" Margin="152,125,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <TextBox x:Name="TextBoxFiltersCropBottom" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Height="27" Margin="152,189,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <Label Content="Bottom" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Margin="152,216,0,0" VerticalAlignment="Top" Width="55"/>
-                    <Label Content="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Margin="164,96,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Left" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Margin="63,157,0,0" VerticalAlignment="Top" Height="27"/>
-                    <Label Content="Right" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Margin="262,156,0,0" VerticalAlignment="Top" Height="30"/>
+                    <GroupBox Header="Crop" HorizontalAlignment="Left" Height="203" Margin="47,62,0,0" VerticalAlignment="Top" Width="275">
+                        <Grid>
+                            <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Height="26" Margin="44,78,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Height="26" Margin="155,78,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Height="26" Margin="100,46,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <TextBox x:Name="TextBoxFiltersCropBottom" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Height="26" Margin="100,110,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Label Content="Bottom" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Margin="100,136,0,0" VerticalAlignment="Top" Width="55"/>
+                            <Label Content="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Margin="112,16,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Left" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Margin="11,78,0,0" VerticalAlignment="Top" Height="26"/>
+                            <Label Content="Right" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersCrop}" HorizontalAlignment="Left" Margin="210,76,0,0" VerticalAlignment="Top" Height="30"/>
+                        </Grid>
+                    </GroupBox>
                     <CheckBox x:Name="CheckBoxFiltersCrop" Content="" HorizontalAlignment="Left" Margin="89,66,0,0" VerticalAlignment="Top"/>
                     <GroupBox Header="Resize" HorizontalAlignment="Left" Height="203" Margin="327,62,0,0" VerticalAlignment="Top" Width="285" >
-                        <ComboBox x:Name="ComboBoxFiltersScaling" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Margin="139,74,0,0" VerticalAlignment="Top" Width="120" Height="30" VerticalContentAlignment="Center">
-                            <ComboBoxItem Content="fast_bilinear"/>
-                            <ComboBoxItem Content="bilinear"/>
-                            <ComboBoxItem Content="bicubic" IsSelected="True"/>
-                            <ComboBoxItem Content="experimental"/>
-                            <ComboBoxItem Content="neighbor"/>
-                            <ComboBoxItem Content="area"/>
-                            <ComboBoxItem Content="bicublin"/>
-                            <ComboBoxItem Content="gauss"/>
-                            <ComboBoxItem Content="sinc"/>
-                            <ComboBoxItem Content="lanczos"/>
-                            <ComboBoxItem Content="spline"/>
-                        </ComboBox>
+                        <Grid>
+                            <Label Content="Scaling Algorithm:" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Margin="32,94,0,0" VerticalAlignment="Top" Height="28"/>
+                            <ComboBox x:Name="ComboBoxFiltersScaling" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Margin="139,92,0,0" VerticalAlignment="Top" Width="120" Height="30" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="fast_bilinear"/>
+                                <ComboBoxItem Content="bilinear"/>
+                                <ComboBoxItem Content="bicubic" IsSelected="True"/>
+                                <ComboBoxItem Content="experimental"/>
+                                <ComboBoxItem Content="neighbor"/>
+                                <ComboBoxItem Content="area"/>
+                                <ComboBoxItem Content="bicublin"/>
+                                <ComboBoxItem Content="gauss"/>
+                                <ComboBoxItem Content="sinc"/>
+                                <ComboBoxItem Content="lanczos"/>
+                                <ComboBoxItem Content="spline"/>
+                            </ComboBox>
+                            <Label Content="Width:" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Margin="19,48,0,0" VerticalAlignment="Top" Height="28"/>
+                            <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Height="28" Margin="71,46,0,0" TextWrapping="Wrap" Text="1920" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Label Content="Height:" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Margin="141,48,0,0" VerticalAlignment="Top" Height="28"/>
+                            <TextBox x:Name="TextBoxFiltersResizeHeight" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Height="28" Margin="199,46,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <CheckBox x:Name="CheckBoxFiltersResize" Content="" HorizontalAlignment="Left" Margin="39,-14,0,0" VerticalAlignment="Top"/>
+                        </Grid>
                     </GroupBox>
-                    <CheckBox x:Name="CheckBoxFiltersResize" Content="" HorizontalAlignment="Left" Margin="377,66,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Width:" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Margin="340,117,0,0" VerticalAlignment="Top" Height="28"/>
-                    <Label Content="Height:" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Margin="475,116,0,0" VerticalAlignment="Top" Height="28"/>
-                    <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Height="27" Margin="403,118,0,0" TextWrapping="Wrap" Text="1920" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <TextBox x:Name="TextBoxFiltersResizeHeight" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Height="27" Margin="535,117,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <Label Content="Scaling Algorithm:" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersResize}" HorizontalAlignment="Left" Margin="340,156,0,0" VerticalAlignment="Top" Height="28"/>
-                    <GroupBox Header="Rotate" HorizontalAlignment="Left" Height="90" Margin="617,62,0,0" VerticalAlignment="Top" Width="285" />
-                    <CheckBox x:Name="CheckBoxFiltersRotate" Content="" HorizontalAlignment="Left" Margin="669,66,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Rotate (Clockwise):" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersRotate}" HorizontalAlignment="Left" Margin="636,98,0,0" VerticalAlignment="Top" Height="28"/>
-                    <ComboBox x:Name="ComboBoxFiltersRotate" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersRotate}" HorizontalAlignment="Left" Margin="767,97,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
-                        <ComboBoxItem Content="0°" IsSelected="True"/>
-                        <ComboBoxItem Content="90°"/>
-                        <ComboBoxItem Content="180°"/>
-                        <ComboBoxItem Content="270°"/>
-                    </ComboBox>
-                    <GroupBox Header="Deinterlace" HorizontalAlignment="Left" Height="95" Margin="617,170,0,0" VerticalAlignment="Top" Width="285" />
-                    <CheckBox x:Name="CheckBoxFiltersDeinterlace" Content="" HorizontalAlignment="Left" Margin="699,173,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Deinterlace (Yadif):" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersDeinterlace}" HorizontalAlignment="Left" Margin="636,209,0,0" VerticalAlignment="Top" Height="28"/>
-                    <ComboBox x:Name="ComboBoxFiltersDeinterlace" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersDeinterlace}" HorizontalAlignment="Left" Margin="766,208,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
-                        <ComboBoxItem Content="1" IsSelected="True"/>
-                        <ComboBoxItem Content="0"/>
-                    </ComboBox>
+                    <GroupBox Header="Rotate" HorizontalAlignment="Left" Height="90" Margin="617,62,0,0" VerticalAlignment="Top" Width="285">
+                        <Grid>
+                            <Label Content="Rotate (Clockwise):" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersRotate}" HorizontalAlignment="Left" Margin="36,18,0,0" VerticalAlignment="Top" Height="28"/>
+                            <ComboBox x:Name="ComboBoxFiltersRotate" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersRotate}" HorizontalAlignment="Left" Margin="151,18,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="0°" IsSelected="True"/>
+                                <ComboBoxItem Content="90°"/>
+                                <ComboBoxItem Content="180°"/>
+                                <ComboBoxItem Content="270°"/>
+                            </ComboBox>
+                            <CheckBox x:Name="CheckBoxFiltersRotate" Content="" HorizontalAlignment="Left" Margin="40,-14,0,0" VerticalAlignment="Top"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Deinterlace" HorizontalAlignment="Left" Height="95" Margin="617,170,0,0" VerticalAlignment="Top" Width="285">
+                        <Grid>
+                            <Label Content="Deinterlace (Yadif):" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersDeinterlace}" HorizontalAlignment="Left" Margin="39,21,0,0" VerticalAlignment="Top" Height="28"/>
+                            <ComboBox x:Name="ComboBoxFiltersDeinterlace" IsEnabled="{Binding IsChecked, ElementName=CheckBoxFiltersDeinterlace}" HorizontalAlignment="Left" Margin="152,20,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="1" IsSelected="True"/>
+                                <ComboBoxItem Content="0"/>
+                            </ComboBox>
+                            <CheckBox x:Name="CheckBoxFiltersDeinterlace" Content="" HorizontalAlignment="Left" Margin="66,-14,0,0" VerticalAlignment="Top"/>
+                        </Grid>
+                    </GroupBox>
                     <Label Content="Filters" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                 </Grid>
             </TabItem>
@@ -229,7 +240,7 @@
                     <Label Content="Fastest |" HorizontalAlignment="Left" Margin="224,292,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
                     <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="457,156,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center"/>
                     <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="582,156,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <CheckBox x:Name="CheckBoxVideoAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="59,142,0,0" VerticalAlignment="Top" Width="139"/>
+                    <CheckBox x:Name="CheckBoxVideoAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="59,142,0,0" VerticalAlignment="Top" Width="139" IsChecked="True"/>
                     <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="281,272,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Collapsed"/>
                 </Grid>
             </TabItem>
@@ -733,7 +744,7 @@
                         <TextBox x:Name="TextBoxRav1eMasteringLx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="783" Canvas.Top="153"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         <TextBox x:Name="TextBoxRav1eMasteringLy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="847" Canvas.Top="153"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                     </Canvas>
-                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="947" Margin="0,41,0,0">
+                    <Canvas Height="237" VerticalAlignment="Top" Margin="0,41,5,0">
                         <Canvas.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -896,7 +907,7 @@
                             <ComboBoxItem Content="0"/>
                         </ComboBox>
                     </Canvas>
-                    <TextBox x:Name="TextBoxCustomVideoSettings" HorizontalAlignment="Left" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Height="59" Margin="10,313,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="927" TextChanged="TextBoxCustomVideoSettings_TextChanged"/>
+                    <TextBox x:Name="TextBoxCustomVideoSettings" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Margin="10,313,15,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged"/>
                     <CheckBox x:Name="CheckBoxCustomVideoSettings" Content="Custom Settings" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Checked="CheckBoxCustomVideoSettings_Checked"/>
                 </Grid>
             </TabItem>
@@ -948,8 +959,9 @@
         </Button>
         <Label Content="Preset:" HorizontalAlignment="Left" Margin="21,78,0,0" VerticalAlignment="Top" Height="29"/>
         <ComboBox x:Name="ComboBoxPresets" HorizontalAlignment="Left" Margin="77,78,0,0" VerticalAlignment="Top" Width="186" Height="29" VerticalContentAlignment="Center"  SelectionChanged="ComboBoxPresets_SelectionChanged"/>
-        <Button x:Name="ButtonSavePreset" Content="Save" HorizontalAlignment="Left" Margin="268,78,0,0" VerticalAlignment="Top" Width="50" Height="29" Background="White" Click="ButtonSavePreset_Click"/>
-        <Button x:Name="ButtonSetDefaultPreset" Content="Set Default" HorizontalAlignment="Left" Margin="317,78,0,0" VerticalAlignment="Top" Width="76" Height="29" Background="White" Click="ButtonSetDefaultPreset_Click"/>
-        <Button x:Name="ButtonDeletePreset" Content="Delete" HorizontalAlignment="Left" Margin="392,78,0,0" VerticalAlignment="Top" Width="50" Height="29" Background="White" Click="ButtonDeletePreset_Click" />
+        <Button x:Name="ButtonSavePreset" Content="Save" HorizontalAlignment="Left" Margin="268,78,0,0" VerticalAlignment="Top" Width="50" Height="29" Background="{x:Null}" Click="ButtonSavePreset_Click"/>
+        <Button x:Name="ButtonSetDefaultPreset" Content="Set Default" HorizontalAlignment="Left" Margin="317,78,0,0" VerticalAlignment="Top" Width="76" Height="29" Background="{x:Null}" Click="ButtonSetDefaultPreset_Click"/>
+        <Button x:Name="ButtonDeletePreset" Content="Delete" HorizontalAlignment="Left" Margin="392,78,0,0" VerticalAlignment="Top" Width="50" Height="29" Background="{x:Null}" Click="ButtonDeletePreset_Click" />
+        <Button x:Name="ButtonExpandCollapseWindow" Content="Resize Window" HorizontalAlignment="Left" Margin="447,77,0,0" VerticalAlignment="Top" Width="135" Height="29" Background="White" Click="ButtonExpandCollapseWindow_Click"/>
     </Grid>
 </Window>

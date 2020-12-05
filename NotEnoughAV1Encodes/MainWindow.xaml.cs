@@ -374,6 +374,22 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
 
+        private void ButtonExpandCollapseWindow_Click(object sender, RoutedEventArgs e)
+        {
+            // Resizes the Window to free screen space
+            if (this.Width > 650)
+            {
+                this.Width = 620;
+                this.Height = 210;
+            }
+            else
+            {
+                this.Width = 1010;
+                this.Height = 620;
+            }
+
+        }
+
         private void ComboBoxPresets_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             try
