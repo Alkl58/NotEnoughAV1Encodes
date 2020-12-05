@@ -212,5 +212,14 @@
   <ItemGroup>
     <None Include="Resources\stop.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\github.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\paypal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\discord.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -83,6 +83,7 @@ namespace NotEnoughAV1Encodes
         public static bool PlayUISounds = false;    // UI Sounds (Finished Encoding / Error)
         public static bool ShowTerminal = false;    // Show / Hide Encoding Terminal
         public static bool CustomBG = false;        // Custom Image Background
+        public static bool StartUp = true;          // Avoids conflicts with Settings Tab
         public static int TotalFrames = 0;          // used for progressbar and frame check
         public DateTime StartTime;                  // used for eta calculation
         // Progress Cancellation
@@ -133,6 +134,8 @@ namespace NotEnoughAV1Encodes
                 }
                 catch { }
             }
+
+            StartUp = false;
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
@@ -423,6 +426,24 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void ButtonGithub_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/Alkl58/NotEnoughAV1Encodes");
+        }
+
+        private void ButtonPayPal_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://paypal.me/alkl58");
+        }
+
+        private void ButtonDiscord_Click(object sender, RoutedEventArgs e)
+        {
+            // AV1 Discord
+            Process.Start("https://discord.gg/HSBxne3");
+            // NEAV1E Discord
+            Process.Start("https://discord.gg/yG27ArHBFe");
+        }
+
         private void ComboBoxPresets_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             try
@@ -511,9 +532,56 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void CheckBoxSettingsDeleteTempFiles_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxSettingsDeleteTempFiles_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
         private void CheckBoxSettingsUISounds_Checked(object sender, RoutedEventArgs e)
         {
             PlayUISounds = CheckBoxSettingsUISounds.IsChecked == true;
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxSettingsUISounds_Unchecked(object sender, RoutedEventArgs e)
+        {
+            PlayUISounds = CheckBoxSettingsUISounds.IsChecked == true;
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxSettingsTerminal_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxSettingsTerminal_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxSettingsShutdownAfterEncode_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxSettingsShutdownAfterEncode_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxSettingsLogging_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
+        }
+
+        private void CheckBoxSettingsLogging_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsTab();
         }
 
         private void TextBoxCustomVideoSettings_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -1567,58 +1635,6 @@ namespace NotEnoughAV1Encodes
 
         // ══════════════════════════════════════ Buttons ═════════════════════════════════════════
 
-        private void ButtonSaveSettings_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                XmlWriter writer = XmlWriter.Create(Path.Combine(Directory.GetCurrentDirectory(), "settings.xml"));
-                writer.WriteStartElement("Settings");
-                writer.WriteElementString("CustomTemp", CheckBoxCustomTempPath.IsChecked.ToString());
-                writer.WriteElementString("CustomTempPath", TextBoxCustomTempPath.Text);
-                writer.WriteElementString("DeleteTempFiles", CheckBoxSettingsDeleteTempFiles.IsChecked.ToString());
-                writer.WriteElementString("PlaySound", CheckBoxSettingsUISounds.IsChecked.ToString());
-                writer.WriteElementString("Logging", CheckBoxSettingsLogging.IsChecked.ToString());
-                writer.WriteElementString("Shutdown", CheckBoxSettingsShutdownAfterEncode.IsChecked.ToString());
-                writer.WriteElementString("TempPathActive", CheckBoxCustomTempPath.IsChecked.ToString());
-                writer.WriteElementString("TempPath", TextBoxCustomTempPath.Text);
-                writer.WriteElementString("Terminal", CheckBoxSettingsTerminal.IsChecked.ToString());
-                writer.WriteElementString("ThemeAccent", ComboBoxAccentTheme.SelectedIndex.ToString());
-                writer.WriteElementString("ThemeBase", ComboBoxBaseTheme.SelectedIndex.ToString());
-                writer.WriteEndElement();
-                writer.Close();
-            }
-            catch { }
-        }
-
-        private void LoadSettingsTab()
-        {
-            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "settings.xml")))
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(Path.Combine(Directory.GetCurrentDirectory(), "settings.xml"));
-                XmlNodeList node = doc.GetElementsByTagName("Settings");
-                foreach (XmlNode n in node[0].ChildNodes)
-                {
-                    switch (n.Name)
-                    {
-                        case "CustomTemp":      CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
-                        case "CustomTempPath":  TextBoxCustomTempPath.Text = n.InnerText; break;
-                        case "DeleteTempFiles": CheckBoxSettingsDeleteTempFiles.IsChecked = n.InnerText == "True"; break;
-                        case "PlaySound":       CheckBoxSettingsUISounds.IsChecked = n.InnerText == "True"; break;
-                        case "Logging":         CheckBoxSettingsLogging.IsChecked = n.InnerText == "True"; break;
-                        case "Shutdown":        CheckBoxSettingsShutdownAfterEncode.IsChecked = n.InnerText == "True"; break;
-                        case "TempPathActive":  CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
-                        case "TempPath":        TextBoxCustomTempPath.Text = n.InnerText; break;
-                        case "Terminal":        CheckBoxSettingsTerminal.IsChecked = n.InnerText == "True"; break;
-                        case "ThemeAccent":     ComboBoxAccentTheme.SelectedIndex = int.Parse(n.InnerText); break;
-                        case "ThemeBase":       ComboBoxBaseTheme.SelectedIndex = int.Parse(n.InnerText); break;
-                        default: break;
-                    }
-                }
-                ThemeManager.Current.ChangeTheme(this, ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text);
-            }
-        }
-
         private void ButtonSetTheme_Click(object sender, RoutedEventArgs e)
         {
             ThemeManager.Current.ChangeTheme(this, ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text);
@@ -1637,6 +1653,7 @@ namespace NotEnoughAV1Encodes
             }
             if (CustomBG)
                 SetBackGroundColor();
+            SaveSettingsTab();
         }
 
         private void ButtonSetBGImage_Click(object sender, RoutedEventArgs e)
@@ -1800,6 +1817,11 @@ namespace NotEnoughAV1Encodes
             { 
                 Process.Start(TextBoxCustomTempPath.Text); 
             }
+        }
+
+        private void ButtonOpenLogFolder_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(Path.Combine(Directory.GetCurrentDirectory(), "Logging"));
         }
 
         private void ButtonSetTempPath_Click(object sender, RoutedEventArgs e)
@@ -2105,6 +2127,67 @@ namespace NotEnoughAV1Encodes
         }
 
         // ═════════════════════════════════════ Presets IO ═══════════════════════════════════════
+
+        private void SaveSettingsTab()
+        {
+            try
+            {
+                if (StartUp != true)
+                {
+                    XmlWriter writer = XmlWriter.Create(Path.Combine(Directory.GetCurrentDirectory(), "settings.xml"));
+                    writer.WriteStartElement("Settings");
+                    writer.WriteElementString("CustomTemp", CheckBoxCustomTempPath.IsChecked.ToString());
+                    writer.WriteElementString("CustomTempPath", TextBoxCustomTempPath.Text);
+                    writer.WriteElementString("DeleteTempFiles", CheckBoxSettingsDeleteTempFiles.IsChecked.ToString());
+                    writer.WriteElementString("PlaySound", CheckBoxSettingsUISounds.IsChecked.ToString());
+                    writer.WriteElementString("Logging", CheckBoxSettingsLogging.IsChecked.ToString());
+                    writer.WriteElementString("Shutdown", CheckBoxSettingsShutdownAfterEncode.IsChecked.ToString());
+                    writer.WriteElementString("TempPathActive", CheckBoxCustomTempPath.IsChecked.ToString());
+                    writer.WriteElementString("TempPath", TextBoxCustomTempPath.Text);
+                    writer.WriteElementString("Terminal", CheckBoxSettingsTerminal.IsChecked.ToString());
+                    writer.WriteElementString("ThemeAccent", ComboBoxAccentTheme.SelectedIndex.ToString());
+                    writer.WriteElementString("ThemeBase", ComboBoxBaseTheme.SelectedIndex.ToString());
+                    writer.WriteEndElement();
+                    writer.Close();
+                }
+
+            }
+            catch { }
+        }
+
+        private void LoadSettingsTab()
+        {
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "settings.xml")))
+            {
+                try
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(Path.Combine(Directory.GetCurrentDirectory(), "settings.xml"));
+                    XmlNodeList node = doc.GetElementsByTagName("Settings");
+                    foreach (XmlNode n in node[0].ChildNodes)
+                    {
+                        switch (n.Name)
+                        {
+                            case "CustomTemp": CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
+                            case "CustomTempPath": TextBoxCustomTempPath.Text = n.InnerText; break;
+                            case "DeleteTempFiles": CheckBoxSettingsDeleteTempFiles.IsChecked = n.InnerText == "True"; break;
+                            case "PlaySound": CheckBoxSettingsUISounds.IsChecked = n.InnerText == "True"; break;
+                            case "Logging": CheckBoxSettingsLogging.IsChecked = n.InnerText == "True"; break;
+                            case "Shutdown": CheckBoxSettingsShutdownAfterEncode.IsChecked = n.InnerText == "True"; break;
+                            case "TempPathActive": CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
+                            case "TempPath": TextBoxCustomTempPath.Text = n.InnerText; break;
+                            case "Terminal": CheckBoxSettingsTerminal.IsChecked = n.InnerText == "True"; break;
+                            case "ThemeAccent": ComboBoxAccentTheme.SelectedIndex = int.Parse(n.InnerText); break;
+                            case "ThemeBase": ComboBoxBaseTheme.SelectedIndex = int.Parse(n.InnerText); break;
+                            default: break;
+                        }
+                    }
+                }
+                catch { }
+
+                ThemeManager.Current.ChangeTheme(this, ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text);
+            }
+        }
 
         private void SaveSettings(bool SaveProfile, string SaveName)
         {
