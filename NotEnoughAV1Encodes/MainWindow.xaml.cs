@@ -1948,7 +1948,30 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("SubThreeLanguage",           ComboBoxSubTrackThreeLanguage.SelectedIndex.ToString());        // Subtitle Track Three Language
                 writer.WriteElementString("SubFourLanguage",            ComboBoxSubTrackFourLanguage.SelectedIndex.ToString());         // Subtitle Track Four Language
                 writer.WriteElementString("SubFFiveLanguage",           ComboBoxSubTrackFiveLanguage.SelectedIndex.ToString());         // Subtitle Track Five Language
+                // Audio (for resume mode)
+                writer.WriteElementString("AudioLangOne",               ComboBoxTrackOneLanguage.SelectedIndex.ToString());             // Audio Track One Language
+                writer.WriteElementString("AudioLangTwo",               ComboBoxTrackTwoLanguage.SelectedIndex.ToString());             // Audio Track Two Language
+                writer.WriteElementString("AudioLangThree",             ComboBoxTrackThreeLanguage.SelectedIndex.ToString());           // Audio Track Three Language
+                writer.WriteElementString("AudioLangFour",              ComboBoxTrackFourLanguage.SelectedIndex.ToString());            // Audio Track Four Language
             }
+            // ═══════════════════════════════════════════════════════════════════ Audio ══════════════════════════════════════════════════════════════════
+            writer.WriteElementString("AudioTrackOne",                  CheckBoxAudioTrackOne.IsChecked.ToString());                    // Audio Track One Active
+            writer.WriteElementString("AudioTrackTwo",                  CheckBoxAudioTrackTwo.IsChecked.ToString());                    // Audio Track Two Active
+            writer.WriteElementString("AudioTrackThree",                CheckBoxAudioTrackThree.IsChecked.ToString());                  // Audio Track Three Active
+            writer.WriteElementString("AudioTrackFour",                 CheckBoxAudioTrackFour.IsChecked.ToString());                   // Audio Track Four Active
+            writer.WriteElementString("TrackOneCodec",                  ComboBoxAudioCodec.SelectedIndex.ToString());                   // Audio Track One Codec
+            writer.WriteElementString("TrackTwoCodec",                  ComboBoxAudioCodecTrackTwo.SelectedIndex.ToString());           // Audio Track Two Codec
+            writer.WriteElementString("TrackThreeCodec",                ComboBoxAudioCodecTrackThree.SelectedIndex.ToString());         // Audio Track Three Codec
+            writer.WriteElementString("TrackFourCodec",                 ComboBoxAudioCodecTrackFour.SelectedIndex.ToString());          // Audio Track Four Codec
+            writer.WriteElementString("TrackOneBitrate",                TextBoxAudioBitrate.Text);                                      // Audio Track One Bitrate
+            writer.WriteElementString("TrackTwoBitrate",                TextBoxAudioBitrateTrackTwo.Text);                              // Audio Track Two Bitrate
+            writer.WriteElementString("TrackThreeBitrate",              TextBoxAudioBitrateTrackThree.Text);                            // Audio Track Three Bitrate
+            writer.WriteElementString("TrackFourBitrate",               TextBoxAudioBitrateTrackFour.Text);                             // Audio Track Four Bitrate
+            writer.WriteElementString("TrackOneChannels",               ComboBoxTrackOneChannels.SelectedIndex.ToString());             // Audio Track One Channels
+            writer.WriteElementString("TrackTwoChannels",               ComboBoxTrackTwoChannels.SelectedIndex.ToString());             // Audio Track Two Channels
+            writer.WriteElementString("TrackThreeChannels",             ComboBoxTrackThreeChannels.SelectedIndex.ToString());           // Audio Track Three Channels
+            writer.WriteElementString("TrackFourChannels",              ComboBoxTrackFourChannels.SelectedIndex.ToString());            // Audio Track Four Channels
+
 
             writer.WriteElementString("WorkerCount",                    ComboBoxWorkerCount.SelectedIndex.ToString());                  // Worker Count
             writer.WriteElementString("WorkerPriority",                 ComboBoxProcessPriority.SelectedIndex.ToString());              // Worker Priority
@@ -2142,6 +2165,27 @@ namespace NotEnoughAV1Encodes
                                                             TextBoxVideoDestination.Text = n.InnerText;                             break;  // Video Output
                     case "WorkerCount":                     ComboBoxWorkerCount.SelectedIndex = int.Parse(n.InnerText);             break;  // Worker Count
                     case "WorkerPriority":                  ComboBoxProcessPriority.SelectedIndex = int.Parse(n.InnerText);         break;  // Worker Priority
+                    // ═══════════════════════════════════════════════════════════════════ Audio ═══════════════════════════════════════════════════════════════════
+                    case "AudioTrackOne":                   CheckBoxAudioTrackOne.IsChecked = n.InnerText == "True";                break;  // Audio Track One Active
+                    case "AudioTrackTwo":                   CheckBoxAudioTrackTwo.IsChecked = n.InnerText == "True";                break;  // Audio Track Two Active
+                    case "AudioTrackThree":                 CheckBoxAudioTrackThree.IsChecked = n.InnerText == "True";              break;  // Audio Track Three Active
+                    case "AudioTrackFour":                  CheckBoxAudioTrackFour.IsChecked = n.InnerText == "True";               break;  // Audio Track Four Active
+                    case "AudioLangOne":                    ComboBoxTrackOneLanguage.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track One Language
+                    case "AudioLangTwo":                    ComboBoxTrackTwoLanguage.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track Two Language
+                    case "AudioLangThree":                  ComboBoxTrackThreeLanguage.SelectedIndex = int.Parse(n.InnerText);      break;  // Audio Track Three Language
+                    case "AudioLangFour":                   ComboBoxTrackFourLanguage.SelectedIndex = int.Parse(n.InnerText);       break;  // Audio Track Four Language
+                    case "TrackOneCodec":                   ComboBoxAudioCodec.SelectedIndex = int.Parse(n.InnerText);              break;  // Audio Track One Codec
+                    case "TrackTwoCodec":                   ComboBoxAudioCodecTrackTwo.SelectedIndex = int.Parse(n.InnerText);      break;  // Audio Track Two Codec
+                    case "TrackThreeCodec":                 ComboBoxAudioCodecTrackThree.SelectedIndex = int.Parse(n.InnerText);    break;  // Audio Track Three Codec
+                    case "TrackFourCodec":                  ComboBoxAudioCodecTrackFour.SelectedIndex = int.Parse(n.InnerText);     break;  // Audio Track Four Codec
+                    case "TrackOneBitrate":                 TextBoxAudioBitrate.Text = n.InnerText;                                 break;  // Audio Track One Bitrate
+                    case "TrackTwoBitrate":                 TextBoxAudioBitrateTrackTwo.Text = n.InnerText;                         break;  // Audio Track Two Bitrate
+                    case "TrackThreeBitrate":               TextBoxAudioBitrateTrackThree.Text = n.InnerText;                       break;  // Audio Track Three Bitrate
+                    case "TrackFourBitrate":                TextBoxAudioBitrateTrackFour.Text = n.InnerText;                        break;  // Audio Track Four Bitrate
+                    case "TrackOneChannels":                ComboBoxTrackOneChannels.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track One Channels
+                    case "TrackTwoChannels":                ComboBoxTrackTwoChannels.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track Two Channels
+                    case "TrackThreeChannels":              ComboBoxTrackThreeChannels.SelectedIndex = int.Parse(n.InnerText);      break;  // Audio Track Three Channels
+                    case "TrackFourChannels":               ComboBoxTrackFourChannels.SelectedIndex = int.Parse(n.InnerText);       break;  // Audio Track Four Channels
                     // ═════════════════════════════════════════════════════════════════ Splitting ═════════════════════════════════════════════════════════════════
                     case "SplittingMethod":                 ComboBoxSplittingMethod.SelectedIndex = int.Parse(n.InnerText);         break;  // Splitting Method
                     case "SplittingThreshold":              TextBoxSplittingThreshold.Text = n.InnerText;                           break;  // Splitting Threshold
