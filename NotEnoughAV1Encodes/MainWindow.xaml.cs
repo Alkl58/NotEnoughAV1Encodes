@@ -12,11 +12,14 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
+using MahApps.Metro.Controls;
+using MahApps.Metro;
 using System.Xml;
+using ControlzEx.Theming;
 
 namespace NotEnoughAV1Encodes
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
 
         // Final Commands
@@ -56,10 +59,6 @@ namespace NotEnoughAV1Encodes
         public static int audioChannelsTrackThree;  // Audio Track Three Channels
         public static int audioChannelsTrackFour;   // Audio Track Four Channels
         // Temp Settings Subtitles
-        public static string subTrackOnePath;       // Subtitle Track One Path
-        public static string subTrackTwoPath;       // Subtitle Track Two Path
-        public static string subTrackThreePath;     // Subtitle Track Three Path
-        public static string subTrackFourPath;      // Subtitle Track Four Path
         public static string subCommand;            // Subtitle Muxing Command
         public static string subHardCommand;        // Subtitle Hardcoding Command
         public static bool subSoftSubEnabled;       // Subtitle Toggle for later Muxing
@@ -112,26 +111,27 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonSubtitleTrackOne_Click(object sender, RoutedEventArgs e)
         {
-            subTrackOnePath = SubtitleFiledialog();
-            TextBoxSubtitleTrackOne.Text = subTrackOnePath;
+            TextBoxSubtitleTrackOne.Text = SubtitleFiledialog();
         }
 
         private void ButtonSubtitleTrackTwo_Click(object sender, RoutedEventArgs e)
         {
-            subTrackTwoPath = SubtitleFiledialog();
-            TextBoxSubtitleTrackTwo.Text = subTrackTwoPath;
+            TextBoxSubtitleTrackTwo.Text = SubtitleFiledialog();
         }
 
         private void ButtonSubtitleTrackThree_Click(object sender, RoutedEventArgs e)
         {
-            subTrackThreePath = SubtitleFiledialog();
-            TextBoxSubtitleTrackThree.Text = subTrackThreePath;
+            TextBoxSubtitleTrackThree.Text = SubtitleFiledialog();
         }
 
         private void ButtonSubtitleTrackFour_Click(object sender, RoutedEventArgs e)
         {
-            subTrackFourPath = SubtitleFiledialog();
-            TextBoxSubtitleTrackFour.Text = subTrackFourPath;
+            TextBoxSubtitleTrackFour.Text = SubtitleFiledialog();
+        }
+
+        private void ButtonSubtitleTrackFive_Click(object sender, RoutedEventArgs e)
+        {
+            TextBoxSubtitleTrackFive.Text = SubtitleFiledialog();
         }
 
         private void CheckBoxSubOneBurn_Checked(object sender, RoutedEventArgs e)
@@ -377,17 +377,16 @@ namespace NotEnoughAV1Encodes
         private void ButtonExpandCollapseWindow_Click(object sender, RoutedEventArgs e)
         {
             // Resizes the Window to free screen space
-            if (this.Width > 650)
+            if (this.Width > 680)
             {
-                this.Width = 620;
+                this.Width = 607;
                 this.Height = 210;
             }
             else
             {
                 this.Width = 1010;
-                this.Height = 620;
+                this.Height = 650;
             }
-
         }
 
         private void ComboBoxPresets_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -1422,6 +1421,11 @@ namespace NotEnoughAV1Encodes
         }
 
         // ══════════════════════════════════════ Buttons ═════════════════════════════════════════
+
+        private void ButtonSetTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ThemeManager.Current.ChangeTheme(this, ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text);
+        }
 
         private void ButtonDeleteTempFiles_Click(object sender, RoutedEventArgs e)
         {
