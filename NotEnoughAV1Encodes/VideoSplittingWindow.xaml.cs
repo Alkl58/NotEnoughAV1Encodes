@@ -5,10 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using MahApps.Metro.Controls;
+using ControlzEx.Theming;
 
 namespace NotEnoughAV1Encodes
 {
-    public partial class VideoSplittingWindow : Window
+    public partial class VideoSplittingWindow : MetroWindow
     {
         // Temp variables
         public string FFmpegThreshold = "0.4";  // scene threshold
@@ -19,10 +21,10 @@ namespace NotEnoughAV1Encodes
         public bool Reencode = false;           // reencoding boolean
         public bool HardSub = false;            // hardsub boolean (only chunking method)
 
-        public VideoSplittingWindow(int method, bool reencode, int reencodemethod, string thresholdFfmpeg, string chunk, bool subHardSub, string subHardSubCMD)
+        public VideoSplittingWindow(int method, bool reencode, int reencodemethod, string thresholdFfmpeg, string chunk, bool subHardSub, string subHardSubCMD, string baseTheme, string accentTheme)
         {
             InitializeComponent();
-
+            ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
             // Sets the values from constructor
             FFmpegThreshold = thresholdFfmpeg;
             ReencodeMethod = reencodemethod;

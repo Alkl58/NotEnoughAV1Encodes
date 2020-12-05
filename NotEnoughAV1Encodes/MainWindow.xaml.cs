@@ -686,7 +686,7 @@ namespace NotEnoughAV1Encodes
             int reencodeMethod = ComboBoxSplittingReencodeMethod.SelectedIndex;
             string ffmpegThreshold = TextBoxSplittingThreshold.Text;
             string chunkLength = TextBoxSplittingChunkLength.Text;
-            VideoSplittingWindow videoSplittingWindow = new VideoSplittingWindow(splitmethod, reencodesplit, reencodeMethod, ffmpegThreshold, chunkLength, subHardSubEnabled, subHardCommand);
+            VideoSplittingWindow videoSplittingWindow = new VideoSplittingWindow(splitmethod, reencodesplit, reencodeMethod, ffmpegThreshold, chunkLength, subHardSubEnabled, subHardCommand, ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
             videoSplittingWindow.ShowDialog();
         }
 
