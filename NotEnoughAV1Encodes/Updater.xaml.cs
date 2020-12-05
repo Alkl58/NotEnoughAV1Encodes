@@ -7,10 +7,12 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using MahApps.Metro.Controls;
+using ControlzEx.Theming;
 
 namespace NotEnoughAV1Encodes
 {
-    public partial class Updater : Window
+    public partial class Updater : MetroWindow
     {
 
         // --------------------------------------------------------------------
@@ -39,10 +41,11 @@ namespace NotEnoughAV1Encodes
         // Current Directory
         public static string CurrentDir = Directory.GetCurrentDirectory();
 
-        public Updater()
+        public Updater(string baseTheme, string accentTheme)
         {
             InitializeComponent();
             LabelCurrentProgramVersion.Content = Neav1eCurrentVersion;
+            ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
             ParseNEAV1EGithub();
             ParseJeremyleeJSON();
             CompareLocalVersion();

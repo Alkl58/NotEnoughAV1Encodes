@@ -13,7 +13,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using MahApps.Metro.Controls;
-using MahApps.Metro;
 using System.Xml;
 using ControlzEx.Theming;
 
@@ -1657,7 +1656,7 @@ namespace NotEnoughAV1Encodes
         private void ButtonUpdater_Click(object sender, RoutedEventArgs e)
         {
             // Opens the program Updater
-            Updater updater = new Updater();
+            Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
             updater.ShowDialog();
             CheckDependencies.Check();
         }
