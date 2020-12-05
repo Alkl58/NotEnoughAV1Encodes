@@ -1066,8 +1066,8 @@ namespace NotEnoughAV1Encodes
         public void GetSubtitleTracks()
         {
             //Creates Audio Directory in the temp dir
-            if (!Directory.Exists(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Subtitles")))
-                Directory.CreateDirectory(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Subtitles"));
+            if (!Directory.Exists(Path.Combine(TempPath, TempPathFileName, "Subtitles")))
+                Directory.CreateDirectory(Path.Combine(TempPath, TempPathFileName, "Subtitles"));
 
             //This function gets subtitle information
             Process getSubtitles = new Process

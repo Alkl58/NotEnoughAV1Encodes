@@ -240,287 +240,8 @@
                     <Label Content="Fastest |" HorizontalAlignment="Left" Margin="224,292,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
                     <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="457,156,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center"/>
                     <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="582,156,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <CheckBox x:Name="CheckBoxVideoAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="59,142,0,0" VerticalAlignment="Top" Width="139" IsChecked="True"/>
+                    <CheckBox x:Name="CheckBoxVideoAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="59,142,0,0" VerticalAlignment="Top" Width="139"/>
                     <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="281,272,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Collapsed"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Audio">
-                <Grid Background="White">
-                    <GroupBox x:Name="GroupBox3" Header="Track 4" Height="74" Margin="10,281,15,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}"/>
-                    <GroupBox x:Name="GroupBox2" Header="Track 3" Height="74" Margin="10,207,15,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}"/>
-                    <GroupBox x:Name="GroupBox1" Header="Track 2" Height="74" Margin="10,133,15,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}"/>
-                    <GroupBox x:Name="GroupBox" Header="Track 1" Height="74" Margin="10,59,15,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}"/>
-                    <ComboBox x:Name="ComboBoxTrackOneLanguage" HorizontalAlignment="Left" Margin="740,91,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}">
-                        <ComboBoxItem Content="unknown" IsSelected="True"/>
-                        <ComboBoxItem Content="eng"/>
-                        <ComboBoxItem Content="ger"/>
-                        <ComboBoxItem Content="fra"/>
-                        <ComboBoxItem Content="ita"/>
-                        <ComboBoxItem Content="spa"/>
-                        <ComboBoxItem Content="jpn"/>
-                        <ComboBoxItem Content="chi"/>
-                        <ComboBoxItem Content="kor"/>
-                    </ComboBox>
-                    <ComboBox x:Name="ComboBoxAudioCodec" HorizontalAlignment="Left" Margin="100,91,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}">
-                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
-                        <ComboBoxItem Content="Opus" IsSelected="True" />
-                        <ComboBoxItem Content="AC3" />
-                        <ComboBoxItem Content="AAC" />
-                        <ComboBoxItem Content="MP3" />
-                        <ComboBoxItem Content="Copy Audio" />
-                    </ComboBox>
-                    <Label Content="Audio" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
-                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="43,89,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" />
-                    <CheckBox x:Name="CheckBoxAudioTrackOne" Content="" HorizontalAlignment="Left" Margin="65,62,0,0" VerticalAlignment="Top" Foreground="Black">
-                        <CheckBox.ToolTip>
-                            <ToolTip Content="Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!"/>
-                        </CheckBox.ToolTip>
-                    </CheckBox>
-                    <CheckBox x:Name="CheckBoxAudioTrackTwo" Content="" HorizontalAlignment="Left" Margin="65,136,0,0" VerticalAlignment="Top" Foreground="Black">
-                        <CheckBox.ToolTip>
-                            <ToolTip Content="Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!"/>
-                        </CheckBox.ToolTip>
-                    </CheckBox>
-                    <Label Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="236,89,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" Height="31" />
-                    <CheckBox x:Name="CheckBoxAudioTrackThree" Content="" HorizontalAlignment="Left" Margin="65,210,0,0" VerticalAlignment="Top" Foreground="Black">
-                        <CheckBox.ToolTip>
-                            <ToolTip Content="Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!"/>
-                        </CheckBox.ToolTip>
-                    </CheckBox>
-                    <CheckBox x:Name="CheckBoxAudioTrackFour" Content="" HorizontalAlignment="Left" Margin="65,284,0,0" VerticalAlignment="Top" Foreground="Black">
-                        <CheckBox.ToolTip>
-                            <ToolTip Content="Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!"/>
-                        </CheckBox.ToolTip>
-                    </CheckBox>
-                    <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="336,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" PreviewTextInput="NumberValidationTextBox">
-                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
-                    </TextBox>
-                    <ComboBox x:Name="ComboBoxAudioCodecTrackTwo" HorizontalAlignment="Left" Margin="100,163,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}">
-                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
-                        <ComboBoxItem Content="Opus" IsSelected="True" />
-                        <ComboBoxItem Content="AC3" />
-                        <ComboBoxItem Content="AAC" />
-                        <ComboBoxItem Content="MP3" />
-                        <ComboBoxItem Content="Copy Audio" />
-                    </ComboBox>
-                    <TextBox x:Name="TextBoxAudioBitrateTrackTwo" HorizontalAlignment="Left" Height="26" Margin="336,162,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" PreviewTextInput="NumberValidationTextBox">
-                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
-                    </TextBox>
-                    <ComboBox x:Name="ComboBoxAudioCodecTrackThree" HorizontalAlignment="Left" Margin="100,239,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}">
-                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
-                        <ComboBoxItem Content="Opus" IsSelected="True" />
-                        <ComboBoxItem Content="AC3" />
-                        <ComboBoxItem Content="AAC" />
-                        <ComboBoxItem Content="MP3" />
-                        <ComboBoxItem Content="Copy Audio" />
-                    </ComboBox>
-                    <TextBox x:Name="TextBoxAudioBitrateTrackThree" HorizontalAlignment="Left" Height="26" Margin="336,238,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" PreviewTextInput="NumberValidationTextBox">
-                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
-                    </TextBox>
-                    <ComboBox x:Name="ComboBoxAudioCodecTrackFour" HorizontalAlignment="Left" Margin="100,317,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}">
-                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
-                        <ComboBoxItem Content="Opus" IsSelected="True" />
-                        <ComboBoxItem Content="AC3" />
-                        <ComboBoxItem Content="AAC" />
-                        <ComboBoxItem Content="MP3" />
-                        <ComboBoxItem Content="Copy Audio" />
-                    </ComboBox>
-                    <TextBox x:Name="TextBoxAudioBitrateTrackFour" HorizontalAlignment="Left" Height="26" Margin="336,316,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" PreviewTextInput="NumberValidationTextBox">
-                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
-                    </TextBox>
-                    <Label Content="Channels:" HorizontalAlignment="Left" Margin="454,89,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" Height="25" />
-                    <ComboBox x:Name="ComboBoxTrackOneChannels" HorizontalAlignment="Left" Margin="528,91,0,0" VerticalAlignment="Top" Width="100" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}">
-                        <ComboBoxItem Content="1 (Mono)" Tag="1"/>
-                        <ComboBoxItem Content="2.0 (Stereo)" IsSelected="True" Tag="2"/>
-                        <ComboBoxItem Content="5.1" Tag="6"/>
-                        <ComboBoxItem Content="7.1" Tag="8"/>
-                    </ComboBox>
-                    <ComboBox x:Name="ComboBoxTrackTwoChannels" HorizontalAlignment="Left" Margin="528,164,0,0" VerticalAlignment="Top" Width="100" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}">
-                        <ComboBoxItem Content="1 (Mono)" Tag="1"/>
-                        <ComboBoxItem Content="2.0 (Stereo)" IsSelected="True" Tag="2"/>
-                        <ComboBoxItem Content="5.1" Tag="6"/>
-                        <ComboBoxItem Content="7.1" Tag="8"/>
-                    </ComboBox>
-                    <ComboBox x:Name="ComboBoxTrackThreeChannels" HorizontalAlignment="Left" Margin="528,239,0,0" VerticalAlignment="Top" Width="100" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}">
-                        <ComboBoxItem Content="1 (Mono)" Tag="1"/>
-                        <ComboBoxItem Content="2.0 (Stereo)" IsSelected="True" Tag="2"/>
-                        <ComboBoxItem Content="5.1" Tag="6"/>
-                        <ComboBoxItem Content="7.1" Tag="8"/>
-                    </ComboBox>
-                    <ComboBox x:Name="ComboBoxTrackFourChannels" HorizontalAlignment="Left" Margin="528,317,0,0" VerticalAlignment="Top" Width="100" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}">
-                        <ComboBoxItem Content="1 (Mono)" Tag="1"/>
-                        <ComboBoxItem Content="2.0 (Stereo)" IsSelected="True" Tag="2"/>
-                        <ComboBoxItem Content="5.1" Tag="6"/>
-                        <ComboBoxItem Content="7.1" Tag="8"/>
-                    </ComboBox>
-                    <Label Content="Audio" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Label Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="236,161,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
-                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="43,161,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
-                    <Label Content="Channels:" HorizontalAlignment="Left" Margin="454,161,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
-                    <Label Content="Channels:" HorizontalAlignment="Left" Margin="454,237,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
-                    <Label Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="236,237,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
-                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="43,237,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
-                    <Label Content="Channels:" HorizontalAlignment="Left" Margin="454,315,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" />
-                    <Label Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="236,315,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" />
-                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="43,315,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}"/>
-                    <Label Content="Language:" HorizontalAlignment="Left" Margin="657,89,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.473,0.534" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" />
-                    <Label Content="Language:" HorizontalAlignment="Left" Margin="657,161,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
-                    <ComboBox x:Name="ComboBoxTrackTwoLanguage" HorizontalAlignment="Left" Margin="740,163,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}">
-                        <ComboBoxItem Content="unknown" IsSelected="True"/>
-                        <ComboBoxItem Content="eng"/>
-                        <ComboBoxItem Content="ger"/>
-                        <ComboBoxItem Content="fra"/>
-                        <ComboBoxItem Content="ita"/>
-                        <ComboBoxItem Content="spa"/>
-                        <ComboBoxItem Content="jpn"/>
-                        <ComboBoxItem Content="chi"/>
-                        <ComboBoxItem Content="kor"/>
-                    </ComboBox>
-                    <Label Content="Language:" HorizontalAlignment="Left" Margin="657,237,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
-                    <ComboBox x:Name="ComboBoxTrackThreeLanguage" HorizontalAlignment="Left" Margin="740,238,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}">
-                        <ComboBoxItem Content="unknown" IsSelected="True"/>
-                        <ComboBoxItem Content="eng"/>
-                        <ComboBoxItem Content="ger"/>
-                        <ComboBoxItem Content="fra"/>
-                        <ComboBoxItem Content="ita"/>
-                        <ComboBoxItem Content="spa"/>
-                        <ComboBoxItem Content="jpn"/>
-                        <ComboBoxItem Content="chi"/>
-                        <ComboBoxItem Content="kor"/>
-                    </ComboBox>
-                    <Label Content="Language:" HorizontalAlignment="Left" Margin="657,315,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" />
-                    <ComboBox x:Name="ComboBoxTrackFourLanguage" HorizontalAlignment="Left" Margin="740,317,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}">
-                        <ComboBoxItem Content="unknown" IsSelected="True"/>
-                        <ComboBoxItem Content="eng"/>
-                        <ComboBoxItem Content="ger"/>
-                        <ComboBoxItem Content="fra"/>
-                        <ComboBoxItem Content="ita"/>
-                        <ComboBoxItem Content="spa"/>
-                        <ComboBoxItem Content="jpn"/>
-                        <ComboBoxItem Content="chi"/>
-                        <ComboBoxItem Content="kor"/>
-                    </ComboBox>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Subtitles">
-                <Grid x:Name="TabGrid6" Background="{Binding ElementName=TabGrid,Path=Background,UpdateSourceTrigger=PropertyChanged}">
-                    <Label Content="Subtitles" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <GroupBox Header="Track 1" Height="70" Margin="10,32,18,0" VerticalAlignment="Top" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}">
-                        <Grid>
-                            <Button x:Name="ButtonSubtitleTrackOne" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Select" HorizontalAlignment="Left" Margin="5,12,0,10" Width="53" Click="ButtonSubtitleTrackOne_Click"/>
-                            <TextBox x:Name="TextBoxSubtitleTrackOne" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="63,7,419,0" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True" Height="36" VerticalAlignment="Top"/>
-                            <Label Content="Track Name:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,339,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="75" />
-                            <TextBox x:Name="TextBoxSubOneName" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,12,218,0" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112"/>
-                            <CheckBox x:Name="CheckBoxSubOneBurn" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Burn in" Margin="0,7,144,0" Checked="CheckBoxSubOneBurn_Checked" HorizontalAlignment="Right" Width="58" Height="15" VerticalAlignment="Top"/>
-                            <CheckBox x:Name="CheckBoxSubOneDefault" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Default" Margin="0,0,144,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubOneDefault_Checked" HorizontalAlignment="Right" Width="58" Height="15" VerticalAlignment="Bottom"/>
-                            <Label Content="Language:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,70,11" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="64" />
-                            <ComboBox x:Name="ComboBoxSubTrackOneLanguage" Margin="0,12,10,9" IsEnabled="{Binding IsChecked, ElementName=CheckBoxSubtitleActivatedOne}" HorizontalAlignment="Right" Width="58">
-                                <ComboBoxItem Content="und" IsSelected="True"/>
-                                <ComboBoxItem Content="eng"/>
-                                <ComboBoxItem Content="ger"/>
-                                <ComboBoxItem Content="fra"/>
-                                <ComboBoxItem Content="ita"/>
-                                <ComboBoxItem Content="spa"/>
-                                <ComboBoxItem Content="jpn"/>
-                                <ComboBoxItem Content="chi"/>
-                                <ComboBoxItem Content="kor"/>
-                            </ComboBox>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="Track 2" Height="70" Margin="10,102,18,0" VerticalAlignment="Top" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}">
-                        <Grid>
-                            <Button x:Name="ButtonSubtitleTrackTwo" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Select" HorizontalAlignment="Left" Margin="5,12,0,0" VerticalAlignment="Top" Width="53" Height="25" Click="ButtonSubtitleTrackTwo_Click"/>
-                            <TextBox x:Name="TextBoxSubtitleTrackTwo" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="37" Margin="63,7,419,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" IsReadOnly="True"/>
-                            <Label Content="Track Name:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,12,339,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="75" />
-                            <TextBox x:Name="TextBoxSubTwoName" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="0,14,218,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112"/>
-                            <CheckBox x:Name="CheckBoxSubTwoBurn" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Burn in" Margin="0,7,144,0" VerticalAlignment="Top" Checked="CheckBoxSubTwoBurn_Checked" HorizontalAlignment="Right" Width="58"/>
-                            <CheckBox x:Name="CheckBoxSubTwoDefault" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Default" Margin="0,0,144,6" Checked="CheckBoxSubTwoDefault_Checked" Height="15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="58"/>
-                            <Label Content="Language:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,69,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="64" />
-                            <ComboBox x:Name="ComboBoxSubTrackTwoLanguage" Margin="0,11,10,0" VerticalAlignment="Top" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxSubtitleActivatedTwo}" HorizontalAlignment="Right" Width="58">
-                                <ComboBoxItem Content="und" IsSelected="True"/>
-                                <ComboBoxItem Content="eng"/>
-                                <ComboBoxItem Content="ger"/>
-                                <ComboBoxItem Content="fra"/>
-                                <ComboBoxItem Content="ita"/>
-                                <ComboBoxItem Content="spa"/>
-                                <ComboBoxItem Content="jpn"/>
-                                <ComboBoxItem Content="chi"/>
-                                <ComboBoxItem Content="kor"/>
-                            </ComboBox>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="Track 3" Height="70" Margin="10,173,18,0" VerticalAlignment="Top" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}">
-                        <Grid>
-                            <Button x:Name="ButtonSubtitleTrackThree" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Select" HorizontalAlignment="Left" Margin="5,13,0,0" VerticalAlignment="Top" Width="53" Height="25" Click="ButtonSubtitleTrackThree_Click"/>
-                            <TextBox x:Name="TextBoxSubtitleTrackThree" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="37" Margin="63,6,419,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" IsReadOnly="True"/>
-                            <Label Content="Track Name:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,11,338,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="76" />
-                            <TextBox x:Name="TextBoxSubThreeName" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="0,13,218,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112"/>
-                            <Label Content="Language:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,9,68,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="64" />
-                            <ComboBox x:Name="ComboBoxSubTrackThreeLanguage" Margin="0,11,10,0" VerticalAlignment="Top" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxSubtitleActivatedThree}" HorizontalAlignment="Right" Width="58">
-                                <ComboBoxItem Content="und" IsSelected="True"/>
-                                <ComboBoxItem Content="eng"/>
-                                <ComboBoxItem Content="ger"/>
-                                <ComboBoxItem Content="fra"/>
-                                <ComboBoxItem Content="ita"/>
-                                <ComboBoxItem Content="spa"/>
-                                <ComboBoxItem Content="jpn"/>
-                                <ComboBoxItem Content="chi"/>
-                                <ComboBoxItem Content="kor"/>
-                            </ComboBox>
-                            <CheckBox x:Name="CheckBoxSubThreeBurn" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Burn in" Margin="0,7,143,0" VerticalAlignment="Top" Checked="CheckBoxSubThreeBurn_Checked" HorizontalAlignment="Right" Width="58"/>
-                            <CheckBox x:Name="CheckBoxSubThreeDefault" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Default" Margin="0,25,143,0" VerticalAlignment="Top" Checked="CheckBoxSubThreeDefault_Checked" HorizontalAlignment="Right" Width="58"/>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="Track 4" Height="70" Margin="10,243,18,0" VerticalAlignment="Top" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}">
-                        <Grid>
-                            <Button x:Name="ButtonSubtitleTrackFour" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Select" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" Width="53" Height="25" Click="ButtonSubtitleTrackFour_Click"/>
-                            <TextBox x:Name="TextBoxSubtitleTrackFour" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="37" Margin="63,3,419,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" IsReadOnly="True"/>
-                            <Label Content="Track Name:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,339,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="75" />
-                            <TextBox x:Name="TextBoxSubFourName" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="0,12,218,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112"/>
-                            <CheckBox x:Name="CheckBoxSubFourDefault" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Default" Margin="0,25,143,0" VerticalAlignment="Top" Checked="CheckBoxSubFourDefault_Checked" HorizontalAlignment="Right" Width="58"/>
-                            <CheckBox x:Name="CheckBoxSubFourBurn" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Burn in" Margin="0,7,143,0" VerticalAlignment="Top" Checked="CheckBoxSubFourBurn_Checked" HorizontalAlignment="Right" Width="58"/>
-                            <Label Content="Language:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,9,68,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="64" />
-                            <ComboBox x:Name="ComboBoxSubTrackFourLanguage" Margin="0,11,10,0" VerticalAlignment="Top" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxSubtitleActivatedFour}" HorizontalAlignment="Right" Width="58">
-                                <ComboBoxItem Content="und" IsSelected="True"/>
-                                <ComboBoxItem Content="eng"/>
-                                <ComboBoxItem Content="ger"/>
-                                <ComboBoxItem Content="fra"/>
-                                <ComboBoxItem Content="ita"/>
-                                <ComboBoxItem Content="spa"/>
-                                <ComboBoxItem Content="jpn"/>
-                                <ComboBoxItem Content="chi"/>
-                                <ComboBoxItem Content="kor"/>
-                            </ComboBox>
-                        </Grid>
-                    </GroupBox>
-
-                    <CheckBox x:Name="CheckBoxSubtitleActivatedOne" Content="" HorizontalAlignment="Left" Margin="58,35,0,0" VerticalAlignment="Top" />
-                    <CheckBox x:Name="CheckBoxSubtitleActivatedTwo" Content="" HorizontalAlignment="Left" Margin="58,105,0,0" VerticalAlignment="Top" />
-                    <CheckBox x:Name="CheckBoxSubtitleActivatedThree" Content="" HorizontalAlignment="Left" Margin="58,175,0,0" VerticalAlignment="Top" />
-                    <CheckBox x:Name="CheckBoxSubtitleActivatedFour" Content="" HorizontalAlignment="Left" Margin="58,245,0,0" VerticalAlignment="Top" />
-                    <GroupBox Header="Track 5" Height="70" Margin="10,311,18,0" VerticalAlignment="Top" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}">
-                        <Grid>
-                            <Button x:Name="ButtonSubtitleTrackFive" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Select" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" Width="53" Height="25"/>
-                            <TextBox x:Name="TextBoxSubtitleTrackFive" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="37" Margin="63,4,419,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" IsReadOnly="True"/>
-                            <Label Content="Track Name:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,8,339,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="75" />
-                            <TextBox x:Name="TextBoxSubFiveName" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="0,11,218,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112"/>
-                            <CheckBox x:Name="CheckBoxSubFiveBurn" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Burn in" Margin="0,4,143,0" VerticalAlignment="Top" Checked="CheckBoxSubFiveBurn_Checked" HorizontalAlignment="Right" Width="58"/>
-                            <CheckBox x:Name="CheckBoxSubFiveDefault" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Default" Margin="0,24,143,0" VerticalAlignment="Top" Checked="CheckBoxSubFiveDefault_Checked" HorizontalAlignment="Right" Width="58"/>
-                            <Label Content="Language:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,8,68,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="64" />
-                            <ComboBox x:Name="ComboBoxSubTrackFiveLanguage" Margin="0,10,10,0" VerticalAlignment="Top" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxSubtitleActivatedFour}" HorizontalAlignment="Right" Width="58">
-                                <ComboBoxItem Content="und" IsSelected="True"/>
-                                <ComboBoxItem Content="eng"/>
-                                <ComboBoxItem Content="ger"/>
-                                <ComboBoxItem Content="fra"/>
-                                <ComboBoxItem Content="ita"/>
-                                <ComboBoxItem Content="spa"/>
-                                <ComboBoxItem Content="jpn"/>
-                                <ComboBoxItem Content="chi"/>
-                                <ComboBoxItem Content="kor"/>
-                            </ComboBox>
-                        </Grid>
-                    </GroupBox>
-                    <CheckBox x:Name="CheckBoxSubtitleActivatedFive" Content="" HorizontalAlignment="Left" Margin="58,313,0,0" VerticalAlignment="Top" />
                 </Grid>
             </TabItem>
             <TabItem Header="Advanced Settings" Visibility="{Binding ElementName=CheckBoxVideoAdvancedSettings, Path=IsChecked, Converter={StaticResource b2v}}">
@@ -909,6 +630,285 @@
                     </Canvas>
                     <TextBox x:Name="TextBoxCustomVideoSettings" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Margin="10,313,15,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged"/>
                     <CheckBox x:Name="CheckBoxCustomVideoSettings" Content="Custom Settings" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Checked="CheckBoxCustomVideoSettings_Checked"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Audio">
+                <Grid Background="White">
+                    <GroupBox x:Name="GroupBox3" Header="Track 4" Height="74" Margin="10,281,15,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}"/>
+                    <GroupBox x:Name="GroupBox2" Header="Track 3" Height="74" Margin="10,207,15,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}"/>
+                    <GroupBox x:Name="GroupBox1" Header="Track 2" Height="74" Margin="10,133,15,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}"/>
+                    <GroupBox x:Name="GroupBox" Header="Track 1" Height="74" Margin="10,59,15,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}"/>
+                    <ComboBox x:Name="ComboBoxTrackOneLanguage" HorizontalAlignment="Left" Margin="740,91,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}">
+                        <ComboBoxItem Content="unknown" IsSelected="True"/>
+                        <ComboBoxItem Content="eng"/>
+                        <ComboBoxItem Content="ger"/>
+                        <ComboBoxItem Content="fra"/>
+                        <ComboBoxItem Content="ita"/>
+                        <ComboBoxItem Content="spa"/>
+                        <ComboBoxItem Content="jpn"/>
+                        <ComboBoxItem Content="chi"/>
+                        <ComboBoxItem Content="kor"/>
+                    </ComboBox>
+                    <ComboBox x:Name="ComboBoxAudioCodec" HorizontalAlignment="Left" Margin="100,91,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}">
+                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                        <ComboBoxItem Content="Opus" IsSelected="True" />
+                        <ComboBoxItem Content="AC3" />
+                        <ComboBoxItem Content="AAC" />
+                        <ComboBoxItem Content="MP3" />
+                        <ComboBoxItem Content="Copy Audio" />
+                    </ComboBox>
+                    <Label Content="Audio" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Margin="10,10,0,0" FontWeight="Bold" />
+                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="43,89,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" />
+                    <CheckBox x:Name="CheckBoxAudioTrackOne" Content="" HorizontalAlignment="Left" Margin="65,62,0,0" VerticalAlignment="Top" Foreground="Black">
+                        <CheckBox.ToolTip>
+                            <ToolTip Content="Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!"/>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
+                    <CheckBox x:Name="CheckBoxAudioTrackTwo" Content="" HorizontalAlignment="Left" Margin="65,136,0,0" VerticalAlignment="Top" Foreground="Black">
+                        <CheckBox.ToolTip>
+                            <ToolTip Content="Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!"/>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
+                    <Label Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="236,89,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" Height="31" />
+                    <CheckBox x:Name="CheckBoxAudioTrackThree" Content="" HorizontalAlignment="Left" Margin="65,210,0,0" VerticalAlignment="Top" Foreground="Black">
+                        <CheckBox.ToolTip>
+                            <ToolTip Content="Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!"/>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
+                    <CheckBox x:Name="CheckBoxAudioTrackFour" Content="" HorizontalAlignment="Left" Margin="65,284,0,0" VerticalAlignment="Top" Foreground="Black">
+                        <CheckBox.ToolTip>
+                            <ToolTip Content="Enable/Disable Audio Track. Only activate if it is existant, else Muxing will fail!"/>
+                        </CheckBox.ToolTip>
+                    </CheckBox>
+                    <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="336,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" PreviewTextInput="NumberValidationTextBox">
+                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                    </TextBox>
+                    <ComboBox x:Name="ComboBoxAudioCodecTrackTwo" HorizontalAlignment="Left" Margin="100,163,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}">
+                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                        <ComboBoxItem Content="Opus" IsSelected="True" />
+                        <ComboBoxItem Content="AC3" />
+                        <ComboBoxItem Content="AAC" />
+                        <ComboBoxItem Content="MP3" />
+                        <ComboBoxItem Content="Copy Audio" />
+                    </ComboBox>
+                    <TextBox x:Name="TextBoxAudioBitrateTrackTwo" HorizontalAlignment="Left" Height="26" Margin="336,162,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" PreviewTextInput="NumberValidationTextBox">
+                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                    </TextBox>
+                    <ComboBox x:Name="ComboBoxAudioCodecTrackThree" HorizontalAlignment="Left" Margin="100,239,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}">
+                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                        <ComboBoxItem Content="Opus" IsSelected="True" />
+                        <ComboBoxItem Content="AC3" />
+                        <ComboBoxItem Content="AAC" />
+                        <ComboBoxItem Content="MP3" />
+                        <ComboBoxItem Content="Copy Audio" />
+                    </ComboBox>
+                    <TextBox x:Name="TextBoxAudioBitrateTrackThree" HorizontalAlignment="Left" Height="26" Margin="336,238,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" PreviewTextInput="NumberValidationTextBox">
+                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                    </TextBox>
+                    <ComboBox x:Name="ComboBoxAudioCodecTrackFour" HorizontalAlignment="Left" Margin="100,317,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}">
+                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                        <ComboBoxItem Content="Opus" IsSelected="True" />
+                        <ComboBoxItem Content="AC3" />
+                        <ComboBoxItem Content="AAC" />
+                        <ComboBoxItem Content="MP3" />
+                        <ComboBoxItem Content="Copy Audio" />
+                    </ComboBox>
+                    <TextBox x:Name="TextBoxAudioBitrateTrackFour" HorizontalAlignment="Left" Height="26" Margin="336,316,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" PreviewTextInput="NumberValidationTextBox">
+                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                    </TextBox>
+                    <Label Content="Channels:" HorizontalAlignment="Left" Margin="454,89,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" Height="25" />
+                    <ComboBox x:Name="ComboBoxTrackOneChannels" HorizontalAlignment="Left" Margin="528,91,0,0" VerticalAlignment="Top" Width="100" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}">
+                        <ComboBoxItem Content="1 (Mono)" Tag="1"/>
+                        <ComboBoxItem Content="2.0 (Stereo)" IsSelected="True" Tag="2"/>
+                        <ComboBoxItem Content="5.1" Tag="6"/>
+                        <ComboBoxItem Content="7.1" Tag="8"/>
+                    </ComboBox>
+                    <ComboBox x:Name="ComboBoxTrackTwoChannels" HorizontalAlignment="Left" Margin="528,164,0,0" VerticalAlignment="Top" Width="100" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}">
+                        <ComboBoxItem Content="1 (Mono)" Tag="1"/>
+                        <ComboBoxItem Content="2.0 (Stereo)" IsSelected="True" Tag="2"/>
+                        <ComboBoxItem Content="5.1" Tag="6"/>
+                        <ComboBoxItem Content="7.1" Tag="8"/>
+                    </ComboBox>
+                    <ComboBox x:Name="ComboBoxTrackThreeChannels" HorizontalAlignment="Left" Margin="528,239,0,0" VerticalAlignment="Top" Width="100" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}">
+                        <ComboBoxItem Content="1 (Mono)" Tag="1"/>
+                        <ComboBoxItem Content="2.0 (Stereo)" IsSelected="True" Tag="2"/>
+                        <ComboBoxItem Content="5.1" Tag="6"/>
+                        <ComboBoxItem Content="7.1" Tag="8"/>
+                    </ComboBox>
+                    <ComboBox x:Name="ComboBoxTrackFourChannels" HorizontalAlignment="Left" Margin="528,317,0,0" VerticalAlignment="Top" Width="100" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}">
+                        <ComboBoxItem Content="1 (Mono)" Tag="1"/>
+                        <ComboBoxItem Content="2.0 (Stereo)" IsSelected="True" Tag="2"/>
+                        <ComboBoxItem Content="5.1" Tag="6"/>
+                        <ComboBoxItem Content="7.1" Tag="8"/>
+                    </ComboBox>
+                    <Label Content="Audio" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <Label Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="236,161,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
+                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="43,161,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
+                    <Label Content="Channels:" HorizontalAlignment="Left" Margin="454,161,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
+                    <Label Content="Channels:" HorizontalAlignment="Left" Margin="454,237,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
+                    <Label Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="236,237,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
+                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="43,237,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
+                    <Label Content="Channels:" HorizontalAlignment="Left" Margin="454,315,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" />
+                    <Label Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="236,315,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" />
+                    <Label Content="Codec:" HorizontalAlignment="Left" Margin="43,315,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}"/>
+                    <Label Content="Language:" HorizontalAlignment="Left" Margin="657,89,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.473,0.534" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" />
+                    <Label Content="Language:" HorizontalAlignment="Left" Margin="657,161,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}" />
+                    <ComboBox x:Name="ComboBoxTrackTwoLanguage" HorizontalAlignment="Left" Margin="740,163,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackTwo}">
+                        <ComboBoxItem Content="unknown" IsSelected="True"/>
+                        <ComboBoxItem Content="eng"/>
+                        <ComboBoxItem Content="ger"/>
+                        <ComboBoxItem Content="fra"/>
+                        <ComboBoxItem Content="ita"/>
+                        <ComboBoxItem Content="spa"/>
+                        <ComboBoxItem Content="jpn"/>
+                        <ComboBoxItem Content="chi"/>
+                        <ComboBoxItem Content="kor"/>
+                    </ComboBox>
+                    <Label Content="Language:" HorizontalAlignment="Left" Margin="657,237,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}" />
+                    <ComboBox x:Name="ComboBoxTrackThreeLanguage" HorizontalAlignment="Left" Margin="740,238,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackThree}">
+                        <ComboBoxItem Content="unknown" IsSelected="True"/>
+                        <ComboBoxItem Content="eng"/>
+                        <ComboBoxItem Content="ger"/>
+                        <ComboBoxItem Content="fra"/>
+                        <ComboBoxItem Content="ita"/>
+                        <ComboBoxItem Content="spa"/>
+                        <ComboBoxItem Content="jpn"/>
+                        <ComboBoxItem Content="chi"/>
+                        <ComboBoxItem Content="kor"/>
+                    </ComboBox>
+                    <Label Content="Language:" HorizontalAlignment="Left" Margin="657,315,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}" />
+                    <ComboBox x:Name="ComboBoxTrackFourLanguage" HorizontalAlignment="Left" Margin="740,317,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackFour}">
+                        <ComboBoxItem Content="unknown" IsSelected="True"/>
+                        <ComboBoxItem Content="eng"/>
+                        <ComboBoxItem Content="ger"/>
+                        <ComboBoxItem Content="fra"/>
+                        <ComboBoxItem Content="ita"/>
+                        <ComboBoxItem Content="spa"/>
+                        <ComboBoxItem Content="jpn"/>
+                        <ComboBoxItem Content="chi"/>
+                        <ComboBoxItem Content="kor"/>
+                    </ComboBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Subtitles">
+                <Grid x:Name="TabGrid6" Background="{Binding ElementName=TabGrid,Path=Background,UpdateSourceTrigger=PropertyChanged}">
+                    <Label Content="Subtitles" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <GroupBox Header="Track 1" Height="70" Margin="10,32,18,0" VerticalAlignment="Top" Foreground="{Binding ElementName=LabelPresets, Path=Foreground, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid>
+                            <Button x:Name="ButtonSubtitleTrackOne" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Select" HorizontalAlignment="Left" Margin="5,12,0,10" Width="53" Click="ButtonSubtitleTrackOne_Click"/>
+                            <TextBox x:Name="TextBoxSubtitleTrackOne" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="63,7,419,0" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True" Height="36" VerticalAlignment="Top"/>
+                            <Label Content="Track Name:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,339,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="75" />
+                            <TextBox x:Name="TextBoxSubOneName" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,12,218,0" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112"/>
+                            <CheckBox x:Name="CheckBoxSubOneBurn" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Burn in" Margin="0,7,144,0" Checked="CheckBoxSubOneBurn_Checked" HorizontalAlignment="Right" Width="58" Height="15" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="CheckBoxSubOneDefault" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Default" Margin="0,0,144,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubOneDefault_Checked" HorizontalAlignment="Right" Width="58" Height="15" VerticalAlignment="Bottom"/>
+                            <Label Content="Language:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,70,11" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="64" />
+                            <ComboBox x:Name="ComboBoxSubTrackOneLanguage" Margin="0,12,10,9" IsEnabled="{Binding IsChecked, ElementName=CheckBoxSubtitleActivatedOne}" HorizontalAlignment="Right" Width="58">
+                                <ComboBoxItem Content="und" IsSelected="True"/>
+                                <ComboBoxItem Content="eng"/>
+                                <ComboBoxItem Content="ger"/>
+                                <ComboBoxItem Content="fra"/>
+                                <ComboBoxItem Content="ita"/>
+                                <ComboBoxItem Content="spa"/>
+                                <ComboBoxItem Content="jpn"/>
+                                <ComboBoxItem Content="chi"/>
+                                <ComboBoxItem Content="kor"/>
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Track 2" Height="70" Margin="10,102,18,0" VerticalAlignment="Top" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid>
+                            <Button x:Name="ButtonSubtitleTrackTwo" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Select" HorizontalAlignment="Left" Margin="5,12,0,0" VerticalAlignment="Top" Width="53" Height="25" Click="ButtonSubtitleTrackTwo_Click"/>
+                            <TextBox x:Name="TextBoxSubtitleTrackTwo" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="37" Margin="63,7,419,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                            <Label Content="Track Name:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,12,339,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="75" />
+                            <TextBox x:Name="TextBoxSubTwoName" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="0,14,218,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112"/>
+                            <CheckBox x:Name="CheckBoxSubTwoBurn" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Burn in" Margin="0,7,144,0" VerticalAlignment="Top" Checked="CheckBoxSubTwoBurn_Checked" HorizontalAlignment="Right" Width="58"/>
+                            <CheckBox x:Name="CheckBoxSubTwoDefault" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Default" Margin="0,0,144,6" Checked="CheckBoxSubTwoDefault_Checked" Height="15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="58"/>
+                            <Label Content="Language:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,69,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="64" />
+                            <ComboBox x:Name="ComboBoxSubTrackTwoLanguage" Margin="0,11,10,0" VerticalAlignment="Top" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxSubtitleActivatedTwo}" HorizontalAlignment="Right" Width="58">
+                                <ComboBoxItem Content="und" IsSelected="True"/>
+                                <ComboBoxItem Content="eng"/>
+                                <ComboBoxItem Content="ger"/>
+                                <ComboBoxItem Content="fra"/>
+                                <ComboBoxItem Content="ita"/>
+                                <ComboBoxItem Content="spa"/>
+                                <ComboBoxItem Content="jpn"/>
+                                <ComboBoxItem Content="chi"/>
+                                <ComboBoxItem Content="kor"/>
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Track 3" Height="70" Margin="10,173,18,0" VerticalAlignment="Top" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid>
+                            <Button x:Name="ButtonSubtitleTrackThree" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Select" HorizontalAlignment="Left" Margin="5,13,0,0" VerticalAlignment="Top" Width="53" Height="25" Click="ButtonSubtitleTrackThree_Click"/>
+                            <TextBox x:Name="TextBoxSubtitleTrackThree" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="37" Margin="63,6,419,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                            <Label Content="Track Name:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,11,338,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="76" />
+                            <TextBox x:Name="TextBoxSubThreeName" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="0,13,218,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112"/>
+                            <Label Content="Language:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,9,68,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="64" />
+                            <ComboBox x:Name="ComboBoxSubTrackThreeLanguage" Margin="0,11,10,0" VerticalAlignment="Top" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxSubtitleActivatedThree}" HorizontalAlignment="Right" Width="58">
+                                <ComboBoxItem Content="und" IsSelected="True"/>
+                                <ComboBoxItem Content="eng"/>
+                                <ComboBoxItem Content="ger"/>
+                                <ComboBoxItem Content="fra"/>
+                                <ComboBoxItem Content="ita"/>
+                                <ComboBoxItem Content="spa"/>
+                                <ComboBoxItem Content="jpn"/>
+                                <ComboBoxItem Content="chi"/>
+                                <ComboBoxItem Content="kor"/>
+                            </ComboBox>
+                            <CheckBox x:Name="CheckBoxSubThreeBurn" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Burn in" Margin="0,7,143,0" VerticalAlignment="Top" Checked="CheckBoxSubThreeBurn_Checked" HorizontalAlignment="Right" Width="58"/>
+                            <CheckBox x:Name="CheckBoxSubThreeDefault" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Default" Margin="0,25,143,0" VerticalAlignment="Top" Checked="CheckBoxSubThreeDefault_Checked" HorizontalAlignment="Right" Width="58"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Track 4" Height="70" Margin="10,243,18,0" VerticalAlignment="Top" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid>
+                            <Button x:Name="ButtonSubtitleTrackFour" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Select" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" Width="53" Height="25" Click="ButtonSubtitleTrackFour_Click"/>
+                            <TextBox x:Name="TextBoxSubtitleTrackFour" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="37" Margin="63,3,419,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                            <Label Content="Track Name:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,339,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="75" />
+                            <TextBox x:Name="TextBoxSubFourName" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="0,12,218,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112"/>
+                            <CheckBox x:Name="CheckBoxSubFourDefault" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Default" Margin="0,25,143,0" VerticalAlignment="Top" Checked="CheckBoxSubFourDefault_Checked" HorizontalAlignment="Right" Width="58"/>
+                            <CheckBox x:Name="CheckBoxSubFourBurn" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Burn in" Margin="0,7,143,0" VerticalAlignment="Top" Checked="CheckBoxSubFourBurn_Checked" HorizontalAlignment="Right" Width="58"/>
+                            <Label Content="Language:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,9,68,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="64" />
+                            <ComboBox x:Name="ComboBoxSubTrackFourLanguage" Margin="0,11,10,0" VerticalAlignment="Top" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxSubtitleActivatedFour}" HorizontalAlignment="Right" Width="58">
+                                <ComboBoxItem Content="und" IsSelected="True"/>
+                                <ComboBoxItem Content="eng"/>
+                                <ComboBoxItem Content="ger"/>
+                                <ComboBoxItem Content="fra"/>
+                                <ComboBoxItem Content="ita"/>
+                                <ComboBoxItem Content="spa"/>
+                                <ComboBoxItem Content="jpn"/>
+                                <ComboBoxItem Content="chi"/>
+                                <ComboBoxItem Content="kor"/>
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
+
+                    <CheckBox x:Name="CheckBoxSubtitleActivatedOne" Content="" HorizontalAlignment="Left" Margin="58,35,0,0" VerticalAlignment="Top" />
+                    <CheckBox x:Name="CheckBoxSubtitleActivatedTwo" Content="" HorizontalAlignment="Left" Margin="58,105,0,0" VerticalAlignment="Top" />
+                    <CheckBox x:Name="CheckBoxSubtitleActivatedThree" Content="" HorizontalAlignment="Left" Margin="58,175,0,0" VerticalAlignment="Top" />
+                    <CheckBox x:Name="CheckBoxSubtitleActivatedFour" Content="" HorizontalAlignment="Left" Margin="58,245,0,0" VerticalAlignment="Top" />
+                    <GroupBox Header="Track 5" Height="70" Margin="10,311,18,0" VerticalAlignment="Top" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid>
+                            <Button x:Name="ButtonSubtitleTrackFive" Background="{Binding Background, ElementName=ButtonOpenSource, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Select" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" Width="53" Height="25"/>
+                            <TextBox x:Name="TextBoxSubtitleTrackFive" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="37" Margin="63,4,419,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                            <Label Content="Track Name:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,8,339,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="75" />
+                            <TextBox x:Name="TextBoxSubFiveName" Background="{Binding Background, ElementName=TextBoxChunkLength, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="0,11,218,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112"/>
+                            <CheckBox x:Name="CheckBoxSubFiveBurn" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Burn in" Margin="0,4,143,0" VerticalAlignment="Top" Checked="CheckBoxSubFiveBurn_Checked" HorizontalAlignment="Right" Width="58"/>
+                            <CheckBox x:Name="CheckBoxSubFiveDefault" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Content="Default" Margin="0,24,143,0" VerticalAlignment="Top" Checked="CheckBoxSubFiveDefault_Checked" HorizontalAlignment="Right" Width="58"/>
+                            <Label Content="Language:" Foreground="{Binding Foreground, ElementName=LabelPresets, UpdateSourceTrigger=PropertyChanged}" Margin="0,8,68,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAudioTrackOne}" HorizontalAlignment="Right" Width="64" />
+                            <ComboBox x:Name="ComboBoxSubTrackFiveLanguage" Margin="0,10,10,0" VerticalAlignment="Top" Height="26" IsEnabled="{Binding IsChecked, ElementName=CheckBoxSubtitleActivatedFour}" HorizontalAlignment="Right" Width="58">
+                                <ComboBoxItem Content="und" IsSelected="True"/>
+                                <ComboBoxItem Content="eng"/>
+                                <ComboBoxItem Content="ger"/>
+                                <ComboBoxItem Content="fra"/>
+                                <ComboBoxItem Content="ita"/>
+                                <ComboBoxItem Content="spa"/>
+                                <ComboBoxItem Content="jpn"/>
+                                <ComboBoxItem Content="chi"/>
+                                <ComboBoxItem Content="kor"/>
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
+                    <CheckBox x:Name="CheckBoxSubtitleActivatedFive" Content="" HorizontalAlignment="Left" Margin="58,313,0,0" VerticalAlignment="Top" />
                 </Grid>
             </TabItem>
             <TabItem Header="Program Settings">
