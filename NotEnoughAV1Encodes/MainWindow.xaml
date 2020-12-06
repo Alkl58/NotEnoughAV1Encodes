@@ -24,19 +24,26 @@
         <mah:MetroTabControl x:Name="MetroTab" Margin="21,116,23,63" Background="{x:Null}" >
             <TabItem Header="Summary">
                 <Grid>
+                    <GroupBox Header="Current Encoding Settings" Margin="105,89,105,0" Height="163" VerticalAlignment="Top">
+                        <Grid>
+                            <Label Content="Encoder:" HorizontalAlignment="Left" Margin="15,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Text, ElementName=ComboBoxVideoEncoder, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="94,13,0,0" VerticalAlignment="Top" Width="140"/>
+                            <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="15,42,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Text, ElementName=ComboBoxVideoBitDepth, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="94,42,0,0" VerticalAlignment="Top" Width="140"/>
+                            <Label Content="Speed:" HorizontalAlignment="Left" Margin="15,71,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="94,71,0,0" VerticalAlignment="Top" Width="140"/>
+                            <Label Content="Passes:" HorizontalAlignment="Left" Margin="15,100,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Text, ElementName=ComboBoxVideoPasses, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="94,100,0,0" VerticalAlignment="Top" Width="140"/>
+                            <Label Content="Splitting Method:" HorizontalAlignment="Right" Margin="0,13,450,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Text, ElementName=ComboBoxSplittingMethod, UpdateSourceTrigger=PropertyChanged}" Margin="0,13,302,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="140"/>
+                            <Label Content="Worker  Count:" HorizontalAlignment="Right" Margin="0,42,464,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Text, ElementName=ComboBoxWorkerCount, UpdateSourceTrigger=PropertyChanged}" Margin="0,42,302,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="140"/>
+                        </Grid>
+                    </GroupBox>
                     <Label Content="Source:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Label Content="Destination:" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBox x:Name="TextBoxVideoSource" HorizontalAlignment="Left" Height="29" Margin="105,10,0,0" TextWrapping="Wrap" Text="No Source Selected" VerticalAlignment="Top" Width="700" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}"/>
-                    <TextBox x:Name="TextBoxVideoDestination" HorizontalAlignment="Left" Height="29" Margin="105,39,0,0" TextWrapping="Wrap" Text="No Destination Selected" VerticalAlignment="Top" Width="700" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}"/>
-                    <Label Content="Encoding Settings:" HorizontalAlignment="Left" Margin="10,180,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Label Content="Encoder:" HorizontalAlignment="Left" Margin="105,211,0,0" VerticalAlignment="Top"/>
-                    <Label Content="{Binding Text, ElementName=ComboBoxVideoEncoder, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="184,211,0,0" VerticalAlignment="Top" Width="140"/>
-                    <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="105,240,0,0" VerticalAlignment="Top"/>
-                    <Label Content="{Binding Text, ElementName=ComboBoxVideoBitDepth, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="184,240,0,0" VerticalAlignment="Top" Width="140"/>
-                    <Label Content="Speed:" HorizontalAlignment="Left" Margin="105,269,0,0" VerticalAlignment="Top"/>
-                    <Label Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="184,269,0,0" VerticalAlignment="Top" Width="140"/>
-                    <Label Content="Passes:" HorizontalAlignment="Left" Margin="105,298,0,0" VerticalAlignment="Top"/>
-                    <Label Content="{Binding Text, ElementName=ComboBoxVideoPasses, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="184,298,0,0" VerticalAlignment="Top" Width="140"/>
+                    <TextBox x:Name="TextBoxVideoSource" Height="29" Margin="105,10,105,0" TextWrapping="Wrap" Text="No Source Selected" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <TextBox x:Name="TextBoxVideoDestination" Height="29" Margin="105,39,105,0" TextWrapping="Wrap" Text="No Destination Selected" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Splitting">
