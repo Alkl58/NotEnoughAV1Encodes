@@ -767,7 +767,14 @@ namespace NotEnoughAV1Encodes
             CheckBoxSubtitleActivatedFour.IsChecked = false;
             CheckBoxSubtitleActivatedFive.IsChecked = false;
         }
-        
+
+        private void CheckBoxTrimming_Unchecked(object sender, RoutedEventArgs e)
+        {
+            BitmapImage image = new BitmapImage(new Uri("/NotEnoughAV1Encodes;component/img/offline.png", UriKind.Relative));
+            ImagePreviewTrimStart.Source = image;
+            ImagePreviewTrimEnd.Source = image;
+        }
+
         // ══════════════════════════════════════ Main Logic ══════════════════════════════════════
 
         private async void PreStart()
@@ -2763,6 +2770,5 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
-
     }
 }
