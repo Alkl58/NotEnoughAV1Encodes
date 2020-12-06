@@ -635,7 +635,7 @@ namespace NotEnoughAV1Encodes
         private void TextBoxTrimEnd_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             // Main Entry for Changing the image preview
-            if (TextBoxTrimEnd != null && ReadTimeCode && CheckBoxTrimming.IsChecked == true) { setVideoLengthTrimmed(); }
+            if (TextBoxTrimEnd != null && ReadTimeCode && ToggleSwitchTrimming.IsOn == true) { setVideoLengthTrimmed(); }
         }
 
         private void setVideoLengthTrimmed()
@@ -728,7 +728,7 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxTrimming_Checked(object sender, RoutedEventArgs e)
         {
-            if (TextBoxTrimEnd != null && ReadTimeCode && CheckBoxTrimming.IsChecked == true) { setVideoLengthTrimmed(); }
+            if (TextBoxTrimEnd != null && ReadTimeCode && ToggleSwitchTrimming.IsOn == true) { setVideoLengthTrimmed(); }
             ToggleSwitchSubtitleActivatedOne.IsOn = false;
             ToggleSwitchSubtitleActivatedTwo.IsOn = false;
             ToggleSwitchSubtitleActivatedThree.IsOn = false;
@@ -770,7 +770,7 @@ namespace NotEnoughAV1Encodes
             // Sets the encoder (0 aomenc; 1 rav1e; 2 svt-av1)
             EncodeMethod = ComboBoxVideoEncoder.SelectedIndex;                      
             // Sets Trim Params
-            TrimEnabled = CheckBoxTrimming.IsChecked == true;
+            TrimEnabled = ToggleSwitchTrimming.IsOn == true;
             if (TrimEnabled)
             {
                 TrimCommand = "-ss " + TextBoxTrimStart.Text + " -to " + TextBoxTrimEnd.Text;
@@ -1077,10 +1077,10 @@ namespace NotEnoughAV1Encodes
 
         private void SetVideoFilters()
         {
-            bool crop = CheckBoxFiltersCrop.IsChecked == true;
-            bool rotate = CheckBoxFiltersRotate.IsChecked == true;
-            bool resize = CheckBoxFiltersResize.IsChecked == true;
-            bool deinterlace = CheckBoxFiltersDeinterlace.IsChecked == true;
+            bool crop = ToggleSwitchFilterCrop.IsOn == true;
+            bool rotate = ToggleSwitchFilterRotate.IsOn == true;
+            bool resize = ToggleSwitchFilterResize.IsOn == true;
+            bool deinterlace = ToggleSwitchFilterDeinterlace.IsOn == true;
             int tempCounter = 0;
 
             if (crop == true || rotate == true || resize == true || deinterlace == true)
@@ -2432,8 +2432,8 @@ namespace NotEnoughAV1Encodes
             }
             // ══════════════════════════════════════════════════════════════════ Filters ══════════════════════════════════════════════════════════════════
 
-            writer.WriteElementString("FilterCrop",                 CheckBoxFiltersCrop.IsChecked.ToString());                          // Filter Crop (Boolean)
-            if (CheckBoxFiltersCrop.IsChecked == true)
+            writer.WriteElementString("FilterCrop",                 ToggleSwitchFilterCrop.IsOn.ToString());                            // Filter Crop (Boolean)
+            if (ToggleSwitchFilterCrop.IsOn == true)
             {
                 // Cropping
                 writer.WriteElementString("FilterCropTop",          TextBoxFiltersCropTop.Text);                                        // Filter Crop Top
@@ -2442,8 +2442,8 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("FilterCropRight",        TextBoxFiltersCropRight.Text);                                      // Filter Crop Right
             }
 
-            writer.WriteElementString("FilterResize",               CheckBoxFiltersResize.IsChecked.ToString());                        // Filter Resize (Boolean)
-            if (CheckBoxFiltersResize.IsChecked == true)
+            writer.WriteElementString("FilterResize",               ToggleSwitchFilterResize.IsOn.ToString());                          // Filter Resize (Boolean)
+            if (ToggleSwitchFilterResize.IsOn == true)
             {
                 // Resize
                 writer.WriteElementString("FilterResizeWidth",      TextBoxFiltersResizeWidth.Text);                                    // Filter Resize Width
@@ -2451,15 +2451,15 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("FilterResizeAlgo",       ComboBoxFiltersScaling.SelectedIndex.ToString());                   // Filter Resize Scaling Algorithm
             }
 
-            writer.WriteElementString("FilterRotate",               CheckBoxFiltersRotate.IsChecked.ToString());                        // Filter Rotate (Boolean)
-            if (CheckBoxFiltersRotate.IsChecked == true)
+            writer.WriteElementString("FilterRotate",               ToggleSwitchFilterRotate.IsOn.ToString());                          // Filter Rotate (Boolean)
+            if (ToggleSwitchFilterRotate.IsOn == true)
             {
                 // Rotating
                 writer.WriteElementString("FilterRotateAmount",     ComboBoxFiltersRotate.SelectedIndex.ToString());                    // Filter Rotate
             }
 
-            writer.WriteElementString("FilterDeinterlace",          CheckBoxFiltersDeinterlace.IsChecked.ToString());                   // Filter Deinterlace (Boolean)
-            if (CheckBoxFiltersDeinterlace.IsChecked == true)
+            writer.WriteElementString("FilterDeinterlace",          ToggleSwitchFilterDeinterlace.IsOn.ToString());                     // Filter Deinterlace (Boolean)
+            if (ToggleSwitchFilterDeinterlace.IsOn == true)
             {
                 // Deinterlacing
                 writer.WriteElementString("FilterDeinterlaceType",  ComboBoxFiltersDeinterlace.SelectedIndex.ToString());               // Filter Deinterlace
@@ -2604,9 +2604,9 @@ namespace NotEnoughAV1Encodes
                     case "WorkerPriority":                  ComboBoxProcessPriority.SelectedIndex = int.Parse(n.InnerText);         break;  // Worker Priority
                     // ═══════════════════════════════════════════════════════════════════ Audio ═══════════════════════════════════════════════════════════════════
                     case "AudioTrackOne":                   ToggleSwitchAudioTrackOne.IsOn = n.InnerText == "True";                 break;  // Audio Track One Active
-                    case "AudioTrackTwo":                   ToggleSwitchAudioTrackTwo.IsOn = n.InnerText == "True";                break;  // Audio Track Two Active
-                    case "AudioTrackThree":                 ToggleSwitchAudioTrackThree.IsOn = n.InnerText == "True";              break;  // Audio Track Three Active
-                    case "AudioTrackFour":                  ToggleSwitchAudioTrackFour.IsOn = n.InnerText == "True";               break;  // Audio Track Four Active
+                    case "AudioTrackTwo":                   ToggleSwitchAudioTrackTwo.IsOn = n.InnerText == "True";                 break;  // Audio Track Two Active
+                    case "AudioTrackThree":                 ToggleSwitchAudioTrackThree.IsOn = n.InnerText == "True";               break;  // Audio Track Three Active
+                    case "AudioTrackFour":                  ToggleSwitchAudioTrackFour.IsOn = n.InnerText == "True";                break;  // Audio Track Four Active
                     case "AudioLangOne":                    ComboBoxTrackOneLanguage.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track One Language
                     case "AudioLangTwo":                    ComboBoxTrackTwoLanguage.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track Two Language
                     case "AudioLangThree":                  ComboBoxTrackThreeLanguage.SelectedIndex = int.Parse(n.InnerText);      break;  // Audio Track Three Language
@@ -2630,18 +2630,18 @@ namespace NotEnoughAV1Encodes
                     case "SplittingReencodeActive":         CheckBoxSplittingReencode.IsChecked = n.InnerText == "True";            break;  // Splitting Reencode Active
                     case "SplittingReencodeLength":         TextBoxSplittingChunkLength.Text = n.InnerText;                         break;  // Splitting Chunk Length
                     // ══════════════════════════════════════════════════════════════════ Filters ══════════════════════════════════════════════════════════════════
-                    case "FilterCrop":                      CheckBoxFiltersCrop.IsChecked = n.InnerText == "True";                  break;  // Filter Crop (Boolean)
+                    case "FilterCrop":                      ToggleSwitchFilterCrop.IsOn = n.InnerText == "True";                    break;  // Filter Crop (Boolean)
                     case "FilterCropTop":                   TextBoxFiltersCropTop.Text = n.InnerText;                               break;  // Filter Crop Top
                     case "FilterCropBottom":                TextBoxFiltersCropBottom.Text = n.InnerText;                            break;  // Filter Crop Bottom
                     case "FilterCropLeft":                  TextBoxFiltersCropLeft.Text = n.InnerText;                              break;  // Filter Crop Left
                     case "FilterCropRight":                 TextBoxFiltersCropRight.Text = n.InnerText;                             break;  // Filter Crop Right
-                    case "FilterResize":                    CheckBoxFiltersResize.IsChecked = n.InnerText == "True";                break;  // Filter Resize (Boolean)
+                    case "FilterResize":                    ToggleSwitchFilterResize.IsOn = n.InnerText == "True";                  break;  // Filter Resize (Boolean)
                     case "FilterResizeWidth":               TextBoxFiltersResizeWidth.Text = n.InnerText;                           break;  // Filter Resize Width
                     case "FilterResizeHeight":              TextBoxFiltersResizeHeight.Text = n.InnerText;                          break;  // Filter Resize Height
                     case "FilterResizeAlgo":                ComboBoxFiltersScaling.SelectedIndex = int.Parse(n.InnerText);          break;  // Filter Resize Scaling Algorithm
-                    case "FilterRotate":                    CheckBoxFiltersRotate.IsChecked = n.InnerText == "True";                break;  // Filter Rotate (Boolean)
+                    case "FilterRotate":                    ToggleSwitchFilterRotate.IsOn = n.InnerText == "True";                  break;  // Filter Rotate (Boolean)
                     case "FilterRotateAmount":              ComboBoxFiltersRotate.SelectedIndex = int.Parse(n.InnerText);           break;  // Filter Rotate
-                    case "FilterDeinterlace":               CheckBoxFiltersDeinterlace.IsChecked = n.InnerText == "True";           break;  // Filter Deinterlace (Boolean)
+                    case "FilterDeinterlace":               ToggleSwitchFilterDeinterlace.IsOn = n.InnerText == "True";             break;  // Filter Deinterlace (Boolean)
                     case "FilterDeinterlaceType":           ComboBoxFiltersDeinterlace.SelectedIndex = int.Parse(n.InnerText);      break;  // Filter Deinterlace
                     // ═══════════════════════════════════════════════════════════ Basic Video Settings ════════════════════════════════════════════════════════════
                     case "VideoEncoder":                    ComboBoxVideoEncoder.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Encoder
@@ -2713,8 +2713,8 @@ namespace NotEnoughAV1Encodes
                     case "SubOne":                          ToggleSwitchSubtitleActivatedOne.IsOn = n.InnerText == "True";          break;  // Subtitle Track One Active
                     case "SubTwo":                          ToggleSwitchSubtitleActivatedTwo.IsOn = n.InnerText == "True";          break;  // Subtitle Track Two Active
                     case "SubThree":                        ToggleSwitchSubtitleActivatedThree.IsOn = n.InnerText == "True";        break;  // Subtitle Track Three Active
-                    case "SubFour":                         ToggleSwitchSubtitleActivatedFour.IsOn = n.InnerText == "True";        break;  // Subtitle Track Four Active
-                    case "SubFive":                         ToggleSwitchSubtitleActivatedFive.IsOn = n.InnerText == "True";        break;  // Subtitle Track Five Active
+                    case "SubFour":                         ToggleSwitchSubtitleActivatedFour.IsOn = n.InnerText == "True";         break;  // Subtitle Track Four Active
+                    case "SubFive":                         ToggleSwitchSubtitleActivatedFive.IsOn = n.InnerText == "True";         break;  // Subtitle Track Five Active
                     case "SubOnePath":                      TextBoxSubtitleTrackOne.Text = n.InnerText;                             break;  // Subtitle Track One Path
                     case "SubTwoPath":                      TextBoxSubtitleTrackTwo.Text = n.InnerText;                             break;  // Subtitle Track Two Path
                     case "SubThreePath":                    TextBoxSubtitleTrackThree.Text = n.InnerText;                           break;  // Subtitle Track Three Path
