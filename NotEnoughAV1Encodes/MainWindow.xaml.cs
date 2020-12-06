@@ -537,54 +537,23 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void CheckBoxSettingsDeleteTempFiles_Checked(object sender, RoutedEventArgs e)
-        {
-            SaveSettingsTab();
-        }
-
-        private void CheckBoxSettingsDeleteTempFiles_Unchecked(object sender, RoutedEventArgs e)
-        {
-            SaveSettingsTab();
-        }
-
         private void CheckBoxSettingsUISounds_Checked(object sender, RoutedEventArgs e)
         {
-            PlayUISounds = CheckBoxSettingsUISounds.IsChecked == true;
+            PlayUISounds = ToggleSwitchUISounds.IsOn == true;
             SaveSettingsTab();
         }
 
-        private void CheckBoxSettingsUISounds_Unchecked(object sender, RoutedEventArgs e)
-        {
-            PlayUISounds = CheckBoxSettingsUISounds.IsChecked == true;
-            SaveSettingsTab();
-        }
-
-        private void CheckBoxSettingsTerminal_Checked(object sender, RoutedEventArgs e)
+        private void ToggleSwitchTempFolder_Toggled(object sender, RoutedEventArgs e)
         {
             SaveSettingsTab();
         }
 
-        private void CheckBoxSettingsTerminal_Unchecked(object sender, RoutedEventArgs e)
+        private void ToggleSwitchShutdownAfterEncode_Toggled(object sender, RoutedEventArgs e)
         {
             SaveSettingsTab();
         }
 
-        private void CheckBoxSettingsShutdownAfterEncode_Checked(object sender, RoutedEventArgs e)
-        {
-            SaveSettingsTab();
-        }
-
-        private void CheckBoxSettingsShutdownAfterEncode_Unchecked(object sender, RoutedEventArgs e)
-        {
-            SaveSettingsTab();
-        }
-
-        private void CheckBoxSettingsLogging_Checked(object sender, RoutedEventArgs e)
-        {
-            SaveSettingsTab();
-        }
-
-        private void CheckBoxSettingsLogging_Unchecked(object sender, RoutedEventArgs e)
+        private void CheckBoxSettingsDeleteTempFiles_Checked(object sender, RoutedEventArgs e)
         {
             SaveSettingsTab();
         }
@@ -682,7 +651,7 @@ namespace NotEnoughAV1Encodes
                         TextBoxTrimEnd.BorderBrush = new SolidColorBrush(Color.FromRgb(171, 173, 179));
                         TextBoxTrimStart.BorderBrush = new SolidColorBrush(Color.FromRgb(171, 173, 179));
                         TimeSpan result = end - start;
-                        if (CheckBoxCustomTempPath != null && VideoInputSet) { setImagePreview(); }
+                        if (ToggleSwitchTempFolder != null && VideoInputSet) { setImagePreview(); }
                     }
                     else
                     {
@@ -697,7 +666,7 @@ namespace NotEnoughAV1Encodes
         private void setImagePreview()
         {
             string tempPath = Path.Combine("NEAV1E", TempPathFileName);
-            if (CheckBoxCustomTempPath.IsChecked == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); }
+            if (ToggleSwitchTempFolder.IsOn == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); }
             else { tempPath = Path.Combine(Path.GetTempPath(), tempPath); }
 
 
@@ -760,11 +729,11 @@ namespace NotEnoughAV1Encodes
         private void CheckBoxTrimming_Checked(object sender, RoutedEventArgs e)
         {
             if (TextBoxTrimEnd != null && ReadTimeCode && CheckBoxTrimming.IsChecked == true) { setVideoLengthTrimmed(); }
-            CheckBoxSubtitleActivatedOne.IsChecked = false;
-            CheckBoxSubtitleActivatedTwo.IsChecked = false;
-            CheckBoxSubtitleActivatedThree.IsChecked = false;
-            CheckBoxSubtitleActivatedFour.IsChecked = false;
-            CheckBoxSubtitleActivatedFive.IsChecked = false;
+            ToggleSwitchSubtitleActivatedOne.IsOn = false;
+            ToggleSwitchSubtitleActivatedTwo.IsOn = false;
+            ToggleSwitchSubtitleActivatedThree.IsOn = false;
+            ToggleSwitchSubtitleActivatedFour.IsOn = false;
+            ToggleSwitchSubtitleActivatedFive.IsOn = false;
         }
 
         private void CheckBoxTrimming_Unchecked(object sender, RoutedEventArgs e)
@@ -783,7 +752,7 @@ namespace NotEnoughAV1Encodes
             // Thats why we have this function "inbetween"
 
             // Sets the Temp Path
-            if (CheckBoxCustomTempPath.IsChecked == true)
+            if (ToggleSwitchTempFolder.IsOn == true)
                 TempPath = TextBoxCustomTempPath.Text;
             SmallFunctions.Logging("Temp Path: " + TempPath);
             // Resets the global Cancellation Boolean
@@ -921,7 +890,7 @@ namespace NotEnoughAV1Encodes
                 // Plays a sound if encoding has finished
                 if (BatchEncoding == false)
                     SmallFunctions.PlayFinishedSound();
-                if (CheckBoxSettingsShutdownAfterEncode.IsChecked == true && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
+                if (ToggleSwitchTempFolder.IsOn == true && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
             }
             catch { SmallFunctions.PlayStopSound(); }
             EncodeStarted = false;
@@ -973,8 +942,8 @@ namespace NotEnoughAV1Encodes
             OnePass = ComboBoxVideoPasses.SelectedIndex == 0;                       // Sets the amount of passes (true = 1, false = 2)
             Priority = ComboBoxProcessPriority.SelectedIndex == 0;                  // Sets the Process Priority
             SplitMethod = ComboBoxSplittingMethod.SelectedIndex;                    // Sets the Splitmethod, used for VideoEncode() function
-            DeleteTempFiles = CheckBoxSettingsDeleteTempFiles.IsChecked == true;    // Sets if Temp Files should be deleted
-            ShowTerminal = CheckBoxSettingsTerminal.IsChecked == false;             // Sets if Terminal shall be shown during encode
+            DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn == true;    // Sets if Temp Files should be deleted
+            ShowTerminal = ToggleSwitchHideTerminal.IsOn == false;             // Sets if Terminal shall be shown during encode
             SmallFunctions.setVideoChunks(SplitMethod);                             // Sets the array of videochunks/commands
             SetPipeCommand();
         }
@@ -1050,10 +1019,10 @@ namespace NotEnoughAV1Encodes
         private void SetAudioSettings()
         {
             // Sets Active Audio Tracks
-            trackOne = CheckBoxAudioTrackOne.IsChecked == true;
-            trackTwo = CheckBoxAudioTrackTwo.IsChecked == true;
-            trackThree = CheckBoxAudioTrackThree.IsChecked == true;
-            trackFour = CheckBoxAudioTrackFour.IsChecked == true;
+            trackOne = ToggleSwitchAudioTrackOne.IsOn == true;
+            trackTwo = ToggleSwitchAudioTrackTwo.IsOn == true;
+            trackThree = ToggleSwitchAudioTrackThree.IsOn == true;
+            trackFour = ToggleSwitchAudioTrackFour.IsOn == true;
             // Sets Audio Language
             trackOneLanguage = ComboBoxTrackOneLanguage.Text;
             trackTwoLanguage = ComboBoxTrackTwoLanguage.Text;
@@ -1216,14 +1185,14 @@ namespace NotEnoughAV1Encodes
                 detectedTracks += 1;
             }
             // Enable / Disable CheckBoxes
-            if (trackone) { CheckBoxAudioTrackOne.IsEnabled = true; CheckBoxAudioTrackOne.IsChecked = true; }
-            else { CheckBoxAudioTrackOne.IsChecked = false; CheckBoxAudioTrackOne.IsEnabled = false; }
-            if (tracktwo) { CheckBoxAudioTrackTwo.IsEnabled = true; CheckBoxAudioTrackTwo.IsChecked = true; }
-            else { CheckBoxAudioTrackTwo.IsChecked = false; CheckBoxAudioTrackTwo.IsEnabled = false; }
-            if (trackthree) { CheckBoxAudioTrackThree.IsEnabled = true; CheckBoxAudioTrackThree.IsChecked = true; }
-            else { CheckBoxAudioTrackThree.IsChecked = false; CheckBoxAudioTrackThree.IsEnabled = false; }
-            if (trackfour) { CheckBoxAudioTrackFour.IsEnabled = true; CheckBoxAudioTrackFour.IsChecked = true; }
-            else { CheckBoxAudioTrackFour.IsChecked = false; CheckBoxAudioTrackFour.IsEnabled = false; }
+            if (trackone) { ToggleSwitchAudioTrackOne.IsOn = true; ToggleSwitchAudioTrackOne.IsOn = true; }
+            else { ToggleSwitchAudioTrackOne.IsOn = false; ToggleSwitchAudioTrackOne.IsOn = false; }
+            if (tracktwo) { ToggleSwitchAudioTrackTwo.IsOn = true; ToggleSwitchAudioTrackTwo.IsOn = true; }
+            else { ToggleSwitchAudioTrackTwo.IsOn = false; ToggleSwitchAudioTrackTwo.IsOn = false; }
+            if (trackthree) { ToggleSwitchAudioTrackThree.IsOn = true; ToggleSwitchAudioTrackThree.IsOn = true; }
+            else { ToggleSwitchAudioTrackThree.IsOn = false; ToggleSwitchAudioTrackThree.IsOn = false; }
+            if (trackfour) { ToggleSwitchAudioTrackFour.IsOn = true; ToggleSwitchAudioTrackFour.IsOn = true; }
+            else { ToggleSwitchAudioTrackFour.IsOn = false; ToggleSwitchAudioTrackFour.IsOn = false; }
             // This is needed if user encodes a bluray with pcm audio stream and wants to copy audio
             if (GetAudioInfo() == "pcm_bluray") { pcmBluray = true; } else { pcmBluray = false; }
             GetAudioLanguage();
@@ -1307,11 +1276,11 @@ namespace NotEnoughAV1Encodes
         private void ResetSubtitles()
         {
             // Clears Temp Subtitles information from GUI
-            CheckBoxSubtitleActivatedOne.IsChecked = false;
-            CheckBoxSubtitleActivatedTwo.IsChecked = false;
-            CheckBoxSubtitleActivatedThree.IsChecked = false;
-            CheckBoxSubtitleActivatedFour.IsChecked = false;
-            CheckBoxSubtitleActivatedFive.IsChecked = false;
+            ToggleSwitchSubtitleActivatedOne.IsOn = false;
+            ToggleSwitchSubtitleActivatedTwo.IsOn = false;
+            ToggleSwitchSubtitleActivatedThree.IsOn = false;
+            ToggleSwitchSubtitleActivatedFour.IsOn = false;
+            ToggleSwitchSubtitleActivatedFive.IsOn = false;
             TextBoxSubtitleTrackOne.Text = "";
             TextBoxSubtitleTrackTwo.Text = "";
             TextBoxSubtitleTrackThree.Text = "";
@@ -1331,7 +1300,7 @@ namespace NotEnoughAV1Encodes
             subHardSubEnabled = false;
             subCommand = "";
 
-            if (CheckBoxSubtitleActivatedOne.IsChecked == true)
+            if (ToggleSwitchSubtitleActivatedOne.IsOn == true)
             {
                 // 1st Subtitle
                 if (CheckBoxSubOneBurn.IsChecked == false)
@@ -1348,7 +1317,7 @@ namespace NotEnoughAV1Encodes
                
             }
 
-            if (CheckBoxSubtitleActivatedTwo.IsChecked == true && CheckBoxSubTwoBurn.IsChecked != true)
+            if (ToggleSwitchSubtitleActivatedTwo.IsOn == true && CheckBoxSubTwoBurn.IsChecked != true)
             {
                 // 2nd Subtitle
                 if (CheckBoxSubTwoBurn.IsChecked == false)
@@ -1364,7 +1333,7 @@ namespace NotEnoughAV1Encodes
                 }
             }
 
-            if (CheckBoxSubtitleActivatedThree.IsChecked == true && CheckBoxSubThreeBurn.IsChecked != true)
+            if (ToggleSwitchSubtitleActivatedThree.IsOn == true && CheckBoxSubThreeBurn.IsChecked != true)
             {
                 // 3rd Subtitle
                 if (CheckBoxSubThreeBurn.IsChecked == false)
@@ -1381,7 +1350,7 @@ namespace NotEnoughAV1Encodes
 
             }
 
-            if (CheckBoxSubtitleActivatedFour.IsChecked == true && CheckBoxSubFourBurn.IsChecked != true)
+            if (ToggleSwitchSubtitleActivatedFour.IsOn == true && CheckBoxSubFourBurn.IsChecked != true)
             {
                 // 4th Subtitle
                 if (CheckBoxSubFourBurn.IsChecked == false)
@@ -1398,7 +1367,7 @@ namespace NotEnoughAV1Encodes
                 
             }
 
-            if (CheckBoxSubtitleActivatedFive.IsChecked == true && CheckBoxSubFiveBurn.IsChecked != true)
+            if (ToggleSwitchSubtitleActivatedFive.IsOn == true && CheckBoxSubFiveBurn.IsChecked != true)
             {
                 // 5th Subtitle
                 if (CheckBoxSubFiveBurn.IsChecked == false)
@@ -1579,11 +1548,11 @@ namespace NotEnoughAV1Encodes
                     }
 
                     //Sets the TextBoxes
-                    if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; ComboBoxSubTrackOneLanguage.SelectedIndex = indexLang; CheckBoxSubtitleActivatedOne.IsChecked = true; }
-                    if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; ComboBoxSubTrackTwoLanguage.SelectedIndex = indexLang; CheckBoxSubtitleActivatedTwo.IsChecked = true; }
-                    if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; ComboBoxSubTrackThreeLanguage.SelectedIndex = indexLang; CheckBoxSubtitleActivatedThree.IsChecked = true; }
-                    if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; ComboBoxSubTrackFourLanguage.SelectedIndex = indexLang; CheckBoxSubtitleActivatedFour.IsChecked = true; }
-                    if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; ComboBoxSubTrackFiveLanguage.SelectedIndex = indexLang; CheckBoxSubtitleActivatedFive.IsChecked = true; }
+                    if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; ComboBoxSubTrackOneLanguage.SelectedIndex = indexLang; ToggleSwitchSubtitleActivatedOne.IsOn = true; }
+                    if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; ComboBoxSubTrackTwoLanguage.SelectedIndex = indexLang; ToggleSwitchSubtitleActivatedTwo.IsOn = true; }
+                    if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; ComboBoxSubTrackThreeLanguage.SelectedIndex = indexLang; ToggleSwitchSubtitleActivatedThree.IsOn = true; }
+                    if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; ComboBoxSubTrackFourLanguage.SelectedIndex = indexLang; ToggleSwitchSubtitleActivatedFour.IsOn = true; }
+                    if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; ComboBoxSubTrackFiveLanguage.SelectedIndex = indexLang; ToggleSwitchSubtitleActivatedFive.IsOn = true; }
                     b++;
                 }
                 a++;
@@ -1987,7 +1956,7 @@ namespace NotEnoughAV1Encodes
         private void ButtonOpenTempFolder_Click(object sender, RoutedEventArgs e)
         {
             // Opens the Temp Folder
-            if (CheckBoxCustomTempPath.IsChecked == false) 
+            if (ToggleSwitchTempFolder.IsOn == false) 
             {
                 //Creates the temp directoy if not existent
                 if (Directory.Exists(Path.Combine(Path.GetTempPath(), "NEAV1E")) == false) { Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "NEAV1E")); }
@@ -2316,17 +2285,15 @@ namespace NotEnoughAV1Encodes
                 {
                     XmlWriter writer = XmlWriter.Create(Path.Combine(Directory.GetCurrentDirectory(), "settings.xml"));
                     writer.WriteStartElement("Settings");
-                    writer.WriteElementString("CustomTemp", CheckBoxCustomTempPath.IsChecked.ToString());
-                    writer.WriteElementString("CustomTempPath", TextBoxCustomTempPath.Text);
-                    writer.WriteElementString("DeleteTempFiles", CheckBoxSettingsDeleteTempFiles.IsChecked.ToString());
-                    writer.WriteElementString("PlaySound", CheckBoxSettingsUISounds.IsChecked.ToString());
-                    writer.WriteElementString("Logging", CheckBoxSettingsLogging.IsChecked.ToString());
-                    writer.WriteElementString("Shutdown", CheckBoxSettingsShutdownAfterEncode.IsChecked.ToString());
-                    writer.WriteElementString("TempPathActive", CheckBoxCustomTempPath.IsChecked.ToString());
-                    writer.WriteElementString("TempPath", TextBoxCustomTempPath.Text);
-                    writer.WriteElementString("Terminal", CheckBoxSettingsTerminal.IsChecked.ToString());
-                    writer.WriteElementString("ThemeAccent", ComboBoxAccentTheme.SelectedIndex.ToString());
-                    writer.WriteElementString("ThemeBase", ComboBoxBaseTheme.SelectedIndex.ToString());
+                    writer.WriteElementString("DeleteTempFiles",    ToggleSwitchDeleteTempFiles.IsOn.ToString());
+                    writer.WriteElementString("PlaySound",          ToggleSwitchUISounds.IsOn.ToString());
+                    writer.WriteElementString("Logging",            ToggleSwitchLogging.IsOn.ToString());
+                    writer.WriteElementString("Shutdown",           ToggleSwitchShutdownAfterEncode.IsOn.ToString());
+                    writer.WriteElementString("TempPathActive",     ToggleSwitchTempFolder.IsOn.ToString());
+                    writer.WriteElementString("TempPath",           TextBoxCustomTempPath.Text);
+                    writer.WriteElementString("Terminal",           ToggleSwitchHideTerminal.IsOn.ToString());
+                    writer.WriteElementString("ThemeAccent",        ComboBoxAccentTheme.SelectedIndex.ToString());
+                    writer.WriteElementString("ThemeBase",          ComboBoxBaseTheme.SelectedIndex.ToString());
                     writer.WriteEndElement();
                     writer.Close();
                 }
@@ -2348,17 +2315,15 @@ namespace NotEnoughAV1Encodes
                     {
                         switch (n.Name)
                         {
-                            case "CustomTemp": CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
-                            case "CustomTempPath": TextBoxCustomTempPath.Text = n.InnerText; break;
-                            case "DeleteTempFiles": CheckBoxSettingsDeleteTempFiles.IsChecked = n.InnerText == "True"; break;
-                            case "PlaySound": CheckBoxSettingsUISounds.IsChecked = n.InnerText == "True"; break;
-                            case "Logging": CheckBoxSettingsLogging.IsChecked = n.InnerText == "True"; break;
-                            case "Shutdown": CheckBoxSettingsShutdownAfterEncode.IsChecked = n.InnerText == "True"; break;
-                            case "TempPathActive": CheckBoxCustomTempPath.IsChecked = n.InnerText == "True"; break;
-                            case "TempPath": TextBoxCustomTempPath.Text = n.InnerText; break;
-                            case "Terminal": CheckBoxSettingsTerminal.IsChecked = n.InnerText == "True"; break;
-                            case "ThemeAccent": ComboBoxAccentTheme.SelectedIndex = int.Parse(n.InnerText); break;
-                            case "ThemeBase": ComboBoxBaseTheme.SelectedIndex = int.Parse(n.InnerText); break;
+                            case "DeleteTempFiles": ToggleSwitchDeleteTempFiles.IsOn = n.InnerText == "True"; break;
+                            case "PlaySound":       ToggleSwitchUISounds.IsOn = n.InnerText == "True"; break;
+                            case "Logging":         ToggleSwitchLogging.IsOn = n.InnerText == "True"; break;
+                            case "Shutdown":        ToggleSwitchShutdownAfterEncode.IsOn = n.InnerText == "True"; break;
+                            case "TempPathActive":  ToggleSwitchTempFolder.IsOn = n.InnerText == "True"; break;
+                            case "TempPath":        TextBoxCustomTempPath.Text = n.InnerText; break;
+                            case "Terminal":        ToggleSwitchHideTerminal.IsOn = n.InnerText == "True"; break;
+                            case "ThemeAccent":     ComboBoxAccentTheme.SelectedIndex = int.Parse(n.InnerText); break;
+                            case "ThemeBase":       ComboBoxBaseTheme.SelectedIndex = int.Parse(n.InnerText); break;
                             default: break;
                         }
                     }
@@ -2400,11 +2365,11 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("VideoInput",                 VideoInput);                                                    // Video Input
                 writer.WriteElementString("VideoOutput",                VideoOutput);                                                   // Video Output
                 // Subtitles
-                writer.WriteElementString("SubOne",                     CheckBoxSubtitleActivatedOne.IsChecked.ToString());             // Subtitle Track One Active
-                writer.WriteElementString("SubTwo",                     CheckBoxSubtitleActivatedTwo.IsChecked.ToString());             // Subtitle Track Two Active
-                writer.WriteElementString("SubThree",                   CheckBoxSubtitleActivatedThree.IsChecked.ToString());           // Subtitle Track Three Active
-                writer.WriteElementString("SubFour",                    CheckBoxSubtitleActivatedFour.IsChecked.ToString());            // Subtitle Track Four Active
-                writer.WriteElementString("SubFive",                    CheckBoxSubtitleActivatedFive.IsChecked.ToString());            // Subtitle Track Five Active
+                writer.WriteElementString("SubOne",                     ToggleSwitchSubtitleActivatedOne.IsOn.ToString());             // Subtitle Track One Active
+                writer.WriteElementString("SubTwo",                     ToggleSwitchSubtitleActivatedTwo.IsOn.ToString());             // Subtitle Track Two Active
+                writer.WriteElementString("SubThree",                   ToggleSwitchSubtitleActivatedThree.IsOn.ToString());           // Subtitle Track Three Active
+                writer.WriteElementString("SubFour",                    ToggleSwitchSubtitleActivatedFour.IsOn.ToString());            // Subtitle Track Four Active
+                writer.WriteElementString("SubFive",                    ToggleSwitchSubtitleActivatedFive.IsOn.ToString());            // Subtitle Track Five Active
                 writer.WriteElementString("SubOnePath",                 TextBoxSubtitleTrackOne.Text);                                  // Subtitle Track One Path
                 writer.WriteElementString("SubTwoPath",                 TextBoxSubtitleTrackTwo.Text);                                  // Subtitle Track Two Path
                 writer.WriteElementString("SubThreePath",               TextBoxSubtitleTrackThree.Text);                                // Subtitle Track Three Path
@@ -2427,10 +2392,10 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("AudioLangFour",              ComboBoxTrackFourLanguage.SelectedIndex.ToString());            // Audio Track Four Language
             }
             // ═══════════════════════════════════════════════════════════════════ Audio ══════════════════════════════════════════════════════════════════
-            writer.WriteElementString("AudioTrackOne",                  CheckBoxAudioTrackOne.IsChecked.ToString());                    // Audio Track One Active
-            writer.WriteElementString("AudioTrackTwo",                  CheckBoxAudioTrackTwo.IsChecked.ToString());                    // Audio Track Two Active
-            writer.WriteElementString("AudioTrackThree",                CheckBoxAudioTrackThree.IsChecked.ToString());                  // Audio Track Three Active
-            writer.WriteElementString("AudioTrackFour",                 CheckBoxAudioTrackFour.IsChecked.ToString());                   // Audio Track Four Active
+            writer.WriteElementString("AudioTrackOne",                  ToggleSwitchAudioTrackOne.IsOn.ToString());                    // Audio Track One Active
+            writer.WriteElementString("AudioTrackTwo",                  ToggleSwitchAudioTrackTwo.IsOn.ToString());                    // Audio Track Two Active
+            writer.WriteElementString("AudioTrackThree",                ToggleSwitchAudioTrackThree.IsOn.ToString());                  // Audio Track Three Active
+            writer.WriteElementString("AudioTrackFour",                 ToggleSwitchAudioTrackFour.IsOn.ToString());                   // Audio Track Four Active
             writer.WriteElementString("TrackOneCodec",                  ComboBoxAudioCodec.SelectedIndex.ToString());                   // Audio Track One Codec
             writer.WriteElementString("TrackTwoCodec",                  ComboBoxAudioCodecTrackTwo.SelectedIndex.ToString());           // Audio Track Two Codec
             writer.WriteElementString("TrackThreeCodec",                ComboBoxAudioCodecTrackThree.SelectedIndex.ToString());         // Audio Track Three Codec
@@ -2638,10 +2603,10 @@ namespace NotEnoughAV1Encodes
                     case "WorkerCount":                     ComboBoxWorkerCount.SelectedIndex = int.Parse(n.InnerText);             break;  // Worker Count
                     case "WorkerPriority":                  ComboBoxProcessPriority.SelectedIndex = int.Parse(n.InnerText);         break;  // Worker Priority
                     // ═══════════════════════════════════════════════════════════════════ Audio ═══════════════════════════════════════════════════════════════════
-                    case "AudioTrackOne":                   CheckBoxAudioTrackOne.IsChecked = n.InnerText == "True";                break;  // Audio Track One Active
-                    case "AudioTrackTwo":                   CheckBoxAudioTrackTwo.IsChecked = n.InnerText == "True";                break;  // Audio Track Two Active
-                    case "AudioTrackThree":                 CheckBoxAudioTrackThree.IsChecked = n.InnerText == "True";              break;  // Audio Track Three Active
-                    case "AudioTrackFour":                  CheckBoxAudioTrackFour.IsChecked = n.InnerText == "True";               break;  // Audio Track Four Active
+                    case "AudioTrackOne":                   ToggleSwitchAudioTrackOne.IsOn = n.InnerText == "True";                 break;  // Audio Track One Active
+                    case "AudioTrackTwo":                   ToggleSwitchAudioTrackTwo.IsOn = n.InnerText == "True";                break;  // Audio Track Two Active
+                    case "AudioTrackThree":                 ToggleSwitchAudioTrackThree.IsOn = n.InnerText == "True";              break;  // Audio Track Three Active
+                    case "AudioTrackFour":                  ToggleSwitchAudioTrackFour.IsOn = n.InnerText == "True";               break;  // Audio Track Four Active
                     case "AudioLangOne":                    ComboBoxTrackOneLanguage.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track One Language
                     case "AudioLangTwo":                    ComboBoxTrackTwoLanguage.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track Two Language
                     case "AudioLangThree":                  ComboBoxTrackThreeLanguage.SelectedIndex = int.Parse(n.InnerText);      break;  // Audio Track Three Language
@@ -2745,11 +2710,11 @@ namespace NotEnoughAV1Encodes
                     case "VideoAdvancedSVTAV1HDR":          CheckBoxSVTAV1HDR.IsChecked = n.InnerText == "True";                    break;  // Video Advanced Settings SVT-AV1 HDR
                     case "VideoAdvancedCustomString":       TextBoxCustomVideoSettings.Text = n.InnerText;                          break;  // Video Advanced Settings Custom String
                     // Subtitles
-                    case "SubOne":                          CheckBoxSubtitleActivatedOne.IsChecked = n.InnerText == "True";         break;  // Subtitle Track One Active
-                    case "SubTwo":                          CheckBoxSubtitleActivatedTwo.IsChecked = n.InnerText == "True";         break;  // Subtitle Track Two Active
-                    case "SubThree":                        CheckBoxSubtitleActivatedThree.IsChecked = n.InnerText == "True";       break;  // Subtitle Track Three Active
-                    case "SubFour":                         CheckBoxSubtitleActivatedFour.IsChecked = n.InnerText == "True";        break;  // Subtitle Track Four Active
-                    case "SubFive":                         CheckBoxSubtitleActivatedFive.IsChecked = n.InnerText == "True";        break;  // Subtitle Track Five Active
+                    case "SubOne":                          ToggleSwitchSubtitleActivatedOne.IsOn = n.InnerText == "True";          break;  // Subtitle Track One Active
+                    case "SubTwo":                          ToggleSwitchSubtitleActivatedTwo.IsOn = n.InnerText == "True";          break;  // Subtitle Track Two Active
+                    case "SubThree":                        ToggleSwitchSubtitleActivatedThree.IsOn = n.InnerText == "True";        break;  // Subtitle Track Three Active
+                    case "SubFour":                         ToggleSwitchSubtitleActivatedFour.IsOn = n.InnerText == "True";        break;  // Subtitle Track Four Active
+                    case "SubFive":                         ToggleSwitchSubtitleActivatedFive.IsOn = n.InnerText == "True";        break;  // Subtitle Track Five Active
                     case "SubOnePath":                      TextBoxSubtitleTrackOne.Text = n.InnerText;                             break;  // Subtitle Track One Path
                     case "SubTwoPath":                      TextBoxSubtitleTrackTwo.Text = n.InnerText;                             break;  // Subtitle Track Two Path
                     case "SubThreePath":                    TextBoxSubtitleTrackThree.Text = n.InnerText;                           break;  // Subtitle Track Three Path
