@@ -104,7 +104,7 @@ namespace NotEnoughAV1Encodes
         {
             // Sets the GUI Version
             string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            LabelVersion.Content = version.Remove(version.Length - 2);
+            GroubBoxVersion.Header = "Version: " + version.Remove(version.Length - 2);
 
             CheckDependencies.Check();
 
@@ -305,7 +305,7 @@ namespace NotEnoughAV1Encodes
         private void SliderVideoSpeed_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             // Shows / Hides Real Time Mode CheckBox
-            if (CheckBoxVideoAomencRealTime != null)
+            if (CheckBoxVideoAomencRealTime != null && ComboBoxVideoEncoder != null)
             {
                 if (ComboBoxVideoEncoder.SelectedIndex == 0)
                 {
@@ -754,7 +754,6 @@ namespace NotEnoughAV1Encodes
                 imgTempEnd.UriSource = uriSourceEnd;
                 imgTempEnd.EndInit();
                 ImagePreviewTrimEnd.Source = imgTempEnd;
-                TrimEndTemp = TextBoxTrimEnd.Text;
             }
         }
 

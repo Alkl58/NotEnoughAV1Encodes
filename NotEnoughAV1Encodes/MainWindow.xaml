@@ -224,40 +224,50 @@
             </TabItem>
             <TabItem Header="Video">
                 <Grid>
-                    <Label Content="Video" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Label Content="Encoder:" HorizontalAlignment="Left" Margin="57,57,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="138,57,0,0" VerticalAlignment="Top" Width="127" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
-                        <ComboBoxItem Content="aomenc" IsSelected="True"/>
-                        <ComboBoxItem Content="rav1e"/>
-                        <ComboBoxItem Content="svt-av1"/>
-                    </ComboBox>
-                    <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="57,98,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="138,98,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center">
-                        <ComboBoxItem Content="8" IsSelected="True"/>
-                        <ComboBoxItem Content="10"/>
-                        <ComboBoxItem Content="12"/>
-                    </ComboBox>
-                    <Label Content="Quality" HorizontalAlignment="Left" Margin="395,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="Constant Quality:" HorizontalAlignment="Left" Margin="457,56,0,0" VerticalAlignment="Top" Height="29" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True" Background="{x:Null}"/>
-                    <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" HorizontalAlignment="Left" Margin="475,90,0,0" VerticalAlignment="Top" Width="431" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959"/>
-                    <Label x:Name="LabelVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Content="{Binding Value, ElementName=SliderVideoQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="587,55,0,0" VerticalAlignment="Top"/>
-                    <Label Content="| Lowest Quality" HorizontalAlignment="Left" Margin="474,113,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
-                    <Label Content="Highest Quality |" HorizontalAlignment="Left" Margin="831,113,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
-                    <Label Content="Optimisation" HorizontalAlignment="Left" Margin="10,216,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Label Content="Speed:" HorizontalAlignment="Left" Margin="57,263,0,0" VerticalAlignment="Top"/>
-                    <Slider x:Name="SliderVideoSpeed" HorizontalAlignment="Left" Margin="138,270,0,0" VerticalAlignment="Top" Width="127" Height="29" TickPlacement="BottomRight" Foreground="#FF595959" Maximum="9" Value="4" SmallChange="0" IsSnapToTickEnabled="True" ValueChanged="SliderVideoSpeed_ValueChanged"/>
-                    <Label x:Name="LabelVideoSpeed" Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="109,263,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Passes:" HorizontalAlignment="Left" Margin="57,323,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxVideoPasses" HorizontalAlignment="Left" Margin="138,323,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoPasses_SelectionChanged">
-                        <ComboBoxItem Content="1" IsSelected="True"/>
-                        <ComboBoxItem Content="2"/>
-                    </ComboBox>
-                    <Label Content="| Slowest" HorizontalAlignment="Left" Margin="137,292,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
-                    <Label Content="Fastest |" HorizontalAlignment="Left" Margin="224,292,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
-                    <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="457,156,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center" Background="{x:Null}"/>
-                    <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="582,156,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <CheckBox x:Name="CheckBoxVideoAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="59,142,0,0" VerticalAlignment="Top" Width="139"/>
-                    <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="281,272,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Collapsed"/>
+                    <GroupBox Header="Video" HorizontalAlignment="Left" Height="190" Margin="10,10,0,0" VerticalAlignment="Top" Width="364">
+                        <Grid>
+                            <Label Content="Encoder:" HorizontalAlignment="Left" Margin="30,32,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="110,32,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
+                                <ComboBoxItem Content="aomenc" IsSelected="True"/>
+                                <ComboBoxItem Content="rav1e"/>
+                                <ComboBoxItem Content="svt-av1"/>
+                            </ComboBox>
+                            <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="30,72,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="110,72,0,0" VerticalAlignment="Top" Width="60" Height="30" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="8" IsSelected="True"/>
+                                <ComboBoxItem Content="10"/>
+                                <ComboBoxItem Content="12"/>
+                            </ComboBox>
+                            <CheckBox x:Name="CheckBoxVideoAdvancedSettings" Content="Advanced Settings" HorizontalAlignment="Left" Margin="32,116,0,0" VerticalAlignment="Top" Width="138"/>
+
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Quality" Height="190" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="542">
+                        <Grid>
+                            <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="Constant Quality:" HorizontalAlignment="Left" Margin="42,19,0,0" VerticalAlignment="Top" Height="29" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True" Background="{x:Null}"/>
+                            <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" HorizontalAlignment="Left" Margin="60,53,0,0" VerticalAlignment="Top" Width="431" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959"/>
+                            <Label x:Name="LabelVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Content="{Binding Value, ElementName=SliderVideoQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="172,18,0,0" VerticalAlignment="Top"/>
+                            <Label Content="| Lowest Quality" HorizontalAlignment="Left" Margin="59,76,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
+                            <Label Content="Highest Quality |" HorizontalAlignment="Left" Margin="416,76,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
+                            <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="42,119,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center" Background="{x:Null}"/>
+                            <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="167,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Optimisation" HorizontalAlignment="Left" Margin="10,0,0,10" Width="364" Height="168" VerticalAlignment="Bottom">
+                        <Grid>
+                            <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="246,41,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Visible"/>
+                            <Label Content="Speed:" HorizontalAlignment="Left" Margin="29,30,0,0" VerticalAlignment="Top"/>
+                            <Slider x:Name="SliderVideoSpeed" HorizontalAlignment="Left" Margin="110,37,0,0" VerticalAlignment="Top" Width="127" Height="29" TickPlacement="BottomRight" Foreground="#FF595959" Maximum="9" Value="4" SmallChange="0" IsSnapToTickEnabled="True" ValueChanged="SliderVideoSpeed_ValueChanged"/>
+                            <Label x:Name="LabelVideoSpeed" Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="81,30,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Passes:" HorizontalAlignment="Left" Margin="29,90,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="ComboBoxVideoPasses" HorizontalAlignment="Left" Margin="110,90,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoPasses_SelectionChanged">
+                                <ComboBoxItem Content="1" IsSelected="True"/>
+                                <ComboBoxItem Content="2"/>
+                            </ComboBox>
+                            <Label Content="| Slowest" HorizontalAlignment="Left" Margin="109,59,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
+                            <Label Content="Fastest |" HorizontalAlignment="Left" Margin="196,59,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Advanced Settings" Visibility="{Binding ElementName=CheckBoxVideoAdvancedSettings, Path=IsChecked, Converter={StaticResource b2v}}">
@@ -926,24 +936,8 @@
             </TabItem>
             <TabItem Header="Preferences">
                 <Grid>
-                    <Button x:Name="ButtonGithub" Margin="0,158,57,0" Background="{x:Null}" Click="ButtonGithub_Click" HorizontalAlignment="Right" Width="53" Height="50" VerticalAlignment="Top">
-                        <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/github.png"/>
-                    </Button>
-                    <Button x:Name="ButtonPayPal" Margin="0,158,115,0" Click="ButtonPayPal_Click" Background="{x:Null}" Height="50" VerticalAlignment="Top" HorizontalAlignment="Right" Width="53" ToolTip="">
-                        <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/paypal.png" ToolTip="Buy me lemons"/>
-                    </Button>
-                    <Button x:Name="ButtonDiscord" HorizontalAlignment="Right" Width="53" Margin="0,158,173,0" Click="ButtonDiscord_Click" Background="{x:Null}" Height="50" VerticalAlignment="Top">
-                        <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/discord.png"/>
-                    </Button>
                     <CheckBox x:Name="CheckBoxSettingsDeleteTempFiles" Content="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="33,44,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="213" IsChecked="True" Unchecked="CheckBoxSettingsDeleteTempFiles_Unchecked" Checked="CheckBoxSettingsDeleteTempFiles_Checked"/>
-                    <Label Content="Program Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <CheckBox x:Name="CheckBoxSettingsUISounds" Content="Enable UI Sounds (Finished Encoding / Error)" HorizontalAlignment="Left" Margin="33,67,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Unchecked="CheckBoxSettingsUISounds_Unchecked" Checked="CheckBoxSettingsUISounds_Checked"/>
-                    <Label x:Name="LabelVersion" Content="" Margin="0,26,197,0" HorizontalAlignment="Right" Width="100" Height="26" VerticalAlignment="Top"/>
-                    <Label Content="Github:" HorizontalAlignment="Right" Margin="0,52,297,0" VerticalAlignment="Top" FontSize="12"/>
-                    <TextBlock Margin="0,56,10,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top">
-                        <Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/Alkl58/NotEnoughAV1Encodes</Hyperlink>
-                    </TextBlock>
-                    <Button x:Name="ButtonUpdater" Content="Updater" Margin="0,158,231,0" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click" HorizontalAlignment="Right" Width="124" Height="50" VerticalAlignment="Top"/>
                     <Button x:Name="ButtonOpenTempFolder" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="19,0,0,71" Width="136" Background="{x:Null}" Click="ButtonOpenTempFolder_Click" Height="38" VerticalAlignment="Bottom"/>
                     <CheckBox x:Name="CheckBoxCustomTempPath" Content="" HorizontalAlignment="Left" Margin="82,0,0,10" Width="20" VerticalContentAlignment="Center" Height="27" VerticalAlignment="Bottom"/>
                     <TextBox x:Name="TextBoxCustomTempPath" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomTempPath}" Margin="107,0,134,10" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="27" VerticalAlignment="Bottom"/>
@@ -951,7 +945,6 @@
                     <Label Content="Temp Folder" HorizontalAlignment="Left" Margin="10,0,0,40" FontWeight="Bold" Height="26" VerticalAlignment="Bottom"/>
                     <Button x:Name="ButtonOpenProgramFolder" Content="Open Program Folder" HorizontalAlignment="Left" Margin="19,0,0,113" Width="136" Background="{x:Null}" Click="ButtonOpenProgramFolder_Click" Height="38" VerticalAlignment="Bottom"/>
                     <CheckBox x:Name="CheckBoxSettingsTerminal" Content="Hide Terminal" HorizontalAlignment="Left" Margin="33,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Unchecked="CheckBoxSettingsTerminal_Unchecked" Checked="CheckBoxSettingsTerminal_Checked"/>
-                    <Label Content="Version:" Margin="0,24,293,0" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Right" Width="62"/>
                     <Button x:Name="ButtonDeleteTempFiles" Content="Delete Temp Files" HorizontalAlignment="Left" Margin="160,0,0,71" Width="105" Background="{x:Null}" Click="ButtonDeleteTempFiles_Click" Height="38" VerticalAlignment="Bottom"/>
                     <CheckBox x:Name="CheckBoxSettingsLogging" Content="Logging" HorizontalAlignment="Left" Margin="33,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.54" Width="301" IsChecked="True" Unchecked="CheckBoxSettingsLogging_Unchecked" Checked="CheckBoxSettingsLogging_Checked"/>
                     <CheckBox x:Name="CheckBoxSettingsShutdownAfterEncode" Content="Shutdown after Encode" HorizontalAlignment="Left" Margin="33,136,0,0" VerticalAlignment="Top" Unchecked="CheckBoxSettingsShutdownAfterEncode_Unchecked" Checked="CheckBoxSettingsShutdownAfterEncode_Checked"/>
@@ -985,14 +978,30 @@
                         <ComboBoxItem Content="Taupe" Foreground="#9F9471"/>
                         <ComboBoxItem Content="Sienna" Foreground="#B37557"/>
                     </ComboBox>
-                    <Label Content="Theme:" HorizontalAlignment="Right" Margin="0,83,297,0" VerticalAlignment="Top" FontSize="12"/>
-                    <TextBlock Margin="0,87,10,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top"><Hyperlink NavigateUri="https://mahapps.com/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://mahapps.com/"/></Hyperlink></TextBlock>
-                    <Label Content="Icon:" HorizontalAlignment="Right" Margin="0,110,297,0" VerticalAlignment="Top" FontSize="12"/>
-                    <TextBlock Margin="0,114,10,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top"><Hyperlink NavigateUri="https://icons8.de/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://icons8.de/"/></Hyperlink></TextBlock>
                     <Button x:Name="ButtonSetBGImage" Content="Set BG Image" HorizontalAlignment="Right" Margin="0,0,152,71" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetBGImage_Click"/>
                     <Label Content="Accent:" HorizontalAlignment="Right" Margin="0,0,152,130" FontSize="12" Height="26" VerticalAlignment="Bottom"/>
                     <Label Content="Base Theme:" HorizontalAlignment="Right" Margin="0,0,152,103" FontSize="12" Height="26" VerticalAlignment="Bottom"/>
                     <Button x:Name="ButtonOpenLogFolder" Content="Open Log Folder" HorizontalAlignment="Left" Margin="19,0,0,156" Width="136" Background="{x:Null}" Click="ButtonOpenLogFolder_Click" Height="38" VerticalAlignment="Bottom"/>
+                    <GroupBox Header="Program Settings" HorizontalAlignment="Left" Height="160" Margin="10,10,0,0" VerticalAlignment="Top" Width="298"/>
+                    <GroupBox x:Name="GroubBoxVersion" Header="GroupBox" Height="160" Margin="0,10,56,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="404">
+                        <Grid>
+                            <Label Content="Theme:" HorizontalAlignment="Right" Margin="0,6,324,0" VerticalAlignment="Top" FontSize="12"/>
+                            <TextBlock Margin="0,12,26,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top"><Hyperlink NavigateUri="https://mahapps.com/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://mahapps.com/"/></Hyperlink></TextBlock>
+                            <Label Content="Icon:" HorizontalAlignment="Right" Margin="0,37,324,0" VerticalAlignment="Top" FontSize="12"/>
+                            <TextBlock Margin="0,42,26,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top"><Hyperlink NavigateUri="https://icons8.de/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://icons8.de/"/></Hyperlink></TextBlock>
+                            <Button x:Name="ButtonGithub" Margin="0,69,316,0" Background="{x:Null}" Click="ButtonGithub_Click" HorizontalAlignment="Right" Width="54" Height="50" VerticalAlignment="Top">
+                                <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/github.png"/>
+                            </Button>
+                            <Button x:Name="ButtonPayPal" Margin="0,69,200,0" Click="ButtonPayPal_Click" Background="{x:Null}" Height="50" VerticalAlignment="Top" HorizontalAlignment="Right" Width="53" ToolTip="">
+                                <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/paypal.png" ToolTip="Buy me lemons"/>
+                            </Button>
+                            <Button x:Name="ButtonDiscord" HorizontalAlignment="Right" Width="53" Margin="0,69,258,0" Click="ButtonDiscord_Click" Background="{x:Null}" Height="50" VerticalAlignment="Top">
+                                <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/discord.png"/>
+                            </Button>
+                            <Button x:Name="ButtonUpdater" Content="Updater" Margin="0,69,26,0" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click" HorizontalAlignment="Right" Width="169" Height="50" VerticalAlignment="Top"/>
+
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
         </mah:MetroTabControl>
