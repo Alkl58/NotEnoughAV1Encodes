@@ -1159,7 +1159,7 @@ namespace NotEnoughAV1Encodes
                 WindowStyle = ProcessWindowStyle.Hidden,
                 FileName = "cmd.exe",
                 WorkingDirectory = FFmpegPath,
-                Arguments = "/C ffprobe.exe -i " + '\u0022' + VideoInput + '\u0022' + " -loglevel error -select_streams a -show_streams -show_entries stream=index:tags=:disposition= -of csv",
+                Arguments = "/C ffprobe.exe -i " + '\u0022' + VideoInput + '\u0022' + " -loglevel error -select_streams a -show_entries stream=codec_type,index -of csv=p=0",
                 RedirectStandardError = true,
                 RedirectStandardOutput = true
             };
@@ -1168,7 +1168,7 @@ namespace NotEnoughAV1Encodes
             string audioIndexes = getAudioIndexes.StandardOutput.ReadToEnd();
             getAudioIndexes.WaitForExit();
             //Splits the Console Output
-            string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", "stream," }, StringSplitOptions.RemoveEmptyEntries);
+            string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", "audio," }, StringSplitOptions.RemoveEmptyEntries);
             int detectedTracks = 0;
             bool trackone = false, tracktwo = false, trackthree = false, trackfour = false;
             // Iterates over the audioIndexesFixed Array
@@ -1185,14 +1185,14 @@ namespace NotEnoughAV1Encodes
                 detectedTracks += 1;
             }
             // Enable / Disable CheckBoxes
-            if (trackone) { ToggleSwitchAudioTrackOne.IsOn = true; ToggleSwitchAudioTrackOne.IsOn = true; }
-            else { ToggleSwitchAudioTrackOne.IsOn = false; ToggleSwitchAudioTrackOne.IsOn = false; }
-            if (tracktwo) { ToggleSwitchAudioTrackTwo.IsOn = true; ToggleSwitchAudioTrackTwo.IsOn = true; }
-            else { ToggleSwitchAudioTrackTwo.IsOn = false; ToggleSwitchAudioTrackTwo.IsOn = false; }
-            if (trackthree) { ToggleSwitchAudioTrackThree.IsOn = true; ToggleSwitchAudioTrackThree.IsOn = true; }
-            else { ToggleSwitchAudioTrackThree.IsOn = false; ToggleSwitchAudioTrackThree.IsOn = false; }
-            if (trackfour) { ToggleSwitchAudioTrackFour.IsOn = true; ToggleSwitchAudioTrackFour.IsOn = true; }
-            else { ToggleSwitchAudioTrackFour.IsOn = false; ToggleSwitchAudioTrackFour.IsOn = false; }
+            if (trackone) { ToggleSwitchAudioTrackOne.IsEnabled = true; ToggleSwitchAudioTrackOne.IsOn = true; }
+            else { ToggleSwitchAudioTrackOne.IsEnabled = false; ToggleSwitchAudioTrackOne.IsOn = false; }
+            if (tracktwo) { ToggleSwitchAudioTrackTwo.IsEnabled = true; ToggleSwitchAudioTrackTwo.IsOn = true; }
+            else { ToggleSwitchAudioTrackTwo.IsEnabled = false; ToggleSwitchAudioTrackTwo.IsOn = false; }
+            if (trackthree) { ToggleSwitchAudioTrackThree.IsEnabled = true; ToggleSwitchAudioTrackThree.IsOn = true; }
+            else { ToggleSwitchAudioTrackThree.IsEnabled = false; ToggleSwitchAudioTrackThree.IsOn = false; }
+            if (trackfour) { ToggleSwitchAudioTrackFour.IsEnabled = true; ToggleSwitchAudioTrackFour.IsOn = true; }
+            else { ToggleSwitchAudioTrackFour.IsEnabled = false; ToggleSwitchAudioTrackFour.IsOn = false; }
             // This is needed if user encodes a bluray with pcm audio stream and wants to copy audio
             if (GetAudioInfo() == "pcm_bluray") { pcmBluray = true; } else { pcmBluray = false; }
             GetAudioLanguage();
