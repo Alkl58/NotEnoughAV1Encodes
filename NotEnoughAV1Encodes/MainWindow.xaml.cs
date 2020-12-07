@@ -37,6 +37,9 @@ namespace NotEnoughAV1Encodes
         public static bool Priority = true;         // true = normal, false = below normal (process priority)
         public static bool Logging = true;          // Program Logging
         public static bool TrimEnabled = false;     // Trim Boolean
+        public static bool VFRVideo = false;        // Wether or not timestamp file should be used
+        public static string VSYNC = " -vsync 0 ";  // Default Piping Frame Sync Method
+        public static string VFRCMD = "";           // VFR Muxing Command
         public static string[] VideoChunks;         // Array of command/videochunks
         public static string TrimCommand;           // Trim Parameters
         // Temp Settings Audio
@@ -768,7 +771,9 @@ namespace NotEnoughAV1Encodes
             // Sets that the encode has started
             EncodeStarted = true;
             // Sets the encoder (0 aomenc; 1 rav1e; 2 svt-av1)
-            EncodeMethod = ComboBoxVideoEncoder.SelectedIndex;                      
+            EncodeMethod = ComboBoxVideoEncoder.SelectedIndex;
+            // Sets if Video is VFR
+            VFRVideo = ToggleSwitchVFR.IsOn == true;
             // Sets Trim Params
             TrimEnabled = ToggleSwitchTrimming.IsOn == true;
             if (TrimEnabled)
@@ -848,6 +853,8 @@ namespace NotEnoughAV1Encodes
                 SetAudioSettings();
                 // Set Subtitle Parameters
                 SetSubtitleParameters();
+                // Extracts VFR Timestamps
+                ExtractVFRTimeStamps();
                 // Saves the Project as file
                 SaveSettings(false, TempPathFileName);
 
@@ -859,7 +866,9 @@ namespace NotEnoughAV1Encodes
 
                 // Split Video / Scene Detection
                 SplitVideo();
+                // Set other temporary settings
                 SetTempSettings();
+                // Get Source Framecount
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetSourceFrameCount(); }, token);
                 if (trackOne || trackTwo || trackThree || trackFour)
                 {
@@ -932,6 +941,39 @@ namespace NotEnoughAV1Encodes
                 }
             }
 
+        }
+
+        private void ExtractVFRTimeStamps()
+        {
+            if (VFRVideo)
+            {
+                // Skips extracting if file already exists
+                if (File.Exists(Path.Combine(TempPath, TempPathFileName, "vsync.txt")) == false)
+                {
+                    // Run mkvextract command
+                    Process mkvToolNix = new Process();
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = "cmd.exe",
+                        WorkingDirectory = MKVToolNixPath,
+                        Arguments = "/C mkvextract.exe " + '\u0022' + VideoInput + '\u0022' + " timestamps_v2 0:" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "vsync.txt") + '\u0022'
+                    };
+                    SmallFunctions.Logging("VSYNC Extract: " + startInfo.Arguments);
+                    mkvToolNix.StartInfo = startInfo;
+                    mkvToolNix.Start();
+                    mkvToolNix.WaitForExit();
+                }
+                // Discards piping timestamp 
+                VSYNC = "-vsync drop";
+                VFRCMD = "--timestamps 0:" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "vsync.txt") + '\u0022';
+            }
+            else
+            {
+                // Reset to default VSYNC piping
+                VSYNC = "-vsync 0";
+                VFRCMD = "";
+            }
         }
 
         // ════════════════════════════════════ Temp Settings ═════════════════════════════════════
@@ -1615,7 +1657,7 @@ namespace NotEnoughAV1Encodes
             if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " --end-usage=q --cq-level=" + SliderVideoQuality.Value; }
             else if (RadioButtonVideoBitrate.IsChecked == true) { cmd += " --end-usage=vbr --target-bitrate=" + TextBoxVideoBitrate.Text; }
 
-            if (CheckBoxVideoAdvancedSettings.IsChecked == false)
+            if (ToggleSwitchAdvancedVideoSettings.IsOn == false)
             {
                 // Default params when User don't select advanced settings
                 cmd += " --threads=4 --tile-columns=2 --tile-rows=1";
@@ -1683,7 +1725,7 @@ namespace NotEnoughAV1Encodes
             if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " --quantizer " + SliderVideoQuality.Value; }
             else if (RadioButtonVideoBitrate.IsChecked == true) { cmd += " --bitrate " + TextBoxVideoBitrate.Text; }
 
-            if (CheckBoxVideoAdvancedSettings.IsChecked == false)
+            if (ToggleSwitchAdvancedVideoSettings.IsOn == false)
             {
                 // Default params when User don't select advanced settings
                 cmd += " --threads 4 --tile-cols 2 --tile-rows 1";
@@ -1747,7 +1789,7 @@ namespace NotEnoughAV1Encodes
                 cmd += " --tbr " + TextBoxVideoBitrate.Text; 
             }
 
-            if (CheckBoxVideoAdvancedSettings.IsChecked == true)
+            if (ToggleSwitchAdvancedVideoSettings.IsOn == true)
             {
                 cmd += " --tile-columns " + ComboBoxSVTAV1TileColumns.Text;                             // Tile Columns
                 cmd += " --tile-rows " + ComboBoxSVTAV1TileRows.Text;                                   // Tile Rows
@@ -2166,7 +2208,7 @@ namespace NotEnoughAV1Encodes
                                         {
                                             string aomencCMD = "";
                                             string output = "";
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -vsync 0 -f yuv4mpegpipe - | ";
+                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 " + VSYNC + " -f yuv4mpegpipe - | ";
 
                                             if (OnePass) // One Pass Encoding
                                             {
@@ -2183,7 +2225,7 @@ namespace NotEnoughAV1Encodes
                                         else if (EncodeMethod == 1) // rav1e
                                         {
 
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -vsync 0 -f yuv4mpegpipe - | ";
+                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 " + VSYNC + " -f yuv4mpegpipe - | ";
                                             string rav1eCMD = '\u0022' + Path.Combine(Rav1ePath, "rav1e.exe") + '\u0022' + " - " + EncoderRav1eCommand + " --output ";
                                             string output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                             startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + rav1eCMD + output;
@@ -2192,7 +2234,7 @@ namespace NotEnoughAV1Encodes
                                         {
                                             string svtav1CMD = "";
                                             string output = "";
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -nostdin -vsync 0 -f yuv4mpegpipe - | ";
+                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -nostdin " + VSYNC + " -f yuv4mpegpipe - | ";
                                             if (OnePass)
                                             {
                                                 // One Pass Encoding
@@ -2230,7 +2272,7 @@ namespace NotEnoughAV1Encodes
                                         // Two Pass Encoding Second Pass
                                         if (EncodeMethod == 0) // aomenc
                                         {
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -vsync 0 -f yuv4mpegpipe - | ";
+                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 " + VSYNC + " -f yuv4mpegpipe - | ";
                                             string aomencCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=2" + EncoderAomencCommand + " --fpf=";
                                             string outputLog = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                             string outputVid = " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
@@ -2242,7 +2284,7 @@ namespace NotEnoughAV1Encodes
                                         }
                                         else if (EncodeMethod == 2) // svt-av1
                                         {
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -nostdin -vsync 0 -f yuv4mpegpipe - | ";
+                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -nostdin " + VSYNC + " -f yuv4mpegpipe - | ";
                                             string svtav1CMD = '\u0022' + Path.Combine(Rav1ePath, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 2 --stats ";
                                             string stats = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                             string outputVid = " -b " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
@@ -2482,12 +2524,13 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("VideoBitrate",       TextBoxVideoBitrate.Text);                                              // Video Bitrate
             if (ComboBoxVideoEncoder.SelectedIndex == 0)
                 writer.WriteElementString("VideoAomencRT",      CheckBoxVideoAomencRealTime.IsChecked.ToString());                      // Video Aomenc Real Time Mode
+            writer.WriteElementString("VideoVFR",               ToggleSwitchVFR.IsOn.ToString());                                       // Video Variable Framerate
             // ══════════════════════════════════════════════════════════ Advanced Video Settings ══════════════════════════════════════════════════════════
 
-            writer.WriteElementString("VideoAdvanced",          CheckBoxVideoAdvancedSettings.IsChecked.ToString());                    // Video Advanced Settings
+            writer.WriteElementString("VideoAdvanced",          ToggleSwitchAdvancedVideoSettings.IsOn.ToString());                     // Video Advanced Settings
             writer.WriteElementString("VideoAdvancedCustom",    CheckBoxCustomVideoSettings.IsChecked.ToString());                      // Video Advanced Settings Custom
 
-            if (CheckBoxVideoAdvancedSettings.IsChecked == true && CheckBoxCustomVideoSettings.IsChecked == false)
+            if (ToggleSwitchAdvancedVideoSettings.IsOn == true && CheckBoxCustomVideoSettings.IsChecked == false)
             {
                 // Custom Advanced Settings
                 if (ComboBoxVideoEncoder.SelectedIndex == 0)
@@ -2565,7 +2608,7 @@ namespace NotEnoughAV1Encodes
                 }
 
             }
-            else if (CheckBoxVideoAdvancedSettings.IsChecked == true && CheckBoxCustomVideoSettings.IsChecked == true)
+            else if (ToggleSwitchAdvancedVideoSettings.IsOn == true && CheckBoxCustomVideoSettings.IsChecked == true)
             {
                 writer.WriteElementString("VideoAdvancedCustomString",          TextBoxCustomVideoSettings.Text);                       // Video Advanced Settings Custom String
             }
@@ -2658,8 +2701,9 @@ namespace NotEnoughAV1Encodes
                     case "VideoBitrate":                    TextBoxVideoBitrate.Text = n.InnerText;
                                                             RadioButtonVideoBitrate.IsChecked = true;                               break;  // Video Bitrate
                     case "VideoAomencRT":                   CheckBoxVideoAomencRealTime.IsChecked = n.InnerText == "True";          break;  // Video Aomenc Real Time Mode
+                    case "VideoVFR":                        ToggleSwitchVFR.IsOn = n.InnerText == "True";                           break;  // VIdeo Variable Framerate
                     // ═════════════════════════════════════════════════════════ Advanced Video Settings ═══════════════════════════════════════════════════════════
-                    case "VideoAdvanced":                   CheckBoxVideoAdvancedSettings.IsChecked = n.InnerText == "True";        break;  // Video Advanced Settings
+                    case "VideoAdvanced":                   ToggleSwitchAdvancedVideoSettings.IsOn = n.InnerText == "True";         break;  // Video Advanced Settings
                     case "VideoAdvancedCustom":             CheckBoxCustomVideoSettings.IsChecked = n.InnerText == "True";          break;  // Video Advanced Settings Custom
                     case "VideoAdvancedAomencThreads":      ComboBoxAomencThreads.SelectedIndex = int.Parse(n.InnerText);           break;  // Video Advanced Settings Aomenc Threads
                     case "VideoAdvancedAomencTileCols":     ComboBoxAomencTileColumns.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings Aomenc Tile Columns
