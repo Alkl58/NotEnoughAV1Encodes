@@ -188,6 +188,12 @@ namespace NotEnoughAV1Encodes
             TextBoxSubtitleTrackFive.Text = SubtitleFiledialog();
         }
 
+        private void MessageBoxUnsupportedSubtitleBurnIn()
+        {
+            if (BatchEncoding == false)
+                MessageBox.Show("This subtitle is not supported for hardsubbing!", "Subtitle", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
         private void CheckBoxSubOneBurn_Checked(object sender, RoutedEventArgs e)
         {
             CheckBoxSubTwoBurn.IsChecked = false;
@@ -195,6 +201,11 @@ namespace NotEnoughAV1Encodes
             CheckBoxSubFourBurn.IsChecked = false;
             CheckBoxSubFiveBurn.IsChecked = false;
             CheckBoxSubOneDefault.IsChecked = false;
+            if (Path.GetExtension(TextBoxSubtitleTrackOne.Text) == ".sup")
+            {
+                MessageBoxUnsupportedSubtitleBurnIn();
+                CheckBoxSubOneBurn.IsChecked = false;
+            }
         }
 
         private void CheckBoxSubTwoBurn_Checked(object sender, RoutedEventArgs e)
@@ -204,6 +215,11 @@ namespace NotEnoughAV1Encodes
             CheckBoxSubFourBurn.IsChecked = false;
             CheckBoxSubFiveBurn.IsChecked = false;
             CheckBoxSubTwoDefault.IsChecked = false;
+            if (Path.GetExtension(TextBoxSubtitleTrackTwo.Text) == ".sup")
+            {
+                MessageBoxUnsupportedSubtitleBurnIn();
+                CheckBoxSubTwoBurn.IsChecked = false;
+            }
         }
 
         private void CheckBoxSubThreeBurn_Checked(object sender, RoutedEventArgs e)
@@ -213,6 +229,11 @@ namespace NotEnoughAV1Encodes
             CheckBoxSubFourBurn.IsChecked = false;
             CheckBoxSubFiveBurn.IsChecked = false;
             CheckBoxSubThreeDefault.IsChecked = false;
+            if (Path.GetExtension(TextBoxSubtitleTrackThree.Text) == ".sup")
+            {
+                MessageBoxUnsupportedSubtitleBurnIn();
+                CheckBoxSubThreeBurn.IsChecked = false;
+            }
         }
 
         private void CheckBoxSubFourBurn_Checked(object sender, RoutedEventArgs e)
@@ -222,6 +243,11 @@ namespace NotEnoughAV1Encodes
             CheckBoxSubThreeBurn.IsChecked = false;
             CheckBoxSubFiveBurn.IsChecked = false;
             CheckBoxSubFourDefault.IsChecked = false;
+            if (Path.GetExtension(TextBoxSubtitleTrackFour.Text) == ".sup")
+            {
+                MessageBoxUnsupportedSubtitleBurnIn();
+                CheckBoxSubFourBurn.IsChecked = false;
+            }
         }
 
         private void CheckBoxSubFiveBurn_Checked(object sender, RoutedEventArgs e)
@@ -231,6 +257,11 @@ namespace NotEnoughAV1Encodes
             CheckBoxSubThreeBurn.IsChecked = false;
             CheckBoxSubFourBurn.IsChecked = false;
             CheckBoxSubFiveDefault.IsChecked = false;
+            if (Path.GetExtension(TextBoxSubtitleTrackFive.Text) == ".sup")
+            {
+                MessageBoxUnsupportedSubtitleBurnIn();
+                CheckBoxSubFiveBurn.IsChecked = false;
+            }
         }
 
         private void CheckBoxSubOneDefault_Checked(object sender, RoutedEventArgs e)
