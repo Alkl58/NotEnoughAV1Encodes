@@ -1832,12 +1832,17 @@ namespace NotEnoughAV1Encodes
             {
                 // Light Theme
                 SolidColorBrush transparentWhite = new SolidColorBrush(Color.FromArgb(65, 100, 100, 100));
-                MetroTab.Background = transparentWhite;
+                SolidColorBrush tab = new SolidColorBrush(Color.FromArgb(90, 10, 10, 10));
+                MetroTab.Background = tab;
+                Grid0.Background = transparentWhite;
             }
             else
             {
+                // Dark Theme
                 SolidColorBrush transparentBlack = new SolidColorBrush(Color.FromArgb(65, 30, 30, 30));
-                MetroTab.Background = transparentBlack;
+                SolidColorBrush tab = new SolidColorBrush(Color.FromArgb(90, 10, 10, 10));
+                MetroTab.Background = tab;
+                Grid0.Background = transparentBlack;
             }
         }
 
