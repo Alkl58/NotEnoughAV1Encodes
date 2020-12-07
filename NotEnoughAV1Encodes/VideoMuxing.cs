@@ -9,38 +9,82 @@ namespace NotEnoughAV1Encodes
     {
         public static async Task Concat()
         {
-            if (SmallFunctions.Cancel.CancelAll == false)
-            {
-                //Writes all ivf files into chunks.txt for later concat
-                string ffmpegCommand = "/C (for %i in (" + '\u0022' + Path.Combine(MainWindow.tempPath, "Chunks") + "\\*.ivf" + '\u0022' + ") do @echo file '%i') > " + '\u0022' + Path.Combine(MainWindow.tempPath, "Chunks") + "\\chunks.txt" + '\u0022';
-                await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
-                //-----------------------------------------------------
+            // ══════════════════════════════════════ Chunk Parsing ══════════════════════════════════════
+            // Writes all ivf files into chunks.txt for later concat
+            string ffmpegCommand = "/C (for %i in (" + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks") + "\\*.ivf" + '\u0022' + ") do @echo file '%i') > " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "chunks.txt") + '\u0022';
+            await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
 
-                if (MainWindow.audioEncoding == false)
+            // ════════════════════════════════════ Muxing with Audio ════════════════════════════════════
+            if (MainWindow.trackOne || MainWindow.trackTwo || MainWindow.trackThree || MainWindow.trackFour)
+            {
+                // First Concats the video to a temp.mkv file
+                ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "chunks.txt") + '\u0022' + " -c copy " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022';
+                SmallFunctions.Logging("Muxing: " + ffmpegCommand);
+                await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
+
+                if (MainWindow.subSoftSubEnabled != true)
                 {
-                    if (MainWindow.subtitleEncoding == false)
+                    // Muxes Video & Audio together
+                    // Run mkvmerge command
+                    Process mkvToolNix = new Process();
+                    ProcessStartInfo startInfo = new ProcessStartInfo
                     {
-                        //No Audio && No Softsubs
-                        ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "Chunks", "chunks.txt") + '\u0022' + MainWindow.encoderMetadata + " -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
-                        SmallFunctions.Logging("VideoMuxing() Command: " + ffmpegCommand);
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = "cmd.exe",
+                        WorkingDirectory = MainWindow.MKVToolNixPath,
+                        Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.VideoOutput + '\u0022' + " " + MainWindow.VFRCMD + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022'
+                    };
+                    SmallFunctions.Logging("Muxing: " + startInfo.Arguments);
+                    mkvToolNix.StartInfo = startInfo;
+                    mkvToolNix.Start();
+                    mkvToolNix.WaitForExit();
+                }
+                else
+                {
+                    // Muxes Video & Audio & Subtitles together
+                    // Run mkvmerge command
+                    Process mkvToolNix = new Process();
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = "cmd.exe",
+                        WorkingDirectory = MainWindow.MKVToolNixPath,
+                        Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.VideoOutput + '\u0022' + " " + MainWindow.VFRCMD + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022' + " " + MainWindow.subCommand
+                    };
+                    SmallFunctions.Logging("Muxing: " + startInfo.Arguments);
+                    mkvToolNix.StartInfo = startInfo;
+                    mkvToolNix.Start();
+                    mkvToolNix.WaitForExit();
+                }
+            }
+            else
+            {
+                // ═════════════════════════════════ Muxing without Audio ════════════════════════════════
+                // Video Concat
+                if (MainWindow.subSoftSubEnabled != true)
+                {
+                    // Only Video Output
+                    if (MainWindow.VFRVideo == false)
+                    {
+                        ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "chunks.txt") + '\u0022' + " -c copy " + '\u0022' + MainWindow.VideoOutput + '\u0022';
                         await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
                     }
                     else
                     {
-                        //No Audio && With Softsubs
-                        ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "Chunks", "chunks.txt") + '\u0022' + MainWindow.encoderMetadata + " -c copy " + '\u0022' + Path.Combine(MainWindow.tempPath, "temp.mkv") + '\u0022';
-                        SmallFunctions.Logging("VideoMuxing() Command: " + ffmpegCommand);
+                        // First Concats the video to a temp.mkv file
+                        ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "chunks.txt") + '\u0022' + " -c copy " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022';
                         await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
 
-                        //Run mkvmerge command
+                        // Run mkvmerge command with VFR Support
                         Process mkvToolNix = new Process();
                         ProcessStartInfo startInfo = new ProcessStartInfo
                         {
                             WindowStyle = ProcessWindowStyle.Hidden,
                             FileName = "cmd.exe",
-                            WorkingDirectory = MainWindow.mkvToolNixPath,
-                            Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.videoOutput + '\u0022' + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "temp.mkv") + '\u0022' + " " + MainWindow.subtitleMuxingInput
+                            WorkingDirectory = MainWindow.MKVToolNixPath,
+                            Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.VideoOutput + '\u0022' + " " + MainWindow.VFRCMD + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022'
                         };
+                        SmallFunctions.Logging("Muxing: " + startInfo.Arguments);
                         mkvToolNix.StartInfo = startInfo;
                         mkvToolNix.Start();
                         mkvToolNix.WaitForExit();
@@ -48,37 +92,26 @@ namespace NotEnoughAV1Encodes
                 }
                 else
                 {
-                    //Temp File
-                    ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "Chunks", "chunks.txt") + '\u0022' + MainWindow.encoderMetadata + " -c copy " + '\u0022' + Path.Combine(MainWindow.tempPath, "temp.mkv") + '\u0022';
-                    SmallFunctions.Logging("VideoMuxing() Command: " + ffmpegCommand);
+                    // First Concats the video to a temp.mkv file
+                    ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "chunks.txt") + '\u0022' + " -c copy " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022';
                     await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
 
-
-                    if (MainWindow.subtitleEncoding == false)
+                    // Muxes Video & Subtitles together
+                    // Run mkvmerge command
+                    Process mkvToolNix = new Process();
+                    ProcessStartInfo startInfo = new ProcessStartInfo
                     {
-                        //With Audio && No Softsubs
-                        ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "temp.mkv") + '\u0022' + " -i " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + MainWindow.encoderMetadata + " -map 0:v -map 1:a -c copy " + '\u0022' + MainWindow.videoOutput + '\u0022';
-                        SmallFunctions.Logging("VideoMuxing() Command: " + ffmpegCommand);
-                        await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
-                    }
-                    else
-                    {
-                        //With Audio && With Softsubs
-                        //Run mkvmerge command
-                        Process mkvToolNix = new Process();
-                        ProcessStartInfo startInfo = new ProcessStartInfo
-                        {
-                            WindowStyle = ProcessWindowStyle.Hidden,
-                            FileName = "cmd.exe",
-                            WorkingDirectory = MainWindow.mkvToolNixPath,
-                            Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.videoOutput + '\u0022' + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + " " + MainWindow.subtitleMuxingInput
-                        };
-                        mkvToolNix.StartInfo = startInfo;
-                        SmallFunctions.Logging("mkvmerge.exe --output " + '\u0022' + MainWindow.videoOutput + '\u0022' + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.tempPath, "AudioEncoded", "audio.mkv") + '\u0022' + " " + MainWindow.subtitleMuxingInput);
-                        mkvToolNix.Start();
-                        mkvToolNix.WaitForExit();
-                    }
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = "cmd.exe",
+                        WorkingDirectory = MainWindow.MKVToolNixPath,
+                        Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.VideoOutput + '\u0022' + " " + MainWindow.VFRCMD + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022' + " " + MainWindow.subCommand
+                    };
+                    SmallFunctions.Logging("Muxing: " + startInfo.Arguments);
+                    mkvToolNix.StartInfo = startInfo;
+                    mkvToolNix.Start();
+                    mkvToolNix.WaitForExit();
                 }
+
             }
         }
     }

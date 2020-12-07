@@ -1,15 +1,15 @@
-﻿<Window x:Name="WindowSavePreset" x:Class="NotEnoughAV1Encodes.SavePreset"
+﻿<mah:MetroWindow x:Class="NotEnoughAV1Encodes.SavePreset"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
-        Title="Save Preset" Height="127" Width="261.5" ResizeMode="NoResize">
+        Title="Save Preset" Height="127" Width="260" ResizeMode="NoResize">
     <Grid>
-        <Button x:Name="ButtonSavePreset" Content="Save" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Width="110" Height="25" Background="White" Click="ButtonSavePreset_Click"/>
-        <TextBox x:Name="TextBoxPresetName" HorizontalAlignment="Left" Height="25" Margin="10,21,0,0" TextWrapping="Wrap" Text="PresetName" VerticalAlignment="Top" Width="222" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        <Button x:Name="ButtonCloseWindow" Content="Cancel" HorizontalAlignment="Left" Margin="122,51,0,0" VerticalAlignment="Top" Width="110" Height="25" Click="ButtonCloseWindow_Click" Background="White"/>
-
+        <Button x:Name="ButtonSavePreset" Content="Save" HorizontalAlignment="Left" Margin="16,50,0,0" VerticalAlignment="Top" Width="110" Height="26" Background="{x:Null}" Click="ButtonSavePreset_Click"/>
+        <TextBox x:Name="TextBoxPresetName" HorizontalAlignment="Left" Height="26" Margin="16,20,0,0" TextWrapping="Wrap" Text="PresetName" VerticalAlignment="Top" Width="222" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Button x:Name="ButtonCloseWindow" Content="Cancel" HorizontalAlignment="Left" Margin="128,50,0,0" VerticalAlignment="Top" Width="110" Height="26" Click="ButtonCloseWindow_Click" Background="{x:Null}"/>
     </Grid>
-</Window>
+</mah:MetroWindow>
