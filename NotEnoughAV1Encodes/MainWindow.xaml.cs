@@ -2058,6 +2058,7 @@ namespace NotEnoughAV1Encodes
             if (browseOutputFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 TextBoxCustomTempPath.Text = browseOutputFolder.SelectedPath;
+                SaveSettingsTab();
             }
         }
 
