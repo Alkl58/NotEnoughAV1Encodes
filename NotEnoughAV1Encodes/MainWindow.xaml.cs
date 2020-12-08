@@ -930,7 +930,7 @@ namespace NotEnoughAV1Encodes
                 // Plays a sound if encoding has finished
                 if (BatchEncoding == false)
                     SmallFunctions.PlayFinishedSound();
-                if (ToggleSwitchTempFolder.IsOn == true && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
+                if (ToggleSwitchShutdownAfterEncode.IsOn == true && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
             }
             catch { SmallFunctions.PlayStopSound(); }
             EncodeStarted = false;
