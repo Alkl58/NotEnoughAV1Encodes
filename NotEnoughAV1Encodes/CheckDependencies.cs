@@ -42,6 +42,10 @@ namespace NotEnoughAV1Encodes
             else if (File.Exists(@"C:\Program Files\MKVToolNix\mkvmerge.exe")) { MainWindow.MKVToolNixPath = @"C:\Program Files\MKVToolNix\"; }
             else { MainWindow.MKVToolNixPath = null; }
             SmallFunctions.Logging("MKVToolNix Path: " + MainWindow.MKVToolNixPath);
+
+            // Checks if PySceneDetect is found in the Windows PATH environment
+            if (ExistsOnPath("scenedetect.exe")) { MainWindow.PySceneFound = true; }
+            SmallFunctions.Logging("PySceneDetect found: " + MainWindow.PySceneFound);
         }
 
         private static bool ExistsOnPath(string fileName)

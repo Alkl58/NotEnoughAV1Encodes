@@ -82,6 +82,7 @@ namespace NotEnoughAV1Encodes
         public static string Rav1ePath = null;      // Path to rav1e
         public static string SvtAV1Path = null;     // Path to svt-av1
         public static string MKVToolNixPath = null; // Path to mkvtoolnix
+        public static bool PySceneFound = false;    // 
         // Temp Variables
         public static bool EncodeStarted = false;   // Encode Started Boolean
         public static bool BatchEncoding = false;   // Batch Encoding
@@ -147,6 +148,16 @@ namespace NotEnoughAV1Encodes
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
+
+        private void ComboBoxSplittingMethod_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if(ComboBoxSplittingMethod.SelectedIndex == 1){
+                if (PySceneFound == false)
+                {
+                    MessageBox.Show("PySceneDetect seems to be missing on your System.\n\nPlease make sure that Python and PySceneDetect is installed.\n\nInstruction:\n1. Install Python 3.8.6\n2. In CMD: pip install scenedetect[opencv]\n3. In CMD: pip install numpy==1.19.3\n", "PySceneDetect", MessageBoxButton.OK);
+                }
+            }
+        }
 
         // Subtitle UI
 

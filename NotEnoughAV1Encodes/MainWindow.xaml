@@ -75,7 +75,7 @@
                     <Button x:Name="ButtonTrimPlusEnd" Content="+" HorizontalAlignment="Left" Margin="916,142,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlusEnd_Click" />
                     <Button x:Name="ButtonTrimMinusEnd" Content="-" HorizontalAlignment="Left" Margin="790,142,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinusEnd_Click"  />
                     <Label Content="Splitting Method:" HorizontalAlignment="Left" Margin="57,57,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxSplittingMethod" HorizontalAlignment="Left" Margin="179,57,0,0" VerticalAlignment="Top" Width="168" Height="29" VerticalContentAlignment="Center">
+                    <ComboBox x:Name="ComboBoxSplittingMethod" HorizontalAlignment="Left" Margin="179,57,0,0" VerticalAlignment="Top" Width="168" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxSplittingMethod_SelectionChanged">
                         <ComboBoxItem Content="Scene Detect (ffmpeg)" IsSelected="True"/>
                         <ComboBoxItem Content="PySceneDetect"/>
                         <ComboBoxItem Content="Equal Chunking"/>
