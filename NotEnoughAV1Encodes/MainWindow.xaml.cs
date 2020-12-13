@@ -149,6 +149,72 @@ namespace NotEnoughAV1Encodes
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
 
+        private void AutoSetBitDepthAndColorFormat(string result)
+        {
+            string format = FFprobe.GetPixelFormat(result);
+            if (format == "yuv420p10le")
+            {
+                ComboBoxVideoBitDepth.SelectedIndex = 1;
+                ComboBoxAomencColorFormat.SelectedIndex = 0;
+                ComboBoxRav1eColorFormat.SelectedIndex = 0;
+                ComboBoxSVTAV1ColorFormat.SelectedIndex = 0;
+            }
+            else if(format == "yuv420p12le")
+            {
+                ComboBoxVideoBitDepth.SelectedIndex = 2;
+                ComboBoxAomencColorFormat.SelectedIndex = 0;
+                ComboBoxRav1eColorFormat.SelectedIndex = 0;
+                ComboBoxSVTAV1ColorFormat.SelectedIndex = 0;
+            }else if (format == "yuv422p")
+            {
+                ToggleSwitchAdvancedVideoSettings.IsOn = true;
+                ComboBoxVideoBitDepth.SelectedIndex = 0;
+                ComboBoxAomencColorFormat.SelectedIndex = 1;
+                ComboBoxRav1eColorFormat.SelectedIndex = 1;
+                ComboBoxSVTAV1ColorFormat.SelectedIndex = 1;
+            }
+            else if (format == "yuv422p10le")
+            {
+                ToggleSwitchAdvancedVideoSettings.IsOn = true;
+                ComboBoxVideoBitDepth.SelectedIndex = 1;
+                ComboBoxAomencColorFormat.SelectedIndex = 1;
+                ComboBoxRav1eColorFormat.SelectedIndex = 1;
+                ComboBoxSVTAV1ColorFormat.SelectedIndex = 1;
+            }
+            else if (format == "yuv422p12le")
+            {
+                ToggleSwitchAdvancedVideoSettings.IsOn = true;
+                ComboBoxVideoBitDepth.SelectedIndex = 2;
+                ComboBoxAomencColorFormat.SelectedIndex = 1;
+                ComboBoxRav1eColorFormat.SelectedIndex = 1;
+                ComboBoxSVTAV1ColorFormat.SelectedIndex = 1;
+            }
+            else if (format == "yuv444p")
+            {
+                ToggleSwitchAdvancedVideoSettings.IsOn = true;
+                ComboBoxVideoBitDepth.SelectedIndex = 0;
+                ComboBoxAomencColorFormat.SelectedIndex = 2;
+                ComboBoxRav1eColorFormat.SelectedIndex = 2;
+                ComboBoxSVTAV1ColorFormat.SelectedIndex = 2;
+            }
+            else if (format == "yuv444p10le")
+            {
+                ToggleSwitchAdvancedVideoSettings.IsOn = true;
+                ComboBoxVideoBitDepth.SelectedIndex = 1;
+                ComboBoxAomencColorFormat.SelectedIndex = 2;
+                ComboBoxRav1eColorFormat.SelectedIndex = 2;
+                ComboBoxSVTAV1ColorFormat.SelectedIndex = 2;
+            }
+            else if (format == "yuv444p12le")
+            {
+                ToggleSwitchAdvancedVideoSettings.IsOn = true;
+                ComboBoxVideoBitDepth.SelectedIndex = 2;
+                ComboBoxAomencColorFormat.SelectedIndex = 2;
+                ComboBoxRav1eColorFormat.SelectedIndex = 2;
+                ComboBoxSVTAV1ColorFormat.SelectedIndex = 2;
+            }
+        }
+
         private void ComboBoxSplittingMethod_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if(ComboBoxSplittingMethod.SelectedIndex == 1){
@@ -862,13 +928,15 @@ namespace NotEnoughAV1Encodes
                     // Get Source Information
                     GetAudioInformation();
                     // Reset Subtitle
-                    
                     GetSubtitleTracks();
                     // Don't want to burn in subtitles in Batch Encoding
                     CheckBoxSubOneBurn.IsChecked = false;
                     CheckBoxSubTwoBurn.IsChecked = false;
                     CheckBoxSubThreeBurn.IsChecked = false;
                     CheckBoxSubFourBurn.IsChecked = false;
+
+                    // Set Bit-Depth and Color Format
+                    AutoSetBitDepthAndColorFormat(VideoInput);
 
                     // Start encoding process
                     await MainEntry(cancellationTokenSource.Token);
@@ -1983,6 +2051,7 @@ namespace NotEnoughAV1Encodes
                     TextBoxTrimEnd.Text = SmallFunctions.GetVideoLengthAccurate(result);
                     TrimEndTemp = TextBoxTrimEnd.Text;
                     LabelVideoLength.Content = TrimEndTemp.Remove(TrimEndTemp.Length-4);
+                    AutoSetBitDepthAndColorFormat(result);
                     LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(result);
                     LabelVideoFramerate.Content = FFprobe.GetFrameRate(result);
                     LabelVideoResolution.Content = FFprobe.GetResolution(result);
@@ -2000,6 +2069,7 @@ namespace NotEnoughAV1Encodes
                     TextBoxTrimEnd.Text = SmallFunctions.GetVideoLengthAccurate(result);
                     TrimEndTemp = TextBoxTrimEnd.Text;
                     LabelVideoLength.Content = TrimEndTemp.Remove(TrimEndTemp.Length - 4);
+                    AutoSetBitDepthAndColorFormat(result);
                     LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(result);
                     LabelVideoFramerate.Content = FFprobe.GetFrameRate(result);
                     LabelVideoResolution.Content = FFprobe.GetResolution(result);
