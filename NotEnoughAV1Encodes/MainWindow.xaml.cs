@@ -1971,6 +1971,10 @@ namespace NotEnoughAV1Encodes
                     GetSubtitleTracks();
                     TextBoxTrimEnd.Text = SmallFunctions.GetVideoLengthAccurate(result);
                     TrimEndTemp = TextBoxTrimEnd.Text;
+                    LabelVideoLength.Content = TrimEndTemp.Remove(TrimEndTemp.Length-4);
+                    LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(result);
+                    LabelVideoFramerate.Content = FFprobe.GetFrameRate(result);
+                    LabelVideoResolution.Content = FFprobe.GetResolution(result);
                     ReadTimeCode = true;
                 }
             }
@@ -1984,6 +1988,10 @@ namespace NotEnoughAV1Encodes
                     GetSubtitleTracks();
                     TextBoxTrimEnd.Text = SmallFunctions.GetVideoLengthAccurate(result);
                     TrimEndTemp = TextBoxTrimEnd.Text;
+                    LabelVideoLength.Content = TrimEndTemp.Remove(TrimEndTemp.Length - 4);
+                    LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(result);
+                    LabelVideoFramerate.Content = FFprobe.GetFrameRate(result);
+                    LabelVideoResolution.Content = FFprobe.GetResolution(result);
                     ReadTimeCode = true;
                 }
             }else if (batchFolder == true && resultProject == false)

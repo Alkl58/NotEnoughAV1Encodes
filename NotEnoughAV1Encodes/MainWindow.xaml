@@ -24,7 +24,7 @@
         <mah:MetroAnimatedSingleRowTabControl x:Name="MetroTab" Margin="21,116,23,63" Background="{x:Null}">
             <mah:MetroTabItem Header="Summary">
                 <Grid x:Name="Grid0">
-                    <GroupBox Header="Current Encoding Settings" Margin="105,89,105,0" Height="163" VerticalAlignment="Top">
+                    <GroupBox Header="Current Encoding Settings" Margin="105,150,105,0" Height="163" VerticalAlignment="Top">
                         <Grid>
                             <Label Content="Encoder:" HorizontalAlignment="Left" Margin="15,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                             <Label Content="{Binding Text, ElementName=ComboBoxVideoEncoder, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="94,13,0,0" VerticalAlignment="Top" Width="140"/>
@@ -44,6 +44,19 @@
                     <Label Content="Destination:" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <TextBox x:Name="TextBoxVideoSource" Height="29" Margin="105,10,105,0" TextWrapping="Wrap" Text="No Source Selected" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
                     <TextBox x:Name="TextBoxVideoDestination" Height="29" Margin="105,39,105,0" TextWrapping="Wrap" Text="No Destination Selected" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                    <GroupBox Header="Video Information" Height="72" Margin="105,73,105,0" VerticalAlignment="Top">
+                        <Grid>
+                            <Label Content="Length:" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label x:Name="LabelVideoLength" Content="00:00:00" HorizontalAlignment="Left" Margin="67,5,0,0" VerticalAlignment="Top" Width="80"/>
+                            <Label Content="Color Format:" HorizontalAlignment="Left" Margin="147,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label x:Name="LabelVideoColorFomat" Content="yuv420p" HorizontalAlignment="Left" Margin="239,5,0,0" VerticalAlignment="Top" Width="80"/>
+                            <Label Content="Framerate:" HorizontalAlignment="Left" Margin="324,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label x:Name="LabelVideoFramerate" Content="24" HorizontalAlignment="Left" Margin="400,5,0,0" VerticalAlignment="Top" Width="80"/>
+                            <Label Content="Resolution:" HorizontalAlignment="Left" Margin="485,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label x:Name="LabelVideoResolution" Content="1920x1080" HorizontalAlignment="Left" Margin="563,5,0,0" VerticalAlignment="Top" Width="80"/>
+
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Splitting">
