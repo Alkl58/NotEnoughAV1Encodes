@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Text;
 using System.Threading;
 using System.Windows;
 
@@ -10,6 +11,18 @@ namespace NotEnoughAV1Encodes
 {
     class SmallFunctions
     {
+        public static void CheckUnicode(string fileName)
+        {
+            // This function checks if the provided video file has compatible unicode characters in the filename
+            // Reference: codesnippets.fesslersoft.de/how-to-check-if-a-string-is-unicode-in-c-and-vb-net/
+            var asciiBytesCount = Encoding.ASCII.GetByteCount(fileName);
+            var unicodBytesCount = Encoding.UTF8.GetByteCount(fileName);
+            if (asciiBytesCount != unicodBytesCount)
+            {
+                MessageBox.Show("The filename contains non unicode characters.\n\nPlease rename your file before proceeding to guarantee a successful encode!", "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
         public static int getCoreCount()
         {
             // Gets Core Count

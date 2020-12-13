@@ -1965,6 +1965,7 @@ namespace NotEnoughAV1Encodes
                     TextBoxVideoSource.Text = result;
                     VideoInput = result;
                     TempPathFileName = Path.GetFileNameWithoutExtension(result);
+                    SmallFunctions.CheckUnicode(TempPathFileName);
                     BatchEncoding = false;
                     GetAudioInformation();
                     GetSubtitleTracks();
