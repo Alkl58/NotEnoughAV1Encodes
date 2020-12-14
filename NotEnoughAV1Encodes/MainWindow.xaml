@@ -75,7 +75,7 @@
                     <Button x:Name="ButtonTrimPlusEnd" Content="+" HorizontalAlignment="Left" Margin="916,142,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlusEnd_Click" />
                     <Button x:Name="ButtonTrimMinusEnd" Content="-" HorizontalAlignment="Left" Margin="790,142,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinusEnd_Click"  />
                     <Label Content="Splitting Method:" HorizontalAlignment="Left" Margin="57,57,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxSplittingMethod" HorizontalAlignment="Left" Margin="179,57,0,0" VerticalAlignment="Top" Width="168" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxSplittingMethod_SelectionChanged">
+                    <ComboBox x:Name="ComboBoxSplittingMethod" HorizontalAlignment="Left" Margin="179,57,0,0" VerticalAlignment="Top" Width="168" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxSplittingMethod_SelectionChanged" ToolTip="Splitting Method">
                         <ComboBoxItem Content="Scene Detect (ffmpeg)" IsSelected="True"/>
                         <ComboBoxItem Content="PySceneDetect"/>
                         <ComboBoxItem Content="Equal Chunking"/>
@@ -92,7 +92,7 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <TextBox x:Name="TextBoxSplittingThreshold" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="27" Margin="179,109,0,0" TextWrapping="Wrap" Text="0.3" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                    <TextBox x:Name="TextBoxSplittingThreshold" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="27" Margin="179,109,0,0" TextWrapping="Wrap" Text="0.3" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="Scene Detect Threshold">
                         <TextBox.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -168,7 +168,7 @@
                         </Label.Style>
                     </Label>
                     <Label Content="Worker Count:" HorizontalAlignment="Left" Margin="57,265,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxWorkerCount" HorizontalAlignment="Left" Margin="179,265,0,0" VerticalAlignment="Top" Width="86" Height="29"/>
+                    <ComboBox x:Name="ComboBoxWorkerCount" HorizontalAlignment="Left" Margin="179,265,0,0" VerticalAlignment="Top" Width="86" Height="29" ToolTip="Amount of parallel workers."/>
                     <Label Content="Process Priority:" HorizontalAlignment="Left" Margin="57,308,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="179,308,0,0" VerticalAlignment="Top" Width="168" Height="29">
                         <ComboBoxItem Content="Normal" IsSelected="True"/>
@@ -246,13 +246,13 @@
                     <GroupBox Header="Video" HorizontalAlignment="Left" Height="190" Margin="10,10,0,0" VerticalAlignment="Top" Width="372">
                         <Grid>
                             <Label Content="Encoder:" HorizontalAlignment="Left" Margin="30,32,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="110,32,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
+                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="110,32,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use">
                                 <ComboBoxItem Content="aomenc" IsSelected="True"/>
                                 <ComboBoxItem Content="rav1e"/>
                                 <ComboBoxItem Content="svt-av1"/>
                             </ComboBox>
                             <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="30,72,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="110,72,0,0" VerticalAlignment="Top" Width="60" Height="30" VerticalContentAlignment="Center">
+                            <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="110,72,0,0" VerticalAlignment="Top" Width="60" Height="30" VerticalContentAlignment="Center" ToolTip="Bit-Depth. 10bit recommended for animation and to avoid banding.">
                                 <ComboBoxItem Content="8" IsSelected="True"/>
                                 <ComboBoxItem Content="10"/>
                                 <ComboBoxItem Content="12"/>
@@ -265,11 +265,11 @@
                     <GroupBox Header="Quality" Height="190" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="542">
                         <Grid>
                             <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="Constant Quality:" HorizontalAlignment="Left" Margin="42,19,0,0" VerticalAlignment="Top" Height="29" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True" Background="{x:Null}"/>
-                            <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" HorizontalAlignment="Left" Margin="60,53,0,0" VerticalAlignment="Top" Width="431" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959"/>
+                            <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" HorizontalAlignment="Left" Margin="60,53,0,0" VerticalAlignment="Top" Width="431" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959" ToolTip="Target Quality"/>
                             <Label x:Name="LabelVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Content="{Binding Value, ElementName=SliderVideoQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="172,18,0,0" VerticalAlignment="Top"/>
                             <Label Content="| Lowest Quality" HorizontalAlignment="Left" Margin="59,76,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
                             <Label Content="Highest Quality |" HorizontalAlignment="Left" Margin="416,76,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
-                            <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="42,119,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center" Background="{x:Null}"/>
+                            <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="42,119,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center" Background="{x:Null}" ToolTip="Target Bitrate"/>
                             <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="167,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         </Grid>
                     </GroupBox>
@@ -289,7 +289,7 @@
                             <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="Advanced Video Settings" HorizontalAlignment="Left" Height="100" Margin="256,75,0,-42" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.44,0.39"/>
                         </Grid>
                     </GroupBox>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchVFR" Header="" HorizontalAlignment="Left" Height="100" Margin="126,130,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchVFR" Header="" HorizontalAlignment="Left" Height="100" Margin="126,130,0,0" VerticalAlignment="Top" Width="100" ToolTip="ONLY TOGGLE IF SOURCE IS VFR"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Advanced Settings" Visibility="{Binding ElementName=ToggleSwitchAdvancedVideoSettings, Path=IsOn, Converter={StaticResource b2v}}">
