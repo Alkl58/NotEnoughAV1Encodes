@@ -1793,6 +1793,7 @@ namespace NotEnoughAV1Encodes
                 cmd += " --aq-mode=" + ComboBoxAomencAQMode.SelectedIndex;                              // AQ-Mode
                 cmd += " --enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex;      // Key Frame Filtering
                 cmd += " --tune=" + ComboBoxAomencTune.Text;                                            // Tune
+                cmd += " --tune-content=" + ComboBoxAomencTuneContent.Text;                             // Tune-Content
                 if (TextBoxAomencMaxGOP.Text != "0")
                 {
                     cmd += " --kf-max-dist=" + TextBoxAomencMaxGOP.Text;                                // Keyframe Interval
@@ -2685,6 +2686,7 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("VideoAdvancedAomencAQMode",      ComboBoxAomencAQMode.SelectedIndex.ToString());         // Video Advanced Settings Aomenc AQ Mode
                     writer.WriteElementString("VideoAdvancedAomencKFFiltering", ComboBoxAomencKeyFiltering.SelectedIndex.ToString());   // Video Advanced Settings Aomenc Keyframe Filtering
                     writer.WriteElementString("VideoAdvancedAomencTune",        ComboBoxAomencTune.SelectedIndex.ToString());           // Video Advanced Settings Aomenc Tune
+                    writer.WriteElementString("VideoAdvancedAomencTuneContent", ComboBoxAomencTuneContent.SelectedIndex.ToString());    // Video Advanced Settings Aomenc Tune
                     writer.WriteElementString("VideoAdvancedAomencARNR",        CheckBoxAomencARNRMax.IsChecked.ToString());            // Video Advanced Settings Aomenc ARNR
                     if (CheckBoxAomencARNRMax.IsChecked == true)
                     {
@@ -2854,6 +2856,7 @@ namespace NotEnoughAV1Encodes
                     case "VideoAdvancedAomencAQMode":       ComboBoxAomencAQMode.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Advanced Settings Aomenc AQ Mode
                     case "VideoAdvancedAomencKFFiltering":  ComboBoxAomencKeyFiltering.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings Aomenc Keyframe Filtering
                     case "VideoAdvancedAomencTune":         ComboBoxAomencTune.SelectedIndex = int.Parse(n.InnerText);              break;  // Video Advanced Settings Aomenc Tune
+                    case "VideoAdvancedAomencTuneContent":  ComboBoxAomencTuneContent.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings Aomenc Tune Content
                     case "VideoAdvancedAomencARNR":         CheckBoxAomencARNRMax.IsChecked = n.InnerText == "True";                break;  // Video Advanced Settings Aomenc ARNR
                     case "VideoAdvancedAomencARNRMax":      ComboBoxAomencARNRMax.SelectedIndex = int.Parse(n.InnerText);           break;  // Video Advanced Settings Aomenc ARNR Max
                     case "VideoAdvancedAomencARNRStre":     ComboBoxAomencARNRStrength.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings Aomenc ARNR Strength

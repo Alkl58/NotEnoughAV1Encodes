@@ -246,20 +246,22 @@
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                     <GroupBox Header="Video" HorizontalAlignment="Left" Height="190" Margin="10,10,0,0" VerticalAlignment="Top" Width="372">
                         <Grid>
-                            <Label Content="Encoder:" HorizontalAlignment="Left" Margin="30,32,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="110,32,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use">
+                            <Label Content="Encoder:" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use">
                                 <ComboBoxItem Content="aomenc" IsSelected="True"/>
                                 <ComboBoxItem Content="rav1e"/>
                                 <ComboBoxItem Content="svt-av1"/>
                             </ComboBox>
-                            <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="30,72,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="110,72,0,0" VerticalAlignment="Top" Width="60" Height="30" VerticalContentAlignment="Center" ToolTip="Bit-Depth. 10bit recommended for animation and to avoid banding.">
+                            <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="60" Height="30" VerticalContentAlignment="Center" ToolTip="Bit-Depth. 10bit recommended for animation and to avoid banding.">
                                 <ComboBoxItem Content="8" IsSelected="True"/>
                                 <ComboBoxItem Content="10"/>
                                 <ComboBoxItem Content="12"/>
                             </ComboBox>
-                            <Label Content="VFR:" HorizontalAlignment="Left" Margin="30,116,0,0" VerticalAlignment="Top"/>
-                            <Label Content="(only MKV Input / Output)" HorizontalAlignment="Left" Margin="189,116,0,0" VerticalAlignment="Top"/>
+                            <Label Content="VFR:" HorizontalAlignment="Left" Margin="19,93,0,0" VerticalAlignment="Top"/>
+                            <Label Content="(only MKV Input / Output)" HorizontalAlignment="Left" Margin="220,91,-6,0" VerticalAlignment="Top"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xD;&#xA;" HorizontalAlignment="Left" Height="73" Margin="135,80,0,0" VerticalAlignment="Top" Width="158" RenderTransformOrigin="0.44,0.39"/>
+                            <Label Content="Advanced Settings:" HorizontalAlignment="Left" Margin="19,124,0,0" VerticalAlignment="Top"/>
 
                         </Grid>
                     </GroupBox>
@@ -276,21 +278,20 @@
                     </GroupBox>
                     <GroupBox Header="Optimisation" HorizontalAlignment="Left" Margin="10,0,0,10" Width="372" Height="168" VerticalAlignment="Bottom">
                         <Grid>
-                            <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="246,41,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Visible"/>
-                            <Label Content="Speed:" HorizontalAlignment="Left" Margin="29,30,0,0" VerticalAlignment="Top"/>
-                            <Slider x:Name="SliderVideoSpeed" HorizontalAlignment="Left" Margin="110,37,0,0" VerticalAlignment="Top" Width="127" Height="29" TickPlacement="BottomRight" Foreground="#FF595959" Maximum="9" Value="4" SmallChange="0" IsSnapToTickEnabled="True" ValueChanged="SliderVideoSpeed_ValueChanged"/>
+                            <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="246,34,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Visible"/>
+                            <Label Content="Speed:" HorizontalAlignment="Left" Margin="16,30,0,0" VerticalAlignment="Top"/>
+                            <Slider x:Name="SliderVideoSpeed" HorizontalAlignment="Left" Margin="109,30,0,0" VerticalAlignment="Top" Width="127" Height="29" TickPlacement="BottomRight" Foreground="#FF595959" Maximum="9" Value="4" SmallChange="0" IsSnapToTickEnabled="True" ValueChanged="SliderVideoSpeed_ValueChanged"/>
                             <Label x:Name="LabelVideoSpeed" Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="81,30,0,0" VerticalAlignment="Top"/>
-                            <Label Content="Passes:" HorizontalAlignment="Left" Margin="29,90,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxVideoPasses" HorizontalAlignment="Left" Margin="110,90,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoPasses_SelectionChanged">
+                            <Label Content="Passes:" HorizontalAlignment="Left" Margin="16,90,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="ComboBoxVideoPasses" HorizontalAlignment="Left" Margin="81,88,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoPasses_SelectionChanged">
                                 <ComboBoxItem Content="1" IsSelected="True"/>
                                 <ComboBoxItem Content="2"/>
                             </ComboBox>
-                            <Label Content="| Slowest" HorizontalAlignment="Left" Margin="109,59,0,0" VerticalAlignment="Top" FontSize="9" Width="79"/>
-                            <Label Content="Fastest |" HorizontalAlignment="Left" Margin="196,59,0,0" VerticalAlignment="Top" FontSize="9" Width="79"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="Advanced Video Settings" HorizontalAlignment="Left" Height="100" Margin="256,75,0,-42" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.44,0.39"/>
+                            <Label Content="| Slowest" HorizontalAlignment="Left" Margin="107,53,0,0" VerticalAlignment="Top" FontSize="9" Width="79"/>
+                            <Label Content="Fastest |" HorizontalAlignment="Left" Margin="196,53,0,0" VerticalAlignment="Top" FontSize="9" Width="79"/>
                         </Grid>
                     </GroupBox>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchVFR" Header="" HorizontalAlignment="Left" Height="100" Margin="126,130,0,0" VerticalAlignment="Top" Width="100" ToolTip="ONLY TOGGLE IF SOURCE IS VFR"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchVFR" Header="" HorizontalAlignment="Left" Height="100" Margin="150,107,0,0" VerticalAlignment="Top" Width="100" ToolTip="ONLY TOGGLE IF SOURCE IS VFR"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Advanced Settings" Visibility="{Binding ElementName=ToggleSwitchAdvancedVideoSettings, Path=IsOn, Converter={StaticResource b2v}}">
@@ -645,9 +646,9 @@
                             <ComboBoxItem Content="psnr" IsSelected="True"/>
                             <ComboBoxItem Content="ssim"/>
                         </ComboBox>
-                        <CheckBox x:Name="CheckBoxAomencRowMT" Content="Row based Multi-Threading" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="650" Canvas.Top="125" Width="197" IsChecked="True"/>
-                        <CheckBox x:Name="CheckBoxAomencCDEF" Content="CDEF" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="650" Canvas.Top="159" Width="62" IsChecked="True" ToolTip="Enable the constrained directional enhancement filter (0: false, 1: true (default))"/>
-                        <ComboBox x:Name="ComboBoxAomencARNRMax" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="772" Canvas.Top="51" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <CheckBox x:Name="CheckBoxAomencRowMT" Content="Row based Multi-Threading" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="653" Canvas.Top="157" Width="197" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBoxAomencCDEF" Content="CDEF" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="653" Canvas.Top="191" Width="62" IsChecked="True" ToolTip="Enable the constrained directional enhancement filter (0: false, 1: true (default))"/>
+                        <ComboBox x:Name="ComboBoxAomencARNRMax" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="772" Canvas.Top="83" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="15" IsSelected="True"/>
                             <ComboBoxItem Content="14"/>
                             <ComboBoxItem Content="13"/>
@@ -665,9 +666,9 @@
                             <ComboBoxItem Content="1"/>
                             <ComboBoxItem Content="0"/>
                         </ComboBox>
-                        <CheckBox x:Name="CheckBoxAomencARNRMax" Content="ARNR Max Frames:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="144" Canvas.Left="623" Canvas.Top="57"/>
-                        <Label x:Name="LabelAomencTune_Copy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}" Content="ARNR Strength:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="640" Canvas.Top="85" />
-                        <ComboBox x:Name="ComboBoxAomencARNRStrength" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="772" Canvas.Top="85" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <CheckBox x:Name="CheckBoxAomencARNRMax" Content="ARNR Max Frames:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="144" Canvas.Left="626" Canvas.Top="89"/>
+                        <Label x:Name="LabelAomencTune_Copy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}" Content="ARNR Strength:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="643" Canvas.Top="117" />
+                        <ComboBox x:Name="ComboBoxAomencARNRStrength" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="772" Canvas.Top="117" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="6" IsSelected="True"/>
                             <ComboBoxItem Content="5"/>
                             <ComboBoxItem Content="4"/>
@@ -675,6 +676,11 @@
                             <ComboBoxItem Content="2"/>
                             <ComboBoxItem Content="1"/>
                             <ComboBoxItem Content="0"/>
+                        </ComboBox>
+                        <Label x:Name="LabelAomencTune_Copy1" Content="Tune-Content:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="640" Canvas.Top="51" />
+                        <ComboBox x:Name="ComboBoxAomencTuneContent"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="772" Canvas.Top="49" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="default" IsSelected="True"/>
+                            <ComboBoxItem Content="screen"/>
                         </ComboBox>
                     </Canvas>
                     <TextBox x:Name="TextBoxCustomVideoSettings" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Margin="10,313,15,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged"/>
