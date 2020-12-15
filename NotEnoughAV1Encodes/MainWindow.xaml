@@ -195,8 +195,8 @@
                     </GroupBox>
                     <GroupBox Header="Resize" HorizontalAlignment="Left" Height="203" Margin="302,20,0,0" VerticalAlignment="Top" Width="285" >
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterResize}">
-                            <Label Content="Scaling Algorithm:" HorizontalAlignment="Left" Margin="32,94,0,0" VerticalAlignment="Top" Height="28"/>
-                            <ComboBox x:Name="ComboBoxFiltersScaling" HorizontalAlignment="Left" Margin="139,92,0,0" VerticalAlignment="Top" Width="120" Height="30" VerticalContentAlignment="Center">
+                            <Label Content="Scaling Algorithm:" HorizontalAlignment="Left" Margin="19,98,0,0" VerticalAlignment="Top" Height="28"/>
+                            <ComboBox x:Name="ComboBoxFiltersScaling" HorizontalAlignment="Left" Margin="131,96,0,0" VerticalAlignment="Top" Width="128" Height="30" VerticalContentAlignment="Center">
                                 <ComboBoxItem Content="fast_bilinear"/>
                                 <ComboBoxItem Content="bilinear"/>
                                 <ComboBoxItem Content="bicubic" IsSelected="True"/>
@@ -210,9 +210,10 @@
                                 <ComboBoxItem Content="spline"/>
                             </ComboBox>
                             <Label Content="Width:" HorizontalAlignment="Left" Margin="19,48,0,0" VerticalAlignment="Top" Height="28"/>
-                            <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="71,46,0,0" TextWrapping="Wrap" Text="1920" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="71,46,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="If set to 0 it will automatically set the corresponding width to the height."/>
                             <Label Content="Height:" HorizontalAlignment="Left" Margin="141,48,0,0" VerticalAlignment="Top" Height="28"/>
                             <TextBox x:Name="TextBoxFiltersResizeHeight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="199,46,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Label Content="0 = Auto" HorizontalAlignment="Left" Margin="71,67,0,0" VerticalAlignment="Top" FontStyle="Italic" RenderTransformOrigin="0.504,0.51" Width="60"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Rotate" HorizontalAlignment="Left" Height="90" Margin="596,20,0,0" VerticalAlignment="Top" Width="285">

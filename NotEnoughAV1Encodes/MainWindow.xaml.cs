@@ -1296,7 +1296,17 @@ namespace NotEnoughAV1Encodes
         private string VideoFiltersResize()
         {
             // Sets the values for scaling the video
-            return "scale=" + TextBoxFiltersResizeWidth.Text + ":" + TextBoxFiltersResizeHeight.Text + " -sws_flags " + ComboBoxFiltersScaling.Text;
+            if (TextBoxFiltersResizeWidth.Text != "0")
+            {
+                // Custom Scale
+                return "scale=" + TextBoxFiltersResizeWidth.Text + ":" + TextBoxFiltersResizeHeight.Text + " -sws_flags " + ComboBoxFiltersScaling.Text;
+            }
+            else
+            {
+                // Auto Scale
+                return "scale=trunc(oh*a/2)*2:" + TextBoxFiltersResizeHeight.Text + " -sws_flags " + ComboBoxFiltersScaling.Text;
+            }
+            
         }
 
         // ═════════════════════════════════════ Audio Logic ══════════════════════════════════════
@@ -2054,7 +2064,9 @@ namespace NotEnoughAV1Encodes
                     AutoSetBitDepthAndColorFormat(result);
                     LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(result);
                     LabelVideoFramerate.Content = FFprobe.GetFrameRate(result);
-                    LabelVideoResolution.Content = FFprobe.GetResolution(result);
+                    string res = FFprobe.GetResolution(result);
+                    LabelVideoResolution.Content = res;
+                    TextBoxFiltersResizeHeight.Text = res.Substring(res.LastIndexOf('x') + 1);
                     ReadTimeCode = true;
                 }
             }
@@ -2072,7 +2084,9 @@ namespace NotEnoughAV1Encodes
                     AutoSetBitDepthAndColorFormat(result);
                     LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(result);
                     LabelVideoFramerate.Content = FFprobe.GetFrameRate(result);
-                    LabelVideoResolution.Content = FFprobe.GetResolution(result);
+                    string res = FFprobe.GetResolution(result);
+                    LabelVideoResolution.Content = res;
+                    TextBoxFiltersResizeHeight.Text = res.Substring(res.LastIndexOf('x') + 1);
                     ReadTimeCode = true;
                 }
             }else if (batchFolder == true && resultProject == false)

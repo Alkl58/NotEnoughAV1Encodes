@@ -72,9 +72,7 @@ namespace NotEnoughAV1Encodes
             getResolution.Start();
             string resolution = getResolution.StandardOutput.ReadLine();
             getResolution.WaitForExit();
-            Console.WriteLine(resolution);
             resolution = resolution.Replace(",", "x");
-            Console.WriteLine(resolution);
             return resolution;
         }
     }
