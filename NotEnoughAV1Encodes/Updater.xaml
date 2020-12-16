@@ -6,7 +6,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
-        Title="Updater" Height="320" Width="550" ResizeMode="NoResize">
+        Title="Updater" Height="345" Width="550" ResizeMode="NoResize">
     <Grid>
         <Button x:Name="ButtonUpdateProgram" Content="Update Program" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateProgram_Click"/>
         <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,39,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center"/>
@@ -33,8 +33,13 @@
         <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,195,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center"/>
         <Label x:Name="LabelCurrentSVTAV1Version" Content="" HorizontalAlignment="Left" Margin="241,195,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
         <Label x:Name="LabelUpdateSVTAV1Version" Content="" HorizontalAlignment="Left" Margin="439,195,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
-        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="30" Margin="10,241,0,0" VerticalAlignment="Top" Width="517"/>
+        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="30" Margin="10,276,0,0" VerticalAlignment="Top" Width="517"/>
         <Label Content="Builds are provided by jeremylee.sh and are released under gplv3." HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="403" Height="48" VerticalContentAlignment="Center" FontStyle="Italic"/>
+        <Button x:Name="ButtonUpdateVPX" Content="Update VPX" HorizontalAlignment="Left" Margin="10,234,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateVPX_Click"/>
+        <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,234,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center"/>
+        <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,234,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center"/>
+        <Label x:Name="LabelCurrentVPXVersion" Content="" HorizontalAlignment="Left" Margin="241,234,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
+        <Label x:Name="LabelUpdateVPXVersion" Content="" HorizontalAlignment="Left" Margin="439,237,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
 
     </Grid>
 </mah:MetroWindow>

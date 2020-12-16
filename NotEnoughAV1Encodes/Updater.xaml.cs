@@ -38,6 +38,9 @@ namespace NotEnoughAV1Encodes
         // SVT-AV1 Update
         public static string SVTAV1UpdateVersion;
         public static string SVTAV1CurrentVersion;
+        // VP9 Update
+        public static string VP9UpdateVersion;
+        public static string VP9CurrentVersion;
         // Current Directory
         public static string CurrentDir = Directory.GetCurrentDirectory();
 
@@ -99,6 +102,10 @@ namespace NotEnoughAV1Encodes
                 string svtav1Version = json.apps["SvtAv1EncApp.exe"].datetime;
                 SVTAV1UpdateVersion = svtav1Version.Replace("-", ".").Remove(svtav1Version.Length - 6);
                 LabelUpdateSVTAV1Version.Content = SVTAV1UpdateVersion;
+
+                string svtvp9Version = json.apps["vpxenc.exe"].datetime;
+                VP9UpdateVersion = svtvp9Version.Replace("-", ".").Remove(svtvp9Version.Length - 6);
+                LabelUpdateVPXVersion.Content = VP9UpdateVersion;
             }
             catch { }
         }
@@ -205,6 +212,31 @@ namespace NotEnoughAV1Encodes
                 }
             }
             else { LabelCurrentSVTAV1Version.Content = "unknown"; LabelCurrentSVTAV1Version.Foreground = Brushes.Red; }
+            // vpx
+            if (File.Exists(Path.Combine(CurrentDir, "Apps", "vpx", "vpx.txt")))
+            {
+                VP9CurrentVersion = File.ReadAllText(Path.Combine(CurrentDir, "Apps", "vpx", "vpx.txt"));
+                LabelCurrentVPXVersion.Content = VP9CurrentVersion;
+                if (ParseDate(VP9CurrentVersion) < ParseDate(VP9UpdateVersion))
+                {
+                    // Update Version is newer
+                    LabelCurrentVPXVersion.Foreground = Brushes.Red;
+                    LabelUpdateVPXVersion.Foreground = Brushes.Green;
+                }
+                else if (ParseDate(VP9CurrentVersion) == ParseDate(VP9UpdateVersion))
+                {
+                    // Both Versions are identical
+                    LabelCurrentVPXVersion.Foreground = Brushes.Green;
+                    LabelUpdateVPXVersion.Foreground = Brushes.Green;
+                }
+                else if (ParseDate(VP9CurrentVersion) > ParseDate(VP9UpdateVersion))
+                {
+                    // Local Version is newer
+                    LabelCurrentVPXVersion.Foreground = Brushes.Green;
+                    LabelUpdateVPXVersion.Foreground = Brushes.Red;
+                }
+            }
+            else { LabelCurrentVPXVersion.Content = "unknown"; LabelCurrentVPXVersion.Foreground = Brushes.Red; }
         }
 
         private DateTime? ParseDate(string input)
@@ -342,11 +374,42 @@ namespace NotEnoughAV1Encodes
                     // Deletes txt file
                     if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt")))
                         File.Delete(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt"));
-                    File.WriteAllText(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt"), Rav1eUpdateVersion);
+                    File.WriteAllText(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt"), SVTAV1UpdateVersion);
                 }
                 // Deletes downloaded archive
                 if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1.7z")))
                     File.Delete(Path.Combine(CurrentDir, "Apps", "svt-av1.7z"));
+                CompareLocalVersion();
+            }
+            ProgressBar.IsIndeterminate = false;
+        }
+
+        private async void ButtonUpdateVPX_Click(object sender, RoutedEventArgs e)
+        {
+            ProgressBar.IsIndeterminate = true;
+            // Creates the svt-av1 folder if not existent
+            if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "vpx")))
+                Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "vpx"));
+            // Downloads rav1e
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/vpx.7z", Path.Combine(CurrentDir, "Apps", "vpx.7z")));
+            if (File.Exists(Path.Combine(CurrentDir, "Apps", "vpx.7z")))
+            {
+                // Extracts rav1e
+                ExtractFile(Path.Combine(CurrentDir, "Apps", "vpx.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "vpx"));
+                // Writes the version to file
+                if (File.Exists(Path.Combine(CurrentDir, "Apps", "vpx", "vpxenc.exe")))
+                {
+                    // Deletes SVT-AV1 Decoder
+                    if (File.Exists(Path.Combine(CurrentDir, "Apps", "vpx", "vpxdec.exe")))
+                        File.Delete(Path.Combine(CurrentDir, "Apps", "vpx", "vpxdec.exe"));
+                    // Deletes txt file
+                    if (File.Exists(Path.Combine(CurrentDir, "Apps", "vpx", "vpx.txt")))
+                        File.Delete(Path.Combine(CurrentDir, "Apps", "vpx", "vpx.txt"));
+                    File.WriteAllText(Path.Combine(CurrentDir, "Apps", "vpx", "vpx.txt"), VP9UpdateVersion);
+                }
+                // Deletes downloaded archive
+                if (File.Exists(Path.Combine(CurrentDir, "Apps", "vpx.7z")))
+                    File.Delete(Path.Combine(CurrentDir, "Apps", "vpx.7z"));
                 CompareLocalVersion();
             }
             ProgressBar.IsIndeterminate = false;
@@ -385,5 +448,6 @@ namespace NotEnoughAV1Encodes
                 MessageBox.Show(Ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
     }
 }
