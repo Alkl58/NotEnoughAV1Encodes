@@ -160,6 +160,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxAomencColorFormat.SelectedIndex = 0;
                 ComboBoxRav1eColorFormat.SelectedIndex = 0;
                 ComboBoxSVTAV1ColorFormat.SelectedIndex = 0;
+                ComboBoxVP9ColorFormat.SelectedIndex = 0;
             }
             else if(format == "yuv420p12le")
             {
@@ -167,13 +168,16 @@ namespace NotEnoughAV1Encodes
                 ComboBoxAomencColorFormat.SelectedIndex = 0;
                 ComboBoxRav1eColorFormat.SelectedIndex = 0;
                 ComboBoxSVTAV1ColorFormat.SelectedIndex = 0;
-            }else if (format == "yuv422p")
+                ComboBoxVP9ColorFormat.SelectedIndex = 0;
+            }
+            else if (format == "yuv422p")
             {
                 ToggleSwitchAdvancedVideoSettings.IsOn = true;
                 ComboBoxVideoBitDepth.SelectedIndex = 0;
                 ComboBoxAomencColorFormat.SelectedIndex = 1;
                 ComboBoxRav1eColorFormat.SelectedIndex = 1;
                 ComboBoxSVTAV1ColorFormat.SelectedIndex = 1;
+                ComboBoxVP9ColorFormat.SelectedIndex = 1;
             }
             else if (format == "yuv422p10le")
             {
@@ -182,6 +186,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxAomencColorFormat.SelectedIndex = 1;
                 ComboBoxRav1eColorFormat.SelectedIndex = 1;
                 ComboBoxSVTAV1ColorFormat.SelectedIndex = 1;
+                ComboBoxVP9ColorFormat.SelectedIndex = 1;
             }
             else if (format == "yuv422p12le")
             {
@@ -190,6 +195,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxAomencColorFormat.SelectedIndex = 1;
                 ComboBoxRav1eColorFormat.SelectedIndex = 1;
                 ComboBoxSVTAV1ColorFormat.SelectedIndex = 1;
+                ComboBoxVP9ColorFormat.SelectedIndex = 1;
             }
             else if (format == "yuv444p")
             {
@@ -198,6 +204,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxAomencColorFormat.SelectedIndex = 2;
                 ComboBoxRav1eColorFormat.SelectedIndex = 2;
                 ComboBoxSVTAV1ColorFormat.SelectedIndex = 2;
+                ComboBoxVP9ColorFormat.SelectedIndex = 2;
             }
             else if (format == "yuv444p10le")
             {
@@ -206,6 +213,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxAomencColorFormat.SelectedIndex = 2;
                 ComboBoxRav1eColorFormat.SelectedIndex = 2;
                 ComboBoxSVTAV1ColorFormat.SelectedIndex = 2;
+                ComboBoxVP9ColorFormat.SelectedIndex = 2;
             }
             else if (format == "yuv444p12le")
             {
@@ -214,6 +222,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxAomencColorFormat.SelectedIndex = 2;
                 ComboBoxRav1eColorFormat.SelectedIndex = 2;
                 ComboBoxSVTAV1ColorFormat.SelectedIndex = 2;
+                ComboBoxVP9ColorFormat.SelectedIndex = 2;
             }
         }
 
@@ -1184,7 +1193,19 @@ namespace NotEnoughAV1Encodes
 
             if (ComboBoxVideoEncoder.SelectedIndex == 3)
             {
-                PipeBitDepthCommand += "420p";
+                // vp9
+                if (ComboBoxVP9ColorFormat.SelectedIndex == 0)
+                {
+                    PipeBitDepthCommand += "420p";
+                }
+                else if (ComboBoxVP9ColorFormat.SelectedIndex == 1)
+                {
+                    PipeBitDepthCommand += "422p";
+                }
+                else if (ComboBoxVP9ColorFormat.SelectedIndex == 2)
+                {
+                    PipeBitDepthCommand += "444p";
+                }
             }
 
             if (ComboBoxVideoBitDepth.SelectedIndex == 1)
@@ -1984,6 +2005,27 @@ namespace NotEnoughAV1Encodes
         {
             string cmd = "";
             cmd += " --bit-depth=" + ComboBoxVideoBitDepth.Text;    // Bit-Depth
+
+            if (ComboBoxVP9ColorFormat.SelectedIndex == 0)
+            {
+                // yuv420p
+                if (ComboBoxVideoBitDepth.SelectedIndex == 1 || ComboBoxVideoBitDepth.SelectedIndex == 2)
+                {
+                    // profile=2: 10bit / 12bit
+                    cmd += " --profile=2";
+                }
+            }
+            else
+            {
+                // yuv420p / yuv422p / yuv444p
+                if (ComboBoxVideoBitDepth.SelectedIndex == 1 || ComboBoxVideoBitDepth.SelectedIndex == 2)
+                {
+                    // profile=3: 10bit / 12bit
+                    cmd += " --profile=3";
+                }
+            }
+
+
             cmd += " --cpu-used=" + SliderVideoSpeed.Value;         // Speed
 
             // Constant Quality or Target Bitrate
