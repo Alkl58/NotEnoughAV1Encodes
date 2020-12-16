@@ -156,6 +156,8 @@ namespace NotEnoughAV1Encodes
             if (today.ToString("dd-MM") == "24-12")
             {
                 imgDynamic.Source = new BitmapImage(new Uri("pack://application:,,,/NotEnoughAV1Encodes;component/img/christmas.jpg", UriKind.Absolute));
+                ComboBoxBaseTheme.SelectedIndex = 1;
+                ThemeManager.Current.ChangeTheme(this, ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text);
             }
         }
 

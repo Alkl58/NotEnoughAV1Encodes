@@ -16,7 +16,7 @@
         <Button x:Name="ButtonUpdateFFmpeg" Content="Update FFmpeg" HorizontalAlignment="Left" Margin="10,78,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateFFmpeg_Click"/>
         <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,78,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center"/>
         <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,78,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center"/>
-        <Label x:Name="LabelCurrentFFmpegVersion" Content="" HorizontalAlignment="Left" Margin="241,78,0,0" VerticalAlignment="Top" Width="88" FontSize="14" Height="34" VerticalContentAlignment="Center"/>
+        <Label x:Name="LabelCurrentFFmpegVersion" Content="" HorizontalAlignment="Left" Margin="241,78,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
         <Label x:Name="LabelUpdateFFmpegVersion" Content="" HorizontalAlignment="Left" Margin="439,78,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
         <Button x:Name="ButtonUpdateAomenc" Content="Update aomenc" HorizontalAlignment="Left" Margin="10,117,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateAomenc_Click"/>
         <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,117,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center"/>
