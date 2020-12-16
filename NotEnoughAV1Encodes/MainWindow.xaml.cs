@@ -145,8 +145,18 @@ namespace NotEnoughAV1Encodes
                 }
                 catch { }
             }
-
+            EasterEgg();
             StartUp = false;
+        }
+
+        private void EasterEgg()
+        {
+            DateTime today = DateTime.Today;
+
+            if (today.ToString("dd-MM") == "24-12")
+            {
+                imgDynamic.Source = new BitmapImage(new Uri("pack://application:,,,/NotEnoughAV1Encodes;component/img/christmas.jpg", UriKind.Absolute));
+            }
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
