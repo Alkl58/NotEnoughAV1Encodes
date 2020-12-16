@@ -633,6 +633,22 @@ namespace NotEnoughAV1Encodes
                             CheckDependencies.Check();
                         }
                     }
+                }else if (ComboBoxVideoEncoder.SelectedIndex == 3)
+                {
+                    // vp9
+                    SliderVideoSpeed.Maximum = 9;
+                    SliderVideoSpeed.Value = 4;
+                    SliderVideoQuality.Value = 30;
+                    SliderVideoQuality.Maximum = 63;
+                    if (VPXPath == null)
+                    {
+                        if (MessageBox.Show("Could not find vpxenc!\nOpen Updater?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        {
+                            Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
+                            updater.ShowDialog();
+                            CheckDependencies.Check();
+                        }
+                    }
                 }
             }
 
