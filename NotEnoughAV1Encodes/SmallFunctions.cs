@@ -153,9 +153,9 @@ namespace NotEnoughAV1Encodes
         public static void CheckVideoOutput()
         {
             // This checks if the video muxer created an output file
-            if (File.Exists(MainWindow.VideoInput))
+            if (File.Exists(MainWindow.VideoOutput))
             {
-                FileInfo VideoOutput = new FileInfo(MainWindow.VideoInput);
+                FileInfo VideoOutput = new FileInfo(MainWindow.VideoOutput);
                 if (VideoOutput.Length <= 50000)
                 {
                     MessageBox.Show("Video Output is " + (VideoOutput.Length /1000) + "KB.\nThere could be a muxing error.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
