@@ -996,7 +996,14 @@ namespace NotEnoughAV1Encodes
                 }
 
                 ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(3, 112, 200));
-                ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames);
+                if (OnePass == true)
+                {
+                    ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames);
+                }
+                else
+                {
+                    ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames * 2);
+                }
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeVideo(); }, token);
                 await Task.Run(async () => { token.ThrowIfCancellationRequested(); await VideoMuxing.Concat(); }, token);
                 SmallFunctions.CheckVideoOutput();
@@ -2294,6 +2301,10 @@ namespace NotEnoughAV1Encodes
             // Sets the total framecount
             int totalframes = TotalFrames;
 
+            // The amount of frames doubles when in two pass mode
+            if (OnePass != true)
+                totalframes = totalframes * 2;
+
             foreach (string file in filePaths)
             {
                 // Reads the progress file of ffmpeg without locking it up
@@ -2483,6 +2494,8 @@ namespace NotEnoughAV1Encodes
 
                                     if (OnePass != true)
                                     {
+                                        // Creates a different progress file for the second pass (avoids negative frame progressbar)
+                                        FFmpegProgress = " -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress_2nd.log") + '\u0022';
                                         // Two Pass Encoding Second Pass
                                         if (EncodeMethod == 0) // aomenc
                                         {

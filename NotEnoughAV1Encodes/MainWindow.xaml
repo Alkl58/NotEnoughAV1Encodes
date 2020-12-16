@@ -248,10 +248,10 @@
                         <Grid>
                             <Label Content="Encoder:" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
                             <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use">
-                                <ComboBoxItem Content="aomenc" />
+                                <ComboBoxItem Content="aomenc" IsSelected="True"/>
                                 <ComboBoxItem Content="rav1e"/>
                                 <ComboBoxItem Content="svt-av1"/>
-                                <ComboBoxItem Content="vp9" IsSelected="True"/>
+                                <ComboBoxItem Content="vp9"/>
                             </ComboBox>
                             <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top"/>
                             <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="60" Height="30" VerticalContentAlignment="Center" ToolTip="Bit-Depth. 10bit recommended for animation and to avoid banding.">
