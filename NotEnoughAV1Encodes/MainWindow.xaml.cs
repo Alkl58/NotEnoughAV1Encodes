@@ -2762,9 +2762,6 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("TrackFourChannels",              ComboBoxTrackFourChannels.SelectedIndex.ToString());            // Audio Track Four Channels
 
 
-            writer.WriteElementString("WorkerCount",                    ComboBoxWorkerCount.SelectedIndex.ToString());                  // Worker Count
-            writer.WriteElementString("WorkerPriority",                 ComboBoxProcessPriority.SelectedIndex.ToString());              // Worker Priority
-
             // ═════════════════════════════════════════════════════════════════ Splitting ═════════════════════════════════════════════════════════════════
             writer.WriteElementString("SplittingMethod",                ComboBoxSplittingMethod.SelectedIndex.ToString());              // Splitting Method
             if (ComboBoxSplittingMethod.SelectedIndex == 0)
@@ -2830,6 +2827,9 @@ namespace NotEnoughAV1Encodes
             if (ComboBoxVideoEncoder.SelectedIndex == 0)
                 writer.WriteElementString("VideoAomencRT",      CheckBoxVideoAomencRealTime.IsChecked.ToString());                      // Video Aomenc Real Time Mode
             writer.WriteElementString("VideoVFR",               ToggleSwitchVFR.IsOn.ToString());                                       // Video Variable Framerate
+
+            writer.WriteElementString("WorkerCount", ComboBoxWorkerCount.SelectedIndex.ToString());                                     // Worker Count
+            writer.WriteElementString("WorkerPriority", ComboBoxProcessPriority.SelectedIndex.ToString());                              // Worker Priority
             // ══════════════════════════════════════════════════════════ Advanced Video Settings ══════════════════════════════════════════════════════════
 
             writer.WriteElementString("VideoAdvanced",          ToggleSwitchAdvancedVideoSettings.IsOn.ToString());                     // Video Advanced Settings
