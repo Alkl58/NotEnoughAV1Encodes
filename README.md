@@ -1,8 +1,8 @@
 # NotEnoughAV1Encodes
 
-### NEAV1E is a GUI for aomenc, rav1e & SVT-AV1. 
+### NEAV1E is a GUI for AV1 encoders - aomenc, rav1e, svt-av1 & vp9. 
 
-It is a tool to make encoding easier and faster for AV1 encoders.
+It is a tool to make encoding faster and easier for AV1 encoders.
 
 ![alt text](https://i.imgur.com/BqYWv24.png "Darkmode")
 
@@ -12,7 +12,7 @@ It is a tool to make encoding easier and faster for AV1 encoders.
 
 ---
 
-## How does this program work?
+## 🔬 How does this program work?
 1. This program will split the given video file into chunks (scene based splitting or equal chunks).
 2. After splitting, it will encode the chunks with n-amount of workers. 
 3. When finished, it will merge the encoded files to a single video file.
@@ -24,17 +24,18 @@ It is a tool to make encoding easier and faster for AV1 encoders.
 
 #### Unstable Builds: [AppVeyor](https://ci.appveyor.com/project/Alkl/notenoughav1encodes/branch/master/artifacts)
 
-## Encoders
+## 📽 Encoders
 
 NEAV1E supports the following encoders:
 
 - aomenc / libaom
 - rav1e
 - svt-av1
+- vp9
 
-### Installation / Usage / Wiki: https://github.com/Alkl58/NotEnoughAV1Encodes/wiki
+### 📋 Installation / Usage / Wiki: https://github.com/Alkl58/NotEnoughAV1Encodes/wiki
 
 ---
 
-#### Contacting me
+#### 📬 Contacting me
 You can find me on the unofficial [AV1 Discord](https://discord.gg/HSBxne3) or on the [NEAV1E Discord](https://discord.gg/yG27ArHBFe)
