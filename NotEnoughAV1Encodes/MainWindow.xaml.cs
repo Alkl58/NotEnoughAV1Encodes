@@ -2247,7 +2247,7 @@ namespace NotEnoughAV1Encodes
             {
                 // Save File Dialog for single file saving
                 SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
-                saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;*.mp4";
+                saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;";
                 // Avoid NULL being returned resulting in crash
                 Nullable<bool> result = saveVideoFileDialog.ShowDialog();
                 if (result == true)
