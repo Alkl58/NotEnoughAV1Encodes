@@ -6,7 +6,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
-        Title="NotEnoughAV1Encodes" Height="650" Width="1085" ResizeMode="CanResizeWithGrip">
+        Title="NotEnoughAV1Encodes" Height="650" Width="1085" ResizeMode="CanResizeWithGrip" AllowDrop="True" DragDrop.Drop="Grid_Drop">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="b2v"/>
     </Window.Resources>

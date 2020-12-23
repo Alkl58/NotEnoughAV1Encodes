@@ -163,6 +163,50 @@ namespace NotEnoughAV1Encodes
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
 
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+            // Drag & Drop Video Files into GUI
+            List<string> filepaths = new List<string>();
+            foreach (var s in (string[])e.Data.GetData(DataFormats.FileDrop, false)) { filepaths.Add(s); }
+            int counter = 0;
+            foreach (var item in filepaths) { counter += 1; }
+            foreach (var item in filepaths)
+            {
+                if (counter == 1)
+                {
+                    // Single File Input
+                    SingleFileInput(item);
+                }
+            }
+            if (counter >= 2)
+            {
+                MessageBox.Show("Multiple Input Files currently not implemented.");
+            }
+
+        }
+
+        private void SingleFileInput(string file)
+        {
+            VideoInputSet = true;
+            TextBoxVideoSource.Text = file;
+            VideoInput = file;
+            TempPathFileName = Path.GetFileNameWithoutExtension(file);
+            SmallFunctions.CheckUnicode(TempPathFileName);
+            BatchEncoding = false;
+            GetAudioInformation();
+            GetSubtitleTracks();
+            TextBoxTrimEnd.Text = SmallFunctions.GetVideoLengthAccurate(file);
+            TrimEndTemp = TextBoxTrimEnd.Text;
+            LabelVideoLength.Content = TrimEndTemp.Remove(TrimEndTemp.Length - 4);
+            AutoSetBitDepthAndColorFormat(file);
+            LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(file);
+            LabelVideoFramerate.Content = FFprobe.GetFrameRate(file);
+            string res = FFprobe.GetResolution(file);
+            LabelVideoResolution.Content = res;
+            TextBoxFiltersResizeHeight.Text = res.Substring(res.LastIndexOf('x') + 1);
+            ReadTimeCode = true;
+        }
+
         private void AutoSetBitDepthAndColorFormat(string result)
         {
             string format = FFprobe.GetPixelFormat(result);
@@ -2183,32 +2227,15 @@ namespace NotEnoughAV1Encodes
             bool batchFolder = WindowVideoSource.BatchFolder;
             if (resultProject == false && batchFolder == false)
             {
-                // Sets the label in the user interface
-                // Note that this has to be edited once batch encoding is added as function
+                // Single Video File Input
                 if (WindowVideoSource.QuitCorrectly)
                 {
-                    VideoInputSet = true;
-                    TextBoxVideoSource.Text = result;
-                    VideoInput = result;
-                    TempPathFileName = Path.GetFileNameWithoutExtension(result);
-                    SmallFunctions.CheckUnicode(TempPathFileName);
-                    BatchEncoding = false;
-                    GetAudioInformation();
-                    GetSubtitleTracks();
-                    TextBoxTrimEnd.Text = SmallFunctions.GetVideoLengthAccurate(result);
-                    TrimEndTemp = TextBoxTrimEnd.Text;
-                    LabelVideoLength.Content = TrimEndTemp.Remove(TrimEndTemp.Length-4);
-                    AutoSetBitDepthAndColorFormat(result);
-                    LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(result);
-                    LabelVideoFramerate.Content = FFprobe.GetFrameRate(result);
-                    string res = FFprobe.GetResolution(result);
-                    LabelVideoResolution.Content = res;
-                    TextBoxFiltersResizeHeight.Text = res.Substring(res.LastIndexOf('x') + 1);
-                    ReadTimeCode = true;
+                    SingleFileInput(result);
                 }
             }
             else if (batchFolder == false && resultProject == true)
             {
+                // Project File
                 if (WindowVideoSource.QuitCorrectly)
                 {
                     BatchEncoding = false;
