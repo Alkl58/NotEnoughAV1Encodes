@@ -116,7 +116,7 @@ namespace NotEnoughAV1Encodes
                         WindowStyle = ProcessWindowStyle.Hidden,
                         FileName = "cmd.exe",
                         WorkingDirectory = MainWindow.FFmpegPath,
-                        Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -hide_banner -loglevel 32 -map 0:v:0 -c copy -f null -",
+                        Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " -hide_banner -loglevel 32 -map 0:v:0 -f null -",
                         RedirectStandardError = true,
                         RedirectStandardOutput = true
                     }
