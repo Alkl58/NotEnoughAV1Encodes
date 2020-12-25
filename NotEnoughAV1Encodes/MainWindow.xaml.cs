@@ -2242,13 +2242,13 @@ namespace NotEnoughAV1Encodes
                     LoadSettings(true, result);
                     GetAudioInformation();
                     GetSubtitleTracks();
-                    TextBoxTrimEnd.Text = SmallFunctions.GetVideoLengthAccurate(result);
+                    TextBoxTrimEnd.Text = SmallFunctions.GetVideoLengthAccurate(VideoInput);
                     TrimEndTemp = TextBoxTrimEnd.Text;
                     LabelVideoLength.Content = TrimEndTemp.Remove(TrimEndTemp.Length - 4);
-                    AutoSetBitDepthAndColorFormat(result);
-                    LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(result);
-                    LabelVideoFramerate.Content = FFprobe.GetFrameRate(result);
-                    string res = FFprobe.GetResolution(result);
+                    AutoSetBitDepthAndColorFormat(VideoInput);
+                    LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(VideoInput);
+                    LabelVideoFramerate.Content = FFprobe.GetFrameRate(VideoInput);
+                    string res = FFprobe.GetResolution(VideoInput);
                     LabelVideoResolution.Content = res;
                     TextBoxFiltersResizeHeight.Text = res.Substring(res.LastIndexOf('x') + 1);
                     ReadTimeCode = true;
