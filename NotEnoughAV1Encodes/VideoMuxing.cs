@@ -25,19 +25,29 @@ namespace NotEnoughAV1Encodes
                 if (MainWindow.subSoftSubEnabled != true)
                 {
                     // Muxes Video & Audio together
-                    // Run mkvmerge command
-                    Process mkvToolNix = new Process();
-                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    if (MainWindow.VFRVideo == false)
                     {
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        FileName = "cmd.exe",
-                        WorkingDirectory = MainWindow.MKVToolNixPath,
-                        Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.VideoOutput + '\u0022' + " " + MainWindow.VFRCMD + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022'
-                    };
-                    SmallFunctions.Logging("Muxing: " + startInfo.Arguments);
-                    mkvToolNix.StartInfo = startInfo;
-                    mkvToolNix.Start();
-                    mkvToolNix.WaitForExit();
+                        // Muxes Video & Audio together (required for MP4 output)
+                        ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022' + " -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022' + " -map 0:v -map 1:a -c copy " + '\u0022' + MainWindow.VideoOutput + '\u0022';
+                        await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
+                    }
+                    else
+                    {
+                        // Run mkvmerge command
+                        Process mkvToolNix = new Process();
+                        ProcessStartInfo startInfo = new ProcessStartInfo
+                        {
+                            WindowStyle = ProcessWindowStyle.Hidden,
+                            FileName = "cmd.exe",
+                            WorkingDirectory = MainWindow.MKVToolNixPath,
+                            Arguments = "/C mkvmerge.exe --output " + '\u0022' + MainWindow.VideoOutput + '\u0022' + " " + MainWindow.VFRCMD + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022'
+                        };
+                        SmallFunctions.Logging("Muxing: " + startInfo.Arguments);
+                        mkvToolNix.StartInfo = startInfo;
+                        mkvToolNix.Start();
+                        mkvToolNix.WaitForExit();
+                    }
+
                 }
                 else
                 {

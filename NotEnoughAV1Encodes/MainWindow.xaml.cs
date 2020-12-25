@@ -163,6 +163,46 @@ namespace NotEnoughAV1Encodes
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
 
+        private void ToggleSwitchSubtitleActivatedOne_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && ToggleSwitchSubtitleActivatedOne.IsOn == true)
+            {
+                MessageBox.Show("Softsub not supported with MP4 as container", "Subtitles", MessageBoxButton.OK);
+            }
+        }
+
+        private void ToggleSwitchSubtitleActivatedTwo_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && ToggleSwitchSubtitleActivatedTwo.IsOn == true)
+            {
+                MessageBox.Show("Softsub not supported with MP4 as container", "Subtitles", MessageBoxButton.OK);
+            }
+        }
+
+        private void ToggleSwitchSubtitleActivatedThree_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && ToggleSwitchSubtitleActivatedThree.IsOn == true)
+            {
+                MessageBox.Show("Softsub not supported with MP4 as container", "Subtitles", MessageBoxButton.OK);
+            }
+        }
+
+        private void ToggleSwitchSubtitleActivatedFour_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && ToggleSwitchSubtitleActivatedFour.IsOn == true)
+            {
+                MessageBox.Show("Softsub not supported with MP4 as container", "Subtitles", MessageBoxButton.OK);
+            }
+        }
+
+        private void ToggleSwitchSubtitleActivatedFive_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && ToggleSwitchSubtitleActivatedFive.IsOn == true)
+            {
+                MessageBox.Show("Softsub not supported with MP4 as container", "Subtitles", MessageBoxButton.OK);
+            }
+        }
+
         private void Grid_Drop(object sender, DragEventArgs e)
         {
             // Drag & Drop Video Files into GUI
@@ -1818,14 +1858,30 @@ namespace NotEnoughAV1Encodes
                     }
 
                     //Sets the TextBoxes
-                    if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; ComboBoxSubTrackOneLanguage.SelectedIndex = indexLang; ToggleSwitchSubtitleActivatedOne.IsOn = true; }
-                    if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; ComboBoxSubTrackTwoLanguage.SelectedIndex = indexLang; ToggleSwitchSubtitleActivatedTwo.IsOn = true; }
-                    if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; ComboBoxSubTrackThreeLanguage.SelectedIndex = indexLang; ToggleSwitchSubtitleActivatedThree.IsOn = true; }
-                    if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; ComboBoxSubTrackFourLanguage.SelectedIndex = indexLang; ToggleSwitchSubtitleActivatedFour.IsOn = true; }
-                    if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; ComboBoxSubTrackFiveLanguage.SelectedIndex = indexLang; ToggleSwitchSubtitleActivatedFive.IsOn = true; }
+                    if (Path.GetExtension(VideoOutput) != ".mp4")
+                    {
+                        if (b == 0) { ToggleSwitchSubtitleActivatedOne.IsOn = true; }
+                        if (b == 1) { ToggleSwitchSubtitleActivatedTwo.IsOn = true; }
+                        if (b == 2) { ToggleSwitchSubtitleActivatedThree.IsOn = true; }
+                        if (b == 3) { ToggleSwitchSubtitleActivatedFour.IsOn = true; }
+                        if (b == 4) { ToggleSwitchSubtitleActivatedFive.IsOn = true; }
+                    }
+                    if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; ComboBoxSubTrackOneLanguage.SelectedIndex = indexLang; }
+                    if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; ComboBoxSubTrackTwoLanguage.SelectedIndex = indexLang; }
+                    if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; ComboBoxSubTrackThreeLanguage.SelectedIndex = indexLang; }
+                    if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; ComboBoxSubTrackFourLanguage.SelectedIndex = indexLang; }
+                    if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; ComboBoxSubTrackFiveLanguage.SelectedIndex = indexLang; }
                     b++;
                 }
                 a++;
+            }
+            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4")
+            {
+                ToggleSwitchSubtitleActivatedOne.IsOn = false;
+                ToggleSwitchSubtitleActivatedTwo.IsOn = false;
+                ToggleSwitchSubtitleActivatedThree.IsOn = false;
+                ToggleSwitchSubtitleActivatedFour.IsOn = false;
+                ToggleSwitchSubtitleActivatedFive.IsOn = false;
             }
         }
 
@@ -2274,7 +2330,7 @@ namespace NotEnoughAV1Encodes
             {
                 // Save File Dialog for single file saving
                 SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
-                saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;";
+                saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;*.mp4";
                 // Avoid NULL being returned resulting in crash
                 Nullable<bool> result = saveVideoFileDialog.ShowDialog();
                 if (result == true)
@@ -2282,6 +2338,21 @@ namespace NotEnoughAV1Encodes
                     TextBoxVideoDestination.Text = saveVideoFileDialog.FileName;
                     VideoOutput = saveVideoFileDialog.FileName;
                     VideoOutputSet = true;
+                    if (Path.GetExtension(VideoOutput) == ".mp4")
+                    {
+                        // Disables VFR, as only MKV is supported
+                        ToggleSwitchVFR.IsOn = false;
+                        ToggleSwitchVFR.IsEnabled = false;
+                        ToggleSwitchSubtitleActivatedOne.IsOn = false;
+                        ToggleSwitchSubtitleActivatedTwo.IsOn = false;
+                        ToggleSwitchSubtitleActivatedThree.IsOn = false;
+                        ToggleSwitchSubtitleActivatedFour.IsOn = false;
+                        ToggleSwitchSubtitleActivatedFive.IsOn = false;
+                    }
+                    else
+                    {
+                        ToggleSwitchVFR.IsEnabled = true;
+                    }
                 }
             }
             else

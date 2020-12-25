@@ -1056,11 +1056,11 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedOne" Header="" HorizontalAlignment="Left" Height="100" Margin="62,-14,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedTwo" Header="" HorizontalAlignment="Left" Height="100" Margin="62,59,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedThree" Header="" HorizontalAlignment="Left" Height="100" Margin="62,132,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedFour" Header="" HorizontalAlignment="Left" Height="100" Margin="62,205,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedFive" Header="" HorizontalAlignment="Left" Height="100" Margin="62,277,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedOne" Header="" Toggled="ToggleSwitchSubtitleActivatedOne_Toggled" HorizontalAlignment="Left" Height="100" Margin="62,-14,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedTwo" Header="" Toggled="ToggleSwitchSubtitleActivatedOne_Toggled" HorizontalAlignment="Left" Height="100" Margin="62,59,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedThree" Header="" Toggled="ToggleSwitchSubtitleActivatedOne_Toggled" HorizontalAlignment="Left" Height="100" Margin="62,132,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedFour" Header="" Toggled="ToggleSwitchSubtitleActivatedOne_Toggled" HorizontalAlignment="Left" Height="100" Margin="62,205,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedFive" Header="" Toggled="ToggleSwitchSubtitleActivatedOne_Toggled" HorizontalAlignment="Left" Height="100" Margin="62,277,0,0" VerticalAlignment="Top" Width="100"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Preferences">
