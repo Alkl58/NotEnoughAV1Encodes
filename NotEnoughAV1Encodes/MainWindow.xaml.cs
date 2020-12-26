@@ -2296,8 +2296,6 @@ namespace NotEnoughAV1Encodes
                 {
                     BatchEncoding = false;
                     LoadSettings(true, result);
-                    GetAudioInformation();
-                    GetSubtitleTracks();
                     TextBoxTrimEnd.Text = SmallFunctions.GetVideoLengthAccurate(VideoInput);
                     TrimEndTemp = TextBoxTrimEnd.Text;
                     LabelVideoLength.Content = TrimEndTemp.Remove(TrimEndTemp.Length - 4);
