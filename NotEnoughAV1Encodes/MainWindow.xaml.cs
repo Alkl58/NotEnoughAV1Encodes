@@ -2813,11 +2813,21 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("VideoInput",                 VideoInput);                                                    // Video Input
                 writer.WriteElementString("VideoOutput",                VideoOutput);                                                   // Video Output
                 // Subtitles
-                writer.WriteElementString("SubOne",                     ToggleSwitchSubtitleActivatedOne.IsOn.ToString());             // Subtitle Track One Active
-                writer.WriteElementString("SubTwo",                     ToggleSwitchSubtitleActivatedTwo.IsOn.ToString());             // Subtitle Track Two Active
-                writer.WriteElementString("SubThree",                   ToggleSwitchSubtitleActivatedThree.IsOn.ToString());           // Subtitle Track Three Active
-                writer.WriteElementString("SubFour",                    ToggleSwitchSubtitleActivatedFour.IsOn.ToString());            // Subtitle Track Four Active
-                writer.WriteElementString("SubFive",                    ToggleSwitchSubtitleActivatedFive.IsOn.ToString());            // Subtitle Track Five Active
+                writer.WriteElementString("SubOne",                     ToggleSwitchSubtitleActivatedOne.IsOn.ToString());              // Subtitle Track One Active
+                writer.WriteElementString("SubTwo",                     ToggleSwitchSubtitleActivatedTwo.IsOn.ToString());              // Subtitle Track Two Active
+                writer.WriteElementString("SubThree",                   ToggleSwitchSubtitleActivatedThree.IsOn.ToString());            // Subtitle Track Three Active
+                writer.WriteElementString("SubFour",                    ToggleSwitchSubtitleActivatedFour.IsOn.ToString());             // Subtitle Track Four Active
+                writer.WriteElementString("SubFive",                    ToggleSwitchSubtitleActivatedFive.IsOn.ToString());             // Subtitle Track Five Active
+                writer.WriteElementString("SubOneBurn",                 CheckBoxSubOneBurn.IsChecked.ToString());                       // Subtitle Track One Burn
+                writer.WriteElementString("SubTwoBurn",                 CheckBoxSubTwoBurn.IsChecked.ToString());                       // Subtitle Track One Burn
+                writer.WriteElementString("SubThreeBurn",               CheckBoxSubThreeBurn.IsChecked.ToString());                     // Subtitle Track One Burn
+                writer.WriteElementString("SubFourBurn",                CheckBoxSubFourBurn.IsChecked.ToString());                      // Subtitle Track One Burn
+                writer.WriteElementString("SubFiveBurn",                CheckBoxSubFiveBurn.IsChecked.ToString());                      // Subtitle Track One Burn
+                writer.WriteElementString("SubOneDefault",              CheckBoxSubOneDefault.IsChecked.ToString());                    // Subtitle Track One Default
+                writer.WriteElementString("SubTwoDefault",              CheckBoxSubTwoDefault.IsChecked.ToString());                    // Subtitle Track One Default
+                writer.WriteElementString("SubThreeDefault",            CheckBoxSubThreeDefault.IsChecked.ToString());                  // Subtitle Track One Default
+                writer.WriteElementString("SubFourDefault",             CheckBoxSubFourDefault.IsChecked.ToString());                   // Subtitle Track One Default
+                writer.WriteElementString("SubFiveDefault",             CheckBoxSubFiveDefault.IsChecked.ToString());                   // Subtitle Track One Default
                 writer.WriteElementString("SubOnePath",                 TextBoxSubtitleTrackOne.Text);                                  // Subtitle Track One Path
                 writer.WriteElementString("SubTwoPath",                 TextBoxSubtitleTrackTwo.Text);                                  // Subtitle Track Two Path
                 writer.WriteElementString("SubThreePath",               TextBoxSubtitleTrackThree.Text);                                // Subtitle Track Three Path
@@ -2832,7 +2842,7 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("SubTwoLanguage",             ComboBoxSubTrackTwoLanguage.SelectedIndex.ToString());          // Subtitle Track Two Language
                 writer.WriteElementString("SubThreeLanguage",           ComboBoxSubTrackThreeLanguage.SelectedIndex.ToString());        // Subtitle Track Three Language
                 writer.WriteElementString("SubFourLanguage",            ComboBoxSubTrackFourLanguage.SelectedIndex.ToString());         // Subtitle Track Four Language
-                writer.WriteElementString("SubFFiveLanguage",           ComboBoxSubTrackFiveLanguage.SelectedIndex.ToString());         // Subtitle Track Five Language
+                writer.WriteElementString("SubFiveLanguage",           ComboBoxSubTrackFiveLanguage.SelectedIndex.ToString());          // Subtitle Track Five Language
                 // Audio (for resume mode)
                 writer.WriteElementString("AudioLangOne",               ComboBoxTrackOneLanguage.SelectedIndex.ToString());             // Audio Track One Language
                 writer.WriteElementString("AudioLangTwo",               ComboBoxTrackTwoLanguage.SelectedIndex.ToString());             // Audio Track Two Language
@@ -3202,6 +3212,16 @@ namespace NotEnoughAV1Encodes
                     case "SubThree":                        ToggleSwitchSubtitleActivatedThree.IsOn = n.InnerText == "True";        break;  // Subtitle Track Three Active
                     case "SubFour":                         ToggleSwitchSubtitleActivatedFour.IsOn = n.InnerText == "True";         break;  // Subtitle Track Four Active
                     case "SubFive":                         ToggleSwitchSubtitleActivatedFive.IsOn = n.InnerText == "True";         break;  // Subtitle Track Five Active
+                    case "SubOneBurn":                      CheckBoxSubOneBurn.IsChecked = n.InnerText == "True";                   break;  // Subtitle Track One Burn
+                    case "SubTwoBurn":                      CheckBoxSubTwoBurn.IsChecked = n.InnerText == "True";                   break;  // Subtitle Track Two Burn
+                    case "SubThreeBurn":                    CheckBoxSubThreeBurn.IsChecked = n.InnerText == "True";                 break;  // Subtitle Track Three Burn
+                    case "SubFourBurn":                     CheckBoxSubFourBurn.IsChecked = n.InnerText == "True";                  break;  // Subtitle Track Four Burn
+                    case "SubFiveBurn":                     CheckBoxSubFiveBurn.IsChecked = n.InnerText == "True";                  break;  // Subtitle Track Five Burn
+                    case "SubOneDefault":                   CheckBoxSubOneDefault.IsChecked = n.InnerText == "True";                break;  // Subtitle Track One Default
+                    case "SubTwoDefault":                   CheckBoxSubTwoDefault.IsChecked = n.InnerText == "True";                break;  // Subtitle Track Two Default
+                    case "SubThreeDefault":                 CheckBoxSubThreeDefault.IsChecked = n.InnerText == "True";              break;  // Subtitle Track Three Default
+                    case "SubFourDefault":                  CheckBoxSubFourDefault.IsChecked = n.InnerText == "True";               break;  // Subtitle Track Four Default
+                    case "SubFiveDefault":                  CheckBoxSubFiveDefault.IsChecked = n.InnerText == "True";               break;  // Subtitle Track Five Default
                     case "SubOnePath":                      TextBoxSubtitleTrackOne.Text = n.InnerText;                             break;  // Subtitle Track One Path
                     case "SubTwoPath":                      TextBoxSubtitleTrackTwo.Text = n.InnerText;                             break;  // Subtitle Track Two Path
                     case "SubThreePath":                    TextBoxSubtitleTrackThree.Text = n.InnerText;                           break;  // Subtitle Track Three Path
