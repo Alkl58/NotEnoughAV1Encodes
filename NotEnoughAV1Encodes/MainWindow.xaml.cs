@@ -1478,7 +1478,7 @@ namespace NotEnoughAV1Encodes
             string audioIndexes = getAudioIndexes.StandardOutput.ReadToEnd();
             getAudioIndexes.WaitForExit();
             //Splits the Console Output
-            string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", "audio," }, StringSplitOptions.RemoveEmptyEntries);
+            string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", ",audio" }, StringSplitOptions.RemoveEmptyEntries);
             int detectedTracks = 0;
             bool trackone = false, tracktwo = false, trackthree = false, trackfour = false;
             // Iterates over the audioIndexesFixed Array
