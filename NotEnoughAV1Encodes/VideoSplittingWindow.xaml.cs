@@ -44,9 +44,12 @@ namespace NotEnoughAV1Encodes
             if (DetectMethod == 0)
                 await Task.Run(() => FFmpegSceneDetect());
             if (DetectMethod == 1)
+                // PyScenedetect
                 await Task.Run(() => PySceneDetect());
             if (DetectMethod == 2)
+                // FFmpeg Chunking
                 await Task.Run(() => FFmpegChunking());
+            // Closes the Window after above functions finished
             this.Close();
         }
 
@@ -217,15 +220,13 @@ namespace NotEnoughAV1Encodes
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
                     WorkingDirectory = MainWindow.FFmpegPath,
-                    Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " " + HardSubCMD + " -map_metadata -1 -an " + EncodeCMD + " -f segment -segment_time " + ChunkLength + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "split%0d.mkv") + '\u0022'
+                    Arguments = "/C ffmpeg.exe -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " " + HardSubCMD + " -map_metadata -1 -an " + EncodeCMD + " -f segment -segment_time " + ChunkLength + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "split%6d.mkv") + '\u0022'
                 };
                 SmallFunctions.Logging("Splitting with FFmpeg Chunking: " + startInfo.Arguments);
                 process.StartInfo = startInfo;
                 process.Start();
                 process.WaitForExit();
-
-                // Starts renaming the splits
-                RenameSplits.Rename();
+                // The rename function has been removed, as the FFmpeg Command above now creates longer filenames %6d instead of %0d
             }
             // Resume stuff to skip splitting in resume mode
             SmallFunctions.WriteToFileThreadSafe("", Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName,  "finished_splitting.log"));

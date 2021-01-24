@@ -103,7 +103,6 @@
     </ApplicationDefinition>
     <Compile Include="EncodeAudio.cs" />
     <Compile Include="FFprobe.cs" />
-    <Compile Include="RenameSplits.cs" />
     <Compile Include="SavePreset.xaml.cs">
       <DependentUpon>SavePreset.xaml</DependentUpon>
     </Compile>
