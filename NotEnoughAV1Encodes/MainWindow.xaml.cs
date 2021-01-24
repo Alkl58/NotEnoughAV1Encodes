@@ -1469,7 +1469,7 @@ namespace NotEnoughAV1Encodes
                 WindowStyle = ProcessWindowStyle.Hidden,
                 FileName = "cmd.exe",
                 WorkingDirectory = FFmpegPath,
-                Arguments = "/C ffprobe.exe -i " + '\u0022' + VideoInput + '\u0022' + " -loglevel error -select_streams a -show_entries stream=codec_type,index -of csv=p=0",
+                Arguments = "/C ffprobe.exe -i " + '\u0022' + VideoInput + '\u0022' + " -loglevel error -select_streams a -show_entries stream=index -of csv=p=1",
                 RedirectStandardError = true,
                 RedirectStandardOutput = true
             };
@@ -1478,7 +1478,7 @@ namespace NotEnoughAV1Encodes
             string audioIndexes = getAudioIndexes.StandardOutput.ReadToEnd();
             getAudioIndexes.WaitForExit();
             //Splits the Console Output
-            string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", ",audio" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", "stream," }, StringSplitOptions.RemoveEmptyEntries);
             int detectedTracks = 0;
             bool trackone = false, tracktwo = false, trackthree = false, trackfour = false;
             // Iterates over the audioIndexesFixed Array
