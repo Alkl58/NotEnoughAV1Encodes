@@ -1140,6 +1140,7 @@ namespace NotEnoughAV1Encodes
                 // Plays a sound if encoding has finished
                 if (BatchEncoding == false)
                     SmallFunctions.PlayFinishedSound();
+                    ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
                 if (ToggleSwitchShutdownAfterEncode.IsOn == true && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
             }
             catch { SmallFunctions.PlayStopSound(); }
