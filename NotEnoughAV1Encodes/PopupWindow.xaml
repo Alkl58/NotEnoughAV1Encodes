@@ -6,17 +6,19 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
-        Title="Encode Finished" Height="205" Width="260" ResizeMode="NoResize">
+        Title="Encode Finished" Height="228.5" Width="346" ResizeMode="NoResize">
     <Grid>
-        <Label Content="Elapsed Time:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <Label Content="Encoded Frames:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-        <Label Content="Average FPS:" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-        <Label Content="Filesize:" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
-        <Button Content="Close" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="230" Background="{x:Null}" Height="30" Click="Button_Click"/>
-        <Label x:Name="LabelElapsedTime" Content="" HorizontalAlignment="Left" Margin="122,10,0,0" VerticalAlignment="Top" Width="100"/>
-        <Label x:Name="LabelEncodedFrames" Content="" HorizontalAlignment="Left" Margin="122,41,0,0" VerticalAlignment="Top" Width="100"/>
-        <Label x:Name="LabelEncodedAVG" Content="" HorizontalAlignment="Left" Margin="122,72,0,0" VerticalAlignment="Top" Width="100"/>
-        <Label x:Name="LabelEncodedFilesize" Content="" HorizontalAlignment="Left" Margin="122,103,0,0" VerticalAlignment="Top" Width="100"/>
+        <Label Content="Elapsed Time:" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Encoded Frames:" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Average FPS:" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Filesize:" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Button Content="Close" HorizontalAlignment="Left" Margin="10,157,0,0" VerticalAlignment="Top" Width="150" Background="{x:Null}" Height="30" Click="Button_Click"/>
+        <Label x:Name="LabelElapsedTime" Content="" HorizontalAlignment="Left" Margin="122,33,0,0" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="LabelEncodedFrames" Content="" HorizontalAlignment="Left" Margin="122,64,0,0" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="LabelEncodedAVG" Content="" HorizontalAlignment="Left" Margin="122,95,0,0" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="LabelEncodedFilesize" Content="" HorizontalAlignment="Left" Margin="122,126,0,0" VerticalAlignment="Top" Width="100"/>
+        <Button Content="Open File Location" HorizontalAlignment="Left" Margin="184,157,0,0" VerticalAlignment="Top" Width="150" Background="{x:Null}" Height="30" Click="Button_Click_1"/>
+        <Label Content="Finished Encoding!" HorizontalAlignment="Left" Margin="97,2,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Foreground="#FF39C922"/>
 
     </Grid>
 </mah:MetroWindow>
