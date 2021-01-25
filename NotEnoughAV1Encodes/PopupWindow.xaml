@@ -1,0 +1,22 @@
+﻿<mah:MetroWindow x:Class="NotEnoughAV1Encodes.PopupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:NotEnoughAV1Encodes"
+        mc:Ignorable="d"
+        Title="Encode Finished" Height="205" Width="260" ResizeMode="NoResize">
+    <Grid>
+        <Label Content="Elapsed Time:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Encoded Frames:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+        <Label Content="Average FPS:" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
+        <Label Content="Filesize:" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
+        <Button Content="Close" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="230" Background="{x:Null}" Height="30" Click="Button_Click"/>
+        <Label x:Name="LabelElapsedTime" Content="" HorizontalAlignment="Left" Margin="122,10,0,0" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="LabelEncodedFrames" Content="" HorizontalAlignment="Left" Margin="122,41,0,0" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="LabelEncodedAVG" Content="" HorizontalAlignment="Left" Margin="122,72,0,0" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="LabelEncodedFilesize" Content="" HorizontalAlignment="Left" Margin="122,103,0,0" VerticalAlignment="Top" Width="100"/>
+
+    </Grid>
+</mah:MetroWindow>

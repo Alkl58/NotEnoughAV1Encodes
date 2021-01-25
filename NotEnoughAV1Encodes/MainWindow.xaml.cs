@@ -94,6 +94,7 @@ namespace NotEnoughAV1Encodes
         public static bool CustomBG = false;        // Custom Image Background
         public static bool StartUp = true;          // Avoids conflicts with Settings Tab
         public static bool ReadTimeCode = false;    // Skips creating an image preview at start
+        public static bool PopupWindow = false;     // Shows a popup window after encode finished
         public static string TrimEndTemp = "00:23:00.000"; // Sets the maximum trim time
         public static int TotalFrames = 0;          // used for progressbar and frame check
         public DateTime StartTime;                  // used for eta calculation
@@ -1000,6 +1001,8 @@ namespace NotEnoughAV1Encodes
             ButtonStopEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
             // Creates new Cancellation Token
             cancellationTokenSource = new CancellationTokenSource();
+            // Sets if popup window appears
+            PopupWindow = ToggleSwitchShowWindow.IsOn == true;
             // Sets that the encode has started
             EncodeStarted = true;
             // Sets the encoder (0 aomenc; 1 rav1e; 2 svt-av1; 3 vp9)
@@ -1141,6 +1144,8 @@ namespace NotEnoughAV1Encodes
                 if (BatchEncoding == false)
                     SmallFunctions.PlayFinishedSound();
                     ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
+                    PopupWindow popupWindow = new PopupWindow(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text, timespent.ToString("hh\\:mm\\:ss"), TotalFrames.ToString(), Math.Round(TotalFrames / timespent.TotalSeconds, 2).ToString(), VideoOutput);
+                    popupWindow.ShowDialog();
                 if (ToggleSwitchShutdownAfterEncode.IsOn == true && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
             }
             catch { SmallFunctions.PlayStopSound(); }
@@ -2737,6 +2742,7 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("DeleteTempFiles",    ToggleSwitchDeleteTempFiles.IsOn.ToString());
                     writer.WriteElementString("PlaySound",          ToggleSwitchUISounds.IsOn.ToString());
                     writer.WriteElementString("Logging",            ToggleSwitchLogging.IsOn.ToString());
+                    writer.WriteElementString("ShowDialog",         ToggleSwitchShowWindow.IsOn.ToString());
                     writer.WriteElementString("Shutdown",           ToggleSwitchShutdownAfterEncode.IsOn.ToString());
                     writer.WriteElementString("TempPathActive",     ToggleSwitchTempFolder.IsOn.ToString());
                     writer.WriteElementString("TempPath",           TextBoxCustomTempPath.Text);
@@ -2767,6 +2773,7 @@ namespace NotEnoughAV1Encodes
                             case "DeleteTempFiles": ToggleSwitchDeleteTempFiles.IsOn = n.InnerText == "True"; break;
                             case "PlaySound":       ToggleSwitchUISounds.IsOn = n.InnerText == "True"; break;
                             case "Logging":         ToggleSwitchLogging.IsOn = n.InnerText == "True"; break;
+                            case "ShowDialog":      ToggleSwitchShowWindow.IsOn = n.InnerText == "True"; break;
                             case "Shutdown":        ToggleSwitchShutdownAfterEncode.IsOn = n.InnerText == "True"; break;
                             case "TempPathActive":  ToggleSwitchTempFolder.IsOn = n.InnerText == "True"; break;
                             case "TempPath":        TextBoxCustomTempPath.Text = n.InnerText; break;

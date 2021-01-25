@@ -1072,6 +1072,7 @@
                             <mah:ToggleSwitch x:Name="ToggleSwitchHideTerminal" IsOn="True" Header="Hide Terminal" HorizontalAlignment="Left" Margin="10,0,0,58" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
                             <mah:ToggleSwitch x:Name="ToggleSwitchUISounds" IsOn="True" Header="UI Sounds" HorizontalAlignment="Left" Margin="215,0,0,118" VerticalAlignment="Bottom" Toggled="CheckBoxSettingsUISounds_Checked"/>
                             <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" IsOn="True" Header="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="10,0,0,118" VerticalAlignment="Bottom" Toggled="CheckBoxSettingsDeleteTempFiles_Checked"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchShowWindow" Header="Popup Window" HorizontalAlignment="Left" Margin="215,0,0,-2" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Opens a window after the encode to show generic information"/>
                         </Grid>
                     </GroupBox>
                     <Button x:Name="ButtonOpenTempFolder" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="19,0,0,71" Width="136" Background="{x:Null}" Click="ButtonOpenTempFolder_Click" Height="38" VerticalAlignment="Bottom"/>
