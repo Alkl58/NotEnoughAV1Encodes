@@ -1121,6 +1121,12 @@ namespace NotEnoughAV1Encodes
                 {
                     LabelProgressBar.Content = "Encoding Audio...";
                     await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeAudio.Encode(); }, token);
+                    if (!File.Exists(Path.Combine(TempPath, TempPathFileName, "Audio", "audio.mkv")))
+                    {
+                        // This disables audio if audio encoding failed, thus still managing to output a video in the muxing process without audio
+                        trackOne = false; trackTwo = false; trackThree = false; trackFour = false;
+                        SmallFunctions.Logging("Attention: Tried to encode audio. Not audio output detected. Audio is now disabled.");
+                    }
                 }
 
                 if (subHardSubEnabled || TrimEnabled)
