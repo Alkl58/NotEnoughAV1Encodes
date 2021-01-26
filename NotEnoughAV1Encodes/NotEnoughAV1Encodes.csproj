@@ -114,9 +114,6 @@
       <DependentUpon>Updater.xaml</DependentUpon>
     </Compile>
     <Compile Include="VideoMuxing.cs" />
-    <Compile Include="VideoSplittingWindow.xaml.cs">
-      <DependentUpon>VideoSplittingWindow.xaml</DependentUpon>
-    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -143,10 +140,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Updater.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="VideoSplittingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
