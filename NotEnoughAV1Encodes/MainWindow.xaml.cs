@@ -674,8 +674,18 @@ namespace NotEnoughAV1Encodes
             {
                 if (ComboBoxPresets.SelectedItem != null)
                 {
+                    // Temporary saves the state of toggleswitches
+                    bool audio1 = ToggleSwitchAudioTrackOne.IsEnabled == true;
+                    bool audio2 = ToggleSwitchAudioTrackTwo.IsEnabled == true;
+                    bool audio3 = ToggleSwitchAudioTrackThree.IsEnabled == true;
+                    bool audio4 = ToggleSwitchAudioTrackFour.IsEnabled == true;
                     // Loads the selected preset file
                     LoadSettings(true, ComboBoxPresets.SelectedItem.ToString());
+                    // Reloads the saved states of the toogleswitches
+                    if (!audio1) { ToggleSwitchAudioTrackOne.IsEnabled = false; ToggleSwitchAudioTrackOne.IsOn = false; }
+                    if (!audio2) { ToggleSwitchAudioTrackTwo.IsEnabled = false; ToggleSwitchAudioTrackTwo.IsOn = false; }
+                    if (!audio3) { ToggleSwitchAudioTrackThree.IsEnabled = false; ToggleSwitchAudioTrackThree.IsOn = false; }
+                    if (!audio4) { ToggleSwitchAudioTrackFour.IsEnabled = false; ToggleSwitchAudioTrackFour.IsOn = false; }
                 }
                 else { }
             }
