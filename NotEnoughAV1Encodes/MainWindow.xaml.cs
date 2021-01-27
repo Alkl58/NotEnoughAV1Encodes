@@ -1090,6 +1090,7 @@ namespace NotEnoughAV1Encodes
                 }
             }
             SmallFunctions.PlayFinishedSound();
+            ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
         }
 
         public async Task MainEntry(CancellationToken token)
@@ -1167,10 +1168,15 @@ namespace NotEnoughAV1Encodes
                 ProgressBar.Value = 10;
                 // Plays a sound if encoding has finished
                 if (BatchEncoding == false)
+                {
                     SmallFunctions.PlayFinishedSound();
                     ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
-                    PopupWindow popupWindow = new PopupWindow(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text, timespent.ToString("hh\\:mm\\:ss"), TotalFrames.ToString(), Math.Round(TotalFrames / timespent.TotalSeconds, 2).ToString(), VideoOutput);
-                    popupWindow.ShowDialog();
+                    if (PopupWindow)
+                    {
+                        PopupWindow popupWindow = new PopupWindow(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text, timespent.ToString("hh\\:mm\\:ss"), TotalFrames.ToString(), Math.Round(TotalFrames / timespent.TotalSeconds, 2).ToString(), VideoOutput);
+                        popupWindow.ShowDialog();
+                    }
+                }
                 if (ToggleSwitchShutdownAfterEncode.IsOn == true && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
             }
             catch { SmallFunctions.PlayStopSound(); }
