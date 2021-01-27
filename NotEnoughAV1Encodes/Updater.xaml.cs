@@ -25,7 +25,7 @@ namespace NotEnoughAV1Encodes
 
         // NEAV1E Update
         public static double Neav1eUpdateVersion = 0.0;
-        public static double Neav1eCurrentVersion = 1.5; // current neav1e version (hardcoded)
+        public static double Neav1eCurrentVersion = 1.6; // current neav1e version (hardcoded)
         // FFmpeg Update
         public static string FFmpegUpdateVersion;
         public static string FFmpegCurrentVersion;
