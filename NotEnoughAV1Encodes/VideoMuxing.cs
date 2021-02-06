@@ -11,7 +11,7 @@ namespace NotEnoughAV1Encodes
         {
             // ══════════════════════════════════════ Chunk Parsing ══════════════════════════════════════
             // Writes all ivf files into chunks.txt for later concat
-            string ffmpegCommand = "/C (for %i in (" + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks") + "\\*.ivf" + '\u0022' + ") do @echo file '%i') > " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "chunks.txt") + '\u0022';
+            string ffmpegCommand = "/C (for %i in (" + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks") + "\\*.ivf" + '\u0022' + ") do @echo file '%i') | sort /o " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "chunks.txt") + '\u0022';
             await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
 
             // ════════════════════════════════════ Muxing with Audio ════════════════════════════════════
@@ -77,6 +77,7 @@ namespace NotEnoughAV1Encodes
                     if (MainWindow.VFRVideo == false)
                     {
                         ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "chunks.txt") + '\u0022' + " -c copy " + '\u0022' + MainWindow.VideoOutput + '\u0022';
+                        SmallFunctions.Logging("Muxing: " + ffmpegCommand);
                         await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
                     }
                     else
