@@ -186,11 +186,6 @@ namespace NotEnoughAV1Encodes
             ReadTimeCode = true;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            AutoSetBitDepthAndColorFormat(@"D:\Test Videos\plsaaaa.mp4");
-        }
-
         private void AutoSetBitDepthAndColorFormat(string result)
         {
             // Get & Set correct Color Formats
