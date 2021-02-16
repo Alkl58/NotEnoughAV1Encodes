@@ -16,10 +16,10 @@ namespace NotEnoughAV1Encodes
                 int numberoftracksactive = 0, indexinteger = 0;
 
                 //Counts the number of active audio tracks for audio mapping purposes
-                if (MainWindow.trackOne == true) { numberoftracksactive += 1; }
-                if (MainWindow.trackTwo == true) { numberoftracksactive += 1; }
-                if (MainWindow.trackThree == true) { numberoftracksactive += 1; }
-                if (MainWindow.trackFour == true) { numberoftracksactive += 1; }
+                if (MainWindow.trackOne) { numberoftracksactive += 1; }
+                if (MainWindow.trackTwo) { numberoftracksactive += 1; }
+                if (MainWindow.trackThree) { numberoftracksactive += 1; }
+                if (MainWindow.trackFour) { numberoftracksactive += 1; }
 
                 if (numberoftracksactive == 1)
                 {
@@ -64,7 +64,7 @@ namespace NotEnoughAV1Encodes
         }
 
         private static string audiocodecswitch = "";
-        private static string SwitchCodec(string Codec, int track)
+        private static string SwitchCodec(string Codec)
         {
             switch (Codec)
             {
@@ -85,13 +85,13 @@ namespace NotEnoughAV1Encodes
             // Audio Mapping
             audioCodecCommand = "-map 0:a:" + activetrackindex + " -c:a ";
             // Codec
-            audioCodecCommand += SwitchCodec(activtrackcodec, channellayout);
+            audioCodecCommand += SwitchCodec(activtrackcodec);
             // Channel Layout / Bitrate
             if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " -b:a " + activetrackbitrate + "k"; }
             audioCodecCommand += " -ac " + channellayout;
             // Metadata
-            if (MainWindow.trackOneLanguage != "unknown") 
-            { 
+            if (MainWindow.trackOneLanguage != "unknown")
+            {
                 // Sets Language Metadata
                 audioCodecCommand += " -metadata:s:a:0 language=" + MainWindow.trackOneLanguage;
                 if (activtrackcodec != "Copy Audio")
@@ -105,9 +105,8 @@ namespace NotEnoughAV1Encodes
                 if (activtrackcodec != "Copy Audio")
                 {
                     audioCodecCommand += " -metadata:s:a:0 title=" + '\u0022' + "[UND] " + activtrackcodec + " " + activetrackbitrate + "kbps" + '\u0022' + " ";
-                }  
+                }
             }
-            
             return audioCodecCommand;
         }
         private static string MultipleTrackCommandGenerator(int activetrackbitrate, string activetrackindex, int activetrackaudioindex, string activtrackcodec, int channellayout, string lang)
@@ -116,25 +115,25 @@ namespace NotEnoughAV1Encodes
             // Audio Mapping
             audioCodecCommand = "-map 0:a:" + activetrackindex + " -c:a:" + activetrackaudioindex + " ";
             // Codec
-            audioCodecCommand += SwitchCodec(activtrackcodec, channellayout);
+            audioCodecCommand += SwitchCodec(activtrackcodec);
             // Channel Layout / Bitrate
             if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -b:a:" + activetrackaudioindex + " " + activetrackbitrate + "k"; }
             audioCodecCommand += " -ac:a:" + activetrackaudioindex + " " + channellayout + " ";
             // Metadata
             if (lang != "unknown") 
-            { 
+            {
                 audioCodecCommand += " -metadata:s:a:" + activetrackaudioindex + " language=" + lang;
                 if (activtrackcodec != "Copy Audio")
                 {
                     audioCodecCommand += " -metadata:s:a:" + activetrackaudioindex + " title=" + '\u0022' + "[" + lang.ToUpper() + "] " + activtrackcodec + " " + activetrackbitrate + "kbps" + '\u0022' + " ";
-                } 
+                }
             }
             else
             {
                 if (activtrackcodec != "Copy Audio")
                 {
                     audioCodecCommand += " -metadata:s:a:" + activetrackaudioindex + " title=" + '\u0022' + "[UND] " + activtrackcodec + " " + activetrackbitrate + "kbps" + '\u0022' + " ";
-                }     
+                }
             }
             return audioCodecCommand;
         }

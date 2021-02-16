@@ -43,7 +43,7 @@ namespace NotEnoughAV1Encodes
         public static string VFRCMD = "";           // VFR Muxing Command
         public static string[] VideoChunks;         // Array of command/videochunks
         public static string TrimCommand;           // Trim Parameters
-        // Spltting Settings
+        // Splitting Settings
         public static string FFmpegThreshold;
         public static string ChunkLength;
         public static string HardSubCMD;
@@ -76,6 +76,7 @@ namespace NotEnoughAV1Encodes
         public static string subHardCommand;        // Subtitle Hardcoding Command
         public static bool subSoftSubEnabled;       // Subtitle Toggle for later Muxing
         public static bool subHardSubEnabled;       // Subtitle Toggle for hardsub
+        public static bool subMessageShowed = false;// Used to message the user when trying to do softsub in MP4 Container
         // IO Paths
         public static string TempPath = Path.Combine(Path.GetTempPath(), "NEAV1E");
         public static string TempPathFileName = null;
@@ -101,6 +102,7 @@ namespace NotEnoughAV1Encodes
         public static bool StartUp = true;          // Avoids conflicts with Settings Tab
         public static bool ReadTimeCode = false;    // Skips creating an image preview at start
         public static bool PopupWindow = false;     // Shows a popup window after encode finished
+        public static bool Yadif1 = false;          // If true -> double the frames
         public static string TrimEndTemp = "00:23:00.000"; // Sets the maximum trim time
         public static int TotalFrames = 0;          // used for progressbar and frame check
         public DateTime StartTime;                  // used for eta calculation
@@ -130,83 +132,21 @@ namespace NotEnoughAV1Encodes
             LoadDefaultProfile();
             LoadSettingsTab();
 
-            if (FFmpegPath == null)
-            {
-                if (MessageBox.Show("Could not find ffmpeg!\nOpen Updater?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                {
-                    Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
-                    updater.ShowDialog();
-                    CheckDependencies.Check();
-                }
-            }
-
-            // Custom BG
-            if (File.Exists("background.txt"))
-            {
-                try
-                {
-                    Uri fileUri = new Uri(File.ReadAllText("background.txt"));
-                    imgDynamic.Source = new BitmapImage(fileUri);
-                    CustomBG = true;
-                    SetBackGroundColor();
-                }
-                catch { }
-            }
-            EasterEgg();
             StartUp = false;
-        }
-
-        private void EasterEgg()
-        {
-            DateTime today = DateTime.Today;
-
-            if (today.ToString("dd-MM") == "24-12")
-            {
-                imgDynamic.Source = new BitmapImage(new Uri("pack://application:,,,/NotEnoughAV1Encodes;component/img/christmas.jpg", UriKind.Absolute));
-                ComboBoxBaseTheme.SelectedIndex = 1;
-                ThemeManager.Current.ChangeTheme(this, ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text);
-            }
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
 
         private void ToggleSwitchSubtitleActivatedOne_Toggled(object sender, RoutedEventArgs e)
         {
-            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && ToggleSwitchSubtitleActivatedOne.IsOn == true)
+            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && !subMessageShowed)
             {
-                MessageBox.Show("Softsub not supported with MP4 as container", "Subtitles", MessageBoxButton.OK);
-            }
-        }
-
-        private void ToggleSwitchSubtitleActivatedTwo_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && ToggleSwitchSubtitleActivatedTwo.IsOn == true)
-            {
-                MessageBox.Show("Softsub not supported with MP4 as container", "Subtitles", MessageBoxButton.OK);
-            }
-        }
-
-        private void ToggleSwitchSubtitleActivatedThree_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && ToggleSwitchSubtitleActivatedThree.IsOn == true)
-            {
-                MessageBox.Show("Softsub not supported with MP4 as container", "Subtitles", MessageBoxButton.OK);
-            }
-        }
-
-        private void ToggleSwitchSubtitleActivatedFour_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && ToggleSwitchSubtitleActivatedFour.IsOn == true)
-            {
-                MessageBox.Show("Softsub not supported with MP4 as container", "Subtitles", MessageBoxButton.OK);
-            }
-        }
-
-        private void ToggleSwitchSubtitleActivatedFive_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && ToggleSwitchSubtitleActivatedFive.IsOn == true)
-            {
-                MessageBox.Show("Softsub not supported with MP4 as container", "Subtitles", MessageBoxButton.OK);
+                if (ToggleSwitchSubtitleActivatedOne.IsOn == true || ToggleSwitchSubtitleActivatedTwo.IsOn == true || ToggleSwitchSubtitleActivatedThree.IsOn == true || ToggleSwitchSubtitleActivatedFour.IsOn == true || ToggleSwitchSubtitleActivatedFive.IsOn == true)
+                {
+                    MessageBox.Show("Softsub not supported with MP4 as container", "Subtitles", MessageBoxButton.OK);
+                    // Only show this Message once per instance
+                    subMessageShowed = true;
+                }
             }
         }
 
@@ -216,20 +156,12 @@ namespace NotEnoughAV1Encodes
             List<string> filepaths = new List<string>();
             foreach (var s in (string[])e.Data.GetData(DataFormats.FileDrop, false)) { filepaths.Add(s); }
             int counter = 0;
-            foreach (var item in filepaths) { counter += 1; }
             foreach (var item in filepaths)
             {
-                if (counter == 1)
-                {
-                    // Single File Input
-                    SingleFileInput(item);
-                }
+                if (counter == 0) { SingleFileInput(item); }
+                counter += 1;
             }
-            if (counter >= 2)
-            {
-                MessageBox.Show("Multiple Input Files currently not implemented.");
-            }
-
+            if (counter >= 2) { MessageBox.Show("Multiple Input Files currently not implemented.\nPlease use Batch encoding instead!"); }
         }
 
         private void SingleFileInput(string file)
@@ -254,79 +186,46 @@ namespace NotEnoughAV1Encodes
             ReadTimeCode = true;
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            AutoSetBitDepthAndColorFormat(@"D:\Test Videos\plsaaaa.mp4");
+        }
+
         private void AutoSetBitDepthAndColorFormat(string result)
         {
+            // Get & Set correct Color Formats
+
             string format = FFprobe.GetPixelFormat(result);
-            if (format == "yuv420p10le")
+
+            Regex rgx10bit = new Regex(@"10le$");
+            Regex rgx12bit = new Regex(@"12le$");
+            Regex rgxyuv420 = new Regex(@"^yuv420p");
+            Regex rgxyuv422 = new Regex(@"^yuv422p");
+            Regex rgxyuv444 = new Regex(@"^yuv444p");
+
+            int rgxIndex = 0;
+            int rgxBit = 0;
+
+            if (rgx10bit.IsMatch(format)) {  rgxBit = 1; }
+            else if (rgx12bit.IsMatch(format)) { rgxBit = 2; }
+
+            if (rgxyuv420.IsMatch(format)) { rgxIndex = 0; }
+            else if (rgxyuv422.IsMatch(format)) 
             {
-                ComboBoxVideoBitDepth.SelectedIndex = 1;
-                ComboBoxAomencColorFormat.SelectedIndex = 0;
-                ComboBoxRav1eColorFormat.SelectedIndex = 0;
-                ComboBoxSVTAV1ColorFormat.SelectedIndex = 0;
-                ComboBoxVP9ColorFormat.SelectedIndex = 0;
-            }
-            else if(format == "yuv420p12le")
-            {
-                ComboBoxVideoBitDepth.SelectedIndex = 2;
-                ComboBoxAomencColorFormat.SelectedIndex = 0;
-                ComboBoxRav1eColorFormat.SelectedIndex = 0;
-                ComboBoxSVTAV1ColorFormat.SelectedIndex = 0;
-                ComboBoxVP9ColorFormat.SelectedIndex = 0;
-            }
-            else if (format == "yuv422p")
-            {
+                rgxIndex = 1;
                 ToggleSwitchAdvancedVideoSettings.IsOn = true;
-                ComboBoxVideoBitDepth.SelectedIndex = 0;
-                ComboBoxAomencColorFormat.SelectedIndex = 1;
-                ComboBoxRav1eColorFormat.SelectedIndex = 1;
-                ComboBoxSVTAV1ColorFormat.SelectedIndex = 1;
-                ComboBoxVP9ColorFormat.SelectedIndex = 1;
             }
-            else if (format == "yuv422p10le")
+            else if (rgxyuv444.IsMatch(format))
             {
+                rgxIndex = 2;
                 ToggleSwitchAdvancedVideoSettings.IsOn = true;
-                ComboBoxVideoBitDepth.SelectedIndex = 1;
-                ComboBoxAomencColorFormat.SelectedIndex = 1;
-                ComboBoxRav1eColorFormat.SelectedIndex = 1;
-                ComboBoxSVTAV1ColorFormat.SelectedIndex = 1;
-                ComboBoxVP9ColorFormat.SelectedIndex = 1;
             }
-            else if (format == "yuv422p12le")
-            {
-                ToggleSwitchAdvancedVideoSettings.IsOn = true;
-                ComboBoxVideoBitDepth.SelectedIndex = 2;
-                ComboBoxAomencColorFormat.SelectedIndex = 1;
-                ComboBoxRav1eColorFormat.SelectedIndex = 1;
-                ComboBoxSVTAV1ColorFormat.SelectedIndex = 1;
-                ComboBoxVP9ColorFormat.SelectedIndex = 1;
-            }
-            else if (format == "yuv444p")
-            {
-                ToggleSwitchAdvancedVideoSettings.IsOn = true;
-                ComboBoxVideoBitDepth.SelectedIndex = 0;
-                ComboBoxAomencColorFormat.SelectedIndex = 2;
-                ComboBoxRav1eColorFormat.SelectedIndex = 2;
-                ComboBoxSVTAV1ColorFormat.SelectedIndex = 2;
-                ComboBoxVP9ColorFormat.SelectedIndex = 2;
-            }
-            else if (format == "yuv444p10le")
-            {
-                ToggleSwitchAdvancedVideoSettings.IsOn = true;
-                ComboBoxVideoBitDepth.SelectedIndex = 1;
-                ComboBoxAomencColorFormat.SelectedIndex = 2;
-                ComboBoxRav1eColorFormat.SelectedIndex = 2;
-                ComboBoxSVTAV1ColorFormat.SelectedIndex = 2;
-                ComboBoxVP9ColorFormat.SelectedIndex = 2;
-            }
-            else if (format == "yuv444p12le")
-            {
-                ToggleSwitchAdvancedVideoSettings.IsOn = true;
-                ComboBoxVideoBitDepth.SelectedIndex = 2;
-                ComboBoxAomencColorFormat.SelectedIndex = 2;
-                ComboBoxRav1eColorFormat.SelectedIndex = 2;
-                ComboBoxSVTAV1ColorFormat.SelectedIndex = 2;
-                ComboBoxVP9ColorFormat.SelectedIndex = 2;
-            }
+
+            ComboBoxVideoBitDepth.SelectedIndex = rgxBit;
+            ComboBoxAomencColorFormat.SelectedIndex = rgxIndex;
+            ComboBoxRav1eColorFormat.SelectedIndex = rgxIndex;
+            ComboBoxSVTAV1ColorFormat.SelectedIndex = rgxIndex;
+            ComboBoxVP9ColorFormat.SelectedIndex = rgxIndex;
         }
 
         private void ComboBoxSplittingMethod_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -385,12 +284,18 @@ namespace NotEnoughAV1Encodes
                 MessageBox.Show("This subtitle is not supported for hardsubbing!", "Subtitle", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
+        private void CheckBoxBurnToggle(bool one, bool two, bool three, bool four, bool five)
+        {
+            CheckBoxSubOneBurn.IsChecked = one;
+            CheckBoxSubTwoBurn.IsChecked = two;
+            CheckBoxSubThreeBurn.IsChecked = three;
+            CheckBoxSubFourBurn.IsChecked = four;
+            CheckBoxSubFiveBurn.IsChecked = five;
+        }
+
         private void CheckBoxSubOneBurn_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBoxSubTwoBurn.IsChecked = false;
-            CheckBoxSubThreeBurn.IsChecked = false;
-            CheckBoxSubFourBurn.IsChecked = false;
-            CheckBoxSubFiveBurn.IsChecked = false;
+            CheckBoxBurnToggle(true, false, false, false, false);
             CheckBoxSubOneDefault.IsChecked = false;
             if (Path.GetExtension(TextBoxSubtitleTrackOne.Text) == ".sup")
             {
@@ -401,10 +306,7 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxSubTwoBurn_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBoxSubOneBurn.IsChecked = false;
-            CheckBoxSubThreeBurn.IsChecked = false;
-            CheckBoxSubFourBurn.IsChecked = false;
-            CheckBoxSubFiveBurn.IsChecked = false;
+            CheckBoxBurnToggle(false, true, false, false, false);
             CheckBoxSubTwoDefault.IsChecked = false;
             if (Path.GetExtension(TextBoxSubtitleTrackTwo.Text) == ".sup")
             {
@@ -415,10 +317,7 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxSubThreeBurn_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBoxSubOneBurn.IsChecked = false;
-            CheckBoxSubTwoBurn.IsChecked = false;
-            CheckBoxSubFourBurn.IsChecked = false;
-            CheckBoxSubFiveBurn.IsChecked = false;
+            CheckBoxBurnToggle(false, false, true, false, false);
             CheckBoxSubThreeDefault.IsChecked = false;
             if (Path.GetExtension(TextBoxSubtitleTrackThree.Text) == ".sup")
             {
@@ -429,10 +328,7 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxSubFourBurn_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBoxSubOneBurn.IsChecked = false;
-            CheckBoxSubTwoBurn.IsChecked = false;
-            CheckBoxSubThreeBurn.IsChecked = false;
-            CheckBoxSubFiveBurn.IsChecked = false;
+            CheckBoxBurnToggle(false, false, false, true, false);
             CheckBoxSubFourDefault.IsChecked = false;
             if (Path.GetExtension(TextBoxSubtitleTrackFour.Text) == ".sup")
             {
@@ -443,10 +339,7 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxSubFiveBurn_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBoxSubOneBurn.IsChecked = false;
-            CheckBoxSubTwoBurn.IsChecked = false;
-            CheckBoxSubThreeBurn.IsChecked = false;
-            CheckBoxSubFourBurn.IsChecked = false;
+            CheckBoxBurnToggle(false, false, false, false, true);
             CheckBoxSubFiveDefault.IsChecked = false;
             if (Path.GetExtension(TextBoxSubtitleTrackFive.Text) == ".sup")
             {
@@ -455,48 +348,42 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void CheckBoxDefaultToggle(bool one, bool two, bool three, bool four, bool five)
+        {
+            CheckBoxSubOneDefault.IsChecked = one;
+            CheckBoxSubTwoDefault.IsChecked = two;
+            CheckBoxSubThreeDefault.IsChecked = three;
+            CheckBoxSubFourDefault.IsChecked = four;
+            CheckBoxSubFiveDefault.IsChecked = five;
+        }
+
         private void CheckBoxSubOneDefault_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBoxSubTwoDefault.IsChecked = false;
-            CheckBoxSubThreeDefault.IsChecked = false;
-            CheckBoxSubFourDefault.IsChecked = false;
-            CheckBoxSubFiveDefault.IsChecked = false;
+            CheckBoxDefaultToggle(true, false, false, false, false);
             CheckBoxSubOneBurn.IsChecked = false;
         }
 
         private void CheckBoxSubTwoDefault_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBoxSubOneDefault.IsChecked = false;
-            CheckBoxSubThreeDefault.IsChecked = false;
-            CheckBoxSubFourDefault.IsChecked = false;
-            CheckBoxSubFiveDefault.IsChecked = false;
+            CheckBoxDefaultToggle(false, true, false, false, false);
             CheckBoxSubTwoBurn.IsChecked = false;
         }
 
         private void CheckBoxSubThreeDefault_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBoxSubOneDefault.IsChecked = false;
-            CheckBoxSubTwoDefault.IsChecked = false;
-            CheckBoxSubFourDefault.IsChecked = false;
-            CheckBoxSubFiveDefault.IsChecked = false;
+            CheckBoxDefaultToggle(false, false, true, false, false);
             CheckBoxSubThreeBurn.IsChecked = false;
         }
 
         private void CheckBoxSubFourDefault_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBoxSubOneDefault.IsChecked = false;
-            CheckBoxSubTwoDefault.IsChecked = false;
-            CheckBoxSubThreeDefault.IsChecked = false;
-            CheckBoxSubFiveDefault.IsChecked = false;
+            CheckBoxDefaultToggle(false, false, false, true, false);
             CheckBoxSubFourBurn.IsChecked = false;
         }
 
         private void CheckBoxSubFiveDefault_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBoxSubOneDefault.IsChecked = false;
-            CheckBoxSubTwoDefault.IsChecked = false;
-            CheckBoxSubThreeDefault.IsChecked = false;
-            CheckBoxSubFourDefault.IsChecked = false;
+            CheckBoxDefaultToggle(false, false, false, false, true);
             CheckBoxSubFiveBurn.IsChecked = false;
         }
 
@@ -921,8 +808,6 @@ namespace NotEnoughAV1Encodes
             if (ToggleSwitchTempFolder.IsOn == true) { tempPath = Path.Combine(TextBoxCustomTempPath.Text, tempPath); }
             else { tempPath = Path.Combine(Path.GetTempPath(), tempPath); }
 
-
-
             Process getStartFrame = new Process
             {
                 StartInfo = new ProcessStartInfo()
@@ -1154,6 +1039,10 @@ namespace NotEnoughAV1Encodes
                 {
                     ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames * 2);
                 }
+
+                if (Yadif1)
+                    ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames * 2);
+
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeVideo(); }, token);
                 await Task.Run(async () => { token.ThrowIfCancellationRequested(); await VideoMuxing.Concat(); }, token);
                 SmallFunctions.CheckVideoOutput();
@@ -1273,69 +1162,33 @@ namespace NotEnoughAV1Encodes
             if (ComboBoxVideoEncoder.SelectedIndex == 0)
             {
                 // aomenc
-                if (ComboBoxAomencColorFormat.SelectedIndex == 0)
-                {
-                    PipeBitDepthCommand += "420p";
-                }
-                else if (ComboBoxAomencColorFormat.SelectedIndex == 1)
-                {
-                    PipeBitDepthCommand += "422p";
-                }
-                else if (ComboBoxAomencColorFormat.SelectedIndex == 2)
-                {
-                    PipeBitDepthCommand += "444p";
-                }
+                if (ComboBoxAomencColorFormat.SelectedIndex == 0) { PipeBitDepthCommand += "420p"; }
+                else if (ComboBoxAomencColorFormat.SelectedIndex == 1) { PipeBitDepthCommand += "422p"; }
+                else if (ComboBoxAomencColorFormat.SelectedIndex == 2) { PipeBitDepthCommand += "444p"; }
             }
 
             if (ComboBoxVideoEncoder.SelectedIndex == 1)
             {
                 // rav1e
-                if (ComboBoxRav1eColorFormat.SelectedIndex == 0)
-                {
-                    PipeBitDepthCommand += "420p";
-                }
-                else if (ComboBoxRav1eColorFormat.SelectedIndex == 1)
-                {
-                    PipeBitDepthCommand += "422p";
-                }
-                else if (ComboBoxRav1eColorFormat.SelectedIndex == 2)
-                {
-                    PipeBitDepthCommand += "444p";
-                }
+                if (ComboBoxRav1eColorFormat.SelectedIndex == 0) { PipeBitDepthCommand += "420p"; }
+                else if (ComboBoxRav1eColorFormat.SelectedIndex == 1) { PipeBitDepthCommand += "422p"; }
+                else if (ComboBoxRav1eColorFormat.SelectedIndex == 2) { PipeBitDepthCommand += "444p"; }
             }
 
             if (ComboBoxVideoEncoder.SelectedIndex == 2)
             {
                 // svt-av1
-                if (ComboBoxSVTAV1ColorFormat.SelectedIndex == 0)
-                {
-                    PipeBitDepthCommand += "420p";
-                }
-                else if (ComboBoxSVTAV1ColorFormat.SelectedIndex == 1)
-                {
-                    PipeBitDepthCommand += "422p";
-                }
-                else if (ComboBoxSVTAV1ColorFormat.SelectedIndex == 2)
-                {
-                    PipeBitDepthCommand += "444p";
-                }
+                if (ComboBoxSVTAV1ColorFormat.SelectedIndex == 0) { PipeBitDepthCommand += "420p"; }
+                else if (ComboBoxSVTAV1ColorFormat.SelectedIndex == 1) { PipeBitDepthCommand += "422p"; }
+                else if (ComboBoxSVTAV1ColorFormat.SelectedIndex == 2) { PipeBitDepthCommand += "444p"; }
             }
 
             if (ComboBoxVideoEncoder.SelectedIndex == 3)
             {
                 // vp9
-                if (ComboBoxVP9ColorFormat.SelectedIndex == 0)
-                {
-                    PipeBitDepthCommand += "420p";
-                }
-                else if (ComboBoxVP9ColorFormat.SelectedIndex == 1)
-                {
-                    PipeBitDepthCommand += "422p";
-                }
-                else if (ComboBoxVP9ColorFormat.SelectedIndex == 2)
-                {
-                    PipeBitDepthCommand += "444p";
-                }
+                if (ComboBoxVP9ColorFormat.SelectedIndex == 0) { PipeBitDepthCommand += "420p"; }
+                else if (ComboBoxVP9ColorFormat.SelectedIndex == 1) { PipeBitDepthCommand += "422p"; }
+                else if (ComboBoxVP9ColorFormat.SelectedIndex == 2) { PipeBitDepthCommand += "444p"; }
             }
 
             if (ComboBoxVideoBitDepth.SelectedIndex == 1)
@@ -1415,29 +1268,30 @@ namespace NotEnoughAV1Encodes
             bool rotate = ToggleSwitchFilterRotate.IsOn == true;
             bool resize = ToggleSwitchFilterResize.IsOn == true;
             bool deinterlace = ToggleSwitchFilterDeinterlace.IsOn == true;
+            Yadif1 = false;
             int tempCounter = 0;
 
-            if (crop == true || rotate == true || resize == true || deinterlace == true)
+            if (crop || rotate || resize || deinterlace )
             {
                 FilterCommand = " -vf ";
-                if (crop == true)
+                if (crop)
                 {
                     FilterCommand += VideoFiltersCrop();
                     tempCounter += 1;
                 }
-                if (rotate == true)
+                if (rotate)
                 {
                     if (tempCounter != 0) { FilterCommand += ","; }
                     FilterCommand += VideoFiltersRotate();
                     tempCounter += 1;
                 }
-                if (deinterlace == true)
+                if (deinterlace)
                 {
                     if (tempCounter != 0) { FilterCommand += ","; }
                     FilterCommand += VideoFiltersDeinterlace();
                     tempCounter += 1;
                 }
-                if (resize == true)
+                if (resize)
                 {
                     // Has to be last, due to scaling algorithm
                     if (tempCounter != 0) { FilterCommand += ","; }
@@ -1472,6 +1326,7 @@ namespace NotEnoughAV1Encodes
         private string VideoFiltersDeinterlace()
         {
             // Sets the values for deinterlacing the video
+            Yadif1 = ComboBoxFiltersDeinterlace.Text == "1";
             return "yadif=" + ComboBoxFiltersDeinterlace.Text;
         }
 
@@ -1488,7 +1343,6 @@ namespace NotEnoughAV1Encodes
                 // Auto Scale
                 return "scale=trunc(oh*a/2)*2:" + TextBoxFiltersResizeHeight.Text + " -sws_flags " + ComboBoxFiltersScaling.Text;
             }
-            
         }
 
         // ═════════════════════════════════════ Audio Logic ══════════════════════════════════════
@@ -1653,12 +1507,7 @@ namespace NotEnoughAV1Encodes
                     subSoftSubEnabled = true;
                     subCommand += SoftSubCMDGenerator(ComboBoxSubTrackOneLanguage.Text, TextBoxSubOneName.Text, TextBoxSubtitleTrackOne.Text, CheckBoxSubOneDefault.IsChecked == true);
                 }
-                else
-                {
-                    // Hardsub
-                    HardSubCMDGenerator(TextBoxSubtitleTrackOne.Text);
-                }
-               
+                else { HardSubCMDGenerator(TextBoxSubtitleTrackOne.Text); }
             }
 
             if (ToggleSwitchSubtitleActivatedTwo.IsOn == true && CheckBoxSubTwoBurn.IsChecked != true)
@@ -1670,11 +1519,7 @@ namespace NotEnoughAV1Encodes
                     subSoftSubEnabled = true;
                     subCommand += SoftSubCMDGenerator(ComboBoxSubTrackTwoLanguage.Text, TextBoxSubTwoName.Text, TextBoxSubtitleTrackTwo.Text, CheckBoxSubTwoDefault.IsChecked == true);
                 }
-                else
-                {
-                    // Hardsub
-                    HardSubCMDGenerator(TextBoxSubtitleTrackTwo.Text);
-                }
+                else { HardSubCMDGenerator(TextBoxSubtitleTrackTwo.Text); }
             }
 
             if (ToggleSwitchSubtitleActivatedThree.IsOn == true && CheckBoxSubThreeBurn.IsChecked != true)
@@ -1686,12 +1531,7 @@ namespace NotEnoughAV1Encodes
                     subSoftSubEnabled = true;
                     subCommand += SoftSubCMDGenerator(ComboBoxSubTrackThreeLanguage.Text, TextBoxSubThreeName.Text, TextBoxSubtitleTrackThree.Text, CheckBoxSubThreeDefault.IsChecked == true);
                 }
-                else
-                {
-                    // Hardsub
-                    HardSubCMDGenerator(TextBoxSubtitleTrackThree.Text);
-                }
-
+                else { HardSubCMDGenerator(TextBoxSubtitleTrackThree.Text); }
             }
 
             if (ToggleSwitchSubtitleActivatedFour.IsOn == true && CheckBoxSubFourBurn.IsChecked != true)
@@ -1703,11 +1543,7 @@ namespace NotEnoughAV1Encodes
                     subSoftSubEnabled = true;
                     subCommand += SoftSubCMDGenerator(ComboBoxSubTrackFourLanguage.Text, TextBoxSubFourName.Text, TextBoxSubtitleTrackFour.Text, CheckBoxSubFourDefault.IsChecked == true);
                 }
-                else
-                {
-                    // Hardsub
-                    HardSubCMDGenerator(TextBoxSubtitleTrackFour.Text);
-                }
+                else { HardSubCMDGenerator(TextBoxSubtitleTrackFour.Text); }
                 
             }
 
@@ -1720,12 +1556,7 @@ namespace NotEnoughAV1Encodes
                     subSoftSubEnabled = true;
                     subCommand += SoftSubCMDGenerator(ComboBoxSubTrackFiveLanguage.Text, TextBoxSubFiveName.Text, TextBoxSubtitleTrackFive.Text, CheckBoxSubFiveDefault.IsChecked == true);
                 }
-                else
-                {
-                    // Hardsub
-                    HardSubCMDGenerator(TextBoxSubtitleTrackFive.Text);
-                }
-                
+                else { HardSubCMDGenerator(TextBoxSubtitleTrackFive.Text); }
             }
             SmallFunctions.Logging("Subtitle Command: " + subCommand);
         }
@@ -2171,7 +2002,6 @@ namespace NotEnoughAV1Encodes
                 }
             }
 
-
             cmd += " --cpu-used=" + SliderVideoSpeed.Value;         // Speed
 
             // Constant Quality or Target Bitrate
@@ -2484,9 +2314,12 @@ namespace NotEnoughAV1Encodes
         private void ButtonUpdater_Click(object sender, RoutedEventArgs e)
         {
             // Opens the program Updater
-            Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
-            updater.ShowDialog();
-            CheckDependencies.Check();
+            if (!EncodeStarted)
+            {
+                Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
+                updater.ShowDialog();
+                CheckDependencies.Check();
+            }
         }
 
         // ══════════════════════════════════ Video Splitting ═════════════════════════════════════
@@ -2546,6 +2379,9 @@ namespace NotEnoughAV1Encodes
 
                 // Temporary value for Arg creation
                 string previousScene = "0.000";
+
+                // Clears the Args List to avoid conflicts in Batch Encode Mode
+                FFmpegArgs.Clear();
 
                 // Creates the seeking args for ffmpeg piping
                 foreach (string sc in scenes)
@@ -2610,6 +2446,9 @@ namespace NotEnoughAV1Encodes
             // Temporary value used for creating the ffmpeg command line
             string previousScene = "00:00:00.000";
 
+            // Argument for seeking until the end of the video
+            FFmpegArgs.Add("-ss " + previousScene);
+
             // Iterates over the list of time codes and creates the args for ffmpeg
             foreach (string sc in scenes)
             {
@@ -2651,10 +2490,7 @@ namespace NotEnoughAV1Encodes
                     if (ReEncodeMethodSplitting == 2)
                         EncodeCMD = "-c:v utvideo";
                 }
-                else
-                {
-                    EncodeCMD = "-c:v copy";
-                }
+                else { EncodeCMD = "-c:v copy"; }
 
                 //Run ffmpeg command
                 Process process = new Process();
@@ -2690,7 +2526,11 @@ namespace NotEnoughAV1Encodes
 
             // The amount of frames doubles when in two pass mode
             if (OnePass != true)
-                totalframes = totalframes * 2;
+                totalframes *= 2;
+
+            // Doibles the amount of frames, when deinterlacing is set to 1
+            if (Yadif1)
+                totalframes *= 2;
 
             foreach (string file in filePaths)
             {
@@ -2795,72 +2635,65 @@ namespace NotEnoughAV1Encodes
 
                                     string FFmpegProgress = " -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022';
 
+                                    string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 " + VSYNC + " -f yuv4mpegpipe - | ";
+
                                     // Logic to skip first pass encoding if "_finished" log file exists
                                     if (File.Exists(Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log" + "_finished.log")) == false)
                                     {
+                                        string encoderCMD = "";
+                                        string outputCMD = "";
+
                                         if (EncodeMethod == 0) // aomenc
                                         {
-                                            string aomencCMD = "";
-                                            string output = "";
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 " + VSYNC + " -f yuv4mpegpipe - | ";
-
                                             if (OnePass) // One Pass Encoding
                                             {
-                                                aomencCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=1" + EncoderAomencCommand + " --output=";
-                                                output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                                encoderCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=1" + EncoderAomencCommand + " --output=";
+                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                             }
                                             else // Two Pass Encoding First Pass
                                             {
-                                                aomencCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=1" + EncoderAomencCommand + " --fpf=";
-                                                output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
+                                                encoderCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=1" + EncoderAomencCommand + " --fpf=";
+                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
                                             }
-                                            startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + aomencCMD + output;
                                         }
                                         else if (EncodeMethod == 1) // rav1e
                                         {
-
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 " + VSYNC + " -f yuv4mpegpipe - | ";
-                                            string rav1eCMD = '\u0022' + Path.Combine(Rav1ePath, "rav1e.exe") + '\u0022' + " - " + EncoderRav1eCommand + " --output ";
-                                            string output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-                                            startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + rav1eCMD + output;
+                                            encoderCMD = '\u0022' + Path.Combine(Rav1ePath, "rav1e.exe") + '\u0022' + " - " + EncoderRav1eCommand + " --output ";
+                                            outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                         }
                                         else if (EncodeMethod == 2) // svt-av1
                                         {
-                                            string svtav1CMD = "";
-                                            string output = "";
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -nostdin " + VSYNC + " -f yuv4mpegpipe - | ";
+                                            ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -nostdin " + VSYNC + " -f yuv4mpegpipe - | ";
                                             if (OnePass)
                                             {
                                                 // One Pass Encoding
-                                                svtav1CMD = '\u0022' + Path.Combine(SvtAV1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --passes 1 -b ";
-                                                output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                                encoderCMD = '\u0022' + Path.Combine(SvtAV1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --passes 1 -b ";
+                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                             }
                                             else
                                             {
                                                 // Two Pass Encoding First Pass
-                                                svtav1CMD = '\u0022' + Path.Combine(SvtAV1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 1 -b NUL --stats ";
-                                                output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
+                                                encoderCMD = '\u0022' + Path.Combine(SvtAV1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 1 -b NUL --stats ";
+                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                             }
-                                            startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + svtav1CMD + output;
+                                            
                                         }
                                         else if (EncodeMethod == 3) // vp9
                                         {
-                                            string vp9CMD = "";
-                                            string output = "";
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 " + VSYNC + " -f yuv4mpegpipe - | ";
-
                                             if (OnePass) // One Pass Encoding
                                             {
-                                                vp9CMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=1" + EncoderVP9Command + " --output=";
-                                                output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                                encoderCMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=1" + EncoderVP9Command + " --output=";
+                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                             }
                                             else // Two Pass Encoding First Pass
                                             {
-                                                vp9CMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=2 --pass=1" + EncoderVP9Command + " --fpf=";
-                                                output = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
+                                                encoderCMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=2 --pass=1" + EncoderVP9Command + " --fpf=";
+                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
                                             }
-                                            startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + vp9CMD + output;
                                         }
+
+                                        startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + encoderCMD + outputCMD;
+
                                         SmallFunctions.Logging("Encoding Video: " + startInfo.Arguments);
                                         ffmpegProcess.StartInfo = startInfo;
                                         ffmpegProcess.Start();
@@ -2883,14 +2716,17 @@ namespace NotEnoughAV1Encodes
                                     {
                                         // Creates a different progress file for the second pass (avoids negative frame progressbar)
                                         FFmpegProgress = " -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress_2nd.log") + '\u0022';
+
+                                        string encoderCMD = "";
+                                        string outputLog = "";
+                                        string outputCMD = "";
+                                        
                                         // Two Pass Encoding Second Pass
                                         if (EncodeMethod == 0) // aomenc
                                         {
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 " + VSYNC + " -f yuv4mpegpipe - | ";
-                                            string aomencCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=2" + EncoderAomencCommand + " --fpf=";
-                                            string outputLog = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
-                                            string outputVid = " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-                                            startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + aomencCMD + outputLog + outputVid;
+                                            encoderCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=2" + EncoderAomencCommand + " --fpf=";
+                                            outputLog = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
+                                            outputCMD = " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                         }
                                         else if (EncodeMethod == 1) // rav1e
                                         {
@@ -2898,20 +2734,18 @@ namespace NotEnoughAV1Encodes
                                         }
                                         else if (EncodeMethod == 2) // svt-av1
                                         {
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -nostdin " + VSYNC + " -f yuv4mpegpipe - | ";
-                                            string svtav1CMD = '\u0022' + Path.Combine(SvtAV1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 2 --stats ";
-                                            string stats = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
-                                            string outputVid = " -b " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-                                            startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + svtav1CMD + stats + outputVid;
+                                            ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -nostdin " + VSYNC + " -f yuv4mpegpipe - | ";
+                                            encoderCMD = '\u0022' + Path.Combine(SvtAV1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 2 --stats ";
+                                            outputLog = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
+                                            outputCMD = " -b " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                         }
                                         else if (EncodeMethod == 3) // vp9
                                         {
-                                            string ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 " + VSYNC + " -f yuv4mpegpipe - | ";
-                                            string vp9CMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=2 --pass=2" + EncoderVP9Command + " --fpf=";
-                                            string outputLog = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
-                                            string outputVid = " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-                                            startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + vp9CMD + outputLog + outputVid;
+                                            encoderCMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=2 --pass=2" + EncoderVP9Command + " --fpf=";
+                                            outputLog = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
+                                            outputCMD = " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                         }
+
                                         SmallFunctions.Logging("Encoding Video: " + startInfo.Arguments);
                                         ffmpegProcess.StartInfo = startInfo;
                                         ffmpegProcess.Start();
@@ -3002,6 +2836,19 @@ namespace NotEnoughAV1Encodes
                 catch { }
 
                 ThemeManager.Current.ChangeTheme(this, ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text);
+            }
+
+            // Custom BG
+            if (File.Exists("background.txt"))
+            {
+                try
+                {
+                    Uri fileUri = new Uri(File.ReadAllText("background.txt"));
+                    imgDynamic.Source = new BitmapImage(fileUri);
+                    CustomBG = true;
+                    SetBackGroundColor();
+                }
+                catch { }
             }
         }
 

@@ -11,51 +11,27 @@ namespace NotEnoughAV1Encodes
     {
         public static string GetPixelFormat(string videoInput)
         {
-            Process getPixelFormat = new Process
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "cmd.exe",
-                    WorkingDirectory = MainWindow.FFmpegPath,
-                    Arguments = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=pix_fmt",
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true
-                }
-            };
-            getPixelFormat.Start();
-            string pixfmt = getPixelFormat.StandardOutput.ReadLine();
-            getPixelFormat.WaitForExit();
-            return pixfmt;
+            string cmd = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=pix_fmt";
+            return FFprobeExe(cmd);
         }
 
         public static string GetFrameRate(string videoInput)
         {
-            Process getStreamFps = new Process
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "cmd.exe",
-                    WorkingDirectory = MainWindow.FFmpegPath,
-                    Arguments = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate",
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true
-                }
-            };
-            getStreamFps.Start();
-            string framerate = getStreamFps.StandardOutput.ReadLine();
-            getStreamFps.WaitForExit();
-            return framerate;
+            string cmd = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate";
+            return FFprobeExe(cmd);
         }
 
         public static string GetResolution(string videoInput)
         {
-            Process getResolution = new Process
+            string cmd = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams v:0 -of csv=p=0 -show_entries stream=width,height";
+            string resolution = FFprobeExe(cmd);
+            resolution = resolution.Replace(",", "x");
+            return resolution;
+        }
+
+        private static string FFprobeExe(string command)
+        {
+            Process ffprobe = new Process
             {
                 StartInfo = new ProcessStartInfo()
                 {
@@ -64,15 +40,14 @@ namespace NotEnoughAV1Encodes
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
                     WorkingDirectory = MainWindow.FFmpegPath,
-                    Arguments = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams v:0 -of csv=p=0 -show_entries stream=width,height",
+                    Arguments = command,
                     RedirectStandardError = true,
                     RedirectStandardOutput = true
                 }
             };
-            getResolution.Start();
-            string resolution = getResolution.StandardOutput.ReadLine();
-            getResolution.WaitForExit();
-            resolution = resolution.Replace(",", "x");
+            ffprobe.Start();
+            string resolution = ffprobe.StandardOutput.ReadLine();
+            ffprobe.WaitForExit();
             return resolution;
         }
     }

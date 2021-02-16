@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Windows;
 
 namespace NotEnoughAV1Encodes
 {
@@ -53,6 +54,21 @@ namespace NotEnoughAV1Encodes
             // Checks if PySceneDetect is found in the Windows PATH environment
             if (ExistsOnPath("scenedetect.exe")) { MainWindow.PySceneFound = true; }
             SmallFunctions.Logging("PySceneDetect found: " + MainWindow.PySceneFound);
+
+            NotifyUser();
+        }
+
+        public static void NotifyUser()
+        {
+            if (MainWindow.FFmpegPath == null)
+            {
+                if (MessageBox.Show("Could not find ffmpeg!\nOpen Updater?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    Updater updater = new Updater("light", "blue");
+                    updater.ShowDialog();
+                    CheckDependencies.Check();
+                }
+            }
         }
 
         private static bool ExistsOnPath(string fileName)

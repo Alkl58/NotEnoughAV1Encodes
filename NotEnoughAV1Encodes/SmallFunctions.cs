@@ -101,6 +101,22 @@ namespace NotEnoughAV1Encodes
             process.WaitForExit();
         }
 
+        public static void ExecuteMKVMergeTask(string mkvmergeCommand)
+        {
+            //Run ffmpeg command
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                WorkingDirectory = MainWindow.MKVToolNixPath,
+                Arguments = mkvmergeCommand
+            };
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+        }
+
         public static void GetSourceFrameCount()
         {
             // Skip Framecount Calculation if it already "exists" (Resume Mode)

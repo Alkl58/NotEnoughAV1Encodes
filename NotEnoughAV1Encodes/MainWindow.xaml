@@ -952,7 +952,7 @@
                             <TextBox x:Name="TextBoxSubtitleTrackOne" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Margin="63,12,462,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
                             <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Margin="0,14,382,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="75" />
                             <TextBox x:Name="TextBoxSubOneName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Margin="0,16,270,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
-                            <CheckBox x:Name="CheckBoxSubOneBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Content="Burn in" Margin="0,0,201,7" Checked="CheckBoxSubOneBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
+                            <CheckBox x:Name="CheckBoxSubOneBurn"  IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Content="Burn in" Margin="0,0,201,7" Checked="CheckBoxSubOneBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
                             <CheckBox x:Name="CheckBoxSubOneDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Content="Default" Margin="0,0,137,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubOneDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
                             <Label Content="Language:"  Margin="0,17,68,4" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="64" />
                             <ComboBox x:Name="ComboBoxSubTrackOneLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" HorizontalAlignment="Right" Width="58" Height="26" VerticalAlignment="Top">
@@ -1163,6 +1163,7 @@
         <Button x:Name="ButtonSetDefaultPreset" Content="Set Default" HorizontalAlignment="Left" Margin="317,78,0,0" VerticalAlignment="Top" Width="76" Height="29" Background="{x:Null}" Click="ButtonSetDefaultPreset_Click"/>
         <Button x:Name="ButtonDeletePreset" Content="Delete" HorizontalAlignment="Left" Margin="392,78,0,0" VerticalAlignment="Top" Width="50" Height="29" Background="{x:Null}" Click="ButtonDeletePreset_Click" />
         <Button x:Name="ButtonExpandCollapseWindow" Content="Resize Window" HorizontalAlignment="Left" Margin="447,77,0,0" VerticalAlignment="Top" Width="135" Height="29" Background="{x:Null}" Click="ButtonExpandCollapseWindow_Click"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="675,57,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
 
     </Grid>
 </mah:MetroWindow>
