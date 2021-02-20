@@ -2520,7 +2520,7 @@ namespace NotEnoughAV1Encodes
             int totalframes = TotalFrames;
 
             // The amount of frames doubles when in two pass mode
-            if (OnePass != true)
+            if (!OnePass)
                 totalframes *= 2;
 
             // Doibles the amount of frames, when deinterlacing is set to 1
@@ -2625,7 +2625,7 @@ namespace NotEnoughAV1Encodes
 
                                     string InputVideo = "";
                                     // FFmpeg Scene Detect or PySceneDetect
-                                    if (SplitMethod == 0 || SplitMethod == 1) { InputVideo = " -i " + '\u0022' + VideoInput + '\u0022' + " " + command; }
+                                    if (SplitMethod <= 1) { InputVideo = " -i " + '\u0022' + VideoInput + '\u0022' + " " + command; }
                                     else if (SplitMethod == 2) { InputVideo = " -i " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", command) + '\u0022'; } // Chunk based splitting
 
                                     string FFmpegProgress = " -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022';
@@ -2636,25 +2636,24 @@ namespace NotEnoughAV1Encodes
                                     if (File.Exists(Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log" + "_finished.log")) == false)
                                     {
                                         string encoderCMD = "";
-                                        string outputCMD = "";
 
                                         if (EncodeMethod == 0) // aomenc
                                         {
                                             if (OnePass) // One Pass Encoding
                                             {
                                                 encoderCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=1" + EncoderAomencCommand + " --output=";
-                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                             }
                                             else // Two Pass Encoding First Pass
                                             {
                                                 encoderCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=1" + EncoderAomencCommand + " --fpf=";
-                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
+                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
                                             }
                                         }
                                         else if (EncodeMethod == 1) // rav1e
                                         {
                                             encoderCMD = '\u0022' + Path.Combine(Rav1ePath, "rav1e.exe") + '\u0022' + " - " + EncoderRav1eCommand + " --output ";
-                                            outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                            encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                         }
                                         else if (EncodeMethod == 2) // svt-av1
                                         {
@@ -2663,13 +2662,13 @@ namespace NotEnoughAV1Encodes
                                             {
                                                 // One Pass Encoding
                                                 encoderCMD = '\u0022' + Path.Combine(SvtAV1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --passes 1 -b ";
-                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                             }
                                             else
                                             {
                                                 // Two Pass Encoding First Pass
                                                 encoderCMD = '\u0022' + Path.Combine(SvtAV1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 1 -b NUL --stats ";
-                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
+                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                             }
                                             
                                         }
@@ -2678,23 +2677,23 @@ namespace NotEnoughAV1Encodes
                                             if (OnePass) // One Pass Encoding
                                             {
                                                 encoderCMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=1" + EncoderVP9Command + " --output=";
-                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                             }
                                             else // Two Pass Encoding First Pass
                                             {
                                                 encoderCMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=2 --pass=1" + EncoderVP9Command + " --fpf=";
-                                                outputCMD = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
+                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
                                             }
                                         }
 
-                                        startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + encoderCMD + outputCMD;
+                                        startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + encoderCMD;
 
                                         SmallFunctions.Logging("Encoding Video: " + startInfo.Arguments);
                                         ffmpegProcess.StartInfo = startInfo;
                                         ffmpegProcess.Start();
 
                                         // Sets the process priority
-                                        if (Priority == false)
+                                        if (!Priority)
                                             ffmpegProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
 
                                         ffmpegProcess.WaitForExit();
@@ -2713,15 +2712,13 @@ namespace NotEnoughAV1Encodes
                                         FFmpegProgress = " -progress " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Progress", "split" + index.ToString("D5") + "_progress_2nd.log") + '\u0022';
 
                                         string encoderCMD = "";
-                                        string outputLog = "";
-                                        string outputCMD = "";
                                         
                                         // Two Pass Encoding Second Pass
                                         if (EncodeMethod == 0) // aomenc
                                         {
                                             encoderCMD = '\u0022' + Path.Combine(AomencPath, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=2" + EncoderAomencCommand + " --fpf=";
-                                            outputLog = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
-                                            outputCMD = " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                            encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
+                                            encoderCMD += " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                         }
                                         else if (EncodeMethod == 1) // rav1e
                                         {
@@ -2731,22 +2728,23 @@ namespace NotEnoughAV1Encodes
                                         {
                                             ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " -color_range 0 -nostdin " + VSYNC + " -f yuv4mpegpipe - | ";
                                             encoderCMD = '\u0022' + Path.Combine(SvtAV1Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncoderSvtAV1Command + " --irefresh-type 2 --pass 2 --stats ";
-                                            outputLog = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
-                                            outputCMD = " -b " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                            encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
+                                            encoderCMD += " -b " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                         }
                                         else if (EncodeMethod == 3) // vp9
                                         {
                                             encoderCMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=2 --pass=2" + EncoderVP9Command + " --fpf=";
-                                            outputLog = '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
-                                            outputCMD = " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                            encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
+                                            encoderCMD += " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
                                         }
 
+                                        startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + encoderCMD;
                                         SmallFunctions.Logging("Encoding Video: " + startInfo.Arguments);
                                         ffmpegProcess.StartInfo = startInfo;
                                         ffmpegProcess.Start();
 
                                         // Sets the process priority
-                                        if (Priority == false)
+                                        if (!Priority)
                                             ffmpegProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
 
                                         ffmpegProcess.WaitForExit();
