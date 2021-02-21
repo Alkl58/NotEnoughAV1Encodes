@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes
@@ -11,12 +12,23 @@ namespace NotEnoughAV1Encodes
         {
             // ══════════════════════════════════════ Chunk Parsing ══════════════════════════════════════
             // Writes all ivf files into chunks.txt for later concat
-            string ffmpegCommand = "/C (for %i in (" + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks") + "\\*.ivf" + '\u0022' + ") do @echo file '%i') | sort /o " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks", "chunks.txt") + '\u0022';
-            await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
+            var sorted = Directory.GetFiles(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks"), "*.ivf").OrderBy(f => f);
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks"), "chunks.txt")))
+            {
+                foreach (var fileTemp in sorted)
+                {
+                    string tempName = fileTemp.Replace("'", "'\\''");
+                    outputFile.WriteLine("file '" + tempName + "'");
+                }
+            }
 
             bool audio = MainWindow.trackOne || MainWindow.trackTwo || MainWindow.trackThree || MainWindow.trackFour;
             bool vfr = MainWindow.VFRVideo;
             bool sub = MainWindow.subSoftSubEnabled;
+            string ffmpegCommand;
+
+            // Replace ' with "'", else muxing will fail with single quotes in filename
+            MainWindow.TempPathFileName.Replace("'", "\"'\"");
 
             if (!audio && !vfr && !sub)
             {
