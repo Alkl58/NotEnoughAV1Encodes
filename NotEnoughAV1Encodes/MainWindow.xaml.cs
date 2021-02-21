@@ -550,8 +550,6 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonDiscord_Click(object sender, RoutedEventArgs e)
         {
-            // AV1 Discord
-            Process.Start("https://discord.gg/HSBxne3");
             // NEAV1E Discord
             Process.Start("https://discord.gg/yG27ArHBFe");
         }

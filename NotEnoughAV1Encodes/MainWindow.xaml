@@ -811,7 +811,7 @@
                     <GroupBox x:Name="GroupBox1" Header="Track 2" Height="74" Margin="6,112,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}"/>
                     <GroupBox x:Name="GroupBox" Header="Track 1" Height="74" Margin="6,34,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}"/>
                     <ComboBox x:Name="ComboBoxTrackOneLanguage" HorizontalAlignment="Left" Margin="736,68,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}">
-                        <ComboBoxItem Content="unknown" IsSelected="True"/>
+                        <ComboBoxItem Content="und" IsSelected="True"/>
                         <ComboBoxItem Content="eng"/>
                         <ComboBoxItem Content="ger"/>
                         <ComboBoxItem Content="fra"/>
@@ -904,7 +904,7 @@
                     <Label Content="Language:" HorizontalAlignment="Left" Margin="653,66,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.473,0.534" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}" />
                     <Label Content="Language:" HorizontalAlignment="Left" Margin="653,143,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}" />
                     <ComboBox x:Name="ComboBoxTrackTwoLanguage" HorizontalAlignment="Left" Margin="736,145,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}">
-                        <ComboBoxItem Content="unknown" IsSelected="True"/>
+                        <ComboBoxItem Content="und" IsSelected="True"/>
                         <ComboBoxItem Content="eng"/>
                         <ComboBoxItem Content="ger"/>
                         <ComboBoxItem Content="fra"/>
@@ -916,7 +916,7 @@
                     </ComboBox>
                     <Label Content="Language:" HorizontalAlignment="Left" Margin="653,221,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}" />
                     <ComboBox x:Name="ComboBoxTrackThreeLanguage" HorizontalAlignment="Left" Margin="736,222,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}">
-                        <ComboBoxItem Content="unknown" IsSelected="True"/>
+                        <ComboBoxItem Content="und" IsSelected="True"/>
                         <ComboBoxItem Content="eng"/>
                         <ComboBoxItem Content="ger"/>
                         <ComboBoxItem Content="fra"/>
@@ -928,7 +928,7 @@
                     </ComboBox>
                     <Label Content="Language:" HorizontalAlignment="Left" Margin="653,299,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}" />
                     <ComboBox x:Name="ComboBoxTrackFourLanguage" HorizontalAlignment="Left" Margin="736,301,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}">
-                        <ComboBoxItem Content="unknown" IsSelected="True"/>
+                        <ComboBoxItem Content="und" IsSelected="True"/>
                         <ComboBoxItem Content="eng"/>
                         <ComboBoxItem Content="ger"/>
                         <ComboBoxItem Content="fra"/>
