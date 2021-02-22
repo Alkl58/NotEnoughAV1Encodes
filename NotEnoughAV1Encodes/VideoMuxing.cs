@@ -53,6 +53,7 @@ namespace NotEnoughAV1Encodes
                     {
                         // Muxes Video & Audio together (required for MP4 output)
                         ffmpegCommand = "/C ffmpeg.exe -y -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "temp.mkv") + '\u0022' + " -i " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022' + " -map 0:v -map 1:a -c copy " + '\u0022' + MainWindow.VideoOutput + '\u0022';
+                        SmallFunctions.Logging("Muxing: " + ffmpegCommand);
                         await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
                     }
                     else

@@ -181,7 +181,7 @@
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Filters">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Crop" HorizontalAlignment="Left" Height="203" Margin="22,20,0,0" VerticalAlignment="Top" Width="274">
+                    <GroupBox Header="Crop" HorizontalAlignment="Left" Height="203" Margin="80,86,0,0" VerticalAlignment="Top" Width="274">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterCrop}">
                             <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="44,78,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="155,78,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
@@ -193,7 +193,7 @@
                             <Label Content="Right" HorizontalAlignment="Left" Margin="210,76,0,0" VerticalAlignment="Top" Height="30"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Resize" HorizontalAlignment="Left" Height="203" Margin="302,20,0,0" VerticalAlignment="Top" Width="285" >
+                    <GroupBox Header="Resize" HorizontalAlignment="Left" Height="203" Margin="360,86,0,0" VerticalAlignment="Top" Width="285" >
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterResize}">
                             <Label Content="Scaling Algorithm:" HorizontalAlignment="Left" Margin="19,98,0,0" VerticalAlignment="Top" Height="28"/>
                             <ComboBox x:Name="ComboBoxFiltersScaling" HorizontalAlignment="Left" Margin="131,96,0,0" VerticalAlignment="Top" Width="128" Height="30" VerticalContentAlignment="Center">
@@ -216,7 +216,7 @@
                             <Label Content="0 = Auto" HorizontalAlignment="Left" Margin="71,67,0,0" VerticalAlignment="Top" FontStyle="Italic" RenderTransformOrigin="0.504,0.51" Width="60"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Rotate" HorizontalAlignment="Left" Height="90" Margin="596,20,0,0" VerticalAlignment="Top" Width="285">
+                    <GroupBox Header="Rotate" HorizontalAlignment="Left" Height="90" Margin="654,86,0,0" VerticalAlignment="Top" Width="285">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterRotate}">
                             <Label Content="Rotate (Clockwise):" HorizontalAlignment="Left" Margin="36,18,0,0" VerticalAlignment="Top" Height="28"/>
                             <ComboBox x:Name="ComboBoxFiltersRotate" HorizontalAlignment="Left" Margin="151,18,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
@@ -227,7 +227,7 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Deinterlace" HorizontalAlignment="Left" Height="95" Margin="596,125,0,0" VerticalAlignment="Top" Width="285">
+                    <GroupBox Header="Deinterlace" HorizontalAlignment="Left" Height="98" Margin="654,191,0,0" VerticalAlignment="Top" Width="285">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterDeinterlace}">
                             <Label Content="Deinterlace (Yadif):" HorizontalAlignment="Left" Margin="39,21,0,0" VerticalAlignment="Top" Height="28"/>
                             <ComboBox x:Name="ComboBoxFiltersDeinterlace" HorizontalAlignment="Left" Margin="152,20,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
@@ -236,10 +236,10 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="64,-6,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="349,-6,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="651,-6,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="681,99,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="122,60,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="407,60,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="709,60,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="739,165,0,0" VerticalAlignment="Top" Width="100"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Video">
@@ -1075,11 +1075,11 @@
                             <mah:ToggleSwitch x:Name="ToggleSwitchShowWindow" Header="Popup Window" HorizontalAlignment="Left" Margin="215,0,0,-2" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Opens a window after the encode to show generic information"/>
                         </Grid>
                     </GroupBox>
-                    <Button x:Name="ButtonOpenTempFolder" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="19,0,0,71" Width="136" Background="{x:Null}" Click="ButtonOpenTempFolder_Click" Height="38" VerticalAlignment="Bottom"/>
+                    <Button x:Name="ButtonOpenTempFolder" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="10,0,0,77" Width="136" Background="{x:Null}" Click="ButtonOpenTempFolder_Click" Height="38" VerticalAlignment="Bottom"/>
                     <TextBox x:Name="TextBoxCustomTempPath" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="107,0,134,10" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="27" VerticalAlignment="Bottom"/>
                     <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="0,0,56,10" Click="ButtonSetTempPath_Click" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="73"/>
-                    <Button x:Name="ButtonOpenProgramFolder" Content="Open Program Folder" HorizontalAlignment="Left" Margin="19,0,0,113" Width="136" Background="{x:Null}" Click="ButtonOpenProgramFolder_Click" Height="38" VerticalAlignment="Bottom"/>
-                    <Button x:Name="ButtonDeleteTempFiles" Content="Delete Temp Files" HorizontalAlignment="Left" Margin="160,0,0,71" Width="105" Background="{x:Null}" Click="ButtonDeleteTempFiles_Click" Height="38" VerticalAlignment="Bottom"/>
+                    <Button x:Name="ButtonOpenProgramFolder" Content="Open Program Folder" HorizontalAlignment="Left" Margin="10,0,0,120" Width="136" Background="{x:Null}" Click="ButtonOpenProgramFolder_Click" Height="38" VerticalAlignment="Bottom"/>
+                    <Button x:Name="ButtonDeleteTempFiles" Content="Delete Temp Files" HorizontalAlignment="Left" Margin="151,0,0,77" Width="136" Background="{x:Null}" Click="ButtonDeleteTempFiles_Click" Height="38" VerticalAlignment="Bottom" BorderBrush="#FFFD0202"/>
                     <Button x:Name="ButtonSetTheme" Content="Set Theme" HorizontalAlignment="Right" Margin="0,0,56,71" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetTheme_Click"/>
                     <ComboBox x:Name="ComboBoxBaseTheme" HorizontalAlignment="Right" Margin="0,0,56,105" VerticalAlignment="Bottom" Width="91">
                         <ComboBoxItem Content="Light" IsSelected="True"/>
@@ -1113,7 +1113,7 @@
                     <Button x:Name="ButtonSetBGImage" Content="Set BG Image" HorizontalAlignment="Right" Margin="0,0,152,71" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetBGImage_Click"/>
                     <Label Content="Accent:" HorizontalAlignment="Right" Margin="0,0,152,130" FontSize="12" Height="26" VerticalAlignment="Bottom"/>
                     <Label Content="Base Theme:" HorizontalAlignment="Right" Margin="0,0,152,103" FontSize="12" Height="26" VerticalAlignment="Bottom"/>
-                    <Button x:Name="ButtonOpenLogFolder" Content="Open Log Folder" HorizontalAlignment="Left" Margin="270,0,0,71" Width="136" Background="{x:Null}" Click="ButtonOpenLogFolder_Click" Height="38" VerticalAlignment="Bottom"/>
+                    <Button x:Name="ButtonOpenLogFolder" Content="Open Log Folder" HorizontalAlignment="Left" Margin="151,0,0,120" Width="136" Background="{x:Null}" Click="ButtonOpenLogFolder_Click" Height="38" VerticalAlignment="Bottom"/>
                     <GroupBox x:Name="GroubBoxVersion" Header="GroupBox" Height="160" Margin="0,10,56,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="404">
                         <Grid>
                             <Label Content="Theme:" HorizontalAlignment="Right" Margin="0,6,324,0" VerticalAlignment="Top" FontSize="12"/>

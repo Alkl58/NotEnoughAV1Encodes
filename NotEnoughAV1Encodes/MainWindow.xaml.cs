@@ -1034,7 +1034,7 @@ namespace NotEnoughAV1Encodes
                 }
 
                 if (Yadif1)
-                    ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = TotalFrames * 2);
+                    ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum = ProgressBar.Maximum * 2);
 
                 await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeVideo(); }, token);
                 await Task.Run(async () => { token.ThrowIfCancellationRequested(); await VideoMuxing.Concat(); }, token);

@@ -184,7 +184,7 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                MessageBox.Show("Muxing failed. Video output not detected!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Muxing failed. Video output not detected!\nCommon issues:\n- Video is interlaced, please enable deinterlace filter\n- Missing dependencies\n- Video stream has broken parts", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
