@@ -1065,7 +1065,7 @@
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Preferences">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Program Settings" HorizontalAlignment="Left" Height="218" Margin="10,10,0,0" VerticalAlignment="Top" Width="389">
+                    <GroupBox Header="Program Settings" HorizontalAlignment="Left" Height="218" Margin="10,10,0,0" VerticalAlignment="Top" Width="470">
                         <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <mah:ToggleSwitch x:Name="ToggleSwitchShutdownAfterEncode" Header="Shutdown after Encode" HorizontalAlignment="Left" Margin="10,0,0,-2" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
                             <mah:ToggleSwitch x:Name="ToggleSwitchLogging" IsOn="True" Header="Logging" HorizontalAlignment="Left" Margin="215,0,0,58" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
@@ -1073,6 +1073,12 @@
                             <mah:ToggleSwitch x:Name="ToggleSwitchUISounds" IsOn="True" Header="UI Sounds" HorizontalAlignment="Left" Margin="215,0,0,118" VerticalAlignment="Bottom" Toggled="CheckBoxSettingsUISounds_Checked"/>
                             <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" IsOn="True" Header="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="10,0,0,118" VerticalAlignment="Bottom" Toggled="CheckBoxSettingsDeleteTempFiles_Checked"/>
                             <mah:ToggleSwitch x:Name="ToggleSwitchShowWindow" Header="Popup Window" HorizontalAlignment="Left" Margin="215,0,0,-2" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Opens a window after the encode to show generic information"/>
+                            <ComboBox x:Name="ComboBoxContainerBatchEncoding" HorizontalAlignment="Left" Margin="343,36,0,0" VerticalAlignment="Top" Width="90" ToolTip="Output Container used in Batch Mode" SelectionChanged="ToggleSwitchShutdownAfterEncode_Toggled">
+                                <ComboBoxItem Content=".mkv" IsSelected="True"/>
+                                <ComboBoxItem Content=".mp4"/>
+                                <ComboBoxItem Content=".webm"/>
+                            </ComboBox>
+                            <Label Content="Batch Container" HorizontalAlignment="Left" Margin="339,7,0,0" VerticalAlignment="Top" Width="111" FontSize="14"/>
                         </Grid>
                     </GroupBox>
                     <Button x:Name="ButtonOpenTempFolder" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="10,0,0,77" Width="136" Background="{x:Null}" Click="ButtonOpenTempFolder_Click" Height="38" VerticalAlignment="Bottom"/>

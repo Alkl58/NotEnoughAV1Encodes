@@ -78,6 +78,7 @@ namespace NotEnoughAV1Encodes
         public static bool subHardSubEnabled;       // Subtitle Toggle for hardsub
         public static bool subMessageShowed = false;// Used to message the user when trying to do softsub in MP4 Container
         // IO Paths
+        public static string BatchOutContainer = ".mkv";
         public static string TempPath = Path.Combine(Path.GetTempPath(), "NEAV1E");
         public static string TempPathFileName = null;
         public static string VideoInput = null;     // Video Input Path
@@ -923,6 +924,8 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
+                // Set the output container for batch encoding example: .mkv
+                BatchOutContainer = ComboBoxContainerBatchEncoding.Text;
                 // Batch Encoding
                 BatchEncode(cancellationTokenSource.Token);
             }
@@ -945,7 +948,7 @@ namespace NotEnoughAV1Encodes
                     EncodeStarted = true;
                     // Sets Input / Output
                     VideoInput = TextBoxVideoSource.Text + "\\" + file;
-                    VideoOutput = TextBoxVideoDestination.Text + "\\" + file + "_av1.mkv";
+                    VideoOutput = TextBoxVideoDestination.Text + "\\" + file + "_av1" + BatchOutContainer;
                     // Sets Temp Filename for temp folder
                     TempPathFileName = Path.GetFileNameWithoutExtension(VideoInput);
                     // Get Source Information
@@ -2789,6 +2792,7 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("Terminal",           ToggleSwitchHideTerminal.IsOn.ToString());
                     writer.WriteElementString("ThemeAccent",        ComboBoxAccentTheme.SelectedIndex.ToString());
                     writer.WriteElementString("ThemeBase",          ComboBoxBaseTheme.SelectedIndex.ToString());
+                    writer.WriteElementString("BatchContainer",     ComboBoxContainerBatchEncoding.SelectedIndex.ToString());
                     writer.WriteEndElement();
                     writer.Close();
                 }
@@ -2820,6 +2824,7 @@ namespace NotEnoughAV1Encodes
                             case "Terminal":        ToggleSwitchHideTerminal.IsOn = n.InnerText == "True"; break;
                             case "ThemeAccent":     ComboBoxAccentTheme.SelectedIndex = int.Parse(n.InnerText); break;
                             case "ThemeBase":       ComboBoxBaseTheme.SelectedIndex = int.Parse(n.InnerText); break;
+                            case "BatchContainer":  ComboBoxContainerBatchEncoding.SelectedIndex = int.Parse(n.InnerText); break;
                             default: break;
                         }
                     }
