@@ -1,6 +1,8 @@
 # NotEnoughAV1Encodes
 
-### NEAV1E is a GUI for AV1 encoders - aomenc, rav1e, svt-av1 & vp9. 
+### NEAV1E is a Windows GUI for AV1 encoders - aomenc, rav1e, svt-av1 & vp9. 
+
+#### Check out the Linux PyQt5 port: [NotEnoughAV1Encodes-Qt](https://github.com/Alkl58/NotEnoughAV1Encodes-Qt)
 
 It is a tool to make encoding faster and easier for AV1 encoders.
 
