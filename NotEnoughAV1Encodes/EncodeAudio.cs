@@ -95,7 +95,7 @@ namespace NotEnoughAV1Encodes
         {
             // String Command Builder for multiple Audio Tracks
             // Audio Mapping
-            audioCodecCommand = "-map 0:a:" + activetrackindex + " -c:a:" + activetrackindex + " ";
+            audioCodecCommand = " -map 0:a:" + activetrackindex + " -c:a:" + activetrackindex + " ";
             // Codec
             audioCodecCommand += SwitchCodec(activtrackcodec);
             // Channel Layout / Bitrate
