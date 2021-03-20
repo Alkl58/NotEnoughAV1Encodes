@@ -2259,12 +2259,6 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void ButtonOpenProgramFolder_Click(object sender, RoutedEventArgs e)
-        {
-            // Opens Program Folder
-            try { Process.Start(Directory.GetCurrentDirectory()); } catch { }
-        }
-
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
             if (VideoInputSet == true && VideoOutputSet == true) 

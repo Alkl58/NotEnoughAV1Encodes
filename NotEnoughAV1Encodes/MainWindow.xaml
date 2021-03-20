@@ -6,7 +6,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
-        Title="NotEnoughAV1Encodes" Height="650" Width="1085" ResizeMode="CanResizeWithGrip" AllowDrop="True" DragDrop.Drop="Grid_Drop">
+        Title="NotEnoughAV1Encodes" Height="650" Width="951" ResizeMode="CanResizeWithGrip" AllowDrop="True" DragDrop.Drop="Grid_Drop">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="b2v"/>
     </Window.Resources>
@@ -21,30 +21,22 @@
                 <Label Content="Source" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="44" Height="30" Canvas.Top="2" FontSize="13" />
             </Canvas>
         </Button>
-        <mah:MetroAnimatedSingleRowTabControl x:Name="MetroTab" Margin="21,116,23,63" Background="{x:Null}">
+        <mah:MetroAnimatedSingleRowTabControl x:Name="MetroTab" Margin="21,116,0,63" Background="{x:Null}" HorizontalAlignment="Left" Width="901">
             <mah:MetroTabItem Header="Summary">
                 <Grid x:Name="Grid0">
-                    <GroupBox Header="Current Encoding Settings" Margin="105,150,105,0" Height="163" VerticalAlignment="Top">
+                    <GroupBox Header="Current Encoding Settings" Margin="20,192,26,0" Height="82" VerticalAlignment="Top">
                         <Grid>
-                            <Label Content="Encoder:" HorizontalAlignment="Left" Margin="15,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label Content="{Binding Text, ElementName=ComboBoxVideoEncoder, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="94,13,0,0" VerticalAlignment="Top" Width="140"/>
-                            <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="15,42,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label Content="{Binding Text, ElementName=ComboBoxVideoBitDepth, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="94,42,0,0" VerticalAlignment="Top" Width="140"/>
-                            <Label Content="Speed:" HorizontalAlignment="Left" Margin="15,71,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="94,71,0,0" VerticalAlignment="Top" Width="140"/>
-                            <Label Content="Passes:" HorizontalAlignment="Left" Margin="15,100,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label Content="{Binding Text, ElementName=ComboBoxVideoPasses, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="94,100,0,0" VerticalAlignment="Top" Width="140"/>
-                            <Label Content="Splitting Method:" HorizontalAlignment="Right" Margin="0,13,450,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label Content="{Binding Text, ElementName=ComboBoxSplittingMethod, UpdateSourceTrigger=PropertyChanged}" Margin="0,13,302,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="140"/>
-                            <Label Content="Worker  Count:" HorizontalAlignment="Right" Margin="0,42,464,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label Content="{Binding Text, ElementName=ComboBoxWorkerCount, UpdateSourceTrigger=PropertyChanged}" Margin="0,42,302,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="140"/>
+                            <Label Content="Encoder:" HorizontalAlignment="Left" Margin="7,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Text, ElementName=ComboBoxVideoEncoder, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="71,13,0,0" VerticalAlignment="Top" Width="74"/>
+                            <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="150,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Text, ElementName=ComboBoxVideoBitDepth, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="244,13,0,0" VerticalAlignment="Top" Width="40"/>
+                            <Label Content="Speed:" HorizontalAlignment="Left" Margin="326,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="408,13,0,0" VerticalAlignment="Top" Width="46"/>
+                            <Label Content="Passes:" HorizontalAlignment="Left" Margin="488,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Text, ElementName=ComboBoxVideoPasses, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="567,13,0,0" VerticalAlignment="Top" Width="140"/>
                         </Grid>
                     </GroupBox>
-                    <Label Content="Source:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Label Content="Destination:" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <TextBox x:Name="TextBoxVideoSource" Height="29" Margin="105,10,105,0" TextWrapping="Wrap" Text="No Source Selected" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
-                    <TextBox x:Name="TextBoxVideoDestination" Height="29" Margin="105,39,105,0" TextWrapping="Wrap" Text="No Destination Selected" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
-                    <GroupBox Header="Video Information" Height="72" Margin="105,73,105,0" VerticalAlignment="Top">
+                    <GroupBox Header="Video Information" Height="72" Margin="20,115,26,0" VerticalAlignment="Top">
                         <Grid>
                             <Label Content="Length:" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                             <Label x:Name="LabelVideoLength" Content="00:00:00" HorizontalAlignment="Left" Margin="67,5,0,0" VerticalAlignment="Top" Width="80"/>
@@ -57,80 +49,102 @@
 
                         </Grid>
                     </GroupBox>
+                    <GroupBox Header="Input / Output" HorizontalAlignment="Left" Height="100" Margin="20,10,0,0" VerticalAlignment="Top" Width="855">
+                        <Grid HorizontalAlignment="Left" Height="66" Margin="0,0,0,-1" VerticalAlignment="Top" Width="813">
+                            <Label Content="Source:" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="Destination:" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <TextBox x:Name="TextBoxVideoSource" Height="29" Margin="105,1,8,0" TextWrapping="Wrap" Text="No Source Selected" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                            <TextBox x:Name="TextBoxVideoDestination" Height="29" Margin="105,30,8,0" TextWrapping="Wrap" Text="No Destination Selected" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Workers" HorizontalAlignment="Left" Height="85" Margin="20,279,0,0" VerticalAlignment="Top" Width="855">
+                        <Grid HorizontalAlignment="Left" Height="46" VerticalAlignment="Top" Width="813">
+                            <Label Content="Worker Count:" HorizontalAlignment="Left" Margin="9,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <ComboBox x:Name="ComboBoxWorkerCount" HorizontalAlignment="Left" Margin="116,10,0,0" VerticalAlignment="Top" Width="80" Height="29" ToolTip="Amount of parallel workers."/>
+                            <Label Content="Priority:" HorizontalAlignment="Left" Margin="325,11,0,0" VerticalAlignment="Top" FontWeight="Bold" Height="31"/>
+                            <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="402,8,0,0" VerticalAlignment="Top" Width="100" Height="29">
+                                <ComboBoxItem Content="Normal" IsSelected="True"/>
+                                <ComboBoxItem Content="Below Normal"/>
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Splitting">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Splitting" HorizontalAlignment="Left" Height="201" Margin="22,20,0,0" VerticalAlignment="Top" Width="350"/>
-                    <GroupBox Header="Trim Start" HorizontalAlignment="Left" Height="211" Margin="389,142,0,0" VerticalAlignment="Top" Width="311">
+                    <GroupBox Header="Splitting" HorizontalAlignment="Left" Height="153" Margin="348,10,0,0" VerticalAlignment="Top" Width="311">
+                        <Grid HorizontalAlignment="Left" Height="117" VerticalAlignment="Top" Width="301">
+                            <Label Content="Splitting Method:" HorizontalAlignment="Left" Margin="14,10,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="ComboBoxSplittingMethod" HorizontalAlignment="Left" Margin="136,10,0,0" VerticalAlignment="Top" Width="155" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxSplittingMethod_SelectionChanged" ToolTip="Splitting Method">
+                                <ComboBoxItem Content="Scene Detect (ffmpeg)" IsSelected="True"/>
+                                <ComboBoxItem Content="PySceneDetect"/>
+                                <ComboBoxItem Content="Equal Chunking"/>
+                            </ComboBox>
+                            <Label Content="Threshold:" HorizontalAlignment="Left" Margin="14,42,0,0" VerticalAlignment="Top">
+                                <Label.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="0">
+                                                <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
+                            <TextBox x:Name="TextBoxSplittingThreshold" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="136,44,0,0" TextWrapping="Wrap" Text="0.3" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="Scene Detect Threshold">
+                                <TextBox.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="0">
+                                                <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                            <ComboBox x:Name="ComboBoxSplittingReencodeMethod" HorizontalAlignment="Left" Margin="136,76,0,0" VerticalAlignment="Top" Width="81" Height="28" VerticalContentAlignment="Center">
+                                <ComboBox.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
+                                                <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
+                                <ComboBoxItem Content="x264" IsSelected="True"/>
+                                <ComboBoxItem Content="ffv1"/>
+                                <ComboBoxItem Content="utvideo"/>
+                            </ComboBox>
+                            <CheckBox x:Name="CheckBoxSplittingReencode" Content="Re-Encode:" HorizontalAlignment="Left" Margin="14,82,0,0" VerticalAlignment="Top" IsChecked="True">
+                                <CheckBox.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
+                                                <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </CheckBox.Style>
+                            </CheckBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Trim Start" HorizontalAlignment="Left" Height="211" Margin="24,168,0,0" VerticalAlignment="Top" Width="311">
                         <Image x:Name="ImagePreviewTrimStart" Margin="0,0,0,0" Height="180" VerticalAlignment="Top" HorizontalAlignment="Right" Width="300" Stretch="Fill" Source="img\offline.png"/>
                     </GroupBox>
-                    <GroupBox Header="Trim End" HorizontalAlignment="Left" Height="211" Margin="710,142,0,0" VerticalAlignment="Top" Width="311">
+                    <GroupBox Header="Trim End" HorizontalAlignment="Left" Height="211" Margin="348,168,0,0" VerticalAlignment="Top" Width="311">
                         <Image x:Name="ImagePreviewTrimEnd" Margin="0,0,0,0" HorizontalAlignment="Right" Stretch="Fill" Width="300" Source="img\offline.png"/>
                     </GroupBox>
-                    <TextBox x:Name="TextBoxTrimStart"  HorizontalAlignment="Left" Height="26" Margin="491,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:00:00.000" TextChanged="TextBoxTrimEnd_TextChanged" />
-                    <TextBox x:Name="TextBoxTrimEnd" HorizontalAlignment="Left" Height="26" Margin="815,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:23:00.000" TextChanged="TextBoxTrimEnd_TextChanged"/>
-                    <Button x:Name="ButtonTrimPlus" Content="+" HorizontalAlignment="Left" Margin="591,142,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlus_Click"/>
-                    <Button x:Name="ButtonTrimMinus" Content="-" HorizontalAlignment="Left" Margin="466,142,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinus_Click"/>
-                    <Button x:Name="ButtonTrimPlusEnd" Content="+" HorizontalAlignment="Left" Margin="916,142,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlusEnd_Click" />
-                    <Button x:Name="ButtonTrimMinusEnd" Content="-" HorizontalAlignment="Left" Margin="790,142,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinusEnd_Click"  />
-                    <Label Content="Splitting Method:" HorizontalAlignment="Left" Margin="57,57,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxSplittingMethod" HorizontalAlignment="Left" Margin="179,57,0,0" VerticalAlignment="Top" Width="168" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxSplittingMethod_SelectionChanged" ToolTip="Splitting Method">
-                        <ComboBoxItem Content="Scene Detect (ffmpeg)" IsSelected="True"/>
-                        <ComboBoxItem Content="PySceneDetect"/>
-                        <ComboBoxItem Content="Equal Chunking"/>
-                    </ComboBox>
-                    <Label Content="Threshold:" HorizontalAlignment="Left" Margin="57,107,0,0" VerticalAlignment="Top">
-                        <Label.Style>
-                            <Style>
-                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="0">
-                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Label.Style>
-                    </Label>
-                    <TextBox x:Name="TextBoxSplittingThreshold" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="27" Margin="179,109,0,0" TextWrapping="Wrap" Text="0.3" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="Scene Detect Threshold">
-                        <TextBox.Style>
-                            <Style>
-                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="0">
-                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBox.Style>
-                    </TextBox>
-                    <ComboBox x:Name="ComboBoxSplittingReencodeMethod" HorizontalAlignment="Left" Margin="179,149,0,0" VerticalAlignment="Top" Width="81" Height="29" VerticalContentAlignment="Center">
-                        <ComboBox.Style>
-                            <Style>
-                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
-                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ComboBox.Style>
-                        <ComboBoxItem Content="x264" IsSelected="True"/>
-                        <ComboBoxItem Content="ffv1"/>
-                        <ComboBoxItem Content="utvideo"/>
-                    </ComboBox>
-                    <CheckBox x:Name="CheckBoxSplittingReencode" Content="Re-Encode:" HorizontalAlignment="Left" Margin="60,156,0,0" VerticalAlignment="Top" IsChecked="True">
-                        <CheckBox.Style>
-                            <Style>
-                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
-                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </CheckBox.Style>
-                    </CheckBox>
+                    <TextBox x:Name="TextBoxTrimStart"  HorizontalAlignment="Left" Height="26" Margin="126,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:00:00.000" TextChanged="TextBoxTrimEnd_TextChanged" />
+                    <TextBox x:Name="TextBoxTrimEnd" HorizontalAlignment="Left" Height="26" Margin="453,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:23:00.000" TextChanged="TextBoxTrimEnd_TextChanged"/>
+                    <Button x:Name="ButtonTrimPlus" Content="+" HorizontalAlignment="Left" Margin="226,168,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlus_Click"/>
+                    <Button x:Name="ButtonTrimMinus" Content="-" HorizontalAlignment="Left" Margin="101,168,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinus_Click"/>
+                    <Button x:Name="ButtonTrimPlusEnd" Content="+" HorizontalAlignment="Left" Margin="554,168,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlusEnd_Click" />
+                    <Button x:Name="ButtonTrimMinusEnd" Content="-" HorizontalAlignment="Left" Margin="428,168,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinusEnd_Click"  />
                     <Label Content="Chunk-Length:" HorizontalAlignment="Left" Margin="57,107,0,0" VerticalAlignment="Top">
                         <Label.Style>
                             <Style>
@@ -167,33 +181,25 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <Label Content="Worker Count:" HorizontalAlignment="Left" Margin="57,265,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxWorkerCount" HorizontalAlignment="Left" Margin="179,265,0,0" VerticalAlignment="Top" Width="86" Height="29" ToolTip="Amount of parallel workers."/>
-                    <Label Content="Process Priority:" HorizontalAlignment="Left" Margin="57,308,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="179,308,0,0" VerticalAlignment="Top" Width="168" Height="29">
-                        <ComboBoxItem Content="Normal" IsSelected="True"/>
-                        <ComboBoxItem Content="Below Normal"/>
-                    </ComboBox>
-                    <Label Content="(Soft Subs not supported)" HorizontalAlignment="Left" Margin="484,115,0,0" VerticalAlignment="Top"/>
-                    <GroupBox Header="Workers" HorizontalAlignment="Left" Height="127" Margin="22,226,0,0" VerticalAlignment="Top" Width="350"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchTrimming" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="389,89,0,0" VerticalAlignment="Top" Width="100"/>
+                    <Label Content="(Soft Subs not supported)" HorizontalAlignment="Left" Margin="105,137,0,0" VerticalAlignment="Top"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchTrimming" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="56" Margin="24,112,0,0" VerticalAlignment="Top" Width="100"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Filters">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Crop" HorizontalAlignment="Left" Height="203" Margin="80,86,0,0" VerticalAlignment="Top" Width="274">
+                    <GroupBox Header="Crop" HorizontalAlignment="Left" Height="203" Margin="14,20,0,0" VerticalAlignment="Top" Width="274">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterCrop}">
-                            <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="44,78,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="155,78,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="100,46,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <TextBox x:Name="TextBoxFiltersCropBottom" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="100,110,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <Label Content="Bottom" HorizontalAlignment="Left" Margin="100,136,0,0" VerticalAlignment="Top" Width="55"/>
-                            <Label Content="Top" HorizontalAlignment="Left" Margin="112,16,0,0" VerticalAlignment="Top"/>
-                            <Label Content="Left" HorizontalAlignment="Left" Margin="11,78,0,0" VerticalAlignment="Top" Height="26"/>
-                            <Label Content="Right" HorizontalAlignment="Left" Margin="210,76,0,0" VerticalAlignment="Top" Height="30"/>
+                            <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="52,70,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="163,70,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="108,38,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <TextBox x:Name="TextBoxFiltersCropBottom" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="108,102,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Label Content="Bottom" HorizontalAlignment="Left" Margin="108,128,0,0" VerticalAlignment="Top" Width="55"/>
+                            <Label Content="Top" HorizontalAlignment="Left" Margin="120,8,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Left" HorizontalAlignment="Left" Margin="19,70,0,0" VerticalAlignment="Top" Height="26"/>
+                            <Label Content="Right" HorizontalAlignment="Left" Margin="218,68,0,0" VerticalAlignment="Top" Height="30"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Resize" HorizontalAlignment="Left" Height="203" Margin="360,86,0,0" VerticalAlignment="Top" Width="285" >
+                    <GroupBox Header="Resize" HorizontalAlignment="Left" Height="203" Margin="294,20,0,0" VerticalAlignment="Top" Width="285" >
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterResize}">
                             <Label Content="Scaling Algorithm:" HorizontalAlignment="Left" Margin="19,98,0,0" VerticalAlignment="Top" Height="28"/>
                             <ComboBox x:Name="ComboBoxFiltersScaling" HorizontalAlignment="Left" Margin="131,96,0,0" VerticalAlignment="Top" Width="128" Height="30" VerticalContentAlignment="Center">
@@ -216,7 +222,7 @@
                             <Label Content="0 = Auto" HorizontalAlignment="Left" Margin="71,67,0,0" VerticalAlignment="Top" FontStyle="Italic" RenderTransformOrigin="0.504,0.51" Width="60"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Rotate" HorizontalAlignment="Left" Height="90" Margin="654,86,0,0" VerticalAlignment="Top" Width="285">
+                    <GroupBox Header="Rotate" HorizontalAlignment="Left" Height="90" Margin="588,20,0,0" VerticalAlignment="Top" Width="285">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterRotate}">
                             <Label Content="Rotate (Clockwise):" HorizontalAlignment="Left" Margin="36,18,0,0" VerticalAlignment="Top" Height="28"/>
                             <ComboBox x:Name="ComboBoxFiltersRotate" HorizontalAlignment="Left" Margin="151,18,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
@@ -227,7 +233,7 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Deinterlace" HorizontalAlignment="Left" Height="98" Margin="654,191,0,0" VerticalAlignment="Top" Width="285">
+                    <GroupBox Header="Deinterlace" HorizontalAlignment="Left" Height="98" Margin="588,125,0,0" VerticalAlignment="Top" Width="285">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterDeinterlace}">
                             <Label Content="Deinterlace (Yadif):" HorizontalAlignment="Left" Margin="39,21,0,0" VerticalAlignment="Top" Height="28"/>
                             <ComboBox x:Name="ComboBoxFiltersDeinterlace" HorizontalAlignment="Left" Margin="152,20,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
@@ -236,19 +242,19 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="122,60,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="407,60,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="709,60,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="739,165,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="61" Margin="56,-6,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="341,-6,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="643,-6,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="673,99,0,0" VerticalAlignment="Top" Width="100"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Video">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Video" HorizontalAlignment="Left" Height="190" Margin="10,10,0,0" VerticalAlignment="Top" Width="372">
+                    <GroupBox Header="Video" HorizontalAlignment="Left" Height="190" Margin="10,10,0,0" VerticalAlignment="Top" Width="385">
                         <Grid>
                             <Label Content="Encoder:" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use">
-                                <ComboBoxItem Content="aomenc" IsSelected="True"/>
+                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use" SelectedIndex="0">
+                                <ComboBoxItem Content="aomenc"  IsSelected="True"/>
                                 <ComboBoxItem Content="rav1e"/>
                                 <ComboBoxItem Content="svt-av1"/>
                                 <ComboBoxItem Content="vp9"/>
@@ -259,46 +265,46 @@
                                 <ComboBoxItem Content="10"/>
                                 <ComboBoxItem Content="12"/>
                             </ComboBox>
-                            <Label Content="VFR:" HorizontalAlignment="Left" Margin="19,93,0,0" VerticalAlignment="Top"/>
-                            <Label Content="(only MKV Input / Output)" HorizontalAlignment="Left" Margin="220,91,-6,0" VerticalAlignment="Top"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xD;&#xA;" HorizontalAlignment="Left" Height="73" Margin="135,80,0,0" VerticalAlignment="Top" Width="158" RenderTransformOrigin="0.44,0.39"/>
-                            <Label Content="Advanced Settings:" HorizontalAlignment="Left" Margin="19,124,0,0" VerticalAlignment="Top"/>
+                            <Label Content="VFR:" HorizontalAlignment="Left" Margin="19,94,0,0" VerticalAlignment="Top"/>
+                            <Label Content="only if video is VFR; both input and output have to be mkv" HorizontalAlignment="Left" Margin="19,113,0,0" VerticalAlignment="Top" Width="356" FontStyle="Italic"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchVFR" Header="" HorizontalAlignment="Left" Height="100" Margin="135,68,0,-13" VerticalAlignment="Top" Width="100" ToolTip="ONLY TOGGLE IF SOURCE IS VFR"/>
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Quality" Height="190" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="542">
+                    <GroupBox Header="Quality" Height="190" Margin="10,205,10,0" VerticalAlignment="Top">
                         <Grid>
-                            <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="Constant Quality:" HorizontalAlignment="Left" Margin="42,19,0,0" VerticalAlignment="Top" Height="29" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True" Background="{x:Null}"/>
-                            <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" HorizontalAlignment="Left" Margin="60,53,0,0" VerticalAlignment="Top" Width="431" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959" ToolTip="Target Quality"/>
-                            <Label x:Name="LabelVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Content="{Binding Value, ElementName=SliderVideoQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="172,18,0,0" VerticalAlignment="Top"/>
-                            <Label Content="| Lowest Quality" HorizontalAlignment="Left" Margin="59,76,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
-                            <Label Content="Highest Quality |" HorizontalAlignment="Left" Margin="416,76,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
-                            <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="42,119,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center" Background="{x:Null}" ToolTip="Target Bitrate"/>
-                            <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="167,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="Constant Quality:" HorizontalAlignment="Left" Margin="42,14,0,0" VerticalAlignment="Top" Height="28" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True" Background="{x:Null}"/>
+                            <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" HorizontalAlignment="Left" Margin="60,48,0,0" VerticalAlignment="Top" Width="747" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959" ToolTip="Target Quality"/>
+                            <Label x:Name="LabelVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Content="{Binding Value, ElementName=SliderVideoQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="172,17,0,0" VerticalAlignment="Top"/>
+                            <Label Content="| Lowest Quality" HorizontalAlignment="Left" Margin="58,70,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
+                            <Label Content="Highest Quality |" HorizontalAlignment="Left" Margin="733,70,0,0" VerticalAlignment="Top" FontSize="9" Width="80" Foreground="#FF595959" RenderTransformOrigin="0.93,0.773"/>
+                            <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="42,109,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center" Background="{x:Null}" ToolTip="Target Bitrate"/>
+                            <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="167,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Optimisation" HorizontalAlignment="Left" Margin="10,0,0,10" Width="372" Height="168" VerticalAlignment="Bottom">
+                    <GroupBox Header="Optimisation" Margin="0,0,10,201" Height="190" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="385">
                         <Grid>
-                            <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="246,34,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Visible"/>
-                            <Label Content="Speed:" HorizontalAlignment="Left" Margin="16,30,0,0" VerticalAlignment="Top"/>
-                            <Slider x:Name="SliderVideoSpeed" HorizontalAlignment="Left" Margin="109,30,0,0" VerticalAlignment="Top" Width="127" Height="29" TickPlacement="BottomRight" Foreground="#FF595959" Maximum="9" Value="4" SmallChange="0" IsSnapToTickEnabled="True" ValueChanged="SliderVideoSpeed_ValueChanged"/>
-                            <Label x:Name="LabelVideoSpeed" Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="81,30,0,0" VerticalAlignment="Top"/>
-                            <Label Content="Passes:" HorizontalAlignment="Left" Margin="16,90,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxVideoPasses" HorizontalAlignment="Left" Margin="81,88,0,0" VerticalAlignment="Top" Width="60" Height="29" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoPasses_SelectionChanged">
+                            <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="226,106,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Visible"/>
+                            <Label Content="Speed:" HorizontalAlignment="Left" Margin="17,11,0,0" VerticalAlignment="Top"/>
+                            <Slider x:Name="SliderVideoSpeed" HorizontalAlignment="Left" Margin="63,43,0,0" VerticalAlignment="Top" Width="276" Height="29" TickPlacement="BottomRight" Foreground="#FF595959" Maximum="9" Value="4" SmallChange="0" IsSnapToTickEnabled="True" ValueChanged="SliderVideoSpeed_ValueChanged"/>
+                            <Label x:Name="LabelVideoSpeed" Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="68,11,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Passes:" HorizontalAlignment="Left" Margin="20,103,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="ComboBoxVideoPasses" HorizontalAlignment="Left" Margin="85,101,0,0" VerticalAlignment="Top" Width="60" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoPasses_SelectionChanged">
                                 <ComboBoxItem Content="1" IsSelected="True"/>
                                 <ComboBoxItem Content="2"/>
                             </ComboBox>
-                            <Label Content="| Slowest" HorizontalAlignment="Left" Margin="107,53,0,0" VerticalAlignment="Top" FontSize="9" Width="79"/>
-                            <Label Content="Fastest |" HorizontalAlignment="Left" Margin="196,53,0,0" VerticalAlignment="Top" FontSize="9" Width="79"/>
+                            <Label Content="| Slowest" HorizontalAlignment="Left" Margin="61,66,0,0" VerticalAlignment="Top" FontSize="9" Width="80"/>
+                            <Label Content="Fastest |" HorizontalAlignment="Left" Margin="299,66,-4,0" VerticalAlignment="Top" FontSize="9" Width="80"/>
                         </Grid>
                     </GroupBox>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchVFR" Header="" HorizontalAlignment="Left" Height="100" Margin="150,107,0,0" VerticalAlignment="Top" Width="100" ToolTip="ONLY TOGGLE IF SOURCE IS VFR"/>
+                    <Label Content="Advanced Settings:" HorizontalAlignment="Left" Margin="683,10,0,0" VerticalAlignment="Top"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xA;" HorizontalAlignment="Left" Height="73" Margin="804,-34,-61,0" VerticalAlignment="Top" Width="158" RenderTransformOrigin="0.44,0.39"/>
                 </Grid>
             </mah:MetroTabItem>
-            <mah:MetroTabItem Header="Advanced Settings" Visibility="{Binding ElementName=ToggleSwitchAdvancedVideoSettings, Path=IsOn, Converter={StaticResource b2v}}">
+            <mah:MetroTabItem Header="Advanced" Visibility="{Binding ElementName=ToggleSwitchAdvancedVideoSettings, Path=IsOn, Converter={StaticResource b2v}}">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="Advanced Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="947" Margin="0,41,0,0">
+                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="900" Margin="0,41,0,0">
                         <Canvas.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -414,7 +420,7 @@
                             <ComboBoxItem Content="3"/>
                         </ComboBox>
                     </Canvas>
-                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="947" Margin="0,41,0,0">
+                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="900" Margin="0,41,0,0">
                         <Canvas.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -501,7 +507,7 @@
                         </ComboBox>
                         <CheckBox x:Name="CheckBoxSVTAV1HDR" Content="HDR" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="591" Canvas.Top="23"/>
                     </Canvas>
-                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="947" Margin="0,41,0,0">
+                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="900" Margin="0,41,0,0">
                         <Canvas.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -512,8 +518,8 @@
                                 </Style.Triggers>
                             </Style>
                         </Canvas.Style>
-                        <Label x:Name="LabelRav1eThreads" Content="Threads:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="17" />
-                        <ComboBox x:Name="ComboBoxRav1eThreads"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="17" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelRav1eThreads" Content="Threads:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="25" />
+                        <ComboBox x:Name="ComboBoxRav1eThreads"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="25" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="0"/>
                             <ComboBoxItem Content="1"/>
                             <ComboBoxItem Content="2"/>
@@ -524,16 +530,16 @@
                             <ComboBoxItem Content="7"/>
                             <ComboBoxItem Content="8"/>
                         </ComboBox>
-                        <Label x:Name="LabelRav1eTileCols"  Content="Tile Columns:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="51"/>
-                        <Label x:Name="LabelRav1eTileRows"  Content="Tile Rows:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="85"/>
-                        <ComboBox x:Name="ComboBoxRav1eTileColumns"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="51" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelRav1eTileCols"  Content="Tile Columns:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="59"/>
+                        <Label x:Name="LabelRav1eTileRows"  Content="Tile Rows:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="93"/>
+                        <ComboBox x:Name="ComboBoxRav1eTileColumns"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="59" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="0" IsSelected="True"/>
                             <ComboBoxItem Content="1"/>
                             <ComboBoxItem Content="2"/>
                             <ComboBoxItem Content="3"/>
                             <ComboBoxItem Content="4"/>
                         </ComboBox>
-                        <ComboBox x:Name="ComboBoxRav1eTileRows"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="85" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <ComboBox x:Name="ComboBoxRav1eTileRows"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="93" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="0" IsSelected="True"/>
                             <ComboBoxItem Content="1"/>
                             <ComboBoxItem Content="2"/>
@@ -542,12 +548,12 @@
                             <ComboBoxItem Content="5"/>
                             <ComboBoxItem Content="6"/>
                         </ComboBox>
-                        <Label x:Name="LabelRav1eMaxGOP"  Content="Max GOP Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="119"/>
-                        <TextBox x:Name="TextBoxRav1eMaxGOP" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="119"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <TextBox x:Name="TextBoxRav1eLookahead" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="40" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="153"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <Label x:Name="LabelRav1eLookahead"  Content="RDO Lookahead:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="153"/>
-                        <Label x:Name="LabelRav1eColorPrimaries" Content="Color Primaries:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="320" Canvas.Top="17" />
-                        <ComboBox x:Name="ComboBoxRav1eColorPrimaries"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="463" Canvas.Top="17" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelRav1eMaxGOP"  Content="Max GOP Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="127"/>
+                        <TextBox x:Name="TextBoxRav1eMaxGOP" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="127"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="TextBoxRav1eLookahead" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="40" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="161"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label x:Name="LabelRav1eLookahead"  Content="RDO Lookahead:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="161"/>
+                        <Label x:Name="LabelRav1eColorPrimaries" Content="Color Primaries:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="25" />
+                        <ComboBox x:Name="ComboBoxRav1eColorPrimaries"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="25" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="Unspecified" IsSelected="True"/>
                             <ComboBoxItem Content="BT470M"/>
                             <ComboBoxItem Content="BT470BG"/>
@@ -561,8 +567,8 @@
                             <ComboBoxItem Content="GenericFilm"/>
                             <ComboBoxItem Content="XYZ"/>
                         </ComboBox>
-                        <Label x:Name="LabelRav1eColorTransfer" Content="Color Transfer:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="320" Canvas.Top="51" />
-                        <ComboBox x:Name="ComboBoxRav1eColorTransfer"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="463" Canvas.Top="51" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelRav1eColorTransfer" Content="Color Transfer:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="59" />
+                        <ComboBox x:Name="ComboBoxRav1eColorTransfer"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="59" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="Unspecified" IsSelected="True"/>
                             <ComboBoxItem Content="BT470M"/>
                             <ComboBoxItem Content="BT470BG"/>
@@ -581,8 +587,8 @@
                             <ComboBoxItem Content="SRGB"/>
                             <ComboBoxItem Content="HLG"/>
                         </ComboBox>
-                        <Label x:Name="LabelRav1eColorMatrix" Content="Color Matrix:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="320" Canvas.Top="85" />
-                        <ComboBox x:Name="ComboBoxRav1eColorMatrix"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="463" Canvas.Top="85" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelRav1eColorMatrix" Content="Color Matrix:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="93" />
+                        <ComboBox x:Name="ComboBoxRav1eColorMatrix"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="93" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="Unspecified" IsSelected="True"/>
                             <ComboBoxItem Content="BT470BG"/>
                             <ComboBoxItem Content="BT601"/>
@@ -597,42 +603,42 @@
                             <ComboBoxItem Content="ICtCp"/>
                             <ComboBoxItem Content="Identity"/>
                         </ComboBox>
-                        <Label x:Name="LabelRav1eColorFormat" Content="Color Format:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="320" Canvas.Top="119" />
-                        <ComboBox x:Name="ComboBoxRav1eColorFormat"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="463" Canvas.Top="119" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelRav1eColorFormat" Content="Color Format:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="127" />
+                        <ComboBox x:Name="ComboBoxRav1eColorFormat"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="127" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="4:2:0" IsSelected="True"/>
                             <ComboBoxItem Content="4:2:2"/>
                             <ComboBoxItem Content="4:4:4"/>
                         </ComboBox>
-                        <Label x:Name="LabelRav1eTune" Content="Tune:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="320" Canvas.Top="153" />
-                        <ComboBox x:Name="ComboBoxRav1eTune"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="463" Canvas.Top="153" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelRav1eTune" Content="Tune:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="161" />
+                        <ComboBox x:Name="ComboBoxRav1eTune"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="161" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="Psychovisual" IsSelected="True"/>
                             <ComboBoxItem Content="Psnr"/>
                         </ComboBox>
-                        <CheckBox x:Name="CheckBoxRav1eMasteringDisplay" Content="Mastering Display:" Canvas.Left="610" Canvas.Top="23"/>
+                        <CheckBox x:Name="CheckBoxRav1eMasteringDisplay" Content="Mastering Display:" Canvas.Left="573" Canvas.Top="31"/>
                         <Label x:Name="LabelRav1eMasteringG" Content="G" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="757" Canvas.Top="17"  Foreground="#FF13DC09"/>
-                        <TextBox x:Name="TextBoxRav1eMasteringGx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="782" Canvas.Top="17"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <TextBox x:Name="TextBoxRav1eMasteringGy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="847" Canvas.Top="17"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <Label x:Name="LabelRav1eMasteringB" Content="B"  IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="758" Canvas.Top="51"  Foreground="#FF0986DC" Width="20"/>
-                        <TextBox x:Name="TextBoxRav1eMasteringBx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="782" Canvas.Top="51"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <TextBox x:Name="TextBoxRav1eMasteringBy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="847" Canvas.Top="51"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <Label x:Name="LabelRav1eMasteringR" Content="R" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="758" Canvas.Top="85"  Foreground="#FFDC0909" Width="20"/>
-                        <TextBox x:Name="TextBoxRav1eMasteringRx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="783" Canvas.Top="85"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <TextBox x:Name="TextBoxRav1eMasteringRy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="847" Canvas.Top="85"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <Label x:Name="LabelRav1eMasteringWP" Content="WP" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="746" Canvas.Top="119"  Foreground="Black" Width="32"/>
-                        <TextBox x:Name="TextBoxRav1eMasteringWPx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="783" Canvas.Top="119"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <TextBox x:Name="TextBoxRav1eMasteringWPy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="847" Canvas.Top="119"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <Label x:Name="LabelRav1eMasteringWP_Copy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" Content="|       x      " HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="775" Canvas.Top="-10"  Foreground="#FFABADB3" Width="72" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                        <Label x:Name="LabelRav1eMasteringWP_Copy1" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" Content="|" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="832" Canvas.Top="-10"  Foreground="#FFABADB3" Width="19" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                        <Label x:Name="LabelRav1eMasteringWP_Copy2" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}"  Content="|       y      " HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="840" Canvas.Top="-10"  Foreground="#FFABADB3" Width="72" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                        <Label x:Name="LabelRav1eMasteringWP_Copy3" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" Content="|" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="897" Canvas.Top="-10"  Foreground="#FFABADB3" Width="19" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                        <CheckBox x:Name="CheckBoxRav1eContentLight" Content="Content-Light (cll, fall):" Canvas.Left="610" Canvas.Top="195"/>
-                        <TextBox x:Name="TextBoxRav1eContentLightCll" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eContentLight}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="783" Canvas.Top="189"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <TextBox x:Name="TextBoxRav1eContentLightFall" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eContentLight}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="847" Canvas.Top="189"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <Label x:Name="LabelRav1eMasteringWP_Copy4" Content="L" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="758" Canvas.Top="153"  Foreground="Black" Width="32"/>
-                        <TextBox x:Name="TextBoxRav1eMasteringLx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="783" Canvas.Top="153"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <TextBox x:Name="TextBoxRav1eMasteringLy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="847" Canvas.Top="153"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="TextBoxRav1eMasteringGx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="745" Canvas.Top="25"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="TextBoxRav1eMasteringGy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="25"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label x:Name="LabelRav1eMasteringB" Content="B"  IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="721" Canvas.Top="59"  Foreground="#FF0986DC" Width="20"/>
+                        <TextBox x:Name="TextBoxRav1eMasteringBx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="745" Canvas.Top="59"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="TextBoxRav1eMasteringBy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="59"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label x:Name="LabelRav1eMasteringR" Content="R" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="721" Canvas.Top="93"  Foreground="#FFDC0909" Width="20"/>
+                        <TextBox x:Name="TextBoxRav1eMasteringRx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="746" Canvas.Top="93"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="TextBoxRav1eMasteringRy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="93"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label x:Name="LabelRav1eMasteringWP" Content="WP" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="709" Canvas.Top="127"  Foreground="Black" Width="32"/>
+                        <TextBox x:Name="TextBoxRav1eMasteringWPx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="746" Canvas.Top="127"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="TextBoxRav1eMasteringWPy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="127"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label x:Name="LabelRav1eMasteringWP_Copy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" Content="|       x      " HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="734" Canvas.Top="-2"  Foreground="#FFABADB3" Width="72" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <Label x:Name="LabelRav1eMasteringWP_Copy1" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" Content="|" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="795" Canvas.Top="-3"  Foreground="#FFABADB3" Width="19" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <Label x:Name="LabelRav1eMasteringWP_Copy2" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}"  Content="|       y      " HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="799" Canvas.Top="-3"  Foreground="#FFABADB3" Width="72" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <Label x:Name="LabelRav1eMasteringWP_Copy3" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" Content="|" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="860" Canvas.Top="-2"  Foreground="#FFABADB3" Width="19" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <CheckBox x:Name="CheckBoxRav1eContentLight" Content="Content-Light (cll, fall):" Canvas.Left="573" Canvas.Top="203"/>
+                        <TextBox x:Name="TextBoxRav1eContentLightCll" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eContentLight}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="746" Canvas.Top="197"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="TextBoxRav1eContentLightFall" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eContentLight}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="197"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label x:Name="LabelRav1eMasteringWP_Copy4" Content="L" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="721" Canvas.Top="161"  Foreground="Black" Width="32"/>
+                        <TextBox x:Name="TextBoxRav1eMasteringLx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="746" Canvas.Top="161"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="TextBoxRav1eMasteringLy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="161"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                     </Canvas>
-                    <Canvas Height="237" VerticalAlignment="Top" Margin="0,41,5,0">
+                    <Canvas Height="237" VerticalAlignment="Top" Margin="10,41,133,0">
                         <Canvas.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -643,8 +649,8 @@
                                 </Style.Triggers>
                             </Style>
                         </Canvas.Style>
-                        <Label x:Name="LabelAomencThreads" Content="Threads:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="17" />
-                        <ComboBox x:Name="ComboBoxAomencThreads"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="17" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelAomencThreads" Content="Threads:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="21" />
+                        <ComboBox x:Name="ComboBoxAomencThreads"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="21" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="1"/>
                             <ComboBoxItem Content="2"/>
                             <ComboBoxItem Content="3"/>
@@ -654,18 +660,18 @@
                             <ComboBoxItem Content="7"/>
                             <ComboBoxItem Content="8"/>
                         </ComboBox>
-                        <Label x:Name="LabelAomencTileCols"  Content="Tile Columns:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="51"/>
-                        <Label x:Name="LabelAomencTileRows"  Content="Tile Rows:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="85"/>
-                        <Label x:Name="LabelAomencMaxGOP"  Content="Max GOP Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="119"/>
-                        <Label x:Name="LabelAomencLagInFrames"  Content="Lag In Frames:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="153"/>
-                        <ComboBox x:Name="ComboBoxAomencTileColumns"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="51" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelAomencTileCols"  Content="Tile Columns:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="55"/>
+                        <Label x:Name="LabelAomencTileRows"  Content="Tile Rows:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="89"/>
+                        <Label x:Name="LabelAomencMaxGOP"  Content="Max GOP Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="123"/>
+                        <Label x:Name="LabelAomencLagInFrames"  Content="Lag In Frames:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="157"/>
+                        <ComboBox x:Name="ComboBoxAomencTileColumns"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="55" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="0" IsSelected="True"/>
                             <ComboBoxItem Content="1"/>
                             <ComboBoxItem Content="2"/>
                             <ComboBoxItem Content="3"/>
                             <ComboBoxItem Content="4"/>
                         </ComboBox>
-                        <ComboBox x:Name="ComboBoxAomencTileRows"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="85" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <ComboBox x:Name="ComboBoxAomencTileRows"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="89" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="0" IsSelected="True"/>
                             <ComboBoxItem Content="1"/>
                             <ComboBoxItem Content="2"/>
@@ -674,10 +680,10 @@
                             <ComboBoxItem Content="5"/>
                             <ComboBoxItem Content="6"/>
                         </ComboBox>
-                        <TextBox x:Name="TextBoxAomencMaxGOP" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="119"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <TextBox x:Name="TextBoxAomencLagInFrames" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="153"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                        <Label x:Name="LabelAomencColorPrimaries" Content="Color Primaries:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="320" Canvas.Top="17" />
-                        <ComboBox x:Name="ComboBoxAomencColorPrimaries"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="463" Canvas.Top="17" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <TextBox x:Name="TextBoxAomencMaxGOP" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="123"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="TextBoxAomencLagInFrames" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="157"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label x:Name="LabelAomencColorPrimaries" Content="Color Primaries:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="21" />
+                        <ComboBox x:Name="ComboBoxAomencColorPrimaries"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="21" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="unspecified" IsSelected="True"/>
                             <ComboBoxItem Content="bt470m"/>
                             <ComboBoxItem Content="bt470bg"/>
@@ -691,8 +697,8 @@
                             <ComboBoxItem Content="film"/>
                             <ComboBoxItem Content="xyz"/>
                         </ComboBox>
-                        <Label x:Name="LabelAomencColorTransfer" Content="Color Transfer:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="320" Canvas.Top="51" />
-                        <ComboBox x:Name="ComboBoxAomencColorTransfer"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="463" Canvas.Top="51" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelAomencColorTransfer" Content="Color Transfer:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="55" />
+                        <ComboBox x:Name="ComboBoxAomencColorTransfer"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="55" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="unspecified" IsSelected="True"/>
                             <ComboBoxItem Content="bt470m"/>
                             <ComboBoxItem Content="bt470bg"/>
@@ -711,8 +717,8 @@
                             <ComboBoxItem Content="srgb"/>
                             <ComboBoxItem Content="hlg"/>
                         </ComboBox>
-                        <Label x:Name="LabelAomencColorMatrix" Content="Color Matrix:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="320" Canvas.Top="85" />
-                        <ComboBox x:Name="ComboBoxAomencColorMatrix"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="463" Canvas.Top="85" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelAomencColorMatrix" Content="Color Matrix:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="89" />
+                        <ComboBox x:Name="ComboBoxAomencColorMatrix"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="89" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="unspecified" IsSelected="True"/>
                             <ComboBoxItem Content="bt470bg"/>
                             <ComboBoxItem Content="bt601"/>
@@ -728,21 +734,21 @@
                             <ComboBoxItem Content="fcc73"/>
                             <ComboBoxItem Content="identity"/>
                         </ComboBox>
-                        <Label x:Name="LabelAomencColorFormat" Content="Color Format:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="320" Canvas.Top="119" />
-                        <ComboBox x:Name="ComboBoxAomencColorFormat"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="463" Canvas.Top="119" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelAomencColorFormat" Content="Color Format:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="123" />
+                        <ComboBox x:Name="ComboBoxAomencColorFormat"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="123" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="i420" IsSelected="True"/>
                             <ComboBoxItem Content="i422"/>
                             <ComboBoxItem Content="i444"/>
                         </ComboBox>
-                        <Label x:Name="LabelAomencAQMode" Content="AQ-Mode:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="320" Canvas.Top="153" />
-                        <ComboBox x:Name="ComboBoxAomencAQMode"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="463" Canvas.Top="153" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelAomencAQMode" Content="AQ-Mode:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="157" />
+                        <ComboBox x:Name="ComboBoxAomencAQMode"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="157" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="0: off (default)" IsSelected="True"/>
                             <ComboBoxItem Content="1: Variance"/>
                             <ComboBoxItem Content="2: Complexity"/>
                             <ComboBoxItem Content="3: Cyclic Refresh"/>
                         </ComboBox>
-                        <Label x:Name="LabelAomencSharpness" Content="Sharpness:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="187" />
-                        <ComboBox x:Name="ComboBoxAomencSharpness"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="187" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelAomencSharpness" Content="Sharpness:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="191" />
+                        <ComboBox x:Name="ComboBoxAomencSharpness"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="191" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="0" IsSelected="True"/>
                             <ComboBoxItem Content="1"/>
                             <ComboBoxItem Content="2"/>
@@ -752,20 +758,20 @@
                             <ComboBoxItem Content="6"/>
                             <ComboBoxItem Content="7"/>
                         </ComboBox>
-                        <Label x:Name="LabelAomencKeyframeFiltering" Content="Keyframe Filtering:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="320" Canvas.Top="187" />
-                        <ComboBox x:Name="ComboBoxAomencKeyFiltering"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="463" Canvas.Top="187" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelAomencKeyframeFiltering" Content="Keyframe Filtering:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="191" />
+                        <ComboBox x:Name="ComboBoxAomencKeyFiltering"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="191" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="0"/>
                             <ComboBoxItem Content="1" IsSelected="True"/>
                             <ComboBoxItem Content="2"/>
                         </ComboBox>
-                        <Label x:Name="LabelAomencTune" Content="Tune:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="640" Canvas.Top="17" />
-                        <ComboBox x:Name="ComboBoxAomencTune"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="772" Canvas.Top="17" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelAomencTune" Content="Tune:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="598" Canvas.Top="21" />
+                        <ComboBox x:Name="ComboBoxAomencTune"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="730" Canvas.Top="21" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="psnr" IsSelected="True"/>
                             <ComboBoxItem Content="ssim"/>
                         </ComboBox>
-                        <CheckBox x:Name="CheckBoxAomencRowMT" Content="Row based Multi-Threading" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="653" Canvas.Top="157" Width="197" IsChecked="True"/>
-                        <CheckBox x:Name="CheckBoxAomencCDEF" Content="CDEF" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="653" Canvas.Top="191" Width="62" IsChecked="True" ToolTip="Enable the constrained directional enhancement filter (0: false, 1: true (default))"/>
-                        <ComboBox x:Name="ComboBoxAomencARNRMax" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="772" Canvas.Top="83" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <CheckBox x:Name="CheckBoxAomencRowMT" Content="Row based Multi-Threading" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="611" Canvas.Top="161" Width="197" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBoxAomencCDEF" Content="CDEF" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="611" Canvas.Top="195" Width="62" IsChecked="True" ToolTip="Enable the constrained directional enhancement filter (0: false, 1: true (default))"/>
+                        <ComboBox x:Name="ComboBoxAomencARNRMax" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="730" Canvas.Top="87" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="15" IsSelected="True"/>
                             <ComboBoxItem Content="14"/>
                             <ComboBoxItem Content="13"/>
@@ -783,9 +789,9 @@
                             <ComboBoxItem Content="1"/>
                             <ComboBoxItem Content="0"/>
                         </ComboBox>
-                        <CheckBox x:Name="CheckBoxAomencARNRMax" Content="ARNR Max Frames:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="144" Canvas.Left="626" Canvas.Top="89"/>
-                        <Label x:Name="LabelAomencTune_Copy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}" Content="ARNR Strength:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="643" Canvas.Top="117" />
-                        <ComboBox x:Name="ComboBoxAomencARNRStrength" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="772" Canvas.Top="117" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <CheckBox x:Name="CheckBoxAomencARNRMax" Content="ARNR Max Frames:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="144" Canvas.Left="584" Canvas.Top="93"/>
+                        <Label x:Name="LabelAomencTune_Copy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}" Content="ARNR Strength:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="601" Canvas.Top="121" />
+                        <ComboBox x:Name="ComboBoxAomencARNRStrength" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="730" Canvas.Top="121" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="6" IsSelected="True"/>
                             <ComboBoxItem Content="5"/>
                             <ComboBoxItem Content="4"/>
@@ -794,22 +800,22 @@
                             <ComboBoxItem Content="1"/>
                             <ComboBoxItem Content="0"/>
                         </ComboBox>
-                        <Label x:Name="LabelAomencTune_Copy1" Content="Tune-Content:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="640" Canvas.Top="51" />
-                        <ComboBox x:Name="ComboBoxAomencTuneContent"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="772" Canvas.Top="49" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelAomencTune_Copy1" Content="Tune-Content:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="598" Canvas.Top="55" />
+                        <ComboBox x:Name="ComboBoxAomencTuneContent"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="730" Canvas.Top="53" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="default" IsSelected="True"/>
                             <ComboBoxItem Content="screen"/>
                         </ComboBox>
                     </Canvas>
-                    <TextBox x:Name="TextBoxCustomVideoSettings" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Margin="10,313,15,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged"/>
+                    <TextBox x:Name="TextBoxCustomVideoSettings" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Margin="10,313,10,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged"/>
                     <CheckBox x:Name="CheckBoxCustomVideoSettings" Content="Custom Settings" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Checked="CheckBoxCustomVideoSettings_Checked"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Audio">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox x:Name="GroupBox3" Header="Track 4" Height="74" Margin="6,265,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}"/>
-                    <GroupBox x:Name="GroupBox2" Header="Track 3" Height="74" Margin="6,189,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}"/>
-                    <GroupBox x:Name="GroupBox1" Header="Track 2" Height="74" Margin="6,112,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}"/>
-                    <GroupBox x:Name="GroupBox" Header="Track 1" Height="74" Margin="6,34,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}"/>
+                    <GroupBox x:Name="GroupBox3" Header="Track 4" Height="74" Margin="6,265,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}"/>
+                    <GroupBox x:Name="GroupBox2" Header="Track 3" Height="74" Margin="6,189,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}"/>
+                    <GroupBox x:Name="GroupBox1" Header="Track 2" Height="74" Margin="6,112,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}"/>
+                    <GroupBox x:Name="GroupBox" Header="Track 1" Height="74" Margin="6,34,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}"/>
                     <ComboBox x:Name="ComboBoxTrackOneLanguage" HorizontalAlignment="Left" Margin="736,68,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}">
                         <ComboBoxItem Content="und" IsSelected="True"/>
                         <ComboBoxItem Content="eng"/>
@@ -946,7 +952,7 @@
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Subtitles">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Track 1" Height="70" Margin="3,12,2,0" VerticalAlignment="Top">
+                    <GroupBox Header="Track 1" Height="70" Margin="3,12,10,0" VerticalAlignment="Top">
                         <Grid Height="47" VerticalAlignment="Bottom">
                             <Button x:Name="ButtonSubtitleTrackOne" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}"  Content="Select" HorizontalAlignment="Left" Margin="5,15,0,7" Width="53" Click="ButtonSubtitleTrackOne_Click"/>
                             <TextBox x:Name="TextBoxSubtitleTrackOne" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Margin="63,12,462,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
@@ -968,7 +974,7 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Track 2" Height="70" Margin="3,85,2,0" VerticalAlignment="Top">
+                    <GroupBox Header="Track 2" Height="70" Margin="3,85,10,0" VerticalAlignment="Top">
                         <Grid Height="47" VerticalAlignment="Bottom">
                             <Button x:Name="ButtonSubtitleTrackTwo" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Content="Select" HorizontalAlignment="Left" Margin="5,15,0,7" Width="53" Click="ButtonSubtitleTrackTwo_Click"/>
                             <TextBox x:Name="TextBoxSubtitleTrackTwo" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="63,12,462,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
@@ -990,7 +996,7 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Track 3" Height="70" Margin="3,158,2,0" VerticalAlignment="Top">
+                    <GroupBox Header="Track 3" Height="70" Margin="3,158,10,0" VerticalAlignment="Top">
                         <Grid Height="47" VerticalAlignment="Bottom">
                             <Button x:Name="ButtonSubtitleTrackThree" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Content="Select" HorizontalAlignment="Left" Margin="5,15,0,7" Width="53" Click="ButtonSubtitleTrackThree_Click"/>
                             <TextBox x:Name="TextBoxSubtitleTrackThree" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Margin="63,12,462,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
@@ -1012,7 +1018,7 @@
                             <CheckBox x:Name="CheckBoxSubThreeDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Content="Default" Margin="0,0,137,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubThreeDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Track 4" Height="70" Margin="3,231,2,0" VerticalAlignment="Top">
+                    <GroupBox Header="Track 4" Height="70" Margin="3,231,10,0" VerticalAlignment="Top">
                         <Grid Height="47" VerticalAlignment="Bottom">
                             <Button x:Name="ButtonSubtitleTrackFour" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Content="Select" HorizontalAlignment="Left" Margin="5,15,0,7" Width="53" Click="ButtonSubtitleTrackFour_Click"/>
                             <TextBox x:Name="TextBoxSubtitleTrackFour" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="63,12,462,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
@@ -1034,7 +1040,7 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Track 5" Height="70" Margin="3,303,2,0" VerticalAlignment="Top">
+                    <GroupBox Header="Track 5" Height="70" Margin="3,303,10,0" VerticalAlignment="Top">
                         <Grid Height="47" VerticalAlignment="Bottom">
                             <Button x:Name="ButtonSubtitleTrackFive" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Content="Select" HorizontalAlignment="Left" Margin="5,15,0,7" Width="53" Click="ButtonSubtitleTrackFive_Click"/>
                             <TextBox x:Name="TextBoxSubtitleTrackFive" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="63,12,462,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
@@ -1065,62 +1071,22 @@
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Preferences">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Program Settings" HorizontalAlignment="Left" Height="218" Margin="10,10,0,0" VerticalAlignment="Top" Width="470">
+                    <GroupBox Header="Program Settings" HorizontalAlignment="Left" Height="160" Margin="10,10,0,0" VerticalAlignment="Top" Width="470">
                         <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <mah:ToggleSwitch x:Name="ToggleSwitchShutdownAfterEncode" Header="Shutdown after Encode" HorizontalAlignment="Left" Margin="10,0,0,-2" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchLogging" IsOn="True" Header="Logging" HorizontalAlignment="Left" Margin="215,0,0,58" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchHideTerminal" IsOn="True" Header="Hide Terminal" HorizontalAlignment="Left" Margin="10,0,0,58" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchUISounds" IsOn="True" Header="UI Sounds" HorizontalAlignment="Left" Margin="215,0,0,118" VerticalAlignment="Bottom" Toggled="CheckBoxSettingsUISounds_Checked"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" IsOn="True" Header="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="10,0,0,118" VerticalAlignment="Bottom" Toggled="CheckBoxSettingsDeleteTempFiles_Checked"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchShowWindow" Header="Popup Window" HorizontalAlignment="Left" Margin="215,0,0,-2" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Opens a window after the encode to show generic information"/>
-                            <ComboBox x:Name="ComboBoxContainerBatchEncoding" HorizontalAlignment="Left" Margin="343,36,0,0" VerticalAlignment="Top" Width="90" ToolTip="Output Container used in Batch Mode" SelectionChanged="ToggleSwitchShutdownAfterEncode_Toggled">
-                                <ComboBoxItem Content=".mkv" IsSelected="True"/>
-                                <ComboBoxItem Content=".mp4"/>
-                                <ComboBoxItem Content=".webm"/>
-                            </ComboBox>
-                            <Label Content="Batch Container" HorizontalAlignment="Left" Margin="339,7,0,0" VerticalAlignment="Top" Width="111" FontSize="14"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchShutdownAfterEncode" Header="Shutdown after Encode" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchLogging" IsOn="True" Header="Logging" HorizontalAlignment="Left" Margin="215,0,0,10" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchHideTerminal" IsOn="True" Header="Hide Terminal" HorizontalAlignment="Left" Margin="348,0,-42,70" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchUISounds" IsOn="True" Header="UI Sounds" HorizontalAlignment="Left" Margin="215,0,0,70" VerticalAlignment="Bottom" Toggled="CheckBoxSettingsUISounds_Checked"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" IsOn="True" Header="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="10,0,0,70" VerticalAlignment="Bottom" Toggled="CheckBoxSettingsDeleteTempFiles_Checked"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchShowWindow" Header="Popup Window" HorizontalAlignment="Left" Margin="348,0,-42,10" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Opens a window after the encode to show generic information"/>
                         </Grid>
                     </GroupBox>
-                    <Button x:Name="ButtonOpenTempFolder" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="10,0,0,77" Width="136" Background="{x:Null}" Click="ButtonOpenTempFolder_Click" Height="38" VerticalAlignment="Bottom"/>
-                    <TextBox x:Name="TextBoxCustomTempPath" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="107,0,134,10" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="27" VerticalAlignment="Bottom"/>
-                    <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="0,0,56,10" Click="ButtonSetTempPath_Click" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="73"/>
-                    <Button x:Name="ButtonOpenProgramFolder" Content="Open Program Folder" HorizontalAlignment="Left" Margin="10,0,0,120" Width="136" Background="{x:Null}" Click="ButtonOpenProgramFolder_Click" Height="38" VerticalAlignment="Bottom"/>
-                    <Button x:Name="ButtonDeleteTempFiles" Content="Delete Temp Files" HorizontalAlignment="Left" Margin="151,0,0,77" Width="136" Background="{x:Null}" Click="ButtonDeleteTempFiles_Click" Height="38" VerticalAlignment="Bottom" BorderBrush="#FFFD0202"/>
-                    <Button x:Name="ButtonSetTheme" Content="Set Theme" HorizontalAlignment="Right" Margin="0,0,56,71" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetTheme_Click"/>
-                    <ComboBox x:Name="ComboBoxBaseTheme" HorizontalAlignment="Right" Margin="0,0,56,105" VerticalAlignment="Bottom" Width="91">
-                        <ComboBoxItem Content="Light" IsSelected="True"/>
-                        <ComboBoxItem Content="Dark"/>
-                    </ComboBox>
-                    <ComboBox x:Name="ComboBoxAccentTheme" HorizontalAlignment="Right" Margin="0,0,56,132" VerticalAlignment="Bottom" Width="91">
-                        <ComboBoxItem Content="Blue" Foreground="#0767B3" IsSelected="True"/>
-                        <ComboBoxItem Content="Red" Foreground="#EA4333"/>
-                        <ComboBoxItem Content="Green" Foreground="#80BA45"/>
-                        <ComboBoxItem Content="Purple" Foreground="#837AE5"/>
-                        <ComboBoxItem Content="Orange" Foreground="#FB8633"/>
-                        <ComboBoxItem Content="Lime"  Foreground="#B6D033"/>
-                        <ComboBoxItem Content="Emerald" Foreground="#B6CE59"/>
-                        <ComboBoxItem Content="Teal" Foreground="#33BCBA"/>
-                        <ComboBoxItem Content="Cyan" Foreground="#49B4E8"/>
-                        <ComboBoxItem Content="Cobalt" Foreground="#3373F2"/>
-                        <ComboBoxItem Content="Indigo" Foreground="#8833FF"/>
-                        <ComboBoxItem Content="Violet" Foreground="#BB33FF"/>
-                        <ComboBoxItem Content="Pink" Foreground="#F68ED9"/>
-                        <ComboBoxItem Content="Magenta" Foreground="#E0338F"/>
-                        <ComboBoxItem Content="Crimson" Foreground="#B53351"/>
-                        <ComboBoxItem Content="Amber" Foreground="#F3B53B"/>
-                        <ComboBoxItem Content="Yellow" Foreground="#FEE538"/>
-                        <ComboBoxItem Content="Brown" Foreground="#9B7B56"/>
-                        <ComboBoxItem Content="Olive" Foreground="#8A9F83"/>
-                        <ComboBoxItem Content="Steel" Foreground="#83919F"/>
-                        <ComboBoxItem Content="Mauve" Foreground="#9180A1"/>
-                        <ComboBoxItem Content="Taupe" Foreground="#9F9471"/>
-                        <ComboBoxItem Content="Sienna" Foreground="#B37557"/>
-                    </ComboBox>
-                    <Button x:Name="ButtonSetBGImage" Content="Set BG Image" HorizontalAlignment="Right" Margin="0,0,152,71" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetBGImage_Click"/>
-                    <Label Content="Accent:" HorizontalAlignment="Right" Margin="0,0,152,130" FontSize="12" Height="26" VerticalAlignment="Bottom"/>
-                    <Label Content="Base Theme:" HorizontalAlignment="Right" Margin="0,0,152,103" FontSize="12" Height="26" VerticalAlignment="Bottom"/>
-                    <Button x:Name="ButtonOpenLogFolder" Content="Open Log Folder" HorizontalAlignment="Left" Margin="151,0,0,120" Width="136" Background="{x:Null}" Click="ButtonOpenLogFolder_Click" Height="38" VerticalAlignment="Bottom"/>
-                    <GroupBox x:Name="GroubBoxVersion" Header="GroupBox" Height="160" Margin="0,10,56,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="404">
+                    <Button x:Name="ButtonOpenTempFolder" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="173,0,0,68" Width="150" Background="{x:Null}" Click="ButtonOpenTempFolder_Click" Height="38" VerticalAlignment="Bottom"/>
+                    <TextBox x:Name="TextBoxCustomTempPath" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="107,0,88,10" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="27" VerticalAlignment="Bottom"/>
+                    <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="0,0,10,10" Click="ButtonSetTempPath_Click" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="73"/>
+                    <Button x:Name="ButtonDeleteTempFiles" Content="Delete Temp Files" HorizontalAlignment="Left" Margin="328,0,0,68" Width="152" Background="{x:Null}" Click="ButtonDeleteTempFiles_Click" Height="38" VerticalAlignment="Bottom" BorderBrush="#FFFD0202"/>
+                    <Button x:Name="ButtonOpenLogFolder" Content="Open Log Folder" HorizontalAlignment="Left" Margin="11,0,0,68" Width="157" Background="{x:Null}" Click="ButtonOpenLogFolder_Click" Height="38" VerticalAlignment="Bottom"/>
+                    <GroupBox x:Name="GroubBoxVersion" Header="GroupBox" Height="160" Margin="495,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="396">
                         <Grid>
                             <Label Content="Theme:" HorizontalAlignment="Right" Margin="0,6,324,0" VerticalAlignment="Top" FontSize="12"/>
                             <TextBlock Margin="0,12,26,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top"><Hyperlink NavigateUri="https://mahapps.com/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://mahapps.com/"/></Hyperlink></TextBlock>
@@ -1140,6 +1106,53 @@
                         </Grid>
                     </GroupBox>
                     <mah:ToggleSwitch x:Name="ToggleSwitchTempFolder" Header="Custom Temp Path" HorizontalAlignment="Left" Margin="14,0,0,7" VerticalAlignment="Bottom" Toggled="ToggleSwitchTempFolder_Toggled"/>
+                    <GroupBox Header="Theme" HorizontalAlignment="Left" Height="112" Margin="495,175,0,0" VerticalAlignment="Top" Width="396">
+                        <Grid HorizontalAlignment="Left" Height="79" Margin="0,0,0,-2" VerticalAlignment="Top" Width="386">
+                            <ComboBox x:Name="ComboBoxAccentTheme" HorizontalAlignment="Left" Margin="89,0,0,41" VerticalAlignment="Bottom" Width="80">
+                                <ComboBoxItem Content="Blue" Foreground="#0767B3" IsSelected="True"/>
+                                <ComboBoxItem Content="Red" Foreground="#EA4333"/>
+                                <ComboBoxItem Content="Green" Foreground="#80BA45"/>
+                                <ComboBoxItem Content="Purple" Foreground="#837AE5"/>
+                                <ComboBoxItem Content="Orange" Foreground="#FB8633"/>
+                                <ComboBoxItem Content="Lime"  Foreground="#B6D033"/>
+                                <ComboBoxItem Content="Emerald" Foreground="#B6CE59"/>
+                                <ComboBoxItem Content="Teal" Foreground="#33BCBA"/>
+                                <ComboBoxItem Content="Cyan" Foreground="#49B4E8"/>
+                                <ComboBoxItem Content="Cobalt" Foreground="#3373F2"/>
+                                <ComboBoxItem Content="Indigo" Foreground="#8833FF"/>
+                                <ComboBoxItem Content="Violet" Foreground="#BB33FF"/>
+                                <ComboBoxItem Content="Pink" Foreground="#F68ED9"/>
+                                <ComboBoxItem Content="Magenta" Foreground="#E0338F"/>
+                                <ComboBoxItem Content="Crimson" Foreground="#B53351"/>
+                                <ComboBoxItem Content="Amber" Foreground="#F3B53B"/>
+                                <ComboBoxItem Content="Yellow" Foreground="#FEE538"/>
+                                <ComboBoxItem Content="Brown" Foreground="#9B7B56"/>
+                                <ComboBoxItem Content="Olive" Foreground="#8A9F83"/>
+                                <ComboBoxItem Content="Steel" Foreground="#83919F"/>
+                                <ComboBoxItem Content="Mauve" Foreground="#9180A1"/>
+                                <ComboBoxItem Content="Taupe" Foreground="#9F9471"/>
+                                <ComboBoxItem Content="Sienna" Foreground="#B37557"/>
+                            </ComboBox>
+                            <Label Content="Accent:" HorizontalAlignment="Left" Margin="8,0,0,41" FontSize="12" Height="26" VerticalAlignment="Bottom"/>
+                            <ComboBox x:Name="ComboBoxBaseTheme" HorizontalAlignment="Left" Margin="89,0,0,10" VerticalAlignment="Bottom" Width="80">
+                                <ComboBoxItem Content="Light" IsSelected="True"/>
+                                <ComboBoxItem Content="Dark"/>
+                            </ComboBox>
+                            <Label Content="Base Theme:" HorizontalAlignment="Left" Margin="8,0,0,10" FontSize="12" Height="26" VerticalAlignment="Bottom" RenderTransformOrigin="0.346,0.526"/>
+                            <Button x:Name="ButtonSetTheme" Content="Set Theme" HorizontalAlignment="Left" Margin="185,0,0,26" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetTheme_Click"/>
+                            <Button x:Name="ButtonSetBGImage" Content="Set BG Image" HorizontalAlignment="Left" Margin="281,0,0,26" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetBGImage_Click"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Batch Settings" HorizontalAlignment="Left" Height="112" Margin="10,175,0,0" VerticalAlignment="Top" Width="470">
+                        <Grid HorizontalAlignment="Left" Height="76" VerticalAlignment="Top" Width="460">
+                            <Label Content="Container:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="111" FontSize="14"/>
+                            <ComboBox x:Name="ComboBoxContainerBatchEncoding" HorizontalAlignment="Left" Margin="104,12,0,0" VerticalAlignment="Top" Width="90" ToolTip="Output Container used in Batch Mode" SelectionChanged="ToggleSwitchShutdownAfterEncode_Toggled" Height="27">
+                                <ComboBoxItem Content=".mkv" IsSelected="True"/>
+                                <ComboBoxItem Content=".mp4"/>
+                                <ComboBoxItem Content=".webm"/>
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </mah:MetroTabItem>
         </mah:MetroAnimatedSingleRowTabControl>
@@ -1155,8 +1168,8 @@
                 <Label Content="Start Encode" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="26" Height="30" Canvas.Top="2" FontSize="13" />
             </Canvas>
         </Button>
-        <ProgressBar x:Name="ProgressBar" Margin="21,0,23,19" ValueChanged="ProgressBar_ValueChanged" Height="34" VerticalAlignment="Bottom"/>
-        <Label x:Name="LabelProgressBar" Content="" Margin="21,0,23,19" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="34" VerticalAlignment="Bottom"/>
+        <ProgressBar x:Name="ProgressBar" Margin="21,0,21,19" ValueChanged="ProgressBar_ValueChanged" Height="34" VerticalAlignment="Bottom"/>
+        <Label x:Name="LabelProgressBar" Content="" Margin="21,0,21,19" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="34" VerticalAlignment="Bottom"/>
         <Button x:Name="ButtonStopEncode" Margin="447,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="135" Background="{x:Null}" BorderBrush="#FF707070" Click="ButtonStopEncode_Click">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
                 <Image HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="47" Source="img/stop.png" Canvas.Top="-6" Canvas.Left="-9"/>
