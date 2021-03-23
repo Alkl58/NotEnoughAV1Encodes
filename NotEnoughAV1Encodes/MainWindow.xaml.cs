@@ -138,6 +138,87 @@ namespace NotEnoughAV1Encodes
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
 
+        private void ToggleSwitchAudioTrackOne_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (ToggleSwitchAudioTrackOne.IsOn)
+            {
+                if (TextBoxAudioBitrate != null)
+                    TextBoxAudioBitrate.IsEnabled = ComboBoxAudioCodec.SelectedIndex != 4;
+            }
+            else
+            {
+                if (TextBoxAudioBitrate != null)
+                    TextBoxAudioBitrate.IsEnabled = false;
+            }
+        }
+
+        private void ToggleSwitchAudioTrackTwo_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (ToggleSwitchAudioTrackTwo.IsOn)
+            {
+                if (TextBoxAudioBitrateTrackTwo != null)
+                    TextBoxAudioBitrateTrackTwo.IsEnabled = ComboBoxAudioCodecTrackTwo.SelectedIndex != 4;
+            }
+            else
+            {
+                if (TextBoxAudioBitrateTrackTwo != null)
+                    TextBoxAudioBitrateTrackTwo.IsEnabled = false;
+            }
+        }
+
+        private void ToggleSwitchAudioTrackThree_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (ToggleSwitchAudioTrackThree.IsOn)
+            {
+                if (TextBoxAudioBitrateTrackThree != null)
+                    TextBoxAudioBitrateTrackThree.IsEnabled = ComboBoxAudioCodecTrackThree.SelectedIndex != 4;
+            }
+            else
+            {
+                if (TextBoxAudioBitrateTrackThree != null)
+                    TextBoxAudioBitrateTrackThree.IsEnabled = false;
+            }
+        }
+
+        private void ToggleSwitchAudioTrackFour_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (ToggleSwitchAudioTrackFour.IsOn)
+            {
+                if (TextBoxAudioBitrateTrackFour != null)
+                    TextBoxAudioBitrateTrackFour.IsEnabled = ComboBoxAudioCodecTrackFour.SelectedIndex != 4;
+            }
+            else
+            {
+                if (TextBoxAudioBitrate != null)
+                    TextBoxAudioBitrateTrackFour.IsEnabled = false;
+            }
+        }
+
+        private void ComboBoxAudioCodec_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (TextBoxAudioBitrate != null)
+                TextBoxAudioBitrate.IsEnabled = ComboBoxAudioCodec.SelectedIndex != 4;
+                
+        }
+
+        private void ComboBoxAudioCodecTrackTwo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (TextBoxAudioBitrateTrackTwo != null)
+                TextBoxAudioBitrateTrackTwo.IsEnabled = ComboBoxAudioCodecTrackTwo.SelectedIndex != 4;
+        }
+
+        private void ComboBoxAudioCodecTrackThree_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (TextBoxAudioBitrateTrackThree != null)
+                TextBoxAudioBitrateTrackThree.IsEnabled = ComboBoxAudioCodecTrackThree.SelectedIndex != 4;
+        }
+
+        private void ComboBoxAudioCodecTrackFour_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (TextBoxAudioBitrateTrackFour != null)
+                TextBoxAudioBitrateTrackFour.IsEnabled = ComboBoxAudioCodecTrackFour.SelectedIndex != 4;
+        }
+
         private void ToggleSwitchSubtitleActivatedOne_Toggled(object sender, RoutedEventArgs e)
         {
             if (VideoOutputSet && Path.GetExtension(VideoOutput) == ".mp4" && !subMessageShowed)

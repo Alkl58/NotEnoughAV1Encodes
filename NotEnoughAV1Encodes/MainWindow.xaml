@@ -827,7 +827,7 @@
                         <ComboBoxItem Content="chi"/>
                         <ComboBoxItem Content="kor"/>
                     </ComboBox>
-                    <ComboBox x:Name="ComboBoxAudioCodec" HorizontalAlignment="Left" Margin="96,68,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}">
+                    <ComboBox x:Name="ComboBoxAudioCodec" HorizontalAlignment="Left" Margin="96,68,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}" SelectionChanged="ComboBoxAudioCodec_SelectionChanged">
                         <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
                         <ComboBoxItem Content="Opus" IsSelected="True" />
                         <ComboBoxItem Content="AC3" />
@@ -840,7 +840,7 @@
                     <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="332,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}" PreviewTextInput="NumberValidationTextBox">
                         <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
                     </TextBox>
-                    <ComboBox x:Name="ComboBoxAudioCodecTrackTwo" HorizontalAlignment="Left" Margin="96,145,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}">
+                    <ComboBox x:Name="ComboBoxAudioCodecTrackTwo" HorizontalAlignment="Left" Margin="96,145,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}" SelectionChanged="ComboBoxAudioCodecTrackTwo_SelectionChanged">
                         <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
                         <ComboBoxItem Content="Opus" IsSelected="True" />
                         <ComboBoxItem Content="AC3" />
@@ -851,7 +851,7 @@
                     <TextBox x:Name="TextBoxAudioBitrateTrackTwo" HorizontalAlignment="Left" Height="26" Margin="332,145,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}" PreviewTextInput="NumberValidationTextBox">
                         <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
                     </TextBox>
-                    <ComboBox x:Name="ComboBoxAudioCodecTrackThree" HorizontalAlignment="Left" Margin="96,223,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}">
+                    <ComboBox x:Name="ComboBoxAudioCodecTrackThree" HorizontalAlignment="Left" Margin="96,223,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}" SelectionChanged="ComboBoxAudioCodecTrackThree_SelectionChanged">
                         <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
                         <ComboBoxItem Content="Opus" IsSelected="True" />
                         <ComboBoxItem Content="AC3" />
@@ -862,7 +862,7 @@
                     <TextBox x:Name="TextBoxAudioBitrateTrackThree" HorizontalAlignment="Left" Height="26" Margin="332,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}" PreviewTextInput="NumberValidationTextBox">
                         <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
                     </TextBox>
-                    <ComboBox x:Name="ComboBoxAudioCodecTrackFour" HorizontalAlignment="Left" Margin="96,301,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}">
+                    <ComboBox x:Name="ComboBoxAudioCodecTrackFour" HorizontalAlignment="Left" Margin="96,301,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}" SelectionChanged="ComboBoxAudioCodecTrackFour_SelectionChanged">
                         <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
                         <ComboBoxItem Content="Opus" IsSelected="True" />
                         <ComboBoxItem Content="AC3" />
@@ -944,10 +944,10 @@
                         <ComboBoxItem Content="chi"/>
                         <ComboBoxItem Content="kor"/>
                     </ComboBox>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackOne" Header="" HorizontalAlignment="Left" Height="100" Margin="61,8,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackTwo" Header="" HorizontalAlignment="Left" Height="100" Margin="61,86,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackThree" Header="" HorizontalAlignment="Left" Height="100" Margin="61,163,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackFour" Header="" HorizontalAlignment="Left" Height="100" Margin="61,239,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackOne" Header="" HorizontalAlignment="Left" Height="53" Margin="61,8,0,0" VerticalAlignment="Top" Width="100" Toggled="ToggleSwitchAudioTrackOne_Toggled"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackTwo" Header="" HorizontalAlignment="Left" Height="54" Margin="61,86,0,0" VerticalAlignment="Top" Width="100" Toggled="ToggleSwitchAudioTrackTwo_Toggled"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackThree" Header="" HorizontalAlignment="Left" Height="53" Margin="61,163,0,0" VerticalAlignment="Top" Width="100" Toggled="ToggleSwitchAudioTrackThree_Toggled"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackFour" Header="" HorizontalAlignment="Left" Height="57" Margin="61,239,0,0" VerticalAlignment="Top" Width="100" Toggled="ToggleSwitchAudioTrackFour_Toggled"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Subtitles">
