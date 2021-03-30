@@ -106,6 +106,7 @@ namespace NotEnoughAV1Encodes
         public static bool Yadif1 = false;          // If true -> double the frames
         public static string TrimEndTemp = "00:23:00.000"; // Sets the maximum trim time
         public static int TotalFrames = 0;          // used for progressbar and frame check
+        public static Dictionary<string, string> audio_languages = new Dictionary<string, string>();
         public DateTime StartTime;                  // used for eta calculation
         // Progress Cancellation
         private CancellationTokenSource cancellationTokenSource;
@@ -132,8 +133,58 @@ namespace NotEnoughAV1Encodes
             LoadPresetsIntoComboBox();
             LoadDefaultProfile();
             LoadSettingsTab();
-
+            FillLanguagesStartup();
             StartUp = false;
+        }
+
+        private void FillLanguagesStartup()
+        {
+            audio_languages.Add("English",     "eng");
+            audio_languages.Add("Bosnian",     "bos");
+            audio_languages.Add("Bulgarian",   "bul");
+            audio_languages.Add("Chinese",     "chi");
+            audio_languages.Add("Czech",       "cze");
+            audio_languages.Add("Greek",       "gre");
+            audio_languages.Add("Estonian",    "est");
+            audio_languages.Add("Persian",     "per");
+            audio_languages.Add("Filipino",    "fil");
+            audio_languages.Add("Finnish",     "fin");
+            audio_languages.Add("French",      "fre");
+            audio_languages.Add("Georgian",    "geo");
+            audio_languages.Add("German",      "ger");
+            audio_languages.Add("Croatian",    "hrv");
+            audio_languages.Add("Hungarian",   "hun");
+            audio_languages.Add("Indonesian",  "ind");
+            audio_languages.Add("Icelandic",   "ice");
+            audio_languages.Add("Italian",     "ita");
+            audio_languages.Add("Japanese",    "jpn");
+            audio_languages.Add("Korean",      "kor");
+            audio_languages.Add("Latin",       "lat");
+            audio_languages.Add("Latvian",     "lav");
+            audio_languages.Add("Lithuanian",  "lit");
+            audio_languages.Add("Dutch",       "nld");
+            audio_languages.Add("Norwegian",   "nob");
+            audio_languages.Add("Polish",      "pol");
+            audio_languages.Add("Portuguese",  "por");
+            audio_languages.Add("Russian",     "rus");
+            audio_languages.Add("Slovak",      "slk");
+            audio_languages.Add("Slovenian",   "slv");
+            audio_languages.Add("Spanish",     "spa");
+            audio_languages.Add("Swedish",     "swe");
+            audio_languages.Add("Thai",        "tha");
+            audio_languages.Add("Turkish",     "tur");
+            audio_languages.Add("Ukrainian",   "ukr");
+            audio_languages.Add("Vietnamese",  "vie");
+
+            Dictionary<string, string>.KeyCollection keys = audio_languages.Keys;
+            foreach (string lang in keys)
+            {
+                ComboBoxTrackOneLanguage.Items.Add(lang);
+                ComboBoxTrackTwoLanguage.Items.Add(lang);
+                ComboBoxTrackThreeLanguage.Items.Add(lang);
+                ComboBoxTrackFourLanguage.Items.Add(lang);
+            }
+            audio_languages.Add("und", "und");
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
@@ -1288,10 +1339,10 @@ namespace NotEnoughAV1Encodes
             trackThree = ToggleSwitchAudioTrackThree.IsOn == true;
             trackFour = ToggleSwitchAudioTrackFour.IsOn == true;
             // Sets Audio Language
-            trackOneLanguage = ComboBoxTrackOneLanguage.Text;
-            trackTwoLanguage = ComboBoxTrackTwoLanguage.Text;
-            trackThreeLanguage = ComboBoxTrackThreeLanguage.Text;
-            trackFourLanguage = ComboBoxTrackFourLanguage.Text;
+            trackOneLanguage = audio_languages[ComboBoxTrackOneLanguage.Text];
+            trackTwoLanguage = audio_languages[ComboBoxTrackTwoLanguage.Text];
+            trackThreeLanguage = audio_languages[ComboBoxTrackThreeLanguage.Text];
+            trackFourLanguage = audio_languages[ComboBoxTrackFourLanguage.Text];
             // Sets Audio Bitrate
             audioBitrateTrackOne = int.Parse(TextBoxAudioBitrate.Text);
             audioBitrateTrackTwo = int.Parse(TextBoxAudioBitrateTrackTwo.Text);
@@ -1521,26 +1572,24 @@ namespace NotEnoughAV1Encodes
             foreach (string line in audioLanguages)
             {
                 string resultcropped;
-                try { resultcropped = line.Replace(" ", "").Substring(0, 3); }
-                catch { resultcropped = "und"; }
-
-                int indexLang;
-                switch (resultcropped)
-                {
-                    case "eng": indexLang = 1; break;
-                    case "deu": indexLang = 2; break;
-                    case "fre": indexLang = 3; break;
-                    case "ita": indexLang = 4; break;
-                    case "spa": indexLang = 5; break;
-                    case "jpn": indexLang = 6; break;
-                    case "chi": indexLang = 7; break;
-                    case "kor": indexLang = 8; break;
-                    default: indexLang = 0; break;
+                try 
+                { 
+                    resultcropped = line.Replace(" ", "").Substring(0, 3);
+                    var myKey = audio_languages.FirstOrDefault(x => x.Value == resultcropped).Key;
+                    if (index == 0) { ComboBoxTrackOneLanguage.SelectedItem = myKey; }
+                    if (index == 1) { ComboBoxTrackTwoLanguage.SelectedItem = myKey; }
+                    if (index == 2) { ComboBoxTrackThreeLanguage.SelectedItem = myKey; }
+                    if (index == 3) { ComboBoxTrackFourLanguage.SelectedItem = myKey; }
+                    Console.WriteLine(audio_languages[myKey]);
                 }
-                if (index == 0) { ComboBoxTrackOneLanguage.SelectedIndex = indexLang; }
-                if (index == 1) { ComboBoxTrackTwoLanguage.SelectedIndex = indexLang; }
-                if (index == 2) { ComboBoxTrackThreeLanguage.SelectedIndex = indexLang; }
-                if (index == 3) { ComboBoxTrackFourLanguage.SelectedIndex = indexLang; }
+                catch 
+                { 
+                    resultcropped = "und";
+                    if (index == 0) { ComboBoxTrackOneLanguage.SelectedItem = resultcropped; }
+                    if (index == 1) { ComboBoxTrackTwoLanguage.SelectedItem = resultcropped; }
+                    if (index == 2) { ComboBoxTrackThreeLanguage.SelectedItem = resultcropped; }
+                    if (index == 3) { ComboBoxTrackFourLanguage.SelectedItem = resultcropped; }
+                }
                 index += 1;
             }
 

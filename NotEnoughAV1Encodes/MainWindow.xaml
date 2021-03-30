@@ -6,7 +6,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
-        Title="NotEnoughAV1Encodes" Height="650" Width="951" ResizeMode="CanResizeWithGrip" AllowDrop="True" DragDrop.Drop="Grid_Drop">
+        Title="NotEnoughAV1Encodes" Height="650" Width="1085" ResizeMode="CanResizeWithGrip" AllowDrop="True" DragDrop.Drop="Grid_Drop">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="b2v"/>
     </Window.Resources>
@@ -21,10 +21,10 @@
                 <Label Content="Source" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="44" Height="30" Canvas.Top="2" FontSize="13" />
             </Canvas>
         </Button>
-        <mah:MetroAnimatedSingleRowTabControl x:Name="MetroTab" Margin="21,116,0,63" Background="{x:Null}" HorizontalAlignment="Left" Width="901">
+        <mah:MetroAnimatedSingleRowTabControl x:Name="MetroTab" Margin="21,116,21,63" Background="{x:Null}">
             <mah:MetroTabItem Header="Summary">
                 <Grid x:Name="Grid0">
-                    <GroupBox Header="Current Encoding Settings" Margin="20,192,26,0" Height="82" VerticalAlignment="Top">
+                    <GroupBox Header="Current Encoding Settings" Margin="20,192,19,0" Height="82" VerticalAlignment="Top">
                         <Grid>
                             <Label Content="Encoder:" HorizontalAlignment="Left" Margin="7,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                             <Label Content="{Binding Text, ElementName=ComboBoxVideoEncoder, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="71,13,0,0" VerticalAlignment="Top" Width="74"/>
@@ -36,7 +36,7 @@
                             <Label Content="{Binding Text, ElementName=ComboBoxVideoPasses, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="567,13,0,0" VerticalAlignment="Top" Width="140"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Video Information" Height="72" Margin="20,115,26,0" VerticalAlignment="Top">
+                    <GroupBox Header="Video Information" Height="72" Margin="20,115,19,0" VerticalAlignment="Top">
                         <Grid>
                             <Label Content="Length:" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                             <Label x:Name="LabelVideoLength" Content="00:00:00" HorizontalAlignment="Left" Margin="67,5,0,0" VerticalAlignment="Top" Width="80"/>
@@ -49,7 +49,7 @@
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Input / Output" HorizontalAlignment="Left" Height="100" Margin="20,10,0,0" VerticalAlignment="Top" Width="855">
+                    <GroupBox Header="Input / Output" Height="100" Margin="20,10,19,0" VerticalAlignment="Top">
                         <Grid HorizontalAlignment="Left" Height="66" Margin="0,0,0,-1" VerticalAlignment="Top" Width="813">
                             <Label Content="Source:" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                             <Label Content="Destination:" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
@@ -57,30 +57,22 @@
                             <TextBox x:Name="TextBoxVideoDestination" Height="29" Margin="105,30,8,0" TextWrapping="Wrap" Text="No Destination Selected" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Workers" HorizontalAlignment="Left" Height="85" Margin="20,279,0,0" VerticalAlignment="Top" Width="855">
-                        <Grid HorizontalAlignment="Left" Height="46" VerticalAlignment="Top" Width="813">
+                    <GroupBox Header="Workers &amp; Splitting" Height="85" Margin="20,279,19,0" VerticalAlignment="Top">
+                        <Grid HorizontalAlignment="Left" Height="46" VerticalAlignment="Top" Width="986">
                             <Label Content="Worker Count:" HorizontalAlignment="Left" Margin="9,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <ComboBox x:Name="ComboBoxWorkerCount" HorizontalAlignment="Left" Margin="116,10,0,0" VerticalAlignment="Top" Width="80" Height="29" ToolTip="Amount of parallel workers."/>
-                            <Label Content="Priority:" HorizontalAlignment="Left" Margin="325,11,0,0" VerticalAlignment="Top" FontWeight="Bold" Height="31"/>
-                            <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="402,8,0,0" VerticalAlignment="Top" Width="100" Height="29">
+                            <ComboBox x:Name="ComboBoxWorkerCount" HorizontalAlignment="Left" Margin="106,10,0,0" VerticalAlignment="Top" Width="80" Height="29" ToolTip="Amount of parallel workers."/>
+                            <Label Content="Priority:" HorizontalAlignment="Left" Margin="202,10,0,0" VerticalAlignment="Top" FontWeight="Bold" Height="28" RenderTransformOrigin="0.393,0.581"/>
+                            <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="258,10,0,0" VerticalAlignment="Top" Width="100" Height="29">
                                 <ComboBoxItem Content="Normal" IsSelected="True"/>
                                 <ComboBoxItem Content="Below Normal"/>
                             </ComboBox>
-                        </Grid>
-                    </GroupBox>
-                </Grid>
-            </mah:MetroTabItem>
-            <mah:MetroTabItem Header="Splitting">
-                <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Splitting" HorizontalAlignment="Left" Height="153" Margin="348,10,0,0" VerticalAlignment="Top" Width="311">
-                        <Grid HorizontalAlignment="Left" Height="117" VerticalAlignment="Top" Width="301">
-                            <Label Content="Splitting Method:" HorizontalAlignment="Left" Margin="14,10,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxSplittingMethod" HorizontalAlignment="Left" Margin="136,10,0,0" VerticalAlignment="Top" Width="155" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxSplittingMethod_SelectionChanged" ToolTip="Splitting Method">
+                            <Label Content="Splitting Method:" HorizontalAlignment="Left" Margin="370,11,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <ComboBox x:Name="ComboBoxSplittingMethod" HorizontalAlignment="Left" Margin="485,10,0,0" VerticalAlignment="Top" Width="120" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxSplittingMethod_SelectionChanged" ToolTip="Splitting Method" SelectedIndex="0">
                                 <ComboBoxItem Content="Scene Detect (ffmpeg)" IsSelected="True"/>
                                 <ComboBoxItem Content="PySceneDetect"/>
                                 <ComboBoxItem Content="Equal Chunking"/>
                             </ComboBox>
-                            <Label Content="Threshold:" HorizontalAlignment="Left" Margin="14,42,0,0" VerticalAlignment="Top">
+                            <Label Content="Threshold:" HorizontalAlignment="Left" Margin="616,10,0,0" VerticalAlignment="Top" FontWeight="Bold">
                                 <Label.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -92,7 +84,7 @@
                                     </Style>
                                 </Label.Style>
                             </Label>
-                            <TextBox x:Name="TextBoxSplittingThreshold" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="136,44,0,0" TextWrapping="Wrap" Text="0.3" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="Scene Detect Threshold">
+                            <TextBox x:Name="TextBoxSplittingThreshold" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="690,10,0,0" TextWrapping="Wrap" Text="0.3" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="Scene Detect Threshold">
                                 <TextBox.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -104,7 +96,19 @@
                                     </Style>
                                 </TextBox.Style>
                             </TextBox>
-                            <ComboBox x:Name="ComboBoxSplittingReencodeMethod" HorizontalAlignment="Left" Margin="136,76,0,0" VerticalAlignment="Top" Width="81" Height="28" VerticalContentAlignment="Center">
+                            <CheckBox x:Name="CheckBoxSplittingReencode" Content="Re-Encode:" HorizontalAlignment="Left" Margin="616,17,0,0" VerticalAlignment="Top" IsChecked="True" RenderTransformOrigin="0.439,0.467" FontWeight="Bold">
+                                <CheckBox.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
+                                                <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </CheckBox.Style>
+                            </CheckBox>
+                            <ComboBox x:Name="ComboBoxSplittingReencodeMethod" HorizontalAlignment="Left" Margin="707,10,0,0" VerticalAlignment="Top" Width="81" Height="28" VerticalContentAlignment="Center" RenderTransformOrigin="0.498,0.488">
                                 <ComboBox.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -119,8 +123,8 @@
                                 <ComboBoxItem Content="ffv1"/>
                                 <ComboBoxItem Content="utvideo"/>
                             </ComboBox>
-                            <CheckBox x:Name="CheckBoxSplittingReencode" Content="Re-Encode:" HorizontalAlignment="Left" Margin="14,82,0,0" VerticalAlignment="Top" IsChecked="True">
-                                <CheckBox.Style>
+                            <Label Content="Chunk-Length (sec):" HorizontalAlignment="Left" Margin="793,10,0,0" VerticalAlignment="Top" FontWeight="Bold">
+                                <Label.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed"/>
                                         <Style.Triggers>
@@ -129,46 +133,32 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </CheckBox.Style>
-                            </CheckBox>
+                                </Label.Style>
+                            </Label>
+                            <TextBox x:Name="TextBoxSplittingChunkLength" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="27" Margin="921,10,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                <TextBox.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
+                                                <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Trim Start" HorizontalAlignment="Left" Height="211" Margin="24,168,0,0" VerticalAlignment="Top" Width="311">
-                        <Image x:Name="ImagePreviewTrimStart" Margin="0,0,0,0" Height="180" VerticalAlignment="Top" HorizontalAlignment="Right" Width="300" Stretch="Fill" Source="img\offline.png"/>
+                </Grid>
+            </mah:MetroTabItem>
+            <mah:MetroTabItem Header="Trim">
+                <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                    <GroupBox Header="Trim End" HorizontalAlignment="Left" Height="250" Margin="407,63,0,0" VerticalAlignment="Top" Width="360">
+                        <Image x:Name="ImagePreviewTrimEnd" Margin="0,0,0,-2" HorizontalAlignment="Right" Stretch="Fill" Width="350" Source="img\offline.png"/>
                     </GroupBox>
-                    <GroupBox Header="Trim End" HorizontalAlignment="Left" Height="211" Margin="348,168,0,0" VerticalAlignment="Top" Width="311">
-                        <Image x:Name="ImagePreviewTrimEnd" Margin="0,0,0,0" HorizontalAlignment="Right" Stretch="Fill" Width="300" Source="img\offline.png"/>
-                    </GroupBox>
-                    <TextBox x:Name="TextBoxTrimStart"  HorizontalAlignment="Left" Height="26" Margin="126,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:00:00.000" TextChanged="TextBoxTrimEnd_TextChanged" />
-                    <TextBox x:Name="TextBoxTrimEnd" HorizontalAlignment="Left" Height="26" Margin="453,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:23:00.000" TextChanged="TextBoxTrimEnd_TextChanged"/>
-                    <Button x:Name="ButtonTrimPlus" Content="+" HorizontalAlignment="Left" Margin="226,168,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlus_Click"/>
-                    <Button x:Name="ButtonTrimMinus" Content="-" HorizontalAlignment="Left" Margin="101,168,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinus_Click"/>
-                    <Button x:Name="ButtonTrimPlusEnd" Content="+" HorizontalAlignment="Left" Margin="554,168,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlusEnd_Click" />
-                    <Button x:Name="ButtonTrimMinusEnd" Content="-" HorizontalAlignment="Left" Margin="428,168,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinusEnd_Click"  />
-                    <Label Content="Chunk-Length:" HorizontalAlignment="Left" Margin="57,107,0,0" VerticalAlignment="Top">
-                        <Label.Style>
-                            <Style>
-                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
-                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Label.Style>
-                    </Label>
-                    <TextBox x:Name="TextBoxSplittingChunkLength" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="27" Margin="179,109,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="81" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                        <TextBox.Style>
-                            <Style>
-                                <Setter Property="UIElement.Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="2">
-                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBox.Style>
-                    </TextBox>
+                    <TextBox x:Name="TextBoxTrimEnd" HorizontalAlignment="Left" Height="26" Margin="538,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:23:00.000" TextChanged="TextBoxTrimEnd_TextChanged"/>
+                    <Button x:Name="ButtonTrimPlusEnd" Content="+" HorizontalAlignment="Left" Margin="639,63,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlusEnd_Click" />
+                    <Button x:Name="ButtonTrimMinusEnd" Content="-" HorizontalAlignment="Left" Margin="513,63,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinusEnd_Click"  />
                     <Label Content="(in seconds)" HorizontalAlignment="Left" Margin="265,107,0,0" VerticalAlignment="Top" FontStyle="Italic">
                         <Label.Style>
                             <Style>
@@ -181,8 +171,14 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <Label Content="(Soft Subs not supported)" HorizontalAlignment="Left" Margin="105,137,0,0" VerticalAlignment="Top"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchTrimming" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="56" Margin="24,112,0,0" VerticalAlignment="Top" Width="100"/>
+                    <GroupBox Header="Trim Start" HorizontalAlignment="Left" Height="250" Margin="34,63,0,0" VerticalAlignment="Top" Width="360">
+                        <Image x:Name="ImagePreviewTrimStart" Height="216" VerticalAlignment="Top" HorizontalAlignment="Right" Width="350" Stretch="Fill" Source="img/offline.png" Margin="0,0,0,-1"/>
+                    </GroupBox>
+                    <TextBox x:Name="TextBoxTrimStart"  HorizontalAlignment="Left" Height="26" Margin="165,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:00:00.000" TextChanged="TextBoxTrimEnd_TextChanged" />
+                    <Button x:Name="ButtonTrimPlus" Content="+" HorizontalAlignment="Left" Margin="265,63,0,0" VerticalAlignment="Top" Width="24" Height="26" Click="ButtonTrimPlus_Click"/>
+                    <Button x:Name="ButtonTrimMinus" Content="-" HorizontalAlignment="Left" Margin="139,63,0,0" VerticalAlignment="Top" Width="26" Height="26" Click="ButtonTrimMinus_Click"/>
+                    <Label Content="(Soft Subs not supported)" HorizontalAlignment="Left" Margin="322,37,0,0" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchTrimming" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="56" Margin="34,2,0,0" VerticalAlignment="Top" Width="100"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Filters">
@@ -222,7 +218,7 @@
                             <Label Content="0 = Auto" HorizontalAlignment="Left" Margin="71,67,0,0" VerticalAlignment="Top" FontStyle="Italic" RenderTransformOrigin="0.504,0.51" Width="60"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Rotate" HorizontalAlignment="Left" Height="90" Margin="588,20,0,0" VerticalAlignment="Top" Width="285">
+                    <GroupBox Header="Rotate" HorizontalAlignment="Left" Height="95" Margin="591,128,0,0" VerticalAlignment="Top" Width="285">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterRotate}">
                             <Label Content="Rotate (Clockwise):" HorizontalAlignment="Left" Margin="36,18,0,0" VerticalAlignment="Top" Height="28"/>
                             <ComboBox x:Name="ComboBoxFiltersRotate" HorizontalAlignment="Left" Margin="151,18,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
@@ -233,7 +229,7 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Deinterlace" HorizontalAlignment="Left" Height="98" Margin="588,125,0,0" VerticalAlignment="Top" Width="285">
+                    <GroupBox Header="Deinterlace" HorizontalAlignment="Left" Height="96" Margin="591,20,0,0" VerticalAlignment="Top" Width="285">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterDeinterlace}">
                             <Label Content="Deinterlace (Yadif):" HorizontalAlignment="Left" Margin="39,21,0,0" VerticalAlignment="Top" Height="28"/>
                             <ComboBox x:Name="ComboBoxFiltersDeinterlace" HorizontalAlignment="Left" Margin="152,20,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
@@ -244,8 +240,8 @@
                     </GroupBox>
                     <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="61" Margin="56,-6,0,0" VerticalAlignment="Top" Width="100"/>
                     <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="341,-6,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="643,-6,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="673,99,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="649,102,0,0" VerticalAlignment="Top" Width="159"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="100" Margin="677,-6,0,0" VerticalAlignment="Top" Width="100"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Video">
@@ -274,10 +270,10 @@
                     <GroupBox Header="Quality" Height="190" Margin="10,205,10,0" VerticalAlignment="Top">
                         <Grid>
                             <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="Constant Quality:" HorizontalAlignment="Left" Margin="42,14,0,0" VerticalAlignment="Top" Height="28" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True" Background="{x:Null}"/>
-                            <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" HorizontalAlignment="Left" Margin="60,48,0,0" VerticalAlignment="Top" Width="747" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959" ToolTip="Target Quality"/>
+                            <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Margin="60,48,65,0" VerticalAlignment="Top" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959" ToolTip="Target Quality"/>
                             <Label x:Name="LabelVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Content="{Binding Value, ElementName=SliderVideoQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="172,17,0,0" VerticalAlignment="Top"/>
                             <Label Content="| Lowest Quality" HorizontalAlignment="Left" Margin="58,70,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
-                            <Label Content="Highest Quality |" HorizontalAlignment="Left" Margin="733,70,0,0" VerticalAlignment="Top" FontSize="9" Width="80" Foreground="#FF595959" RenderTransformOrigin="0.93,0.773"/>
+                            <Label Content="Highest Quality |" Margin="0,76,59,0" VerticalAlignment="Top" FontSize="9" Foreground="#FF595959" RenderTransformOrigin="0.93,0.773" HorizontalAlignment="Right" Width="80"/>
                             <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="42,109,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center" Background="{x:Null}" ToolTip="Target Bitrate"/>
                             <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="167,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         </Grid>
@@ -297,8 +293,8 @@
                             <Label Content="Fastest |" HorizontalAlignment="Left" Margin="299,66,-4,0" VerticalAlignment="Top" FontSize="9" Width="80"/>
                         </Grid>
                     </GroupBox>
-                    <Label Content="Advanced Settings:" HorizontalAlignment="Left" Margin="683,10,0,0" VerticalAlignment="Top"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xA;" HorizontalAlignment="Left" Height="73" Margin="804,-34,-61,0" VerticalAlignment="Top" Width="158" RenderTransformOrigin="0.44,0.39"/>
+                    <Label Content="Advanced Settings:" HorizontalAlignment="Left" Margin="815,10,0,0" VerticalAlignment="Top"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xA;" HorizontalAlignment="Left" Height="73" Margin="936,-34,0,0" VerticalAlignment="Top" Width="89" RenderTransformOrigin="0.44,0.39"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Advanced" Visibility="{Binding ElementName=ToggleSwitchAdvancedVideoSettings, Path=IsOn, Converter={StaticResource b2v}}">
@@ -818,14 +814,6 @@
                     <GroupBox x:Name="GroupBox" Header="Track 1" Height="74" Margin="6,34,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}"/>
                     <ComboBox x:Name="ComboBoxTrackOneLanguage" HorizontalAlignment="Left" Margin="736,68,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}">
                         <ComboBoxItem Content="und" IsSelected="True"/>
-                        <ComboBoxItem Content="eng"/>
-                        <ComboBoxItem Content="ger"/>
-                        <ComboBoxItem Content="fra"/>
-                        <ComboBoxItem Content="ita"/>
-                        <ComboBoxItem Content="spa"/>
-                        <ComboBoxItem Content="jpn"/>
-                        <ComboBoxItem Content="chi"/>
-                        <ComboBoxItem Content="kor"/>
                     </ComboBox>
                     <ComboBox x:Name="ComboBoxAudioCodec" HorizontalAlignment="Left" Margin="96,68,0,0" VerticalAlignment="Top" Width="120" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}" SelectionChanged="ComboBoxAudioCodec_SelectionChanged">
                         <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
@@ -911,38 +899,14 @@
                     <Label Content="Language:" HorizontalAlignment="Left" Margin="653,143,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}" />
                     <ComboBox x:Name="ComboBoxTrackTwoLanguage" HorizontalAlignment="Left" Margin="736,145,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}">
                         <ComboBoxItem Content="und" IsSelected="True"/>
-                        <ComboBoxItem Content="eng"/>
-                        <ComboBoxItem Content="ger"/>
-                        <ComboBoxItem Content="fra"/>
-                        <ComboBoxItem Content="ita"/>
-                        <ComboBoxItem Content="spa"/>
-                        <ComboBoxItem Content="jpn"/>
-                        <ComboBoxItem Content="chi"/>
-                        <ComboBoxItem Content="kor"/>
                     </ComboBox>
                     <Label Content="Language:" HorizontalAlignment="Left" Margin="653,221,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}" />
                     <ComboBox x:Name="ComboBoxTrackThreeLanguage" HorizontalAlignment="Left" Margin="736,222,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}">
                         <ComboBoxItem Content="und" IsSelected="True"/>
-                        <ComboBoxItem Content="eng"/>
-                        <ComboBoxItem Content="ger"/>
-                        <ComboBoxItem Content="fra"/>
-                        <ComboBoxItem Content="ita"/>
-                        <ComboBoxItem Content="spa"/>
-                        <ComboBoxItem Content="jpn"/>
-                        <ComboBoxItem Content="chi"/>
-                        <ComboBoxItem Content="kor"/>
                     </ComboBox>
                     <Label Content="Language:" HorizontalAlignment="Left" Margin="653,299,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}" />
                     <ComboBox x:Name="ComboBoxTrackFourLanguage" HorizontalAlignment="Left" Margin="736,301,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}">
                         <ComboBoxItem Content="und" IsSelected="True"/>
-                        <ComboBoxItem Content="eng"/>
-                        <ComboBoxItem Content="ger"/>
-                        <ComboBoxItem Content="fra"/>
-                        <ComboBoxItem Content="ita"/>
-                        <ComboBoxItem Content="spa"/>
-                        <ComboBoxItem Content="jpn"/>
-                        <ComboBoxItem Content="chi"/>
-                        <ComboBoxItem Content="kor"/>
                     </ComboBox>
                     <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackOne" Header="" HorizontalAlignment="Left" Height="53" Margin="61,8,0,0" VerticalAlignment="Top" Width="100" Toggled="ToggleSwitchAudioTrackOne_Toggled"/>
                     <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackTwo" Header="" HorizontalAlignment="Left" Height="54" Margin="61,86,0,0" VerticalAlignment="Top" Width="100" Toggled="ToggleSwitchAudioTrackTwo_Toggled"/>
@@ -1086,27 +1050,27 @@
                     <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="0,0,10,10" Click="ButtonSetTempPath_Click" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="73"/>
                     <Button x:Name="ButtonDeleteTempFiles" Content="Delete Temp Files" HorizontalAlignment="Left" Margin="328,0,0,68" Width="152" Background="{x:Null}" Click="ButtonDeleteTempFiles_Click" Height="38" VerticalAlignment="Bottom" BorderBrush="#FFFD0202"/>
                     <Button x:Name="ButtonOpenLogFolder" Content="Open Log Folder" HorizontalAlignment="Left" Margin="11,0,0,68" Width="157" Background="{x:Null}" Click="ButtonOpenLogFolder_Click" Height="38" VerticalAlignment="Bottom"/>
-                    <GroupBox x:Name="GroubBoxVersion" Header="GroupBox" Height="160" Margin="495,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="396">
+                    <GroupBox x:Name="GroubBoxVersion" Header="GroupBox" Margin="0,10,10,0" Height="171" VerticalAlignment="Top" HorizontalAlignment="Right" Width="390">
                         <Grid>
-                            <Label Content="Theme:" HorizontalAlignment="Right" Margin="0,6,324,0" VerticalAlignment="Top" FontSize="12"/>
-                            <TextBlock Margin="0,12,26,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top"><Hyperlink NavigateUri="https://mahapps.com/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://mahapps.com/"/></Hyperlink></TextBlock>
-                            <Label Content="Icon:" HorizontalAlignment="Right" Margin="0,37,324,0" VerticalAlignment="Top" FontSize="12"/>
-                            <TextBlock Margin="0,42,26,0" FontSize="12" HorizontalAlignment="Right" Width="282" Height="22" VerticalAlignment="Top"><Hyperlink NavigateUri="https://icons8.de/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://icons8.de/"/></Hyperlink></TextBlock>
-                            <Button x:Name="ButtonGithub" Margin="0,69,316,0" Background="{x:Null}" Click="ButtonGithub_Click" HorizontalAlignment="Right" Width="54" Height="50" VerticalAlignment="Top">
+                            <Label Content="Theme:" Margin="5,6,0,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Left" Width="49"/>
+                            <TextBlock Margin="70,12,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="282"><Hyperlink NavigateUri="https://mahapps.com/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://mahapps.com/"/></Hyperlink></TextBlock>
+                            <Label Content="Icon:" Margin="19,37,0,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Left" Width="35"/>
+                            <TextBlock Margin="70,42,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="282"><Hyperlink NavigateUri="https://icons8.de/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://icons8.de/"/></Hyperlink></TextBlock>
+                            <Button x:Name="ButtonGithub" Margin="8,69,0,0" Background="{x:Null}" Click="ButtonGithub_Click" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="54">
                                 <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/github.png"/>
                             </Button>
-                            <Button x:Name="ButtonPayPal" Margin="0,69,200,0" Click="ButtonPayPal_Click" Background="{x:Null}" Height="50" VerticalAlignment="Top" HorizontalAlignment="Right" Width="53" ToolTip="">
+                            <Button x:Name="ButtonPayPal" Margin="125,69,0,0" Click="ButtonPayPal_Click" Background="{x:Null}" Height="50" VerticalAlignment="Top" ToolTip="" HorizontalAlignment="Left" Width="53">
                                 <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/paypal.png" ToolTip="Buy me lemons"/>
                             </Button>
-                            <Button x:Name="ButtonDiscord" HorizontalAlignment="Right" Width="53" Margin="0,69,258,0" Click="ButtonDiscord_Click" Background="{x:Null}" Height="50" VerticalAlignment="Top">
+                            <Button x:Name="ButtonDiscord" Margin="67,69,0,0" Click="ButtonDiscord_Click" Background="{x:Null}" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="53">
                                 <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/discord.png"/>
                             </Button>
-                            <Button x:Name="ButtonUpdater" Content="Updater" Margin="0,69,26,0" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click" HorizontalAlignment="Right" Width="169" Height="50" VerticalAlignment="Top"/>
+                            <Button x:Name="ButtonUpdater" Content="Updater" Margin="183,69,0,0" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="169"/>
 
                         </Grid>
                     </GroupBox>
                     <mah:ToggleSwitch x:Name="ToggleSwitchTempFolder" Header="Custom Temp Path" HorizontalAlignment="Left" Margin="14,0,0,7" VerticalAlignment="Bottom" Toggled="ToggleSwitchTempFolder_Toggled"/>
-                    <GroupBox Header="Theme" HorizontalAlignment="Left" Height="112" Margin="495,175,0,0" VerticalAlignment="Top" Width="396">
+                    <GroupBox Header="Theme" Height="112" Margin="0,175,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="390">
                         <Grid HorizontalAlignment="Left" Height="79" Margin="0,0,0,-2" VerticalAlignment="Top" Width="386">
                             <ComboBox x:Name="ComboBoxAccentTheme" HorizontalAlignment="Left" Margin="89,0,0,41" VerticalAlignment="Bottom" Width="80">
                                 <ComboBoxItem Content="Blue" Foreground="#0767B3" IsSelected="True"/>
