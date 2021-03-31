@@ -2566,8 +2566,8 @@ namespace NotEnoughAV1Encodes
             // Temporary value used for creating the ffmpeg command line
             string previousScene = "00:00:00.000";
 
-            // Argument for seeking until the end of the video
-            FFmpegArgs.Add("-ss " + previousScene);
+            // Clears the Args List to avoid conflicts in Batch Encode Mode
+            FFmpegArgs.Clear();
 
             // Iterates over the list of time codes and creates the args for ffmpeg
             foreach (string sc in scenes)
