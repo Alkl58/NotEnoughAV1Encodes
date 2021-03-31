@@ -59,6 +59,10 @@ namespace NotEnoughAV1Encodes
         public static string trackTwoLanguage;      // Audio Track Two Language
         public static string trackThreeLanguage;    // Audio Track Three Language
         public static string trackFourLanguage;     // Audio Track Four Language
+        public static string trackOneName;          // Audio Track One Name
+        public static string trackTwoName;          // Audio Track Two Name
+        public static string trackThreeName;        // Audio Track Three Name
+        public static string trackFourName;         // Audio Track Four Name
         public static string audioCodecTrackOne;    // Audio Track One Codec
         public static string audioCodecTrackTwo;    // Audio Track Two Codec
         public static string audioCodecTrackThree;  // Audio Track Three Codec
@@ -1353,6 +1357,19 @@ namespace NotEnoughAV1Encodes
             audioCodecTrackTwo = ComboBoxAudioCodecTrackTwo.Text;
             audioCodecTrackThree = ComboBoxAudioCodecTrackThree.Text;
             audioCodecTrackFour = ComboBoxAudioCodecTrackFour.Text;
+            // Sets Audio Track Name
+            if (CheckBoxTrackOneTrackName.IsChecked == true) { trackOneName = TextBoxAudioTrackOneName.Text; }
+            else if (audioCodecTrackOne != "Copy Audio") { trackOneName = "[" + trackOneLanguage.ToUpper() + "] " + audioCodecTrackOne + " " + TextBoxAudioBitrate.Text + "kbps"; }
+            else { trackOneName = ""; }
+            if (CheckBoxTrackTwoTrackName.IsChecked == true) { trackTwoName = TextBoxAudioTrackTwoName.Text; }
+            else if (audioCodecTrackTwo != "Copy Audio") { trackTwoName = "[" + trackTwoLanguage.ToUpper() + "] " + audioCodecTrackTwo + " " + TextBoxAudioBitrateTrackTwo.Text + "kbps"; }
+            else { trackTwoName = ""; }
+            if (CheckBoxTrackThreeTrackName.IsChecked == true) { trackThreeName = TextBoxAudioTrackThreeName.Text; }
+            else if (audioCodecTrackThree != "Copy Audio") { trackThreeName = "[" + trackThreeLanguage.ToUpper() + "] " + audioCodecTrackThree + " " + TextBoxAudioBitrateTrackThree.Text + "kbps"; }
+            else { trackThreeName = ""; }
+            if (CheckBoxTrackFourTrackName.IsChecked == true) { trackFourName = TextBoxAudioTrackFourName.Text; }
+            else if (audioCodecTrackFour != "Copy Audio") { trackFourName = "[" + trackFourLanguage.ToUpper() + "] " + audioCodecTrackFour + " " + TextBoxAudioBitrateTrackFour.Text + "kbps"; }
+            else { trackFourName = ""; }
             // Sets Audio Channels
             switch (ComboBoxTrackOneChannels.SelectedIndex)
             {
@@ -3032,7 +3049,7 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("SubTwoLanguage",             ComboBoxSubTrackTwoLanguage.SelectedIndex.ToString());          // Subtitle Track Two Language
                 writer.WriteElementString("SubThreeLanguage",           ComboBoxSubTrackThreeLanguage.SelectedIndex.ToString());        // Subtitle Track Three Language
                 writer.WriteElementString("SubFourLanguage",            ComboBoxSubTrackFourLanguage.SelectedIndex.ToString());         // Subtitle Track Four Language
-                writer.WriteElementString("SubFiveLanguage",           ComboBoxSubTrackFiveLanguage.SelectedIndex.ToString());          // Subtitle Track Five Language
+                writer.WriteElementString("SubFiveLanguage",            ComboBoxSubTrackFiveLanguage.SelectedIndex.ToString());         // Subtitle Track Five Language
                 // Audio (for resume mode)
                 writer.WriteElementString("AudioLangOne",               ComboBoxTrackOneLanguage.SelectedIndex.ToString());             // Audio Track One Language
                 writer.WriteElementString("AudioLangTwo",               ComboBoxTrackTwoLanguage.SelectedIndex.ToString());             // Audio Track Two Language
@@ -3040,10 +3057,18 @@ namespace NotEnoughAV1Encodes
                 writer.WriteElementString("AudioLangFour",              ComboBoxTrackFourLanguage.SelectedIndex.ToString());            // Audio Track Four Language
             }
             // ═══════════════════════════════════════════════════════════════════ Audio ══════════════════════════════════════════════════════════════════
-            writer.WriteElementString("AudioTrackOne",                  ToggleSwitchAudioTrackOne.IsOn.ToString());                    // Audio Track One Active
-            writer.WriteElementString("AudioTrackTwo",                  ToggleSwitchAudioTrackTwo.IsOn.ToString());                    // Audio Track Two Active
-            writer.WriteElementString("AudioTrackThree",                ToggleSwitchAudioTrackThree.IsOn.ToString());                  // Audio Track Three Active
-            writer.WriteElementString("AudioTrackFour",                 ToggleSwitchAudioTrackFour.IsOn.ToString());                   // Audio Track Four Active
+            writer.WriteElementString("AudioTrackOne",                  ToggleSwitchAudioTrackOne.IsOn.ToString());                     // Audio Track One Active
+            writer.WriteElementString("AudioTrackTwo",                  ToggleSwitchAudioTrackTwo.IsOn.ToString());                     // Audio Track Two Active
+            writer.WriteElementString("AudioTrackThree",                ToggleSwitchAudioTrackThree.IsOn.ToString());                   // Audio Track Three Active
+            writer.WriteElementString("AudioTrackFour",                 ToggleSwitchAudioTrackFour.IsOn.ToString());                    // Audio Track Four Active
+            writer.WriteElementString("AudioTrackOneName",              TextBoxAudioTrackOneName.Text);                                 // Audio Track One Name
+            writer.WriteElementString("AudioTrackTwoName",              TextBoxAudioTrackTwoName.Text);                                 // Audio Track Two Name
+            writer.WriteElementString("AudioTrackThreeName",            TextBoxAudioTrackThreeName.Text);                               // Audio Track Three Name
+            writer.WriteElementString("AudioTrackFourName",             TextBoxAudioTrackFourName.Text);                                // Audio Track Four Name
+            writer.WriteElementString("AudioTrackOneNameActive",        CheckBoxTrackOneTrackName.IsChecked.ToString());                // Audio Track One Name Active
+            writer.WriteElementString("AudioTrackTwoNameActive",        CheckBoxTrackTwoTrackName.IsChecked.ToString());                // Audio Track Two Name Active
+            writer.WriteElementString("AudioTrackThreeNameActive",      CheckBoxTrackThreeTrackName.IsChecked.ToString());              // Audio Track Three Name Active
+            writer.WriteElementString("AudioTrackFourNameActive",       CheckBoxTrackFourTrackName.IsChecked.ToString());               // Audio Track Four Name Active
             writer.WriteElementString("TrackOneCodec",                  ComboBoxAudioCodec.SelectedIndex.ToString());                   // Audio Track One Codec
             writer.WriteElementString("TrackTwoCodec",                  ComboBoxAudioCodecTrackTwo.SelectedIndex.ToString());           // Audio Track Two Codec
             writer.WriteElementString("TrackThreeCodec",                ComboBoxAudioCodecTrackThree.SelectedIndex.ToString());         // Audio Track Three Codec
@@ -3278,6 +3303,14 @@ namespace NotEnoughAV1Encodes
                     case "AudioTrackTwo":                   ToggleSwitchAudioTrackTwo.IsOn = n.InnerText == "True";                 break;  // Audio Track Two Active
                     case "AudioTrackThree":                 ToggleSwitchAudioTrackThree.IsOn = n.InnerText == "True";               break;  // Audio Track Three Active
                     case "AudioTrackFour":                  ToggleSwitchAudioTrackFour.IsOn = n.InnerText == "True";                break;  // Audio Track Four Active
+                    case "AudioTrackOneName":               TextBoxAudioTrackOneName.Text = n.InnerText;                            break;  // Audio Track One Name
+                    case "AudioTrackTwoName":               TextBoxAudioTrackTwoName.Text = n.InnerText;                            break;  // Audio Track Two Name
+                    case "AudioTrackThreeName":             TextBoxAudioTrackThreeName.Text = n.InnerText;                          break;  // Audio Track Three Name
+                    case "AudioTrackFourName":              TextBoxAudioTrackFourName.Text = n.InnerText;                           break;  // Audio Track Four Name
+                    case "AudioTrackOneNameActive":         CheckBoxTrackOneTrackName.IsChecked = n.InnerText == "True";            break;  // Audio Track One Name Active
+                    case "AudioTrackTwoNameActive":         CheckBoxTrackTwoTrackName.IsChecked = n.InnerText == "True";            break;  // Audio Track Two Name Active
+                    case "AudioTrackThreeNameActive":       CheckBoxTrackThreeTrackName.IsChecked = n.InnerText == "True";          break;  // Audio Track Three Name Active
+                    case "AudioTrackFourNameActive":        CheckBoxTrackFourTrackName.IsChecked = n.InnerText == "True";           break;  // Audio Track Four Name Active
                     case "AudioLangOne":                    ComboBoxTrackOneLanguage.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track One Language
                     case "AudioLangTwo":                    ComboBoxTrackTwoLanguage.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track Two Language
                     case "AudioLangThree":                  ComboBoxTrackThreeLanguage.SelectedIndex = int.Parse(n.InnerText);      break;  // Audio Track Three Language

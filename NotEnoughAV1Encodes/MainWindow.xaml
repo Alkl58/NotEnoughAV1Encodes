@@ -834,6 +834,8 @@
                             <ComboBox x:Name="ComboBoxTrackFourLanguage" HorizontalAlignment="Left" Margin="643,8,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
+                            <CheckBox x:Name="CheckBoxTrackFourTrackName" Content="Track Name:" HorizontalAlignment="Left" Margin="753,12,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TextBoxAudioTrackFourName" IsEnabled="{Binding IsChecked, ElementName=CheckBoxTrackFourTrackName}" Margin="0,8,10,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="152" Height="24" VerticalAlignment="Top" Text="[UND] Opus 2.0 128kbps"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="GroupBox2" Header="Track 3" Height="74" Margin="6,176,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}">
@@ -862,6 +864,8 @@
                             <ComboBox x:Name="ComboBoxTrackThreeLanguage" HorizontalAlignment="Left" Margin="643,9,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
+                            <CheckBox x:Name="CheckBoxTrackThreeTrackName" Content="Track Name:" HorizontalAlignment="Left" Margin="752,13,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TextBoxAudioTrackThreeName" IsEnabled="{Binding IsChecked, ElementName=CheckBoxTrackThreeTrackName}" Margin="0,8,10,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="153" Height="24" VerticalAlignment="Top" Text="[UND] Opus 2.0 128kbps"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="GroupBox1" Header="Track 2" Height="74" Margin="6,97,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}">
@@ -890,6 +894,8 @@
                             <ComboBox x:Name="ComboBoxTrackTwoLanguage" HorizontalAlignment="Left" Margin="643,8,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
+                            <CheckBox x:Name="CheckBoxTrackTwoTrackName" Content="Track Name:" HorizontalAlignment="Left" Margin="754,12,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TextBoxAudioTrackTwoName" IsEnabled="{Binding IsChecked, ElementName=CheckBoxTrackTwoTrackName}" Margin="0,8,10,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="151" Height="24" VerticalAlignment="Top" Text="[UND] Opus 2.0 128kbps"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="GroupBox" Header="Track 1" Height="74" Margin="6,18,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}">
@@ -918,6 +924,8 @@
                             <ComboBox x:Name="ComboBoxTrackOneLanguage" HorizontalAlignment="Left" Margin="643,11,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
+                            <CheckBox x:Name="CheckBoxTrackOneTrackName" Content="Track Name:" HorizontalAlignment="Left" Margin="753,15,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="TextBoxAudioTrackOneName" IsEnabled="{Binding IsChecked, ElementName=CheckBoxTrackOneTrackName}" Margin="0,11,10,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="152" Height="24" VerticalAlignment="Top" Text="[UND] Opus 2.0 128kbps"/>
                         </Grid>
                     </GroupBox>
                     <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackOne" Header="" HorizontalAlignment="Left" Height="53" Margin="62,-8,0,0" VerticalAlignment="Top" Width="100" Toggled="ToggleSwitchAudioTrackOne_Toggled"/>

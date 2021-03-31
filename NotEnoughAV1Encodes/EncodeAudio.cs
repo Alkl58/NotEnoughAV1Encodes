@@ -29,19 +29,19 @@ namespace NotEnoughAV1Encodes
                 {
                     if (MainWindow.trackOne == true)
                     {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackOne, "0", MainWindow.audioCodecTrackOne, MainWindow.audioChannelsTrackOne, MainWindow.trackOneLanguage);
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackOne, "0", MainWindow.audioCodecTrackOne, MainWindow.audioChannelsTrackOne, MainWindow.trackOneLanguage, MainWindow.trackOneName);
                     }
                     if (MainWindow.trackTwo == true)
                     {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackTwo, "1", MainWindow.audioCodecTrackTwo, MainWindow.audioChannelsTrackTwo, MainWindow.trackTwoLanguage);
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackTwo, "1", MainWindow.audioCodecTrackTwo, MainWindow.audioChannelsTrackTwo, MainWindow.trackTwoLanguage, MainWindow.trackTwoName);
                     }
                     if (MainWindow.trackThree == true)
                     {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackThree, "2", MainWindow.audioCodecTrackThree, MainWindow.audioChannelsTrackThree, MainWindow.trackThreeLanguage);
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackThree, "2", MainWindow.audioCodecTrackThree, MainWindow.audioChannelsTrackThree, MainWindow.trackThreeLanguage, MainWindow.trackThreeName);
                     }
                     if (MainWindow.trackFour == true)
                     {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackFour, "3", MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour, MainWindow.trackFourLanguage);
+                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackFour, "3", MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour, MainWindow.trackFourLanguage, MainWindow.trackFourName);
                     }
                     if (MainWindow.audioCodecTrackOne != "Copy Audio" && MainWindow.audioCodecTrackTwo != "Copy Audio" && MainWindow.audioCodecTrackThree != "Copy Audio" && MainWindow.audioCodecTrackFour != "Copy Audio")
                     {
@@ -83,15 +83,10 @@ namespace NotEnoughAV1Encodes
             audioCodecCommand += " -ac " + channellayout;
             // Sets Language Metadata
             audioCodecCommand += " -metadata:s:a:0 language=" + MainWindow.trackOneLanguage;
-            if (activtrackcodec != "Copy Audio")
-            {
-                // Sets Track Name e.g. "[GER] Opus 128kbps"
-                audioCodecCommand += " -metadata:s:a:0 title=" + '\u0022' + "[" + MainWindow.trackOneLanguage.ToUpper() + "] " + activtrackcodec + " " + activetrackbitrate + "kbps" + '\u0022' + " ";
-            }
-
+            audioCodecCommand += " -metadata:s:a:0 title=" + '\u0022' + MainWindow.trackOneName + '\u0022' + " ";
             return audioCodecCommand;
         }
-        private static string MultipleTrackCommandGenerator(int activetrackbitrate, string activetrackindex, string activtrackcodec, int channellayout, string lang)
+        private static string MultipleTrackCommandGenerator(int activetrackbitrate, string activetrackindex, string activtrackcodec, int channellayout, string lang, string track_name)
         {
             // String Command Builder for multiple Audio Tracks
             // Audio Mapping
@@ -105,7 +100,7 @@ namespace NotEnoughAV1Encodes
             audioCodecCommand += " -metadata:s:a:" + activetrackindex + " language=" + lang;
             if (activtrackcodec != "Copy Audio")
             {
-                audioCodecCommand += " -metadata:s:a:" + activetrackindex + " title=" + '\u0022' + "[" + lang.ToUpper() + "] " + activtrackcodec + " " + activetrackbitrate + "kbps" + '\u0022' + " ";
+                audioCodecCommand += " -metadata:s:a:" + activetrackindex + " title=" + '\u0022' + track_name + '\u0022' + " ";
             }
             return audioCodecCommand;
         }
