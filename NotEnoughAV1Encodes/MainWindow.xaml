@@ -939,110 +939,70 @@
                     <GroupBox Header="Track 1" Height="70" Margin="3,12,10,0" VerticalAlignment="Top">
                         <Grid Height="47" VerticalAlignment="Bottom">
                             <Button x:Name="ButtonSubtitleTrackOne" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}"  Content="Select" HorizontalAlignment="Left" Margin="5,15,0,7" Width="53" Click="ButtonSubtitleTrackOne_Click"/>
-                            <TextBox x:Name="TextBoxSubtitleTrackOne" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Margin="63,12,462,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
-                            <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Margin="0,14,382,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="75" />
-                            <TextBox x:Name="TextBoxSubOneName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Margin="0,16,270,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
-                            <CheckBox x:Name="CheckBoxSubOneBurn"  IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Content="Burn in" Margin="0,0,201,7" Checked="CheckBoxSubOneBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
-                            <CheckBox x:Name="CheckBoxSubOneDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Content="Default" Margin="0,0,137,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubOneDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
-                            <Label Content="Language:"  Margin="0,17,68,4" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="64" />
-                            <ComboBox x:Name="ComboBoxSubTrackOneLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" HorizontalAlignment="Right" Width="58" Height="26" VerticalAlignment="Top">
+                            <TextBox x:Name="TextBoxSubtitleTrackOne" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Margin="63,12,501,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                            <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Margin="0,14,420,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="75" />
+                            <TextBox x:Name="TextBoxSubOneName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Margin="0,16,308,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="CheckBoxSubOneBurn"  IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Content="Burn in" Margin="0,0,239,7" Checked="CheckBoxSubOneBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
+                            <CheckBox x:Name="CheckBoxSubOneDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Content="Default" Margin="0,0,172,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubOneDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
+                            <Label Content="Language:"  Margin="0,17,105,4" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="64" />
+                            <ComboBox x:Name="ComboBoxSubTrackOneLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" HorizontalAlignment="Right" Width="90" Height="26" VerticalAlignment="Top">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
-                                <ComboBoxItem Content="eng"/>
-                                <ComboBoxItem Content="ger"/>
-                                <ComboBoxItem Content="fra"/>
-                                <ComboBoxItem Content="ita"/>
-                                <ComboBoxItem Content="spa"/>
-                                <ComboBoxItem Content="jpn"/>
-                                <ComboBoxItem Content="chi"/>
-                                <ComboBoxItem Content="kor"/>
                             </ComboBox>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Track 2" Height="70" Margin="3,85,10,0" VerticalAlignment="Top">
                         <Grid Height="47" VerticalAlignment="Bottom">
                             <Button x:Name="ButtonSubtitleTrackTwo" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Content="Select" HorizontalAlignment="Left" Margin="5,15,0,7" Width="53" Click="ButtonSubtitleTrackTwo_Click"/>
-                            <TextBox x:Name="TextBoxSubtitleTrackTwo" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="63,12,462,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
-                            <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="0,14,382,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="75" />
-                            <TextBox x:Name="TextBoxSubTwoName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="0,16,270,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
-                            <CheckBox x:Name="CheckBoxSubTwoBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Content="Burn in" Margin="0,0,201,7" Checked="CheckBoxSubTwoBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
-                            <CheckBox x:Name="CheckBoxSubTwoDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Content="Default" Margin="0,0,137,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubTwoDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
-                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="0,17,68,4" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
-                            <ComboBox x:Name="ComboBoxSubTrackTwoLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" HorizontalAlignment="Right" Width="58" Height="26" VerticalAlignment="Top">
+                            <TextBox x:Name="TextBoxSubtitleTrackTwo" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="63,12,501,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                            <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="0,14,420,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="75" />
+                            <TextBox x:Name="TextBoxSubTwoName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="0,16,308,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="CheckBoxSubTwoBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Content="Burn in" Margin="0,0,239,7" Checked="CheckBoxSubTwoBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
+                            <CheckBox x:Name="CheckBoxSubTwoDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Content="Default" Margin="0,0,172,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubTwoDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
+                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
+                            <ComboBox x:Name="ComboBoxSubTrackTwoLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" HorizontalAlignment="Right" Width="90" Height="26" VerticalAlignment="Top">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
-                                <ComboBoxItem Content="eng"/>
-                                <ComboBoxItem Content="ger"/>
-                                <ComboBoxItem Content="fra"/>
-                                <ComboBoxItem Content="ita"/>
-                                <ComboBoxItem Content="spa"/>
-                                <ComboBoxItem Content="jpn"/>
-                                <ComboBoxItem Content="chi"/>
-                                <ComboBoxItem Content="kor"/>
                             </ComboBox>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Track 3" Height="70" Margin="3,158,10,0" VerticalAlignment="Top">
                         <Grid Height="47" VerticalAlignment="Bottom">
                             <Button x:Name="ButtonSubtitleTrackThree" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Content="Select" HorizontalAlignment="Left" Margin="5,15,0,7" Width="53" Click="ButtonSubtitleTrackThree_Click"/>
-                            <TextBox x:Name="TextBoxSubtitleTrackThree" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Margin="63,12,462,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
-                            <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Margin="0,14,382,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="76" />
-                            <TextBox x:Name="TextBoxSubThreeName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}"  Margin="0,16,270,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
-                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Margin="0,17,68,4" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
-                            <ComboBox x:Name="ComboBoxSubTrackThreeLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" HorizontalAlignment="Right" Width="58" Height="26" VerticalAlignment="Top">
+                            <TextBox x:Name="TextBoxSubtitleTrackThree" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Margin="63,12,501,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                            <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Margin="0,14,420,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="76" />
+                            <TextBox x:Name="TextBoxSubThreeName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}"  Margin="0,16,308,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
+                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
+                            <ComboBox x:Name="ComboBoxSubTrackThreeLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" HorizontalAlignment="Right" Width="90" Height="26" VerticalAlignment="Top">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
-                                <ComboBoxItem Content="eng"/>
-                                <ComboBoxItem Content="ger"/>
-                                <ComboBoxItem Content="fra"/>
-                                <ComboBoxItem Content="ita"/>
-                                <ComboBoxItem Content="spa"/>
-                                <ComboBoxItem Content="jpn"/>
-                                <ComboBoxItem Content="chi"/>
-                                <ComboBoxItem Content="kor"/>
                             </ComboBox>
-                            <CheckBox x:Name="CheckBoxSubThreeBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Content="Burn in" Margin="0,0,201,7" Checked="CheckBoxSubThreeBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
-                            <CheckBox x:Name="CheckBoxSubThreeDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Content="Default" Margin="0,0,137,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubThreeDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
+                            <CheckBox x:Name="CheckBoxSubThreeBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Content="Burn in" Margin="0,0,239,7" Checked="CheckBoxSubThreeBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
+                            <CheckBox x:Name="CheckBoxSubThreeDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Content="Default" Margin="0,0,172,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubThreeDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Track 4" Height="70" Margin="3,231,10,0" VerticalAlignment="Top">
                         <Grid Height="47" VerticalAlignment="Bottom">
                             <Button x:Name="ButtonSubtitleTrackFour" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Content="Select" HorizontalAlignment="Left" Margin="5,15,0,7" Width="53" Click="ButtonSubtitleTrackFour_Click"/>
-                            <TextBox x:Name="TextBoxSubtitleTrackFour" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="63,12,462,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
-                            <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="0,14,382,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="75" />
-                            <TextBox x:Name="TextBoxSubFourName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="0,16,270,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
-                            <CheckBox x:Name="CheckBoxSubFourDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Content="Default" Margin="0,0,137,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubFourDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
-                            <CheckBox x:Name="CheckBoxSubFourBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Content="Burn in" Margin="0,0,201,7" Checked="CheckBoxSubFourBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
-                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="0,17,68,4" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
-                            <ComboBox x:Name="ComboBoxSubTrackFourLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" HorizontalAlignment="Right" Width="58" Height="26" VerticalAlignment="Top">
+                            <TextBox x:Name="TextBoxSubtitleTrackFour" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="63,12,501,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                            <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="0,14,420,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="75" />
+                            <TextBox x:Name="TextBoxSubFourName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="0,16,308,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="CheckBoxSubFourDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Content="Default" Margin="0,0,172,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubFourDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
+                            <CheckBox x:Name="CheckBoxSubFourBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Content="Burn in" Margin="0,0,239,7" Checked="CheckBoxSubFourBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
+                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
+                            <ComboBox x:Name="ComboBoxSubTrackFourLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" HorizontalAlignment="Right" Width="90" Height="26" VerticalAlignment="Top">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
-                                <ComboBoxItem Content="eng"/>
-                                <ComboBoxItem Content="ger"/>
-                                <ComboBoxItem Content="fra"/>
-                                <ComboBoxItem Content="ita"/>
-                                <ComboBoxItem Content="spa"/>
-                                <ComboBoxItem Content="jpn"/>
-                                <ComboBoxItem Content="chi"/>
-                                <ComboBoxItem Content="kor"/>
                             </ComboBox>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Track 5" Height="70" Margin="3,303,10,0" VerticalAlignment="Top">
                         <Grid Height="47" VerticalAlignment="Bottom">
                             <Button x:Name="ButtonSubtitleTrackFive" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Content="Select" HorizontalAlignment="Left" Margin="5,15,0,7" Width="53" Click="ButtonSubtitleTrackFive_Click"/>
-                            <TextBox x:Name="TextBoxSubtitleTrackFive" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="63,12,462,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
-                            <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="0,14,382,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="75" />
-                            <TextBox x:Name="TextBoxSubFiveName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="0,16,270,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
-                            <CheckBox x:Name="CheckBoxSubFiveBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Content="Burn in" Margin="0,0,201,7" Checked="CheckBoxSubFiveBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
-                            <CheckBox x:Name="CheckBoxSubFiveDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Content="Default" Margin="0,0,137,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubFiveDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
-                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="0,17,68,4" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
-                            <ComboBox x:Name="ComboBoxSubTrackFiveLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" HorizontalAlignment="Right" Width="58" Height="26" VerticalAlignment="Top">
+                            <TextBox x:Name="TextBoxSubtitleTrackFive" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="63,12,501,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                            <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="0,14,420,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="75" />
+                            <TextBox x:Name="TextBoxSubFiveName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="0,16,308,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="CheckBoxSubFiveBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Content="Burn in" Margin="0,0,239,7" Checked="CheckBoxSubFiveBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
+                            <CheckBox x:Name="CheckBoxSubFiveDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Content="Default" Margin="0,0,172,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubFiveDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
+                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
+                            <ComboBox x:Name="ComboBoxSubTrackFiveLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" HorizontalAlignment="Right" Width="90" Height="26" VerticalAlignment="Top">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
-                                <ComboBoxItem Content="eng"/>
-                                <ComboBoxItem Content="ger"/>
-                                <ComboBoxItem Content="fra"/>
-                                <ComboBoxItem Content="ita"/>
-                                <ComboBoxItem Content="spa"/>
-                                <ComboBoxItem Content="jpn"/>
-                                <ComboBoxItem Content="chi"/>
-                                <ComboBoxItem Content="kor"/>
                             </ComboBox>
                         </Grid>
                     </GroupBox>

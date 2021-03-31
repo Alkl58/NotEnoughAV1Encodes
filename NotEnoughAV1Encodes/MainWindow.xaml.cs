@@ -143,6 +143,7 @@ namespace NotEnoughAV1Encodes
 
         private void FillLanguagesStartup()
         {
+            // Languages in ISO 639-2 Format: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
             audio_languages.Add("English",     "eng");
             audio_languages.Add("Bosnian",     "bos");
             audio_languages.Add("Bulgarian",   "bul");
@@ -187,6 +188,11 @@ namespace NotEnoughAV1Encodes
                 ComboBoxTrackTwoLanguage.Items.Add(lang);
                 ComboBoxTrackThreeLanguage.Items.Add(lang);
                 ComboBoxTrackFourLanguage.Items.Add(lang);
+                ComboBoxSubTrackOneLanguage.Items.Add(lang);
+                ComboBoxSubTrackTwoLanguage.Items.Add(lang);
+                ComboBoxSubTrackThreeLanguage.Items.Add(lang);
+                ComboBoxSubTrackFourLanguage.Items.Add(lang);
+                ComboBoxSubTrackFiveLanguage.Items.Add(lang);
             }
             audio_languages.Add("und", "und");
         }
@@ -1648,7 +1654,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    subCommand += SoftSubCMDGenerator(ComboBoxSubTrackOneLanguage.Text, TextBoxSubOneName.Text, TextBoxSubtitleTrackOne.Text, CheckBoxSubOneDefault.IsChecked == true);
+                    subCommand += SoftSubCMDGenerator(audio_languages[ComboBoxSubTrackOneLanguage.Text], TextBoxSubOneName.Text, TextBoxSubtitleTrackOne.Text, CheckBoxSubOneDefault.IsChecked == true);
                 }
                 else { HardSubCMDGenerator(TextBoxSubtitleTrackOne.Text); }
             }
@@ -1660,7 +1666,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    subCommand += SoftSubCMDGenerator(ComboBoxSubTrackTwoLanguage.Text, TextBoxSubTwoName.Text, TextBoxSubtitleTrackTwo.Text, CheckBoxSubTwoDefault.IsChecked == true);
+                    subCommand += SoftSubCMDGenerator(audio_languages[ComboBoxSubTrackTwoLanguage.Text], TextBoxSubTwoName.Text, TextBoxSubtitleTrackTwo.Text, CheckBoxSubTwoDefault.IsChecked == true);
                 }
                 else { HardSubCMDGenerator(TextBoxSubtitleTrackTwo.Text); }
             }
@@ -1672,7 +1678,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    subCommand += SoftSubCMDGenerator(ComboBoxSubTrackThreeLanguage.Text, TextBoxSubThreeName.Text, TextBoxSubtitleTrackThree.Text, CheckBoxSubThreeDefault.IsChecked == true);
+                    subCommand += SoftSubCMDGenerator(audio_languages[ComboBoxSubTrackThreeLanguage.Text], TextBoxSubThreeName.Text, TextBoxSubtitleTrackThree.Text, CheckBoxSubThreeDefault.IsChecked == true);
                 }
                 else { HardSubCMDGenerator(TextBoxSubtitleTrackThree.Text); }
             }
@@ -1684,7 +1690,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    subCommand += SoftSubCMDGenerator(ComboBoxSubTrackFourLanguage.Text, TextBoxSubFourName.Text, TextBoxSubtitleTrackFour.Text, CheckBoxSubFourDefault.IsChecked == true);
+                    subCommand += SoftSubCMDGenerator(audio_languages[ComboBoxSubTrackFourLanguage.Text], TextBoxSubFourName.Text, TextBoxSubtitleTrackFour.Text, CheckBoxSubFourDefault.IsChecked == true);
                 }
                 else { HardSubCMDGenerator(TextBoxSubtitleTrackFour.Text); }
                 
@@ -1697,7 +1703,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    subCommand += SoftSubCMDGenerator(ComboBoxSubTrackFiveLanguage.Text, TextBoxSubFiveName.Text, TextBoxSubtitleTrackFive.Text, CheckBoxSubFiveDefault.IsChecked == true);
+                    subCommand += SoftSubCMDGenerator(audio_languages[ComboBoxSubTrackFiveLanguage.Text], TextBoxSubFiveName.Text, TextBoxSubtitleTrackFive.Text, CheckBoxSubFiveDefault.IsChecked == true);
                 }
                 else { HardSubCMDGenerator(TextBoxSubtitleTrackFive.Text); }
             }
@@ -1849,23 +1855,8 @@ namespace NotEnoughAV1Encodes
                         tempName = Path.Combine(TempPath, TempPathFileName, "Subtitles", "pgs_dvd_" + b + ".sup");
                     }
 
-                    string resultcropped = line.Substring(line.LastIndexOf(',') + 1).Substring(0, 3);
-                    int indexLang;
-                    switch (resultcropped)
-                    {
-                        case "eng": indexLang = 1; break;
-                        case "deu": indexLang = 2; break;
-                        case "ger": indexLang = 2; break;
-                        case "fre": indexLang = 3; break;
-                        case "ita": indexLang = 4; break;
-                        case "spa": indexLang = 5; break;
-                        case "jpn": indexLang = 6; break;
-                        case "chi": indexLang = 7; break;
-                        case "kor": indexLang = 8; break;
-                        default: indexLang = 0; break;
-                    }
 
-                    //Sets the TextBoxes
+                    //Sets the ToggleSwitches
                     if (Path.GetExtension(VideoOutput) != ".mp4")
                     {
                         if (b == 0) { ToggleSwitchSubtitleActivatedOne.IsOn = true; }
@@ -1874,11 +1865,27 @@ namespace NotEnoughAV1Encodes
                         if (b == 3) { ToggleSwitchSubtitleActivatedFour.IsOn = true; }
                         if (b == 4) { ToggleSwitchSubtitleActivatedFive.IsOn = true; }
                     }
-                    if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; ComboBoxSubTrackOneLanguage.SelectedIndex = indexLang; }
-                    if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; ComboBoxSubTrackTwoLanguage.SelectedIndex = indexLang; }
-                    if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; ComboBoxSubTrackThreeLanguage.SelectedIndex = indexLang; }
-                    if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; ComboBoxSubTrackFourLanguage.SelectedIndex = indexLang; }
-                    if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; ComboBoxSubTrackFiveLanguage.SelectedIndex = indexLang; }
+
+
+                    try
+                    {
+                        string resultcropped = line.Substring(line.LastIndexOf(',') + 1).Substring(0, 3);
+                        var myKey = audio_languages.FirstOrDefault(x => x.Value == resultcropped).Key;
+                        if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; ComboBoxSubTrackOneLanguage.SelectedItem = myKey; }
+                        if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; ComboBoxSubTrackTwoLanguage.SelectedItem = myKey; }
+                        if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; ComboBoxSubTrackThreeLanguage.SelectedItem = myKey; }
+                        if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; ComboBoxSubTrackFourLanguage.SelectedItem = myKey; }
+                        if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; ComboBoxSubTrackFiveLanguage.SelectedItem = myKey; }
+                    }
+                    catch 
+                    {
+                        var myKey = "und"; // undefined
+                        if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; ComboBoxSubTrackOneLanguage.SelectedItem = myKey; }
+                        if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; ComboBoxSubTrackTwoLanguage.SelectedItem = myKey; }
+                        if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; ComboBoxSubTrackThreeLanguage.SelectedItem = myKey; }
+                        if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; ComboBoxSubTrackFourLanguage.SelectedItem = myKey; }
+                        if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; ComboBoxSubTrackFiveLanguage.SelectedItem = myKey; }
+                    }
                     b++;
                 }
                 a++;
