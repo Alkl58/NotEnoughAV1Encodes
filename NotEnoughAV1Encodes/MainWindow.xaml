@@ -1090,11 +1090,14 @@
                     <GroupBox Header="Batch Settings" HorizontalAlignment="Left" Height="112" Margin="10,175,0,0" VerticalAlignment="Top" Width="470">
                         <Grid HorizontalAlignment="Left" Height="76" VerticalAlignment="Top" Width="460">
                             <Label Content="Container:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="111" FontSize="14"/>
-                            <ComboBox x:Name="ComboBoxContainerBatchEncoding" HorizontalAlignment="Left" Margin="104,12,0,0" VerticalAlignment="Top" Width="90" ToolTip="Output Container used in Batch Mode" SelectionChanged="ToggleSwitchShutdownAfterEncode_Toggled" Height="27">
+                            <ComboBox x:Name="ComboBoxContainerBatchEncoding" HorizontalAlignment="Left" Margin="165,12,0,0" VerticalAlignment="Top" Width="90" ToolTip="Output Container used in Batch Mode" SelectionChanged="ToggleSwitchShutdownAfterEncode_Toggled" Height="27">
                                 <ComboBoxItem Content=".mkv" IsSelected="True"/>
                                 <ComboBoxItem Content=".mp4"/>
                                 <ComboBoxItem Content=".webm"/>
                             </ComboBox>
+                            <ComboBox x:Name="ComboBoxBatchSettings" HorizontalAlignment="Left" Margin="165,46,0,0" VerticalAlignment="Top" Width="120">
+                            </ComboBox>
+                            <CheckBox x:Name="CheckBoxBatchWithDifferentPresets" Content="Encode with Presets:" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" FontSize="14" ToolTip="Encodes each batch file with the selected presets."/>
                         </Grid>
                     </GroupBox>
                 </Grid>

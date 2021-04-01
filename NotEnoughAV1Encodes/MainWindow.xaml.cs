@@ -603,6 +603,16 @@ namespace NotEnoughAV1Encodes
                     FileInfo[] Files = profiles.GetFiles("*.xml");
                     // Sets the ComboBox with the FileInfo Array
                     ComboBoxPresets.ItemsSource = Files;
+                    // Fills the ComobBox with checkable items for batch encoding
+                    foreach (var file in Files)
+                    {
+                        System.Windows.Controls.CheckBox comboBoxItem = new System.Windows.Controls.CheckBox
+                        {
+                            Content = file,
+                            IsChecked = false
+                        };
+                        ComboBoxBatchSettings.Items.Add(comboBoxItem);
+                    }
                 }
             }
             catch { }
@@ -1083,33 +1093,99 @@ namespace NotEnoughAV1Encodes
             {
                 if (SmallFunctions.CheckFileType(file.ToString()) == true && SmallFunctions.Cancel.CancelAll == false)
                 {
-                    SmallFunctions.Logging("Batch Encoding: " + file);
-                    // Reset Progressbar
-                    ProgressBar.Maximum = 100;
-                    ProgressBar.Value = 0;
-                    EncodeStarted = true;
-                    // Sets Input / Output
-                    VideoInput = TextBoxVideoSource.Text + "\\" + file;
-                    VideoOutput = TextBoxVideoDestination.Text + "\\" + file + "_av1" + BatchOutContainer;
-                    // Sets Temp Filename for temp folder
-                    TempPathFileName = Path.GetFileNameWithoutExtension(VideoInput);
-                    // Get Source Information
-                    GetAudioInformation();
-                    // Reset Subtitle
-                    GetSubtitleTracks();
-                    // Don't want to burn in subtitles in Batch Encoding
-                    CheckBoxSubOneBurn.IsChecked = false;
-                    CheckBoxSubTwoBurn.IsChecked = false;
-                    CheckBoxSubThreeBurn.IsChecked = false;
-                    CheckBoxSubFourBurn.IsChecked = false;
+                    if (CheckBoxBatchWithDifferentPresets.IsChecked == false)
+                    {
+                        // Normal Batch Encoding
 
-                    // Set Bit-Depth and Color Format
-                    AutoSetBitDepthAndColorFormat(VideoInput);
+                        SmallFunctions.Logging("Batch Encoding: " + file);
+                        // Reset Progressbar
+                        ProgressBar.Maximum = 100;
+                        ProgressBar.Value = 0;
+                        EncodeStarted = true;
+                        // Sets Input / Output
+                        VideoInput = TextBoxVideoSource.Text + "\\" + file;
+                        VideoOutput = TextBoxVideoDestination.Text + "\\" + file + "_av1" + BatchOutContainer;
+                        // Sets Temp Filename for temp folder
+                        TempPathFileName = Path.GetFileNameWithoutExtension(VideoInput);
+                        // Get Source Information
+                        GetAudioInformation();
+                        // Set Subtitle
+                        if (ComboBoxContainerBatchEncoding.SelectedIndex == 2)
+                        {
+                            // Resets Subtitle Settings, as it is mostly not compatible with .webm or .mp4
+                            ResetSubtitles();
+                        }
+                        else { GetSubtitleTracks(); }
+                        // Don't want to burn in subtitles in Batch Encoding
+                        CheckBoxSubOneBurn.IsChecked = false;
+                        CheckBoxSubTwoBurn.IsChecked = false;
+                        CheckBoxSubThreeBurn.IsChecked = false;
+                        CheckBoxSubFourBurn.IsChecked = false;
 
-                    // Start encoding process
-                    await MainEntry(cancellationTokenSource.Token);
+                        // Set Bit-Depth and Color Format
+                        AutoSetBitDepthAndColorFormat(VideoInput);
 
-                    SmallFunctions.Logging("Batch Encoding Finished: " + file);
+                        // Start encoding process
+                        await MainEntry(cancellationTokenSource.Token);
+
+                        SmallFunctions.Logging("Batch Encoding Finished: " + file);
+                    }
+                    else
+                    {
+                        // Get all Items from ComboBox
+                        var encode_presets = ComboBoxBatchSettings.Items;
+                        var encode_presets_to_encode = new List<string>();
+                        // Fill List with Presets to use
+                        foreach (var preset in encode_presets)
+                        {
+                            System.Windows.Controls.CheckBox pre = (System.Windows.Controls.CheckBox)preset;
+
+                            if (pre.IsChecked == true)
+                            {
+                                encode_presets_to_encode.Add(pre.Content.ToString());
+                            }
+                        }
+                        // Encode each file with the selected presets
+                        foreach (string preset in encode_presets_to_encode)
+                        {
+                            LoadSettings(true, preset);
+                            SmallFunctions.Logging("Batch Encoding: " + file + " with Preset: " + preset);
+                            // Reset Progressbar
+                            ProgressBar.Maximum = 100;
+                            ProgressBar.Value = 0;
+                            EncodeStarted = true;
+                            // Sets Input / Output
+                            VideoInput = TextBoxVideoSource.Text + "\\" + file;
+                            VideoOutput = Path.Combine(TextBoxVideoDestination.Text, file.ToString(), Path.GetFileNameWithoutExtension(preset) + BatchOutContainer);
+                            // Creates Subfolder for each batch file
+                            if (!Directory.Exists(Path.Combine(TextBoxVideoDestination.Text, file.ToString())))
+                                Directory.CreateDirectory(Path.Combine(TextBoxVideoDestination.Text, file.ToString()));
+                            // Sets Temp Filename for temp folder
+                            TempPathFileName = Path.GetFileNameWithoutExtension(VideoInput);
+                            // Get Source Information
+                            GetAudioInformation();
+                            // Set Subtitle
+                            if (ComboBoxContainerBatchEncoding.SelectedIndex == 2)
+                            {
+                                // Resets Subtitle Settings, as it is mostly not compatible with .webm or .mp4
+                                ResetSubtitles();
+                            }
+                            else { GetSubtitleTracks(); }
+                            // Don't want to burn in subtitles in Batch Encoding
+                            CheckBoxSubOneBurn.IsChecked = false;
+                            CheckBoxSubTwoBurn.IsChecked = false;
+                            CheckBoxSubThreeBurn.IsChecked = false;
+                            CheckBoxSubFourBurn.IsChecked = false;
+
+                            // Set Bit-Depth and Color Format
+                            AutoSetBitDepthAndColorFormat(VideoInput);
+
+                            // Start encoding process
+                            await MainEntry(cancellationTokenSource.Token);
+
+                            SmallFunctions.Logging("Batch Encoding Finished: " + file);
+                        }
+                    }
                 }
             }
             SmallFunctions.PlayFinishedSound();
@@ -1603,7 +1679,6 @@ namespace NotEnoughAV1Encodes
                     if (index == 1) { ComboBoxTrackTwoLanguage.SelectedItem = myKey; }
                     if (index == 2) { ComboBoxTrackThreeLanguage.SelectedItem = myKey; }
                     if (index == 3) { ComboBoxTrackFourLanguage.SelectedItem = myKey; }
-                    Console.WriteLine(audio_languages[myKey]);
                 }
                 catch 
                 { 
