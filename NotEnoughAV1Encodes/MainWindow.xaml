@@ -249,11 +249,11 @@
                     <GroupBox Header="Video" HorizontalAlignment="Left" Height="190" Margin="10,10,0,0" VerticalAlignment="Top" Width="385">
                         <Grid>
                             <Label Content="Encoder:" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use" SelectedIndex="3">
-                                <ComboBoxItem Content="aomenc"/>
+                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use" SelectedIndex="0">
+                                <ComboBoxItem Content="aomenc" IsSelected="True"/>
                                 <ComboBoxItem Content="rav1e"/>
                                 <ComboBoxItem Content="svt-av1"/>
-                                <ComboBoxItem Content="vp9" IsSelected="True"/>
+                                <ComboBoxItem Content="vp9"/>
                             </ComboBox>
                             <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top"/>
                             <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="60" Height="30" VerticalContentAlignment="Center" ToolTip="Bit-Depth. 10bit recommended for animation and to avoid banding.">
@@ -294,7 +294,7 @@
                         </Grid>
                     </GroupBox>
                     <Label Content="Advanced Settings:" HorizontalAlignment="Left" Margin="815,10,0,0" VerticalAlignment="Top"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xA;" HorizontalAlignment="Left" Height="73" Margin="936,-34,0,0" VerticalAlignment="Top" Width="89" RenderTransformOrigin="0.44,0.39" IsOn="True"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xA;" HorizontalAlignment="Left" Height="73" Margin="936,-34,0,0" VerticalAlignment="Top" Width="89" RenderTransformOrigin="0.44,0.39"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Advanced" Visibility="{Binding ElementName=ToggleSwitchAdvancedVideoSettings, Path=IsOn, Converter={StaticResource b2v}}">
