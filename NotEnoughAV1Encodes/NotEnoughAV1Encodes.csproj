@@ -222,7 +222,7 @@
     <Resource Include="img\discord.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="img\offline.png" />
+    <Resource Include="img\video_icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

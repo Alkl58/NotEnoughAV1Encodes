@@ -153,12 +153,13 @@
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Trim">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Trim End" HorizontalAlignment="Left" Height="250" Margin="407,63,0,0" VerticalAlignment="Top" Width="360">
-                        <Image x:Name="ImagePreviewTrimEnd" Margin="0,0,0,-2" HorizontalAlignment="Right" Stretch="Fill" Width="350" Source="img\offline.png"/>
+                    <GroupBox Header="Trimming" HorizontalAlignment="Left" Height="332" Margin="10,10,0,0" VerticalAlignment="Top" Width="1015"/>
+                    <GroupBox Header="Trim End" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTrimming}" HorizontalAlignment="Left" Height="250" Margin="548,56,0,0" VerticalAlignment="Top" Width="360">
+                        <Image x:Name="ImagePreviewTrimEnd" Margin="0,0,0,-2" HorizontalAlignment="Right" Stretch="Fill" Width="350" Source="img/video_icon.png"/>
                     </GroupBox>
-                    <TextBox x:Name="TextBoxTrimEnd" HorizontalAlignment="Left" Height="26" Margin="538,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:23:00.000" TextChanged="TextBoxTrimEnd_TextChanged"/>
-                    <Button x:Name="ButtonTrimPlusEnd" Content="+" HorizontalAlignment="Left" Margin="639,63,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlusEnd_Click" />
-                    <Button x:Name="ButtonTrimMinusEnd" Content="-" HorizontalAlignment="Left" Margin="513,63,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinusEnd_Click"  />
+                    <TextBox x:Name="TextBoxTrimEnd" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTrimming}" HorizontalAlignment="Left" Height="26" Margin="679,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:23:00.000" TextChanged="TextBoxTrimEnd_TextChanged"/>
+                    <Button x:Name="ButtonTrimPlusEnd" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTrimming}" Content="+" HorizontalAlignment="Left" Margin="780,56,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimPlusEnd_Click" />
+                    <Button x:Name="ButtonTrimMinusEnd" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTrimming}" Content="-" HorizontalAlignment="Left" Margin="654,56,0,0" VerticalAlignment="Top" Width="25" Height="26" Click="ButtonTrimMinusEnd_Click"  />
                     <Label Content="(in seconds)" HorizontalAlignment="Left" Margin="265,107,0,0" VerticalAlignment="Top" FontStyle="Italic">
                         <Label.Style>
                             <Style>
@@ -171,14 +172,14 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <GroupBox Header="Trim Start" HorizontalAlignment="Left" Height="250" Margin="34,63,0,0" VerticalAlignment="Top" Width="360">
-                        <Image x:Name="ImagePreviewTrimStart" Height="216" VerticalAlignment="Top" HorizontalAlignment="Right" Width="350" Stretch="Fill" Source="img/offline.png" Margin="0,0,0,-1"/>
+                    <GroupBox Header="Trim Start" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTrimming}" HorizontalAlignment="Left" Height="250" Margin="102,56,0,0" VerticalAlignment="Top" Width="360">
+                        <Image x:Name="ImagePreviewTrimStart" Height="216" VerticalAlignment="Top" HorizontalAlignment="Right" Width="350" Stretch="Fill" Source="img/video_icon.png" Margin="0,0,0,-1"/>
                     </GroupBox>
-                    <TextBox x:Name="TextBoxTrimStart"  HorizontalAlignment="Left" Height="26" Margin="165,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:00:00.000" TextChanged="TextBoxTrimEnd_TextChanged" />
-                    <Button x:Name="ButtonTrimPlus" Content="+" HorizontalAlignment="Left" Margin="265,63,0,0" VerticalAlignment="Top" Width="24" Height="26" Click="ButtonTrimPlus_Click"/>
-                    <Button x:Name="ButtonTrimMinus" Content="-" HorizontalAlignment="Left" Margin="139,63,0,0" VerticalAlignment="Top" Width="26" Height="26" Click="ButtonTrimMinus_Click"/>
-                    <Label Content="(Soft Subs not supported)" HorizontalAlignment="Left" Margin="322,37,0,0" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchTrimming" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="56" Margin="34,2,0,0" VerticalAlignment="Top" Width="100"/>
+                    <TextBox x:Name="TextBoxTrimStart" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTrimming}"  HorizontalAlignment="Left" Height="26" Margin="233,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsTabStop="False" Text="00:00:00.000" TextChanged="TextBoxTrimEnd_TextChanged" />
+                    <Button x:Name="ButtonTrimPlus" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTrimming}" Content="+" HorizontalAlignment="Left" Margin="333,56,0,0" VerticalAlignment="Top" Width="24" Height="26" Click="ButtonTrimPlus_Click"/>
+                    <Button x:Name="ButtonTrimMinus" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTrimming}" Content="-" HorizontalAlignment="Left" Margin="207,56,0,0" VerticalAlignment="Top" Width="26" Height="26" Click="ButtonTrimMinus_Click"/>
+                    <Label Content="(Soft Subs not supported in this Mode)" HorizontalAlignment="Left" Margin="782,316,0,0" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold" Width="237"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchTrimming" Header="" Toggled="CheckBoxTrimming_Checked" HorizontalAlignment="Left" Height="56" Margin="94,-16,0,0" VerticalAlignment="Top" Width="100"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Filters">
@@ -300,7 +301,7 @@
             <mah:MetroTabItem Header="Advanced" Visibility="{Binding ElementName=ToggleSwitchAdvancedVideoSettings, Path=IsOn, Converter={StaticResource b2v}}">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="Advanced Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="900" Margin="0,41,0,0">
+                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="1025" Margin="0,41,0,0">
                         <Canvas.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -405,7 +406,7 @@
                             <ComboBoxItem Content="3"/>
                         </ComboBox>
                     </Canvas>
-                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="900" Margin="0,41,0,0">
+                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="1025" Margin="0,41,0,0">
                         <Canvas.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -492,7 +493,7 @@
                         </ComboBox>
                         <CheckBox x:Name="CheckBoxSVTAV1HDR" Content="HDR" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="591" Canvas.Top="23"/>
                     </Canvas>
-                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="900" Margin="0,41,0,0">
+                    <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="1025" Margin="0,41,0,0">
                         <Canvas.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -600,8 +601,8 @@
                             <ComboBoxItem Content="Psnr"/>
                         </ComboBox>
                         <CheckBox x:Name="CheckBoxRav1eMasteringDisplay" Content="Mastering Display:" Canvas.Left="573" Canvas.Top="31"/>
-                        <Label x:Name="LabelRav1eMasteringG" Content="G" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="757" Canvas.Top="17"  Foreground="#FF13DC09"/>
-                        <TextBox x:Name="TextBoxRav1eMasteringGx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="745" Canvas.Top="25"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label x:Name="LabelRav1eMasteringG" Content="G" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="721" Canvas.Top="27"  Foreground="#FF13DC09"/>
+                        <TextBox x:Name="TextBoxRav1eMasteringGx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="746" Canvas.Top="25"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         <TextBox x:Name="TextBoxRav1eMasteringGy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="25"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         <Label x:Name="LabelRav1eMasteringB" Content="B"  IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="721" Canvas.Top="59"  Foreground="#FF0986DC" Width="20"/>
                         <TextBox x:Name="TextBoxRav1eMasteringBx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="745" Canvas.Top="59"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
@@ -623,7 +624,7 @@
                         <TextBox x:Name="TextBoxRav1eMasteringLx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="746" Canvas.Top="161"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         <TextBox x:Name="TextBoxRav1eMasteringLy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="161"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                     </Canvas>
-                    <Canvas Height="237" VerticalAlignment="Top" Margin="10,41,133,0">
+                    <Canvas Height="237" VerticalAlignment="Top" Margin="10,41,10,0">
                         <Canvas.Style>
                             <Style>
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
