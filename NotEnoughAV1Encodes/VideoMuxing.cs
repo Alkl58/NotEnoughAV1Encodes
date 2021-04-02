@@ -12,7 +12,16 @@ namespace NotEnoughAV1Encodes
         {
             // ══════════════════════════════════════ Chunk Parsing ══════════════════════════════════════
             // Writes all ivf files into chunks.txt for later concat
-            var sorted = Directory.GetFiles(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks"), "*.ivf").OrderBy(f => f);
+            IOrderedEnumerable<string> sorted = null;
+            if (MainWindow.EncodeMethod != 3)
+            {
+                sorted = Directory.GetFiles(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks"), "*.ivf").OrderBy(f => f);
+            }
+            else
+            {
+                sorted = Directory.GetFiles(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks"), "*.webm").OrderBy(f => f);
+            }
+            
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Chunks"), "chunks.txt")))
             {
                 foreach (var fileTemp in sorted)

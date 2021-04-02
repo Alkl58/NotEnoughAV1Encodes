@@ -95,7 +95,6 @@ namespace NotEnoughAV1Encodes
         public static string Rav1ePath = null;      // Path to rav1e
         public static string SvtAV1Path = null;     // Path to svt-av1
         public static string MKVToolNixPath = null; // Path to mkvtoolnix
-        public static string VPXPath = null;        // Path to vpxenc
         public static bool PySceneFound = false;    // 
         // Temp Variables
         public static bool EncodeStarted = false;   // Encode Started Boolean
@@ -795,15 +794,6 @@ namespace NotEnoughAV1Encodes
                     SliderVideoSpeed.Value = 4;
                     SliderVideoQuality.Value = 30;
                     SliderVideoQuality.Maximum = 63;
-                    if (VPXPath == null)
-                    {
-                        if (MessageBox.Show("Could not find vpxenc!\nOpen Updater?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                        {
-                            Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
-                            updater.ShowDialog();
-                            CheckDependencies.Check();
-                        }
-                    }
                 }
             }
 
@@ -2206,58 +2196,33 @@ namespace NotEnoughAV1Encodes
         private string SetVP9Command()
         {
             string cmd = "";
-            cmd += " --bit-depth=" + ComboBoxVideoBitDepth.Text;    // Bit-Depth
 
-            if (ComboBoxVP9ColorFormat.SelectedIndex == 0)
-            {
-                // yuv420p
-                if (ComboBoxVideoBitDepth.SelectedIndex == 1 || ComboBoxVideoBitDepth.SelectedIndex == 2)
-                {
-                    // profile=2: 10bit / 12bit
-                    cmd += " --profile=2";
-                }
-            }
-            else
-            {
-                // yuv420p / yuv422p / yuv444p
-                if (ComboBoxVideoBitDepth.SelectedIndex == 1 || ComboBoxVideoBitDepth.SelectedIndex == 2)
-                {
-                    // profile=3: 10bit / 12bit
-                    cmd += " --profile=3";
-                }
-            }
-
-            cmd += " --cpu-used=" + SliderVideoSpeed.Value;         // Speed
+            cmd += " -cpu-used " + SliderVideoSpeed.Value;         // Speed
 
             // Constant Quality or Target Bitrate
-            if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " --end-usage=q --cq-level=" + SliderVideoQuality.Value; }
-            else if (RadioButtonVideoBitrate.IsChecked == true) { cmd += " --end-usage=vbr --target-bitrate=" + TextBoxVideoBitrate.Text; }
+            if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " -b:v 0 -crf " + SliderVideoQuality.Value; }
+            else if (RadioButtonVideoBitrate.IsChecked == true) { cmd += " -b:v " + TextBoxVideoBitrate.Text + "k"; }
 
             if (ToggleSwitchAdvancedVideoSettings.IsOn == false)
             {
                 // Default params when User don't select advanced settings
-                cmd += " --threads=4 --tile-columns=2 --tile-rows=1";
+                cmd += " -threads 4 -tile-columns 2 -tile-rows 1";
             }
             else
             {
-                cmd += " --" + ComboBoxVP9ColorFormat.Text;                         // Color Format
-                cmd += " --threads=" + ComboBoxVP9Threads.Text;                     // Max Threads
-                cmd += " --tile-columns=" + ComboBoxVP9TileColumns.SelectedIndex;   // Tile Columns
-                cmd += " --tile-rows=" + ComboBoxVP9TileRows.SelectedIndex;         // Tile Rows
-                cmd += " --lag-in-frames=" + TextBoxVP9LagInFrames.Text;            // Lag in Frames
-                cmd += " --kf-max-dist=" + TextBoxVP9MaxKF.Text;                    // Max GOP
-                cmd += " --aq-mode=" + ComboBoxVP9AQMode.SelectedIndex;             // AQ-Mode
-                cmd += " --tune=" + ComboBoxVP9ATune.Text;                          // Tune
-                cmd += " --tune-content=" + ComboBoxVP9ATuneContent.Text;           // Tune-Content
-                if (ComboBoxVP9Space.SelectedIndex != 0)
-                {
-                    cmd += " --color-space=" + ComboBoxVP9Space.Text;               // Color Space
-                }
+                cmd += " -threads " + ComboBoxVP9Threads.Text;                      // Max Threads
+                cmd += " -tile-columns " + ComboBoxVP9TileColumns.SelectedIndex;    // Tile Columns
+                cmd += " -tile-rows " + ComboBoxVP9TileRows.SelectedIndex;          // Tile Rows
+                cmd += " -lag-in-frames " + TextBoxVP9LagInFrames.Text;             // Lag in Frames
+                cmd += " -g " + TextBoxVP9MaxKF.Text;                               // Max GOP
+                cmd += " -aq-mode " + ComboBoxVP9AQMode.SelectedIndex;              // AQ-Mode
+                cmd += " -tune " + ComboBoxVP9ATune.SelectedIndex;                  // Tune
+                cmd += " -tune-content " + ComboBoxVP9ATuneContent.SelectedIndex;   // Tune-Content
                 if (CheckBoxVP9ARNR.IsChecked == true)
                 {
-                    cmd += " --arnr-maxframes=" + ComboBoxAomencVP9Max.Text;        // ARNR Max Frames
-                    cmd += " --arnr-strength=" + ComboBoxAomencVP9Strength.Text;    // ARNR Strength
-                    cmd += " --arnr-type=" + ComboBoxAomencVP9ARNRType.Text;        // ARNR Type
+                    cmd += " -arnr-maxframes " + ComboBoxAomencVP9Max.Text;        // ARNR Max Frames
+                    cmd += " -arnr-strength " + ComboBoxAomencVP9Strength.Text;    // ARNR Strength
+                    cmd += " -arnr-type " + ComboBoxAomencVP9ARNRType.Text;        // ARNR Type
                 }
             }
 
@@ -2898,15 +2863,16 @@ namespace NotEnoughAV1Encodes
                                         }
                                         else if (EncodeMethod == 3) // vp9
                                         {
+                                            ffmpegPipe = InputVideo + " " + FilterCommand + PipeBitDepthCommand + " " + VSYNC + " ";
                                             if (OnePass) // One Pass Encoding
                                             {
-                                                encoderCMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=1" + EncoderVP9Command + " --output=";
-                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                                encoderCMD = " " + EncoderVP9Command + " ";
+                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".webm") + '\u0022';
                                             }
                                             else // Two Pass Encoding First Pass
                                             {
-                                                encoderCMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=2 --pass=1" + EncoderVP9Command + " --fpf=";
-                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
+                                                encoderCMD = " -pass 1 " + EncoderVP9Command + " -passlogfile ";
+                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " NUL";
                                             }
                                         }
 
@@ -2957,9 +2923,9 @@ namespace NotEnoughAV1Encodes
                                         }
                                         else if (EncodeMethod == 3) // vp9
                                         {
-                                            encoderCMD = '\u0022' + Path.Combine(VPXPath, "vpxenc.exe") + '\u0022' + " - --passes=2 --pass=2" + EncoderVP9Command + " --fpf=";
+                                            encoderCMD = " -pass 2 " + EncoderVP9Command + " -passlogfile ";
                                             encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
-                                            encoderCMD += " --output=" + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                            encoderCMD += " " + '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + ".webm") + '\u0022';
                                         }
 
                                         startInfo.Arguments = "/C ffmpeg.exe" + FFmpegProgress + ffmpegPipe + encoderCMD;
@@ -3326,8 +3292,6 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("VideoAdvancedVP9AQMode",         ComboBoxVP9AQMode.SelectedIndex.ToString());            // Video Advanced Settings VP9 AQ Mode
                     writer.WriteElementString("VideoAdvancedVP9Tune",           ComboBoxVP9ATune.SelectedIndex.ToString());             // Video Advanced Settings VP9 Tune
                     writer.WriteElementString("VideoAdvancedVP9TuneContent",    ComboBoxVP9ATuneContent.SelectedIndex.ToString());      // Video Advanced Settings VP9 Tune Content
-                    writer.WriteElementString("VideoAdvancedVP9ColorFormat",    ComboBoxVP9ColorFormat.SelectedIndex.ToString());       // Video Advanced Settings VP9 Color Format
-                    writer.WriteElementString("VideoAdvancedVP9ColorSpace",     ComboBoxVP9Space.SelectedIndex.ToString());             // Video Advanced Settings VP9 Color Space
                     writer.WriteElementString("VideoAdvancedVP9ARNR",           CheckBoxVP9ARNR.IsChecked.ToString());                  // Video Advanced Settings VP9 ARNR
                     if (CheckBoxAomencARNRMax.IsChecked == true)
                     {
@@ -3504,8 +3468,6 @@ namespace NotEnoughAV1Encodes
                     case "VideoAdvancedVP9AQMode":          ComboBoxVP9AQMode.SelectedIndex = int.Parse(n.InnerText);               break;  // Video Advanced Settings VP9 AQ Mode
                     case "VideoAdvancedVP9Tune":            ComboBoxVP9ATune.SelectedIndex = int.Parse(n.InnerText);                break;  // Video Advanced Settings VP9 Tune
                     case "VideoAdvancedVP9TuneContent":     ComboBoxVP9ATuneContent.SelectedIndex = int.Parse(n.InnerText);         break;  // Video Advanced Settings VP9 Tune Content
-                    case "VideoAdvancedVP9ColorFormat":     ComboBoxVP9ColorFormat.SelectedIndex = int.Parse(n.InnerText);          break;  // Video Advanced Settings VP9 Color Format
-                    case "VideoAdvancedVP9ColorSpace":      ComboBoxVP9Space.SelectedIndex = int.Parse(n.InnerText);                break;  // Video Advanced Settings VP9 Color Space
                     case "VideoAdvancedVP9ARNR":            CheckBoxVP9ARNR.IsChecked = n.InnerText == "True";                      break;  // Video Advanced Settings VP9 ARNR
                     case "VideoAdvancedVP9ARNRMax":         ComboBoxAomencVP9Max.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Advanced Settings VP9 ARNR Max
                     case "VideoAdvancedVP9ARNRStre":        ComboBoxAomencVP9Strength.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings VP9 ARNR Strength

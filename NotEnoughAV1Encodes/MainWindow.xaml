@@ -249,11 +249,11 @@
                     <GroupBox Header="Video" HorizontalAlignment="Left" Height="190" Margin="10,10,0,0" VerticalAlignment="Top" Width="385">
                         <Grid>
                             <Label Content="Encoder:" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use" SelectedIndex="0">
-                                <ComboBoxItem Content="aomenc"  IsSelected="True"/>
+                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use" SelectedIndex="3">
+                                <ComboBoxItem Content="aomenc"/>
                                 <ComboBoxItem Content="rav1e"/>
                                 <ComboBoxItem Content="svt-av1"/>
-                                <ComboBoxItem Content="vp9"/>
+                                <ComboBoxItem Content="vp9" IsSelected="True"/>
                             </ComboBox>
                             <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top"/>
                             <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="60" Height="30" VerticalContentAlignment="Center" ToolTip="Bit-Depth. 10bit recommended for animation and to avoid banding.">
@@ -294,7 +294,7 @@
                         </Grid>
                     </GroupBox>
                     <Label Content="Advanced Settings:" HorizontalAlignment="Left" Margin="815,10,0,0" VerticalAlignment="Top"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xA;" HorizontalAlignment="Left" Height="73" Margin="936,-34,0,0" VerticalAlignment="Top" Width="89" RenderTransformOrigin="0.44,0.39"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xA;" HorizontalAlignment="Left" Height="73" Margin="936,-34,0,0" VerticalAlignment="Top" Width="89" RenderTransformOrigin="0.44,0.39" IsOn="True"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Advanced" Visibility="{Binding ElementName=ToggleSwitchAdvancedVideoSettings, Path=IsOn, Converter={StaticResource b2v}}">
@@ -344,9 +344,9 @@
                         <TextBox x:Name="TextBoxVP9LagInFrames" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="119"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         <Label x:Name="LabelVP9ColorFormat" Content="Color Format:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="312" Canvas.Top="121" />
                         <ComboBox x:Name="ComboBoxVP9ColorFormat"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="433" Canvas.Top="119" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
-                            <ComboBoxItem Content="i420" IsSelected="True"/>
-                            <ComboBoxItem Content="i422"/>
-                            <ComboBoxItem Content="i444"/>
+                            <ComboBoxItem Content="4:2:0" IsSelected="True"/>
+                            <ComboBoxItem Content="4:2:2"/>
+                            <ComboBoxItem Content="4:4:4"/>
                         </ComboBox>
                         <ComboBox x:Name="ComboBoxAomencVP9Max" IsEnabled="{Binding IsChecked, ElementName=CheckBoxVP9ARNR}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="740" Canvas.Top="15" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="15" IsSelected="True"/>
@@ -395,17 +395,6 @@
                         <ComboBox x:Name="ComboBoxVP9ATune"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="433" Canvas.Top="51" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="psnr" IsSelected="True"/>
                             <ComboBoxItem Content="ssim"/>
-                        </ComboBox>
-                        <Label x:Name="LabelVP9ColorFormat_Copy" Content="Color Space:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="312" Canvas.Top="155" />
-                        <ComboBox x:Name="ComboBoxVP9Space"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="433" Canvas.Top="154" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
-                            <ComboBoxItem Content="unknown" IsSelected="True"/>
-                            <ComboBoxItem Content="bt601"/>
-                            <ComboBoxItem Content="bt709"/>
-                            <ComboBoxItem Content="smpte170"/>
-                            <ComboBoxItem Content="smpte240"/>
-                            <ComboBoxItem Content="bt2020"/>
-                            <ComboBoxItem Content="reserved"/>
-                            <ComboBoxItem Content="sRGB"/>
                         </ComboBox>
                         <Label x:Name="LabelVP9LagInFrames_Copy"  Content="Max GOP:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="155"/>
                         <TextBox x:Name="TextBoxVP9MaxKF" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="153"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>

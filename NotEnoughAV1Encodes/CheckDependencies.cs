@@ -36,13 +36,6 @@ namespace NotEnoughAV1Encodes
             else { MainWindow.SvtAV1Path = null; }
             SmallFunctions.Logging("SVT-AV1 Path: " + MainWindow.SvtAV1Path);
 
-            // Sets / Checks vpx Path
-            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "vpxenc.exe"))) { MainWindow.VPXPath = Directory.GetCurrentDirectory(); }
-            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "vpx", "vpxenc.exe"))) { MainWindow.VPXPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "vpx"); }
-            else if (ExistsOnPath("vpxenc.exe")) { MainWindow.VPXPath = GetFullPathWithOutName("vpxenc.exe"); }
-            else { MainWindow.VPXPath = null; }
-            SmallFunctions.Logging("VPXEnc Path: " + MainWindow.VPXPath);
-
             // Sets / Checks mkvtoolnix Path
             if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "mkvmerge.exe"))) { MainWindow.MKVToolNixPath = Directory.GetCurrentDirectory(); }
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "mkvtoolnix", "mkvmerge.exe"))) { MainWindow.MKVToolNixPath = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "mkvtoolnix"); }
