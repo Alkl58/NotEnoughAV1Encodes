@@ -1107,10 +1107,9 @@
         </Button>
         <ProgressBar x:Name="ProgressBar" Margin="21,0,21,19" ValueChanged="ProgressBar_ValueChanged" Height="34" VerticalAlignment="Bottom"/>
         <Label x:Name="LabelProgressBar" Content="" Margin="21,0,21,19" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="34" VerticalAlignment="Bottom"/>
-        <Button x:Name="ButtonStopEncode" Margin="447,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="135" Background="{x:Null}" BorderBrush="#FF707070" Click="ButtonStopEncode_Click">
-            <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
-                <Image HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="47" Source="img/stop.png" Canvas.Top="-6" Canvas.Left="-9"/>
-                <Label Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="38" Height="30" Canvas.Top="2" FontSize="13" />
+        <Button x:Name="ButtonStopEncode" Margin="514,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="68" Background="{x:Null}" BorderBrush="#FF707070" Click="ButtonStopEncode_Click">
+            <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="62">
+                <Image HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="48" Source="img/stop.png" Canvas.Top="-7" Canvas.Left="3"/>
             </Canvas>
         </Button>
         <Label Content="Preset:" HorizontalAlignment="Left" Margin="21,78,0,0" VerticalAlignment="Top" Height="29"/>
@@ -1119,6 +1118,11 @@
         <Button x:Name="ButtonSetDefaultPreset" Content="Set Default" HorizontalAlignment="Left" Margin="317,78,0,0" VerticalAlignment="Top" Width="76" Height="29" Background="{x:Null}" Click="ButtonSetDefaultPreset_Click"/>
         <Button x:Name="ButtonDeletePreset" Content="Delete" HorizontalAlignment="Left" Margin="392,78,0,0" VerticalAlignment="Top" Width="50" Height="29" Background="{x:Null}" Click="ButtonDeletePreset_Click" />
         <Button x:Name="ButtonExpandCollapseWindow" Content="Resize Window" HorizontalAlignment="Left" Margin="447,77,0,0" VerticalAlignment="Top" Width="135" Height="29" Background="{x:Null}" Click="ButtonExpandCollapseWindow_Click"/>
+        <Button x:Name="ButtonPauseEncode" Margin="447,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="68" Background="{x:Null}" BorderBrush="#FF707070" Click="ButtonPauseEncode_Click">
+            <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="62">
+                <Image x:Name="ImagePauseResume" HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="48" Source="img/pause.png" Canvas.Top="-7" Canvas.Left="3"/>
+            </Canvas>
+        </Button>
 
     </Grid>
 </mah:MetroWindow>

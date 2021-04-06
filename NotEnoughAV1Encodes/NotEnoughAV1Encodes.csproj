@@ -43,7 +43,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -110,6 +110,7 @@
       <DependentUpon>SavePreset.xaml</DependentUpon>
     </Compile>
     <Compile Include="SmallFunctions.cs" />
+    <Compile Include="suspend.cs" />
     <Compile Include="Updater.xaml.cs">
       <DependentUpon>Updater.xaml</DependentUpon>
     </Compile>
@@ -223,6 +224,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="img\video_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\resume.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

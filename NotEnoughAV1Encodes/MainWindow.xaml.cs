@@ -2465,6 +2465,40 @@ namespace NotEnoughAV1Encodes
                 SaveSettingsTab();
             }
         }
+        public static bool encode_paused = false;
+        private void ButtonPauseEncode_Click(object sender, RoutedEventArgs e)
+        {
+            if (EncodeStarted == true)
+            {
+                if (encode_paused)
+                {
+                    var process = Process.GetProcessesByName("ffmpeg");
+                    foreach (var p in process)
+                    {
+                        suspend.ResumeProcess(p.Id);
+                    }
+                    BitmapImage image = new BitmapImage(new Uri("/NotEnoughAV1Encodes;component/img/pause.png", UriKind.Relative));
+                    ImagePauseResume.Source = image;
+                    encode_paused = false;
+                }
+                else
+                {
+                    var process = Process.GetProcessesByName("ffmpeg");
+                    foreach (var p in process)
+                    {
+                        suspend.SuspendProcess(p.Id);
+                    }
+                    BitmapImage image = new BitmapImage(new Uri("/NotEnoughAV1Encodes;component/img/resume.png", UriKind.Relative));
+                    ImagePauseResume.Source = image;
+                    encode_paused = true;
+                }
+            }
+            else
+            {
+                SmallFunctions.PlayStopSound();
+                MessageBox.Show("Encode has not started yet!", "Attention", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
 
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
