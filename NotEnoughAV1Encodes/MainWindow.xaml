@@ -268,7 +268,7 @@
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Quality" Height="190" Margin="10,205,10,0" VerticalAlignment="Top">
+                    <GroupBox Header="Quality" Margin="10,0,10,10" Height="190" VerticalAlignment="Bottom">
                         <Grid>
                             <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="Constant Quality:" HorizontalAlignment="Left" Margin="42,14,0,0" VerticalAlignment="Top" Height="28" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True" Background="{x:Null}"/>
                             <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Margin="60,48,65,0" VerticalAlignment="Top" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959" ToolTip="Target Quality"/>
@@ -279,7 +279,7 @@
                             <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="167,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Optimisation" Margin="0,0,10,201" Height="190" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="385">
+                    <GroupBox Header="Optimisation" Margin="0,10,10,0" HorizontalAlignment="Right" Width="385" Height="190" VerticalAlignment="Top">
                         <Grid>
                             <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="226,106,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Visible"/>
                             <Label Content="Speed:" HorizontalAlignment="Left" Margin="17,11,0,0" VerticalAlignment="Top"/>
@@ -294,8 +294,8 @@
                             <Label Content="Fastest |" HorizontalAlignment="Left" Margin="299,66,-4,0" VerticalAlignment="Top" FontSize="9" Width="80"/>
                         </Grid>
                     </GroupBox>
-                    <Label Content="Advanced Settings:" HorizontalAlignment="Left" Margin="815,10,0,0" VerticalAlignment="Top"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xA;" HorizontalAlignment="Left" Height="73" Margin="936,-34,0,0" VerticalAlignment="Top" Width="89" RenderTransformOrigin="0.44,0.39"/>
+                    <Label Content="Advanced Settings:" Margin="0,10,103,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="111"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xA;" Height="73" Margin="0,-33,-53,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,0.39" HorizontalAlignment="Right" Width="89"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Advanced" Visibility="{Binding ElementName=ToggleSwitchAdvancedVideoSettings, Path=IsOn, Converter={StaticResource b2v}}">
