@@ -23,7 +23,14 @@ namespace NotEnoughAV1Encodes
 
                 if (activeTracks == 1)
                 {
-                    audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackOne, MainWindow.audioCodecTrackOne, MainWindow.audioChannelsTrackOne);
+                    if (MainWindow.trackOne == true)
+                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackOne, MainWindow.audioCodecTrackOne, MainWindow.audioChannelsTrackOne, 0);
+                    if (MainWindow.trackTwo == true)
+                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackTwo, MainWindow.audioCodecTrackTwo, MainWindow.audioChannelsTrackTwo, 1);
+                    if (MainWindow.trackThree == true)
+                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackThree, MainWindow.audioCodecTrackThree, MainWindow.audioChannelsTrackThree, 2);
+                    if (MainWindow.trackFour == true)
+                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackFour, MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour, 3);
                 }
                 else if (activeTracks >= 2)
                 {
@@ -73,11 +80,11 @@ namespace NotEnoughAV1Encodes
         }
 
         private static string audioCodecCommand = "";
-        private static string OneTrackCommandGenerator(int activetrackbitrate, string activtrackcodec, int channellayout)
+        private static string OneTrackCommandGenerator(int activetrackbitrate, string activtrackcodec, int channellayout, int index)
         {
             // String Command Builder for a single Audio Track
             // Audio Mapping + Codec
-            audioCodecCommand = "-map 0:a:0 -c:a " + SwitchCodec(activtrackcodec);
+            audioCodecCommand = "-map 0:a:" + index + " -c:a " + SwitchCodec(activtrackcodec);
             // Channel Layout / Bitrate
             if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " -b:a " + activetrackbitrate + "k"; }
             audioCodecCommand += " -ac " + channellayout;
