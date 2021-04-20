@@ -12,102 +12,73 @@ namespace NotEnoughAV1Encodes
                 //Creates Audio Directory in the temp dir
                 if (!Directory.Exists(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio")))
                     Directory.CreateDirectory(Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio"));
-                string audioCodec = "";
-                int activeTracks = 0;
+                string audio_command = "";
 
-                //Counts the number of active audio tracks for audio mapping purposes
-                if (MainWindow.trackOne) { activeTracks += 1; }
-                if (MainWindow.trackTwo) { activeTracks += 1; }
-                if (MainWindow.trackThree) { activeTracks += 1; }
-                if (MainWindow.trackFour) { activeTracks += 1; }
-
-                if (activeTracks == 1)
+                int end_index = 0;
+                if (MainWindow.trackOne)
                 {
-                    if (MainWindow.trackOne == true)
-                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackOne, MainWindow.audioCodecTrackOne, MainWindow.audioChannelsTrackOne, 0);
-                    if (MainWindow.trackTwo == true)
-                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackTwo, MainWindow.audioCodecTrackTwo, MainWindow.audioChannelsTrackTwo, 1);
-                    if (MainWindow.trackThree == true)
-                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackThree, MainWindow.audioCodecTrackThree, MainWindow.audioChannelsTrackThree, 2);
-                    if (MainWindow.trackFour == true)
-                        audioCodec = OneTrackCommandGenerator(MainWindow.audioBitrateTrackFour, MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour, 3);
+                    audio_command += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackOne, 0, end_index, MainWindow.audioCodecTrackOne, MainWindow.audioChannelsTrackOne, MainWindow.trackOneLanguage, MainWindow.trackOneName);
+                    end_index += 1;
                 }
-                else if (activeTracks >= 2)
+                if (MainWindow.trackTwo)
                 {
-                    if (MainWindow.trackOne == true)
-                    {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackOne, "0", MainWindow.audioCodecTrackOne, MainWindow.audioChannelsTrackOne, MainWindow.trackOneLanguage, MainWindow.trackOneName);
-                    }
-                    if (MainWindow.trackTwo == true)
-                    {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackTwo, "1", MainWindow.audioCodecTrackTwo, MainWindow.audioChannelsTrackTwo, MainWindow.trackTwoLanguage, MainWindow.trackTwoName);
-                    }
-                    if (MainWindow.trackThree == true)
-                    {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackThree, "2", MainWindow.audioCodecTrackThree, MainWindow.audioChannelsTrackThree, MainWindow.trackThreeLanguage, MainWindow.trackThreeName);
-                    }
-                    if (MainWindow.trackFour == true)
-                    {
-                        audioCodec += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackFour, "3", MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour, MainWindow.trackFourLanguage, MainWindow.trackFourName);
-                    }
-                    if (MainWindow.audioCodecTrackOne != "Copy Audio" && MainWindow.audioCodecTrackTwo != "Copy Audio" && MainWindow.audioCodecTrackThree != "Copy Audio" && MainWindow.audioCodecTrackFour != "Copy Audio")
-                    {
-                        audioCodec += " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " ";
-                    }
+                    audio_command += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackTwo, 1, end_index, MainWindow.audioCodecTrackTwo, MainWindow.audioChannelsTrackTwo, MainWindow.trackTwoLanguage, MainWindow.trackTwoName);
+                    end_index += 1;
+                }
+                if (MainWindow.trackThree)
+                {
+                    audio_command += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackThree, 2, end_index, MainWindow.audioCodecTrackThree, MainWindow.audioChannelsTrackThree, MainWindow.trackThreeLanguage, MainWindow.trackThreeName);
+                    end_index += 1;
+                }
+                if (MainWindow.trackFour)
+                {
+                    audio_command += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackFour, 3, end_index, MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour, MainWindow.trackFourLanguage, MainWindow.trackFourName);
+                }
+
+                if (MainWindow.audioCodecTrackOne != "Copy Audio" && MainWindow.audioCodecTrackTwo != "Copy Audio" && MainWindow.audioCodecTrackThree != "Copy Audio" && MainWindow.audioCodecTrackFour != "Copy Audio")
+                {
+                    audio_command += " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " ";
                 }
 
                 // ══════════════════════════════════════ Audio Encoding ══════════════════════════════════════
-                string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " " + MainWindow.TrimCommand + " -map_metadata -1 -vn -sn -dn " + audioCodec + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022';
+                string ffmpegAudioCommands = "/C ffmpeg.exe -y -i " + '\u0022' + MainWindow.VideoInput + '\u0022' + " " + MainWindow.TrimCommand + " -map_metadata -1 -vn -sn -dn " + audio_command + " " + '\u0022' + Path.Combine(MainWindow.TempPath, MainWindow.TempPathFileName, "Audio", "audio.mkv") + '\u0022';
                 SmallFunctions.Logging("Encoding Audio: " + ffmpegAudioCommands);
                 SmallFunctions.ExecuteFfmpegTask(ffmpegAudioCommands);
                 // ════════════════════════════════════════════════════════════════════════════════════════════
             }
         }
 
-        private static string audiocodecswitch = "";
-        private static string SwitchCodec(string Codec)
+        private static string SwitchCodec(string audio_codec)
         {
-            switch (Codec)
+            string audio_codec_switch = "";
+            switch (audio_codec)
             {
-                case "Opus": audiocodecswitch = "libopus"; break;
-                case "AC3": audiocodecswitch = "ac3"; break;
-                case "AAC": audiocodecswitch = "aac"; break;
-                case "MP3": audiocodecswitch = "libmp3lame"; break;
-                case "Copy Audio": if (MainWindow.pcmBluray) { audiocodecswitch = "pcm_s16le"; } else { audiocodecswitch = "copy"; } break;
+                case "Opus": audio_codec_switch = "libopus"; break;
+                case "AC3": audio_codec_switch = "ac3"; break;
+                case "AAC": audio_codec_switch = "aac"; break;
+                case "MP3": audio_codec_switch = "libmp3lame"; break;
+                case "Copy Audio": if (MainWindow.pcmBluray) { audio_codec_switch = "pcm_s16le"; } else { audio_codec_switch = "copy"; } break;
                 default: break;
             }
-            return audiocodecswitch;
+            return audio_codec_switch;
         }
 
         private static string audioCodecCommand = "";
-        private static string OneTrackCommandGenerator(int activetrackbitrate, string activtrackcodec, int channellayout, int index)
+        private static string MultipleTrackCommandGenerator(int activetrackbitrate, int map_index, int end_index, string activtrackcodec, int channellayout, string lang, string track_name)
         {
-            // String Command Builder for a single Audio Track
-            // Audio Mapping + Codec
-            audioCodecCommand = "-map 0:a:" + index + " -c:a " + SwitchCodec(activtrackcodec);
-            // Channel Layout / Bitrate
-            if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " -b:a " + activetrackbitrate + "k"; }
-            audioCodecCommand += " -ac " + channellayout;
-            // Sets Language Metadata
-            audioCodecCommand += " -metadata:s:a:0 language=" + MainWindow.trackOneLanguage;
-            audioCodecCommand += " -metadata:s:a:0 title=" + '\u0022' + MainWindow.trackOneName + '\u0022' + " ";
-            return audioCodecCommand;
-        }
-        private static string MultipleTrackCommandGenerator(int activetrackbitrate, string activetrackindex, string activtrackcodec, int channellayout, string lang, string track_name)
-        {
-            // String Command Builder for multiple Audio Tracks
+            // Command Builder for Audio
             // Audio Mapping
-            audioCodecCommand = " -map 0:a:" + activetrackindex + " -c:a:" + activetrackindex + " ";
+            audioCodecCommand = " -map 0:a:" + map_index + " -c:a:" + end_index + " ";
             // Codec
             audioCodecCommand += SwitchCodec(activtrackcodec);
             // Channel Layout / Bitrate
-            if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -b:a:" + activetrackindex + " " + activetrackbitrate + "k"; }
-            audioCodecCommand += " -ac:a:" + activetrackindex + " " + channellayout + " ";
+            if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -b:a:" + end_index + " " + activetrackbitrate + "k"; }
+            audioCodecCommand += " -ac:a:" + end_index + " " + channellayout + " ";
             // Metadata
-            audioCodecCommand += " -metadata:s:a:" + activetrackindex + " language=" + lang;
+            audioCodecCommand += " -metadata:s:a:" + end_index + " language=" + lang;
             if (activtrackcodec != "Copy Audio")
             {
-                audioCodecCommand += " -metadata:s:a:" + activetrackindex + " title=" + '\u0022' + track_name + '\u0022' + " ";
+                audioCodecCommand += " -metadata:s:a:" + end_index + " title=" + '\u0022' + track_name + '\u0022' + " ";
             }
             return audioCodecCommand;
         }
