@@ -2919,8 +2919,8 @@ namespace NotEnoughAV1Encodes
                                             }
                                             else // Two Pass Encoding First Pass
                                             {
-                                                encoderCMD = " -pass 1 " + EncoderVP9Command + " -passlogfile ";
-                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " NUL";
+                                                encoderCMD = " -y -pass 1 " + EncoderVP9Command + " -passlogfile ";
+                                                encoderCMD += '\u0022' + Path.Combine(TempPath, TempPathFileName, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " -f webm NUL";
                                             }
                                         }
 
