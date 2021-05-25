@@ -7,7 +7,7 @@ namespace NotEnoughAV1Encodes
     public partial class SavePreset : MetroWindow
     {
         public string SaveName { get; set; }
-        public bool cancel { get; set; }
+        public bool Cancel { get; set; }
         public SavePreset(string baseTheme, string accentTheme)
         {
             InitializeComponent();
@@ -15,7 +15,7 @@ namespace NotEnoughAV1Encodes
         }
         private void ButtonCloseWindow_Click(object sender, RoutedEventArgs e)
         {
-            cancel = true;
+            Cancel = true;
             // Closes the Window
             this.Close();
         }
@@ -24,7 +24,7 @@ namespace NotEnoughAV1Encodes
         {
             // Saves the Preset
             SaveName = TextBoxPresetName.Text;
-            cancel = false;
+            Cancel = false;
 
             // Closes the Window
             this.Close();

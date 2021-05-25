@@ -6,7 +6,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
-        Title="NotEnoughAV1Encodes" Height="251.264" Width="328.611" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="NotEnoughAV1Encodes" Height="251.264" Width="328.611" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Topmost="True">
     <Grid>
         <Button x:Name="ButtonSingleFile" Content="➔ Single File" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" Width="293" Height="43" FontSize="16" Background="{x:Null}" HorizontalContentAlignment="Left" BorderBrush="#FFE4E4E4" Click="ButtonOpenSingleSource_Click"/>
         <Label Content="Method for opening a source." HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="39" Width="237" FontSize="16"/>

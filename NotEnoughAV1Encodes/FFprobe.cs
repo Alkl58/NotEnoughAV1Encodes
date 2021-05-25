@@ -39,7 +39,7 @@ namespace NotEnoughAV1Encodes
                     CreateNoWindow = true,
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    WorkingDirectory = MainWindow.FFmpegPath,
+                    WorkingDirectory = Global.FFmpeg_Path,
                     Arguments = command,
                     RedirectStandardError = true,
                     RedirectStandardOutput = true

@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace NotEnoughAV1Encodes
 {
-    class suspend
+    class Suspend
     {
         [Flags]
         public enum ThreadAccess : int

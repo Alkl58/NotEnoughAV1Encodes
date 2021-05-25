@@ -6,7 +6,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
-        Title="Updater" Height="305" Width="550" ResizeMode="NoResize">
+        Title="Updater" Height="200" Width="550" ResizeMode="NoResize">
     <Grid>
         <Button x:Name="ButtonUpdateProgram" Content="Update Program" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateProgram_Click"/>
         <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,39,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center"/>
@@ -18,23 +18,8 @@
         <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,78,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center"/>
         <Label x:Name="LabelCurrentFFmpegVersion" Content="" HorizontalAlignment="Left" Margin="241,78,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
         <Label x:Name="LabelUpdateFFmpegVersion" Content="" HorizontalAlignment="Left" Margin="439,78,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
-        <Button x:Name="ButtonUpdateAomenc" Content="Update aomenc" HorizontalAlignment="Left" Margin="10,117,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateAomenc_Click"/>
-        <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,117,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center"/>
-        <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,117,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center"/>
-        <Label x:Name="LabelCurrentAomencVersion" Content="" HorizontalAlignment="Left" Margin="241,117,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
-        <Label x:Name="LabelUpdateAomencVersion" Content="" HorizontalAlignment="Left" Margin="439,117,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
-        <Button x:Name="ButtonUpdateRav1e" Content="Update rav1e" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateRav1e_Click"/>
-        <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,156,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center"/>
-        <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,156,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center"/>
-        <Label x:Name="LabelCurrentRav1eVersion" Content="" HorizontalAlignment="Left" Margin="241,156,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
-        <Label x:Name="LabelUpdateRav1eVersion" Content="" HorizontalAlignment="Left" Margin="439,156,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
-        <Button x:Name="ButtonUpdateSVTAV1" Content="Update SVT-AV1" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateSVTAV1_Click"/>
-        <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,195,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center"/>
-        <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,195,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center"/>
-        <Label x:Name="LabelCurrentSVTAV1Version" Content="" HorizontalAlignment="Left" Margin="241,195,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
-        <Label x:Name="LabelUpdateSVTAV1Version" Content="" HorizontalAlignment="Left" Margin="439,195,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center"/>
-        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="30" Margin="10,236,0,0" VerticalAlignment="Top" Width="526"/>
-        <Label Content="Builds are provided by jeremylee.sh and are released under gplv3." HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="403" Height="48" VerticalContentAlignment="Center" FontStyle="Italic"/>
+        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="30" Margin="10,126,0,0" VerticalAlignment="Top" Width="526"/>
+        <Label Content="Builds are provided by gyan.dev and are released under gplv3." HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="403" Height="48" VerticalContentAlignment="Center" FontStyle="Italic"/>
 
     </Grid>
 </mah:MetroWindow>
