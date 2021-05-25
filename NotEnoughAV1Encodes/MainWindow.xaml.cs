@@ -38,31 +38,13 @@ namespace NotEnoughAV1Encodes
         public static string VSYNC = " -vsync 0 ";  // Default Piping Frame Sync Method
         public static string VFRCMD = "";           // VFR Muxing Command
         // Temp Settings Audio
-        public static bool trackOne;                // Audio Track One active
-        public static bool trackTwo;                // Audio Track Two active
-        public static bool trackThree;              // Audio Track Three active
-        public static bool trackFour;               // Audio Track Four active
+
         public static bool pcmBluray;               // Audio PCM Copy
-        public static string trackOneLanguage;      // Audio Track One Language
-        public static string trackTwoLanguage;      // Audio Track Two Language
-        public static string trackThreeLanguage;    // Audio Track Three Language
-        public static string trackFourLanguage;     // Audio Track Four Language
-        public static string trackOneName;          // Audio Track One Name
-        public static string trackTwoName;          // Audio Track Two Name
-        public static string trackThreeName;        // Audio Track Three Name
-        public static string trackFourName;         // Audio Track Four Name
-        public static string audioCodecTrackOne;    // Audio Track One Codec
-        public static string audioCodecTrackTwo;    // Audio Track Two Codec
-        public static string audioCodecTrackThree;  // Audio Track Three Codec
-        public static string audioCodecTrackFour;   // Audio Track Four Codec
-        public static int audioBitrateTrackOne;     // Audio Track One Bitrate
-        public static int audioBitrateTrackTwo;     // Audio Track Two Bitrate
-        public static int audioBitrateTrackThree;   // Audio Track Three Bitrate
-        public static int audioBitrateTrackFour;    // Audio Track Four Bitrate
-        public static int audioChannelsTrackOne;    // Audio Track One Channels
-        public static int audioChannelsTrackTwo;    // Audio Track Two Channels
-        public static int audioChannelsTrackThree;  // Audio Track Three Channels
-        public static int audioChannelsTrackFour;   // Audio Track Four Channels
+        
+
+
+
+
         // Temp Settings Subtitles
         public static string subCommand;            // Subtitle Muxing Command
         public static string hardsub_command;        // Subtitle Hardcoding Command
@@ -1017,14 +999,14 @@ namespace NotEnoughAV1Encodes
                 }
                 
                 
-                if (trackOne || trackTwo || trackThree || trackFour)
+                if (EncodeAudio.trackOne || EncodeAudio.trackTwo || EncodeAudio.trackThree || EncodeAudio.trackFour)
                 {
                     LabelProgressBar.Content = "Encoding Audio...";
                     await Task.Run(() => { token.ThrowIfCancellationRequested(); EncodeAudio.Encode(); }, token);
                     if (!File.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "Audio", "audio.mkv")))
                     {
                         // This disables audio if audio encoding failed, thus still managing to output a video in the muxing process without audio
-                        trackOne = false; trackTwo = false; trackThree = false; trackFour = false;
+                        EncodeAudio.trackOne = EncodeAudio.trackTwo = EncodeAudio.trackThree = EncodeAudio.trackFour = false;
                         Helpers.Logging("Attention: Tried to encode audio. Not audio output detected. Audio is now disabled.");
                     }
                 }
@@ -1184,71 +1166,43 @@ namespace NotEnoughAV1Encodes
         private void SetAudioSettings()
         {
             // Sets Active Audio Tracks
-            trackOne = ToggleSwitchAudioTrackOne.IsOn == true;
-            trackTwo = ToggleSwitchAudioTrackTwo.IsOn == true;
-            trackThree = ToggleSwitchAudioTrackThree.IsOn == true;
-            trackFour = ToggleSwitchAudioTrackFour.IsOn == true;
+            EncodeAudio.trackOne = ToggleSwitchAudioTrackOne.IsOn == true;
+            EncodeAudio.trackTwo = ToggleSwitchAudioTrackTwo.IsOn == true;
+            EncodeAudio.trackThree = ToggleSwitchAudioTrackThree.IsOn == true;
+            EncodeAudio.trackFour = ToggleSwitchAudioTrackFour.IsOn == true;
             // Sets Audio Language
-            trackOneLanguage = audio_languages[ComboBoxTrackOneLanguage.Text];
-            trackTwoLanguage = audio_languages[ComboBoxTrackTwoLanguage.Text];
-            trackThreeLanguage = audio_languages[ComboBoxTrackThreeLanguage.Text];
-            trackFourLanguage = audio_languages[ComboBoxTrackFourLanguage.Text];
+            EncodeAudio.trackOneLanguage = audio_languages[ComboBoxTrackOneLanguage.Text];
+            EncodeAudio.trackTwoLanguage = audio_languages[ComboBoxTrackTwoLanguage.Text];
+            EncodeAudio.trackThreeLanguage = audio_languages[ComboBoxTrackThreeLanguage.Text];
+            EncodeAudio.trackFourLanguage = audio_languages[ComboBoxTrackFourLanguage.Text];
             // Sets Audio Bitrate
-            audioBitrateTrackOne = int.Parse(TextBoxAudioBitrate.Text);
-            audioBitrateTrackTwo = int.Parse(TextBoxAudioBitrateTrackTwo.Text);
-            audioBitrateTrackThree = int.Parse(TextBoxAudioBitrateTrackThree.Text);
-            audioBitrateTrackFour = int.Parse(TextBoxAudioBitrateTrackFour.Text);
-            // Sets Audio Codec
-            audioCodecTrackOne = ComboBoxAudioCodec.Text;
-            audioCodecTrackTwo = ComboBoxAudioCodecTrackTwo.Text;
-            audioCodecTrackThree = ComboBoxAudioCodecTrackThree.Text;
-            audioCodecTrackFour = ComboBoxAudioCodecTrackFour.Text;
-            // Sets Audio Track Name
-            if (CheckBoxTrackOneTrackName.IsChecked == true) { trackOneName = TextBoxAudioTrackOneName.Text; }
-            else if (audioCodecTrackOne != "Copy Audio") { trackOneName = "[" + trackOneLanguage.ToUpper() + "] " + audioCodecTrackOne + " " + TextBoxAudioBitrate.Text + "kbps"; }
-            else { trackOneName = ""; }
-            if (CheckBoxTrackTwoTrackName.IsChecked == true) { trackTwoName = TextBoxAudioTrackTwoName.Text; }
-            else if (audioCodecTrackTwo != "Copy Audio") { trackTwoName = "[" + trackTwoLanguage.ToUpper() + "] " + audioCodecTrackTwo + " " + TextBoxAudioBitrateTrackTwo.Text + "kbps"; }
-            else { trackTwoName = ""; }
-            if (CheckBoxTrackThreeTrackName.IsChecked == true) { trackThreeName = TextBoxAudioTrackThreeName.Text; }
-            else if (audioCodecTrackThree != "Copy Audio") { trackThreeName = "[" + trackThreeLanguage.ToUpper() + "] " + audioCodecTrackThree + " " + TextBoxAudioBitrateTrackThree.Text + "kbps"; }
-            else { trackThreeName = ""; }
-            if (CheckBoxTrackFourTrackName.IsChecked == true) { trackFourName = TextBoxAudioTrackFourName.Text; }
-            else if (audioCodecTrackFour != "Copy Audio") { trackFourName = "[" + trackFourLanguage.ToUpper() + "] " + audioCodecTrackFour + " " + TextBoxAudioBitrateTrackFour.Text + "kbps"; }
-            else { trackFourName = ""; }
+            EncodeAudio.audioBitrateTrackOne = int.Parse(TextBoxAudioBitrate.Text);
+            EncodeAudio.audioBitrateTrackTwo = int.Parse(TextBoxAudioBitrateTrackTwo.Text);
+            EncodeAudio.audioBitrateTrackThree = int.Parse(TextBoxAudioBitrateTrackThree.Text);
+            EncodeAudio.audioBitrateTrackFour = int.Parse(TextBoxAudioBitrateTrackFour.Text);
             // Sets Audio Channels
-            switch (ComboBoxTrackOneChannels.SelectedIndex)
-            {
-                case 0: audioChannelsTrackOne = 1; break;
-                case 1: audioChannelsTrackOne = 2; break;
-                case 2: audioChannelsTrackOne = 6; break;
-                case 3: audioChannelsTrackOne = 8; break;
-                default: break;
-            }
-            switch (ComboBoxTrackTwoChannels.SelectedIndex)
-            {
-                case 0: audioChannelsTrackTwo = 1; break;
-                case 1: audioChannelsTrackTwo = 2; break;
-                case 2: audioChannelsTrackTwo = 6; break;
-                case 3: audioChannelsTrackTwo = 8; break;
-                default: break;
-            }
-            switch (ComboBoxTrackThreeChannels.SelectedIndex)
-            {
-                case 0: audioChannelsTrackThree = 1; break;
-                case 1: audioChannelsTrackThree = 2; break;
-                case 2: audioChannelsTrackThree = 6; break;
-                case 3: audioChannelsTrackThree = 8; break;
-                default: break;
-            }
-            switch (ComboBoxTrackFourChannels.SelectedIndex)
-            {
-                case 0: audioChannelsTrackFour = 1; break;
-                case 1: audioChannelsTrackFour = 2; break;
-                case 2: audioChannelsTrackFour = 6; break;
-                case 3: audioChannelsTrackFour = 8; break;
-                default: break;
-            }
+            EncodeAudio.audioChannelsTrackOne = ComboBoxTrackOneChannels.SelectedIndex;
+            EncodeAudio.audioChannelsTrackTwo = ComboBoxTrackTwoChannels.SelectedIndex;
+            EncodeAudio.audioChannelsTrackThree = ComboBoxTrackThreeChannels.SelectedIndex;
+            EncodeAudio.audioChannelsTrackFour = ComboBoxTrackFourChannels.SelectedIndex;
+            // Sets Audio Codec
+            EncodeAudio.audioCodecTrackOne = ComboBoxAudioCodec.Text;
+            EncodeAudio.audioCodecTrackTwo = ComboBoxAudioCodecTrackTwo.Text;
+            EncodeAudio.audioCodecTrackThree = ComboBoxAudioCodecTrackThree.Text;
+            EncodeAudio.audioCodecTrackFour = ComboBoxAudioCodecTrackFour.Text;
+            // Sets Audio Track Name
+            if (CheckBoxTrackOneTrackName.IsChecked == true) { EncodeAudio.trackOneName = TextBoxAudioTrackOneName.Text; }
+            else if (EncodeAudio.audioCodecTrackOne != "Copy Audio") { EncodeAudio.trackOneName = "[" + EncodeAudio.trackOneLanguage.ToUpper() + "] " + EncodeAudio.audioCodecTrackOne + " " + TextBoxAudioBitrate.Text + "kbps"; }
+            else { EncodeAudio.trackOneName = ""; }
+            if (CheckBoxTrackTwoTrackName.IsChecked == true) { EncodeAudio.trackTwoName = TextBoxAudioTrackTwoName.Text; }
+            else if (EncodeAudio.audioCodecTrackTwo != "Copy Audio") { EncodeAudio.trackTwoName = "[" + EncodeAudio.trackTwoLanguage.ToUpper() + "] " + EncodeAudio.audioCodecTrackTwo + " " + TextBoxAudioBitrateTrackTwo.Text + "kbps"; }
+            else { EncodeAudio.trackTwoName = ""; }
+            if (CheckBoxTrackThreeTrackName.IsChecked == true) { EncodeAudio.trackThreeName = TextBoxAudioTrackThreeName.Text; }
+            else if (EncodeAudio.audioCodecTrackThree != "Copy Audio") { EncodeAudio.trackThreeName = "[" + EncodeAudio.trackThreeLanguage.ToUpper() + "] " + EncodeAudio.audioCodecTrackThree + " " + TextBoxAudioBitrateTrackThree.Text + "kbps"; }
+            else { EncodeAudio.trackThreeName = ""; }
+            if (CheckBoxTrackFourTrackName.IsChecked == true) { EncodeAudio.trackFourName = TextBoxAudioTrackFourName.Text; }
+            else if (EncodeAudio.audioCodecTrackFour != "Copy Audio") { EncodeAudio.trackFourName = "[" + EncodeAudio.trackFourLanguage.ToUpper() + "] " + EncodeAudio.audioCodecTrackFour + " " + TextBoxAudioBitrateTrackFour.Text + "kbps"; }
+            else { EncodeAudio.trackFourName = ""; }
         }
 
         // ════════════════════════════════════ Video Filters ═════════════════════════════════════
@@ -2220,7 +2174,6 @@ namespace NotEnoughAV1Encodes
 
                     // Set as encoding
                     encode_state = 1;
-                    Console.WriteLine("Encode State: " + encode_state);
                 }
                 else if (encode_state == 1)
                 {
@@ -2230,13 +2183,11 @@ namespace NotEnoughAV1Encodes
                     // Pause all PIDs
                     foreach (int pid in Global.Launched_PIDs)
                     {
-                        Console.WriteLine("Paused PID: " + pid);
                         Suspend.SuspendProcess(pid);
                     }
 
                     // Set as paused
                     encode_state = 2;
-                    Console.WriteLine("Encode State: " + encode_state);
                 }
             }
             else 
@@ -2450,22 +2401,17 @@ namespace NotEnoughAV1Encodes
 
                                         // Get launched Process ID
                                         int temp_pid = ffmpegProcess.Id;
-                                        Console.WriteLine("PID Launched: " + temp_pid);
 
                                         // Add Process ID to Array, inorder to keep track / kill the instances
                                         Global.Launched_PIDs.Add(temp_pid);
-                                        Console.WriteLine("PIDs Total: " + Global.Launched_PIDs);
 
                                         ffmpegProcess.WaitForExit();
 
                                         // Get Exit Code
                                         int exit_code = ffmpegProcess.ExitCode;
-                                        Console.WriteLine("Exit Code: " + exit_code);
 
                                         // Remove PID from Array after Exit
                                         Global.Launched_PIDs.RemoveAll(i => i == temp_pid);
-                                        Console.WriteLine("PID Removed: " + temp_pid);
-                                        Console.WriteLine("PIDs Total: " + Global.Launched_PIDs);
 
                                         if (OnePass == false && SmallFunctions.Cancel.CancelAll == false)
                                         {
@@ -2504,7 +2450,6 @@ namespace NotEnoughAV1Encodes
 
                                         // Get Exit Code
                                         int exit_code = ffmpegProcess.ExitCode;
-                                        Console.WriteLine("Exit Code: " + exit_code);
 
                                         // Remove PID from Array after Exit
                                         Global.Launched_PIDs.RemoveAll(i => i == temp_pid);

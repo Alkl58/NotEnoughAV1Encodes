@@ -223,10 +223,8 @@ namespace NotEnoughAV1Encodes
 
                 // Get Exit Code
                 int exit_code = chunking_process.ExitCode;
-                Console.WriteLine("Exit Code: " + exit_code);
 
                 // Remove PID from Array after Exit
-                // Global.Launched_PIDs = Global.Launched_PIDs.Where(val => val != temp_pid).ToArray();
                 Global.Launched_PIDs.RemoveAll(i => i == temp_pid);
 
                 // Write Save Point

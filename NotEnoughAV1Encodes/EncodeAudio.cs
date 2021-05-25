@@ -4,6 +4,36 @@ namespace NotEnoughAV1Encodes
 {
     class EncodeAudio
     {
+        public static bool trackOne;                // Audio Track One active
+        public static bool trackTwo;                // Audio Track Two active
+        public static bool trackThree;              // Audio Track Three active
+        public static bool trackFour;               // Audio Track Four active
+
+        public static string trackOneLanguage;      // Audio Track One Language
+        public static string trackTwoLanguage;      // Audio Track Two Language
+        public static string trackThreeLanguage;    // Audio Track Three Language
+        public static string trackFourLanguage;     // Audio Track Four Language
+
+        public static int audioBitrateTrackOne;     // Audio Track One Bitrate
+        public static int audioBitrateTrackTwo;     // Audio Track Two Bitrate
+        public static int audioBitrateTrackThree;   // Audio Track Three Bitrate
+        public static int audioBitrateTrackFour;    // Audio Track Four Bitrate
+
+        public static int audioChannelsTrackOne;    // Audio Track One Channels
+        public static int audioChannelsTrackTwo;    // Audio Track Two Channels
+        public static int audioChannelsTrackThree;  // Audio Track Three Channels
+        public static int audioChannelsTrackFour;   // Audio Track Four Channels
+
+        public static string audioCodecTrackOne;    // Audio Track One Codec
+        public static string audioCodecTrackTwo;    // Audio Track Two Codec
+        public static string audioCodecTrackThree;  // Audio Track Three Codec
+        public static string audioCodecTrackFour;   // Audio Track Four Codec
+
+        public static string trackOneName;          // Audio Track One Name
+        public static string trackTwoName;          // Audio Track Two Name
+        public static string trackThreeName;        // Audio Track Three Name
+        public static string trackFourName;         // Audio Track Four Name
+
         public static void Encode()
         {
             // Skips Audio Encoding if the audio file already exist
@@ -15,27 +45,27 @@ namespace NotEnoughAV1Encodes
                 string audio_command = "";
 
                 int end_index = 0;
-                if (MainWindow.trackOne)
+                if (trackOne)
                 {
-                    audio_command += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackOne, 0, end_index, MainWindow.audioCodecTrackOne, MainWindow.audioChannelsTrackOne, MainWindow.trackOneLanguage, MainWindow.trackOneName);
+                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackOne, 0, end_index, audioCodecTrackOne, audioChannelsTrackOne, trackOneLanguage, trackOneName);
                     end_index += 1;
                 }
-                if (MainWindow.trackTwo)
+                if (trackTwo)
                 {
-                    audio_command += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackTwo, 1, end_index, MainWindow.audioCodecTrackTwo, MainWindow.audioChannelsTrackTwo, MainWindow.trackTwoLanguage, MainWindow.trackTwoName);
+                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackTwo, 1, end_index, audioCodecTrackTwo, audioChannelsTrackTwo, trackTwoLanguage, trackTwoName);
                     end_index += 1;
                 }
-                if (MainWindow.trackThree)
+                if (trackThree)
                 {
-                    audio_command += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackThree, 2, end_index, MainWindow.audioCodecTrackThree, MainWindow.audioChannelsTrackThree, MainWindow.trackThreeLanguage, MainWindow.trackThreeName);
+                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackThree, 2, end_index, audioCodecTrackThree, audioChannelsTrackThree, trackThreeLanguage, trackThreeName);
                     end_index += 1;
                 }
-                if (MainWindow.trackFour)
+                if (trackFour)
                 {
-                    audio_command += MultipleTrackCommandGenerator(MainWindow.audioBitrateTrackFour, 3, end_index, MainWindow.audioCodecTrackFour, MainWindow.audioChannelsTrackFour, MainWindow.trackFourLanguage, MainWindow.trackFourName);
+                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackFour, 3, end_index, audioCodecTrackFour, audioChannelsTrackFour, trackFourLanguage, trackFourName);
                 }
 
-                if (MainWindow.audioCodecTrackOne != "Copy Audio" && MainWindow.audioCodecTrackTwo != "Copy Audio" && MainWindow.audioCodecTrackThree != "Copy Audio" && MainWindow.audioCodecTrackFour != "Copy Audio")
+                if (audioCodecTrackOne != "Copy Audio" && audioCodecTrackTwo != "Copy Audio" && audioCodecTrackThree != "Copy Audio" && audioCodecTrackFour != "Copy Audio")
                 {
                     audio_command += " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " ";
                 }
@@ -73,7 +103,7 @@ namespace NotEnoughAV1Encodes
             audioCodecCommand += SwitchCodec(activtrackcodec);
             // Channel Layout / Bitrate
             if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -b:a:" + end_index + " " + activetrackbitrate + "k"; }
-            audioCodecCommand += " -ac:a:" + end_index + " " + channellayout + " ";
+            audioCodecCommand += " -ac:a:" + end_index + " " + SetChannelLayout(channellayout) + " ";
             // Metadata
             audioCodecCommand += " -metadata:s:a:" + end_index + " language=" + lang;
             if (activtrackcodec != "Copy Audio")
@@ -81,6 +111,20 @@ namespace NotEnoughAV1Encodes
                 audioCodecCommand += " -metadata:s:a:" + end_index + " title=" + '\u0022' + track_name + '\u0022' + " ";
             }
             return audioCodecCommand;
+        }
+
+        private static string SetChannelLayout(int layout)
+        {
+            string returnLayout;
+            switch (layout)
+            {
+                case 0: returnLayout = "1"; break;
+                case 1: returnLayout = "2"; break;
+                case 2: returnLayout = "6"; break;
+                case 3: returnLayout = "8"; break;
+                default: returnLayout = "2";  break;
+            }
+            return returnLayout;
         }
     }
 }
