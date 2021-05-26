@@ -37,14 +37,6 @@ namespace NotEnoughAV1Encodes
         public static bool VFRVideo = false;        // Wether or not timestamp file should be used
         public static string VSYNC = " -vsync 0 ";  // Default Piping Frame Sync Method
         public static string VFRCMD = "";           // VFR Muxing Command
-        // Temp Settings Audio
-
-        public static bool pcmBluray;               // Audio PCM Copy
-        
-
-
-
-
         // Temp Settings Subtitles
         public static string subCommand;            // Subtitle Muxing Command
         public static string hardsub_command;        // Subtitle Hardcoding Command
@@ -1337,7 +1329,7 @@ namespace NotEnoughAV1Encodes
             if (trackfour) { ToggleSwitchAudioTrackFour.IsEnabled = true; ToggleSwitchAudioTrackFour.IsOn = true; }
             else { ToggleSwitchAudioTrackFour.IsEnabled = false; ToggleSwitchAudioTrackFour.IsOn = false; }
             // This is needed if user encodes a bluray with pcm audio stream and wants to copy audio
-            if (GetAudioInfo() == "pcm_bluray") { pcmBluray = true; } else { pcmBluray = false; }
+            if (GetAudioInfo() == "pcm_bluray") { EncodeAudio.pcmBluray = true; } else { EncodeAudio.pcmBluray = false; }
             GetAudioLanguage();
         }
 

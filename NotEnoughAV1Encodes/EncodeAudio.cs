@@ -34,6 +34,8 @@ namespace NotEnoughAV1Encodes
         public static string trackThreeName;        // Audio Track Three Name
         public static string trackFourName;         // Audio Track Four Name
 
+        public static bool pcmBluray;               // Audio PCM Copy
+
         public static void Encode()
         {
             // Skips Audio Encoding if the audio file already exist
@@ -87,7 +89,7 @@ namespace NotEnoughAV1Encodes
                 case "AC3": audio_codec_switch = "ac3"; break;
                 case "AAC": audio_codec_switch = "aac"; break;
                 case "MP3": audio_codec_switch = "libmp3lame"; break;
-                case "Copy Audio": if (MainWindow.pcmBluray) { audio_codec_switch = "pcm_s16le"; } else { audio_codec_switch = "copy"; } break;
+                case "Copy Audio": if (pcmBluray) { audio_codec_switch = "pcm_s16le"; } else { audio_codec_switch = "copy"; } break;
                 default: break;
             }
             return audio_codec_switch;
