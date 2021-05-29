@@ -33,7 +33,6 @@ namespace NotEnoughAV1Encodes
         public static bool OnePass = true;          // true = Onepass, false = Twopass
         public static bool Priority = true;         // true = normal, false = below normal (process priority)
         public static bool Logging = true;          // Program Logging
-        public static bool TrimEnabled = false;     // Trim Boolean
         public static bool VFRVideo = false;        // Wether or not timestamp file should be used
         public static string VSYNC = " -vsync 0 ";  // Default Piping Frame Sync Method
         public static string VFRCMD = "";           // VFR Muxing Command
@@ -58,7 +57,6 @@ namespace NotEnoughAV1Encodes
         public static bool ReadTimeCode = false;    // Skips creating an image preview at start
         public static bool PopupWindow = false;     // Shows a popup window after encode finished
         public static bool Yadif1 = false;          // If true -> double the frames
-        public static string TrimEndTemp = "00:23:00.000"; // Sets the maximum trim time
         public static int TotalFrames = 0;          // used for progressbar and frame check
         public static Dictionary<string, string> audio_languages = new Dictionary<string, string>();
         public DateTime StartTime;                  // used for eta calculation
@@ -266,9 +264,7 @@ namespace NotEnoughAV1Encodes
             BatchEncoding = false;
             GetAudioInformation();
             GetSubtitleTracks();
-            LabelVideoLength.Content = TrimEndTemp.Remove(TrimEndTemp.Length - 4);
             AutoSetBitDepthAndColorFormat(file);
-            LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(file);
             LabelVideoFramerate.Content = FFprobe.GetFrameRate(file);
             string res = FFprobe.GetResolution(file);
             LabelVideoResolution.Content = res;
@@ -281,6 +277,7 @@ namespace NotEnoughAV1Encodes
             // Get & Set correct Color Formats
 
             string format = FFprobe.GetPixelFormat(result);
+            LabelVideoColorFomat.Content = format;
 
             Regex rgx10bit = new Regex(@"10le$");
             Regex rgx12bit = new Regex(@"12le$");
@@ -962,7 +959,7 @@ namespace NotEnoughAV1Encodes
                 // Saves the Project as file
                 SaveSettings(false, Global.temp_path_folder);
 
-                if (subHardSubEnabled || TrimEnabled)
+                if (subHardSubEnabled)
                 {
                     // Reencodes the Video
                     await Task.Run(() => ReEncode());
@@ -981,8 +978,6 @@ namespace NotEnoughAV1Encodes
                 {
                     // Get Framecount from Reencoded Video
                     await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetSourceFrameCount(Path.Combine(Global.temp_path, Global.temp_path_folder, "tmpsub.mkv")); }, token);
-
-                    // To Do: Get Framecount of chunks splitted in chunking mode with trimming enabled
                 }
                 else
                 {
@@ -1003,7 +998,7 @@ namespace NotEnoughAV1Encodes
                     }
                 }
 
-                if (subHardSubEnabled || TrimEnabled)
+                if (subHardSubEnabled)
                 {
                     // Sets the new video input
                     Global.Video_Path = Path.Combine(Global.temp_path, Global.temp_path_folder, "tmpsub.mkv");
@@ -1286,50 +1281,26 @@ namespace NotEnoughAV1Encodes
 
         private void GetAudioInformation()
         {
-            Process getAudioIndexes = new Process();
-            getAudioIndexes.StartInfo = new ProcessStartInfo()
-            {
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe",
-                WorkingDirectory = Global.FFmpeg_Path,
-                Arguments = "/C ffprobe.exe -i " + '\u0022' + Global.Video_Path + '\u0022' + " -loglevel error -select_streams a -show_entries stream=index -of csv=p=1",
-                RedirectStandardError = true,
-                RedirectStandardOutput = true
-            };
-            getAudioIndexes.Start();
-            //Reads the Console Output
-            string audioIndexes = getAudioIndexes.StandardOutput.ReadToEnd();
-            getAudioIndexes.WaitForExit();
-            //Splits the Console Output
-            string[] audioIndexesFixed = audioIndexes.Split(new string[] { " ", "stream," }, StringSplitOptions.RemoveEmptyEntries);
-            int detectedTracks = 0;
-            bool trackone = false, tracktwo = false, trackthree = false, trackfour = false;
-            // Iterates over the audioIndexesFixed Array
-            foreach (var item in audioIndexesFixed)
-            {
-                switch (detectedTracks)
-                {
-                    case 0: trackone = true; break;
-                    case 1: tracktwo = true; break;
-                    case 2: trackthree = true; break;
-                    case 3: trackfour = true; break;
-                    default: break;
-                }
-                detectedTracks += 1;
-            }
+            MediaInfo mediaInfo = new MediaInfo();
+            mediaInfo.Open(Global.Video_Path);
+
+            int audio_count = mediaInfo.Count_Get(StreamKind.Audio);
+
             // Enable / Disable CheckBoxes
-            if (trackone) { ToggleSwitchAudioTrackOne.IsEnabled = true; ToggleSwitchAudioTrackOne.IsOn = true; }
-            else { ToggleSwitchAudioTrackOne.IsEnabled = false; ToggleSwitchAudioTrackOne.IsOn = false; }
-            if (tracktwo) { ToggleSwitchAudioTrackTwo.IsEnabled = true; ToggleSwitchAudioTrackTwo.IsOn = true; }
-            else { ToggleSwitchAudioTrackTwo.IsEnabled = false; ToggleSwitchAudioTrackTwo.IsOn = false; }
-            if (trackthree) { ToggleSwitchAudioTrackThree.IsEnabled = true; ToggleSwitchAudioTrackThree.IsOn = true; }
-            else { ToggleSwitchAudioTrackThree.IsEnabled = false; ToggleSwitchAudioTrackThree.IsOn = false; }
-            if (trackfour) { ToggleSwitchAudioTrackFour.IsEnabled = true; ToggleSwitchAudioTrackFour.IsOn = true; }
-            else { ToggleSwitchAudioTrackFour.IsEnabled = false; ToggleSwitchAudioTrackFour.IsOn = false; }
+            if (audio_count >= 1) { ToggleSwitchAudioTrackOne.IsEnabled = ToggleSwitchAudioTrackOne.IsOn = true; }
+            else { ToggleSwitchAudioTrackOne.IsEnabled = ToggleSwitchAudioTrackOne.IsOn = false; }
+            if (audio_count >= 2) { ToggleSwitchAudioTrackTwo.IsEnabled = ToggleSwitchAudioTrackTwo.IsOn = true; }
+            else { ToggleSwitchAudioTrackTwo.IsEnabled = ToggleSwitchAudioTrackTwo.IsOn = false; }
+            if (audio_count >= 3) { ToggleSwitchAudioTrackThree.IsEnabled = ToggleSwitchAudioTrackThree.IsOn = true; }
+            else { ToggleSwitchAudioTrackThree.IsEnabled = ToggleSwitchAudioTrackThree.IsOn = false; }
+            if (audio_count >= 4) { ToggleSwitchAudioTrackFour.IsEnabled = ToggleSwitchAudioTrackFour.IsOn = true; }
+            else { ToggleSwitchAudioTrackFour.IsEnabled = ToggleSwitchAudioTrackFour.IsOn = false; }
+
             // This is needed if user encodes a bluray with pcm audio stream and wants to copy audio
             if (GetAudioInfo() == "pcm_bluray") { EncodeAudio.pcmBluray = true; } else { EncodeAudio.pcmBluray = false; }
+
+            mediaInfo.Close();
+
             GetAudioLanguage();
         }
 
@@ -2044,7 +2015,6 @@ namespace NotEnoughAV1Encodes
                 {
                     BatchEncoding = false;
                     LoadSettings(true, result);
-                    LabelVideoLength.Content = TrimEndTemp.Remove(TrimEndTemp.Length - 4);
                     AutoSetBitDepthAndColorFormat(Global.Video_Path);
                     LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(Global.Video_Path);
                     LabelVideoFramerate.Content = FFprobe.GetFrameRate(Global.Video_Path);
