@@ -9,12 +9,6 @@ namespace NotEnoughAV1Encodes
 {
     class FFprobe
     {
-        public static string GetPixelFormat(string videoInput)
-        {
-            string cmd = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=pix_fmt";
-            return FFprobeExe(cmd);
-        }
-
         public static string GetFrameRate(string videoInput)
         {
             string cmd = "/C ffprobe.exe -i " + '\u0022' + videoInput + '\u0022' + " -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate";

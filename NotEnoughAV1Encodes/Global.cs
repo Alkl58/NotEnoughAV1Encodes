@@ -10,7 +10,10 @@ namespace NotEnoughAV1Encodes
         public static string temp_path_folder = null;
 
         // Dependecie Paths
-        public static string FFmpeg_Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg", "ffmpeg.exe");
+        public static string FFmpeg_Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg");
+        public static string Aomenc_Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "aomenc");
+        public static string Rav1e__Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e");
+        public static string SvtAv1_Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1");
         public static string MKVToolNix_Path = null;
 
         // Video Input
@@ -23,7 +26,6 @@ namespace NotEnoughAV1Encodes
         public static string[] Video_Chunks;
 
         // Current Active PIDs
-        //public static int[] Launched_PIDs;
         public static List<int> Launched_PIDs = new List<int>();
 
         // Total Frame Count

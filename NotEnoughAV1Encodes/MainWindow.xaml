@@ -208,10 +208,14 @@
                         <Grid>
                             <Label Content="Encoder:" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
                             <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use" SelectedIndex="0">
-                                <ComboBoxItem Content="aomenc" IsSelected="True"/>
+                                <ComboBoxItem Content="libaom" IsSelected="True"/>
+                                <ComboBoxItem Content="librav1e"/>
+                                <ComboBoxItem Content="libsvtav1"/>
+                                <ComboBoxItem Content="libvpx-vp9"/>
+                                <Separator/>
+                                <ComboBoxItem Content="aomenc"/>
                                 <ComboBoxItem Content="rav1e"/>
                                 <ComboBoxItem Content="svt-av1"/>
-                                <ComboBoxItem Content="vp9"/>
                             </ComboBox>
                             <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top"/>
                             <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center" ToolTip="Bit-Depth. 10bit recommended for animation and to avoid banding.">
@@ -371,6 +375,9 @@
                                     <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="2">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="7">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Canvas.Style>
@@ -405,6 +412,9 @@
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="1">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="6">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -479,6 +489,9 @@
                                 <Setter Property="UIElement.Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="0">
+                                        <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="5">
                                         <Setter Property="UIElement.Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>

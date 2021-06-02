@@ -14,8 +14,16 @@ namespace NotEnoughAV1Encodes
             // Writes all ivf files into chunks.txt for later concat
             IOrderedEnumerable<string> sorted = null;
 
-            sorted = Directory.GetFiles(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks"), "*.webm").OrderBy(f => f);
-
+            if (MainWindow.EncodeMethod != 6)
+            {
+                sorted = Directory.GetFiles(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks"), "*.webm").OrderBy(f => f);
+            }
+            else
+            {
+                // rav1e external only supports ivf
+                sorted = Directory.GetFiles(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks"), "*.ivf").OrderBy(f => f);
+            }
+            
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks"), "chunks.txt")))
             {
                 foreach (var fileTemp in sorted)

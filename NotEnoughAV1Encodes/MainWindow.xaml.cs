@@ -25,13 +25,9 @@ namespace NotEnoughAV1Encodes
 
         // Final Commands
         public static string FilterCommand = null;
-        public static string PipeBitDepthCommand = null;
-        public static string Final_Encoder_Command = null;
         // Temp Settings
-        public static int WorkerCount = 0;          // amount of workers
         public static int EncodeMethod = 0;         // 0 = aomenc, 1 = rav1e, 2 = svt-av1...
         public static bool OnePass = true;          // true = Onepass, false = Twopass
-        public static bool Priority = true;         // true = normal, false = below normal (process priority)
         public static bool Logging = true;          // Program Logging
         public static bool VFRVideo = false;        // Wether or not timestamp file should be used
         public static string VSYNC = " -vsync 0 ";  // Default Piping Frame Sync Method
@@ -51,10 +47,8 @@ namespace NotEnoughAV1Encodes
         public static bool BatchEncoding = false;   // Batch Encoding
         public static bool DeleteTempFiles = false; // Temp File Deletion
         public static bool PlayUISounds = false;    // UI Sounds (Finished Encoding / Error)
-        public static bool ShowTerminal = false;    // Show / Hide Encoding Terminal
         public static bool CustomBG = false;        // Custom Image Background
         public static bool StartUp = true;          // Avoids conflicts with Settings Tab
-        public static bool ReadTimeCode = false;    // Skips creating an image preview at start
         public static bool PopupWindow = false;     // Shows a popup window after encode finished
         public static bool Yadif1 = false;          // If true -> double the frames
         public static int TotalFrames = 0;          // used for progressbar and frame check
@@ -78,7 +72,7 @@ namespace NotEnoughAV1Encodes
             CheckDependencies.Check();
 
             // Sets the workercount combobox
-            int corecount = SmallFunctions.GetCoreCount();
+            int corecount = Helpers.GetCoreCount();
             for (int i = 1; i <= corecount; i++) { ComboBoxWorkerCount.Items.Add(i); }
             ComboBoxWorkerCount.SelectedItem = Convert.ToInt32(corecount * 75 / 100);
 
@@ -269,42 +263,48 @@ namespace NotEnoughAV1Encodes
             string res = FFprobe.GetResolution(file);
             LabelVideoResolution.Content = res;
             TextBoxFiltersResizeHeight.Text = res.Substring(res.LastIndexOf('x') + 1);
-            ReadTimeCode = true;
         }
 
         private void AutoSetBitDepthAndColorFormat(string result)
         {
             // Get & Set correct Color Formats
+            MediaInfo mediaInfo = new MediaInfo();
+            mediaInfo.Open(Global.Video_Path);
 
-            string format = FFprobe.GetPixelFormat(result);
-            LabelVideoColorFomat.Content = format;
+            string mediainfo_chroma_subsampling = mediaInfo.Get(StreamKind.Video, 0, "ChromaSubsampling");
+            int mediainfo_bit_depth = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "BitDepth"));
 
-            Regex rgx10bit = new Regex(@"10le$");
-            Regex rgx12bit = new Regex(@"12le$");
-            Regex rgxyuv420 = new Regex(@"^yuv420p");
-            Regex rgxyuv422 = new Regex(@"^yuv422p");
-            Regex rgxyuv444 = new Regex(@"^yuv444p");
+            mediaInfo.Close();
+            
+            LabelVideoColorFomat.Content = mediainfo_chroma_subsampling;
 
-            int rgxIndex = 0;
-            int rgxBit = 0;
+            int chroma_subsampling_index = 0;
+            int bit_depth_index = 0;
 
-            if (rgx10bit.IsMatch(format)) {  rgxBit = 1; }
-            else if (rgx12bit.IsMatch(format)) { rgxBit = 2; }
-
-            if (rgxyuv420.IsMatch(format)) { rgxIndex = 0; }
-            else if (rgxyuv422.IsMatch(format)) 
+            if (mediainfo_bit_depth == 10) 
             {
-                rgxIndex = 1;
-                ToggleSwitchAdvancedVideoSettings.IsOn = true;
+                bit_depth_index = 1; 
             }
-            else if (rgxyuv444.IsMatch(format))
+            else if (mediainfo_bit_depth == 12) 
             {
-                rgxIndex = 2;
-                ToggleSwitchAdvancedVideoSettings.IsOn = true;
+                bit_depth_index = 2; 
             }
 
-            ComboBoxVideoBitDepth.SelectedIndex = rgxBit;
-            ComboBoxColorFormat.SelectedIndex = rgxIndex;
+            if (mediainfo_chroma_subsampling == "4:2:0") 
+            {
+                chroma_subsampling_index = 0; 
+            }
+            else if (mediainfo_chroma_subsampling == "4:2:2") 
+            {
+                chroma_subsampling_index = 1;
+            }
+            else if (mediainfo_chroma_subsampling == "4:4:4")
+            {
+                chroma_subsampling_index = 2;
+            }
+
+            ComboBoxVideoBitDepth.SelectedIndex = bit_depth_index;
+            ComboBoxColorFormat.SelectedIndex = chroma_subsampling_index;
         }
 
         private void ComboBoxSplittingMethod_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -476,7 +476,7 @@ namespace NotEnoughAV1Encodes
                 {
                     ComboBoxVideoPasses.SelectedIndex = 0;
                 }
-                if (ComboBoxVideoEncoder.SelectedIndex == 1)
+                if (ComboBoxVideoEncoder.SelectedIndex == 1 || ComboBoxVideoEncoder.SelectedIndex == 6)
                 {
                     // rav1e
                     ComboBoxVideoPasses.SelectedIndex = 0;
@@ -498,7 +498,7 @@ namespace NotEnoughAV1Encodes
             // Shows / Hides Real Time Mode CheckBox
             if (CheckBoxVideoAomencRealTime != null && ComboBoxVideoEncoder != null)
             {
-                if (ComboBoxVideoEncoder.SelectedIndex == 0)
+                if (ComboBoxVideoEncoder.SelectedIndex == 0 || ComboBoxVideoEncoder.SelectedIndex == 5)
                 {
                     if (SliderVideoSpeed.Value >= 5)
                     {
@@ -661,7 +661,7 @@ namespace NotEnoughAV1Encodes
         {
             if (SliderVideoSpeed != null)
             {
-                if (ComboBoxVideoEncoder.SelectedIndex == 0)
+                if (ComboBoxVideoEncoder.SelectedIndex == 0 || ComboBoxVideoEncoder.SelectedIndex == 5)
                 {
                     // aomenc
                     SliderVideoSpeed.Maximum = 9;
@@ -669,7 +669,7 @@ namespace NotEnoughAV1Encodes
                     SliderVideoQuality.Value = 28;
                     SliderVideoQuality.Maximum = 63;
                 }
-                else if (ComboBoxVideoEncoder.SelectedIndex == 1)
+                else if (ComboBoxVideoEncoder.SelectedIndex == 1 || ComboBoxVideoEncoder.SelectedIndex == 6)
                 {
                     // rav1e
                     SliderVideoSpeed.Maximum = 10;
@@ -679,7 +679,7 @@ namespace NotEnoughAV1Encodes
                     // rav1e can only do 1pass atm
                     ComboBoxVideoPasses.SelectedIndex = 0;
                 }
-                else if (ComboBoxVideoEncoder.SelectedIndex == 2)
+                else if (ComboBoxVideoEncoder.SelectedIndex == 2 || ComboBoxVideoEncoder.SelectedIndex == 7)
                 {
                     // svt-av1
                     SliderVideoSpeed.Maximum = 8;
@@ -706,10 +706,13 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxCustomVideoSettings.IsChecked == true)
             {
                 // Sets the Encoder Settings
-                if (ComboBoxVideoEncoder.SelectedIndex == 0) { TextBoxCustomVideoSettings.Text = SetAomencCommand(); }
-                if (ComboBoxVideoEncoder.SelectedIndex == 1) { TextBoxCustomVideoSettings.Text = SetRav1eCommand(); }
-                if (ComboBoxVideoEncoder.SelectedIndex == 2) { TextBoxCustomVideoSettings.Text = SetSvtAV1Command(); }
+                if (ComboBoxVideoEncoder.SelectedIndex == 0) { TextBoxCustomVideoSettings.Text = SetLibAomCommand(); }
+                if (ComboBoxVideoEncoder.SelectedIndex == 1) { TextBoxCustomVideoSettings.Text = SetLibRav1eCommand(); }
+                if (ComboBoxVideoEncoder.SelectedIndex == 2) { TextBoxCustomVideoSettings.Text = SetLibSvtAV1Command(); }
                 if (ComboBoxVideoEncoder.SelectedIndex == 3) { TextBoxCustomVideoSettings.Text = SetVP9Command(); }
+                if (ComboBoxVideoEncoder.SelectedIndex == 5) { TextBoxCustomVideoSettings.Text = SetAomencCommand(); }
+                if (ComboBoxVideoEncoder.SelectedIndex == 6) { TextBoxCustomVideoSettings.Text = SetRav1eCommand(); }
+                if (ComboBoxVideoEncoder.SelectedIndex == 7) { TextBoxCustomVideoSettings.Text = SetSvtAV1Command(); }
             }
         }
 
@@ -1026,7 +1029,17 @@ namespace NotEnoughAV1Encodes
                     aTimer.Elapsed += new ElapsedEventHandler(ProgressBarUpdating);
                     aTimer.Interval = 1000;
                     aTimer.Start();
-                    EncodeVideo.Encode();
+
+                    if (EncodeMethod <= 4)
+                    {
+                        EncodeVideo.Encode();
+                    }
+                    else
+                    {
+                        EncodeVideoPipe.Encode();
+                    }
+
+                    
                     aTimer.Stop();
                 },  token);
 
@@ -1134,31 +1147,31 @@ namespace NotEnoughAV1Encodes
 
         private void SetTempSettings()
         {
-            WorkerCount = int.Parse(ComboBoxWorkerCount.Text);                      // Sets the worker count
-            OnePass = ComboBoxVideoPasses.SelectedIndex == 0;                       // Sets the amount of passes (true = 1, false = 2)
-            Priority = ComboBoxProcessPriority.SelectedIndex == 0;                  // Sets the Process Priority
-            DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn == true;             // Sets if Temp Files should be deleted
-            ShowTerminal = ToggleSwitchHideTerminal.IsOn == false;                  // Sets if Terminal shall be shown during encode
+            EncodeVideo.Worker_Count = int.Parse(ComboBoxWorkerCount.Text);             // Sets the worker count
+            OnePass = ComboBoxVideoPasses.SelectedIndex == 0;                           // Sets the amount of passes (true = 1, false = 2)
+            EncodeVideo.Process_Priority = ComboBoxProcessPriority.SelectedIndex == 0;  // Sets the Process Priority
+            DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn == true;                 // Sets if Temp Files should be deleted
+            EncodeVideo.Show_Terminal = ToggleSwitchHideTerminal.IsOn == false;         // Sets if Terminal shall be shown during encode
             SetPipeCommand();
         }
 
         private void SetPipeCommand()
         {
-            PipeBitDepthCommand = " -pix_fmt yuv";
+            EncodeVideo.Pixel_Format = " -pix_fmt yuv";
 
-            if (ComboBoxColorFormat.SelectedIndex == 0) { PipeBitDepthCommand += "420p"; }
-            else if (ComboBoxColorFormat.SelectedIndex == 1) { PipeBitDepthCommand += "422p"; }
-            else if (ComboBoxColorFormat.SelectedIndex == 2) { PipeBitDepthCommand += "444p"; }
+            if (ComboBoxColorFormat.SelectedIndex == 0) { EncodeVideo.Pixel_Format += "420p"; }
+            else if (ComboBoxColorFormat.SelectedIndex == 1) { EncodeVideo.Pixel_Format += "422p"; }
+            else if (ComboBoxColorFormat.SelectedIndex == 2) { EncodeVideo.Pixel_Format += "444p"; }
 
             if (ComboBoxVideoBitDepth.SelectedIndex == 1)
             {
                 // 10bit
-                PipeBitDepthCommand += "10le -strict -1";
+                EncodeVideo.Pixel_Format += "10le -strict -1";
             }
             else if (ComboBoxVideoBitDepth.SelectedIndex == 2)
             {
                 // 12bit
-                PipeBitDepthCommand += "12le -strict -1";
+                EncodeVideo.Pixel_Format += "12le -strict -1";
             }
         }
 
@@ -1672,58 +1685,90 @@ namespace NotEnoughAV1Encodes
 
         private void SetEncoderSettings()
         {
+            int selected_encoder = ComboBoxVideoEncoder.SelectedIndex;
+
             if (CheckBoxCustomVideoSettings.IsChecked == false)
             {
                 // Sets the Encoder Settings
-                if (ComboBoxVideoEncoder.SelectedIndex == 0) 
+                if (selected_encoder == 0) 
                 {
-                    Final_Encoder_Command = " -c:v libaom-av1 " + SetAomencCommand();
-                    Helpers.Logging("Aomenc Settings : " + Final_Encoder_Command);
+                    EncodeVideo.Final_Encoder_Command = " -c:v libaom-av1 " + SetLibAomCommand();
+                    Helpers.Logging("Libaom Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
-                if (ComboBoxVideoEncoder.SelectedIndex == 1) 
+                if (selected_encoder == 1) 
                 {
-                    Final_Encoder_Command = " -c:v librav1e " + SetRav1eCommand();
-                    Helpers.Logging("Rav1e Settings : " + Final_Encoder_Command);
+                    EncodeVideo.Final_Encoder_Command = " -c:v librav1e " + SetLibRav1eCommand();
+                    Helpers.Logging("Rav1e Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
-                if (ComboBoxVideoEncoder.SelectedIndex == 2) 
+                if (selected_encoder == 2) 
                 {
-                    Final_Encoder_Command = " -c:v libsvtav1 " + SetSvtAV1Command();
-                    Helpers.Logging("SVT-AV1 Settings : " + Final_Encoder_Command);
+                    EncodeVideo.Final_Encoder_Command = " -c:v libsvtav1 " + SetLibSvtAV1Command();
+                    Helpers.Logging("SVT-AV1 Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
-                if (ComboBoxVideoEncoder.SelectedIndex == 3)
+                if (selected_encoder == 3)
                 {
-                    Final_Encoder_Command = " -c:v libvpx-vp9 " + SetVP9Command();
-                    Helpers.Logging("VP9 Settings : " + Final_Encoder_Command);
+                    EncodeVideo.Final_Encoder_Command = " -c:v libvpx-vp9 " + SetVP9Command();
+                    Helpers.Logging("VP9 Settings : " + EncodeVideo.Final_Encoder_Command);
+                }
+                if (selected_encoder == 5)
+                {
+                    EncodeVideo.Final_Encoder_Command = SetAomencCommand();
+                    Helpers.Logging("Aomenc Settings : " + EncodeVideo.Final_Encoder_Command);
+                }
+                if (selected_encoder == 6)
+                {
+                    EncodeVideo.Final_Encoder_Command = SetRav1eCommand();
+                    Helpers.Logging("Rav1e Settings : " + EncodeVideo.Final_Encoder_Command);
+                }
+                if (selected_encoder == 7)
+                {
+                    EncodeVideo.Final_Encoder_Command = SetSvtAV1Command();
+                    Helpers.Logging("SVT-AV1 Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
             }
             else
             {
                 // Custom Encoding Settings
-                if (ComboBoxVideoEncoder.SelectedIndex == 0) 
+                if (selected_encoder == 0) 
                 {
-                    Final_Encoder_Command = " -c:v libaom-av1 " + TextBoxCustomVideoSettings.Text;
-                    Helpers.Logging("Aomenc Custom Settings : " + Final_Encoder_Command);
+                    EncodeVideo.Final_Encoder_Command = " -c:v libaom-av1 " + TextBoxCustomVideoSettings.Text;
+                    Helpers.Logging("Aomenc Custom Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
-                if (ComboBoxVideoEncoder.SelectedIndex == 1) 
+                if (selected_encoder == 1) 
                 {
-                    Final_Encoder_Command = " -c:v librav1e " + TextBoxCustomVideoSettings.Text;
-                    Helpers.Logging("Rav1e Custom Settings : " + Final_Encoder_Command);
+                    EncodeVideo.Final_Encoder_Command = " -c:v librav1e " + TextBoxCustomVideoSettings.Text;
+                    Helpers.Logging("Rav1e Custom Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
-                if (ComboBoxVideoEncoder.SelectedIndex == 2) 
+                if (selected_encoder == 2) 
                 {
-                    Final_Encoder_Command = " -c:v libsvtav1 " + TextBoxCustomVideoSettings.Text;
-                    Helpers.Logging("SVT-AV1 Custom Settings : " + Final_Encoder_Command);
+                    EncodeVideo.Final_Encoder_Command = " -c:v libsvtav1 " + TextBoxCustomVideoSettings.Text;
+                    Helpers.Logging("SVT-AV1 Custom Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
-                if (ComboBoxVideoEncoder.SelectedIndex == 3)
+                if (selected_encoder == 3)
                 {
-                    Final_Encoder_Command = " -c:v libvpx-vp9 " + TextBoxCustomVideoSettings.Text;
-                    Helpers.Logging("VP9 Custom Settings : " + Final_Encoder_Command);
+                    EncodeVideo.Final_Encoder_Command = " -c:v libvpx-vp9 " + TextBoxCustomVideoSettings.Text;
+                    Helpers.Logging("VP9 Custom Settings : " + EncodeVideo.Final_Encoder_Command);
+                }
+                if (selected_encoder == 5)
+                {
+                    EncodeVideo.Final_Encoder_Command = TextBoxCustomVideoSettings.Text;
+                    Helpers.Logging("Aomenc Settings : " + EncodeVideo.Final_Encoder_Command);
+                }
+                if (selected_encoder == 6)
+                {
+                    EncodeVideo.Final_Encoder_Command = TextBoxCustomVideoSettings.Text;
+                    Helpers.Logging("Rav1e Settings : " + EncodeVideo.Final_Encoder_Command);
+                }
+                if (selected_encoder == 7)
+                {
+                    EncodeVideo.Final_Encoder_Command = TextBoxCustomVideoSettings.Text;
+                    Helpers.Logging("SVT-AV1 Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
             }
 
         }
 
-        private string SetAomencCommand()
+        private string SetLibAomCommand()
         {
             // Aomenc Command
             string cmd = "";
@@ -1787,7 +1832,7 @@ namespace NotEnoughAV1Encodes
             return cmd;
         }
 
-        private string SetRav1eCommand()
+        private string SetLibRav1eCommand()
         {
             // Rav1e Command
             string cmd = "";
@@ -1846,7 +1891,7 @@ namespace NotEnoughAV1Encodes
             return cmd;
         }
 
-        private string SetSvtAV1Command()
+        private string SetLibSvtAV1Command()
         {
             string cmd = "";
             cmd += " -preset " + SliderVideoSpeed.Value;
@@ -1903,6 +1948,122 @@ namespace NotEnoughAV1Encodes
                     cmd += " -arnr-strength " + ComboBoxAomencVP9Strength.Text;    // ARNR Strength
                     cmd += " -arnr-type " + ComboBoxAomencVP9ARNRType.Text;        // ARNR Type
                 }
+            }
+
+            return cmd;
+        }
+
+        private string SetAomencCommand()
+        {
+            string cmd = "";
+            cmd += " --bit-depth=" + ComboBoxVideoBitDepth.Text;
+            cmd += " --cpu-used=" + SliderVideoSpeed.Value;
+            if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " --end-usage=q --cq-level=" + SliderVideoQuality.Value; }
+            else if (RadioButtonVideoBitrate.IsChecked == true) { cmd += " --end-usage=vbr --target-bitrate=" + TextBoxVideoBitrate.Text; }
+            if (ToggleSwitchAdvancedVideoSettings.IsOn == false)
+            {
+                cmd += " --threads=4 --tile-columns=2 --tile-rows=1";
+            }
+            else
+            {
+                cmd += " --threads=" + ComboBoxAomencThreads.Text;                                      // Threads
+                cmd += " --tile-columns=" + ComboBoxAomencTileColumns.Text;                             // Tile Columns
+                cmd += " --tile-rows=" + ComboBoxAomencTileRows.Text;                                   // Tile Rows
+                cmd += " --lag-in-frames=" + TextBoxAomencLagInFrames.Text;                             // Lag in Frames
+                cmd += " --sharpness=" + ComboBoxAomencSharpness.Text;                                  // Sharpness (Filter)
+                cmd += " --aq-mode=" + ComboBoxAomencAQMode.SelectedIndex;                              // AQ-Mode
+                cmd += " --enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex;      // Key Frame Filtering
+                cmd += " --tune=" + ComboBoxAomencTune.Text;                                            // Tune
+                cmd += " --tune-content=" + ComboBoxAomencTuneContent.Text;                             // Tune-Content
+            }
+            if (TextBoxAomencMaxGOP.Text != "0")
+            {
+                cmd += " --kf-max-dist=" + TextBoxAomencMaxGOP.Text;                                // Keyframe Interval
+            }
+            if (CheckBoxAomencRowMT.IsChecked == false)
+            {
+                cmd += " --row-mt=0";                                                               // Row Based Multithreading
+            }
+            if (CheckBoxAomencCDEF.IsChecked == false)
+            {
+                cmd += " --enable-cdef=0";                                                          // Constrained Directional Enhancement Filter
+            }
+            if (CheckBoxAomencARNRMax.IsChecked == true)
+            {
+                cmd += " --arnr-maxframes=" + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
+                cmd += " --arnr-strength=" + ComboBoxAomencARNRStrength.Text;                       // ARNR Strength
+            }
+            if (CheckBoxVideoAomencRealTime.IsChecked == true)
+            {
+                cmd += " --rt";                                                                     // Real Time Mode
+            }
+            return cmd;
+        }
+
+        private string SetRav1eCommand()
+        {
+            // Rav1e Command
+            string cmd = "";
+            cmd += " --speed " + SliderVideoSpeed.Value;    // Speed
+                                                            // Constant Quality or Target Bitrate
+            if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " --quantizer " + SliderVideoQuality.Value; }
+            else if (RadioButtonVideoBitrate.IsChecked == true) { cmd += " --bitrate " + TextBoxVideoBitrate.Text; }
+
+            if (ToggleSwitchAdvancedVideoSettings.IsOn == false)
+            {
+                // Default params when User don't select advanced settings
+                cmd += " --threads 4 --tile-cols 2 --tile-rows 1";
+            }
+            else
+            {
+                cmd += " --threads " + ComboBoxRav1eThreads.SelectedIndex;                              // Threads
+                cmd += " --tile-cols " + ComboBoxRav1eTileColumns.SelectedIndex;                        // Tile Columns
+                cmd += " --tile-rows " + ComboBoxRav1eTileRows.SelectedIndex;                           // Tile Rows
+                cmd += " --rdo-lookahead-frames " + TextBoxRav1eLookahead.Text;                         // RDO Lookahead
+                cmd += " --tune " + ComboBoxRav1eTune.Text;                                             // Tune
+
+                if (TextBoxRav1eMaxGOP.Text != "0")
+                {
+                    cmd += " --keyint " + TextBoxRav1eMaxGOP.Text;                                      // Keyframe Interval
+                }
+                if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
+                {
+                    cmd += " --mastering-display G(" + TextBoxRav1eMasteringGx.Text + ",";              // Mastering Gx
+                    cmd += TextBoxRav1eMasteringGy.Text + ")B(";                                        // Mastering Gy
+                    cmd += TextBoxRav1eMasteringBx.Text + ",";                                          // Mastering Bx
+                    cmd += TextBoxRav1eMasteringBy.Text + ")R(";                                        // Mastering By
+                    cmd += TextBoxRav1eMasteringRx.Text + ",";                                          // Mastering Rx
+                    cmd += TextBoxRav1eMasteringRy.Text + ")WP(";                                       // Mastering Ry
+                    cmd += TextBoxRav1eMasteringWPx.Text + ",";                                         // Mastering WPx
+                    cmd += TextBoxRav1eMasteringWPy.Text + ")L(";                                       // Mastering WPy
+                    cmd += TextBoxRav1eMasteringLx.Text + ",";                                          // Mastering Lx
+                    cmd += TextBoxRav1eMasteringLy.Text + ")";                                          // Mastering Ly
+                }
+                if (CheckBoxRav1eContentLight.IsChecked == true)
+                {
+                    cmd += " --content-light " + TextBoxRav1eContentLightCll.Text;                      // Content Light CLL
+                    cmd += "," + TextBoxRav1eContentLightFall.Text;                                     // Content Light FALL
+                }
+            }
+
+            return cmd;
+        }
+
+        private string SetSvtAV1Command()
+        {
+            string cmd = "";
+
+            cmd += " --preset " + SliderVideoSpeed.Value;
+
+            if (RadioButtonVideoConstantQuality.IsChecked == true) { cmd += " --rc 0 -q " + SliderVideoQuality.Value; }
+            else if (RadioButtonVideoBitrate.IsChecked == true) { cmd += " --rc 1 --tbr " + TextBoxVideoBitrate.Text; }
+
+            if (ToggleSwitchAdvancedVideoSettings.IsOn == true)
+            {
+                cmd += " --tile-columns " + ComboBoxSVTAV1TileColumns.Text;                             // Tile Columns
+                cmd += " --tile-rows " + ComboBoxSVTAV1TileRows.Text;                                   // Tile Rows
+                cmd += " --keyint " + TextBoxSVTAV1MaxGOP.Text;                                         // Keyframe Interval
+                cmd += " --lookahead " + TextBoxSVTAV1Lookahead.Text;                                   // Lookahead
             }
 
             return cmd;
@@ -2028,12 +2189,10 @@ namespace NotEnoughAV1Encodes
                     BatchEncoding = false;
                     LoadSettings(true, result);
                     AutoSetBitDepthAndColorFormat(Global.Video_Path);
-                    LabelVideoColorFomat.Content = FFprobe.GetPixelFormat(Global.Video_Path);
                     LabelVideoFramerate.Content = FFprobe.GetFrameRate(Global.Video_Path);
                     string res = FFprobe.GetResolution(Global.Video_Path);
                     LabelVideoResolution.Content = res;
                     TextBoxFiltersResizeHeight.Text = res.Substring(res.LastIndexOf('x') + 1);
-                    ReadTimeCode = true;
                 }
             }else if (batchFolder == true && resultProject == false)
             {
@@ -2142,7 +2301,7 @@ namespace NotEnoughAV1Encodes
                         // Resume all PIDs
                         foreach (int pid in Global.Launched_PIDs)
                         {
-                            Suspend.ResumeProcess(pid);
+                            Suspend.ResumeProcessTree(pid);
                         }
                     }
 
@@ -2157,7 +2316,7 @@ namespace NotEnoughAV1Encodes
                     // Pause all PIDs
                     foreach (int pid in Global.Launched_PIDs)
                     {
-                        Suspend.SuspendProcess(pid);
+                        Suspend.SuspendProcessTree(pid);
                     }
 
                     // Set as paused

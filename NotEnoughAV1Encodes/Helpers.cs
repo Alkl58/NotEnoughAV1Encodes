@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace NotEnoughAV1Encodes
@@ -31,10 +32,15 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        public static void Raise_Exception(string exception_message)
+        public static int GetCoreCount()
         {
-            //ExceptionForm exception = new ExceptionForm(exception_message);
-            //exception.ShowDialog();
+            // Gets Core Count
+            int coreCount = 0;
+            foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
+            {
+                coreCount += int.Parse(item["NumberOfCores"].ToString());
+            }
+            return coreCount;
         }
 
         public static void Check_Unicode(string file_name)
@@ -45,7 +51,7 @@ namespace NotEnoughAV1Encodes
             var unicodBytesCount = Encoding.UTF8.GetByteCount(file_name);
             if (asciiBytesCount != unicodBytesCount)
             {
-                Raise_Exception("The filename contains non unicode characters.\n\nPlease rename your file before proceeding to guarantee a successful encode!");
+                MessageBox.Show("The filename contains non unicode characters.\n\nPlease rename your file before proceeding to guarantee a successful encode!");
             }
         }
 

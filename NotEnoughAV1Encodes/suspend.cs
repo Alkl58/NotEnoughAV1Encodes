@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Management;
 using System.Runtime.InteropServices;
 
 namespace NotEnoughAV1Encodes
@@ -29,6 +31,48 @@ namespace NotEnoughAV1Encodes
         [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
         static extern bool CloseHandle(IntPtr handle);
 
+
+        public static List<int> GetChildProcesses(int process_id)
+        {
+            List<int> children = new List<int>();
+
+            ManagementObjectSearcher mos = new ManagementObjectSearcher(String.Format("Select * From Win32_Process Where ParentProcessID={0}", process_id));
+
+            foreach (ManagementObject mo in mos.Get())
+            {
+                children.Add(Convert.ToInt32(mo["ProcessID"]));
+            }
+
+            return children;
+        }
+
+        public static void SuspendProcessTree(int pid)
+        {
+            List<int> children = GetChildProcesses(pid);
+
+            // Pause cmd
+            SuspendProcess(pid);
+
+            // Pause subprocess
+            foreach (int pid_children in children)
+            {
+                SuspendProcess(pid_children);
+            }
+        }
+
+        public static void ResumeProcessTree(int pid)
+        {
+            List<int> children = GetChildProcesses(pid);
+
+            // Pause cmd
+            ResumeProcess(pid);
+
+            // Pause subprocess
+            foreach (int pid_children in children)
+            {
+                ResumeProcess(pid_children);
+            }
+        }
 
         public static void SuspendProcess(int pid)
         {

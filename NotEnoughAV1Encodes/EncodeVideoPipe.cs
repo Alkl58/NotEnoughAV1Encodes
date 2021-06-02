@@ -7,19 +7,13 @@ using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes
 {
-    class EncodeVideo
+    class EncodeVideoPipe
     {
-        public static string Final_Encoder_Command = null;
-        public static string Pixel_Format = null;
-        public static int Worker_Count = 0;
-        public static bool Show_Terminal = false;
-        public static bool Process_Priority = false;
-
         public static void Encode()
         {
             // Main Encoding Function
             // Creates a new Thread Pool
-            using (SemaphoreSlim concurrencySemaphore = new SemaphoreSlim(Worker_Count))
+            using (SemaphoreSlim concurrencySemaphore = new SemaphoreSlim(EncodeVideo.Worker_Count))
             {
                 // Creates a tasks list
                 List<Task> tasks = new List<Task>();
@@ -46,7 +40,7 @@ namespace NotEnoughAV1Encodes
                                     startInfo.FileName = "cmd.exe";
                                     startInfo.WorkingDirectory = Global.FFmpeg_Path;
 
-                                    if (!Show_Terminal)
+                                    if (!EncodeVideo.Show_Terminal)
                                         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
                                     string InputVideo = "";
@@ -64,26 +58,58 @@ namespace NotEnoughAV1Encodes
 
                                     // Saves encoder progress to log file
                                     string ffmpeg_progress = " -progress " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022';
-
-                                    string ffmpeg_input = InputVideo + " " + MainWindow.FilterCommand + Pixel_Format + " " + MainWindow.VSYNC + " ";
+                                    // FFmpeg Pipe
+                                    string ffmpeg_input = InputVideo + " " + MainWindow.FilterCommand + EncodeVideo.Pixel_Format + " -color_range 0 " + MainWindow.VSYNC + " -f yuv4mpegpipe - | ";
 
                                     // Logic to skip first pass encoding if "_finished" log file exists
                                     if (File.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log" + "_finished.log")) == false)
                                     {
                                         string encoderCMD = "";
 
-                                        if (MainWindow.OnePass) 
+                                        if (MainWindow.OnePass)
                                         {
                                             // One Pass Encoding
-                                            encoderCMD = " -y " + Final_Encoder_Command + " ";
+
+                                            if (MainWindow.EncodeMethod == 5)
+                                            {
+                                                // aomenc
+                                                encoderCMD = '\u0022' + Path.Combine(Global.Aomenc_Path, "aomenc.exe") + '\u0022' + " - --passes=1 " + EncodeVideo.Final_Encoder_Command + " --output=";
+                                            }
+                                            else if (MainWindow.EncodeMethod == 7)
+                                            {
+                                                // svt-av1
+                                                ffmpeg_input = InputVideo + " " + MainWindow.FilterCommand + EncodeVideo.Pixel_Format + " -color_range 0 -nostdin " + MainWindow.VSYNC + " -f yuv4mpegpipe - | ";
+                                                encoderCMD = '\u0022' + Path.Combine(Global.SvtAv1_Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncodeVideo.Final_Encoder_Command + " --passes 1 -b ";
+                                            }
+
                                             encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".webm") + '\u0022';
+
+                                            if (MainWindow.EncodeMethod == 6)
+                                            {
+                                                // rav1e
+                                                encoderCMD = '\u0022' + Path.Combine(Global.Rav1e__Path, "rav1e.exe") + '\u0022' + " - " + EncodeVideo.Final_Encoder_Command + " --output ";
+                                                encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
+                                            }
                                         }
-                                        else 
+                                        else
                                         {
                                             // Two Pass Encoding - First Pass
-                                            encoderCMD = " -y " + Final_Encoder_Command + " -pass 1 -passlogfile ";
-                                            encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " -f webm NUL";
+
+                                            if (MainWindow.EncodeMethod == 5)
+                                            {
+                                                // aomenc
+                                                encoderCMD = '\u0022' + Path.Combine(Global.Aomenc_Path, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=1 " + EncodeVideo.Final_Encoder_Command + " --fpf=";
+                                                encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=NUL";
+                                            }
+                                            else if (MainWindow.EncodeMethod == 7)
+                                            {
+                                                // svt-av1
+                                                ffmpeg_input = InputVideo + " " + MainWindow.FilterCommand + EncodeVideo.Pixel_Format + " -color_range 0 -nostdin " + MainWindow.VSYNC + " -f yuv4mpegpipe - | ";
+                                                encoderCMD = '\u0022' + Path.Combine(Global.SvtAv1_Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncodeVideo.Final_Encoder_Command + " --irefresh-type 2 --pass 1 -b NUL --stats ";
+                                                encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
+                                            }
                                         }
+
 
                                         startInfo.Arguments = "/C ffmpeg.exe " + ffmpeg_progress + ffmpeg_input + encoderCMD;
 
@@ -92,7 +118,7 @@ namespace NotEnoughAV1Encodes
                                         ffmpegProcess.Start();
 
                                         // Sets the process priority
-                                        if (!Process_Priority)
+                                        if (!EncodeVideo.Process_Priority)
                                             ffmpegProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
 
                                         // Get launched Process ID
@@ -122,10 +148,24 @@ namespace NotEnoughAV1Encodes
                                         // Creates a different progress file for the second pass (avoids negative frame progressbar)
                                         ffmpeg_progress = " -progress " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Progress", "split" + index.ToString("D5") + "_progress_2nd.log") + '\u0022';
 
-                                        string encoderCMD = " -pass 2 " + Final_Encoder_Command;
+                                        string encoderCMD = "";
 
-                                        encoderCMD += " -passlogfile " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
-                                        encoderCMD += " " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".webm") + '\u0022';
+
+                                        if (MainWindow.EncodeMethod == 5)
+                                        {
+                                            // aomenc
+                                            encoderCMD = '\u0022' + Path.Combine(Global.Aomenc_Path, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=2 " + EncodeVideo.Final_Encoder_Command + " --fpf=";
+                                            encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=";
+                                        }
+                                        else if(MainWindow.EncodeMethod == 7)
+                                        {
+                                            // svt-av1
+                                            ffmpeg_input = InputVideo + " " + MainWindow.FilterCommand + EncodeVideo.Pixel_Format + " -color_range 0 -nostdin " + MainWindow.VSYNC + " -f yuv4mpegpipe - | ";
+                                            encoderCMD = '\u0022' + Path.Combine(Global.SvtAv1_Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncodeVideo.Final_Encoder_Command + " --irefresh-type 2 --pass 2 --stats ";
+                                            encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " -b ";
+                                        }
+
+                                        encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".webm") + '\u0022';
 
                                         startInfo.Arguments = "/C ffmpeg.exe " + ffmpeg_progress + ffmpeg_input + encoderCMD;
                                         Helpers.Logging("Encoding Video: " + startInfo.Arguments);
@@ -133,7 +173,7 @@ namespace NotEnoughAV1Encodes
                                         ffmpegProcess.Start();
 
                                         // Sets the process priority
-                                        if (!Process_Priority)
+                                        if (!EncodeVideo.Process_Priority)
                                             ffmpegProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
 
                                         // Get launched Process ID
