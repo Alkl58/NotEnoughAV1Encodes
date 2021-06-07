@@ -89,20 +89,20 @@ namespace NotEnoughAV1Encodes
             audio_languages.Add("English",     "eng");
             audio_languages.Add("Bosnian",     "bos");
             audio_languages.Add("Bulgarian",   "bul");
-            audio_languages.Add("Chinese",     "chi");
-            audio_languages.Add("Czech",       "cze");
-            audio_languages.Add("Greek",       "gre");
+            audio_languages.Add("Chinese",     "zho");
+            audio_languages.Add("Czech",       "ces");
+            audio_languages.Add("Greek",       "ell");
             audio_languages.Add("Estonian",    "est");
             audio_languages.Add("Persian",     "per");
             audio_languages.Add("Filipino",    "fil");
             audio_languages.Add("Finnish",     "fin");
-            audio_languages.Add("French",      "fre");
-            audio_languages.Add("Georgian",    "geo");
-            audio_languages.Add("German",      "ger");
+            audio_languages.Add("French",      "fra");
+            audio_languages.Add("Georgian",    "kat");
+            audio_languages.Add("German",      "deu");
             audio_languages.Add("Croatian",    "hrv");
             audio_languages.Add("Hungarian",   "hun");
             audio_languages.Add("Indonesian",  "ind");
-            audio_languages.Add("Icelandic",   "ice");
+            audio_languages.Add("Icelandic",   "isl");
             audio_languages.Add("Italian",     "ita");
             audio_languages.Add("Japanese",    "jpn");
             audio_languages.Add("Korean",      "kor");
@@ -113,6 +113,7 @@ namespace NotEnoughAV1Encodes
             audio_languages.Add("Norwegian",   "nob");
             audio_languages.Add("Polish",      "pol");
             audio_languages.Add("Portuguese",  "por");
+            audio_languages.Add("Romanian",    "ron");
             audio_languages.Add("Russian",     "rus");
             audio_languages.Add("Slovak",      "slk");
             audio_languages.Add("Slovenian",   "slv");
@@ -256,7 +257,7 @@ namespace NotEnoughAV1Encodes
             Global.temp_path_folder = Path.GetFileNameWithoutExtension(file);
             Helpers.Check_Unicode(Global.temp_path_folder);
             BatchEncoding = false;
-            GetAudioInformation();
+            GetSourceInformation();
             GetSubtitleTracks();
             AutoSetBitDepthAndColorFormat(file);
             LabelVideoFramerate.Content = FFprobe.GetFrameRate(file);
@@ -272,8 +273,18 @@ namespace NotEnoughAV1Encodes
             mediaInfo.Open(Global.Video_Path);
 
             string mediainfo_chroma_subsampling = mediaInfo.Get(StreamKind.Video, 0, "ChromaSubsampling");
-            int mediainfo_bit_depth = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "BitDepth"));
+            if (string.IsNullOrEmpty(mediainfo_chroma_subsampling))
+            {
+                mediainfo_chroma_subsampling = "4:2:0";
+            }
 
+            int mediainfo_bit_depth = 8;
+            try
+            {
+                mediainfo_bit_depth = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "BitDepth"));
+            }
+            catch { }
+            
             mediaInfo.Close();
             
             LabelVideoColorFomat.Content = mediainfo_chroma_subsampling;
@@ -852,7 +863,7 @@ namespace NotEnoughAV1Encodes
                         // Sets Temp Filename for temp folder
                         Global.temp_path_folder = Path.GetFileNameWithoutExtension(Global.Video_Path);
                         // Get Source Information
-                        GetAudioInformation();
+                        GetSourceInformation();
                         // Set Subtitle
                         if (ComboBoxContainerBatchEncoding.SelectedIndex == 2)
                         {
@@ -907,7 +918,7 @@ namespace NotEnoughAV1Encodes
                             // Sets Temp Filename for temp folder
                             Global.temp_path_folder = Path.GetFileNameWithoutExtension(Global.Video_Path);
                             // Get Source Information
-                            GetAudioInformation();
+                            GetSourceInformation();
                             // Set Subtitle
                             if (ComboBoxContainerBatchEncoding.SelectedIndex == 2)
                             {
@@ -1304,99 +1315,84 @@ namespace NotEnoughAV1Encodes
 
         // ═════════════════════════════════════ Audio Logic ══════════════════════════════════════
 
-        private void GetAudioInformation()
+        private void GetSourceInformation()
         {
             MediaInfo mediaInfo = new MediaInfo();
             mediaInfo.Open(Global.Video_Path);
 
-            int audio_count = mediaInfo.Count_Get(StreamKind.Audio);
+            // Video ═════════════════════════════════════
+            try
+            {
+                LabelVideoLength.Content = mediaInfo.Get(StreamKind.Video, 0, "Duration/String3");
+            }
+            catch { }
+            
 
-            // Enable / Disable CheckBoxes
-            if (audio_count >= 1) { ToggleSwitchAudioTrackOne.IsEnabled = ToggleSwitchAudioTrackOne.IsOn = true; }
+            // Audio ═════════════════════════════════════
+
+            int audio_count = mediaInfo.Count_Get(StreamKind.Audio);
+            string lang;
+            if (audio_count >= 1) { 
+                // Toggle Audio
+                ToggleSwitchAudioTrackOne.IsEnabled = ToggleSwitchAudioTrackOne.IsOn = true;
+
+                // Check if Source Audio is PCM_BluRay
+                try { EncodeAudio.pcm_bluray_1 = mediaInfo.Get(StreamKind.Audio, 0, "Format") == "PCM" && mediaInfo.Get(StreamKind.Audio, 0, "MuxingMode") == "Blu-ray"; } catch { }
+
+                // Set Audio Language
+                try {
+                    if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 0, "Language/String3"))) { lang = "und"; }
+                    ComboBoxTrackOneLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                } catch { }
+            }
             else { ToggleSwitchAudioTrackOne.IsEnabled = ToggleSwitchAudioTrackOne.IsOn = false; }
-            if (audio_count >= 2) { ToggleSwitchAudioTrackTwo.IsEnabled = ToggleSwitchAudioTrackTwo.IsOn = true; }
+
+            if (audio_count >= 2) {
+                // Toggle Audio
+                ToggleSwitchAudioTrackTwo.IsEnabled = ToggleSwitchAudioTrackTwo.IsOn = true;
+
+                // Check if Source Audio is PCM_BluRay
+                try { EncodeAudio.pcm_bluray_2 = mediaInfo.Get(StreamKind.Audio, 1, "Format") == "PCM" && mediaInfo.Get(StreamKind.Audio, 1, "MuxingMode") == "Blu-ray"; } catch { }
+
+                // Set Audio Language
+                try {
+                    if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 1, "Language/String3"))) { lang = "und"; }
+                    ComboBoxTrackTwoLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                } catch { }
+            }
             else { ToggleSwitchAudioTrackTwo.IsEnabled = ToggleSwitchAudioTrackTwo.IsOn = false; }
-            if (audio_count >= 3) { ToggleSwitchAudioTrackThree.IsEnabled = ToggleSwitchAudioTrackThree.IsOn = true; }
+
+            if (audio_count >= 3) {
+                // Toggle Audio
+                ToggleSwitchAudioTrackThree.IsEnabled = ToggleSwitchAudioTrackThree.IsOn = true;
+
+                // Check if Source Audio is PCM_BluRay
+                try { EncodeAudio.pcm_bluray_3 = mediaInfo.Get(StreamKind.Audio, 2, "Format") == "PCM" && mediaInfo.Get(StreamKind.Audio, 2, "MuxingMode") == "Blu-ray"; } catch { }
+
+                // Set Audio Language
+                try {
+                    if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 2, "Language/String3"))) { lang = "und"; }
+                    ComboBoxTrackThreeLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                } catch { }
+            }
             else { ToggleSwitchAudioTrackThree.IsEnabled = ToggleSwitchAudioTrackThree.IsOn = false; }
-            if (audio_count >= 4) { ToggleSwitchAudioTrackFour.IsEnabled = ToggleSwitchAudioTrackFour.IsOn = true; }
+
+            if (audio_count >= 4) {
+                // Toggle Audio
+                ToggleSwitchAudioTrackFour.IsEnabled = ToggleSwitchAudioTrackFour.IsOn = true;
+
+                // Check if Source Audio is PCM_BluRay
+                try { EncodeAudio.pcm_bluray_4 = mediaInfo.Get(StreamKind.Audio, 3, "Format") == "PCM" && mediaInfo.Get(StreamKind.Audio, 3, "MuxingMode") == "Blu-ray"; } catch { }
+
+                // Set Audio Language
+                try {
+                    if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 3, "Language/String3"))) { lang = "und"; }
+                    ComboBoxTrackFourLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                } catch { }
+            }
             else { ToggleSwitchAudioTrackFour.IsEnabled = ToggleSwitchAudioTrackFour.IsOn = false; }
 
-            // This is needed if user encodes a bluray with pcm audio stream and wants to copy audio
-            if (GetAudioInfo() == "pcm_bluray") { EncodeAudio.pcmBluray = true; } else { EncodeAudio.pcmBluray = false; }
-
             mediaInfo.Close();
-
-            GetAudioLanguage();
-        }
-
-        public static string GetAudioInfo()
-        {
-            Process getAudioInfo = new Process
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "cmd.exe",
-                    WorkingDirectory = Global.FFmpeg_Path,
-                    Arguments = "/C ffprobe.exe -i " + '\u0022' + Global.Video_Path + '\u0022' + " -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1",
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true
-                }
-            };
-            getAudioInfo.Start();
-            string audio = getAudioInfo.StandardOutput.ReadLine();
-            getAudioInfo.WaitForExit();
-            return audio;
-        }
-
-        private void GetAudioLanguage()
-        {
-            //This function gets the Audio Languages from ffprobe and sets the ComboBoxes in the Audio Tab
-            Process getAudioLang = new Process
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "cmd.exe",
-                    WorkingDirectory = Global.FFmpeg_Path,
-                    Arguments = "/C ffprobe.exe -i " + '\u0022' + Global.Video_Path + '\u0022' + " -v error -select_streams a -show_entries stream=index:stream_tags=language -of csv=p=0",
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true
-                }
-            };
-            getAudioLang.Start();
-            string audio = getAudioLang.StandardOutput.ReadToEnd();
-            string[] audioLanguages = audio.Split(new string[] { "1", "2", "3", "4", "," }, StringSplitOptions.RemoveEmptyEntries);
-            audioLanguages = audioLanguages.Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            getAudioLang.WaitForExit();
-            int index = 0;
-            foreach (string line in audioLanguages)
-            {
-                string resultcropped;
-                try 
-                { 
-                    resultcropped = line.Replace(" ", "").Substring(0, 3);
-                    var myKey = audio_languages.FirstOrDefault(x => x.Value == resultcropped).Key;
-                    if (index == 0) { ComboBoxTrackOneLanguage.SelectedItem = myKey; }
-                    if (index == 1) { ComboBoxTrackTwoLanguage.SelectedItem = myKey; }
-                    if (index == 2) { ComboBoxTrackThreeLanguage.SelectedItem = myKey; }
-                    if (index == 3) { ComboBoxTrackFourLanguage.SelectedItem = myKey; }
-                }
-                catch 
-                { 
-                    resultcropped = "und";
-                    if (index == 0) { ComboBoxTrackOneLanguage.SelectedItem = resultcropped; }
-                    if (index == 1) { ComboBoxTrackTwoLanguage.SelectedItem = resultcropped; }
-                    if (index == 2) { ComboBoxTrackThreeLanguage.SelectedItem = resultcropped; }
-                    if (index == 3) { ComboBoxTrackFourLanguage.SelectedItem = resultcropped; }
-                }
-                index += 1;
-            }
-
         }
 
         // ════════════════════════════════════ Subtitle Logic ════════════════════════════════════

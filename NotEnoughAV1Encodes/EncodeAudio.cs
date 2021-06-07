@@ -34,7 +34,12 @@ namespace NotEnoughAV1Encodes
         public static string trackThreeName;        // Audio Track Three Name
         public static string trackFourName;         // Audio Track Four Name
 
-        public static bool pcmBluray;               // Audio PCM Copy
+        // Explanation: When copying pcm_bluray the codec has to be set to pcm_s16le
+        //              else it will fail. (ffmpeg issue)
+        public static bool pcm_bluray_1 = false;    // PCM_BluRay Check Track One
+        public static bool pcm_bluray_2 = false;    // PCM_BluRay Check Track Two
+        public static bool pcm_bluray_3 = false;    // PCM_BluRay Check Track Three
+        public static bool pcm_bluray_4 = false;    // PCM_BluRay Check Track Four
 
         public static void Encode()
         {
@@ -49,22 +54,22 @@ namespace NotEnoughAV1Encodes
                 int end_index = 0;
                 if (trackOne)
                 {
-                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackOne, 0, end_index, audioCodecTrackOne, audioChannelsTrackOne, trackOneLanguage, trackOneName);
+                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackOne, 0, end_index, audioCodecTrackOne, audioChannelsTrackOne, trackOneLanguage, trackOneName, pcm_bluray_1);
                     end_index += 1;
                 }
                 if (trackTwo)
                 {
-                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackTwo, 1, end_index, audioCodecTrackTwo, audioChannelsTrackTwo, trackTwoLanguage, trackTwoName);
+                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackTwo, 1, end_index, audioCodecTrackTwo, audioChannelsTrackTwo, trackTwoLanguage, trackTwoName, pcm_bluray_2);
                     end_index += 1;
                 }
                 if (trackThree)
                 {
-                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackThree, 2, end_index, audioCodecTrackThree, audioChannelsTrackThree, trackThreeLanguage, trackThreeName);
+                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackThree, 2, end_index, audioCodecTrackThree, audioChannelsTrackThree, trackThreeLanguage, trackThreeName, pcm_bluray_3);
                     end_index += 1;
                 }
                 if (trackFour)
                 {
-                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackFour, 3, end_index, audioCodecTrackFour, audioChannelsTrackFour, trackFourLanguage, trackFourName);
+                    audio_command += MultipleTrackCommandGenerator(audioBitrateTrackFour, 3, end_index, audioCodecTrackFour, audioChannelsTrackFour, trackFourLanguage, trackFourName, pcm_bluray_4);
                 }
 
                 if (audioCodecTrackOne != "Copy Audio" && audioCodecTrackTwo != "Copy Audio" && audioCodecTrackThree != "Copy Audio" && audioCodecTrackFour != "Copy Audio")
@@ -80,7 +85,7 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private static string SwitchCodec(string audio_codec)
+        private static string SwitchCodec(string audio_codec, bool pcm_bluray)
         {
             string audio_codec_switch = "";
             switch (audio_codec)
@@ -89,20 +94,23 @@ namespace NotEnoughAV1Encodes
                 case "AC3": audio_codec_switch = "ac3"; break;
                 case "AAC": audio_codec_switch = "aac"; break;
                 case "MP3": audio_codec_switch = "libmp3lame"; break;
-                case "Copy Audio": if (pcmBluray) { audio_codec_switch = "pcm_s16le"; } else { audio_codec_switch = "copy"; } break;
+                case "Copy Audio": 
+                    if (pcm_bluray) { audio_codec_switch = "pcm_s16le"; } 
+                    else { audio_codec_switch = "copy"; } 
+                    break;
                 default: break;
             }
             return audio_codec_switch;
         }
 
         private static string audioCodecCommand = "";
-        private static string MultipleTrackCommandGenerator(int activetrackbitrate, int map_index, int end_index, string activtrackcodec, int channellayout, string lang, string track_name)
+        private static string MultipleTrackCommandGenerator(int activetrackbitrate, int map_index, int end_index, string activtrackcodec, int channellayout, string lang, string track_name, bool pcm_bluray)
         {
             // Command Builder for Audio
             // Audio Mapping
             audioCodecCommand = " -map 0:a:" + map_index + " -c:a:" + end_index + " ";
             // Codec
-            audioCodecCommand += SwitchCodec(activtrackcodec);
+            audioCodecCommand += SwitchCodec(activtrackcodec, pcm_bluray);
             // Channel Layout / Bitrate
             if (activtrackcodec != "Copy Audio") { audioCodecCommand += " -b:a:" + end_index + " " + activetrackbitrate + "k"; }
             audioCodecCommand += " -ac:a:" + end_index + " " + SetChannelLayout(channellayout) + " ";

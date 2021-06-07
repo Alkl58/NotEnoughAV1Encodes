@@ -204,6 +204,8 @@ namespace NotEnoughAV1Encodes
                 ffmpeg_command += " -segment_time " + chunking_length + " -f segment " + '\u0022';                                  // Segmenting
                 ffmpeg_command += Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split%6d.mkv") + '\u0022';     // Video Output
 
+                Helpers.Logging("Equal Chunking: " + ffmpeg_command);
+
                 // Start Splitting
                 Process chunking_process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo
