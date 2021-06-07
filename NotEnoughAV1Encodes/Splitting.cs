@@ -193,6 +193,12 @@ namespace NotEnoughAV1Encodes
                     ffmpeg_command += " -c:v utvideo";                                                                              // Re-Encoding - Needed because else it WILL loose frames
                 }
 
+                // Hardsub
+                if (MainWindow.subHardSubEnabled)
+                {
+                    ffmpeg_command += " " + MainWindow.hardsub_command;
+                }
+
                 ffmpeg_command += " -sc_threshold 0 -g " + chunking_length;                                                         // Make Splitting more accurate
                 ffmpeg_command += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + chunking_length + ")" + '\u0022';  // Make Splitting more accurate
                 ffmpeg_command += " -segment_time " + chunking_length + " -f segment " + '\u0022';                                  // Segmenting

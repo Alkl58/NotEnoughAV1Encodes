@@ -99,8 +99,6 @@ namespace NotEnoughAV1Encodes
                 var jsonWeb = new WebClient().DownloadString("https://jeremylee.sh/data/bin/packages.json");
                 dynamic json = JsonConvert.DeserializeObject(jsonWeb);
 
-                Console.WriteLine(json);
-
                 string aomencVersion = json.apps["aomenc.exe"].datetime;
                 AomencUpdateVersion = aomencVersion.Replace("-", ".").Remove(aomencVersion.Length - 6);
                 LabelUpdateAomencVersion.Content = AomencUpdateVersion;
