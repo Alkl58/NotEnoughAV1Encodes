@@ -53,7 +53,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <ApplicationIcon>turbovid.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -216,9 +216,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logo.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\stop.wav" />
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +235,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="img\resume.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="turbovid.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
