@@ -1326,10 +1326,10 @@ namespace NotEnoughAV1Encodes
                 LabelVideoLength.Content = mediaInfo.Get(StreamKind.Video, 0, "Duration/String3");
             }
             catch { }
-            
+
 
             // Audio ═════════════════════════════════════
-
+            
             int audio_count = mediaInfo.Count_Get(StreamKind.Audio);
             string lang;
             if (audio_count >= 1) { 
@@ -1391,6 +1391,63 @@ namespace NotEnoughAV1Encodes
                 } catch { }
             }
             else { ToggleSwitchAudioTrackFour.IsEnabled = ToggleSwitchAudioTrackFour.IsOn = false; }
+
+            // Subtitles ═════════════════════════════════
+
+            ResetSubtitles();
+
+            int sub_count = mediaInfo.Count_Get(StreamKind.Text);
+            if (sub_count >= 1)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Text, 0, "Language/String3"))) { lang = "und"; }
+                    ComboBoxSubTrackOneLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                    Console.WriteLine(audio_languages.FirstOrDefault(x => x.Value == lang).Key);
+                    Console.WriteLine(lang);
+                }
+                catch { }
+            }
+
+            if (sub_count >= 2)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Text, 1, "Language/String3"))) { lang = "und"; }
+                    ComboBoxSubTrackTwoLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                }
+                catch { }
+            }
+
+            if (sub_count >= 3)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Text, 2, "Language/String3"))) { lang = "und"; }
+                    ComboBoxSubTrackThreeLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                }
+                catch { }
+            }
+
+            if (sub_count >= 4)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Text, 3, "Language/String3"))) { lang = "und"; }
+                    ComboBoxSubTrackFourLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                }
+                catch { }
+            }
+
+            if (sub_count >= 5)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Text, 4, "Language/String3"))) { lang = "und"; }
+                    ComboBoxSubTrackFiveLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                }
+                catch { }
+            }
 
             mediaInfo.Close();
         }
@@ -1523,8 +1580,6 @@ namespace NotEnoughAV1Encodes
             if (!Directory.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles")))
                 Directory.CreateDirectory(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles"));
 
-            ResetSubtitles();
-
             //This function gets subtitle information
             Process getSubtitles = new Process
             {
@@ -1646,23 +1701,14 @@ namespace NotEnoughAV1Encodes
 
                     try
                     {
-                        string resultcropped = line.Substring(line.LastIndexOf(',') + 1).Substring(0, 3);
-                        var myKey = audio_languages.FirstOrDefault(x => x.Value == resultcropped).Key;
-                        if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; ComboBoxSubTrackOneLanguage.SelectedItem = myKey; }
-                        if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; ComboBoxSubTrackTwoLanguage.SelectedItem = myKey; }
-                        if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; ComboBoxSubTrackThreeLanguage.SelectedItem = myKey; }
-                        if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; ComboBoxSubTrackFourLanguage.SelectedItem = myKey; }
-                        if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; ComboBoxSubTrackFiveLanguage.SelectedItem = myKey; }
+
+                        if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; }
+                        if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName;  }
+                        if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; }
+                        if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; }
+                        if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; }
                     }
-                    catch 
-                    {
-                        var myKey = "und"; // undefined
-                        if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; ComboBoxSubTrackOneLanguage.SelectedItem = myKey; }
-                        if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; ComboBoxSubTrackTwoLanguage.SelectedItem = myKey; }
-                        if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; ComboBoxSubTrackThreeLanguage.SelectedItem = myKey; }
-                        if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; ComboBoxSubTrackFourLanguage.SelectedItem = myKey; }
-                        if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; ComboBoxSubTrackFiveLanguage.SelectedItem = myKey; }
-                    }
+                    catch { }
                     b++;
                 }
                 a++;
