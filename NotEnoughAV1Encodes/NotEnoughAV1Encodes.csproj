@@ -105,7 +105,6 @@
     <Compile Include="EncodeAudio.cs" />
     <Compile Include="EncodeVideo.cs" />
     <Compile Include="EncodeVideoPipe.cs" />
-    <Compile Include="FFprobe.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Kill.cs" />

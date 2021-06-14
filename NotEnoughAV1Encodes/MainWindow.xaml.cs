@@ -260,10 +260,6 @@ namespace NotEnoughAV1Encodes
             GetSourceInformation();
             GetSubtitleTracks();
             AutoSetBitDepthAndColorFormat(file);
-            LabelVideoFramerate.Content = FFprobe.GetFrameRate(file);
-            string res = FFprobe.GetResolution(file);
-            LabelVideoResolution.Content = res;
-            TextBoxFiltersResizeHeight.Text = res.Substring(res.LastIndexOf('x') + 1);
         }
 
         private void AutoSetBitDepthAndColorFormat(string result)
@@ -1321,15 +1317,33 @@ namespace NotEnoughAV1Encodes
             mediaInfo.Open(Global.Video_Path);
 
             // Video ═════════════════════════════════════
-            try
-            {
-                LabelVideoLength.Content = mediaInfo.Get(StreamKind.Video, 0, "Duration/String3");
+
+            // Duration
+            try 
+            { 
+                LabelVideoLength.Content = mediaInfo.Get(StreamKind.Video, 0, "Duration/String3"); 
             }
             catch { }
 
+            // Resolution
+            try 
+            { 
+                string width = mediaInfo.Get(StreamKind.Video, 0, "Width");
+                string height = mediaInfo.Get(StreamKind.Video, 0, "Height");
+                LabelVideoResolution.Content = width + "x" + height;
+                TextBoxFiltersResizeHeight.Text = height;
+            } 
+            catch { }
+
+            // Framerate
+            try
+            {
+                LabelVideoFramerate.Content = mediaInfo.Get(StreamKind.Video, 0, "FrameRate");
+            }
+            catch { }
 
             // Audio ═════════════════════════════════════
-            
+
             int audio_count = mediaInfo.Count_Get(StreamKind.Audio);
             string lang;
             if (audio_count >= 1) { 
@@ -2231,10 +2245,6 @@ namespace NotEnoughAV1Encodes
                     BatchEncoding = false;
                     LoadSettings(true, result);
                     AutoSetBitDepthAndColorFormat(Global.Video_Path);
-                    LabelVideoFramerate.Content = FFprobe.GetFrameRate(Global.Video_Path);
-                    string res = FFprobe.GetResolution(Global.Video_Path);
-                    LabelVideoResolution.Content = res;
-                    TextBoxFiltersResizeHeight.Text = res.Substring(res.LastIndexOf('x') + 1);
                 }
             }else if (batchFolder == true && resultProject == false)
             {
