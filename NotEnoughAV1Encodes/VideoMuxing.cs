@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,7 +12,7 @@ namespace NotEnoughAV1Encodes
             // Writes all ivf files into chunks.txt for later concat
             IOrderedEnumerable<string> sorted = null;
 
-            if (MainWindow.EncodeMethod != 6)
+            if (MainWindow.EncodeMethod <= 4)
             {
                 sorted = Directory.GetFiles(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks"), "*.webm").OrderBy(f => f);
             }

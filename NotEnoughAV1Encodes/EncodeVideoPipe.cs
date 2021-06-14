@@ -75,6 +75,11 @@ namespace NotEnoughAV1Encodes
                                                 // aomenc
                                                 encoderCMD = '\u0022' + Path.Combine(Global.Aomenc_Path, "aomenc.exe") + '\u0022' + " - --passes=1 " + EncodeVideo.Final_Encoder_Command + " --output=";
                                             }
+                                            else if (MainWindow.EncodeMethod == 6)
+                                            {
+                                                // rav1e
+                                                encoderCMD = '\u0022' + Path.Combine(Global.Rav1e__Path, "rav1e.exe") + '\u0022' + " - " + EncodeVideo.Final_Encoder_Command + " --output ";
+                                            }
                                             else if (MainWindow.EncodeMethod == 7)
                                             {
                                                 // svt-av1
@@ -82,14 +87,8 @@ namespace NotEnoughAV1Encodes
                                                 encoderCMD = '\u0022' + Path.Combine(Global.SvtAv1_Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + EncodeVideo.Final_Encoder_Command + " --passes 1 -b ";
                                             }
 
-                                            encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".webm") + '\u0022';
+                                            encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
 
-                                            if (MainWindow.EncodeMethod == 6)
-                                            {
-                                                // rav1e
-                                                encoderCMD = '\u0022' + Path.Combine(Global.Rav1e__Path, "rav1e.exe") + '\u0022' + " - " + EncodeVideo.Final_Encoder_Command + " --output ";
-                                                encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-                                            }
                                         }
                                         else
                                         {
@@ -165,7 +164,7 @@ namespace NotEnoughAV1Encodes
                                             encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " -b ";
                                         }
 
-                                        encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".webm") + '\u0022';
+                                        encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
 
                                         startInfo.Arguments = "/C ffmpeg.exe " + ffmpeg_progress + ffmpeg_input + encoderCMD;
                                         Helpers.Logging("Encoding Video: " + startInfo.Arguments);
