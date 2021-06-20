@@ -2655,17 +2655,9 @@ namespace NotEnoughAV1Encodes
 
             // ═════════════════════════════════════════════════════════════════ Splitting ═════════════════════════════════════════════════════════════════
             writer.WriteElementString("SplittingMethod",                ComboBoxSplittingMethod.SelectedIndex.ToString());              // Splitting Method
-            if (ComboBoxSplittingMethod.SelectedIndex == 0)
-            {
-                // FFmpeg Scene Detect
-                writer.WriteElementString("SplittingThreshold",         TextBoxSplittingThreshold.Text);                                // Splitting Threshold
-            }
-            else if (ComboBoxSplittingMethod.SelectedIndex == 2)
-            {
-                // Chunking Method
-                writer.WriteElementString("SplittingReencode",          ComboBoxSplittingReencodeMethod.SelectedIndex.ToString());      // Splitting Reencode Codec
-                writer.WriteElementString("SplittingReencodeLength",    TextBoxSplittingChunkLength.Text);                              // Splitting Chunk Length
-            }
+            writer.WriteElementString("SplittingThreshold",             TextBoxSplittingThreshold.Text);                                // Splitting Threshold
+            writer.WriteElementString("SplittingReencode",              ComboBoxSplittingReencodeMethod.SelectedIndex.ToString());      // Splitting Reencode Codec
+            writer.WriteElementString("SplittingReencodeLength",        TextBoxSplittingChunkLength.Text);                              // Splitting Chunk Length
             // ══════════════════════════════════════════════════════════════════ Filters ══════════════════════════════════════════════════════════════════
 
             writer.WriteElementString("FilterCrop",                 ToggleSwitchFilterCrop.IsOn.ToString());                            // Filter Crop (Boolean)
