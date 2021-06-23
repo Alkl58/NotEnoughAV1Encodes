@@ -977,13 +977,19 @@ namespace NotEnoughAV1Encodes
 
                 // Split Video / Scene Detection
                 SetSplitSettings();
-                await Task.Run(() => { 
+
+                ProgressBar.Dispatcher.Invoke(() => ProgressBar.IsIndeterminate = true);
+
+                LabelProgressBar.Content = "Processing Video... this might take a while!";
+                await Task.Run(() => {
                     token.ThrowIfCancellationRequested(); 
-                    Splitting.Split(); 
+                    Splitting.Split();
                 }, token);
+
                 // Set other temporary settings
                 SetTempSettings();
 
+                LabelProgressBar.Content = "Calculating Frame Count...";
                 if (subHardSubEnabled && Splitting.split_type != 0)
                 {
                     // Get Framecount from Reencoded Video
@@ -1007,6 +1013,8 @@ namespace NotEnoughAV1Encodes
                         Helpers.Logging("Attention: Tried to encode audio. Not audio output detected. Audio is now disabled.");
                     }
                 }
+
+                ProgressBar.Dispatcher.Invoke(() => ProgressBar.IsIndeterminate = false);
 
                 if (subHardSubEnabled)
                 {
@@ -2335,7 +2343,7 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
-            if (VideoInputSet == true && VideoOutputSet == true) 
+            if (VideoInputSet && VideoOutputSet) 
             {
                 if (encode_state == 0 || encode_state == 2)
                 {
@@ -2375,7 +2383,7 @@ namespace NotEnoughAV1Encodes
                     encode_state = 2;
                 }
             }
-            else 
+            else
             {
                 SmallFunctions.PlayStopSound();
                 MessageBox.Show("Input or Output not set!", "Attention", MessageBoxButton.OK, MessageBoxImage.Information); 

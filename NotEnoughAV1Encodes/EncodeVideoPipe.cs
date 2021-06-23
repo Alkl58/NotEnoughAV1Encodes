@@ -196,10 +196,6 @@ namespace NotEnoughAV1Encodes
                                     }
                                 }
                             }
-                            else
-                            {
-                                Kill.Kill_PID();
-                            }
                         }
                         finally { concurrencySemaphore.Release(); }
                     });

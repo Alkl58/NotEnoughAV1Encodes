@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -8,27 +9,29 @@ namespace NotEnoughAV1Encodes
     {
         public static void Kill_PID()
         {
-            var temp_PID = Global.Launched_PIDs;
 
-            if (temp_PID.Count != 0)
+            List<int> temp_pids = Global.Launched_PIDs;
+
+            // Nuke all PIDs
+            foreach (int pid in temp_pids.ToList())
             {
-                // Iterates over all PIDs to kill them
-                foreach (int pid in temp_PID)
+                try
                 {
-                    try
+                    List<int> children = Suspend.GetChildProcesses(pid);
+
+                    Process proc_to_kill = Process.GetProcessById(pid);
+                    proc_to_kill.Kill();
+
+                    if (children != null)
                     {
-                        // Get the Process by ID
-                        Process proc_to_kill = Process.GetProcessById(pid);
-                        // Kills the Process
-                        proc_to_kill.Kill();
-                        // Remove PID from Array
-                        Global.Launched_PIDs.RemoveAll(i => i == pid);
-                    }
-                    catch (Exception e)
-                    {
-                        Helpers.Logging("Kill_PID(): " + e.Message);
+                        foreach (int pid_children in children)
+                        {
+                            Process child_proc_to_kill = Process.GetProcessById(pid_children);
+                            child_proc_to_kill.Kill();
+                        }
                     }
                 }
+                catch { }
             }
         }
     }
