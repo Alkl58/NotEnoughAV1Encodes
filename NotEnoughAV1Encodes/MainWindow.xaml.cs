@@ -2778,7 +2778,7 @@ namespace NotEnoughAV1Encodes
             if (ToggleSwitchAdvancedVideoSettings.IsOn == true && CheckBoxCustomVideoSettings.IsChecked == false)
             {
                 // Custom Advanced Settings
-                if (ComboBoxVideoEncoder.SelectedIndex == 0)
+                if (ComboBoxVideoEncoder.SelectedIndex == 0 || ComboBoxVideoEncoder.SelectedIndex == 5)
                 {
                     // aomenc
                     writer.WriteElementString("VideoAdvancedAomencThreads",     ComboBoxAomencThreads.SelectedIndex.ToString());        // Video Advanced Settings Aomenc Threads
@@ -2800,7 +2800,7 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("VideoAdvancedAomencRowMT",       CheckBoxAomencRowMT.IsChecked.ToString());              // Video Advanced Settings Aomenc Row Mt
                     writer.WriteElementString("VideoAdvancedAomencCDEF",        CheckBoxAomencCDEF.IsChecked.ToString());               // Video Advanced Settings Aomenc CDEF
                 }
-                else if (ComboBoxVideoEncoder.SelectedIndex == 1)
+                else if (ComboBoxVideoEncoder.SelectedIndex == 1 || ComboBoxVideoEncoder.SelectedIndex == 6)
                 {
                     // rav1e
                     writer.WriteElementString("VideoAdvancedRav1eThreads",      ComboBoxRav1eThreads.SelectedIndex.ToString());         // Video Advanced Settings Rav1e Threads
@@ -2830,7 +2830,7 @@ namespace NotEnoughAV1Encodes
                         writer.WriteElementString("VideoAdvancedRav1eLightFall", TextBoxRav1eContentLightFall.Text);                    // Video Advanced Settings Rav1e Mastering Content Light Fall
                     }
                 }
-                else if (ComboBoxVideoEncoder.SelectedIndex == 2)
+                else if (ComboBoxVideoEncoder.SelectedIndex == 2 || ComboBoxVideoEncoder.SelectedIndex == 7)
                 {
                     // svt-av1
                     writer.WriteElementString("VideoAdvancedSVTAV1TileCols",    ComboBoxSVTAV1TileColumns.SelectedIndex.ToString());    // Video Advanced Settings SVT-AV1 Tile Columns
