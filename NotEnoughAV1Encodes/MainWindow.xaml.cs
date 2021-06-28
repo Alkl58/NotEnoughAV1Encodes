@@ -1001,18 +1001,55 @@ namespace NotEnoughAV1Encodes
                 SetTempSettings();
 
                 LabelProgressBar.Content = "Calculating Frame Count...";
+
+                MediaInfo mediaInfo = new MediaInfo();
+                
                 if (subHardSubEnabled && Splitting.split_type != 0)
                 {
-                    // Get Framecount from Reencoded Video
-                    await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetSourceFrameCount(Path.Combine(Global.temp_path, Global.temp_path_folder, "tmpsub.mkv")); }, token);
+
+                    mediaInfo.Open(Path.Combine(Global.temp_path, Global.temp_path_folder, "tmpsub.mkv"));
+
+                    try
+                    {
+                        int frame_count = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "FrameCount"));
+                        if (frame_count != 0)
+                        {
+                            TotalFrames = frame_count;
+                            Helpers.Logging("MediaInfo Framecount: " + frame_count.ToString());
+                        }
+                    }
+                    catch
+                    {
+                        // Get Framecount from Reencoded Video
+                        await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetSourceFrameCount(Path.Combine(Global.temp_path, Global.temp_path_folder, "tmpsub.mkv")); }, token);
+                        Helpers.Logging("FFmpeg Framecount: " + TotalFrames.ToString());
+                    }
                 }
                 else
                 {
-                    // Get Source Framecount
-                    await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetSourceFrameCount(Global.Video_Path); }, token);
+                    mediaInfo.Open(Global.Video_Path);
+
+                    // Framecount
+                    try
+                    {
+                        int frame_count = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "FrameCount"));
+                        if (frame_count != 0)
+                        {
+                            TotalFrames = frame_count;
+                            Helpers.Logging("MediaInfo Framecount: " + frame_count.ToString());
+                        }
+                    }
+                    catch 
+                    {
+                        // Get Source Framecount
+                        await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetSourceFrameCount(Global.Video_Path); }, token);
+                        Helpers.Logging("FFmpeg Framecount: " + TotalFrames.ToString());
+                    }
                 }
-                
-                
+
+                mediaInfo.Close();
+
+
                 if (EncodeAudio.trackOne || EncodeAudio.trackTwo || EncodeAudio.trackThree || EncodeAudio.trackFour)
                 {
                     LabelProgressBar.Content = "Encoding Audio...";
