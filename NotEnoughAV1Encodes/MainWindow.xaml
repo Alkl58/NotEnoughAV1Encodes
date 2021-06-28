@@ -111,7 +111,7 @@
                                 <ComboBoxItem Content="ffv1"/>
                                 <ComboBoxItem Content="utvideo"/>
                             </ComboBox>
-                            <Label Content="Chunk-Length (sec):" HorizontalAlignment="Left" Margin="702,10,0,0" VerticalAlignment="Top" FontWeight="Bold">
+                            <Label Content="Chunk-Length (sec):" HorizontalAlignment="Left" Margin="696,10,0,0" VerticalAlignment="Top" FontWeight="Bold">
                                 <Label.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -123,7 +123,7 @@
                                     </Style>
                                 </Label.Style>
                             </Label>
-                            <TextBox x:Name="TextBoxSplittingChunkLength" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="27" Margin="830,10,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                            <TextBox x:Name="TextBoxSplittingChunkLength" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="27" Margin="824,10,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                                 <TextBox.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -135,6 +135,18 @@
                                     </Style>
                                 </TextBox.Style>
                             </TextBox>
+                            <CheckBox x:Name="CheckBoxSkipReencode" Content="Skip Reencode" HorizontalAlignment="Left" Margin="884,14,0,0" VerticalAlignment="Top" Checked="CheckBoxSkipReencode_Checked">
+                                <CheckBox.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxSplittingMethod}" Value="0">
+                                                <Setter Property="UIElement.Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </CheckBox.Style>
+                            </CheckBox>
                         </Grid>
                     </GroupBox>
                 </Grid>

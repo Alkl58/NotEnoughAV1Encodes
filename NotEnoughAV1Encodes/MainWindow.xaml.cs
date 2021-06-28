@@ -34,10 +34,11 @@ namespace NotEnoughAV1Encodes
         public static string VFRCMD = "";           // VFR Muxing Command
         // Temp Settings Subtitles
         public static string subCommand;            // Subtitle Muxing Command
-        public static string hardsub_command;        // Subtitle Hardcoding Command
+        public static string hardsub_command;       // Subtitle Hardcoding Command
         public static bool subSoftSubEnabled;       // Subtitle Toggle for later Muxing
         public static bool subHardSubEnabled;       // Subtitle Toggle for hardsub
         public static bool subMessageShowed = false;// Used to message the user when trying to do softsub in MP4 Container
+        public static bool reencodeMessage = false; // Show reencode warning once
         // IO Paths
         public static string BatchOutContainer = ".mkv";
         public static bool VideoInputSet = false;   // Video Input Set Boolean
@@ -141,6 +142,16 @@ namespace NotEnoughAV1Encodes
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
+
+        private void CheckBoxSkipReencode_Checked(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxSkipReencode.IsChecked == true && !reencodeMessage)
+            {
+                MessageBox.Show("Disabling reencoding can lead to frameloss, if the video source has incorrect frame-metadata.\n\nPossible issues which are only visible after encoding:\n- Audio get's more and more desynced\n- Video stream is shorter", "Attention", MessageBoxButton.OK, MessageBoxImage.Information);
+                reencodeMessage = true;
+                SaveSettingsTab();
+            }
+        }
 
         private void ToggleSwitchAudioTrackOne_Toggled(object sender, RoutedEventArgs e)
         {
@@ -1097,6 +1108,7 @@ namespace NotEnoughAV1Encodes
             Splitting.encode_method = ComboBoxSplittingReencodeMethod.SelectedIndex;
             Splitting.FFmpeg_Threshold = TextBoxSplittingThreshold.Text;
             Splitting.chunking_length = int.Parse(TextBoxSplittingChunkLength.Text);
+            Splitting.skip_reencode = CheckBoxSkipReencode.IsChecked == true;
         }
 
         private void ReEncode()
@@ -2512,6 +2524,7 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("ThemeAccent",        ComboBoxAccentTheme.SelectedIndex.ToString());
                     writer.WriteElementString("ThemeBase",          ComboBoxBaseTheme.SelectedIndex.ToString());
                     writer.WriteElementString("BatchContainer",     ComboBoxContainerBatchEncoding.SelectedIndex.ToString());
+                    writer.WriteElementString("ReencodeMessage",    reencodeMessage.ToString());
                     writer.WriteEndElement();
                     writer.Close();
                 }
@@ -2544,6 +2557,7 @@ namespace NotEnoughAV1Encodes
                             case "ThemeAccent":     ComboBoxAccentTheme.SelectedIndex = int.Parse(n.InnerText); break;
                             case "ThemeBase":       ComboBoxBaseTheme.SelectedIndex = int.Parse(n.InnerText); break;
                             case "BatchContainer":  ComboBoxContainerBatchEncoding.SelectedIndex = int.Parse(n.InnerText); break;
+                            case "ReencodeMessage": reencodeMessage = n.InnerText == "True"; break;
                             default: break;
                         }
                     }
@@ -2666,6 +2680,7 @@ namespace NotEnoughAV1Encodes
             writer.WriteElementString("SplittingThreshold",             TextBoxSplittingThreshold.Text);                                // Splitting Threshold
             writer.WriteElementString("SplittingReencode",              ComboBoxSplittingReencodeMethod.SelectedIndex.ToString());      // Splitting Reencode Codec
             writer.WriteElementString("SplittingReencodeLength",        TextBoxSplittingChunkLength.Text);                              // Splitting Chunk Length
+            writer.WriteElementString("SplittingReencodeSkip",          CheckBoxSkipReencode.IsChecked.ToString());                     // Splitting Skip Reencode
             // ══════════════════════════════════════════════════════════════════ Filters ══════════════════════════════════════════════════════════════════
 
             writer.WriteElementString("FilterCrop",                 ToggleSwitchFilterCrop.IsOn.ToString());                            // Filter Crop (Boolean)
@@ -2882,6 +2897,7 @@ namespace NotEnoughAV1Encodes
                     case "SplittingThreshold":              TextBoxSplittingThreshold.Text = n.InnerText;                           break;  // Splitting Threshold
                     case "SplittingReencode":               ComboBoxSplittingReencodeMethod.SelectedIndex = int.Parse(n.InnerText); break;  // Splitting Reencode Codec
                     case "SplittingReencodeLength":         TextBoxSplittingChunkLength.Text = n.InnerText;                         break;  // Splitting Chunk Length
+                    case "SplittingReencodeSkip":           CheckBoxSkipReencode.IsChecked = n.InnerText == "True";                 break;  // Splitting Skip Reencode
                     // ══════════════════════════════════════════════════════════════════ Filters ══════════════════════════════════════════════════════════════════
                     case "FilterCrop":                      ToggleSwitchFilterCrop.IsOn = n.InnerText == "True";                    break;  // Filter Crop (Boolean)
                     case "FilterCropTop":                   TextBoxFiltersCropTop.Text = n.InnerText;                               break;  // Filter Crop Top

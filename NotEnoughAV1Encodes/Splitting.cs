@@ -13,6 +13,7 @@ namespace NotEnoughAV1Encodes
         public static int encode_method = 0;
         public static List<string> FFmpegArgs = new List<string>();
         public static string FFmpeg_Threshold = "";
+        public static bool skip_reencode = false;
 
         public static void Split()
         {
@@ -180,27 +181,35 @@ namespace NotEnoughAV1Encodes
                 ffmpeg_command += " -y -i " + '\u0022' + Global.Video_Path + '\u0022';                                              // Video Input
                 ffmpeg_command += " -reset_timestamps 1 -map_metadata -1 -sn -an";                                                  // Remove unnecessary metadata etc
 
-                if (encode_method == 0)
+                if (skip_reencode)
                 {
-                    ffmpeg_command += " -c:v libx264 -preset ultrafast -crf 0";                                                     // Re-Encoding - Needed because else it WILL loose frames
+                    ffmpeg_command += " -c:v copy";
                 }
-                else if(encode_method == 1)
+                else
                 {
-                    ffmpeg_command += " -c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -slicecrc 0 -slices 4";                   // Re-Encoding - Needed because else it WILL loose frames
-                }
-                else if(encode_method == 2)
-                {
-                    ffmpeg_command += " -c:v utvideo";                                                                              // Re-Encoding - Needed because else it WILL loose frames
+                    if (encode_method == 0)
+                    {
+                        ffmpeg_command += " -c:v libx264 -preset ultrafast -crf 0";                                                     // Re-Encoding - Needed because else it WILL loose frames
+                    }
+                    else if (encode_method == 1)
+                    {
+                        ffmpeg_command += " -c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -slicecrc 0 -slices 4";                   // Re-Encoding - Needed because else it WILL loose frames
+                    }
+                    else if (encode_method == 2)
+                    {
+                        ffmpeg_command += " -c:v utvideo";                                                                              // Re-Encoding - Needed because else it WILL loose frames
+                    }
+
+                    // Hardsub
+                    if (MainWindow.subHardSubEnabled)
+                    {
+                        ffmpeg_command += " " + MainWindow.hardsub_command;
+                    }
+
+                    ffmpeg_command += " -sc_threshold 0 -g " + chunking_length;                                                         // Make Splitting more accurate
+                    ffmpeg_command += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + chunking_length + ")" + '\u0022';  // Make Splitting more accurate
                 }
 
-                // Hardsub
-                if (MainWindow.subHardSubEnabled)
-                {
-                    ffmpeg_command += " " + MainWindow.hardsub_command;
-                }
-
-                ffmpeg_command += " -sc_threshold 0 -g " + chunking_length;                                                         // Make Splitting more accurate
-                ffmpeg_command += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + chunking_length + ")" + '\u0022';  // Make Splitting more accurate
                 ffmpeg_command += " -segment_time " + chunking_length + " -f segment " + '\u0022';                                  // Segmenting
                 ffmpeg_command += Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split%6d.mkv") + '\u0022';     // Video Output
 
