@@ -116,7 +116,7 @@ namespace NotEnoughAV1Encodes
             // Deletes Temp Files
             try
             {
-                if (MainWindow.DeleteTempFiles == true)
+                if (MainWindow.DeleteTempFiles)
                 {
                     DirectoryInfo tmp = new DirectoryInfo(Path.Combine(Global.temp_path, Global.temp_path_folder));
                     tmp.Delete(true);

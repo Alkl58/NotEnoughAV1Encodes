@@ -143,6 +143,14 @@ namespace NotEnoughAV1Encodes
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
 
+        private void CheckBoxBatchWithDifferentPresets_Checked(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxBatchWithDifferentPresets.IsChecked == true)
+            {
+                ToggleSwitchDeleteTempFiles.IsOn = true;
+            }
+        }
+
         private void CheckBoxSkipReencode_Checked(object sender, RoutedEventArgs e)
         {
             if (CheckBoxSkipReencode.IsChecked == true && !reencodeMessage)
@@ -268,7 +276,7 @@ namespace NotEnoughAV1Encodes
             Global.temp_path_folder = Path.GetFileNameWithoutExtension(file);
             Helpers.Check_Unicode(Global.temp_path_folder);
             BatchEncoding = false;
-            GetSourceInformation();
+            GetSourceInformation(false);
             GetSubtitleTracks();
             AutoSetBitDepthAndColorFormat(file);
         }
@@ -811,7 +819,7 @@ namespace NotEnoughAV1Encodes
             // Sets the Temp Path
             if (ToggleSwitchTempFolder.IsOn == true)
                 Global.temp_path = TextBoxCustomTempPath.Text;
-            Helpers.Logging("Temp Path: " + Global.temp_path);
+            
             // Resets the global Cancellation Boolean
             SmallFunctions.Cancel.CancelAll = false;
             // Reset Progressbar
@@ -823,11 +831,7 @@ namespace NotEnoughAV1Encodes
             // Creates new Cancellation Token
             cancellationTokenSource = new CancellationTokenSource();
             // Sets if popup window appears
-            PopupWindow = ToggleSwitchShowWindow.IsOn == true;
-            // Sets the encoder (0 aomenc; 1 rav1e; 2 svt-av1; 3 vp9)
-            EncodeMethod = ComboBoxVideoEncoder.SelectedIndex;
-            // Sets the Split Method
-            Splitting.split_type = ComboBoxSplittingMethod.SelectedIndex;
+            PopupWindow = ToggleSwitchShowWindow.IsOn;
             // Sets if Video is VFR
             VFRVideo = ToggleSwitchVFR.IsOn == true;
 
@@ -840,6 +844,8 @@ namespace NotEnoughAV1Encodes
             {
                 // Set the output container for batch encoding example: .mkv
                 BatchOutContainer = ComboBoxContainerBatchEncoding.Text;
+                // Toggle Delete Temp Files to prevent conflicts
+                ToggleSwitchDeleteTempFiles.IsOn = true;
                 // Batch Encoding
                 BatchEncode(cancellationTokenSource.Token);
             }
@@ -859,18 +865,27 @@ namespace NotEnoughAV1Encodes
                     {
                         // Normal Batch Encoding
 
-                        Helpers.Logging("Batch Encoding: " + file);
                         // Reset Progressbar
                         ProgressBar.Maximum = 100;
                         ProgressBar.Value = 0;
 
-                        // Sets Input / Output
-                        Global.Video_Path = TextBoxVideoSource.Text + "\\" + file;
-                        Global.Video_Output = TextBoxVideoDestination.Text + "\\" + file + "_av1" + BatchOutContainer;
+                        // Set Input
+                        Global.Video_Path = Path.Combine(TextBoxVideoSource.Text, file.ToString());
+
+                        // Set Output
+                        Global.Video_Output = Path.Combine(TextBoxVideoDestination.Text, Path.GetFileNameWithoutExtension(file.Name) + "_" + ComboBoxVideoEncoder.Text + BatchOutContainer);
+
+                        Helpers.Logging("Batch Encoding: " + file);
+
                         // Sets Temp Filename for temp folder
                         Global.temp_path_folder = Path.GetFileNameWithoutExtension(Global.Video_Path);
+
                         // Get Source Information
-                        GetSourceInformation();
+                        GetSourceInformation(true);
+
+                        // Set Bit-Depth and Color Format
+                        AutoSetBitDepthAndColorFormat(Global.Video_Path);
+
                         // Set Subtitle
                         if (ComboBoxContainerBatchEncoding.SelectedIndex == 2)
                         {
@@ -884,9 +899,6 @@ namespace NotEnoughAV1Encodes
                         CheckBoxSubThreeBurn.IsChecked = false;
                         CheckBoxSubFourBurn.IsChecked = false;
 
-                        // Set Bit-Depth and Color Format
-                        AutoSetBitDepthAndColorFormat(Global.Video_Path);
-
                         // Start encoding process
                         await MainEntry(cancellationTokenSource.Token);
 
@@ -897,6 +909,7 @@ namespace NotEnoughAV1Encodes
                         // Get all Items from ComboBox
                         var encode_presets = ComboBoxBatchSettings.Items;
                         var encode_presets_to_encode = new List<string>();
+
                         // Fill List with Presets to use
                         foreach (var preset in encode_presets)
                         {
@@ -907,25 +920,35 @@ namespace NotEnoughAV1Encodes
                                 encode_presets_to_encode.Add(pre.Content.ToString());
                             }
                         }
+
                         // Encode each file with the selected presets
                         foreach (string preset in encode_presets_to_encode)
                         {
-                            LoadSettings(true, preset);
-                            Helpers.Logging("Batch Encoding: " + file + " with Preset: " + preset);
+                            
                             // Reset Progressbar
                             ProgressBar.Maximum = 100;
                             ProgressBar.Value = 0;
 
-                            // Sets Input / Output
-                            Global.Video_Path = TextBoxVideoSource.Text + "\\" + file;
-                            Global.Video_Output = Path.Combine(TextBoxVideoDestination.Text, file.ToString(), Path.GetFileNameWithoutExtension(preset) + BatchOutContainer);
-                            // Creates Subfolder for each batch file
-                            if (!Directory.Exists(Path.Combine(TextBoxVideoDestination.Text, file.ToString())))
-                                Directory.CreateDirectory(Path.Combine(TextBoxVideoDestination.Text, file.ToString()));
+                            // Set Input
+                            Global.Video_Path = Path.Combine(TextBoxVideoSource.Text, file.ToString());
+
+                            // Set Output
+                            Global.Video_Output = Path.Combine(TextBoxVideoDestination.Text, Path.GetFileNameWithoutExtension(file.Name) + "_" + Path.GetFileNameWithoutExtension(preset) + BatchOutContainer);
+
+                            Helpers.Logging("Batch Encoding: " + file + " with Preset: " + preset);
+
                             // Sets Temp Filename for temp folder
                             Global.temp_path_folder = Path.GetFileNameWithoutExtension(Global.Video_Path);
+
+                            // Load Preset
+                            LoadSettings(true, preset);
+
                             // Get Source Information
-                            GetSourceInformation();
+                            GetSourceInformation(true);
+
+                            // Set Bit-Depth and Color Format
+                            AutoSetBitDepthAndColorFormat(Global.Video_Path);
+
                             // Set Subtitle
                             if (ComboBoxContainerBatchEncoding.SelectedIndex == 2)
                             {
@@ -938,9 +961,6 @@ namespace NotEnoughAV1Encodes
                             CheckBoxSubTwoBurn.IsChecked = false;
                             CheckBoxSubThreeBurn.IsChecked = false;
                             CheckBoxSubFourBurn.IsChecked = false;
-
-                            // Set Bit-Depth and Color Format
-                            AutoSetBitDepthAndColorFormat(Global.Video_Path);
 
                             // Start encoding process
                             await MainEntry(cancellationTokenSource.Token);
@@ -963,6 +983,8 @@ namespace NotEnoughAV1Encodes
         {
             try
             {
+                Helpers.Logging("Temp Path: " + Global.temp_path);
+
                 // Temp Folder Creation
                 if (!Directory.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks")))
                     Directory.CreateDirectory(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks"));
@@ -1134,7 +1156,7 @@ namespace NotEnoughAV1Encodes
                     // Set Encoding State to IDLE
                     encode_state = 0;
                 }
-                if (ToggleSwitchShutdownAfterEncode.IsOn == true && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
+                if (ToggleSwitchShutdownAfterEncode.IsOn && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
             }
             catch { SmallFunctions.PlayStopSound(); }
         }
@@ -1142,6 +1164,7 @@ namespace NotEnoughAV1Encodes
         private void SetSplitSettings()
         {
             // Temp Arguments for Splitting / Scenedetection
+            Splitting.split_type = ComboBoxSplittingMethod.SelectedIndex;
             Splitting.encode_method = ComboBoxSplittingReencodeMethod.SelectedIndex;
             Splitting.FFmpeg_Threshold = TextBoxSplittingThreshold.Text;
             Splitting.chunking_length = int.Parse(TextBoxSplittingChunkLength.Text);
@@ -1214,7 +1237,7 @@ namespace NotEnoughAV1Encodes
             EncodeVideo.Worker_Count = int.Parse(ComboBoxWorkerCount.Text);             // Sets the worker count
             OnePass = ComboBoxVideoPasses.SelectedIndex == 0;                           // Sets the amount of passes (true = 1, false = 2)
             EncodeVideo.Process_Priority = ComboBoxProcessPriority.SelectedIndex == 0;  // Sets the Process Priority
-            DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn == true;                 // Sets if Temp Files should be deleted
+            DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn;                         // Sets if Temp Files should be deleted
             EncodeVideo.Show_Terminal = ToggleSwitchHideTerminal.IsOn == false;         // Sets if Terminal shall be shown during encode
             SetPipeCommand();
         }
@@ -1368,7 +1391,7 @@ namespace NotEnoughAV1Encodes
 
         // ═════════════════════════════════════ Audio Logic ══════════════════════════════════════
 
-        private void GetSourceInformation()
+        private void GetSourceInformation(bool batch_skip)
         {
             MediaInfo mediaInfo = new MediaInfo();
             mediaInfo.Open(Global.Video_Path);
@@ -1385,10 +1408,13 @@ namespace NotEnoughAV1Encodes
             // Resolution
             try 
             { 
-                string width = mediaInfo.Get(StreamKind.Video, 0, "Width");
-                string height = mediaInfo.Get(StreamKind.Video, 0, "Height");
-                LabelVideoResolution.Content = width + "x" + height;
-                TextBoxFiltersResizeHeight.Text = height;
+                if (!batch_skip)
+                {
+                    string width = mediaInfo.Get(StreamKind.Video, 0, "Width");
+                    string height = mediaInfo.Get(StreamKind.Video, 0, "Height");
+                    LabelVideoResolution.Content = width + "x" + height;
+                    TextBoxFiltersResizeHeight.Text = height;
+                }
             } 
             catch { }
 
@@ -1799,6 +1825,9 @@ namespace NotEnoughAV1Encodes
         private void SetEncoderSettings()
         {
             int selected_encoder = ComboBoxVideoEncoder.SelectedIndex;
+
+            // Sets the encoder (0 libaom; 1 librav1e; 2 libsvt-av1; 3 libvpx-vp9; 5 aomenc; 6 rav1e; 7 svt-av1)
+            EncodeMethod = selected_encoder;
 
             if (CheckBoxCustomVideoSettings.IsChecked == false)
             {
@@ -2721,7 +2750,7 @@ namespace NotEnoughAV1Encodes
             // ══════════════════════════════════════════════════════════════════ Filters ══════════════════════════════════════════════════════════════════
 
             writer.WriteElementString("FilterCrop",                 ToggleSwitchFilterCrop.IsOn.ToString());                            // Filter Crop (Boolean)
-            if (ToggleSwitchFilterCrop.IsOn == true)
+            if (ToggleSwitchFilterCrop.IsOn)
             {
                 // Cropping
                 writer.WriteElementString("FilterCropTop",          TextBoxFiltersCropTop.Text);                                        // Filter Crop Top
@@ -2731,7 +2760,7 @@ namespace NotEnoughAV1Encodes
             }
 
             writer.WriteElementString("FilterResize",               ToggleSwitchFilterResize.IsOn.ToString());                          // Filter Resize (Boolean)
-            if (ToggleSwitchFilterResize.IsOn == true)
+            if (ToggleSwitchFilterResize.IsOn)
             {
                 // Resize
                 writer.WriteElementString("FilterResizeWidth",      TextBoxFiltersResizeWidth.Text);                                    // Filter Resize Width
@@ -2740,14 +2769,14 @@ namespace NotEnoughAV1Encodes
             }
 
             writer.WriteElementString("FilterRotate",               ToggleSwitchFilterRotate.IsOn.ToString());                          // Filter Rotate (Boolean)
-            if (ToggleSwitchFilterRotate.IsOn == true)
+            if (ToggleSwitchFilterRotate.IsOn)
             {
                 // Rotating
                 writer.WriteElementString("FilterRotateAmount",     ComboBoxFiltersRotate.SelectedIndex.ToString());                    // Filter Rotate
             }
 
             writer.WriteElementString("FilterDeinterlace",          ToggleSwitchFilterDeinterlace.IsOn.ToString());                     // Filter Deinterlace (Boolean)
-            if (ToggleSwitchFilterDeinterlace.IsOn == true)
+            if (ToggleSwitchFilterDeinterlace.IsOn)
             {
                 // Deinterlacing
                 writer.WriteElementString("FilterDeinterlaceType",  ComboBoxFiltersDeinterlace.SelectedIndex.ToString());               // Filter Deinterlace

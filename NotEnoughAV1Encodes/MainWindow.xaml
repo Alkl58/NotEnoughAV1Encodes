@@ -902,7 +902,7 @@
                             </ComboBox>
                             <ComboBox x:Name="ComboBoxBatchSettings" HorizontalAlignment="Left" Margin="165,46,0,0" VerticalAlignment="Top" Width="120">
                             </ComboBox>
-                            <CheckBox x:Name="CheckBoxBatchWithDifferentPresets" Content="Encode with Presets:" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" FontSize="14" ToolTip="Encodes each batch file with the selected presets."/>
+                            <CheckBox x:Name="CheckBoxBatchWithDifferentPresets" Content="Encode with Presets:" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" FontSize="14" ToolTip="Encodes each batch file with the selected presets." Checked="CheckBoxBatchWithDifferentPresets_Checked"/>
                         </Grid>
                     </GroupBox>
                 </Grid>
