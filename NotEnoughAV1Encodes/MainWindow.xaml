@@ -466,8 +466,59 @@
                         <TextBox x:Name="TextBoxRav1eMaxGOP" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="127"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         <TextBox x:Name="TextBoxRav1eLookahead" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="40" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="161"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         <Label x:Name="LabelRav1eLookahead"  Content="RDO Lookahead:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="161"/>
-                        <Label x:Name="LabelRav1eTune" Content="Tune:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="271" Canvas.Top="25" />
-                        <ComboBox x:Name="ComboBoxRav1eTune"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="414" Canvas.Top="25" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                        <Label x:Name="LabelRav1eColorPrimaries" Content="Color Primaries:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="127" />
+                        <ComboBox x:Name="ComboBoxRav1eColorPrimaries"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="127" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="Unspecified" IsSelected="True"/>
+                            <ComboBoxItem Content="BT470M"/>
+                            <ComboBoxItem Content="BT470BG"/>
+                            <ComboBoxItem Content="BT601"/>
+                            <ComboBoxItem Content="BT709"/>
+                            <ComboBoxItem Content="BT2020"/>
+                            <ComboBoxItem Content="SMPTE240"/>
+                            <ComboBoxItem Content="SMPTE431"/>
+                            <ComboBoxItem Content="SMPTE432"/>
+                            <ComboBoxItem Content="EBU3213"/>
+                            <ComboBoxItem Content="GenericFilm"/>
+                            <ComboBoxItem Content="XYZ"/>
+                        </ComboBox>
+                        <Label x:Name="LabelRav1eColorTransfer" Content="Color Transfer:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="59" />
+                        <ComboBox x:Name="ComboBoxRav1eColorTransfer"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="59" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="Unspecified" IsSelected="True"/>
+                            <ComboBoxItem Content="BT470M"/>
+                            <ComboBoxItem Content="BT470BG"/>
+                            <ComboBoxItem Content="BT601"/>
+                            <ComboBoxItem Content="BT709"/>
+                            <ComboBoxItem Content="BT1361"/>
+                            <ComboBoxItem Content="BT2020_10Bit"/>
+                            <ComboBoxItem Content="BT2020_12Bit"/>
+                            <ComboBoxItem Content="SMPTE240"/>
+                            <ComboBoxItem Content="SMPTE428"/>
+                            <ComboBoxItem Content="SMPTE2084"/>
+                            <ComboBoxItem Content="Linear"/>
+                            <ComboBoxItem Content="Log100"/>
+                            <ComboBoxItem Content="Log100Sqrt10"/>
+                            <ComboBoxItem Content="IEC61966"/>
+                            <ComboBoxItem Content="SRGB"/>
+                            <ComboBoxItem Content="HLG"/>
+                        </ComboBox>
+                        <Label x:Name="LabelRav1eColorMatrix" Content="Color Matrix:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="93" />
+                        <ComboBox x:Name="ComboBoxRav1eColorMatrix"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="93" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                            <ComboBoxItem Content="Unspecified" IsSelected="True"/>
+                            <ComboBoxItem Content="BT470BG"/>
+                            <ComboBoxItem Content="BT601"/>
+                            <ComboBoxItem Content="BT709"/>
+                            <ComboBoxItem Content="BT2020NCL"/>
+                            <ComboBoxItem Content="BT2020CL"/>
+                            <ComboBoxItem Content="SMPTE240"/>
+                            <ComboBoxItem Content="SMPTE2085"/>
+                            <ComboBoxItem Content="YCgCo"/>
+                            <ComboBoxItem Content="ChromatNCL"/>
+                            <ComboBoxItem Content="ChromatCL"/>
+                            <ComboBoxItem Content="ICtCp"/>
+                            <ComboBoxItem Content="Identity"/>
+                        </ComboBox>
+                        <Label x:Name="LabelRav1eTune" Content="Tune:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="25" />
+                        <ComboBox x:Name="ComboBoxRav1eTune"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="25" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
                             <ComboBoxItem Content="Psychovisual" IsSelected="True"/>
                             <ComboBoxItem Content="Psnr"/>
                         </ComboBox>

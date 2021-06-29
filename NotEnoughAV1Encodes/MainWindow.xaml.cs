@@ -2002,17 +2002,28 @@ namespace NotEnoughAV1Encodes
                 cmd += " -tile-rows " + ComboBoxRav1eTileRows.SelectedIndex;                           // Tile Rows
 
                 cmd += " -rav1e-params ";
-                cmd += "threads=" + ComboBoxRav1eThreads.SelectedIndex;                              // Threads
-                cmd += ":rdo-lookahead-frames=" + TextBoxRav1eLookahead.Text;                         // RDO Lookahead
-                cmd += ":tune=" + ComboBoxRav1eTune.Text;                                             // Tune
+                cmd += "threads=" + ComboBoxRav1eThreads.SelectedIndex;                                 // Threads
+                cmd += ":rdo-lookahead-frames=" + TextBoxRav1eLookahead.Text;                           // RDO Lookahead
+                cmd += ":tune=" + ComboBoxRav1eTune.Text;                                               // Tune
                 if (TextBoxRav1eMaxGOP.Text != "0")
                 {
-                    cmd += ":keyint=" + TextBoxRav1eMaxGOP.Text;                                      // Keyframe Interval
+                    cmd += ":keyint=" + TextBoxRav1eMaxGOP.Text;                                        // Keyframe Interval
                 }
-                
+                if (ComboBoxRav1eColorPrimaries.SelectedIndex != 0)
+                {
+                    cmd += ":primaries=" + ComboBoxRav1eColorPrimaries.Text;                            // Color Primaries
+                }
+                if (ComboBoxRav1eColorTransfer.SelectedIndex != 0)
+                {
+                    cmd += ":transfer=" + ComboBoxRav1eColorTransfer.Text;                              // Color Transfer
+                }
+                if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
+                {
+                    cmd += ":matrix=" + ComboBoxRav1eColorMatrix.Text;                                  // Color Matrix
+                }
                 if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
                 {
-                    cmd += ":mastering-display=G(" + TextBoxRav1eMasteringGx.Text + ",";              // Mastering Gx
+                    cmd += ":mastering-display=G(" + TextBoxRav1eMasteringGx.Text + ",";                // Mastering Gx
                     cmd += TextBoxRav1eMasteringGy.Text + ")B(";                                        // Mastering Gy
                     cmd += TextBoxRav1eMasteringBx.Text + ",";                                          // Mastering Bx
                     cmd += TextBoxRav1eMasteringBy.Text + ")R(";                                        // Mastering By
@@ -2025,7 +2036,7 @@ namespace NotEnoughAV1Encodes
                 }
                 if (CheckBoxRav1eContentLight.IsChecked == true)
                 {
-                    cmd += ":content-light=" + TextBoxRav1eContentLightCll.Text;                      // Content Light CLL
+                    cmd += ":content-light=" + TextBoxRav1eContentLightCll.Text;                        // Content Light CLL
                     cmd += "," + TextBoxRav1eContentLightFall.Text;                                     // Content Light FALL
                 }
             }
@@ -2167,6 +2178,18 @@ namespace NotEnoughAV1Encodes
                 if (TextBoxRav1eMaxGOP.Text != "0")
                 {
                     cmd += " --keyint " + TextBoxRav1eMaxGOP.Text;                                      // Keyframe Interval
+                }
+                if (ComboBoxRav1eColorPrimaries.SelectedIndex != 0)
+                {
+                    cmd += " --primaries " + ComboBoxRav1eColorPrimaries.Text;                          // Color Primaries
+                }
+                if (ComboBoxRav1eColorTransfer.SelectedIndex != 0)
+                {
+                    cmd += " --transfer " + ComboBoxRav1eColorTransfer.Text;                            // Color Transfer
+                }
+                if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
+                {
+                    cmd += " --matrix " + ComboBoxRav1eColorMatrix.Text;                                // Color Matrix
                 }
                 if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
                 {
@@ -2837,6 +2860,9 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("VideoAdvancedRav1eTileRows",     ComboBoxRav1eTileRows.SelectedIndex.ToString());        // Video Advanced Settings Rav1e Tile Rows
                     writer.WriteElementString("VideoAdvancedRav1eGOP",          TextBoxRav1eMaxGOP.Text);                               // Video Advanced Settings Rav1e GOP
                     writer.WriteElementString("VideoAdvancedRav1eRDO",          TextBoxRav1eLookahead.Text);                            // Video Advanced Settings Rav1e RDO Lookahead
+                    writer.WriteElementString("VideoAdvancedRav1eColorPrim",    ComboBoxRav1eColorPrimaries.SelectedIndex.ToString());  // Video Advanced Settings Rav1e Color Primaries
+                    writer.WriteElementString("VideoAdvancedRav1eColorTrans",   ComboBoxRav1eColorTransfer.SelectedIndex.ToString());   // Video Advanced Settings Rav1e Color Transfer
+                    writer.WriteElementString("VideoAdvancedRav1eColorMatrix",  ComboBoxRav1eColorMatrix.SelectedIndex.ToString());     // Video Advanced Settings Rav1e Color Matrix
                     writer.WriteElementString("VideoAdvancedRav1eTune",         ComboBoxRav1eTune.SelectedIndex.ToString());            // Video Advanced Settings Rav1e Tune
                     writer.WriteElementString("VideoAdvancedRav1eMastering",    CheckBoxRav1eMasteringDisplay.IsChecked.ToString());    // Video Advanced Settings Rav1e Mastering Display
                     if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
@@ -3014,6 +3040,9 @@ namespace NotEnoughAV1Encodes
                     case "VideoAdvancedRav1eGOP":           TextBoxRav1eMaxGOP.Text = n.InnerText;                                  break;  // Video Advanced Settings Rav1e GOP
                     case "VideoAdvancedRav1eRDO":           TextBoxRav1eLookahead.Text = n.InnerText;                               break;  // Video Advanced Settings Rav1e RDO Lookahead
                     case "VideoAdvancedRav1eTune":          ComboBoxRav1eTune.SelectedIndex = int.Parse(n.InnerText);               break;  // Video Advanced Settings Rav1e Tune
+                    case "VideoAdvancedRav1eColorPrim":     ComboBoxRav1eColorPrimaries.SelectedIndex = int.Parse(n.InnerText);     break;  // Video Advanced Settings Rav1e Color Primaries
+                    case "VideoAdvancedRav1eColorTrans":    ComboBoxRav1eColorTransfer.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings Rav1e Color Transfer
+                    case "VideoAdvancedRav1eColorMatrix":   ComboBoxRav1eColorMatrix.SelectedIndex = int.Parse(n.InnerText);        break;  // Video Advanced Settings Rav1e Color Matrix
                     case "VideoAdvancedRav1eMastering":     CheckBoxRav1eMasteringDisplay.IsChecked = n.InnerText == "True";        break;  // Video Advanced Settings Rav1e Mastering Display
                     case "VideoAdvancedRav1eMasteringGx":   TextBoxRav1eMasteringGx.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Gx
                     case "VideoAdvancedRav1eMasteringGy":   TextBoxRav1eMasteringGy.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Gy
