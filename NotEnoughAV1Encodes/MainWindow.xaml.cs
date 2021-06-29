@@ -1969,6 +1969,18 @@ namespace NotEnoughAV1Encodes
                 cmd += " tune-content=" + ComboBoxAomencTuneContent.Text;                             // Tune-Content
                 cmd += ":sharpness=" + ComboBoxAomencSharpness.Text;                                  // Sharpness (Filter)
                 cmd += ":enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex;      // Key Frame Filtering
+                if (ComboBoxAomencColorPrimaries.SelectedIndex != 0)
+                {
+                    cmd += ":color-primaries=" + ComboBoxAomencColorPrimaries.Text;                   // Color Primaries
+                }
+                if (ComboBoxAomencColorTransfer.SelectedIndex != 0)
+                {
+                    cmd += ":transfer-characteristics=" + ComboBoxAomencColorTransfer.Text;           // Color Transfer
+                }
+                if (ComboBoxAomencColorMatrix.SelectedIndex != 0)
+                {
+                    cmd += ":matrix-coefficients=" + ComboBoxAomencColorMatrix.Text;                  // Color Matrix
+                }
             }
 
             return cmd;
@@ -2136,6 +2148,18 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxAomencRowMT.IsChecked == false)
             {
                 cmd += " --row-mt=0";                                                               // Row Based Multithreading
+            }
+            if (ComboBoxAomencColorPrimaries.SelectedIndex != 0)
+            {
+                cmd += " --color-primaries=" + ComboBoxAomencColorPrimaries.Text;                   // Color Primaries
+            }
+            if (ComboBoxAomencColorTransfer.SelectedIndex != 0)
+            {
+                cmd += " --transfer-characteristics=" + ComboBoxAomencColorTransfer.Text;           // Color Transfer
+            }
+            if (ComboBoxAomencColorMatrix.SelectedIndex != 0)
+            {
+                cmd += " --matrix-coefficients=" + ComboBoxAomencColorMatrix.Text;                  // Color Matrix
             }
             if (CheckBoxAomencCDEF.IsChecked == false)
             {
@@ -2844,6 +2868,9 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("VideoAdvancedAomencTune",        ComboBoxAomencTune.SelectedIndex.ToString());           // Video Advanced Settings Aomenc Tune
                     writer.WriteElementString("VideoAdvancedAomencTuneContent", ComboBoxAomencTuneContent.SelectedIndex.ToString());    // Video Advanced Settings Aomenc Tune
                     writer.WriteElementString("VideoAdvancedAomencARNR",        CheckBoxAomencARNRMax.IsChecked.ToString());            // Video Advanced Settings Aomenc ARNR
+                    writer.WriteElementString("VideoAdvancedAomencColorPrim",   ComboBoxAomencColorPrimaries.SelectedIndex.ToString()); // Video Advanced Settings Aomenc Color Primaries
+                    writer.WriteElementString("VideoAdvancedAomencColorTrans",  ComboBoxAomencColorTransfer.SelectedIndex.ToString());  // Video Advanced Settings Aomenc Color Transfer
+                    writer.WriteElementString("VideoAdvancedAomencColorMatrix", ComboBoxAomencColorMatrix.SelectedIndex.ToString());    // Video Advanced Settings Aomenc Color Matrix
                     if (CheckBoxAomencARNRMax.IsChecked == true)
                     {
                         writer.WriteElementString("VideoAdvancedAomencARNRMax", ComboBoxAomencARNRMax.SelectedIndex.ToString());        // Video Advanced Settings Aomenc ARNR Max
@@ -3025,6 +3052,9 @@ namespace NotEnoughAV1Encodes
                     case "VideoAdvancedAomencGOP":          TextBoxAomencMaxGOP.Text = n.InnerText;                                 break;  // Video Advanced Settings Aomenc GOP
                     case "VideoAdvancedAomencLag":          TextBoxAomencLagInFrames.Text = n.InnerText;                            break;  // Video Advanced Settings Aomenc Lag in Frames
                     case "VideoAdvancedAomencSharpness":    ComboBoxAomencSharpness.SelectedIndex = int.Parse(n.InnerText);         break;  // Video Advanced Settings Aomenc Sharpness
+                    case "VideoAdvancedAomencColorPrim":    ComboBoxAomencColorPrimaries.SelectedIndex = int.Parse(n.InnerText);    break;  // Video Advanced Settings Aomenc Color Primaries
+                    case "VideoAdvancedAomencColorTrans":   ComboBoxAomencColorTransfer.SelectedIndex = int.Parse(n.InnerText);     break;  // Video Advanced Settings Aomenc Color Transfer
+                    case "VideoAdvancedAomencColorMatrix":  ComboBoxAomencColorMatrix.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings Aomenc Color Matrix
                     case "VideoAdvancedAomencAQMode":       ComboBoxAomencAQMode.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Advanced Settings Aomenc AQ Mode
                     case "VideoAdvancedAomencKFFiltering":  ComboBoxAomencKeyFiltering.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings Aomenc Keyframe Filtering
                     case "VideoAdvancedAomencTune":         ComboBoxAomencTune.SelectedIndex = int.Parse(n.InnerText);              break;  // Video Advanced Settings Aomenc Tune
