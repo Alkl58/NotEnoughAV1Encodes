@@ -206,6 +206,12 @@ namespace NotEnoughAV1Encodes
                         ffmpeg_command += " " + MainWindow.hardsub_command;
                     }
 
+                    // Filters
+                    ffmpeg_command += MainWindow.FilterCommand;
+
+                    // Reset Filter Command so it is not being used later by encoders
+                    MainWindow.FilterCommand = "";
+
                     ffmpeg_command += " -sc_threshold 0 -g " + chunking_length;                                                         // Make Splitting more accurate
                     ffmpeg_command += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + chunking_length + ")" + '\u0022';  // Make Splitting more accurate
                 }
