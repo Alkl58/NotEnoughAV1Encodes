@@ -58,8 +58,12 @@ namespace NotEnoughAV1Encodes
 
                                     // Saves encoder progress to log file
                                     string ffmpeg_progress = " -progress " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022';
+
                                     // FFmpeg Pipe
                                     string ffmpeg_input = InputVideo + " " + MainWindow.FilterCommand + EncodeVideo.Pixel_Format + " -color_range 0 " + MainWindow.VSYNC + " -f yuv4mpegpipe - | ";
+
+                                    // Process Exit Code
+                                    int exit_code = 0;
 
                                     // Logic to skip first pass encoding if "_finished" log file exists
                                     if (File.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log" + "_finished.log")) == false)
@@ -129,12 +133,15 @@ namespace NotEnoughAV1Encodes
                                         ffmpegProcess.WaitForExit();
 
                                         // Get Exit Code
-                                        int exit_code = ffmpegProcess.ExitCode;
+                                        exit_code = ffmpegProcess.ExitCode;
+
+                                        if (exit_code != 0)
+                                            Helpers.Logging("Chunk " + command + " Failed with Exit Code: " + exit_code.ToString());
 
                                         // Remove PID from Array after Exit
                                         Global.Launched_PIDs.RemoveAll(i => i == temp_pid);
 
-                                        if (MainWindow.OnePass == false && SmallFunctions.Cancel.CancelAll == false)
+                                        if (MainWindow.OnePass == false && SmallFunctions.Cancel.CancelAll == false && exit_code == 0)
                                         {
                                             // Writes log file if first pass is finished, to be able to skip them later if in resume mode
                                             Helpers.WriteToFileThreadSafe("", Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log" + "_finished.log"));
@@ -184,12 +191,16 @@ namespace NotEnoughAV1Encodes
                                         ffmpegProcess.WaitForExit();
 
                                         // Get Exit Code
-                                        int exit_code = ffmpegProcess.ExitCode;
+                                        exit_code = ffmpegProcess.ExitCode;
+
+                                        if (exit_code != 0)
+                                            Helpers.Logging("Chunk " + command + " Failed with Exit Code: " + exit_code.ToString());
 
                                         // Remove PID from Array after Exit
                                         Global.Launched_PIDs.RemoveAll(i => i == temp_pid);
                                     }
-                                    if (SmallFunctions.Cancel.CancelAll == false)
+
+                                    if (SmallFunctions.Cancel.CancelAll == false && exit_code == 0)
                                     {
                                         // This function will write finished encodes to a log file, to be able to skip them if in resume mode
                                         Helpers.WriteToFileThreadSafe("", Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".ivf" + "_finished.log"));

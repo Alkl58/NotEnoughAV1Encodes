@@ -107,7 +107,15 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                MessageBox.Show("Muxing failed. Video output not detected!\nCommon issues:\n- Video is interlaced, please enable deinterlace filter\n- Missing dependencies\n- Video stream has broken parts", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBoxResult Result = MessageBox.Show("Muxing failed. Video output not detected!\nCommon issues:\n- Video is interlaced, please enable deinterlace filter\n- Missing dependencies\n- Video stream has broken parts\n- Incorrect encoding commands\n\nOpen Log File?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (Result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        Process.Start(Global.Video_Output + ".log");
+                    }
+                    catch { }
+                }
             }
         }
 
