@@ -2260,6 +2260,94 @@ namespace NotEnoughAV1Encodes
 
         // ══════════════════════════════════════ Buttons ═════════════════════════════════════════
 
+        private async void ButtonTestCustomSettings_Click(object sender, RoutedEventArgs e)
+        {
+            // Testing Custom Settings
+            ProgressBar.IsIndeterminate = true;
+            LabelProgressBar.Content = "Testing... Please wait.";
+
+            int encoder_index = ComboBoxVideoEncoder.SelectedIndex;
+            string test_command = TextBoxCustomVideoSettings.Text;
+            int exit_code = await Task.Run(() => Test_Encode(encoder_index, test_command));
+
+            if (exit_code == 0)
+            {
+                LabelProgressBar.Content = "Test was Successfull.";
+            }
+            else
+            {
+                LabelProgressBar.Content = "Test Terminated with Error Code: " + exit_code.ToString() + " - Invalid settings?";
+            }
+            ProgressBar.IsIndeterminate = false;
+        }
+
+        private int Test_Encode(int encoder_index, string command)
+        {
+            // Test Video
+            string input_test = " -y -i " + '\u0022' + Path.Combine(Directory.GetCurrentDirectory(), "sample", "test_sample.mp4") + '\u0022';
+
+            Process ffmpegProcess = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.UseShellExecute = true;
+            startInfo.FileName = "cmd.exe";
+            startInfo.WorkingDirectory = Global.FFmpeg_Path;
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+            string test_command = " -t 00:00.30 -pix_fmt yuv420p";
+            if (encoder_index <= 4)
+            {
+                // Internal Encoders
+                if (encoder_index == 0)
+                {
+                    test_command += " -c:v libaom-av1 " + command;
+                }
+                if (encoder_index == 1)
+                {
+                    test_command += " -c:v librav1e " + command;
+                }
+                if (encoder_index == 2)
+                {
+                    test_command += " -c:v libsvtav1 " + command;
+                }
+                if (encoder_index == 3)
+                {
+                    test_command += " -c:v libvpx-vp9 " + command;
+                }
+
+                test_command += " " + '\u0022' + Path.Combine(Directory.GetCurrentDirectory(), "sample", "test_sample_out.webm") + '\u0022';
+
+            }
+            else
+            {
+                // External Encoders
+                if (encoder_index == 5)
+                {
+                    test_command += " -color_range 0 -vsync 0 -f yuv4mpegpipe - | ";
+                    test_command += '\u0022' + Path.Combine(Global.Aomenc_Path, "aomenc.exe") + '\u0022' + " - --passes=1 " + command + " --output=";
+                }
+                if (encoder_index == 6)
+                {
+                    test_command += " -color_range 0 -vsync 0 -f yuv4mpegpipe - | ";
+                    test_command += '\u0022' + Path.Combine(Global.Rav1e__Path, "rav1e.exe") + '\u0022' + " - -y " + command + " --output ";
+                }
+                if (encoder_index == 7)
+                {
+                    test_command += " -color_range 0 -vsync 0 -nostdin -f yuv4mpegpipe - | ";
+                    test_command += '\u0022' + Path.Combine(Global.SvtAv1_Path, "SvtAv1EncApp.exe") + '\u0022' + " -i stdin " + command + " --passes 1 -b ";
+                }
+
+                test_command += '\u0022' + Path.Combine(Directory.GetCurrentDirectory(), "sample", "test_sample_out.ivf") + '\u0022';
+            }
+
+            startInfo.Arguments = "/C ffmpeg.exe " + input_test + test_command;
+
+            ffmpegProcess.StartInfo = startInfo;
+            ffmpegProcess.Start();
+            ffmpegProcess.WaitForExit();
+
+            return ffmpegProcess.ExitCode;
+        }
+
         private void ButtonSetTheme_Click(object sender, RoutedEventArgs e)
         {
             ThemeManager.Current.ChangeTheme(this, ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text);

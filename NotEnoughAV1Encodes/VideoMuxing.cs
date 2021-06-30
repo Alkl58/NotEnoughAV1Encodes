@@ -21,7 +21,7 @@ namespace NotEnoughAV1Encodes
                 // rav1e external only supports ivf
                 sorted = Directory.GetFiles(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks"), "*.ivf").OrderBy(f => f);
             }
-            
+
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks"), "chunks.txt")))
             {
                 foreach (var fileTemp in sorted)

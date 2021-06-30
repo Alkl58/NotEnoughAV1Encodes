@@ -713,6 +713,7 @@
                     </Canvas>
                     <TextBox x:Name="TextBoxCustomVideoSettings" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Margin="10,313,10,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged"/>
                     <CheckBox x:Name="CheckBoxCustomVideoSettings" Content="Custom Settings" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Checked="CheckBoxCustomVideoSettings_Checked"/>
+                    <Button x:Name="ButtonTestCustomSettings" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Content="Test Custom Settings" HorizontalAlignment="Left" Margin="890,281,0,0" VerticalAlignment="Top" Width="135" Click="ButtonTestCustomSettings_Click"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="Audio">
