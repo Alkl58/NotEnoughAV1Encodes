@@ -855,7 +855,7 @@ namespace NotEnoughAV1Encodes
         private async void BatchEncode(CancellationToken token)
         {
             // Gets all files in folder
-            DirectoryInfo batchfiles = new DirectoryInfo(Global.Video_Path);
+            DirectoryInfo batchfiles = new DirectoryInfo(TextBoxVideoSource.Text);
             // Loops over all files in folder
             foreach (var file in batchfiles.GetFiles())
             {
