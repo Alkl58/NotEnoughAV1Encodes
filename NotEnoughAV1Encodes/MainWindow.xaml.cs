@@ -258,9 +258,9 @@ namespace NotEnoughAV1Encodes
         {
             // Drag & Drop Video Files into GUI
             List<string> filepaths = new List<string>();
-            foreach (var s in (string[])e.Data.GetData(DataFormats.FileDrop, false)) { filepaths.Add(s); }
+            foreach (string s in (string[])e.Data.GetData(DataFormats.FileDrop, false)) { filepaths.Add(s); }
             int counter = 0;
-            foreach (var item in filepaths)
+            foreach (string item in filepaths)
             {
                 if (counter == 0) { SingleFileInput(item); }
                 counter += 1;
@@ -571,7 +571,7 @@ namespace NotEnoughAV1Encodes
                     // Sets the ComboBox with the FileInfo Array
                     ComboBoxPresets.ItemsSource = Files;
                     // Fills the ComobBox with checkable items for batch encoding
-                    foreach (var file in Files)
+                    foreach (FileInfo file in Files)
                     {
                         System.Windows.Controls.CheckBox comboBoxItem = new System.Windows.Controls.CheckBox
                         {
@@ -771,7 +771,7 @@ namespace NotEnoughAV1Encodes
             "skip", "webm", "ivf", "obu", "q-hist", "rate-hist", "fullhelp", "benchmark", "first-pass", "second-pass",
             "reconstruction", "enc-mode-2p", "input-stat-file", "output-stat-file" };
 
-            foreach (var word in forbiddenWords)
+            foreach (string word in forbiddenWords)
             {
                 if (ComboBoxBaseTheme.SelectedIndex == 0)
                 {
@@ -857,7 +857,7 @@ namespace NotEnoughAV1Encodes
             // Gets all files in folder
             DirectoryInfo batchfiles = new DirectoryInfo(TextBoxVideoSource.Text);
             // Loops over all files in folder
-            foreach (var file in batchfiles.GetFiles())
+            foreach (FileInfo file in batchfiles.GetFiles())
             {
                 if (SmallFunctions.CheckFileType(file.ToString()) == true && SmallFunctions.Cancel.CancelAll == false)
                 {
@@ -907,11 +907,11 @@ namespace NotEnoughAV1Encodes
                     else
                     {
                         // Get all Items from ComboBox
-                        var encode_presets = ComboBoxBatchSettings.Items;
-                        var encode_presets_to_encode = new List<string>();
+                        System.Windows.Controls.ItemCollection encode_presets = ComboBoxBatchSettings.Items;
+                        List<string> encode_presets_to_encode = new List<string>();
 
                         // Fill List with Presets to use
-                        foreach (var preset in encode_presets)
+                        foreach (object preset in encode_presets)
                         {
                             System.Windows.Controls.CheckBox pre = (System.Windows.Controls.CheckBox)preset;
 
@@ -1697,12 +1697,12 @@ namespace NotEnoughAV1Encodes
             getSubtitles.WaitForExit();
 
             //Splits the output from ffprobe
-            var result = subs.Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            string[] result = subs.Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
 
             int a = 0;
             int b = 0;
             //Iterates over the lines from the splitted output
-            foreach (var line in result)
+            foreach (string line in result)
             {
                 if (line.Contains("hdmv_pgs_subtitle") || line.Contains("ass") || line.Contains("ssa") || line.Contains("subrip") || line.Contains("dvd_subtitle"))
                 {
@@ -2675,7 +2675,7 @@ namespace NotEnoughAV1Encodes
                 string tempvalue = "";
 
                 // Iterates over all lines
-                foreach (var line in lines)
+                foreach (string line in lines)
                 {
                     // Checks if the line contains the word "frame="
                     if (line.Contains("frame=")) { tempvalue = line.Remove(0, 6); }
