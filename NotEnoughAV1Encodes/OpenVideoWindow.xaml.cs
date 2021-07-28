@@ -1,9 +1,9 @@
-﻿using Microsoft.Win32;
+﻿using ControlzEx.Theming;
+using MahApps.Metro.Controls;
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Windows;
-using MahApps.Metro.Controls;
-using ControlzEx.Theming;
 
 namespace NotEnoughAV1Encodes
 {
@@ -13,11 +13,13 @@ namespace NotEnoughAV1Encodes
         public bool ProjectFile { get; set; }
         public bool BatchFolder { get; set; }
         public bool QuitCorrectly { get; set; }
+
         public OpenVideoWindow(string baseTheme, string accentTheme)
         {
             InitializeComponent();
             ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
         }
+
         private void ButtonOpenSingleSource_Click(object sender, RoutedEventArgs e)
         {
             // OpenFileDialog for a Single Video File

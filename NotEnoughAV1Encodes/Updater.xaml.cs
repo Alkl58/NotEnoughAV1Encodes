@@ -1,35 +1,43 @@
-﻿using Octokit;
+﻿using ControlzEx.Theming;
+using MahApps.Metro.Controls;
+using Newtonsoft.Json;
+using Octokit;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using MahApps.Metro.Controls;
-using ControlzEx.Theming;
-using System.Text;
-using Newtonsoft.Json;
 
 namespace NotEnoughAV1Encodes
 {
     public partial class Updater : MetroWindow
     {
-
         // NEAV1E Update
         private static double Neav1eUpdateVersion = 0.0;
+
         private static double Neav1eCurrentVersion = 1.9; // current neav1e version (hardcoded)
+
         // FFmpeg Update
         private static string FFmpegUpdateVersion;
+
         private static string FFmpegCurrentVersion;
+
         // aomenc Update
         public static string AomencUpdateVersion;
+
         public static string AomencCurrentVersion;
+
         // rav1e Update
         public static string Rav1eUpdateVersion;
+
         public static string Rav1eCurrentVersion;
+
         // SVT-AV1 Update
         public static string SVTAV1UpdateVersion;
+
         public static string SVTAV1CurrentVersion;
 
         private static string Git_FFmpeg_Name = "";
@@ -70,7 +78,7 @@ namespace NotEnoughAV1Encodes
                     LabelUpdateProgramVersion.Foreground = Brushes.Green;
                 }
             }
-            catch {  }
+            catch { }
         }
 
         private void ParseGyanFFmpeg()
@@ -102,7 +110,7 @@ namespace NotEnoughAV1Encodes
                 string aomencVersion = json.apps["aomenc.exe"].datetime;
                 AomencUpdateVersion = aomencVersion.Replace("-", ".").Remove(aomencVersion.Length - 6);
                 LabelUpdateAomencVersion.Content = AomencUpdateVersion;
-                
+
                 string rav1eVersion = json.apps["rav1e.exe"].datetime;
                 Rav1eUpdateVersion = rav1eVersion.Replace("-", ".").Remove(rav1eVersion.Length - 6);
                 LabelUpdateRav1eVersion.Content = Rav1eUpdateVersion;
@@ -127,7 +135,7 @@ namespace NotEnoughAV1Encodes
                     LabelCurrentFFmpegVersion.Foreground = Brushes.Red;
                     LabelUpdateFFmpegVersion.Foreground = Brushes.Green;
                 }
-                else if(ParseDate(FFmpegCurrentVersion) == ParseDate(FFmpegUpdateVersion))
+                else if (ParseDate(FFmpegCurrentVersion) == ParseDate(FFmpegUpdateVersion))
                 {
                     // Both Versions are identical
                     LabelCurrentFFmpegVersion.Foreground = Brushes.Green;
@@ -232,10 +240,12 @@ namespace NotEnoughAV1Encodes
                 return null;
             }
         }
+
         private void ButtonUpdateProgram_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("https://github.com/Alkl58/NotEnoughAV1Encodes/releases");
         }
+
         private async void ButtonUpdateFFmpeg_Click(object sender, RoutedEventArgs e)
         {
             ProgressBar.IsIndeterminate = true;
@@ -383,7 +393,7 @@ namespace NotEnoughAV1Encodes
         {
             // Extracts the downloaded archives with 7zip
             string zPath = Path.Combine(CurrentDir, "Apps", "7zip", "7za.exe");
-            // change the path and give yours 
+            // change the path and give yours
             try
             {
                 ProcessStartInfo pro = new ProcessStartInfo
@@ -400,6 +410,5 @@ namespace NotEnoughAV1Encodes
                 MessageBox.Show(Ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
     }
 }

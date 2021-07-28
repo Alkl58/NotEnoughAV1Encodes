@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
 namespace NotEnoughAV1Encodes
 {
-    class Splitting
+    internal class Splitting
     {
         public static int split_type = 0;
         public static int chunking_length = 0;
@@ -21,7 +20,7 @@ namespace NotEnoughAV1Encodes
             {
                 FFmpegChunking();
             }
-            else if(split_type == 1)
+            else if (split_type == 1)
             {
                 FFmpegSceneDetect();
             }
@@ -30,8 +29,6 @@ namespace NotEnoughAV1Encodes
                 PySceneDetect();
             }
         }
-
-
 
         private static void FFmpegSceneDetect()
         {
@@ -125,7 +122,6 @@ namespace NotEnoughAV1Encodes
 
                 PySceneDetectParse();
             }
-
         }
 
         private static void PySceneDetectParse()

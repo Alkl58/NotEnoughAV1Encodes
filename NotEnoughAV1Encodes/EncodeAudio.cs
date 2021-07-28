@@ -2,7 +2,7 @@
 
 namespace NotEnoughAV1Encodes
 {
-    class EncodeAudio
+    internal class EncodeAudio
     {
         public static bool trackOne;                // Audio Track One active
         public static bool trackTwo;                // Audio Track Two active
@@ -37,6 +37,7 @@ namespace NotEnoughAV1Encodes
         // Explanation: When copying pcm_bluray the codec has to be set to pcm_s16le
         //              else it will fail. (ffmpeg issue)
         public static bool pcm_bluray_1 = false;    // PCM_BluRay Check Track One
+
         public static bool pcm_bluray_2 = false;    // PCM_BluRay Check Track Two
         public static bool pcm_bluray_3 = false;    // PCM_BluRay Check Track Three
         public static bool pcm_bluray_4 = false;    // PCM_BluRay Check Track Four
@@ -94,16 +95,18 @@ namespace NotEnoughAV1Encodes
                 case "AC3": audio_codec_switch = "ac3"; break;
                 case "AAC": audio_codec_switch = "aac"; break;
                 case "MP3": audio_codec_switch = "libmp3lame"; break;
-                case "Copy Audio": 
-                    if (pcm_bluray) { audio_codec_switch = "pcm_s16le"; } 
-                    else { audio_codec_switch = "copy"; } 
+                case "Copy Audio":
+                    if (pcm_bluray) { audio_codec_switch = "pcm_s16le"; }
+                    else { audio_codec_switch = "copy"; }
                     break;
+
                 default: break;
             }
             return audio_codec_switch;
         }
 
         private static string audioCodecCommand = "";
+
         private static string MultipleTrackCommandGenerator(int activetrackbitrate, int map_index, int end_index, string activtrackcodec, int channellayout, string lang, string track_name, bool pcm_bluray)
         {
             // Command Builder for Audio
@@ -132,7 +135,7 @@ namespace NotEnoughAV1Encodes
                 case 1: returnLayout = "2"; break;
                 case 2: returnLayout = "6"; break;
                 case 3: returnLayout = "8"; break;
-                default: returnLayout = "2";  break;
+                default: returnLayout = "2"; break;
             }
             return returnLayout;
         }

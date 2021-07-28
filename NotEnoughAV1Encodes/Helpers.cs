@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 
 namespace NotEnoughAV1Encodes
 {
-    class Helpers
+    internal class Helpers
     {
         public static BitmapImage Get_Uri_Source(string name)
         {
@@ -56,6 +56,7 @@ namespace NotEnoughAV1Encodes
         }
 
         private static ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
+
         public static void WriteToFileThreadSafe(string text, string path)
         {
             // Set Status to Locked

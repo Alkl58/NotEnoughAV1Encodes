@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes
 {
-    class VideoMuxing
+    internal class VideoMuxing
     {
         public static async Task Concat()
         {
@@ -52,7 +52,6 @@ namespace NotEnoughAV1Encodes
                 Helpers.Logging("Muxing: " + ffmpegCommand);
                 await Task.Run(() => SmallFunctions.ExecuteFfmpegTask(ffmpegCommand));
             }
-
 
             if (audio)
             {

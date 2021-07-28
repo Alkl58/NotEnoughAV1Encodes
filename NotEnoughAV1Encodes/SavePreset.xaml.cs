@@ -1,6 +1,6 @@
-﻿using System.Windows;
-using ControlzEx.Theming;
+﻿using ControlzEx.Theming;
 using MahApps.Metro.Controls;
+using System.Windows;
 
 namespace NotEnoughAV1Encodes
 {
@@ -8,11 +8,13 @@ namespace NotEnoughAV1Encodes
     {
         public string SaveName { get; set; }
         public bool Cancel { get; set; }
+
         public SavePreset(string baseTheme, string accentTheme)
         {
             InitializeComponent();
             ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
         }
+
         private void ButtonCloseWindow_Click(object sender, RoutedEventArgs e)
         {
             Cancel = true;

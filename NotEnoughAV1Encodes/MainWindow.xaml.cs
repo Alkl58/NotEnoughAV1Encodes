@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using ControlzEx.Theming;
+using MahApps.Metro.Controls;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,44 +10,49 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Navigation;
-using MahApps.Metro.Controls;
-using System.Xml;
-using ControlzEx.Theming;
 using System.Windows.Media.Imaging;
-using System.Timers;
+using System.Windows.Navigation;
+using System.Xml;
 
 namespace NotEnoughAV1Encodes
 {
     public partial class MainWindow : MetroWindow
     {
-
         // Final Commands
         public static string FilterCommand = null;
+
         // Temp Settings
         public static int EncodeMethod = 0;         // 0 = aomenc, 1 = rav1e, 2 = svt-av1...
+
         public static bool OnePass = true;          // true = Onepass, false = Twopass
         public static bool Logging = true;          // Program Logging
         public static bool VFRVideo = false;        // Wether or not timestamp file should be used
         public static string VSYNC = " -vsync 0 ";  // Default Piping Frame Sync Method
         public static string VFRCMD = "";           // VFR Muxing Command
+
         // Temp Settings Subtitles
         public static string subCommand;            // Subtitle Muxing Command
+
         public static string hardsub_command;       // Subtitle Hardcoding Command
         public static bool subSoftSubEnabled;       // Subtitle Toggle for later Muxing
         public static bool subHardSubEnabled;       // Subtitle Toggle for hardsub
         public static bool subMessageShowed = false;// Used to message the user when trying to do softsub in MP4 Container
         public static bool reencodeMessage = false; // Show reencode warning once
+
         // IO Paths
         public static string BatchOutContainer = ".mkv";
+
         public static bool VideoInputSet = false;   // Video Input Set Boolean
         public static bool VideoOutputSet = false;  // Video Output Set Boolean
-        public static bool PySceneFound = false;    // 
+        public static bool PySceneFound = false;    //
+
         // Temp Variables
         public static bool BatchEncoding = false;   // Batch Encoding
+
         public static bool DeleteTempFiles = false; // Temp File Deletion
         public static bool PlayUISounds = false;    // UI Sounds (Finished Encoding / Error)
         public static bool CustomBG = false;        // Custom Image Background
@@ -56,6 +63,7 @@ namespace NotEnoughAV1Encodes
         private string language = null;             // UI Language
         public static Dictionary<string, string> audio_languages = new Dictionary<string, string>();
         public DateTime StartTime;                  // used for eta calculation
+
         // Progress Cancellation
         private CancellationTokenSource cancellationTokenSource;
 
@@ -99,6 +107,7 @@ namespace NotEnoughAV1Encodes
                 case "de-DE":
                     dict.Source = new Uri("..\\lang\\de-DE.xaml", UriKind.Relative);
                     break;
+
                 case "Français":
                 case "fr-BE":
                 case "fr-CA":
@@ -108,6 +117,7 @@ namespace NotEnoughAV1Encodes
                 case "fr-FR":
                     dict.Source = new Uri("..\\lang\\fr-FR.xaml", UriKind.Relative);
                     break;
+
                 case "English":
                 default:
                     dict.Source = new Uri("..\\lang\\en-US.xaml", UriKind.Relative);
@@ -129,9 +139,11 @@ namespace NotEnoughAV1Encodes
                     case "Deutsch":
                         ComboBoxUILanguage.SelectedIndex = 1;
                         break;
+
                     case "Français":
                         ComboBoxUILanguage.SelectedIndex = 2;
                         break;
+
                     default:
                         ComboBoxUILanguage.SelectedIndex = 0;
                         break;
@@ -149,43 +161,43 @@ namespace NotEnoughAV1Encodes
         private void FillLanguagesStartup()
         {
             // Languages in ISO 639-2 Format: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
-            audio_languages.Add("English",     "eng");
-            audio_languages.Add("Bosnian",     "bos");
-            audio_languages.Add("Bulgarian",   "bul");
-            audio_languages.Add("Chinese",     "zho");
-            audio_languages.Add("Czech",       "ces");
-            audio_languages.Add("Greek",       "ell");
-            audio_languages.Add("Estonian",    "est");
-            audio_languages.Add("Persian",     "per");
-            audio_languages.Add("Filipino",    "fil");
-            audio_languages.Add("Finnish",     "fin");
-            audio_languages.Add("French",      "fra");
-            audio_languages.Add("Georgian",    "kat");
-            audio_languages.Add("German",      "deu");
-            audio_languages.Add("Croatian",    "hrv");
-            audio_languages.Add("Hungarian",   "hun");
-            audio_languages.Add("Indonesian",  "ind");
-            audio_languages.Add("Icelandic",   "isl");
-            audio_languages.Add("Italian",     "ita");
-            audio_languages.Add("Japanese",    "jpn");
-            audio_languages.Add("Korean",      "kor");
-            audio_languages.Add("Latin",       "lat");
-            audio_languages.Add("Latvian",     "lav");
-            audio_languages.Add("Lithuanian",  "lit");
-            audio_languages.Add("Dutch",       "nld");
-            audio_languages.Add("Norwegian",   "nob");
-            audio_languages.Add("Polish",      "pol");
-            audio_languages.Add("Portuguese",  "por");
-            audio_languages.Add("Romanian",    "ron");
-            audio_languages.Add("Russian",     "rus");
-            audio_languages.Add("Slovak",      "slk");
-            audio_languages.Add("Slovenian",   "slv");
-            audio_languages.Add("Spanish",     "spa");
-            audio_languages.Add("Swedish",     "swe");
-            audio_languages.Add("Thai",        "tha");
-            audio_languages.Add("Turkish",     "tur");
-            audio_languages.Add("Ukrainian",   "ukr");
-            audio_languages.Add("Vietnamese",  "vie");
+            audio_languages.Add("English", "eng");
+            audio_languages.Add("Bosnian", "bos");
+            audio_languages.Add("Bulgarian", "bul");
+            audio_languages.Add("Chinese", "zho");
+            audio_languages.Add("Czech", "ces");
+            audio_languages.Add("Greek", "ell");
+            audio_languages.Add("Estonian", "est");
+            audio_languages.Add("Persian", "per");
+            audio_languages.Add("Filipino", "fil");
+            audio_languages.Add("Finnish", "fin");
+            audio_languages.Add("French", "fra");
+            audio_languages.Add("Georgian", "kat");
+            audio_languages.Add("German", "deu");
+            audio_languages.Add("Croatian", "hrv");
+            audio_languages.Add("Hungarian", "hun");
+            audio_languages.Add("Indonesian", "ind");
+            audio_languages.Add("Icelandic", "isl");
+            audio_languages.Add("Italian", "ita");
+            audio_languages.Add("Japanese", "jpn");
+            audio_languages.Add("Korean", "kor");
+            audio_languages.Add("Latin", "lat");
+            audio_languages.Add("Latvian", "lav");
+            audio_languages.Add("Lithuanian", "lit");
+            audio_languages.Add("Dutch", "nld");
+            audio_languages.Add("Norwegian", "nob");
+            audio_languages.Add("Polish", "pol");
+            audio_languages.Add("Portuguese", "por");
+            audio_languages.Add("Romanian", "ron");
+            audio_languages.Add("Russian", "rus");
+            audio_languages.Add("Slovak", "slk");
+            audio_languages.Add("Slovenian", "slv");
+            audio_languages.Add("Spanish", "spa");
+            audio_languages.Add("Swedish", "swe");
+            audio_languages.Add("Thai", "tha");
+            audio_languages.Add("Turkish", "tur");
+            audio_languages.Add("Ukrainian", "ukr");
+            audio_languages.Add("Vietnamese", "vie");
 
             Dictionary<string, string>.KeyCollection keys = audio_languages.Keys;
             foreach (string lang in keys)
@@ -282,7 +294,7 @@ namespace NotEnoughAV1Encodes
         private void ComboBoxAudioCodec_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (TextBoxAudioBitrate != null)
-                TextBoxAudioBitrate.IsEnabled = ComboBoxAudioCodec.SelectedIndex != 4;    
+                TextBoxAudioBitrate.IsEnabled = ComboBoxAudioCodec.SelectedIndex != 4;
         }
 
         private void ComboBoxAudioCodecTrackTwo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -361,28 +373,28 @@ namespace NotEnoughAV1Encodes
                 mediainfo_bit_depth = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "BitDepth"));
             }
             catch { }
-            
+
             mediaInfo.Close();
-            
+
             LabelVideoColorFomat.Content = mediainfo_chroma_subsampling;
 
             int chroma_subsampling_index = 0;
             int bit_depth_index = 0;
 
-            if (mediainfo_bit_depth == 10) 
+            if (mediainfo_bit_depth == 10)
             {
-                bit_depth_index = 1; 
+                bit_depth_index = 1;
             }
-            else if (mediainfo_bit_depth == 12) 
+            else if (mediainfo_bit_depth == 12)
             {
-                bit_depth_index = 2; 
+                bit_depth_index = 2;
             }
 
-            if (mediainfo_chroma_subsampling == "4:2:0") 
+            if (mediainfo_chroma_subsampling == "4:2:0")
             {
-                chroma_subsampling_index = 0; 
+                chroma_subsampling_index = 0;
             }
-            else if (mediainfo_chroma_subsampling == "4:2:2") 
+            else if (mediainfo_chroma_subsampling == "4:2:2")
             {
                 chroma_subsampling_index = 1;
             }
@@ -397,7 +409,8 @@ namespace NotEnoughAV1Encodes
 
         private void ComboBoxSplittingMethod_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if(ComboBoxSplittingMethod.SelectedIndex == 2){
+            if (ComboBoxSplittingMethod.SelectedIndex == 2)
+            {
                 if (PySceneFound == false)
                 {
                     MessageBox.Show("PySceneDetect seems to be missing on your System.\n\nPlease make sure that Python and PySceneDetect is installed.\n\nInstruction:\n1. Install Python 3.8.6\n2. In CMD: pip install scenedetect[opencv]\n3. In CMD: pip install numpy==1.19.3\n", "PySceneDetect", MessageBoxButton.OK);
@@ -557,7 +570,7 @@ namespace NotEnoughAV1Encodes
         // ----------
         private void ComboBoxVideoPasses_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            // Reverts to 1 Pass encoding if Real Time Mode is activated 
+            // Reverts to 1 Pass encoding if Real Time Mode is activated
             if (CheckBoxVideoAomencRealTime != null)
             {
                 if (CheckBoxVideoAomencRealTime.IsChecked == true && ComboBoxVideoPasses.SelectedIndex == 1)
@@ -569,12 +582,12 @@ namespace NotEnoughAV1Encodes
                     // rav1e
                     ComboBoxVideoPasses.SelectedIndex = 0;
                 }
-            } 
+            }
         }
 
         private void CheckBoxVideoAomencRealTime_Checked(object sender, RoutedEventArgs e)
         {
-            // Reverts to 1 Pass encoding if Real Time Mode is activated 
+            // Reverts to 1 Pass encoding if Real Time Mode is activated
             if (CheckBoxVideoAomencRealTime.IsChecked == true && ComboBoxVideoPasses.SelectedIndex == 1)
             {
                 ComboBoxVideoPasses.SelectedIndex = 0;
@@ -785,7 +798,6 @@ namespace NotEnoughAV1Encodes
                     SliderVideoQuality.Maximum = 63;
                 }
             }
-
         }
 
         private void CheckBoxCustomVideoSettings_Checked(object sender, RoutedEventArgs e)
@@ -845,7 +857,7 @@ namespace NotEnoughAV1Encodes
                     // Darkmode
                     TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 }
-                
+
                 if (TextBoxCustomVideoSettings.Text.Contains(word))
                 {
                     TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(255, 0, 0));
@@ -881,7 +893,7 @@ namespace NotEnoughAV1Encodes
             // Sets the Temp Path
             if (ToggleSwitchTempFolder.IsOn == true)
                 Global.temp_path = TextBoxCustomTempPath.Text;
-            
+
             // Resets the global Cancellation Boolean
             SmallFunctions.Cancel.CancelAll = false;
             // Reset Progressbar
@@ -911,7 +923,6 @@ namespace NotEnoughAV1Encodes
                 // Batch Encoding
                 BatchEncode(cancellationTokenSource.Token);
             }
-            
         }
 
         private async void BatchEncode(CancellationToken token)
@@ -986,7 +997,6 @@ namespace NotEnoughAV1Encodes
                         // Encode each file with the selected presets
                         foreach (string preset in encode_presets_to_encode)
                         {
-                            
                             // Reset Progressbar
                             ProgressBar.Maximum = 100;
                             ProgressBar.Value = 0;
@@ -1076,8 +1086,9 @@ namespace NotEnoughAV1Encodes
                 ProgressBar.Dispatcher.Invoke(() => ProgressBar.IsIndeterminate = true);
 
                 LabelProgressBar.Content = "Processing Video... this might take a while!";
-                await Task.Run(() => {
-                    token.ThrowIfCancellationRequested(); 
+                await Task.Run(() =>
+                {
+                    token.ThrowIfCancellationRequested();
                     Splitting.Split();
                 }, token);
 
@@ -1087,10 +1098,9 @@ namespace NotEnoughAV1Encodes
                 LabelProgressBar.Content = "Calculating Frame Count...";
 
                 MediaInfo mediaInfo = new MediaInfo();
-                
+
                 if (subHardSubEnabled && Splitting.split_type != 0)
                 {
-
                     mediaInfo.Open(Path.Combine(Global.temp_path, Global.temp_path_folder, "tmpsub.mkv"));
 
                     try
@@ -1123,7 +1133,7 @@ namespace NotEnoughAV1Encodes
                             Helpers.Logging("MediaInfo Framecount: " + frame_count.ToString());
                         }
                     }
-                    catch 
+                    catch
                     {
                         // Get Source Framecount
                         await Task.Run(() => { token.ThrowIfCancellationRequested(); SmallFunctions.GetSourceFrameCount(Global.Video_Path); }, token);
@@ -1132,7 +1142,6 @@ namespace NotEnoughAV1Encodes
                 }
 
                 mediaInfo.Close();
-
 
                 if (EncodeAudio.trackOne || EncodeAudio.trackTwo || EncodeAudio.trackThree || EncodeAudio.trackFour)
                 {
@@ -1167,7 +1176,8 @@ namespace NotEnoughAV1Encodes
                 if (Yadif1)
                     ProgressBar.Dispatcher.Invoke(() => ProgressBar.Maximum *= 2);
 
-                await Task.Run(() => { 
+                await Task.Run(() =>
+                {
                     token.ThrowIfCancellationRequested();
                     // Starts "a timer" for eta / fps calculation
                     DateTime starttime = DateTime.Now;
@@ -1186,9 +1196,8 @@ namespace NotEnoughAV1Encodes
                         EncodeVideoPipe.Encode();
                     }
 
-                    
                     aTimer.Stop();
-                },  token);
+                }, token);
 
                 await Task.Run(async () => { token.ThrowIfCancellationRequested(); await VideoMuxing.Concat(); }, token);
                 SmallFunctions.CheckVideoOutput();
@@ -1256,7 +1265,6 @@ namespace NotEnoughAV1Encodes
                     SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
                 }
             }
-
         }
 
         private void ExtractVFRTimeStamps()
@@ -1280,7 +1288,7 @@ namespace NotEnoughAV1Encodes
                     mkvToolNix.Start();
                     mkvToolNix.WaitForExit();
                 }
-                // Discards piping timestamp 
+                // Discards piping timestamp
                 VSYNC = "-vsync drop";
                 VFRCMD = "--timestamps 0:" + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "vsync.txt") + '\u0022';
             }
@@ -1377,7 +1385,7 @@ namespace NotEnoughAV1Encodes
             Yadif1 = false;
             int tempCounter = 0;
 
-            if (crop || rotate || resize || deinterlace )
+            if (crop || rotate || resize || deinterlace)
             {
                 FilterCommand = " -vf ";
                 if (crop)
@@ -1461,15 +1469,15 @@ namespace NotEnoughAV1Encodes
             // Video ═════════════════════════════════════
 
             // Duration
-            try 
-            { 
-                LabelVideoLength.Content = mediaInfo.Get(StreamKind.Video, 0, "Duration/String3"); 
+            try
+            {
+                LabelVideoLength.Content = mediaInfo.Get(StreamKind.Video, 0, "Duration/String3");
             }
             catch { }
 
             // Resolution
-            try 
-            { 
+            try
+            {
                 if (!batch_skip)
                 {
                     string width = mediaInfo.Get(StreamKind.Video, 0, "Width");
@@ -1477,7 +1485,7 @@ namespace NotEnoughAV1Encodes
                     LabelVideoResolution.Content = width + "x" + height;
                     TextBoxFiltersResizeHeight.Text = height;
                 }
-            } 
+            }
             catch { }
 
             // Framerate
@@ -1491,7 +1499,8 @@ namespace NotEnoughAV1Encodes
 
             int audio_count = mediaInfo.Count_Get(StreamKind.Audio);
             string lang;
-            if (audio_count >= 1) { 
+            if (audio_count >= 1)
+            {
                 // Toggle Audio
                 ToggleSwitchAudioTrackOne.IsEnabled = ToggleSwitchAudioTrackOne.IsOn = true;
 
@@ -1499,14 +1508,17 @@ namespace NotEnoughAV1Encodes
                 try { EncodeAudio.pcm_bluray_1 = mediaInfo.Get(StreamKind.Audio, 0, "Format") == "PCM" && mediaInfo.Get(StreamKind.Audio, 0, "MuxingMode") == "Blu-ray"; } catch { }
 
                 // Set Audio Language
-                try {
+                try
+                {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 0, "Language/String3"))) { lang = "und"; }
                     ComboBoxTrackOneLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
-                } catch { }
+                }
+                catch { }
             }
             else { ToggleSwitchAudioTrackOne.IsEnabled = ToggleSwitchAudioTrackOne.IsOn = false; }
 
-            if (audio_count >= 2) {
+            if (audio_count >= 2)
+            {
                 // Toggle Audio
                 ToggleSwitchAudioTrackTwo.IsEnabled = ToggleSwitchAudioTrackTwo.IsOn = true;
 
@@ -1514,14 +1526,17 @@ namespace NotEnoughAV1Encodes
                 try { EncodeAudio.pcm_bluray_2 = mediaInfo.Get(StreamKind.Audio, 1, "Format") == "PCM" && mediaInfo.Get(StreamKind.Audio, 1, "MuxingMode") == "Blu-ray"; } catch { }
 
                 // Set Audio Language
-                try {
+                try
+                {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 1, "Language/String3"))) { lang = "und"; }
                     ComboBoxTrackTwoLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
-                } catch { }
+                }
+                catch { }
             }
             else { ToggleSwitchAudioTrackTwo.IsEnabled = ToggleSwitchAudioTrackTwo.IsOn = false; }
 
-            if (audio_count >= 3) {
+            if (audio_count >= 3)
+            {
                 // Toggle Audio
                 ToggleSwitchAudioTrackThree.IsEnabled = ToggleSwitchAudioTrackThree.IsOn = true;
 
@@ -1529,14 +1544,17 @@ namespace NotEnoughAV1Encodes
                 try { EncodeAudio.pcm_bluray_3 = mediaInfo.Get(StreamKind.Audio, 2, "Format") == "PCM" && mediaInfo.Get(StreamKind.Audio, 2, "MuxingMode") == "Blu-ray"; } catch { }
 
                 // Set Audio Language
-                try {
+                try
+                {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 2, "Language/String3"))) { lang = "und"; }
                     ComboBoxTrackThreeLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
-                } catch { }
+                }
+                catch { }
             }
             else { ToggleSwitchAudioTrackThree.IsEnabled = ToggleSwitchAudioTrackThree.IsOn = false; }
 
-            if (audio_count >= 4) {
+            if (audio_count >= 4)
+            {
                 // Toggle Audio
                 ToggleSwitchAudioTrackFour.IsEnabled = ToggleSwitchAudioTrackFour.IsOn = true;
 
@@ -1544,10 +1562,12 @@ namespace NotEnoughAV1Encodes
                 try { EncodeAudio.pcm_bluray_4 = mediaInfo.Get(StreamKind.Audio, 3, "Format") == "PCM" && mediaInfo.Get(StreamKind.Audio, 3, "MuxingMode") == "Blu-ray"; } catch { }
 
                 // Set Audio Language
-                try {
+                try
+                {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 3, "Language/String3"))) { lang = "und"; }
                     ComboBoxTrackFourLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
-                } catch { }
+                }
+                catch { }
             }
             else { ToggleSwitchAudioTrackFour.IsEnabled = ToggleSwitchAudioTrackFour.IsOn = false; }
 
@@ -1686,7 +1706,6 @@ namespace NotEnoughAV1Encodes
                     subCommand += SoftSubCMDGenerator(audio_languages[ComboBoxSubTrackFourLanguage.Text], TextBoxSubFourName.Text, TextBoxSubtitleTrackFour.Text, CheckBoxSubFourDefault.IsChecked == true);
                 }
                 else { HardSubCMDGenerator(TextBoxSubtitleTrackFour.Text); }
-                
             }
 
             if (ToggleSwitchSubtitleActivatedFive.IsOn == true && CheckBoxSubFiveBurn.IsChecked != true)
@@ -1768,7 +1787,6 @@ namespace NotEnoughAV1Encodes
             {
                 if (line.Contains("hdmv_pgs_subtitle") || line.Contains("ass") || line.Contains("ssa") || line.Contains("subrip") || line.Contains("dvd_subtitle"))
                 {
-
                     string tempName = "";
                     Process process = new Process();
                     ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -1815,7 +1833,7 @@ namespace NotEnoughAV1Encodes
                         startInfo.WorkingDirectory = Global.MKVToolNix_Path;
 
                         startInfo.Arguments = "/C mkvextract.exe " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".mkv") + '\u0022' + " tracks 0:" + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".sub") + '\u0022';
-                        
+
                         process.StartInfo = startInfo;
                         process.Start();
                         process.WaitForExit();
@@ -1846,7 +1864,6 @@ namespace NotEnoughAV1Encodes
                         tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_dvd_" + b + ".sup");
                     }
 
-
                     //Sets the ToggleSwitches
                     if (Path.GetExtension(Global.Video_Output) != ".mp4")
                     {
@@ -1857,12 +1874,10 @@ namespace NotEnoughAV1Encodes
                         if (b == 4) { ToggleSwitchSubtitleActivatedFive.IsOn = true; }
                     }
 
-
                     try
                     {
-
                         if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; }
-                        if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName;  }
+                        if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; }
                         if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; }
                         if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; }
                         if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; }
@@ -1894,17 +1909,17 @@ namespace NotEnoughAV1Encodes
             if (CheckBoxCustomVideoSettings.IsChecked == false)
             {
                 // Sets the Encoder Settings
-                if (selected_encoder == 0) 
+                if (selected_encoder == 0)
                 {
                     EncodeVideo.Final_Encoder_Command = " -c:v libaom-av1 " + SetLibAomCommand();
                     Helpers.Logging("Libaom Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
-                if (selected_encoder == 1) 
+                if (selected_encoder == 1)
                 {
                     EncodeVideo.Final_Encoder_Command = " -c:v librav1e " + SetLibRav1eCommand();
                     Helpers.Logging("Rav1e Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
-                if (selected_encoder == 2) 
+                if (selected_encoder == 2)
                 {
                     EncodeVideo.Final_Encoder_Command = " -c:v libsvtav1 " + SetLibSvtAV1Command();
                     Helpers.Logging("SVT-AV1 Settings : " + EncodeVideo.Final_Encoder_Command);
@@ -1933,17 +1948,17 @@ namespace NotEnoughAV1Encodes
             else
             {
                 // Custom Encoding Settings
-                if (selected_encoder == 0) 
+                if (selected_encoder == 0)
                 {
                     EncodeVideo.Final_Encoder_Command = " -c:v libaom-av1 " + TextBoxCustomVideoSettings.Text;
                     Helpers.Logging("Aomenc Custom Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
-                if (selected_encoder == 1) 
+                if (selected_encoder == 1)
                 {
                     EncodeVideo.Final_Encoder_Command = " -c:v librav1e " + TextBoxCustomVideoSettings.Text;
                     Helpers.Logging("Rav1e Custom Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
-                if (selected_encoder == 2) 
+                if (selected_encoder == 2)
                 {
                     EncodeVideo.Final_Encoder_Command = " -c:v libsvtav1 " + TextBoxCustomVideoSettings.Text;
                     Helpers.Logging("SVT-AV1 Custom Settings : " + EncodeVideo.Final_Encoder_Command);
@@ -1969,7 +1984,6 @@ namespace NotEnoughAV1Encodes
                     Helpers.Logging("SVT-AV1 Settings : " + EncodeVideo.Final_Encoder_Command);
                 }
             }
-
         }
 
         private string SetLibAomCommand()
@@ -1980,13 +1994,13 @@ namespace NotEnoughAV1Encodes
             cmd += " -cpu-used " + SliderVideoSpeed.Value;         // Speed
 
             // Constant Quality or Target Bitrate
-            if (RadioButtonVideoConstantQuality.IsChecked == true) 
-            { 
-                cmd += " -b:v 0 -crf " + SliderVideoQuality.Value; 
+            if (RadioButtonVideoConstantQuality.IsChecked == true)
+            {
+                cmd += " -b:v 0 -crf " + SliderVideoQuality.Value;
             }
-            else if (RadioButtonVideoBitrate.IsChecked == true) 
-            { 
-                cmd += " -b:v " + TextBoxVideoBitrate.Text + "k"; 
+            else if (RadioButtonVideoBitrate.IsChecked == true)
+            {
+                cmd += " -b:v " + TextBoxVideoBitrate.Text + "k";
             }
 
             if (ToggleSwitchAdvancedVideoSettings.IsOn == false)
@@ -2016,7 +2030,7 @@ namespace NotEnoughAV1Encodes
                 {
                     cmd += " -enable-cdef 0";                                                           // Constrained Directional Enhancement Filter
                 }
-                
+
                 if (CheckBoxAomencARNRMax.IsChecked == true)
                 {
                     cmd += " -arnr-max-frames " + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
@@ -2055,13 +2069,13 @@ namespace NotEnoughAV1Encodes
             cmd += " -speed " + SliderVideoSpeed.Value;    // Speed
 
             // Constant Quality or Target Bitrate
-            if (RadioButtonVideoConstantQuality.IsChecked == true) 
-            { 
-                cmd += " -qp " + SliderVideoQuality.Value; 
+            if (RadioButtonVideoConstantQuality.IsChecked == true)
+            {
+                cmd += " -qp " + SliderVideoQuality.Value;
             }
-            else if (RadioButtonVideoBitrate.IsChecked == true) 
-            { 
-                cmd += " -b:v " + TextBoxVideoBitrate.Text + "k"; 
+            else if (RadioButtonVideoBitrate.IsChecked == true)
+            {
+                cmd += " -b:v " + TextBoxVideoBitrate.Text + "k";
             }
 
             if (ToggleSwitchAdvancedVideoSettings.IsOn == false)
@@ -2124,13 +2138,13 @@ namespace NotEnoughAV1Encodes
             cmd += " -preset " + SliderVideoSpeed.Value;
 
             // Constant Quality or Target Bitrate
-            if (RadioButtonVideoConstantQuality.IsChecked == true) 
-            { 
-                cmd += " -rc 0 -qp " + SliderVideoQuality.Value; 
+            if (RadioButtonVideoConstantQuality.IsChecked == true)
+            {
+                cmd += " -rc 0 -qp " + SliderVideoQuality.Value;
             }
-            else if (RadioButtonVideoBitrate.IsChecked == true) 
-            { 
-                cmd += " -rc 1 -b:v " + TextBoxVideoBitrate.Text + "k";  
+            else if (RadioButtonVideoBitrate.IsChecked == true)
+            {
+                cmd += " -rc 1 -b:v " + TextBoxVideoBitrate.Text + "k";
             }
 
             if (ToggleSwitchAdvancedVideoSettings.IsOn == true)
@@ -2377,7 +2391,6 @@ namespace NotEnoughAV1Encodes
                 }
 
                 test_command += " " + '\u0022' + Path.Combine(Directory.GetCurrentDirectory(), "sample", "test_sample_out.webm") + '\u0022';
-
             }
             else
             {
@@ -2529,7 +2542,8 @@ namespace NotEnoughAV1Encodes
                     LoadSettings(true, result);
                     AutoSetBitDepthAndColorFormat(Global.Video_Path);
                 }
-            }else if (batchFolder == true && resultProject == false)
+            }
+            else if (batchFolder == true && resultProject == false)
             {
                 // Batch Folder Input
                 if (WindowVideoSource.QuitCorrectly)
@@ -2538,9 +2552,7 @@ namespace NotEnoughAV1Encodes
                     TextBoxVideoSource.Text = Global.Video_Path = result;
                     BatchEncoding = true;
                 }
-
             }
-            
         }
 
         private void ButtonOpenDestination_Click(object sender, RoutedEventArgs e)
@@ -2584,21 +2596,20 @@ namespace NotEnoughAV1Encodes
                     VideoOutputSet = true;
                 }
             }
-
         }
 
         private void ButtonOpenTempFolder_Click(object sender, RoutedEventArgs e)
         {
             // Opens the Temp Folder
-            if (ToggleSwitchTempFolder.IsOn == false) 
+            if (ToggleSwitchTempFolder.IsOn == false)
             {
                 //Creates the temp directoy if not existent
                 if (Directory.Exists(Path.Combine(Path.GetTempPath(), "NEAV1E")) == false) { Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "NEAV1E")); }
-                Process.Start(Path.Combine(Path.GetTempPath(), "NEAV1E")); 
+                Process.Start(Path.Combine(Path.GetTempPath(), "NEAV1E"));
             }
-            else 
-            { 
-                Process.Start(TextBoxCustomTempPath.Text); 
+            else
+            {
+                Process.Start(TextBoxCustomTempPath.Text);
             }
         }
 
@@ -2612,13 +2623,13 @@ namespace NotEnoughAV1Encodes
                 SaveSettingsTab();
             }
         }
-        
+
         // Current State of Program - 0 = IDLE ; 1 = Encoding ; 2 = Paused
         private static int encode_state = 0;
 
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
-            if (VideoInputSet && VideoOutputSet) 
+            if (VideoInputSet && VideoOutputSet)
             {
                 if (encode_state == 0 || encode_state == 2)
                 {
@@ -2661,9 +2672,10 @@ namespace NotEnoughAV1Encodes
             else
             {
                 SmallFunctions.PlayStopSound();
-                MessageBox.Show("Input or Output not set!", "Attention", MessageBoxButton.OK, MessageBoxImage.Information); 
+                MessageBox.Show("Input or Output not set!", "Attention", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
         private void ButtonStopEncode_Click(object sender, RoutedEventArgs e)
         {
             if (encode_state != 0)
@@ -2732,7 +2744,7 @@ namespace NotEnoughAV1Encodes
                 stream.Close();
 
                 // Splits every line
-                string[] lines = text.Split( new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None );
+                string[] lines = text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
                 string tempvalue = "";
 
@@ -2776,23 +2788,22 @@ namespace NotEnoughAV1Encodes
                 {
                     XmlWriter writer = XmlWriter.Create(Path.Combine(Directory.GetCurrentDirectory(), "settings.xml"));
                     writer.WriteStartElement("Settings");
-                    writer.WriteElementString("DeleteTempFiles",    ToggleSwitchDeleteTempFiles.IsOn.ToString());
-                    writer.WriteElementString("PlaySound",          ToggleSwitchUISounds.IsOn.ToString());
-                    writer.WriteElementString("Logging",            ToggleSwitchLogging.IsOn.ToString());
-                    writer.WriteElementString("ShowDialog",         ToggleSwitchShowWindow.IsOn.ToString());
-                    writer.WriteElementString("Shutdown",           ToggleSwitchShutdownAfterEncode.IsOn.ToString());
-                    writer.WriteElementString("TempPathActive",     ToggleSwitchTempFolder.IsOn.ToString());
-                    writer.WriteElementString("TempPath",           TextBoxCustomTempPath.Text);
-                    writer.WriteElementString("Terminal",           ToggleSwitchHideTerminal.IsOn.ToString());
-                    writer.WriteElementString("ThemeAccent",        ComboBoxAccentTheme.SelectedIndex.ToString());
-                    writer.WriteElementString("ThemeBase",          ComboBoxBaseTheme.SelectedIndex.ToString());
-                    writer.WriteElementString("BatchContainer",     ComboBoxContainerBatchEncoding.SelectedIndex.ToString());
-                    writer.WriteElementString("ReencodeMessage",    reencodeMessage.ToString());
-                    writer.WriteElementString("Language",           language ?? "English");
+                    writer.WriteElementString("DeleteTempFiles", ToggleSwitchDeleteTempFiles.IsOn.ToString());
+                    writer.WriteElementString("PlaySound", ToggleSwitchUISounds.IsOn.ToString());
+                    writer.WriteElementString("Logging", ToggleSwitchLogging.IsOn.ToString());
+                    writer.WriteElementString("ShowDialog", ToggleSwitchShowWindow.IsOn.ToString());
+                    writer.WriteElementString("Shutdown", ToggleSwitchShutdownAfterEncode.IsOn.ToString());
+                    writer.WriteElementString("TempPathActive", ToggleSwitchTempFolder.IsOn.ToString());
+                    writer.WriteElementString("TempPath", TextBoxCustomTempPath.Text);
+                    writer.WriteElementString("Terminal", ToggleSwitchHideTerminal.IsOn.ToString());
+                    writer.WriteElementString("ThemeAccent", ComboBoxAccentTheme.SelectedIndex.ToString());
+                    writer.WriteElementString("ThemeBase", ComboBoxBaseTheme.SelectedIndex.ToString());
+                    writer.WriteElementString("BatchContainer", ComboBoxContainerBatchEncoding.SelectedIndex.ToString());
+                    writer.WriteElementString("ReencodeMessage", reencodeMessage.ToString());
+                    writer.WriteElementString("Language", language ?? "English");
                     writer.WriteEndElement();
                     writer.Close();
                 }
-
             }
             catch { }
         }
@@ -2811,18 +2822,18 @@ namespace NotEnoughAV1Encodes
                         switch (n.Name)
                         {
                             case "DeleteTempFiles": ToggleSwitchDeleteTempFiles.IsOn = n.InnerText == "True"; break;
-                            case "PlaySound":       ToggleSwitchUISounds.IsOn = n.InnerText == "True"; break;
-                            case "Logging":         ToggleSwitchLogging.IsOn = n.InnerText == "True"; break;
-                            case "ShowDialog":      ToggleSwitchShowWindow.IsOn = n.InnerText == "True"; break;
-                            case "Shutdown":        ToggleSwitchShutdownAfterEncode.IsOn = n.InnerText == "True"; break;
-                            case "TempPathActive":  ToggleSwitchTempFolder.IsOn = n.InnerText == "True"; break;
-                            case "TempPath":        TextBoxCustomTempPath.Text = n.InnerText; break;
-                            case "Terminal":        ToggleSwitchHideTerminal.IsOn = n.InnerText == "True"; break;
-                            case "ThemeAccent":     ComboBoxAccentTheme.SelectedIndex = int.Parse(n.InnerText); break;
-                            case "ThemeBase":       ComboBoxBaseTheme.SelectedIndex = int.Parse(n.InnerText); break;
-                            case "BatchContainer":  ComboBoxContainerBatchEncoding.SelectedIndex = int.Parse(n.InnerText); break;
+                            case "PlaySound": ToggleSwitchUISounds.IsOn = n.InnerText == "True"; break;
+                            case "Logging": ToggleSwitchLogging.IsOn = n.InnerText == "True"; break;
+                            case "ShowDialog": ToggleSwitchShowWindow.IsOn = n.InnerText == "True"; break;
+                            case "Shutdown": ToggleSwitchShutdownAfterEncode.IsOn = n.InnerText == "True"; break;
+                            case "TempPathActive": ToggleSwitchTempFolder.IsOn = n.InnerText == "True"; break;
+                            case "TempPath": TextBoxCustomTempPath.Text = n.InnerText; break;
+                            case "Terminal": ToggleSwitchHideTerminal.IsOn = n.InnerText == "True"; break;
+                            case "ThemeAccent": ComboBoxAccentTheme.SelectedIndex = int.Parse(n.InnerText); break;
+                            case "ThemeBase": ComboBoxBaseTheme.SelectedIndex = int.Parse(n.InnerText); break;
+                            case "BatchContainer": ComboBoxContainerBatchEncoding.SelectedIndex = int.Parse(n.InnerText); break;
                             case "ReencodeMessage": reencodeMessage = n.InnerText == "True"; break;
-                            case "Language":        language = n.InnerText; break;
+                            case "Language": language = n.InnerText; break;
                             default: break;
                         }
                     }
@@ -2874,134 +2885,133 @@ namespace NotEnoughAV1Encodes
             if (SaveProfile == false)
             {
                 // Project File / Resume File
-                writer.WriteElementString("VideoInput",                 Global.Video_Path);                                             // Video Input
-                writer.WriteElementString("VideoOutput",                Global.Video_Output);                                           // Video Output
+                writer.WriteElementString("VideoInput", Global.Video_Path);                                             // Video Input
+                writer.WriteElementString("VideoOutput", Global.Video_Output);                                           // Video Output
                 // Subtitles
-                writer.WriteElementString("SubOne",                     ToggleSwitchSubtitleActivatedOne.IsOn.ToString());              // Subtitle Track One Active
-                writer.WriteElementString("SubTwo",                     ToggleSwitchSubtitleActivatedTwo.IsOn.ToString());              // Subtitle Track Two Active
-                writer.WriteElementString("SubThree",                   ToggleSwitchSubtitleActivatedThree.IsOn.ToString());            // Subtitle Track Three Active
-                writer.WriteElementString("SubFour",                    ToggleSwitchSubtitleActivatedFour.IsOn.ToString());             // Subtitle Track Four Active
-                writer.WriteElementString("SubFive",                    ToggleSwitchSubtitleActivatedFive.IsOn.ToString());             // Subtitle Track Five Active
-                writer.WriteElementString("SubOneBurn",                 CheckBoxSubOneBurn.IsChecked.ToString());                       // Subtitle Track One Burn
-                writer.WriteElementString("SubTwoBurn",                 CheckBoxSubTwoBurn.IsChecked.ToString());                       // Subtitle Track One Burn
-                writer.WriteElementString("SubThreeBurn",               CheckBoxSubThreeBurn.IsChecked.ToString());                     // Subtitle Track One Burn
-                writer.WriteElementString("SubFourBurn",                CheckBoxSubFourBurn.IsChecked.ToString());                      // Subtitle Track One Burn
-                writer.WriteElementString("SubFiveBurn",                CheckBoxSubFiveBurn.IsChecked.ToString());                      // Subtitle Track One Burn
-                writer.WriteElementString("SubOneDefault",              CheckBoxSubOneDefault.IsChecked.ToString());                    // Subtitle Track One Default
-                writer.WriteElementString("SubTwoDefault",              CheckBoxSubTwoDefault.IsChecked.ToString());                    // Subtitle Track One Default
-                writer.WriteElementString("SubThreeDefault",            CheckBoxSubThreeDefault.IsChecked.ToString());                  // Subtitle Track One Default
-                writer.WriteElementString("SubFourDefault",             CheckBoxSubFourDefault.IsChecked.ToString());                   // Subtitle Track One Default
-                writer.WriteElementString("SubFiveDefault",             CheckBoxSubFiveDefault.IsChecked.ToString());                   // Subtitle Track One Default
-                writer.WriteElementString("SubOnePath",                 TextBoxSubtitleTrackOne.Text);                                  // Subtitle Track One Path
-                writer.WriteElementString("SubTwoPath",                 TextBoxSubtitleTrackTwo.Text);                                  // Subtitle Track Two Path
-                writer.WriteElementString("SubThreePath",               TextBoxSubtitleTrackThree.Text);                                // Subtitle Track Three Path
-                writer.WriteElementString("SubFourPath",                TextBoxSubtitleTrackFour.Text);                                 // Subtitle Track Four Path
-                writer.WriteElementString("SubFivePath",                TextBoxSubtitleTrackFive.Text);                                 // Subtitle Track Five Path
-                writer.WriteElementString("SubOneName",                 TextBoxSubOneName.Text);                                        // Subtitle Track One Name
-                writer.WriteElementString("SubTwoName",                 TextBoxSubTwoName.Text);                                        // Subtitle Track Two Name
-                writer.WriteElementString("SubThreeName",               TextBoxSubThreeName.Text);                                      // Subtitle Track Three Name
-                writer.WriteElementString("SubFourName",                TextBoxSubFourName.Text);                                       // Subtitle Track Four Name
-                writer.WriteElementString("SubFiveName",                TextBoxSubFiveName.Text);                                       // Subtitle Track Five Name
-                writer.WriteElementString("SubOneLanguage",             ComboBoxSubTrackOneLanguage.SelectedIndex.ToString());          // Subtitle Track One Language
-                writer.WriteElementString("SubTwoLanguage",             ComboBoxSubTrackTwoLanguage.SelectedIndex.ToString());          // Subtitle Track Two Language
-                writer.WriteElementString("SubThreeLanguage",           ComboBoxSubTrackThreeLanguage.SelectedIndex.ToString());        // Subtitle Track Three Language
-                writer.WriteElementString("SubFourLanguage",            ComboBoxSubTrackFourLanguage.SelectedIndex.ToString());         // Subtitle Track Four Language
-                writer.WriteElementString("SubFiveLanguage",            ComboBoxSubTrackFiveLanguage.SelectedIndex.ToString());         // Subtitle Track Five Language
+                writer.WriteElementString("SubOne", ToggleSwitchSubtitleActivatedOne.IsOn.ToString());              // Subtitle Track One Active
+                writer.WriteElementString("SubTwo", ToggleSwitchSubtitleActivatedTwo.IsOn.ToString());              // Subtitle Track Two Active
+                writer.WriteElementString("SubThree", ToggleSwitchSubtitleActivatedThree.IsOn.ToString());            // Subtitle Track Three Active
+                writer.WriteElementString("SubFour", ToggleSwitchSubtitleActivatedFour.IsOn.ToString());             // Subtitle Track Four Active
+                writer.WriteElementString("SubFive", ToggleSwitchSubtitleActivatedFive.IsOn.ToString());             // Subtitle Track Five Active
+                writer.WriteElementString("SubOneBurn", CheckBoxSubOneBurn.IsChecked.ToString());                       // Subtitle Track One Burn
+                writer.WriteElementString("SubTwoBurn", CheckBoxSubTwoBurn.IsChecked.ToString());                       // Subtitle Track One Burn
+                writer.WriteElementString("SubThreeBurn", CheckBoxSubThreeBurn.IsChecked.ToString());                     // Subtitle Track One Burn
+                writer.WriteElementString("SubFourBurn", CheckBoxSubFourBurn.IsChecked.ToString());                      // Subtitle Track One Burn
+                writer.WriteElementString("SubFiveBurn", CheckBoxSubFiveBurn.IsChecked.ToString());                      // Subtitle Track One Burn
+                writer.WriteElementString("SubOneDefault", CheckBoxSubOneDefault.IsChecked.ToString());                    // Subtitle Track One Default
+                writer.WriteElementString("SubTwoDefault", CheckBoxSubTwoDefault.IsChecked.ToString());                    // Subtitle Track One Default
+                writer.WriteElementString("SubThreeDefault", CheckBoxSubThreeDefault.IsChecked.ToString());                  // Subtitle Track One Default
+                writer.WriteElementString("SubFourDefault", CheckBoxSubFourDefault.IsChecked.ToString());                   // Subtitle Track One Default
+                writer.WriteElementString("SubFiveDefault", CheckBoxSubFiveDefault.IsChecked.ToString());                   // Subtitle Track One Default
+                writer.WriteElementString("SubOnePath", TextBoxSubtitleTrackOne.Text);                                  // Subtitle Track One Path
+                writer.WriteElementString("SubTwoPath", TextBoxSubtitleTrackTwo.Text);                                  // Subtitle Track Two Path
+                writer.WriteElementString("SubThreePath", TextBoxSubtitleTrackThree.Text);                                // Subtitle Track Three Path
+                writer.WriteElementString("SubFourPath", TextBoxSubtitleTrackFour.Text);                                 // Subtitle Track Four Path
+                writer.WriteElementString("SubFivePath", TextBoxSubtitleTrackFive.Text);                                 // Subtitle Track Five Path
+                writer.WriteElementString("SubOneName", TextBoxSubOneName.Text);                                        // Subtitle Track One Name
+                writer.WriteElementString("SubTwoName", TextBoxSubTwoName.Text);                                        // Subtitle Track Two Name
+                writer.WriteElementString("SubThreeName", TextBoxSubThreeName.Text);                                      // Subtitle Track Three Name
+                writer.WriteElementString("SubFourName", TextBoxSubFourName.Text);                                       // Subtitle Track Four Name
+                writer.WriteElementString("SubFiveName", TextBoxSubFiveName.Text);                                       // Subtitle Track Five Name
+                writer.WriteElementString("SubOneLanguage", ComboBoxSubTrackOneLanguage.SelectedIndex.ToString());          // Subtitle Track One Language
+                writer.WriteElementString("SubTwoLanguage", ComboBoxSubTrackTwoLanguage.SelectedIndex.ToString());          // Subtitle Track Two Language
+                writer.WriteElementString("SubThreeLanguage", ComboBoxSubTrackThreeLanguage.SelectedIndex.ToString());        // Subtitle Track Three Language
+                writer.WriteElementString("SubFourLanguage", ComboBoxSubTrackFourLanguage.SelectedIndex.ToString());         // Subtitle Track Four Language
+                writer.WriteElementString("SubFiveLanguage", ComboBoxSubTrackFiveLanguage.SelectedIndex.ToString());         // Subtitle Track Five Language
                 // Audio (for resume mode)
-                writer.WriteElementString("AudioLangOne",               ComboBoxTrackOneLanguage.SelectedIndex.ToString());             // Audio Track One Language
-                writer.WriteElementString("AudioLangTwo",               ComboBoxTrackTwoLanguage.SelectedIndex.ToString());             // Audio Track Two Language
-                writer.WriteElementString("AudioLangThree",             ComboBoxTrackThreeLanguage.SelectedIndex.ToString());           // Audio Track Three Language
-                writer.WriteElementString("AudioLangFour",              ComboBoxTrackFourLanguage.SelectedIndex.ToString());            // Audio Track Four Language
+                writer.WriteElementString("AudioLangOne", ComboBoxTrackOneLanguage.SelectedIndex.ToString());             // Audio Track One Language
+                writer.WriteElementString("AudioLangTwo", ComboBoxTrackTwoLanguage.SelectedIndex.ToString());             // Audio Track Two Language
+                writer.WriteElementString("AudioLangThree", ComboBoxTrackThreeLanguage.SelectedIndex.ToString());           // Audio Track Three Language
+                writer.WriteElementString("AudioLangFour", ComboBoxTrackFourLanguage.SelectedIndex.ToString());            // Audio Track Four Language
             }
             // ═══════════════════════════════════════════════════════════════════ Audio ══════════════════════════════════════════════════════════════════
-            writer.WriteElementString("AudioTrackOne",                  ToggleSwitchAudioTrackOne.IsOn.ToString());                     // Audio Track One Active
-            writer.WriteElementString("AudioTrackTwo",                  ToggleSwitchAudioTrackTwo.IsOn.ToString());                     // Audio Track Two Active
-            writer.WriteElementString("AudioTrackThree",                ToggleSwitchAudioTrackThree.IsOn.ToString());                   // Audio Track Three Active
-            writer.WriteElementString("AudioTrackFour",                 ToggleSwitchAudioTrackFour.IsOn.ToString());                    // Audio Track Four Active
-            writer.WriteElementString("AudioTrackOneName",              TextBoxAudioTrackOneName.Text);                                 // Audio Track One Name
-            writer.WriteElementString("AudioTrackTwoName",              TextBoxAudioTrackTwoName.Text);                                 // Audio Track Two Name
-            writer.WriteElementString("AudioTrackThreeName",            TextBoxAudioTrackThreeName.Text);                               // Audio Track Three Name
-            writer.WriteElementString("AudioTrackFourName",             TextBoxAudioTrackFourName.Text);                                // Audio Track Four Name
-            writer.WriteElementString("AudioTrackOneNameActive",        CheckBoxTrackOneTrackName.IsChecked.ToString());                // Audio Track One Name Active
-            writer.WriteElementString("AudioTrackTwoNameActive",        CheckBoxTrackTwoTrackName.IsChecked.ToString());                // Audio Track Two Name Active
-            writer.WriteElementString("AudioTrackThreeNameActive",      CheckBoxTrackThreeTrackName.IsChecked.ToString());              // Audio Track Three Name Active
-            writer.WriteElementString("AudioTrackFourNameActive",       CheckBoxTrackFourTrackName.IsChecked.ToString());               // Audio Track Four Name Active
-            writer.WriteElementString("TrackOneCodec",                  ComboBoxAudioCodec.SelectedIndex.ToString());                   // Audio Track One Codec
-            writer.WriteElementString("TrackTwoCodec",                  ComboBoxAudioCodecTrackTwo.SelectedIndex.ToString());           // Audio Track Two Codec
-            writer.WriteElementString("TrackThreeCodec",                ComboBoxAudioCodecTrackThree.SelectedIndex.ToString());         // Audio Track Three Codec
-            writer.WriteElementString("TrackFourCodec",                 ComboBoxAudioCodecTrackFour.SelectedIndex.ToString());          // Audio Track Four Codec
-            writer.WriteElementString("TrackOneBitrate",                TextBoxAudioBitrate.Text);                                      // Audio Track One Bitrate
-            writer.WriteElementString("TrackTwoBitrate",                TextBoxAudioBitrateTrackTwo.Text);                              // Audio Track Two Bitrate
-            writer.WriteElementString("TrackThreeBitrate",              TextBoxAudioBitrateTrackThree.Text);                            // Audio Track Three Bitrate
-            writer.WriteElementString("TrackFourBitrate",               TextBoxAudioBitrateTrackFour.Text);                             // Audio Track Four Bitrate
-            writer.WriteElementString("TrackOneChannels",               ComboBoxTrackOneChannels.SelectedIndex.ToString());             // Audio Track One Channels
-            writer.WriteElementString("TrackTwoChannels",               ComboBoxTrackTwoChannels.SelectedIndex.ToString());             // Audio Track Two Channels
-            writer.WriteElementString("TrackThreeChannels",             ComboBoxTrackThreeChannels.SelectedIndex.ToString());           // Audio Track Three Channels
-            writer.WriteElementString("TrackFourChannels",              ComboBoxTrackFourChannels.SelectedIndex.ToString());            // Audio Track Four Channels
-
+            writer.WriteElementString("AudioTrackOne", ToggleSwitchAudioTrackOne.IsOn.ToString());                     // Audio Track One Active
+            writer.WriteElementString("AudioTrackTwo", ToggleSwitchAudioTrackTwo.IsOn.ToString());                     // Audio Track Two Active
+            writer.WriteElementString("AudioTrackThree", ToggleSwitchAudioTrackThree.IsOn.ToString());                   // Audio Track Three Active
+            writer.WriteElementString("AudioTrackFour", ToggleSwitchAudioTrackFour.IsOn.ToString());                    // Audio Track Four Active
+            writer.WriteElementString("AudioTrackOneName", TextBoxAudioTrackOneName.Text);                                 // Audio Track One Name
+            writer.WriteElementString("AudioTrackTwoName", TextBoxAudioTrackTwoName.Text);                                 // Audio Track Two Name
+            writer.WriteElementString("AudioTrackThreeName", TextBoxAudioTrackThreeName.Text);                               // Audio Track Three Name
+            writer.WriteElementString("AudioTrackFourName", TextBoxAudioTrackFourName.Text);                                // Audio Track Four Name
+            writer.WriteElementString("AudioTrackOneNameActive", CheckBoxTrackOneTrackName.IsChecked.ToString());                // Audio Track One Name Active
+            writer.WriteElementString("AudioTrackTwoNameActive", CheckBoxTrackTwoTrackName.IsChecked.ToString());                // Audio Track Two Name Active
+            writer.WriteElementString("AudioTrackThreeNameActive", CheckBoxTrackThreeTrackName.IsChecked.ToString());              // Audio Track Three Name Active
+            writer.WriteElementString("AudioTrackFourNameActive", CheckBoxTrackFourTrackName.IsChecked.ToString());               // Audio Track Four Name Active
+            writer.WriteElementString("TrackOneCodec", ComboBoxAudioCodec.SelectedIndex.ToString());                   // Audio Track One Codec
+            writer.WriteElementString("TrackTwoCodec", ComboBoxAudioCodecTrackTwo.SelectedIndex.ToString());           // Audio Track Two Codec
+            writer.WriteElementString("TrackThreeCodec", ComboBoxAudioCodecTrackThree.SelectedIndex.ToString());         // Audio Track Three Codec
+            writer.WriteElementString("TrackFourCodec", ComboBoxAudioCodecTrackFour.SelectedIndex.ToString());          // Audio Track Four Codec
+            writer.WriteElementString("TrackOneBitrate", TextBoxAudioBitrate.Text);                                      // Audio Track One Bitrate
+            writer.WriteElementString("TrackTwoBitrate", TextBoxAudioBitrateTrackTwo.Text);                              // Audio Track Two Bitrate
+            writer.WriteElementString("TrackThreeBitrate", TextBoxAudioBitrateTrackThree.Text);                            // Audio Track Three Bitrate
+            writer.WriteElementString("TrackFourBitrate", TextBoxAudioBitrateTrackFour.Text);                             // Audio Track Four Bitrate
+            writer.WriteElementString("TrackOneChannels", ComboBoxTrackOneChannels.SelectedIndex.ToString());             // Audio Track One Channels
+            writer.WriteElementString("TrackTwoChannels", ComboBoxTrackTwoChannels.SelectedIndex.ToString());             // Audio Track Two Channels
+            writer.WriteElementString("TrackThreeChannels", ComboBoxTrackThreeChannels.SelectedIndex.ToString());           // Audio Track Three Channels
+            writer.WriteElementString("TrackFourChannels", ComboBoxTrackFourChannels.SelectedIndex.ToString());            // Audio Track Four Channels
 
             // ═════════════════════════════════════════════════════════════════ Splitting ═════════════════════════════════════════════════════════════════
-            writer.WriteElementString("SplittingMethod",                ComboBoxSplittingMethod.SelectedIndex.ToString());              // Splitting Method
-            writer.WriteElementString("SplittingThreshold",             TextBoxSplittingThreshold.Text);                                // Splitting Threshold
-            writer.WriteElementString("SplittingReencode",              ComboBoxSplittingReencodeMethod.SelectedIndex.ToString());      // Splitting Reencode Codec
-            writer.WriteElementString("SplittingReencodeLength",        TextBoxSplittingChunkLength.Text);                              // Splitting Chunk Length
-            writer.WriteElementString("SplittingReencodeSkip",          CheckBoxSkipReencode.IsChecked.ToString());                     // Splitting Skip Reencode
+            writer.WriteElementString("SplittingMethod", ComboBoxSplittingMethod.SelectedIndex.ToString());              // Splitting Method
+            writer.WriteElementString("SplittingThreshold", TextBoxSplittingThreshold.Text);                                // Splitting Threshold
+            writer.WriteElementString("SplittingReencode", ComboBoxSplittingReencodeMethod.SelectedIndex.ToString());      // Splitting Reencode Codec
+            writer.WriteElementString("SplittingReencodeLength", TextBoxSplittingChunkLength.Text);                              // Splitting Chunk Length
+            writer.WriteElementString("SplittingReencodeSkip", CheckBoxSkipReencode.IsChecked.ToString());                     // Splitting Skip Reencode
             // ══════════════════════════════════════════════════════════════════ Filters ══════════════════════════════════════════════════════════════════
 
-            writer.WriteElementString("FilterCrop",                 ToggleSwitchFilterCrop.IsOn.ToString());                            // Filter Crop (Boolean)
+            writer.WriteElementString("FilterCrop", ToggleSwitchFilterCrop.IsOn.ToString());                            // Filter Crop (Boolean)
             if (ToggleSwitchFilterCrop.IsOn)
             {
                 // Cropping
-                writer.WriteElementString("FilterCropTop",          TextBoxFiltersCropTop.Text);                                        // Filter Crop Top
-                writer.WriteElementString("FilterCropBottom",       TextBoxFiltersCropBottom.Text);                                     // Filter Crop Bottom
-                writer.WriteElementString("FilterCropLeft",         TextBoxFiltersCropLeft.Text);                                       // Filter Crop Left
-                writer.WriteElementString("FilterCropRight",        TextBoxFiltersCropRight.Text);                                      // Filter Crop Right
+                writer.WriteElementString("FilterCropTop", TextBoxFiltersCropTop.Text);                                        // Filter Crop Top
+                writer.WriteElementString("FilterCropBottom", TextBoxFiltersCropBottom.Text);                                     // Filter Crop Bottom
+                writer.WriteElementString("FilterCropLeft", TextBoxFiltersCropLeft.Text);                                       // Filter Crop Left
+                writer.WriteElementString("FilterCropRight", TextBoxFiltersCropRight.Text);                                      // Filter Crop Right
             }
 
-            writer.WriteElementString("FilterResize",               ToggleSwitchFilterResize.IsOn.ToString());                          // Filter Resize (Boolean)
+            writer.WriteElementString("FilterResize", ToggleSwitchFilterResize.IsOn.ToString());                          // Filter Resize (Boolean)
             if (ToggleSwitchFilterResize.IsOn)
             {
                 // Resize
-                writer.WriteElementString("FilterResizeWidth",      TextBoxFiltersResizeWidth.Text);                                    // Filter Resize Width
-                writer.WriteElementString("FilterResizeHeight",     TextBoxFiltersResizeHeight.Text);                                   // Filter Resize Height
-                writer.WriteElementString("FilterResizeAlgo",       ComboBoxFiltersScaling.SelectedIndex.ToString());                   // Filter Resize Scaling Algorithm
+                writer.WriteElementString("FilterResizeWidth", TextBoxFiltersResizeWidth.Text);                                    // Filter Resize Width
+                writer.WriteElementString("FilterResizeHeight", TextBoxFiltersResizeHeight.Text);                                   // Filter Resize Height
+                writer.WriteElementString("FilterResizeAlgo", ComboBoxFiltersScaling.SelectedIndex.ToString());                   // Filter Resize Scaling Algorithm
             }
 
-            writer.WriteElementString("FilterRotate",               ToggleSwitchFilterRotate.IsOn.ToString());                          // Filter Rotate (Boolean)
+            writer.WriteElementString("FilterRotate", ToggleSwitchFilterRotate.IsOn.ToString());                          // Filter Rotate (Boolean)
             if (ToggleSwitchFilterRotate.IsOn)
             {
                 // Rotating
-                writer.WriteElementString("FilterRotateAmount",     ComboBoxFiltersRotate.SelectedIndex.ToString());                    // Filter Rotate
+                writer.WriteElementString("FilterRotateAmount", ComboBoxFiltersRotate.SelectedIndex.ToString());                    // Filter Rotate
             }
 
-            writer.WriteElementString("FilterDeinterlace",          ToggleSwitchFilterDeinterlace.IsOn.ToString());                     // Filter Deinterlace (Boolean)
+            writer.WriteElementString("FilterDeinterlace", ToggleSwitchFilterDeinterlace.IsOn.ToString());                     // Filter Deinterlace (Boolean)
             if (ToggleSwitchFilterDeinterlace.IsOn)
             {
                 // Deinterlacing
-                writer.WriteElementString("FilterDeinterlaceType",  ComboBoxFiltersDeinterlace.SelectedIndex.ToString());               // Filter Deinterlace
+                writer.WriteElementString("FilterDeinterlaceType", ComboBoxFiltersDeinterlace.SelectedIndex.ToString());               // Filter Deinterlace
             }
 
             // ═══════════════════════════════════════════════════════════ Basic Video Settings ════════════════════════════════════════════════════════════
-            
-            writer.WriteElementString("VideoEncoder",           ComboBoxVideoEncoder.SelectedIndex.ToString());                         // Video Encoder
-            writer.WriteElementString("VideoBitDepth",          ComboBoxVideoBitDepth.SelectedIndex.ToString());                        // Video BitDepth
-            writer.WriteElementString("VideoColorFormat",       ComboBoxColorFormat.SelectedIndex.ToString());                          // Video Color Format
-            writer.WriteElementString("VideoSpeed",             SliderVideoSpeed.Value.ToString());                                     // Video Speed
-            writer.WriteElementString("VideoPasses",            ComboBoxVideoPasses.SelectedIndex.ToString());                          // Video Passes
+
+            writer.WriteElementString("VideoEncoder", ComboBoxVideoEncoder.SelectedIndex.ToString());                         // Video Encoder
+            writer.WriteElementString("VideoBitDepth", ComboBoxVideoBitDepth.SelectedIndex.ToString());                        // Video BitDepth
+            writer.WriteElementString("VideoColorFormat", ComboBoxColorFormat.SelectedIndex.ToString());                          // Video Color Format
+            writer.WriteElementString("VideoSpeed", SliderVideoSpeed.Value.ToString());                                     // Video Speed
+            writer.WriteElementString("VideoPasses", ComboBoxVideoPasses.SelectedIndex.ToString());                          // Video Passes
             if (RadioButtonVideoConstantQuality.IsChecked == true)
-                writer.WriteElementString("VideoQuality",       SliderVideoQuality.Value.ToString());                                   // Video Quality
+                writer.WriteElementString("VideoQuality", SliderVideoQuality.Value.ToString());                                   // Video Quality
             if (RadioButtonVideoBitrate.IsChecked == true)
-                writer.WriteElementString("VideoBitrate",       TextBoxVideoBitrate.Text);                                              // Video Bitrate
+                writer.WriteElementString("VideoBitrate", TextBoxVideoBitrate.Text);                                              // Video Bitrate
             if (ComboBoxVideoEncoder.SelectedIndex == 0)
-                writer.WriteElementString("VideoAomencRT",      CheckBoxVideoAomencRealTime.IsChecked.ToString());                      // Video Aomenc Real Time Mode
-            writer.WriteElementString("VideoVFR",               ToggleSwitchVFR.IsOn.ToString());                                       // Video Variable Framerate
+                writer.WriteElementString("VideoAomencRT", CheckBoxVideoAomencRealTime.IsChecked.ToString());                      // Video Aomenc Real Time Mode
+            writer.WriteElementString("VideoVFR", ToggleSwitchVFR.IsOn.ToString());                                       // Video Variable Framerate
 
             writer.WriteElementString("WorkerCount", ComboBoxWorkerCount.SelectedIndex.ToString());                                     // Worker Count
             writer.WriteElementString("WorkerPriority", ComboBoxProcessPriority.SelectedIndex.ToString());                              // Worker Priority
             // ══════════════════════════════════════════════════════════ Advanced Video Settings ══════════════════════════════════════════════════════════
 
-            writer.WriteElementString("VideoAdvanced",          ToggleSwitchAdvancedVideoSettings.IsOn.ToString());                     // Video Advanced Settings
-            writer.WriteElementString("VideoAdvancedCustom",    CheckBoxCustomVideoSettings.IsChecked.ToString());                      // Video Advanced Settings Custom
+            writer.WriteElementString("VideoAdvanced", ToggleSwitchAdvancedVideoSettings.IsOn.ToString());                     // Video Advanced Settings
+            writer.WriteElementString("VideoAdvancedCustom", CheckBoxCustomVideoSettings.IsChecked.ToString());                      // Video Advanced Settings Custom
 
             if (ToggleSwitchAdvancedVideoSettings.IsOn == true && CheckBoxCustomVideoSettings.IsChecked == false)
             {
@@ -3009,92 +3019,91 @@ namespace NotEnoughAV1Encodes
                 if (ComboBoxVideoEncoder.SelectedIndex == 0 || ComboBoxVideoEncoder.SelectedIndex == 5)
                 {
                     // aomenc
-                    writer.WriteElementString("VideoAdvancedAomencThreads",     ComboBoxAomencThreads.SelectedIndex.ToString());        // Video Advanced Settings Aomenc Threads
-                    writer.WriteElementString("VideoAdvancedAomencTileCols",    ComboBoxAomencTileColumns.SelectedIndex.ToString());    // Video Advanced Settings Aomenc Tile Columns
-                    writer.WriteElementString("VideoAdvancedAomencTileRows",    ComboBoxAomencTileRows.SelectedIndex.ToString());       // Video Advanced Settings Aomenc Tile Rows
-                    writer.WriteElementString("VideoAdvancedAomencGOP",         TextBoxAomencMaxGOP.Text);                              // Video Advanced Settings Aomenc GOP
-                    writer.WriteElementString("VideoAdvancedAomencLag",         TextBoxAomencLagInFrames.Text);                         // Video Advanced Settings Aomenc Lag in Frames
-                    writer.WriteElementString("VideoAdvancedAomencSharpness",   ComboBoxAomencSharpness.SelectedIndex.ToString());      // Video Advanced Settings Aomenc Sharpness
-                    writer.WriteElementString("VideoAdvancedAomencAQMode",      ComboBoxAomencAQMode.SelectedIndex.ToString());         // Video Advanced Settings Aomenc AQ Mode
+                    writer.WriteElementString("VideoAdvancedAomencThreads", ComboBoxAomencThreads.SelectedIndex.ToString());        // Video Advanced Settings Aomenc Threads
+                    writer.WriteElementString("VideoAdvancedAomencTileCols", ComboBoxAomencTileColumns.SelectedIndex.ToString());    // Video Advanced Settings Aomenc Tile Columns
+                    writer.WriteElementString("VideoAdvancedAomencTileRows", ComboBoxAomencTileRows.SelectedIndex.ToString());       // Video Advanced Settings Aomenc Tile Rows
+                    writer.WriteElementString("VideoAdvancedAomencGOP", TextBoxAomencMaxGOP.Text);                              // Video Advanced Settings Aomenc GOP
+                    writer.WriteElementString("VideoAdvancedAomencLag", TextBoxAomencLagInFrames.Text);                         // Video Advanced Settings Aomenc Lag in Frames
+                    writer.WriteElementString("VideoAdvancedAomencSharpness", ComboBoxAomencSharpness.SelectedIndex.ToString());      // Video Advanced Settings Aomenc Sharpness
+                    writer.WriteElementString("VideoAdvancedAomencAQMode", ComboBoxAomencAQMode.SelectedIndex.ToString());         // Video Advanced Settings Aomenc AQ Mode
                     writer.WriteElementString("VideoAdvancedAomencKFFiltering", ComboBoxAomencKeyFiltering.SelectedIndex.ToString());   // Video Advanced Settings Aomenc Keyframe Filtering
-                    writer.WriteElementString("VideoAdvancedAomencTune",        ComboBoxAomencTune.SelectedIndex.ToString());           // Video Advanced Settings Aomenc Tune
+                    writer.WriteElementString("VideoAdvancedAomencTune", ComboBoxAomencTune.SelectedIndex.ToString());           // Video Advanced Settings Aomenc Tune
                     writer.WriteElementString("VideoAdvancedAomencTuneContent", ComboBoxAomencTuneContent.SelectedIndex.ToString());    // Video Advanced Settings Aomenc Tune
-                    writer.WriteElementString("VideoAdvancedAomencARNR",        CheckBoxAomencARNRMax.IsChecked.ToString());            // Video Advanced Settings Aomenc ARNR
-                    writer.WriteElementString("VideoAdvancedAomencColorPrim",   ComboBoxAomencColorPrimaries.SelectedIndex.ToString()); // Video Advanced Settings Aomenc Color Primaries
-                    writer.WriteElementString("VideoAdvancedAomencColorTrans",  ComboBoxAomencColorTransfer.SelectedIndex.ToString());  // Video Advanced Settings Aomenc Color Transfer
+                    writer.WriteElementString("VideoAdvancedAomencARNR", CheckBoxAomencARNRMax.IsChecked.ToString());            // Video Advanced Settings Aomenc ARNR
+                    writer.WriteElementString("VideoAdvancedAomencColorPrim", ComboBoxAomencColorPrimaries.SelectedIndex.ToString()); // Video Advanced Settings Aomenc Color Primaries
+                    writer.WriteElementString("VideoAdvancedAomencColorTrans", ComboBoxAomencColorTransfer.SelectedIndex.ToString());  // Video Advanced Settings Aomenc Color Transfer
                     writer.WriteElementString("VideoAdvancedAomencColorMatrix", ComboBoxAomencColorMatrix.SelectedIndex.ToString());    // Video Advanced Settings Aomenc Color Matrix
                     if (CheckBoxAomencARNRMax.IsChecked == true)
                     {
                         writer.WriteElementString("VideoAdvancedAomencARNRMax", ComboBoxAomencARNRMax.SelectedIndex.ToString());        // Video Advanced Settings Aomenc ARNR Max
                         writer.WriteElementString("VideoAdvancedAomencARNRStre", ComboBoxAomencARNRStrength.SelectedIndex.ToString());  // Video Advanced Settings Aomenc ARNR Strength
                     }
-                    writer.WriteElementString("VideoAdvancedAomencRowMT",       CheckBoxAomencRowMT.IsChecked.ToString());              // Video Advanced Settings Aomenc Row Mt
-                    writer.WriteElementString("VideoAdvancedAomencCDEF",        CheckBoxAomencCDEF.IsChecked.ToString());               // Video Advanced Settings Aomenc CDEF
+                    writer.WriteElementString("VideoAdvancedAomencRowMT", CheckBoxAomencRowMT.IsChecked.ToString());              // Video Advanced Settings Aomenc Row Mt
+                    writer.WriteElementString("VideoAdvancedAomencCDEF", CheckBoxAomencCDEF.IsChecked.ToString());               // Video Advanced Settings Aomenc CDEF
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex == 1 || ComboBoxVideoEncoder.SelectedIndex == 6)
                 {
                     // rav1e
-                    writer.WriteElementString("VideoAdvancedRav1eThreads",      ComboBoxRav1eThreads.SelectedIndex.ToString());         // Video Advanced Settings Rav1e Threads
-                    writer.WriteElementString("VideoAdvancedRav1eTileCols",     ComboBoxRav1eTileColumns.SelectedIndex.ToString());     // Video Advanced Settings Rav1e Tile Columns
-                    writer.WriteElementString("VideoAdvancedRav1eTileRows",     ComboBoxRav1eTileRows.SelectedIndex.ToString());        // Video Advanced Settings Rav1e Tile Rows
-                    writer.WriteElementString("VideoAdvancedRav1eGOP",          TextBoxRav1eMaxGOP.Text);                               // Video Advanced Settings Rav1e GOP
-                    writer.WriteElementString("VideoAdvancedRav1eRDO",          TextBoxRav1eLookahead.Text);                            // Video Advanced Settings Rav1e RDO Lookahead
-                    writer.WriteElementString("VideoAdvancedRav1eColorPrim",    ComboBoxRav1eColorPrimaries.SelectedIndex.ToString());  // Video Advanced Settings Rav1e Color Primaries
-                    writer.WriteElementString("VideoAdvancedRav1eColorTrans",   ComboBoxRav1eColorTransfer.SelectedIndex.ToString());   // Video Advanced Settings Rav1e Color Transfer
-                    writer.WriteElementString("VideoAdvancedRav1eColorMatrix",  ComboBoxRav1eColorMatrix.SelectedIndex.ToString());     // Video Advanced Settings Rav1e Color Matrix
-                    writer.WriteElementString("VideoAdvancedRav1eTune",         ComboBoxRav1eTune.SelectedIndex.ToString());            // Video Advanced Settings Rav1e Tune
-                    writer.WriteElementString("VideoAdvancedRav1eMastering",    CheckBoxRav1eMasteringDisplay.IsChecked.ToString());    // Video Advanced Settings Rav1e Mastering Display
+                    writer.WriteElementString("VideoAdvancedRav1eThreads", ComboBoxRav1eThreads.SelectedIndex.ToString());         // Video Advanced Settings Rav1e Threads
+                    writer.WriteElementString("VideoAdvancedRav1eTileCols", ComboBoxRav1eTileColumns.SelectedIndex.ToString());     // Video Advanced Settings Rav1e Tile Columns
+                    writer.WriteElementString("VideoAdvancedRav1eTileRows", ComboBoxRav1eTileRows.SelectedIndex.ToString());        // Video Advanced Settings Rav1e Tile Rows
+                    writer.WriteElementString("VideoAdvancedRav1eGOP", TextBoxRav1eMaxGOP.Text);                               // Video Advanced Settings Rav1e GOP
+                    writer.WriteElementString("VideoAdvancedRav1eRDO", TextBoxRav1eLookahead.Text);                            // Video Advanced Settings Rav1e RDO Lookahead
+                    writer.WriteElementString("VideoAdvancedRav1eColorPrim", ComboBoxRav1eColorPrimaries.SelectedIndex.ToString());  // Video Advanced Settings Rav1e Color Primaries
+                    writer.WriteElementString("VideoAdvancedRav1eColorTrans", ComboBoxRav1eColorTransfer.SelectedIndex.ToString());   // Video Advanced Settings Rav1e Color Transfer
+                    writer.WriteElementString("VideoAdvancedRav1eColorMatrix", ComboBoxRav1eColorMatrix.SelectedIndex.ToString());     // Video Advanced Settings Rav1e Color Matrix
+                    writer.WriteElementString("VideoAdvancedRav1eTune", ComboBoxRav1eTune.SelectedIndex.ToString());            // Video Advanced Settings Rav1e Tune
+                    writer.WriteElementString("VideoAdvancedRav1eMastering", CheckBoxRav1eMasteringDisplay.IsChecked.ToString());    // Video Advanced Settings Rav1e Mastering Display
                     if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
                     {
-                        writer.WriteElementString("VideoAdvancedRav1eMasteringGx",  TextBoxRav1eMasteringGx.Text);                      // Video Advanced Settings Rav1e Mastering Display Gx
-                        writer.WriteElementString("VideoAdvancedRav1eMasteringGy",  TextBoxRav1eMasteringGy.Text);                      // Video Advanced Settings Rav1e Mastering Display Gy
-                        writer.WriteElementString("VideoAdvancedRav1eMasteringBx",  TextBoxRav1eMasteringBx.Text);                      // Video Advanced Settings Rav1e Mastering Display Bx
-                        writer.WriteElementString("VideoAdvancedRav1eMasteringBy",  TextBoxRav1eMasteringBy.Text);                      // Video Advanced Settings Rav1e Mastering Display By
-                        writer.WriteElementString("VideoAdvancedRav1eMasteringRx",  TextBoxRav1eMasteringRx.Text);                      // Video Advanced Settings Rav1e Mastering Display Rx
-                        writer.WriteElementString("VideoAdvancedRav1eMasteringRy",  TextBoxRav1eMasteringRy.Text);                      // Video Advanced Settings Rav1e Mastering Display Ry
+                        writer.WriteElementString("VideoAdvancedRav1eMasteringGx", TextBoxRav1eMasteringGx.Text);                      // Video Advanced Settings Rav1e Mastering Display Gx
+                        writer.WriteElementString("VideoAdvancedRav1eMasteringGy", TextBoxRav1eMasteringGy.Text);                      // Video Advanced Settings Rav1e Mastering Display Gy
+                        writer.WriteElementString("VideoAdvancedRav1eMasteringBx", TextBoxRav1eMasteringBx.Text);                      // Video Advanced Settings Rav1e Mastering Display Bx
+                        writer.WriteElementString("VideoAdvancedRav1eMasteringBy", TextBoxRav1eMasteringBy.Text);                      // Video Advanced Settings Rav1e Mastering Display By
+                        writer.WriteElementString("VideoAdvancedRav1eMasteringRx", TextBoxRav1eMasteringRx.Text);                      // Video Advanced Settings Rav1e Mastering Display Rx
+                        writer.WriteElementString("VideoAdvancedRav1eMasteringRy", TextBoxRav1eMasteringRy.Text);                      // Video Advanced Settings Rav1e Mastering Display Ry
                         writer.WriteElementString("VideoAdvancedRav1eMasteringWPx", TextBoxRav1eMasteringWPx.Text);                     // Video Advanced Settings Rav1e Mastering Display WPx
                         writer.WriteElementString("VideoAdvancedRav1eMasteringWPy", TextBoxRav1eMasteringWPy.Text);                     // Video Advanced Settings Rav1e Mastering Display WPy
-                        writer.WriteElementString("VideoAdvancedRav1eMasteringLx",  TextBoxRav1eMasteringLx.Text);                      // Video Advanced Settings Rav1e Mastering Display Lx
-                        writer.WriteElementString("VideoAdvancedRav1eMasteringLy",  TextBoxRav1eMasteringLy.Text);                      // Video Advanced Settings Rav1e Mastering Display Ly
+                        writer.WriteElementString("VideoAdvancedRav1eMasteringLx", TextBoxRav1eMasteringLx.Text);                      // Video Advanced Settings Rav1e Mastering Display Lx
+                        writer.WriteElementString("VideoAdvancedRav1eMasteringLy", TextBoxRav1eMasteringLy.Text);                      // Video Advanced Settings Rav1e Mastering Display Ly
                     }
-                    writer.WriteElementString("VideoAdvancedRav1eLight",        CheckBoxRav1eContentLight.IsChecked.ToString());        // Video Advanced Settings Rav1e Mastering Content Light
+                    writer.WriteElementString("VideoAdvancedRav1eLight", CheckBoxRav1eContentLight.IsChecked.ToString());        // Video Advanced Settings Rav1e Mastering Content Light
                     if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
                     {
-                        writer.WriteElementString("VideoAdvancedRav1eLightCll",  TextBoxRav1eContentLightCll.Text);                     // Video Advanced Settings Rav1e Mastering Content Light Cll
+                        writer.WriteElementString("VideoAdvancedRav1eLightCll", TextBoxRav1eContentLightCll.Text);                     // Video Advanced Settings Rav1e Mastering Content Light Cll
                         writer.WriteElementString("VideoAdvancedRav1eLightFall", TextBoxRav1eContentLightFall.Text);                    // Video Advanced Settings Rav1e Mastering Content Light Fall
                     }
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex == 2 || ComboBoxVideoEncoder.SelectedIndex == 7)
                 {
                     // svt-av1
-                    writer.WriteElementString("VideoAdvancedSVTAV1TileCols",    ComboBoxSVTAV1TileColumns.SelectedIndex.ToString());    // Video Advanced Settings SVT-AV1 Tile Columns
-                    writer.WriteElementString("VideoAdvancedSVTAV1TileRows",    ComboBoxSVTAV1TileRows.SelectedIndex.ToString());       // Video Advanced Settings SVT-AV1 Tile Rows
-                    writer.WriteElementString("VideoAdvancedSVTAV1GOP",         TextBoxSVTAV1MaxGOP.Text);                              // Video Advanced Settings SVT-AV1 GOP
+                    writer.WriteElementString("VideoAdvancedSVTAV1TileCols", ComboBoxSVTAV1TileColumns.SelectedIndex.ToString());    // Video Advanced Settings SVT-AV1 Tile Columns
+                    writer.WriteElementString("VideoAdvancedSVTAV1TileRows", ComboBoxSVTAV1TileRows.SelectedIndex.ToString());       // Video Advanced Settings SVT-AV1 Tile Rows
+                    writer.WriteElementString("VideoAdvancedSVTAV1GOP", TextBoxSVTAV1MaxGOP.Text);                              // Video Advanced Settings SVT-AV1 GOP
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex == 3)
                 {
                     // vp9
-                    writer.WriteElementString("VideoAdvancedVP9Threads",        ComboBoxVP9Threads.SelectedIndex.ToString());           // Video Advanced Settings VP9 Threads
-                    writer.WriteElementString("VideoAdvancedVP9TileCols",       ComboBoxVP9TileColumns.SelectedIndex.ToString());       // Video Advanced Settings VP9 Tile Columns
-                    writer.WriteElementString("VideoAdvancedVP9TileRows",       ComboBoxVP9TileRows.SelectedIndex.ToString());          // Video Advanced Settings VP9 Tile Rows
-                    writer.WriteElementString("VideoAdvancedVP9GOP",            TextBoxVP9MaxKF.Text);                                  // Video Advanced Settings VP9 GOP
-                    writer.WriteElementString("VideoAdvancedVP9Lag",            TextBoxVP9LagInFrames.Text);                            // Video Advanced Settings VP9 Lag in Frames
-                    writer.WriteElementString("VideoAdvancedVP9AQMode",         ComboBoxVP9AQMode.SelectedIndex.ToString());            // Video Advanced Settings VP9 AQ Mode
-                    writer.WriteElementString("VideoAdvancedVP9Tune",           ComboBoxVP9ATune.SelectedIndex.ToString());             // Video Advanced Settings VP9 Tune
-                    writer.WriteElementString("VideoAdvancedVP9TuneContent",    ComboBoxVP9ATuneContent.SelectedIndex.ToString());      // Video Advanced Settings VP9 Tune Content
-                    writer.WriteElementString("VideoAdvancedVP9ARNR",           CheckBoxVP9ARNR.IsChecked.ToString());                  // Video Advanced Settings VP9 ARNR
+                    writer.WriteElementString("VideoAdvancedVP9Threads", ComboBoxVP9Threads.SelectedIndex.ToString());           // Video Advanced Settings VP9 Threads
+                    writer.WriteElementString("VideoAdvancedVP9TileCols", ComboBoxVP9TileColumns.SelectedIndex.ToString());       // Video Advanced Settings VP9 Tile Columns
+                    writer.WriteElementString("VideoAdvancedVP9TileRows", ComboBoxVP9TileRows.SelectedIndex.ToString());          // Video Advanced Settings VP9 Tile Rows
+                    writer.WriteElementString("VideoAdvancedVP9GOP", TextBoxVP9MaxKF.Text);                                  // Video Advanced Settings VP9 GOP
+                    writer.WriteElementString("VideoAdvancedVP9Lag", TextBoxVP9LagInFrames.Text);                            // Video Advanced Settings VP9 Lag in Frames
+                    writer.WriteElementString("VideoAdvancedVP9AQMode", ComboBoxVP9AQMode.SelectedIndex.ToString());            // Video Advanced Settings VP9 AQ Mode
+                    writer.WriteElementString("VideoAdvancedVP9Tune", ComboBoxVP9ATune.SelectedIndex.ToString());             // Video Advanced Settings VP9 Tune
+                    writer.WriteElementString("VideoAdvancedVP9TuneContent", ComboBoxVP9ATuneContent.SelectedIndex.ToString());      // Video Advanced Settings VP9 Tune Content
+                    writer.WriteElementString("VideoAdvancedVP9ARNR", CheckBoxVP9ARNR.IsChecked.ToString());                  // Video Advanced Settings VP9 ARNR
                     if (CheckBoxAomencARNRMax.IsChecked == true)
                     {
-                        writer.WriteElementString("VideoAdvancedVP9ARNRMax",    ComboBoxAomencVP9Max.SelectedIndex.ToString());         // Video Advanced Settings VP9 ARNR Max
-                        writer.WriteElementString("VideoAdvancedVP9ARNRStre",   ComboBoxAomencVP9Strength.SelectedIndex.ToString());    // Video Advanced Settings VP9 ARNR Strength
-                        writer.WriteElementString("VideoAdvancedVP9ARNRType",   ComboBoxAomencVP9ARNRType.SelectedIndex.ToString());    // Video Advanced Settings VP9 ARNR Type
+                        writer.WriteElementString("VideoAdvancedVP9ARNRMax", ComboBoxAomencVP9Max.SelectedIndex.ToString());         // Video Advanced Settings VP9 ARNR Max
+                        writer.WriteElementString("VideoAdvancedVP9ARNRStre", ComboBoxAomencVP9Strength.SelectedIndex.ToString());    // Video Advanced Settings VP9 ARNR Strength
+                        writer.WriteElementString("VideoAdvancedVP9ARNRType", ComboBoxAomencVP9ARNRType.SelectedIndex.ToString());    // Video Advanced Settings VP9 ARNR Type
                     }
                 }
-
             }
             else if (ToggleSwitchAdvancedVideoSettings.IsOn == true && CheckBoxCustomVideoSettings.IsChecked == true)
             {
-                writer.WriteElementString("VideoAdvancedCustomString",          TextBoxCustomVideoSettings.Text);                       // Video Advanced Settings Custom String
+                writer.WriteElementString("VideoAdvancedCustomString", TextBoxCustomVideoSettings.Text);                       // Video Advanced Settings Custom String
             }
 
             // Writes Ending XML Element
@@ -3128,164 +3137,168 @@ namespace NotEnoughAV1Encodes
             {
                 switch (n.Name)
                 {
-                    case "VideoInput":                      Global.Video_Path = n.InnerText; TextBoxVideoSource.Text = n.InnerText; VideoInputSet = true;
-                                                            Global.temp_path_folder = Path.GetFileNameWithoutExtension(n.InnerText);       break;  // Video Input
-                    case "VideoOutput":                     Global.Video_Output = n.InnerText; VideoOutputSet = true;
-                                                            TextBoxVideoDestination.Text = n.InnerText;                             break;  // Video Output
-                    case "WorkerCount":                     ComboBoxWorkerCount.SelectedIndex = int.Parse(n.InnerText);             break;  // Worker Count
-                    case "WorkerPriority":                  ComboBoxProcessPriority.SelectedIndex = int.Parse(n.InnerText);         break;  // Worker Priority
+                    case "VideoInput":
+                        Global.Video_Path = n.InnerText; TextBoxVideoSource.Text = n.InnerText; VideoInputSet = true;
+                        Global.temp_path_folder = Path.GetFileNameWithoutExtension(n.InnerText); break;  // Video Input
+                    case "VideoOutput":
+                        Global.Video_Output = n.InnerText; VideoOutputSet = true;
+                        TextBoxVideoDestination.Text = n.InnerText; break;  // Video Output
+                    case "WorkerCount": ComboBoxWorkerCount.SelectedIndex = int.Parse(n.InnerText); break;  // Worker Count
+                    case "WorkerPriority": ComboBoxProcessPriority.SelectedIndex = int.Parse(n.InnerText); break;  // Worker Priority
                     // ═══════════════════════════════════════════════════════════════════ Audio ═══════════════════════════════════════════════════════════════════
-                    case "AudioTrackOne":                   ToggleSwitchAudioTrackOne.IsOn = n.InnerText == "True";                 break;  // Audio Track One Active
-                    case "AudioTrackTwo":                   ToggleSwitchAudioTrackTwo.IsOn = n.InnerText == "True";                 break;  // Audio Track Two Active
-                    case "AudioTrackThree":                 ToggleSwitchAudioTrackThree.IsOn = n.InnerText == "True";               break;  // Audio Track Three Active
-                    case "AudioTrackFour":                  ToggleSwitchAudioTrackFour.IsOn = n.InnerText == "True";                break;  // Audio Track Four Active
-                    case "AudioTrackOneName":               TextBoxAudioTrackOneName.Text = n.InnerText;                            break;  // Audio Track One Name
-                    case "AudioTrackTwoName":               TextBoxAudioTrackTwoName.Text = n.InnerText;                            break;  // Audio Track Two Name
-                    case "AudioTrackThreeName":             TextBoxAudioTrackThreeName.Text = n.InnerText;                          break;  // Audio Track Three Name
-                    case "AudioTrackFourName":              TextBoxAudioTrackFourName.Text = n.InnerText;                           break;  // Audio Track Four Name
-                    case "AudioTrackOneNameActive":         CheckBoxTrackOneTrackName.IsChecked = n.InnerText == "True";            break;  // Audio Track One Name Active
-                    case "AudioTrackTwoNameActive":         CheckBoxTrackTwoTrackName.IsChecked = n.InnerText == "True";            break;  // Audio Track Two Name Active
-                    case "AudioTrackThreeNameActive":       CheckBoxTrackThreeTrackName.IsChecked = n.InnerText == "True";          break;  // Audio Track Three Name Active
-                    case "AudioTrackFourNameActive":        CheckBoxTrackFourTrackName.IsChecked = n.InnerText == "True";           break;  // Audio Track Four Name Active
-                    case "AudioLangOne":                    ComboBoxTrackOneLanguage.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track One Language
-                    case "AudioLangTwo":                    ComboBoxTrackTwoLanguage.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track Two Language
-                    case "AudioLangThree":                  ComboBoxTrackThreeLanguage.SelectedIndex = int.Parse(n.InnerText);      break;  // Audio Track Three Language
-                    case "AudioLangFour":                   ComboBoxTrackFourLanguage.SelectedIndex = int.Parse(n.InnerText);       break;  // Audio Track Four Language
-                    case "TrackOneCodec":                   ComboBoxAudioCodec.SelectedIndex = int.Parse(n.InnerText);              break;  // Audio Track One Codec
-                    case "TrackTwoCodec":                   ComboBoxAudioCodecTrackTwo.SelectedIndex = int.Parse(n.InnerText);      break;  // Audio Track Two Codec
-                    case "TrackThreeCodec":                 ComboBoxAudioCodecTrackThree.SelectedIndex = int.Parse(n.InnerText);    break;  // Audio Track Three Codec
-                    case "TrackFourCodec":                  ComboBoxAudioCodecTrackFour.SelectedIndex = int.Parse(n.InnerText);     break;  // Audio Track Four Codec
-                    case "TrackOneBitrate":                 TextBoxAudioBitrate.Text = n.InnerText;                                 break;  // Audio Track One Bitrate
-                    case "TrackTwoBitrate":                 TextBoxAudioBitrateTrackTwo.Text = n.InnerText;                         break;  // Audio Track Two Bitrate
-                    case "TrackThreeBitrate":               TextBoxAudioBitrateTrackThree.Text = n.InnerText;                       break;  // Audio Track Three Bitrate
-                    case "TrackFourBitrate":                TextBoxAudioBitrateTrackFour.Text = n.InnerText;                        break;  // Audio Track Four Bitrate
-                    case "TrackOneChannels":                ComboBoxTrackOneChannels.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track One Channels
-                    case "TrackTwoChannels":                ComboBoxTrackTwoChannels.SelectedIndex = int.Parse(n.InnerText);        break;  // Audio Track Two Channels
-                    case "TrackThreeChannels":              ComboBoxTrackThreeChannels.SelectedIndex = int.Parse(n.InnerText);      break;  // Audio Track Three Channels
-                    case "TrackFourChannels":               ComboBoxTrackFourChannels.SelectedIndex = int.Parse(n.InnerText);       break;  // Audio Track Four Channels
+                    case "AudioTrackOne": ToggleSwitchAudioTrackOne.IsOn = n.InnerText == "True"; break;  // Audio Track One Active
+                    case "AudioTrackTwo": ToggleSwitchAudioTrackTwo.IsOn = n.InnerText == "True"; break;  // Audio Track Two Active
+                    case "AudioTrackThree": ToggleSwitchAudioTrackThree.IsOn = n.InnerText == "True"; break;  // Audio Track Three Active
+                    case "AudioTrackFour": ToggleSwitchAudioTrackFour.IsOn = n.InnerText == "True"; break;  // Audio Track Four Active
+                    case "AudioTrackOneName": TextBoxAudioTrackOneName.Text = n.InnerText; break;  // Audio Track One Name
+                    case "AudioTrackTwoName": TextBoxAudioTrackTwoName.Text = n.InnerText; break;  // Audio Track Two Name
+                    case "AudioTrackThreeName": TextBoxAudioTrackThreeName.Text = n.InnerText; break;  // Audio Track Three Name
+                    case "AudioTrackFourName": TextBoxAudioTrackFourName.Text = n.InnerText; break;  // Audio Track Four Name
+                    case "AudioTrackOneNameActive": CheckBoxTrackOneTrackName.IsChecked = n.InnerText == "True"; break;  // Audio Track One Name Active
+                    case "AudioTrackTwoNameActive": CheckBoxTrackTwoTrackName.IsChecked = n.InnerText == "True"; break;  // Audio Track Two Name Active
+                    case "AudioTrackThreeNameActive": CheckBoxTrackThreeTrackName.IsChecked = n.InnerText == "True"; break;  // Audio Track Three Name Active
+                    case "AudioTrackFourNameActive": CheckBoxTrackFourTrackName.IsChecked = n.InnerText == "True"; break;  // Audio Track Four Name Active
+                    case "AudioLangOne": ComboBoxTrackOneLanguage.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track One Language
+                    case "AudioLangTwo": ComboBoxTrackTwoLanguage.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track Two Language
+                    case "AudioLangThree": ComboBoxTrackThreeLanguage.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track Three Language
+                    case "AudioLangFour": ComboBoxTrackFourLanguage.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track Four Language
+                    case "TrackOneCodec": ComboBoxAudioCodec.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track One Codec
+                    case "TrackTwoCodec": ComboBoxAudioCodecTrackTwo.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track Two Codec
+                    case "TrackThreeCodec": ComboBoxAudioCodecTrackThree.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track Three Codec
+                    case "TrackFourCodec": ComboBoxAudioCodecTrackFour.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track Four Codec
+                    case "TrackOneBitrate": TextBoxAudioBitrate.Text = n.InnerText; break;  // Audio Track One Bitrate
+                    case "TrackTwoBitrate": TextBoxAudioBitrateTrackTwo.Text = n.InnerText; break;  // Audio Track Two Bitrate
+                    case "TrackThreeBitrate": TextBoxAudioBitrateTrackThree.Text = n.InnerText; break;  // Audio Track Three Bitrate
+                    case "TrackFourBitrate": TextBoxAudioBitrateTrackFour.Text = n.InnerText; break;  // Audio Track Four Bitrate
+                    case "TrackOneChannels": ComboBoxTrackOneChannels.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track One Channels
+                    case "TrackTwoChannels": ComboBoxTrackTwoChannels.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track Two Channels
+                    case "TrackThreeChannels": ComboBoxTrackThreeChannels.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track Three Channels
+                    case "TrackFourChannels": ComboBoxTrackFourChannels.SelectedIndex = int.Parse(n.InnerText); break;  // Audio Track Four Channels
                     // ═════════════════════════════════════════════════════════════════ Splitting ═════════════════════════════════════════════════════════════════
-                    case "SplittingMethod":                 ComboBoxSplittingMethod.SelectedIndex = int.Parse(n.InnerText);         break;  // Splitting Method
-                    case "SplittingThreshold":              TextBoxSplittingThreshold.Text = n.InnerText;                           break;  // Splitting Threshold
-                    case "SplittingReencode":               ComboBoxSplittingReencodeMethod.SelectedIndex = int.Parse(n.InnerText); break;  // Splitting Reencode Codec
-                    case "SplittingReencodeLength":         TextBoxSplittingChunkLength.Text = n.InnerText;                         break;  // Splitting Chunk Length
-                    case "SplittingReencodeSkip":           CheckBoxSkipReencode.IsChecked = n.InnerText == "True";                 break;  // Splitting Skip Reencode
+                    case "SplittingMethod": ComboBoxSplittingMethod.SelectedIndex = int.Parse(n.InnerText); break;  // Splitting Method
+                    case "SplittingThreshold": TextBoxSplittingThreshold.Text = n.InnerText; break;  // Splitting Threshold
+                    case "SplittingReencode": ComboBoxSplittingReencodeMethod.SelectedIndex = int.Parse(n.InnerText); break;  // Splitting Reencode Codec
+                    case "SplittingReencodeLength": TextBoxSplittingChunkLength.Text = n.InnerText; break;  // Splitting Chunk Length
+                    case "SplittingReencodeSkip": CheckBoxSkipReencode.IsChecked = n.InnerText == "True"; break;  // Splitting Skip Reencode
                     // ══════════════════════════════════════════════════════════════════ Filters ══════════════════════════════════════════════════════════════════
-                    case "FilterCrop":                      ToggleSwitchFilterCrop.IsOn = n.InnerText == "True";                    break;  // Filter Crop (Boolean)
-                    case "FilterCropTop":                   TextBoxFiltersCropTop.Text = n.InnerText;                               break;  // Filter Crop Top
-                    case "FilterCropBottom":                TextBoxFiltersCropBottom.Text = n.InnerText;                            break;  // Filter Crop Bottom
-                    case "FilterCropLeft":                  TextBoxFiltersCropLeft.Text = n.InnerText;                              break;  // Filter Crop Left
-                    case "FilterCropRight":                 TextBoxFiltersCropRight.Text = n.InnerText;                             break;  // Filter Crop Right
-                    case "FilterResize":                    ToggleSwitchFilterResize.IsOn = n.InnerText == "True";                  break;  // Filter Resize (Boolean)
-                    case "FilterResizeWidth":               TextBoxFiltersResizeWidth.Text = n.InnerText;                           break;  // Filter Resize Width
-                    case "FilterResizeHeight":              TextBoxFiltersResizeHeight.Text = n.InnerText;                          break;  // Filter Resize Height
-                    case "FilterResizeAlgo":                ComboBoxFiltersScaling.SelectedIndex = int.Parse(n.InnerText);          break;  // Filter Resize Scaling Algorithm
-                    case "FilterRotate":                    ToggleSwitchFilterRotate.IsOn = n.InnerText == "True";                  break;  // Filter Rotate (Boolean)
-                    case "FilterRotateAmount":              ComboBoxFiltersRotate.SelectedIndex = int.Parse(n.InnerText);           break;  // Filter Rotate
-                    case "FilterDeinterlace":               ToggleSwitchFilterDeinterlace.IsOn = n.InnerText == "True";             break;  // Filter Deinterlace (Boolean)
-                    case "FilterDeinterlaceType":           ComboBoxFiltersDeinterlace.SelectedIndex = int.Parse(n.InnerText);      break;  // Filter Deinterlace
+                    case "FilterCrop": ToggleSwitchFilterCrop.IsOn = n.InnerText == "True"; break;  // Filter Crop (Boolean)
+                    case "FilterCropTop": TextBoxFiltersCropTop.Text = n.InnerText; break;  // Filter Crop Top
+                    case "FilterCropBottom": TextBoxFiltersCropBottom.Text = n.InnerText; break;  // Filter Crop Bottom
+                    case "FilterCropLeft": TextBoxFiltersCropLeft.Text = n.InnerText; break;  // Filter Crop Left
+                    case "FilterCropRight": TextBoxFiltersCropRight.Text = n.InnerText; break;  // Filter Crop Right
+                    case "FilterResize": ToggleSwitchFilterResize.IsOn = n.InnerText == "True"; break;  // Filter Resize (Boolean)
+                    case "FilterResizeWidth": TextBoxFiltersResizeWidth.Text = n.InnerText; break;  // Filter Resize Width
+                    case "FilterResizeHeight": TextBoxFiltersResizeHeight.Text = n.InnerText; break;  // Filter Resize Height
+                    case "FilterResizeAlgo": ComboBoxFiltersScaling.SelectedIndex = int.Parse(n.InnerText); break;  // Filter Resize Scaling Algorithm
+                    case "FilterRotate": ToggleSwitchFilterRotate.IsOn = n.InnerText == "True"; break;  // Filter Rotate (Boolean)
+                    case "FilterRotateAmount": ComboBoxFiltersRotate.SelectedIndex = int.Parse(n.InnerText); break;  // Filter Rotate
+                    case "FilterDeinterlace": ToggleSwitchFilterDeinterlace.IsOn = n.InnerText == "True"; break;  // Filter Deinterlace (Boolean)
+                    case "FilterDeinterlaceType": ComboBoxFiltersDeinterlace.SelectedIndex = int.Parse(n.InnerText); break;  // Filter Deinterlace
                     // ═══════════════════════════════════════════════════════════ Basic Video Settings ════════════════════════════════════════════════════════════
-                    case "VideoEncoder":                    ComboBoxVideoEncoder.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Encoder
-                    case "VideoBitDepth":                   ComboBoxVideoBitDepth.SelectedIndex = int.Parse(n.InnerText);           break;  // Video BitDepth
-                    case "VideoColorFormat":                ComboBoxColorFormat.SelectedIndex = int.Parse(n.InnerText);             break;  // Video Color Format
-                    case "VideoSpeed":                      SliderVideoSpeed.Value = int.Parse(n.InnerText);                        break;  // Video Speed
-                    case "VideoPasses":                     ComboBoxVideoPasses.SelectedIndex = int.Parse(n.InnerText);             break;  // Video Passes
-                    case "VideoQuality":                    SliderVideoQuality.Value = int.Parse(n.InnerText);
-                                                            RadioButtonVideoConstantQuality.IsChecked = true;                       break;  // Video Quality
-                    case "VideoBitrate":                    TextBoxVideoBitrate.Text = n.InnerText;
-                                                            RadioButtonVideoBitrate.IsChecked = true;                               break;  // Video Bitrate
-                    case "VideoAomencRT":                   CheckBoxVideoAomencRealTime.IsChecked = n.InnerText == "True";          break;  // Video Aomenc Real Time Mode
-                    case "VideoVFR":                        ToggleSwitchVFR.IsOn = n.InnerText == "True";                           break;  // VIdeo Variable Framerate
+                    case "VideoEncoder": ComboBoxVideoEncoder.SelectedIndex = int.Parse(n.InnerText); break;  // Video Encoder
+                    case "VideoBitDepth": ComboBoxVideoBitDepth.SelectedIndex = int.Parse(n.InnerText); break;  // Video BitDepth
+                    case "VideoColorFormat": ComboBoxColorFormat.SelectedIndex = int.Parse(n.InnerText); break;  // Video Color Format
+                    case "VideoSpeed": SliderVideoSpeed.Value = int.Parse(n.InnerText); break;  // Video Speed
+                    case "VideoPasses": ComboBoxVideoPasses.SelectedIndex = int.Parse(n.InnerText); break;  // Video Passes
+                    case "VideoQuality":
+                        SliderVideoQuality.Value = int.Parse(n.InnerText);
+                        RadioButtonVideoConstantQuality.IsChecked = true; break;  // Video Quality
+                    case "VideoBitrate":
+                        TextBoxVideoBitrate.Text = n.InnerText;
+                        RadioButtonVideoBitrate.IsChecked = true; break;  // Video Bitrate
+                    case "VideoAomencRT": CheckBoxVideoAomencRealTime.IsChecked = n.InnerText == "True"; break;  // Video Aomenc Real Time Mode
+                    case "VideoVFR": ToggleSwitchVFR.IsOn = n.InnerText == "True"; break;  // VIdeo Variable Framerate
                     // ═════════════════════════════════════════════════════════ Advanced Video Settings ═══════════════════════════════════════════════════════════
-                    case "VideoAdvanced":                   ToggleSwitchAdvancedVideoSettings.IsOn = n.InnerText == "True";         break;  // Video Advanced Settings
-                    case "VideoAdvancedCustom":             CheckBoxCustomVideoSettings.IsChecked = n.InnerText == "True";          break;  // Video Advanced Settings Custom
-                    case "VideoAdvancedAomencThreads":      ComboBoxAomencThreads.SelectedIndex = int.Parse(n.InnerText);           break;  // Video Advanced Settings Aomenc Threads
-                    case "VideoAdvancedAomencTileCols":     ComboBoxAomencTileColumns.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings Aomenc Tile Columns
-                    case "VideoAdvancedAomencTileRows":     ComboBoxAomencTileRows.SelectedIndex = int.Parse(n.InnerText);          break;  // Video Advanced Settings Aomenc Tile Rows
-                    case "VideoAdvancedAomencGOP":          TextBoxAomencMaxGOP.Text = n.InnerText;                                 break;  // Video Advanced Settings Aomenc GOP
-                    case "VideoAdvancedAomencLag":          TextBoxAomencLagInFrames.Text = n.InnerText;                            break;  // Video Advanced Settings Aomenc Lag in Frames
-                    case "VideoAdvancedAomencSharpness":    ComboBoxAomencSharpness.SelectedIndex = int.Parse(n.InnerText);         break;  // Video Advanced Settings Aomenc Sharpness
-                    case "VideoAdvancedAomencColorPrim":    ComboBoxAomencColorPrimaries.SelectedIndex = int.Parse(n.InnerText);    break;  // Video Advanced Settings Aomenc Color Primaries
-                    case "VideoAdvancedAomencColorTrans":   ComboBoxAomencColorTransfer.SelectedIndex = int.Parse(n.InnerText);     break;  // Video Advanced Settings Aomenc Color Transfer
-                    case "VideoAdvancedAomencColorMatrix":  ComboBoxAomencColorMatrix.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings Aomenc Color Matrix
-                    case "VideoAdvancedAomencAQMode":       ComboBoxAomencAQMode.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Advanced Settings Aomenc AQ Mode
-                    case "VideoAdvancedAomencKFFiltering":  ComboBoxAomencKeyFiltering.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings Aomenc Keyframe Filtering
-                    case "VideoAdvancedAomencTune":         ComboBoxAomencTune.SelectedIndex = int.Parse(n.InnerText);              break;  // Video Advanced Settings Aomenc Tune
-                    case "VideoAdvancedAomencTuneContent":  ComboBoxAomencTuneContent.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings Aomenc Tune Content
-                    case "VideoAdvancedAomencARNR":         CheckBoxAomencARNRMax.IsChecked = n.InnerText == "True";                break;  // Video Advanced Settings Aomenc ARNR
-                    case "VideoAdvancedAomencARNRMax":      ComboBoxAomencARNRMax.SelectedIndex = int.Parse(n.InnerText);           break;  // Video Advanced Settings Aomenc ARNR Max
-                    case "VideoAdvancedAomencARNRStre":     ComboBoxAomencARNRStrength.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings Aomenc ARNR Strength
-                    case "VideoAdvancedAomencRowMT":        CheckBoxAomencRowMT.IsChecked = n.InnerText == "True";                  break;  // Video Advanced Settings Aomenc Row Mt
-                    case "VideoAdvancedAomencCDEF":         CheckBoxAomencCDEF.IsChecked = n.InnerText == "True";                   break;  // Video Advanced Settings Aomenc CDEF
-                    case "VideoAdvancedRav1eThreads":       ComboBoxRav1eThreads.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Advanced Settings Rav1e Threads
-                    case "VideoAdvancedRav1eTileCols":      ComboBoxRav1eTileColumns.SelectedIndex = int.Parse(n.InnerText);        break;  // Video Advanced Settings Rav1e Tile Columns
-                    case "VideoAdvancedRav1eTileRows":      ComboBoxRav1eTileRows.SelectedIndex = int.Parse(n.InnerText);           break;  // Video Advanced Settings Rav1e Tile Rows
-                    case "VideoAdvancedRav1eGOP":           TextBoxRav1eMaxGOP.Text = n.InnerText;                                  break;  // Video Advanced Settings Rav1e GOP
-                    case "VideoAdvancedRav1eRDO":           TextBoxRav1eLookahead.Text = n.InnerText;                               break;  // Video Advanced Settings Rav1e RDO Lookahead
-                    case "VideoAdvancedRav1eTune":          ComboBoxRav1eTune.SelectedIndex = int.Parse(n.InnerText);               break;  // Video Advanced Settings Rav1e Tune
-                    case "VideoAdvancedRav1eColorPrim":     ComboBoxRav1eColorPrimaries.SelectedIndex = int.Parse(n.InnerText);     break;  // Video Advanced Settings Rav1e Color Primaries
-                    case "VideoAdvancedRav1eColorTrans":    ComboBoxRav1eColorTransfer.SelectedIndex = int.Parse(n.InnerText);      break;  // Video Advanced Settings Rav1e Color Transfer
-                    case "VideoAdvancedRav1eColorMatrix":   ComboBoxRav1eColorMatrix.SelectedIndex = int.Parse(n.InnerText);        break;  // Video Advanced Settings Rav1e Color Matrix
-                    case "VideoAdvancedRav1eMastering":     CheckBoxRav1eMasteringDisplay.IsChecked = n.InnerText == "True";        break;  // Video Advanced Settings Rav1e Mastering Display
-                    case "VideoAdvancedRav1eMasteringGx":   TextBoxRav1eMasteringGx.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Gx
-                    case "VideoAdvancedRav1eMasteringGy":   TextBoxRav1eMasteringGy.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Gy
-                    case "VideoAdvancedRav1eMasteringBx":   TextBoxRav1eMasteringBx.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Bx
-                    case "VideoAdvancedRav1eMasteringBy":   TextBoxRav1eMasteringBy.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display By
-                    case "VideoAdvancedRav1eMasteringRx":   TextBoxRav1eMasteringRx.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Rx
-                    case "VideoAdvancedRav1eMasteringRy":   TextBoxRav1eMasteringRy.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Ry
-                    case "VideoAdvancedRav1eMasteringWPx":  TextBoxRav1eMasteringWPx.Text = n.InnerText;                            break;  // Video Advanced Settings Rav1e Mastering Display WPx
-                    case "VideoAdvancedRav1eMasteringWPy":  TextBoxRav1eMasteringWPy.Text = n.InnerText;                            break;  // Video Advanced Settings Rav1e Mastering Display WPy
-                    case "VideoAdvancedRav1eMasteringLx":   TextBoxRav1eMasteringLx.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Lx
-                    case "VideoAdvancedRav1eMasteringLy":   TextBoxRav1eMasteringLy.Text = n.InnerText;                             break;  // Video Advanced Settings Rav1e Mastering Display Ly
-                    case "VideoAdvancedRav1eLight":         CheckBoxRav1eContentLight.IsChecked = n.InnerText == "True";            break;  // Video Advanced Settings Rav1e Mastering Content Light
-                    case "VideoAdvancedRav1eLightCll":      TextBoxRav1eContentLightCll.Text = n.InnerText;                         break;  // Video Advanced Settings Rav1e Mastering Content Light Cll
-                    case "VideoAdvancedRav1eLightFall":     TextBoxRav1eContentLightFall.Text = n.InnerText;                        break;  // Video Advanced Settings Rav1e Mastering Content Light Fall
-                    case "VideoAdvancedSVTAV1TileCols":     ComboBoxSVTAV1TileColumns.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings SVT-AV1 Tile Columns
-                    case "VideoAdvancedSVTAV1TileRows":     ComboBoxSVTAV1TileRows.SelectedIndex = int.Parse(n.InnerText);          break;  // Video Advanced Settings SVT-AV1 Tile Rows
-                    case "VideoAdvancedSVTAV1GOP":          TextBoxSVTAV1MaxGOP.Text = n.InnerText;                                 break;  // Video Advanced Settings SVT-AV1 GOP
-                    case "VideoAdvancedVP9Threads":         ComboBoxVP9Threads.SelectedIndex = int.Parse(n.InnerText);              break;  // Video Advanced Settings VP9 Threads
-                    case "VideoAdvancedVP9TileCols":        ComboBoxVP9TileColumns.SelectedIndex = int.Parse(n.InnerText);          break;  // Video Advanced Settings VP9 Tile Columns
-                    case "VideoAdvancedVP9TileRows":        ComboBoxVP9TileRows.SelectedIndex = int.Parse(n.InnerText);             break;  // Video Advanced Settings VP9 Tile Rows
-                    case "VideoAdvancedVP9GOP":             TextBoxVP9MaxKF.Text = n.InnerText;                                     break;  // Video Advanced Settings VP9 GOP
-                    case "VideoAdvancedVP9Lag":             TextBoxVP9LagInFrames.Text = n.InnerText;                               break;  // Video Advanced Settings VP9 Lag in Frames
-                    case "VideoAdvancedVP9AQMode":          ComboBoxVP9AQMode.SelectedIndex = int.Parse(n.InnerText);               break;  // Video Advanced Settings VP9 AQ Mode
-                    case "VideoAdvancedVP9Tune":            ComboBoxVP9ATune.SelectedIndex = int.Parse(n.InnerText);                break;  // Video Advanced Settings VP9 Tune
-                    case "VideoAdvancedVP9TuneContent":     ComboBoxVP9ATuneContent.SelectedIndex = int.Parse(n.InnerText);         break;  // Video Advanced Settings VP9 Tune Content
-                    case "VideoAdvancedVP9ARNR":            CheckBoxVP9ARNR.IsChecked = n.InnerText == "True";                      break;  // Video Advanced Settings VP9 ARNR
-                    case "VideoAdvancedVP9ARNRMax":         ComboBoxAomencVP9Max.SelectedIndex = int.Parse(n.InnerText);            break;  // Video Advanced Settings VP9 ARNR Max
-                    case "VideoAdvancedVP9ARNRStre":        ComboBoxAomencVP9Strength.SelectedIndex = int.Parse(n.InnerText);       break;  // Video Advanced Settings VP9 ARNR Strength
-                    case "VideoAdvancedVP9ARNRType": ComboBoxAomencVP9ARNRType.SelectedIndex = int.Parse(n.InnerText);              break;  // Video Advanced Settings VP9 ARNR Type
-                    case "VideoAdvancedCustomString":       TextBoxCustomVideoSettings.Text = n.InnerText;                          break;  // Video Advanced Settings Custom String
+                    case "VideoAdvanced": ToggleSwitchAdvancedVideoSettings.IsOn = n.InnerText == "True"; break;  // Video Advanced Settings
+                    case "VideoAdvancedCustom": CheckBoxCustomVideoSettings.IsChecked = n.InnerText == "True"; break;  // Video Advanced Settings Custom
+                    case "VideoAdvancedAomencThreads": ComboBoxAomencThreads.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc Threads
+                    case "VideoAdvancedAomencTileCols": ComboBoxAomencTileColumns.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc Tile Columns
+                    case "VideoAdvancedAomencTileRows": ComboBoxAomencTileRows.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc Tile Rows
+                    case "VideoAdvancedAomencGOP": TextBoxAomencMaxGOP.Text = n.InnerText; break;  // Video Advanced Settings Aomenc GOP
+                    case "VideoAdvancedAomencLag": TextBoxAomencLagInFrames.Text = n.InnerText; break;  // Video Advanced Settings Aomenc Lag in Frames
+                    case "VideoAdvancedAomencSharpness": ComboBoxAomencSharpness.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc Sharpness
+                    case "VideoAdvancedAomencColorPrim": ComboBoxAomencColorPrimaries.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc Color Primaries
+                    case "VideoAdvancedAomencColorTrans": ComboBoxAomencColorTransfer.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc Color Transfer
+                    case "VideoAdvancedAomencColorMatrix": ComboBoxAomencColorMatrix.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc Color Matrix
+                    case "VideoAdvancedAomencAQMode": ComboBoxAomencAQMode.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc AQ Mode
+                    case "VideoAdvancedAomencKFFiltering": ComboBoxAomencKeyFiltering.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc Keyframe Filtering
+                    case "VideoAdvancedAomencTune": ComboBoxAomencTune.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc Tune
+                    case "VideoAdvancedAomencTuneContent": ComboBoxAomencTuneContent.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc Tune Content
+                    case "VideoAdvancedAomencARNR": CheckBoxAomencARNRMax.IsChecked = n.InnerText == "True"; break;  // Video Advanced Settings Aomenc ARNR
+                    case "VideoAdvancedAomencARNRMax": ComboBoxAomencARNRMax.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc ARNR Max
+                    case "VideoAdvancedAomencARNRStre": ComboBoxAomencARNRStrength.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Aomenc ARNR Strength
+                    case "VideoAdvancedAomencRowMT": CheckBoxAomencRowMT.IsChecked = n.InnerText == "True"; break;  // Video Advanced Settings Aomenc Row Mt
+                    case "VideoAdvancedAomencCDEF": CheckBoxAomencCDEF.IsChecked = n.InnerText == "True"; break;  // Video Advanced Settings Aomenc CDEF
+                    case "VideoAdvancedRav1eThreads": ComboBoxRav1eThreads.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Rav1e Threads
+                    case "VideoAdvancedRav1eTileCols": ComboBoxRav1eTileColumns.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Rav1e Tile Columns
+                    case "VideoAdvancedRav1eTileRows": ComboBoxRav1eTileRows.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Rav1e Tile Rows
+                    case "VideoAdvancedRav1eGOP": TextBoxRav1eMaxGOP.Text = n.InnerText; break;  // Video Advanced Settings Rav1e GOP
+                    case "VideoAdvancedRav1eRDO": TextBoxRav1eLookahead.Text = n.InnerText; break;  // Video Advanced Settings Rav1e RDO Lookahead
+                    case "VideoAdvancedRav1eTune": ComboBoxRav1eTune.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Rav1e Tune
+                    case "VideoAdvancedRav1eColorPrim": ComboBoxRav1eColorPrimaries.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Rav1e Color Primaries
+                    case "VideoAdvancedRav1eColorTrans": ComboBoxRav1eColorTransfer.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Rav1e Color Transfer
+                    case "VideoAdvancedRav1eColorMatrix": ComboBoxRav1eColorMatrix.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings Rav1e Color Matrix
+                    case "VideoAdvancedRav1eMastering": CheckBoxRav1eMasteringDisplay.IsChecked = n.InnerText == "True"; break;  // Video Advanced Settings Rav1e Mastering Display
+                    case "VideoAdvancedRav1eMasteringGx": TextBoxRav1eMasteringGx.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Display Gx
+                    case "VideoAdvancedRav1eMasteringGy": TextBoxRav1eMasteringGy.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Display Gy
+                    case "VideoAdvancedRav1eMasteringBx": TextBoxRav1eMasteringBx.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Display Bx
+                    case "VideoAdvancedRav1eMasteringBy": TextBoxRav1eMasteringBy.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Display By
+                    case "VideoAdvancedRav1eMasteringRx": TextBoxRav1eMasteringRx.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Display Rx
+                    case "VideoAdvancedRav1eMasteringRy": TextBoxRav1eMasteringRy.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Display Ry
+                    case "VideoAdvancedRav1eMasteringWPx": TextBoxRav1eMasteringWPx.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Display WPx
+                    case "VideoAdvancedRav1eMasteringWPy": TextBoxRav1eMasteringWPy.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Display WPy
+                    case "VideoAdvancedRav1eMasteringLx": TextBoxRav1eMasteringLx.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Display Lx
+                    case "VideoAdvancedRav1eMasteringLy": TextBoxRav1eMasteringLy.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Display Ly
+                    case "VideoAdvancedRav1eLight": CheckBoxRav1eContentLight.IsChecked = n.InnerText == "True"; break;  // Video Advanced Settings Rav1e Mastering Content Light
+                    case "VideoAdvancedRav1eLightCll": TextBoxRav1eContentLightCll.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Content Light Cll
+                    case "VideoAdvancedRav1eLightFall": TextBoxRav1eContentLightFall.Text = n.InnerText; break;  // Video Advanced Settings Rav1e Mastering Content Light Fall
+                    case "VideoAdvancedSVTAV1TileCols": ComboBoxSVTAV1TileColumns.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings SVT-AV1 Tile Columns
+                    case "VideoAdvancedSVTAV1TileRows": ComboBoxSVTAV1TileRows.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings SVT-AV1 Tile Rows
+                    case "VideoAdvancedSVTAV1GOP": TextBoxSVTAV1MaxGOP.Text = n.InnerText; break;  // Video Advanced Settings SVT-AV1 GOP
+                    case "VideoAdvancedVP9Threads": ComboBoxVP9Threads.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings VP9 Threads
+                    case "VideoAdvancedVP9TileCols": ComboBoxVP9TileColumns.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings VP9 Tile Columns
+                    case "VideoAdvancedVP9TileRows": ComboBoxVP9TileRows.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings VP9 Tile Rows
+                    case "VideoAdvancedVP9GOP": TextBoxVP9MaxKF.Text = n.InnerText; break;  // Video Advanced Settings VP9 GOP
+                    case "VideoAdvancedVP9Lag": TextBoxVP9LagInFrames.Text = n.InnerText; break;  // Video Advanced Settings VP9 Lag in Frames
+                    case "VideoAdvancedVP9AQMode": ComboBoxVP9AQMode.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings VP9 AQ Mode
+                    case "VideoAdvancedVP9Tune": ComboBoxVP9ATune.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings VP9 Tune
+                    case "VideoAdvancedVP9TuneContent": ComboBoxVP9ATuneContent.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings VP9 Tune Content
+                    case "VideoAdvancedVP9ARNR": CheckBoxVP9ARNR.IsChecked = n.InnerText == "True"; break;  // Video Advanced Settings VP9 ARNR
+                    case "VideoAdvancedVP9ARNRMax": ComboBoxAomencVP9Max.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings VP9 ARNR Max
+                    case "VideoAdvancedVP9ARNRStre": ComboBoxAomencVP9Strength.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings VP9 ARNR Strength
+                    case "VideoAdvancedVP9ARNRType": ComboBoxAomencVP9ARNRType.SelectedIndex = int.Parse(n.InnerText); break;  // Video Advanced Settings VP9 ARNR Type
+                    case "VideoAdvancedCustomString": TextBoxCustomVideoSettings.Text = n.InnerText; break;  // Video Advanced Settings Custom String
                     // Subtitles
-                    case "SubOne":                          ToggleSwitchSubtitleActivatedOne.IsOn = n.InnerText == "True";          break;  // Subtitle Track One Active
-                    case "SubTwo":                          ToggleSwitchSubtitleActivatedTwo.IsOn = n.InnerText == "True";          break;  // Subtitle Track Two Active
-                    case "SubThree":                        ToggleSwitchSubtitleActivatedThree.IsOn = n.InnerText == "True";        break;  // Subtitle Track Three Active
-                    case "SubFour":                         ToggleSwitchSubtitleActivatedFour.IsOn = n.InnerText == "True";         break;  // Subtitle Track Four Active
-                    case "SubFive":                         ToggleSwitchSubtitleActivatedFive.IsOn = n.InnerText == "True";         break;  // Subtitle Track Five Active
-                    case "SubOneBurn":                      CheckBoxSubOneBurn.IsChecked = n.InnerText == "True";                   break;  // Subtitle Track One Burn
-                    case "SubTwoBurn":                      CheckBoxSubTwoBurn.IsChecked = n.InnerText == "True";                   break;  // Subtitle Track Two Burn
-                    case "SubThreeBurn":                    CheckBoxSubThreeBurn.IsChecked = n.InnerText == "True";                 break;  // Subtitle Track Three Burn
-                    case "SubFourBurn":                     CheckBoxSubFourBurn.IsChecked = n.InnerText == "True";                  break;  // Subtitle Track Four Burn
-                    case "SubFiveBurn":                     CheckBoxSubFiveBurn.IsChecked = n.InnerText == "True";                  break;  // Subtitle Track Five Burn
-                    case "SubOneDefault":                   CheckBoxSubOneDefault.IsChecked = n.InnerText == "True";                break;  // Subtitle Track One Default
-                    case "SubTwoDefault":                   CheckBoxSubTwoDefault.IsChecked = n.InnerText == "True";                break;  // Subtitle Track Two Default
-                    case "SubThreeDefault":                 CheckBoxSubThreeDefault.IsChecked = n.InnerText == "True";              break;  // Subtitle Track Three Default
-                    case "SubFourDefault":                  CheckBoxSubFourDefault.IsChecked = n.InnerText == "True";               break;  // Subtitle Track Four Default
-                    case "SubFiveDefault":                  CheckBoxSubFiveDefault.IsChecked = n.InnerText == "True";               break;  // Subtitle Track Five Default
-                    case "SubOnePath":                      TextBoxSubtitleTrackOne.Text = n.InnerText;                             break;  // Subtitle Track One Path
-                    case "SubTwoPath":                      TextBoxSubtitleTrackTwo.Text = n.InnerText;                             break;  // Subtitle Track Two Path
-                    case "SubThreePath":                    TextBoxSubtitleTrackThree.Text = n.InnerText;                           break;  // Subtitle Track Three Path
-                    case "SubFourPath":                     TextBoxSubtitleTrackFour.Text = n.InnerText;                            break;  // Subtitle Track Four Path
-                    case "SubFivePath":                     TextBoxSubtitleTrackFive.Text = n.InnerText;                            break;  // Subtitle Track Five Path
-                    case "SubOneName":                      TextBoxSubOneName.Text = n.InnerText;                                   break;  // Subtitle Track One Name
-                    case "SubTwoName":                      TextBoxSubTwoName.Text = n.InnerText;                                   break;  // Subtitle Track Two Name
-                    case "SubThreeName":                    TextBoxSubThreeName.Text = n.InnerText;                                 break;  // Subtitle Track Three Name
-                    case "SubFourName":                     TextBoxSubFourName.Text = n.InnerText;                                  break;  // Subtitle Track Four Name
-                    case "SubFiveName":                     TextBoxSubFiveName.Text = n.InnerText;                                  break;  // Subtitle Track Five Name
-                    case "SubOneLanguage":                  ComboBoxSubTrackOneLanguage.SelectedIndex = int.Parse(n.InnerText);     break;  // Subtitle Track One Language
-                    case "SubTwoLanguage":                  ComboBoxSubTrackTwoLanguage.SelectedIndex = int.Parse(n.InnerText);     break;  // Subtitle Track Two Language
-                    case "SubThreeLanguage":                ComboBoxSubTrackThreeLanguage.SelectedIndex = int.Parse(n.InnerText);   break;  // Subtitle Track Three Language
-                    case "SubFourLanguage":                 ComboBoxSubTrackFourLanguage.SelectedIndex = int.Parse(n.InnerText);    break;  // Subtitle Track Four Language
-                    case "SubFiveLanguage":                 ComboBoxSubTrackFiveLanguage.SelectedIndex = int.Parse(n.InnerText);    break;  // Subtitle Track Five Language
+                    case "SubOne": ToggleSwitchSubtitleActivatedOne.IsOn = n.InnerText == "True"; break;  // Subtitle Track One Active
+                    case "SubTwo": ToggleSwitchSubtitleActivatedTwo.IsOn = n.InnerText == "True"; break;  // Subtitle Track Two Active
+                    case "SubThree": ToggleSwitchSubtitleActivatedThree.IsOn = n.InnerText == "True"; break;  // Subtitle Track Three Active
+                    case "SubFour": ToggleSwitchSubtitleActivatedFour.IsOn = n.InnerText == "True"; break;  // Subtitle Track Four Active
+                    case "SubFive": ToggleSwitchSubtitleActivatedFive.IsOn = n.InnerText == "True"; break;  // Subtitle Track Five Active
+                    case "SubOneBurn": CheckBoxSubOneBurn.IsChecked = n.InnerText == "True"; break;  // Subtitle Track One Burn
+                    case "SubTwoBurn": CheckBoxSubTwoBurn.IsChecked = n.InnerText == "True"; break;  // Subtitle Track Two Burn
+                    case "SubThreeBurn": CheckBoxSubThreeBurn.IsChecked = n.InnerText == "True"; break;  // Subtitle Track Three Burn
+                    case "SubFourBurn": CheckBoxSubFourBurn.IsChecked = n.InnerText == "True"; break;  // Subtitle Track Four Burn
+                    case "SubFiveBurn": CheckBoxSubFiveBurn.IsChecked = n.InnerText == "True"; break;  // Subtitle Track Five Burn
+                    case "SubOneDefault": CheckBoxSubOneDefault.IsChecked = n.InnerText == "True"; break;  // Subtitle Track One Default
+                    case "SubTwoDefault": CheckBoxSubTwoDefault.IsChecked = n.InnerText == "True"; break;  // Subtitle Track Two Default
+                    case "SubThreeDefault": CheckBoxSubThreeDefault.IsChecked = n.InnerText == "True"; break;  // Subtitle Track Three Default
+                    case "SubFourDefault": CheckBoxSubFourDefault.IsChecked = n.InnerText == "True"; break;  // Subtitle Track Four Default
+                    case "SubFiveDefault": CheckBoxSubFiveDefault.IsChecked = n.InnerText == "True"; break;  // Subtitle Track Five Default
+                    case "SubOnePath": TextBoxSubtitleTrackOne.Text = n.InnerText; break;  // Subtitle Track One Path
+                    case "SubTwoPath": TextBoxSubtitleTrackTwo.Text = n.InnerText; break;  // Subtitle Track Two Path
+                    case "SubThreePath": TextBoxSubtitleTrackThree.Text = n.InnerText; break;  // Subtitle Track Three Path
+                    case "SubFourPath": TextBoxSubtitleTrackFour.Text = n.InnerText; break;  // Subtitle Track Four Path
+                    case "SubFivePath": TextBoxSubtitleTrackFive.Text = n.InnerText; break;  // Subtitle Track Five Path
+                    case "SubOneName": TextBoxSubOneName.Text = n.InnerText; break;  // Subtitle Track One Name
+                    case "SubTwoName": TextBoxSubTwoName.Text = n.InnerText; break;  // Subtitle Track Two Name
+                    case "SubThreeName": TextBoxSubThreeName.Text = n.InnerText; break;  // Subtitle Track Three Name
+                    case "SubFourName": TextBoxSubFourName.Text = n.InnerText; break;  // Subtitle Track Four Name
+                    case "SubFiveName": TextBoxSubFiveName.Text = n.InnerText; break;  // Subtitle Track Five Name
+                    case "SubOneLanguage": ComboBoxSubTrackOneLanguage.SelectedIndex = int.Parse(n.InnerText); break;  // Subtitle Track One Language
+                    case "SubTwoLanguage": ComboBoxSubTrackTwoLanguage.SelectedIndex = int.Parse(n.InnerText); break;  // Subtitle Track Two Language
+                    case "SubThreeLanguage": ComboBoxSubTrackThreeLanguage.SelectedIndex = int.Parse(n.InnerText); break;  // Subtitle Track Three Language
+                    case "SubFourLanguage": ComboBoxSubTrackFourLanguage.SelectedIndex = int.Parse(n.InnerText); break;  // Subtitle Track Four Language
+                    case "SubFiveLanguage": ComboBoxSubTrackFiveLanguage.SelectedIndex = int.Parse(n.InnerText); break;  // Subtitle Track Five Language
                     default: break;
                 }
             }

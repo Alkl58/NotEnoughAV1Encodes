@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes
 {
-    class EncodeVideoPipe
+    internal class EncodeVideoPipe
     {
         public static void Encode()
         {
@@ -92,7 +92,6 @@ namespace NotEnoughAV1Encodes
                                             }
 
                                             encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".ivf") + '\u0022';
-
                                         }
                                         else
                                         {
@@ -112,7 +111,6 @@ namespace NotEnoughAV1Encodes
                                                 encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022';
                                             }
                                         }
-
 
                                         startInfo.Arguments = "/C ffmpeg.exe " + ffmpeg_progress + ffmpeg_input + encoderCMD;
 
@@ -148,7 +146,6 @@ namespace NotEnoughAV1Encodes
                                         }
                                     }
 
-
                                     if (!MainWindow.OnePass)
                                     {
                                         // Creates a different progress file for the second pass (avoids negative frame progressbar)
@@ -156,14 +153,13 @@ namespace NotEnoughAV1Encodes
 
                                         string encoderCMD = "";
 
-
                                         if (MainWindow.EncodeMethod == 5)
                                         {
                                             // aomenc
                                             encoderCMD = '\u0022' + Path.Combine(Global.Aomenc_Path, "aomenc.exe") + '\u0022' + " - --passes=2 --pass=2 " + EncodeVideo.Final_Encoder_Command + " --fpf=";
                                             encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + "_stats.log") + '\u0022' + " --output=";
                                         }
-                                        else if(MainWindow.EncodeMethod == 7)
+                                        else if (MainWindow.EncodeMethod == 7)
                                         {
                                             // svt-av1
                                             ffmpeg_input = InputVideo + " " + MainWindow.FilterCommand + EncodeVideo.Pixel_Format + " -color_range 0 -nostdin " + MainWindow.VSYNC + " -f yuv4mpegpipe - | ";

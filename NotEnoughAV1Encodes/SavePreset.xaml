@@ -8,8 +8,8 @@
         mc:Ignorable="d"
         Title="Save Preset" Height="127" Width="260" ResizeMode="NoResize">
     <Grid>
-        <Button x:Name="ButtonSavePreset" Content="Save" HorizontalAlignment="Left" Margin="16,50,0,0" VerticalAlignment="Top" Width="110" Height="26" Background="{x:Null}" Click="ButtonSavePreset_Click"/>
-        <TextBox x:Name="TextBoxPresetName" HorizontalAlignment="Left" Height="26" Margin="16,20,0,0" TextWrapping="Wrap" Text="PresetName" VerticalAlignment="Top" Width="222" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        <Button x:Name="ButtonCloseWindow" Content="Cancel" HorizontalAlignment="Left" Margin="128,50,0,0" VerticalAlignment="Top" Width="110" Height="26" Click="ButtonCloseWindow_Click" Background="{x:Null}"/>
+        <Button x:Name="ButtonSavePreset" Content="Save" HorizontalAlignment="Left" Margin="16,50,0,0" VerticalAlignment="Top" Width="110" Height="26" Background="{x:Null}" Click="ButtonSavePreset_Click" />
+        <TextBox x:Name="TextBoxPresetName" HorizontalAlignment="Left" Height="26" Margin="16,20,0,0" TextWrapping="Wrap" Text="PresetName" VerticalAlignment="Top" Width="222" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+        <Button x:Name="ButtonCloseWindow" Content="Cancel" HorizontalAlignment="Left" Margin="128,50,0,0" VerticalAlignment="Top" Width="110" Height="26" Click="ButtonCloseWindow_Click" Background="{x:Null}" />
     </Grid>
 </mah:MetroWindow>

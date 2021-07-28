@@ -7,6 +7,7 @@ namespace NotEnoughAV1Encodes
     public partial class PopupWindow : MetroWindow
     {
         public static string fileLocation;
+
         public PopupWindow(string baseTheme, string accentTheme, string time, string frames, string avg, string fileName)
         {
             InitializeComponent();

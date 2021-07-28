@@ -4,44 +4,45 @@ using System.Windows;
 
 namespace NotEnoughAV1Encodes
 {
-    class CheckDependencies
+    internal class CheckDependencies
     {
         public static void Check()
         {
             // Sets / Checks ffmpeg Path
-            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg", "ffmpeg.exe"))) 
-            { 
-                Global.FFmpeg_Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"); 
-            }
-            else if (ExistsOnPath("ffmpeg.exe")) {
-                Global.FFmpeg_Path = GetFullPathWithOutName("ffmpeg.exe"); 
-            }
-            else 
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg", "ffmpeg.exe")))
             {
-                Global.FFmpeg_Path = null; 
+                Global.FFmpeg_Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg");
+            }
+            else if (ExistsOnPath("ffmpeg.exe"))
+            {
+                Global.FFmpeg_Path = GetFullPathWithOutName("ffmpeg.exe");
+            }
+            else
+            {
+                Global.FFmpeg_Path = null;
             }
 
             // Sets / Checks mkvtoolnix Path
-            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "mkvtoolnix", "mkvmerge.exe"))) 
-            { 
-                Global.MKVToolNix_Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "mkvtoolnix"); 
-            }
-            else if (ExistsOnPath("mkvmerge.exe")) 
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Apps", "mkvtoolnix", "mkvmerge.exe")))
             {
-                Global.MKVToolNix_Path = GetFullPathWithOutName("mkvmerge.exe"); 
+                Global.MKVToolNix_Path = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "mkvtoolnix");
             }
-            else if (File.Exists(@"C:\Program Files\MKVToolNix\mkvmerge.exe")) 
+            else if (ExistsOnPath("mkvmerge.exe"))
             {
-                Global.MKVToolNix_Path = @"C:\Program Files\MKVToolNix\"; 
+                Global.MKVToolNix_Path = GetFullPathWithOutName("mkvmerge.exe");
             }
-            else 
+            else if (File.Exists(@"C:\Program Files\MKVToolNix\mkvmerge.exe"))
             {
-                Global.MKVToolNix_Path = null; 
+                Global.MKVToolNix_Path = @"C:\Program Files\MKVToolNix\";
+            }
+            else
+            {
+                Global.MKVToolNix_Path = null;
             }
 
             // Checks if PySceneDetect is found in the Windows PATH environment
             if (ExistsOnPath("scenedetect.exe")) { MainWindow.PySceneFound = true; }
-            
+
             NotifyUser();
         }
 

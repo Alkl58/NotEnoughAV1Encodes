@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
-    
+
     <!-- Main Buttons  -->
     <system:String x:Key="source">Quelle</system:String>
     <system:String x:Key="source:">Quelle:</system:String>
@@ -70,5 +70,4 @@
     <system:String x:Key="shutdown_after_encode">Nach Encode Herunterfahren</system:String>
     <system:String x:Key="open_temp_folder">öffnen</system:String>
     <system:String x:Key="custom_temp_path">Benutzerdefinierter Temp-Ordner</system:String>
-
 </ResourceDictionary>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes
 {
-    class EncodeVideo
+    internal class EncodeVideo
     {
         public static string Final_Encoder_Command = null;
         public static string Pixel_Format = null;
@@ -75,13 +75,13 @@ namespace NotEnoughAV1Encodes
                                     {
                                         string encoderCMD = "";
 
-                                        if (MainWindow.OnePass) 
+                                        if (MainWindow.OnePass)
                                         {
                                             // One Pass Encoding
                                             encoderCMD = " -y " + Final_Encoder_Command + " ";
                                             encoderCMD += '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "split" + index.ToString("D5") + ".webm") + '\u0022';
                                         }
-                                        else 
+                                        else
                                         {
                                             // Two Pass Encoding - First Pass
                                             encoderCMD = " -y " + Final_Encoder_Command + " -pass 1 -passlogfile ";
@@ -122,7 +122,6 @@ namespace NotEnoughAV1Encodes
                                         }
                                     }
 
-                                    
                                     if (!MainWindow.OnePass)
                                     {
                                         // Creates a different progress file for the second pass (avoids negative frame progressbar)

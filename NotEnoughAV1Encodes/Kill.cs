@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
 namespace NotEnoughAV1Encodes
 {
-    class Kill
+    internal class Kill
     {
         public static void Kill_PID()
         {
-
             List<int> temp_pids = Global.Launched_PIDs;
 
             // Nuke all PIDs

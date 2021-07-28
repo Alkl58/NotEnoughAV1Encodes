@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace NotEnoughAV1Encodes
 {
-    class Suspend
+    internal class Suspend
     {
         [Flags]
         public enum ThreadAccess : int
@@ -23,14 +23,16 @@ namespace NotEnoughAV1Encodes
         }
 
         [DllImport("kernel32.dll")]
-        static extern IntPtr OpenThread(ThreadAccess dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
-        [DllImport("kernel32.dll")]
-        static extern uint SuspendThread(IntPtr hThread);
-        [DllImport("kernel32.dll")]
-        static extern int ResumeThread(IntPtr hThread);
-        [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern bool CloseHandle(IntPtr handle);
+        private static extern IntPtr OpenThread(ThreadAccess dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
 
+        [DllImport("kernel32.dll")]
+        private static extern uint SuspendThread(IntPtr hThread);
+
+        [DllImport("kernel32.dll")]
+        private static extern int ResumeThread(IntPtr hThread);
+
+        [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern bool CloseHandle(IntPtr handle);
 
         public static List<int> GetChildProcesses(int process_id)
         {

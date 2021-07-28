@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace NotEnoughAV1Encodes
 {
-    class SmallFunctions
+    internal class SmallFunctions
     {
         public static void ExecuteFfmpegTask(string ffmpegCommand)
         {
@@ -73,7 +73,6 @@ namespace NotEnoughAV1Encodes
                 // Reads the first line of the framecount file
                 MainWindow.TotalFrames = int.Parse(File.ReadLines(Path.Combine(Global.temp_path, Global.temp_path_folder, "framecount.log")).First());
             }
-
         }
 
         public static string GetBetween(string strSource, string strStart, string strEnd)
@@ -97,7 +96,7 @@ namespace NotEnoughAV1Encodes
                 FileInfo VideoOutput = new FileInfo(Global.Video_Output);
                 if (VideoOutput.Length <= 50000)
                 {
-                    MessageBox.Show("Video Output is " + (VideoOutput.Length /1000) + "KB.\nThere could be a muxing error.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Video Output is " + (VideoOutput.Length / 1000) + "KB.\nThere could be a muxing error.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 else
                 {
@@ -130,7 +129,7 @@ namespace NotEnoughAV1Encodes
                     tmp.Delete(true);
                 }
             }
-            catch {  }
+            catch { }
         }
 
         public static void DeleteTempFilesButton()
