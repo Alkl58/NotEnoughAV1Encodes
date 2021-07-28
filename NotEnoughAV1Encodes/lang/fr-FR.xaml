@@ -1,0 +1,74 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- Main Buttons  -->
+    <system:String x:Key="source">Source</system:String>
+    <system:String x:Key="source:">Source:</system:String>
+    <system:String x:Key="destination">Destination</system:String>
+    <system:String x:Key="destination:">Destination:</system:String>
+    <system:String x:Key="cancel">Annuler</system:String>
+    <!-- Main Tab Control  -->
+    <system:String x:Key="summary">Aperçu</system:String>
+    <system:String x:Key="filters">Filtre</system:String>
+    <system:String x:Key="video">Vidéo</system:String>
+    <system:String x:Key="audio">Audio</system:String>
+    <system:String x:Key="subtitles">Sous-titres</system:String>
+    <system:String x:Key="preferences">Préférences</system:String>
+    <!-- Summary Page Tab Control  -->
+    <system:String x:Key="input_output">Entrée / Sortie</system:String>
+    <system:String x:Key="no_source">Aucune source sélectionnée</system:String>
+    <system:String x:Key="no_destination">Aucune destination sélectionnée</system:String>
+    <system:String x:Key="video_information">Informations vidéo</system:String>
+    <system:String x:Key="video_length">Durée:</system:String>
+    <system:String x:Key="video_color_format">Format de couleur:</system:String>
+    <system:String x:Key="video_framerate">Framerate:</system:String>
+    <system:String x:Key="video_resolution">Résolution:</system:String>
+    <system:String x:Key="current_encoding_settings">Paramètres d'encodage actuels</system:String>
+    <system:String x:Key="encoder:">Encodeur:</system:String>
+    <system:String x:Key="bit-depth:">Bit-Depth:</system:String>
+    <system:String x:Key="speed:">Vitesse:</system:String>
+    <system:String x:Key="passes:">Passes:</system:String>
+    <system:String x:Key="workers_and_splitting">Travailleurs &amp; ragmentation</system:String>
+    <system:String x:Key="worker_count:">Worker Count:</system:String>
+    <system:String x:Key="priority:">Priorité:</system:String>
+    <system:String x:Key="splitting_method:">Splitting Method:</system:String>
+    <system:String x:Key="chunk_length:">Chunk-Length (sec):</system:String>
+    <system:String x:Key="skip_reencoding:">Skip Reencode</system:String>
+    <!-- Filters Page Tab Control  -->
+    <system:String x:Key="crop">Coupe</system:String>
+    <system:String x:Key="resize">Redimensionner</system:String>
+    <system:String x:Key="deinterlace">Désentrelacer</system:String>
+    <system:String x:Key="rotate">Tourner</system:String>
+    <system:String x:Key="top">Top</system:String>
+    <system:String x:Key="right">Droit</system:String>
+    <system:String x:Key="left">Gauche</system:String>
+    <system:String x:Key="bottom">Dessous</system:String>
+    <system:String x:Key="width:">Largeur:</system:String>
+    <system:String x:Key="heigtht:">Hauteur:</system:String>
+    <system:String x:Key="scaling_algorithm:">Algorithme de scaling:</system:String>
+    <system:String x:Key="rotate_clockwise:">Tourner (sens montre):</system:String>
+    <!-- Video Page Tab Control  -->
+    <system:String x:Key="advanced_settings:">Paramètres avancés:</system:String>
+    <system:String x:Key="optimisation">Optimisation</system:String>
+    <system:String x:Key="real_time_mode">Mode temps réel</system:String>
+    <system:String x:Key="vfr_information">seulement si vidéo est VFR; l'entrée et la sortie doivent être MKV</system:String>
+    <system:String x:Key="slowest">| Le plus lent</system:String>
+    <system:String x:Key="fastest">Le plus rapide |</system:String>
+    <system:String x:Key="quality">Qualité</system:String>
+    <system:String x:Key="constant_quality:">Qualité constante:</system:String>
+    <system:String x:Key="lowest_quality">| Qualité la plus basse</system:String>
+    <system:String x:Key="highest_quality">La plus haute qualité |</system:String>
+    <!-- Audio Page Tab Control  -->
+    <system:String x:Key="channels:">Chaînes:</system:String>
+    <system:String x:Key="language:">Langue:</system:String>
+    <!-- Preferences Page Tab Control  -->
+    <system:String x:Key="program_settings">Paramètres du programme</system:String>
+    <system:String x:Key="batch_settings">Paramètres Batch</system:String>
+    <system:String x:Key="theme">Thème</system:String>
+    <system:String x:Key="delete_temp_files">Supprimer les fichiers temporaires après l'encodage</system:String>
+    <system:String x:Key="shutdown_after_encode">Arrêter l'ordinateur après l'encodage</system:String>
+    <system:String x:Key="open_temp_folder">Ouvrir</system:String>
+    <system:String x:Key="custom_temp_path">Chemin temporaire personnalisé</system:String>
+
+</ResourceDictionary>

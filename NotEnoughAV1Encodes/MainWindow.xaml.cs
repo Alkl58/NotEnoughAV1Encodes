@@ -53,6 +53,7 @@ namespace NotEnoughAV1Encodes
         public static bool PopupWindow = false;     // Shows a popup window after encode finished
         public static bool Yadif1 = false;          // If true -> double the frames
         public static int TotalFrames = 0;          // used for progressbar and frame check
+        private string language = null;             // UI Language
         public static Dictionary<string, string> audio_languages = new Dictionary<string, string>();
         public DateTime StartTime;                  // used for eta calculation
         // Progress Cancellation
@@ -81,7 +82,68 @@ namespace NotEnoughAV1Encodes
             LoadDefaultProfile();
             LoadSettingsTab();
             FillLanguagesStartup();
+            SetLanguageStartup();
             StartUp = false;
+        }
+
+        private void SetLanguageDictionary(string lang)
+        {
+            ResourceDictionary dict = new ResourceDictionary();
+            switch (lang)
+            {
+                case "Deutsch":
+                case "de-CH":
+                case "de-LU":
+                case "de-LI":
+                case "de-AT":
+                case "de-DE":
+                    dict.Source = new Uri("..\\lang\\de-DE.xaml", UriKind.Relative);
+                    break;
+                case "Français":
+                case "fr-BE":
+                case "fr-CA":
+                case "fr-LU":
+                case "fr-MC":
+                case "fr-CH":
+                case "fr-FR":
+                    dict.Source = new Uri("..\\lang\\fr-FR.xaml", UriKind.Relative);
+                    break;
+                case "English":
+                default:
+                    dict.Source = new Uri("..\\lang\\en-US.xaml", UriKind.Relative);
+                    break;
+            }
+            Resources.MergedDictionaries.Add(dict);
+        }
+
+        private void SetLanguageStartup()
+        {
+            SetLanguageDictionary(Thread.CurrentThread.CurrentCulture.ToString());
+
+            if (language != null)
+            {
+                SetLanguageDictionary(language);
+
+                switch (language)
+                {
+                    case "Deutsch":
+                        ComboBoxUILanguage.SelectedIndex = 1;
+                        break;
+                    case "Français":
+                        ComboBoxUILanguage.SelectedIndex = 2;
+                        break;
+                    default:
+                        ComboBoxUILanguage.SelectedIndex = 0;
+                        break;
+                }
+            }
+        }
+
+        private void ButtonSaveUILanguage_Click(object sender, RoutedEventArgs e)
+        {
+            language = ComboBoxUILanguage.Text;
+            SetLanguageDictionary(language);
+            SaveSettingsTab();
         }
 
         private void FillLanguagesStartup()
@@ -2726,6 +2788,7 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("ThemeBase",          ComboBoxBaseTheme.SelectedIndex.ToString());
                     writer.WriteElementString("BatchContainer",     ComboBoxContainerBatchEncoding.SelectedIndex.ToString());
                     writer.WriteElementString("ReencodeMessage",    reencodeMessage.ToString());
+                    writer.WriteElementString("Language",           language ?? "English");
                     writer.WriteEndElement();
                     writer.Close();
                 }
@@ -2759,6 +2822,7 @@ namespace NotEnoughAV1Encodes
                             case "ThemeBase":       ComboBoxBaseTheme.SelectedIndex = int.Parse(n.InnerText); break;
                             case "BatchContainer":  ComboBoxContainerBatchEncoding.SelectedIndex = int.Parse(n.InnerText); break;
                             case "ReencodeMessage": reencodeMessage = n.InnerText == "True"; break;
+                            case "Language":        language = n.InnerText; break;
                             default: break;
                         }
                     }

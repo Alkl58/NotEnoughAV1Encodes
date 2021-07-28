@@ -108,7 +108,7 @@
     <Compile Include="Global.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Kill.cs" />
-    <Compile Include="MediaInfo.cs" />
+    <Compile Include="MediaInfo\MediaInfo.cs" />
     <Compile Include="PopupWindow.xaml.cs">
       <DependentUpon>PopupWindow.xaml</DependentUpon>
     </Compile>
@@ -122,6 +122,18 @@
       <DependentUpon>Updater.xaml</DependentUpon>
     </Compile>
     <Compile Include="VideoMuxing.cs" />
+    <Page Include="lang\de-DE.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="lang\en-US.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="lang\fr-FR.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -238,5 +250,6 @@
   <ItemGroup>
     <Resource Include="turbovid.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

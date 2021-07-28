@@ -1,0 +1,74 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- Main Buttons  -->
+    <system:String x:Key="source">Source</system:String>
+    <system:String x:Key="source:">Source:</system:String>
+    <system:String x:Key="destination">Destination</system:String>
+    <system:String x:Key="destination:">Destination:</system:String>
+    <system:String x:Key="cancel">Cancel</system:String>
+    <!-- Main Tab Control  -->
+    <system:String x:Key="summary">Summary</system:String>
+    <system:String x:Key="filters">Filters</system:String>
+    <system:String x:Key="video">Video</system:String>
+    <system:String x:Key="audio">Audio</system:String>
+    <system:String x:Key="subtitles">Subtitles</system:String>
+    <system:String x:Key="preferences">Preferences</system:String>
+    <!-- Summary Page Tab Control  -->
+    <system:String x:Key="input_output">Input / Output</system:String>
+    <system:String x:Key="no_source">No Source Selected</system:String>
+    <system:String x:Key="no_destination">No Destination Selected</system:String>
+    <system:String x:Key="video_information">Video Information</system:String>
+    <system:String x:Key="video_length">Length:</system:String>
+    <system:String x:Key="video_color_format">Color Format:</system:String>
+    <system:String x:Key="video_framerate">Framerate:</system:String>
+    <system:String x:Key="video_resolution">Resolution:</system:String>
+    <system:String x:Key="current_encoding_settings">Current Encoding Settings</system:String>
+    <system:String x:Key="encoder:">Encoder:</system:String>
+    <system:String x:Key="bit-depth:">Bit-Depth:</system:String>
+    <system:String x:Key="speed:">Speed:</system:String>
+    <system:String x:Key="passes:">Passes:</system:String>
+    <system:String x:Key="workers_and_splitting">Workers &amp; Splitting</system:String>
+    <system:String x:Key="worker_count:">Worker Count:</system:String>
+    <system:String x:Key="priority:">Priority:</system:String>
+    <system:String x:Key="splitting_method:">Splitting Method:</system:String>
+    <system:String x:Key="chunk_length:">Chunk-Length (sec):</system:String>
+    <system:String x:Key="skip_reencoding:">Skip Reencode</system:String>
+    <!-- Filters Page Tab Control  -->
+    <system:String x:Key="crop">Crop</system:String>
+    <system:String x:Key="resize">Resize</system:String>
+    <system:String x:Key="deinterlace">Deinterlace</system:String>
+    <system:String x:Key="rotate">Rotate</system:String>
+    <system:String x:Key="top">Top</system:String>
+    <system:String x:Key="right">Right</system:String>
+    <system:String x:Key="left">Left</system:String>
+    <system:String x:Key="bottom">Bottom</system:String>
+    <system:String x:Key="width:">Width:</system:String>
+    <system:String x:Key="heigtht:">Height:</system:String>
+    <system:String x:Key="scaling_algorithm:">Scaling Algorithm:</system:String>
+    <system:String x:Key="rotate_clockwise:">Rotate (Clockwise):</system:String>
+    <!-- Video Page Tab Control  -->
+    <system:String x:Key="advanced_settings:">Advanced Settings:</system:String>
+    <system:String x:Key="optimisation">Optimisation</system:String>
+    <system:String x:Key="real_time_mode">Real Time Mode</system:String>
+    <system:String x:Key="vfr_information">only if video is VFR; both input and output have to be mkv</system:String>
+    <system:String x:Key="slowest">| Slowest</system:String>
+    <system:String x:Key="fastest">Fastest |</system:String>
+    <system:String x:Key="quality">Quality</system:String>
+    <system:String x:Key="constant_quality:">Constant Quality:</system:String>
+    <system:String x:Key="lowest_quality">| Lowest Quality</system:String>
+    <system:String x:Key="highest_quality">Highest Quality |</system:String>
+    <!-- Audio Page Tab Control  -->
+    <system:String x:Key="channels:">Channels:</system:String>
+    <system:String x:Key="language:">Language:</system:String>
+    <!-- Preferences Page Tab Control  -->
+    <system:String x:Key="program_settings">Program Settings</system:String>
+    <system:String x:Key="batch_settings">Batch Settings</system:String>
+    <system:String x:Key="theme">Theme</system:String>
+    <system:String x:Key="delete_temp_files">Delete Temp Files after Encode</system:String>
+    <system:String x:Key="shutdown_after_encode">Shutdown after Encode</system:String>
+    <system:String x:Key="open_temp_folder">Open</system:String>
+    <system:String x:Key="custom_temp_path">Custom Temp Path</system:String>
+
+</ResourceDictionary>

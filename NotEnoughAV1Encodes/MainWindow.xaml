@@ -18,55 +18,55 @@
         <Button x:Name="ButtonOpenSource" Margin="21,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="138" Background="{x:Null}" Click="ButtonOpenSource_Click" BorderBrush="#FF707070">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
                 <Image HorizontalAlignment="Left" Height="51" VerticalAlignment="Top" Width="48" Source="img/video1.png" Canvas.Top="-7" Canvas.Left="-4"/>
-                <Label Content="Source" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="44" Height="30" Canvas.Top="2" FontSize="13" />
+                <Label Content="{DynamicResource source}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="44" Height="30" Canvas.Top="2" FontSize="13" Width="74" />
             </Canvas>
         </Button>
         <mah:MetroAnimatedSingleRowTabControl x:Name="MetroTab" Margin="21,116,21,63" Background="{x:Null}">
-            <mah:MetroTabItem Header="Summary">
+            <mah:MetroTabItem Header="{DynamicResource summary}">
                 <Grid x:Name="Grid0">
-                    <GroupBox Header="Current Encoding Settings" Margin="20,192,19,0" Height="82" VerticalAlignment="Top">
+                    <GroupBox Header="{DynamicResource current_encoding_settings}" Margin="20,192,19,0" Height="82" VerticalAlignment="Top">
                         <Grid>
-                            <Label Content="Encoder:" HorizontalAlignment="Left" Margin="7,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{DynamicResource encoder:}" HorizontalAlignment="Left" Margin="7,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                             <Label Content="{Binding Text, ElementName=ComboBoxVideoEncoder, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="71,13,0,0" VerticalAlignment="Top" Width="74"/>
-                            <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="150,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label Content="{Binding Text, ElementName=ComboBoxVideoBitDepth, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="244,13,0,0" VerticalAlignment="Top" Width="40"/>
-                            <Label Content="Speed:" HorizontalAlignment="Left" Margin="326,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="408,13,0,0" VerticalAlignment="Top" Width="46"/>
-                            <Label Content="Passes:" HorizontalAlignment="Left" Margin="488,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label Content="{Binding Text, ElementName=ComboBoxVideoPasses, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="567,13,0,0" VerticalAlignment="Top" Width="140"/>
+                            <Label Content="{DynamicResource bit-depth:}" HorizontalAlignment="Left" Margin="150,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Text, ElementName=ComboBoxVideoBitDepth, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="264,13,0,0" VerticalAlignment="Top" Width="40"/>
+                            <Label Content="{DynamicResource speed:}" HorizontalAlignment="Left" Margin="363,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="445,13,0,0" VerticalAlignment="Top" Width="46"/>
+                            <Label Content="{DynamicResource passes:}" HorizontalAlignment="Left" Margin="532,13,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{Binding Text, ElementName=ComboBoxVideoPasses, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Margin="613,13,0,0" VerticalAlignment="Top" Width="80"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Video Information" Height="72" Margin="20,115,19,0" VerticalAlignment="Top">
+                    <GroupBox Header="{DynamicResource video_information}" Height="72" Margin="20,115,19,0" VerticalAlignment="Top">
                         <Grid>
-                            <Label Content="Length:" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{DynamicResource video_length}" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                             <Label x:Name="LabelVideoLength" Content="00:00:00" HorizontalAlignment="Left" Margin="67,5,0,0" VerticalAlignment="Top" Width="80"/>
-                            <Label Content="Color Format:" HorizontalAlignment="Left" Margin="147,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label x:Name="LabelVideoColorFomat" Content="yuv420p" HorizontalAlignment="Left" Margin="239,5,0,0" VerticalAlignment="Top" Width="80"/>
-                            <Label Content="Framerate:" HorizontalAlignment="Left" Margin="324,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label x:Name="LabelVideoFramerate" Content="24" HorizontalAlignment="Left" Margin="400,5,0,0" VerticalAlignment="Top" Width="80"/>
-                            <Label Content="Resolution:" HorizontalAlignment="Left" Margin="485,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label x:Name="LabelVideoResolution" Content="1920x1080" HorizontalAlignment="Left" Margin="563,5,0,0" VerticalAlignment="Top" Width="80"/>
+                            <Label Content="{DynamicResource video_color_format}" HorizontalAlignment="Left" Margin="147,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label x:Name="LabelVideoColorFomat" Content="yuv420p" HorizontalAlignment="Left" Margin="264,5,0,0" VerticalAlignment="Top" Width="80"/>
+                            <Label Content="{DynamicResource video_framerate}" HorizontalAlignment="Left" Margin="359,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label x:Name="LabelVideoFramerate" Content="24" HorizontalAlignment="Left" Margin="435,5,0,0" VerticalAlignment="Top" Width="80"/>
+                            <Label Content="{DynamicResource video_resolution}" HorizontalAlignment="Left" Margin="532,5,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label x:Name="LabelVideoResolution" Content="1920x1080" HorizontalAlignment="Left" Margin="610,5,0,0" VerticalAlignment="Top" Width="80"/>
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Input / Output" Height="100" Margin="20,10,19,0" VerticalAlignment="Top">
+                    <GroupBox Header="{DynamicResource input_output}" Height="100" Margin="20,10,19,0" VerticalAlignment="Top">
                         <Grid HorizontalAlignment="Left" Height="66" Margin="0,0,0,-1" VerticalAlignment="Top" Width="813">
-                            <Label Content="Source:" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <Label Content="Destination:" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <TextBox x:Name="TextBoxVideoSource" Height="29" Margin="105,1,8,0" TextWrapping="Wrap" Text="No Source Selected" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
-                            <TextBox x:Name="TextBoxVideoDestination" Height="29" Margin="105,30,8,0" TextWrapping="Wrap" Text="No Destination Selected" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                            <Label Content="{DynamicResource source:}" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{DynamicResource destination:}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <TextBox x:Name="TextBoxVideoSource" Height="29" Margin="105,1,8,0" TextWrapping="Wrap" Text="{DynamicResource no_source}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                            <TextBox x:Name="TextBoxVideoDestination" Height="29" Margin="105,30,8,0" TextWrapping="Wrap" Text="{DynamicResource no_destination}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Workers &amp; Splitting" Height="85" Margin="20,279,19,0" VerticalAlignment="Top">
+                    <GroupBox Header="{DynamicResource workers_and_splitting}" Height="85" Margin="20,279,19,0" VerticalAlignment="Top">
                         <Grid HorizontalAlignment="Left" Height="46" VerticalAlignment="Top" Width="986">
-                            <Label Content="Worker Count:" HorizontalAlignment="Left" Margin="9,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                            <ComboBox x:Name="ComboBoxWorkerCount" HorizontalAlignment="Left" Margin="106,10,0,0" VerticalAlignment="Top" Width="80" Height="29" ToolTip="Amount of parallel workers."/>
-                            <Label Content="Priority:" HorizontalAlignment="Left" Margin="202,10,0,0" VerticalAlignment="Top" FontWeight="Bold" Height="28" RenderTransformOrigin="0.393,0.581"/>
+                            <Label Content="{DynamicResource worker_count:}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <ComboBox x:Name="ComboBoxWorkerCount" HorizontalAlignment="Left" Margin="112,9,0,0" VerticalAlignment="Top" Width="80" Height="29" ToolTip="Amount of parallel workers."/>
+                            <Label Content="{DynamicResource priority:}" HorizontalAlignment="Left" Margin="198,11,0,0" VerticalAlignment="Top" FontWeight="Bold" Height="28" RenderTransformOrigin="0.393,0.581"/>
                             <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="258,10,0,0" VerticalAlignment="Top" Width="100" Height="29">
                                 <ComboBoxItem Content="Normal" IsSelected="True"/>
                                 <ComboBoxItem Content="Below Normal"/>
                             </ComboBox>
-                            <Label Content="Splitting Method:" HorizontalAlignment="Left" Margin="370,11,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="{DynamicResource splitting_method:}" HorizontalAlignment="Left" Margin="370,11,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                             <ComboBox x:Name="ComboBoxSplittingMethod" HorizontalAlignment="Left" Margin="485,10,0,0" VerticalAlignment="Top" Width="120" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxSplittingMethod_SelectionChanged" ToolTip="Splitting Method" SelectedIndex="0">
                                 <ComboBoxItem Content="Equal Chunking" IsSelected="True"/>
                                 <ComboBoxItem Content="Scene Detect (ffmpeg)"/>
@@ -111,7 +111,7 @@
                                 <ComboBoxItem Content="ffv1"/>
                                 <ComboBoxItem Content="utvideo"/>
                             </ComboBox>
-                            <Label Content="Chunk-Length (sec):" HorizontalAlignment="Left" Margin="696,10,0,0" VerticalAlignment="Top" FontWeight="Bold">
+                            <Label Content="{DynamicResource chunk_length:}" HorizontalAlignment="Left" Margin="696,10,0,0" VerticalAlignment="Top" FontWeight="Bold">
                                 <Label.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -135,7 +135,7 @@
                                     </Style>
                                 </TextBox.Style>
                             </TextBox>
-                            <CheckBox x:Name="CheckBoxSkipReencode" Content="Skip Reencode" HorizontalAlignment="Left" Margin="884,14,0,0" VerticalAlignment="Top" Checked="CheckBoxSkipReencode_Checked">
+                            <CheckBox x:Name="CheckBoxSkipReencode" Content="{DynamicResource skip_reencoding:}" HorizontalAlignment="Left" Margin="884,14,0,0" VerticalAlignment="Top" Checked="CheckBoxSkipReencode_Checked">
                                 <CheckBox.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed"/>
@@ -151,23 +151,23 @@
                     </GroupBox>
                 </Grid>
             </mah:MetroTabItem>
-            <mah:MetroTabItem Header="Filters">
+            <mah:MetroTabItem Header="{DynamicResource filters}">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Crop" HorizontalAlignment="Left" Height="203" Margin="14,20,0,0" VerticalAlignment="Top" Width="274">
+                    <GroupBox Header="{DynamicResource crop}" HorizontalAlignment="Left" Height="203" Margin="14,20,0,0" VerticalAlignment="Top" Width="274">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterCrop}">
-                            <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="52,70,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="163,70,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="108,38,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <TextBox x:Name="TextBoxFiltersCropBottom" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="108,102,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <Label Content="Bottom" HorizontalAlignment="Left" Margin="108,128,0,0" VerticalAlignment="Top" Width="55"/>
-                            <Label Content="Top" HorizontalAlignment="Left" Margin="120,8,0,0" VerticalAlignment="Top"/>
-                            <Label Content="Left" HorizontalAlignment="Left" Margin="19,70,0,0" VerticalAlignment="Top" Height="26"/>
-                            <Label Content="Right" HorizontalAlignment="Left" Margin="218,68,0,0" VerticalAlignment="Top" Height="30"/>
+                            <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="49,75,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="160,75,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="105,43,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <TextBox x:Name="TextBoxFiltersCropBottom" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="105,107,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Label Content="{DynamicResource bottom}" HorizontalAlignment="Left" Margin="105,133,0,0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                            <Label Content="{DynamicResource top}" HorizontalAlignment="Center" Margin="105,17,104,125" VerticalAlignment="Center" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                            <Label Content="{DynamicResource left}" HorizontalAlignment="Left" Margin="-3,75,0,0" VerticalAlignment="Top" Height="26" Width="52" HorizontalContentAlignment="Right"/>
+                            <Label Content="{DynamicResource right}" HorizontalAlignment="Left" Margin="215,75,-5,0" VerticalAlignment="Top" Height="28" Width="54"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Resize" HorizontalAlignment="Left" Height="203" Margin="294,20,0,0" VerticalAlignment="Top" Width="285" >
+                    <GroupBox Header="{DynamicResource resize}" HorizontalAlignment="Left" Height="203" Margin="294,20,0,0" VerticalAlignment="Top" Width="285" >
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterResize}">
-                            <Label Content="Scaling Algorithm:" HorizontalAlignment="Left" Margin="19,98,0,0" VerticalAlignment="Top" Height="28"/>
+                            <Label Content="{DynamicResource scaling_algorithm:}" HorizontalAlignment="Right" Margin="0,98,149,0" VerticalAlignment="Top" Height="28" HorizontalContentAlignment="Right"/>
                             <ComboBox x:Name="ComboBoxFiltersScaling" HorizontalAlignment="Left" Margin="131,96,0,0" VerticalAlignment="Top" Width="128" Height="30" VerticalContentAlignment="Center">
                                 <ComboBoxItem Content="fast_bilinear"/>
                                 <ComboBoxItem Content="bilinear"/>
@@ -181,16 +181,16 @@
                                 <ComboBoxItem Content="lanczos"/>
                                 <ComboBoxItem Content="spline"/>
                             </ComboBox>
-                            <Label Content="Width:" HorizontalAlignment="Left" Margin="19,48,0,0" VerticalAlignment="Top" Height="28"/>
+                            <Label Content="{DynamicResource width:}" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" Height="28" Width="56" HorizontalContentAlignment="Right"/>
                             <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="71,46,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="If set to 0 it will automatically set the corresponding width to the height."/>
-                            <Label Content="Height:" HorizontalAlignment="Left" Margin="141,48,0,0" VerticalAlignment="Top" Height="28"/>
+                            <Label Content="{DynamicResource heigtht:}" HorizontalAlignment="Left" Margin="141,48,0,0" VerticalAlignment="Top" Height="28" Width="53" HorizontalContentAlignment="Right"/>
                             <TextBox x:Name="TextBoxFiltersResizeHeight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="199,46,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             <Label Content="0 = Auto" HorizontalAlignment="Left" Margin="71,67,0,0" VerticalAlignment="Top" FontStyle="Italic" RenderTransformOrigin="0.504,0.51" Width="60"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Rotate" HorizontalAlignment="Left" Height="95" Margin="591,128,0,0" VerticalAlignment="Top" Width="285">
+                    <GroupBox Header="{DynamicResource rotate}" HorizontalAlignment="Left" Height="95" Margin="591,128,0,0" VerticalAlignment="Top" Width="285">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterRotate}">
-                            <Label Content="Rotate (Clockwise):" HorizontalAlignment="Left" Margin="36,18,0,0" VerticalAlignment="Top" Height="28"/>
+                            <Label Content="{DynamicResource rotate_clockwise:}" HorizontalAlignment="Right" Margin="0,20,129,0" VerticalAlignment="Top" Height="28" HorizontalContentAlignment="Right" Width="146"/>
                             <ComboBox x:Name="ComboBoxFiltersRotate" HorizontalAlignment="Left" Margin="151,18,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
                                 <ComboBoxItem Content="0°" IsSelected="True"/>
                                 <ComboBoxItem Content="90°"/>
@@ -199,7 +199,7 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Deinterlace" HorizontalAlignment="Left" Height="96" Margin="591,20,0,0" VerticalAlignment="Top" Width="285">
+                    <GroupBox Header="{DynamicResource deinterlace}" HorizontalAlignment="Left" Height="96" Margin="591,20,0,0" VerticalAlignment="Top" Width="285">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterDeinterlace}">
                             <Label Content="Deinterlace (Yadif):" HorizontalAlignment="Left" Margin="39,21,0,0" VerticalAlignment="Top" Height="28"/>
                             <ComboBox x:Name="ComboBoxFiltersDeinterlace" HorizontalAlignment="Left" Margin="152,20,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
@@ -208,17 +208,17 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" Header="" HorizontalAlignment="Left" Height="61" Margin="56,-6,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" Header="" HorizontalAlignment="Left" Height="100" Margin="341,-6,0,0" VerticalAlignment="Top" Width="100"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" Header="" HorizontalAlignment="Left" Height="100" Margin="649,102,0,0" VerticalAlignment="Top" Width="159"/>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" Header="" HorizontalAlignment="Left" Height="100" Margin="677,-6,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" Header="" HorizontalAlignment="Left" Height="61" Margin="204,-6,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" Header="" HorizontalAlignment="Left" Height="100" Margin="495,-6,0,0" VerticalAlignment="Top" Width="100"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" Header="" HorizontalAlignment="Left" Height="100" Margin="793,102,0,0" VerticalAlignment="Top" Width="159"/>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" Header="" HorizontalAlignment="Left" Height="100" Margin="793,-6,0,0" VerticalAlignment="Top" Width="100"/>
                 </Grid>
             </mah:MetroTabItem>
-            <mah:MetroTabItem Header="Video">
+            <mah:MetroTabItem Header="{DynamicResource video}">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Video" HorizontalAlignment="Left" Height="190" Margin="10,10,0,0" VerticalAlignment="Top" Width="385">
+                    <GroupBox Header="{DynamicResource video}" HorizontalAlignment="Left" Height="190" Margin="10,10,0,0" VerticalAlignment="Top" Width="385">
                         <Grid>
-                            <Label Content="Encoder:" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
+                            <Label Content="{DynamicResource encoder:}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
                             <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="128" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged" ToolTip="Encoder to use" SelectedIndex="0">
                                 <ComboBoxItem Content="libaom" IsSelected="True"/>
                                 <ComboBoxItem Content="librav1e"/>
@@ -229,13 +229,13 @@
                                 <ComboBoxItem Content="rav1e"/>
                                 <ComboBoxItem Content="svt-av1"/>
                             </ComboBox>
-                            <Label Content="Bit-Depth:" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top"/>
+                            <Label Content="{DynamicResource bit-depth:}" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top"/>
                             <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center" ToolTip="Bit-Depth. 10bit recommended for animation and to avoid banding.">
                                 <ComboBoxItem Content="8" IsSelected="True"/>
                                 <ComboBoxItem Content="10"/>
                                 <ComboBoxItem Content="12"/>
                             </ComboBox>
-                            <Label Content="Color Format:" HorizontalAlignment="Left" Margin="19,93,0,0" VerticalAlignment="Top" Height="30"/>
+                            <Label Content="{DynamicResource video_color_format}" HorizontalAlignment="Left" Margin="19,93,0,0" VerticalAlignment="Top" Height="30"/>
                             <ComboBox x:Name="ComboBoxColorFormat" HorizontalAlignment="Left" Margin="135,93,0,0" VerticalAlignment="Top" Width="70" Height="30">
                                 <ComboBoxItem Content="4:2:0" IsSelected="True"/>
                                 <ComboBoxItem Content="4:2:2"/>
@@ -244,36 +244,36 @@
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Quality" Margin="10,0,10,10" Height="190" VerticalAlignment="Bottom">
+                    <GroupBox Header="{DynamicResource quality}" Margin="10,0,10,10" Height="190" VerticalAlignment="Bottom">
                         <Grid>
-                            <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="Constant Quality:" HorizontalAlignment="Left" Margin="42,14,0,0" VerticalAlignment="Top" Height="28" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True" Background="{x:Null}"/>
+                            <RadioButton x:Name="RadioButtonVideoConstantQuality" Content="{DynamicResource constant_quality:}" HorizontalAlignment="Left" Margin="42,14,0,0" VerticalAlignment="Top" Height="28" RenderTransformOrigin="0.504,0.192" VerticalContentAlignment="Center" IsChecked="True" Background="{x:Null}"/>
                             <Slider x:Name="SliderVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Margin="60,48,65,0" VerticalAlignment="Top" TickPlacement="BottomRight" Maximum="63" Value="28" SmallChange="1" IsSnapToTickEnabled="True" Height="28" IsDirectionReversed="True" Foreground="#FF595959" ToolTip="Target Quality"/>
                             <Label x:Name="LabelVideoQuality" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoConstantQuality}" Content="{Binding Value, ElementName=SliderVideoQuality, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="172,17,0,0" VerticalAlignment="Top"/>
-                            <Label Content="| Lowest Quality" HorizontalAlignment="Left" Margin="58,70,0,0" VerticalAlignment="Top" FontSize="9" Width="79" Foreground="#FF595959"/>
-                            <Label Content="Highest Quality |" Margin="0,76,59,0" VerticalAlignment="Top" FontSize="9" Foreground="#FF595959" RenderTransformOrigin="0.93,0.773" HorizontalAlignment="Right" Width="80"/>
+                            <Label Content="{DynamicResource lowest_quality}" HorizontalAlignment="Left" Margin="58,70,0,0" VerticalAlignment="Top" FontSize="9" Width="125" Foreground="#FF595959"/>
+                            <Label Content="{DynamicResource highest_quality}" Margin="0,70,63,0" VerticalAlignment="Top" FontSize="9" Foreground="#FF595959" RenderTransformOrigin="0.93,0.773" HorizontalAlignment="Right" Width="110" HorizontalContentAlignment="Right"/>
                             <RadioButton x:Name="RadioButtonVideoBitrate" Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="42,109,0,0" VerticalAlignment="Top" Width="125" Height="29" VerticalContentAlignment="Center" Background="{x:Null}" ToolTip="Target Bitrate"/>
                             <TextBox x:Name="TextBoxVideoBitrate" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding IsChecked, ElementName=RadioButtonVideoBitrate}" HorizontalAlignment="Left" Height="29" Margin="167,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Optimisation" Margin="0,10,10,0" HorizontalAlignment="Right" Width="385" Height="190" VerticalAlignment="Top">
+                    <GroupBox Header="{DynamicResource optimisation}" Margin="0,10,10,0" HorizontalAlignment="Right" Width="385" Height="190" VerticalAlignment="Top">
                         <Grid>
-                            <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="Real Time Mode" HorizontalAlignment="Left" Margin="247,72,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Visible"/>
-                            <Label Content="Speed:" HorizontalAlignment="Left" Margin="17,11,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="CheckBoxVideoAomencRealTime" Content="{DynamicResource real_time_mode}" HorizontalAlignment="Left" Margin="180,72,0,0" VerticalAlignment="Top" Checked="CheckBoxVideoAomencRealTime_Checked" Visibility="Visible"/>
+                            <Label Content="{DynamicResource speed:}" HorizontalAlignment="Left" Margin="17,11,0,0" VerticalAlignment="Top"/>
                             <Slider x:Name="SliderVideoSpeed" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="262" Height="29" TickPlacement="BottomRight" Foreground="#FF595959" Maximum="9" Value="4" SmallChange="0" IsSnapToTickEnabled="True" ValueChanged="SliderVideoSpeed_ValueChanged"/>
                             <Label x:Name="LabelVideoSpeed" Content="{Binding Value, ElementName=SliderVideoSpeed, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="341,13,0,0" VerticalAlignment="Top"/>
-                            <Label Content="Passes:" HorizontalAlignment="Left" Margin="18,68,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxVideoPasses" HorizontalAlignment="Left" Margin="74,66,0,0" VerticalAlignment="Top" Width="60" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoPasses_SelectionChanged">
+                            <Label Content="{DynamicResource passes:}" HorizontalAlignment="Left" Margin="18,68,0,0" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="ComboBoxVideoPasses" HorizontalAlignment="Left" Margin="101,68,0,0" VerticalAlignment="Top" Width="60" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoPasses_SelectionChanged">
                                 <ComboBoxItem Content="1" IsSelected="True"/>
                                 <ComboBoxItem Content="2"/>
                             </ComboBox>
-                            <Label Content="| Slowest" HorizontalAlignment="Left" Margin="72,32,0,0" VerticalAlignment="Top" FontSize="9" Width="80"/>
-                            <Label Content="Fastest |" HorizontalAlignment="Left" Margin="297,32,-2,0" VerticalAlignment="Top" FontSize="9" Width="80"/>
+                            <Label Content="{DynamicResource slowest}" HorizontalAlignment="Left" Margin="72,32,0,0" VerticalAlignment="Top" FontSize="9" Width="80"/>
+                            <Label Content="{DynamicResource fastest}" HorizontalAlignment="Right" Margin="0,32,36,0" VerticalAlignment="Top" FontSize="9" Width="80" HorizontalContentAlignment="Right"/>
                             <Label Content="VFR:" HorizontalAlignment="Left" Margin="18,110,0,0" VerticalAlignment="Top"/>
                             <mah:ToggleSwitch x:Name="ToggleSwitchVFR" Header="" HorizontalAlignment="Left" Height="100" Margin="74,84,0,-29" VerticalAlignment="Top" Width="100" ToolTip="ONLY TOGGLE IF SOURCE IS VFR"/>
-                            <Label Content="only if video is VFR; both input and output have to be mkv" HorizontalAlignment="Left" Margin="19,129,0,0" VerticalAlignment="Top" Width="356" FontStyle="Italic"/>
+                            <Label Content="{DynamicResource vfr_information}" HorizontalAlignment="Left" Margin="19,129,0,0" VerticalAlignment="Top" Width="356" FontStyle="Italic"/>
                         </Grid>
                     </GroupBox>
-                    <Label Content="Advanced Settings:" Margin="0,10,103,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="111"/>
+                    <Label Content="{DynamicResource advanced_settings:}" Margin="0,10,103,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="168" HorizontalContentAlignment="Right"/>
                     <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedVideoSettings" Header="&#xA;" Height="73" Margin="0,-33,-53,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,0.39" HorizontalAlignment="Right" Width="89"/>
                 </Grid>
             </mah:MetroTabItem>
@@ -716,7 +716,7 @@
                     <Button x:Name="ButtonTestCustomSettings" IsEnabled="{Binding IsChecked, ElementName=CheckBoxCustomVideoSettings}" Content="Test Custom Settings" HorizontalAlignment="Left" Margin="890,281,0,0" VerticalAlignment="Top" Width="135" Click="ButtonTestCustomSettings_Click"/>
                 </Grid>
             </mah:MetroTabItem>
-            <mah:MetroTabItem Header="Audio">
+            <mah:MetroTabItem Header="{DynamicResource audio}">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                     <GroupBox x:Name="GroupBox3" Header="Track 4" Height="74" Margin="6,255,10,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}">
                         <Grid HorizontalAlignment="Left" Height="41" Margin="0,0,0,-2" VerticalAlignment="Top" Width="1009">
@@ -737,10 +737,10 @@
                                 <ComboBoxItem Content="5.1" Tag="6"/>
                                 <ComboBoxItem Content="7.1" Tag="8"/>
                             </ComboBox>
-                            <Label Content="Channels:" HorizontalAlignment="Left" Margin="393,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}" />
+                            <Label Content="{DynamicResource channels:}" HorizontalAlignment="Left" Margin="393,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}" />
                             <Label Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="204,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}" />
                             <Label Content="Codec:" HorizontalAlignment="Left" Margin="12,8,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}"/>
-                            <Label Content="Language:" HorizontalAlignment="Left" Margin="574,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}" />
+                            <Label Content="{DynamicResource language:}" HorizontalAlignment="Left" Margin="574,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}" />
                             <ComboBox x:Name="ComboBoxTrackFourLanguage" HorizontalAlignment="Left" Margin="643,8,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackFour}">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
@@ -768,9 +768,9 @@
                                 <ComboBoxItem Content="5.1" Tag="6"/>
                                 <ComboBoxItem Content="7.1" Tag="8"/>
                             </ComboBox>
-                            <Label Content="Channels:" HorizontalAlignment="Left" Margin="393,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}" />
+                            <Label Content="{DynamicResource channels:}" HorizontalAlignment="Left" Margin="393,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}" />
                             <Label Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="203,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}" />
-                            <Label Content="Language:" HorizontalAlignment="Left" Margin="574,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}" />
+                            <Label Content="{DynamicResource language:}" HorizontalAlignment="Left" Margin="574,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}" />
                             <ComboBox x:Name="ComboBoxTrackThreeLanguage" HorizontalAlignment="Left" Margin="643,9,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackThree}">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
@@ -799,8 +799,8 @@
                             </ComboBox>
                             <Label Content="Bitrate (kbps):" HorizontalAlignment="Left" Margin="203,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}" />
                             <Label Content="Codec:" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}" />
-                            <Label Content="Channels:" HorizontalAlignment="Left" Margin="393,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}" />
-                            <Label Content="Language:" HorizontalAlignment="Left" Margin="573,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}" />
+                            <Label Content="{DynamicResource channels:}" HorizontalAlignment="Left" Margin="393,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}" />
+                            <Label Content="{DynamicResource language:}" HorizontalAlignment="Left" Margin="573,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}" />
                             <ComboBox x:Name="ComboBoxTrackTwoLanguage" HorizontalAlignment="Left" Margin="643,8,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackTwo}">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
@@ -823,14 +823,14 @@
                             <TextBox x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" Height="26" Margin="290,11,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="128" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}" PreviewTextInput="NumberValidationTextBox">
                                 <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
                             </TextBox>
-                            <Label Content="Channels:" HorizontalAlignment="Left" Margin="394,11,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}" Height="24" />
+                            <Label Content="{DynamicResource channels:}" HorizontalAlignment="Left" Margin="394,11,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}" Height="24" />
                             <ComboBox x:Name="ComboBoxTrackOneChannels" HorizontalAlignment="Left" Margin="460,11,0,0" VerticalAlignment="Top" Width="100" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}">
                                 <ComboBoxItem Content="1 (Mono)" Tag="1"/>
                                 <ComboBoxItem Content="2.0 (Stereo)" IsSelected="True" Tag="2"/>
                                 <ComboBoxItem Content="5.1" Tag="6"/>
                                 <ComboBoxItem Content="7.1" Tag="8"/>
                             </ComboBox>
-                            <Label Content="Language:" HorizontalAlignment="Left" Margin="574,11,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.473,0.534" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}" />
+                            <Label Content="{DynamicResource language:}" HorizontalAlignment="Left" Margin="574,11,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.473,0.534" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}" />
                             <ComboBox x:Name="ComboBoxTrackOneLanguage" HorizontalAlignment="Left" Margin="643,11,0,0" VerticalAlignment="Top" Width="94" Height="26" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchAudioTrackOne}">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
@@ -844,7 +844,7 @@
                     <mah:ToggleSwitch x:Name="ToggleSwitchAudioTrackFour" Header="" HorizontalAlignment="Left" Height="57" Margin="62,229,0,0" VerticalAlignment="Top" Width="100" Toggled="ToggleSwitchAudioTrackFour_Toggled"/>
                 </Grid>
             </mah:MetroTabItem>
-            <mah:MetroTabItem Header="Subtitles">
+            <mah:MetroTabItem Header="{DynamicResource subtitles}">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                     <GroupBox Header="Track 1" Height="70" Margin="3,12,10,0" VerticalAlignment="Top">
                         <Grid Height="47" VerticalAlignment="Bottom">
@@ -854,7 +854,7 @@
                             <TextBox x:Name="TextBoxSubOneName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Margin="0,16,308,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
                             <CheckBox x:Name="CheckBoxSubOneBurn"  IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Content="Burn in" Margin="0,0,239,7" Checked="CheckBoxSubOneBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
                             <CheckBox x:Name="CheckBoxSubOneDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" Content="Default" Margin="0,0,172,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubOneDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
-                            <Label Content="Language:"  Margin="0,17,105,4" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="64" />
+                            <Label Content="{DynamicResource language:}"  Margin="0,17,105,4" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="64" />
                             <ComboBox x:Name="ComboBoxSubTrackOneLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedOne}" HorizontalAlignment="Right" Width="90" Height="26" VerticalAlignment="Top">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
@@ -868,7 +868,7 @@
                             <TextBox x:Name="TextBoxSubTwoName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="0,16,308,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
                             <CheckBox x:Name="CheckBoxSubTwoBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Content="Burn in" Margin="0,0,239,7" Checked="CheckBoxSubTwoBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
                             <CheckBox x:Name="CheckBoxSubTwoDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Content="Default" Margin="0,0,172,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubTwoDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
-                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
+                            <Label Content="{DynamicResource language:}" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
                             <ComboBox x:Name="ComboBoxSubTrackTwoLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedTwo}" HorizontalAlignment="Right" Width="90" Height="26" VerticalAlignment="Top">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
@@ -880,7 +880,7 @@
                             <TextBox x:Name="TextBoxSubtitleTrackThree" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Margin="63,12,501,4" TextWrapping="Wrap" VerticalContentAlignment="Center" IsReadOnly="True"/>
                             <Label Content="Track Name:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Margin="0,14,420,0" VerticalAlignment="Top" RenderTransformOrigin="0.518,0.577" HorizontalAlignment="Right" Width="76" />
                             <TextBox x:Name="TextBoxSubThreeName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}"  Margin="0,16,308,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
-                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
+                            <Label Content="{DynamicResource language:}" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
                             <ComboBox x:Name="ComboBoxSubTrackThreeLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedThree}" HorizontalAlignment="Right" Width="90" Height="26" VerticalAlignment="Top">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
@@ -896,7 +896,7 @@
                             <TextBox x:Name="TextBoxSubFourName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="0,16,308,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
                             <CheckBox x:Name="CheckBoxSubFourDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Content="Default" Margin="0,0,172,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubFourDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
                             <CheckBox x:Name="CheckBoxSubFourBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Content="Burn in" Margin="0,0,239,7" Checked="CheckBoxSubFourBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
-                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
+                            <Label Content="{DynamicResource language:}" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
                             <ComboBox x:Name="ComboBoxSubTrackFourLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFour}" HorizontalAlignment="Right" Width="90" Height="26" VerticalAlignment="Top">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
@@ -910,7 +910,7 @@
                             <TextBox x:Name="TextBoxSubFiveName" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="0,16,308,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="112" Height="24" VerticalAlignment="Top"/>
                             <CheckBox x:Name="CheckBoxSubFiveBurn" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Content="Burn in" Margin="0,0,239,7" Checked="CheckBoxSubFiveBurn_Checked" HorizontalAlignment="Right" Width="64" RenderTransformOrigin="0.471,0.471" Height="20" VerticalAlignment="Bottom"/>
                             <CheckBox x:Name="CheckBoxSubFiveDefault" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Content="Default" Margin="0,0,172,7" RenderTransformOrigin="0.5,0.467" Checked="CheckBoxSubFiveDefault_Checked" HorizontalAlignment="Right" Width="64" Height="20" VerticalAlignment="Bottom"/>
-                            <Label Content="Language:" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
+                            <Label Content="{DynamicResource language:}" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" Margin="0,17,105,0" RenderTransformOrigin="0.518,0.577" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64" />
                             <ComboBox x:Name="ComboBoxSubTrackFiveLanguage" Margin="0,17,10,0" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchSubtitleActivatedFive}" HorizontalAlignment="Right" Width="90" Height="26" VerticalAlignment="Top">
                                 <ComboBoxItem Content="und" IsSelected="True"/>
                             </ComboBox>
@@ -923,23 +923,23 @@
                     <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedFive" Header="" Toggled="ToggleSwitchSubtitleActivatedOne_Toggled" HorizontalAlignment="Left" Height="100" Margin="62,277,0,0" VerticalAlignment="Top" Width="100"/>
                 </Grid>
             </mah:MetroTabItem>
-            <mah:MetroTabItem Header="Preferences">
+            <mah:MetroTabItem Header="{DynamicResource preferences}">
                 <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="Program Settings" HorizontalAlignment="Left" Height="160" Margin="10,10,0,0" VerticalAlignment="Top" Width="470">
+                    <GroupBox Header="{DynamicResource program_settings}" HorizontalAlignment="Left" Height="277" Margin="10,10,0,0" VerticalAlignment="Top" Width="340">
                         <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <mah:ToggleSwitch x:Name="ToggleSwitchShutdownAfterEncode" Header="Shutdown after Encode" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchLogging" IsOn="True" Header="Logging" HorizontalAlignment="Left" Margin="215,0,0,10" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Enables/Disables Logging - Saved to Video Output Path"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchHideTerminal" IsOn="True" Header="Hide Terminal" HorizontalAlignment="Left" Margin="348,0,-42,70" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchUISounds" IsOn="True" Header="UI Sounds" HorizontalAlignment="Left" Margin="215,0,0,70" VerticalAlignment="Bottom" Toggled="CheckBoxSettingsUISounds_Checked"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" IsOn="True" Header="Delete Temp Files after Encode" HorizontalAlignment="Left" Margin="10,0,0,70" VerticalAlignment="Bottom" Toggled="CheckBoxSettingsDeleteTempFiles_Checked"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchShowWindow" Header="Popup Window" HorizontalAlignment="Left" Margin="348,0,-42,10" VerticalAlignment="Bottom" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Opens a window after the encode to show generic information"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchShutdownAfterEncode" Header="{DynamicResource shutdown_after_encode}" HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchLogging" IsOn="True" Header="Logging" HorizontalAlignment="Left" Margin="134,121,0,0" VerticalAlignment="Top" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Enables/Disables Logging - Saved to Video Output Path"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchHideTerminal" IsOn="True" Header="Hide Terminal" HorizontalAlignment="Left" Margin="10,177,0,0" VerticalAlignment="Top" Toggled="ToggleSwitchShutdownAfterEncode_Toggled"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchUISounds" IsOn="True" Header="UI Sounds" HorizontalAlignment="Left" Margin="10,121,0,0" VerticalAlignment="Top" Toggled="CheckBoxSettingsUISounds_Checked"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" IsOn="True" Header="{DynamicResource delete_temp_files}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Toggled="CheckBoxSettingsDeleteTempFiles_Checked"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchShowWindow" Header="Popup Window" HorizontalAlignment="Left" Margin="134,177,0,0" VerticalAlignment="Top" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Opens a window after the encode to show generic information"/>
                         </Grid>
                     </GroupBox>
-                    <Button x:Name="ButtonOpenTempFolder" Content="Open Temp Folder" HorizontalAlignment="Left" Margin="10,0,0,71" Width="150" Background="{x:Null}" Click="ButtonOpenTempFolder_Click" Height="38" VerticalAlignment="Bottom"/>
-                    <TextBox x:Name="TextBoxCustomTempPath" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="107,0,88,10" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="27" VerticalAlignment="Bottom"/>
-                    <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="0,0,10,10" Click="ButtonSetTempPath_Click" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="73"/>
-                    <Button x:Name="ButtonDeleteTempFiles" Content="Delete Temp Files" HorizontalAlignment="Left" Margin="165,0,0,71" Width="152" Background="{x:Null}" Click="ButtonDeleteTempFiles_Click" Height="38" VerticalAlignment="Bottom" BorderBrush="#FFFD0202"/>
-                    <GroupBox x:Name="GroubBoxVersion" Header="GroupBox" Margin="0,10,10,0" Height="171" VerticalAlignment="Top" HorizontalAlignment="Right" Width="390">
+                    <Button x:Name="ButtonOpenTempFolder" Content="{DynamicResource open_temp_folder}" HorizontalAlignment="Right" Margin="0,0,48,10" Width="57" Background="{x:Null}" Click="ButtonOpenTempFolder_Click" Height="33" VerticalAlignment="Bottom"/>
+                    <TextBox x:Name="TextBoxCustomTempPath" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="107,0,181,10" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="33" VerticalAlignment="Bottom"/>
+                    <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="0,0,110,10" Click="ButtonSetTempPath_Click" Height="33" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="66"/>
+                    <Button x:Name="ButtonDeleteTempFiles" Content="🗑" Margin="0,0,10,10" Background="{x:Null}" Click="ButtonDeleteTempFiles_Click" Height="33" VerticalAlignment="Bottom" BorderBrush="#FFFD0202" HorizontalAlignment="Right" Width="33"/>
+                    <GroupBox x:Name="GroubBoxVersion" Header="GroupBox" Margin="0,10,10,0" Height="160" VerticalAlignment="Top" HorizontalAlignment="Right" Width="369">
                         <Grid>
                             <Label Content="Theme:" Margin="5,6,0,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Left" Width="49"/>
                             <TextBlock Margin="70,12,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="282"><Hyperlink NavigateUri="https://mahapps.com/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://mahapps.com/"/></Hyperlink></TextBlock>
@@ -958,9 +958,9 @@
 
                         </Grid>
                     </GroupBox>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchTempFolder" Header="Custom Temp Path" HorizontalAlignment="Left" Margin="14,0,0,7" VerticalAlignment="Bottom" Toggled="ToggleSwitchTempFolder_Toggled"/>
-                    <GroupBox Header="Theme" Height="112" Margin="0,175,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="390">
-                        <Grid HorizontalAlignment="Left" Height="79" Margin="0,0,0,-2" VerticalAlignment="Top" Width="386">
+                    <mah:ToggleSwitch x:Name="ToggleSwitchTempFolder" Header="{DynamicResource custom_temp_path}" HorizontalAlignment="Left" Margin="14,0,0,7" VerticalAlignment="Bottom" Toggled="ToggleSwitchTempFolder_Toggled"/>
+                    <GroupBox Header="{DynamicResource theme}" Height="112" Margin="0,175,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="369">
+                        <Grid HorizontalAlignment="Left" Height="79" Margin="0,0,0,-2" VerticalAlignment="Top" Width="359">
                             <ComboBox x:Name="ComboBoxAccentTheme" HorizontalAlignment="Left" Margin="89,0,0,41" VerticalAlignment="Bottom" Width="80">
                                 <ComboBoxItem Content="Blue" Foreground="#0767B3" IsSelected="True"/>
                                 <ComboBoxItem Content="Red" Foreground="#EA4333"/>
@@ -992,11 +992,11 @@
                                 <ComboBoxItem Content="Dark"/>
                             </ComboBox>
                             <Label Content="Base Theme:" HorizontalAlignment="Left" Margin="8,0,0,10" FontSize="12" Height="26" VerticalAlignment="Bottom" RenderTransformOrigin="0.346,0.526"/>
-                            <Button x:Name="ButtonSetTheme" Content="Set Theme" HorizontalAlignment="Left" Margin="185,0,0,26" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetTheme_Click"/>
-                            <Button x:Name="ButtonSetBGImage" Content="Set BG Image" HorizontalAlignment="Left" Margin="281,0,0,26" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetBGImage_Click"/>
+                            <Button x:Name="ButtonSetTheme" Content="Set Theme" HorizontalAlignment="Left" Margin="185,0,0,39" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetTheme_Click"/>
+                            <Button x:Name="ButtonSetBGImage" Content="Set BG Image" HorizontalAlignment="Left" Margin="185,0,0,8" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetBGImage_Click"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Batch Settings" HorizontalAlignment="Left" Height="112" Margin="10,175,0,0" VerticalAlignment="Top" Width="470">
+                    <GroupBox Header="{DynamicResource batch_settings}" HorizontalAlignment="Left" Height="112" Margin="355,10,0,0" VerticalAlignment="Top" Width="296">
                         <Grid HorizontalAlignment="Left" Height="76" VerticalAlignment="Top" Width="460">
                             <Label Content="Container:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="111" FontSize="14"/>
                             <ComboBox x:Name="ComboBoxContainerBatchEncoding" HorizontalAlignment="Left" Margin="165,12,0,0" VerticalAlignment="Top" Width="90" ToolTip="Output Container used in Batch Mode" SelectionChanged="ToggleSwitchShutdownAfterEncode_Toggled" Height="27">
@@ -1009,13 +1009,24 @@
                             <CheckBox x:Name="CheckBoxBatchWithDifferentPresets" Content="Encode with Presets:" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" FontSize="14" ToolTip="Encodes each batch file with the selected presets." Checked="CheckBoxBatchWithDifferentPresets_Checked"/>
                         </Grid>
                     </GroupBox>
+                    <GroupBox Header="Language" HorizontalAlignment="Left" Height="112" Margin="355,175,0,0" VerticalAlignment="Top" Width="296">
+                        <Grid HorizontalAlignment="Left" Height="79" Margin="0,0,0,-2" VerticalAlignment="Top" Width="286">
+                            <ComboBox x:Name="ComboBoxUILanguage" HorizontalAlignment="Left" Margin="77,27,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0">
+                                <ComboBoxItem Content="English"/>
+                                <ComboBoxItem Content="Deutsch"/>
+                                <ComboBoxItem Content="Français"/>
+                            </ComboBox>
+                            <Label Content="Language:" HorizontalAlignment="Left" Margin="10,27,0,0" VerticalAlignment="Top" Width="67"/>
+                            <Button x:Name="ButtonSaveUILanguage" Content="Save" HorizontalAlignment="Left" Margin="201,27,0,0" VerticalAlignment="Top" Width="75" Height="26" Click="ButtonSaveUILanguage_Click"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </mah:MetroTabItem>
         </mah:MetroAnimatedSingleRowTabControl>
         <Button x:Name="ButtonOpenDestination" Margin="164,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="138" Background="{x:Null}" Click="ButtonOpenDestination_Click" BorderBrush="#FF707070">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
                 <Image HorizontalAlignment="Left" Height="51" VerticalAlignment="Top" Width="48" Source="img/save.png" Canvas.Top="-6" Canvas.Left="-10"/>
-                <Label Content="Destination" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="34" Height="30" Canvas.Top="3" FontSize="13" />
+                <Label Content="{DynamicResource destination}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.463,0.491" Canvas.Left="32" Height="30" Canvas.Top="3" FontSize="13" Width="86" />
             </Canvas>
         </Button>
         <Button x:Name="ButtonStartEncode" Margin="307,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="135" Background="{x:Null}" BorderBrush="#FF707070" Click="ButtonStartEncode_Click">
@@ -1029,8 +1040,7 @@
         <Button x:Name="ButtonStopEncode" Margin="447,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="135" Background="{x:Null}" BorderBrush="#FF707070" Click="ButtonStopEncode_Click">
             <Canvas HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="114">
                 <Image HorizontalAlignment="Left" Height="47" VerticalAlignment="Top" Width="48" Source="img/stop.png" Canvas.Top="-8"/>
-                <Label Content="Cancel" Canvas.Left="53" Height="30" Width="53" FontSize="13"/>
-
+                <Label Content="{DynamicResource cancel}" Canvas.Left="43" Height="30" Width="84" FontSize="13"/>
             </Canvas>
         </Button>
         <Label Content="Preset:" HorizontalAlignment="Left" Margin="21,78,0,0" VerticalAlignment="Top" Height="29"/>
