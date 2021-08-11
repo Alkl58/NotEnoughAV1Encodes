@@ -1754,38 +1754,32 @@ namespace NotEnoughAV1Encodes
 
         public void GetSubtitleTracks()
         {
-            //Creates Audio Directory in the temp dir
-            if (!Directory.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles")))
-                Directory.CreateDirectory(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles"));
+            MediaInfo mediaInfo = new MediaInfo();
+            mediaInfo.Open(Global.Video_Path);
 
-            //This function gets subtitle information
-            Process getSubtitles = new Process
+            List<string> subs_mediainfo = new List<string>();
+
+            foreach (int index in Enumerable.Range(0, 5))
             {
-                StartInfo = new ProcessStartInfo()
+                try
                 {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "cmd.exe",
-                    WorkingDirectory = Global.FFmpeg_Path,
-                    Arguments = "/C ffprobe.exe -i " + '\u0022' + Global.Video_Path + '\u0022' + " -v error -select_streams s -show_entries stream=codec_name:stream_tags=language -of csv=p=0",
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true
+                    subs_mediainfo.Add(mediaInfo.Get(StreamKind.Text, index, "Format"));
                 }
-            };
-            getSubtitles.Start();
-            string subs = getSubtitles.StandardOutput.ReadToEnd();
-            getSubtitles.WaitForExit();
+                catch { }
+            }
 
-            //Splits the output from ffprobe
-            string[] result = subs.Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            mediaInfo.Close();
+
+            //Creates Audio Directory in the temp dir
+            if (!Directory.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles")) && subs_mediainfo.Any())
+                Directory.CreateDirectory(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles"));
 
             int a = 0;
             int b = 0;
             //Iterates over the lines from the splitted output
-            foreach (string line in result)
+            foreach (string line in subs_mediainfo)
             {
-                if (line.Contains("hdmv_pgs_subtitle") || line.Contains("ass") || line.Contains("ssa") || line.Contains("subrip") || line.Contains("dvd_subtitle"))
+                if (line.Contains("PGS") || line.Contains("ASS") || line.Contains("SSA") || line.Contains("UTF-8") || line.Contains("VobSub"))
                 {
                     string tempName = "";
                     Process process = new Process();
@@ -1795,27 +1789,27 @@ namespace NotEnoughAV1Encodes
                     startInfo.FileName = "cmd.exe";
                     startInfo.WorkingDirectory = Global.FFmpeg_Path;
 
-                    if (line.Contains("hdmv_pgs_subtitle"))
+                    if (line.Contains("PGS"))
                     {
                         startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_" + b + ".sup") + '\u0022';
                         tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_" + b + ".sup");
                     }
-                    else if (line.Contains("ass"))
+                    else if (line.Contains("ASS"))
                     {
                         startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ass_" + b + ".ass") + '\u0022';
                         tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ass_" + b + ".ass");
                     }
-                    else if (line.Contains("subrip"))
+                    else if (line.Contains("UTF-8"))
                     {
                         startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "subrip_" + b + ".srt") + '\u0022';
                         tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "subrip_" + b + ".srt");
                     }
-                    else if (line.Contains("ssa"))
+                    else if (line.Contains("SSA"))
                     {
                         startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ssa_" + b + ".ssa") + '\u0022';
                         tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ssa_" + b + ".ssa");
                     }
-                    else if (line.Contains("dvd_subtitle"))
+                    else if (line.Contains("VobSub"))
                     {
                         startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".mkv") + '\u0022';
                     }
@@ -1824,7 +1818,7 @@ namespace NotEnoughAV1Encodes
                     process.Start();
                     process.WaitForExit();
 
-                    if (line.Contains("dvd_subtitle") == true)
+                    if (line.Contains("VobSub") == true)
                     {
                         // Extract dvdsub from mkv with mkvextract
                         startInfo.WindowStyle = ProcessWindowStyle.Hidden;

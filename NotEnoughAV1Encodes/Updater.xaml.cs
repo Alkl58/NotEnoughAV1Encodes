@@ -267,11 +267,9 @@ namespace NotEnoughAV1Encodes
                     {
                         File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.txt"));
                         File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.exe"));
-                        File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffprobe.exe"));
                     }
 
                     File.Move(Path.Combine(CurrentDir, "Apps", "ffmpeg", Git_FFmpeg_Name, "bin", "ffmpeg.exe"), Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.exe"));
-                    File.Move(Path.Combine(CurrentDir, "Apps", "ffmpeg", Git_FFmpeg_Name, "bin", "ffprobe.exe"), Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffprobe.exe"));
 
                     File.WriteAllText(Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.txt"), FFmpegUpdateVersion);
 
