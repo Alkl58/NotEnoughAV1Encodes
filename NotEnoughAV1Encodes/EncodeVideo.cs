@@ -63,7 +63,7 @@ namespace NotEnoughAV1Encodes
                                     }
 
                                     // Saves encoder progress to log file
-                                    string ffmpeg_progress = " -progress " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022';
+                                    string ffmpeg_progress = " -an -progress " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Progress", "split" + index.ToString("D5") + "_progress.log") + '\u0022';
 
                                     string ffmpeg_input = InputVideo + " " + MainWindow.FilterCommand + Pixel_Format + " " + MainWindow.VSYNC + " ";
 
@@ -125,7 +125,7 @@ namespace NotEnoughAV1Encodes
                                     if (!MainWindow.OnePass)
                                     {
                                         // Creates a different progress file for the second pass (avoids negative frame progressbar)
-                                        ffmpeg_progress = " -progress " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Progress", "split" + index.ToString("D5") + "_progress_2nd.log") + '\u0022';
+                                        ffmpeg_progress = " -an -progress " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Progress", "split" + index.ToString("D5") + "_progress_2nd.log") + '\u0022';
 
                                         string encoderCMD = " -pass 2 " + Final_Encoder_Command;
 
