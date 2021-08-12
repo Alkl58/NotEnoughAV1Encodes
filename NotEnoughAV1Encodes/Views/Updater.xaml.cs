@@ -7,9 +7,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace NotEnoughAV1Encodes
 {
@@ -54,6 +56,15 @@ namespace NotEnoughAV1Encodes
             ParseGyanFFmpeg();
             ParseJeremyleeJSON();
             CompareLocalVersion();
+        }
+
+        private void ToggleAllButtons(bool _toggle)
+        {
+            ButtonUpdateProgram.IsEnabled = _toggle;
+            ButtonUpdateFFmpeg.IsEnabled = _toggle;
+            ButtonUpdateAomenc.IsEnabled = _toggle;
+            ButtonUpdateRav1e.IsEnabled = _toggle;
+            ButtonUpdateSVTAV1.IsEnabled = _toggle;
         }
 
         private void ParseNEAV1EGithub()
@@ -248,7 +259,8 @@ namespace NotEnoughAV1Encodes
 
         private async void ButtonUpdateFFmpeg_Click(object sender, RoutedEventArgs e)
         {
-            ProgressBar.IsIndeterminate = true;
+            ToggleAllButtons(false);
+
             // Creates the ffmpeg folder if not existent
             if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg")))
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "ffmpeg"));
@@ -280,12 +292,15 @@ namespace NotEnoughAV1Encodes
                 }
             }
 
-            ProgressBar.IsIndeterminate = false;
+            ToggleAllButtons(true);
+
+            LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Finished updating FFmpeg");
         }
 
         private async void ButtonUpdateAomenc_Click(object sender, RoutedEventArgs e)
         {
-            ProgressBar.IsIndeterminate = true;
+            ToggleAllButtons(false);
+
             // Creates the aomenc folder if not existent
             if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "aomenc")))
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "aomenc"));
@@ -311,12 +326,16 @@ namespace NotEnoughAV1Encodes
                     File.Delete(Path.Combine(CurrentDir, "Apps", "aom.7z"));
                 CompareLocalVersion();
             }
-            ProgressBar.IsIndeterminate = false;
+
+            ToggleAllButtons(true);
+
+            LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Finished updating Aomenc");
         }
 
         private async void ButtonUpdateRav1e_Click(object sender, RoutedEventArgs e)
         {
-            ProgressBar.IsIndeterminate = true;
+            ToggleAllButtons(false);
+
             // Creates the rav1e folder if not existent
             if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "rav1e")))
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "rav1e"));
@@ -339,12 +358,16 @@ namespace NotEnoughAV1Encodes
                     File.Delete(Path.Combine(CurrentDir, "Apps", "rav1e.7z"));
                 CompareLocalVersion();
             }
-            ProgressBar.IsIndeterminate = false;
+
+            ToggleAllButtons(true);
+
+            LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Finished updating Rav1e");
         }
 
         private async void ButtonUpdateSVTAV1_Click(object sender, RoutedEventArgs e)
         {
-            ProgressBar.IsIndeterminate = true;
+            ToggleAllButtons(false);
+
             // Creates the svt-av1 folder if not existent
             if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1")))
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "svt-av1"));
@@ -370,7 +393,10 @@ namespace NotEnoughAV1Encodes
                     File.Delete(Path.Combine(CurrentDir, "Apps", "svt-av1.7z"));
                 CompareLocalVersion();
             }
-            ProgressBar.IsIndeterminate = false;
+
+            ToggleAllButtons(true);
+
+            LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Finished updating SVT-AV1");
         }
 
         private async Task DownloadBin(string DownloadURL, string PathToFile)
@@ -378,11 +404,21 @@ namespace NotEnoughAV1Encodes
             // Downloads the archive provided in the Link
             try
             {
-                using (WebClient webClient = new WebClient())
+                WebClient webClient = new WebClient();
+                webClient.DownloadProgressChanged += (s, e) =>
                 {
-                    var ddl = new Uri(DownloadURL);
-                    await webClient.DownloadFileTaskAsync(ddl, PathToFile);
-                }
+                    ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = e.ProgressPercentage);
+                    LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = Math.Round(e.BytesReceived / 1024f / 1024f, 1) + "MB / " + Math.Round(e.TotalBytesToReceive / 1024f / 1024f, 1) + "MB - " + e.ProgressPercentage + "%");
+                    this.Dispatcher.Invoke(() => Title = "Updater " + e.ProgressPercentage + "%");
+                };
+                webClient.DownloadFileCompleted += (s, e) =>
+                {
+                    ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = 0);
+                    LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Extracting...");
+                    this.Dispatcher.Invoke(() => Title = "Updater");
+                };
+
+                await webClient.DownloadFileTaskAsync(new Uri(DownloadURL), PathToFile);
             }
             catch { }
         }

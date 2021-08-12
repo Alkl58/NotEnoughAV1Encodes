@@ -109,16 +109,16 @@
     <Compile Include="Helpers.cs" />
     <Compile Include="Kill.cs" />
     <Compile Include="MediaInfo\MediaInfo.cs" />
-    <Compile Include="PopupWindow.xaml.cs">
+    <Compile Include="Views\PopupWindow.xaml.cs">
       <DependentUpon>PopupWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SavePreset.xaml.cs">
+    <Compile Include="Views\SavePreset.xaml.cs">
       <DependentUpon>SavePreset.xaml</DependentUpon>
     </Compile>
     <Compile Include="SmallFunctions.cs" />
     <Compile Include="Splitting.cs" />
     <Compile Include="Suspend.cs" />
-    <Compile Include="Updater.xaml.cs">
+    <Compile Include="Views\Updater.xaml.cs">
       <DependentUpon>Updater.xaml</DependentUpon>
     </Compile>
     <Compile Include="VideoMuxing.cs" />
@@ -147,25 +147,25 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="OpenVideoWindow.xaml">
+    <Page Include="Views\OpenVideoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PopupWindow.xaml">
+    <Page Include="Views\PopupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SavePreset.xaml">
+    <Page Include="Views\SavePreset.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Updater.xaml">
+    <Page Include="Views\Updater.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OpenVideoWindow.xaml.cs">
+    <Compile Include="Views\OpenVideoWindow.xaml.cs">
       <DependentUpon>OpenVideoWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
