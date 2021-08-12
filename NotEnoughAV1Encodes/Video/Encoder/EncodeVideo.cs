@@ -40,14 +40,17 @@ namespace NotEnoughAV1Encodes
                                 {
                                     // One Pass Encoding
                                     Process ffmpegProcess = new Process();
-                                    ProcessStartInfo startInfo = new ProcessStartInfo();
-                                    startInfo.UseShellExecute = true;
-
-                                    startInfo.FileName = "cmd.exe";
-                                    startInfo.WorkingDirectory = Global.FFmpeg_Path;
+                                    ProcessStartInfo startInfo = new ProcessStartInfo
+                                    {
+                                        UseShellExecute = true,
+                                        FileName = "cmd.exe",
+                                        WorkingDirectory = Global.FFmpeg_Path
+                                    };
 
                                     if (!Show_Terminal)
+                                    {
                                         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                    }
 
                                     string InputVideo = "";
 

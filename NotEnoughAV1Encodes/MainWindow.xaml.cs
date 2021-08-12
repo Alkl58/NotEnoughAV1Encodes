@@ -423,8 +423,10 @@ namespace NotEnoughAV1Encodes
         private string SubtitleFiledialog()
         {
             // Opens OpenFileDialog for subtitles
-            OpenFileDialog openSubtitleFileDialog = new OpenFileDialog();
-            openSubtitleFileDialog.Filter = "Subtitle Files|*.pgs;*.srt;*.sup;*.ass;*.ssa;|All Files|*.*";
+            OpenFileDialog openSubtitleFileDialog = new OpenFileDialog
+            {
+                Filter = "Subtitle Files|*.pgs;*.srt;*.sup;*.ass;*.ssa;|All Files|*.*"
+            };
             Nullable<bool> result = openSubtitleFileDialog.ShowDialog();
             if (result == true)
             {
@@ -1783,11 +1785,13 @@ namespace NotEnoughAV1Encodes
                 {
                     string tempName = "";
                     Process process = new Process();
-                    ProcessStartInfo startInfo = new ProcessStartInfo();
-                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    startInfo.UseShellExecute = true;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.WorkingDirectory = Global.FFmpeg_Path;
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        UseShellExecute = true,
+                        FileName = "cmd.exe",
+                        WorkingDirectory = Global.FFmpeg_Path
+                    };
 
                     if (line.Contains("PGS"))
                     {
@@ -2357,11 +2361,13 @@ namespace NotEnoughAV1Encodes
             string input_test = " -y -i " + '\u0022' + Path.Combine(Directory.GetCurrentDirectory(), "sample", "test_sample.mp4") + '\u0022';
 
             Process ffmpegProcess = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.UseShellExecute = true;
-            startInfo.FileName = "cmd.exe";
-            startInfo.WorkingDirectory = Global.FFmpeg_Path;
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                UseShellExecute = true,
+                FileName = "cmd.exe",
+                WorkingDirectory = Global.FFmpeg_Path,
+                WindowStyle = ProcessWindowStyle.Hidden
+            };
 
             string test_command = " -t 00:00.30 -pix_fmt yuv420p";
             if (encoder_index <= 4)
@@ -2554,8 +2560,10 @@ namespace NotEnoughAV1Encodes
             if (BatchEncoding == false)
             {
                 // Save File Dialog for single file saving
-                SaveFileDialog saveVideoFileDialog = new SaveFileDialog();
-                saveVideoFileDialog.Filter = "Video|*.mkv;*.webm;*.mp4";
+                SaveFileDialog saveVideoFileDialog = new SaveFileDialog
+                {
+                    Filter = "Video|*.mkv;*.webm;*.mp4"
+                };
                 // Avoid NULL being returned resulting in crash
                 Nullable<bool> result = saveVideoFileDialog.ShowDialog();
                 if (result == true)
