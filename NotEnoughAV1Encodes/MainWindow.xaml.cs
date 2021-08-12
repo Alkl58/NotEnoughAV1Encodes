@@ -958,9 +958,6 @@ namespace NotEnoughAV1Encodes
                         // Get Source Information
                         GetSourceInformation(true);
 
-                        // Set Bit-Depth and Color Format
-                        AutoSetBitDepthAndColorFormat(Global.Video_Path);
-
                         // Set Subtitle
                         if (ComboBoxContainerBatchEncoding.SelectedIndex == 2)
                         {
@@ -1019,9 +1016,6 @@ namespace NotEnoughAV1Encodes
 
                             // Get Source Information
                             GetSourceInformation(true);
-
-                            // Set Bit-Depth and Color Format
-                            AutoSetBitDepthAndColorFormat(Global.Video_Path);
 
                             // Set Subtitle
                             if (ComboBoxContainerBatchEncoding.SelectedIndex == 2)
