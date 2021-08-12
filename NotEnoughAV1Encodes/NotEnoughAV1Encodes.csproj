@@ -102,12 +102,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="EncodeAudio.cs" />
+    <Compile Include="Audio\Encoder\EncodeAudio.cs" />
     <Compile Include="Video\Encoder\EncodeVideo.cs" />
     <Compile Include="Video\Encoder\EncodeVideoPipe.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="Kill.cs" />
+    <Compile Include="win32\Kill.cs" />
     <Compile Include="MediaInfo\MediaInfo.cs" />
     <Compile Include="Views\PopupWindow.xaml.cs">
       <DependentUpon>PopupWindow.xaml</DependentUpon>
@@ -116,8 +116,9 @@
       <DependentUpon>SavePreset.xaml</DependentUpon>
     </Compile>
     <Compile Include="SmallFunctions.cs" />
-    <Compile Include="Splitting.cs" />
-    <Compile Include="Suspend.cs" />
+    <Compile Include="Video\Splitter\Splitting.cs" />
+    <Compile Include="win32\Resume.cs" />
+    <Compile Include="win32\Suspend.cs" />
     <Compile Include="Views\Updater.xaml.cs">
       <DependentUpon>Updater.xaml</DependentUpon>
     </Compile>
@@ -250,6 +251,10 @@
   <ItemGroup>
     <Resource Include="turbovid.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="MediaInfo\MediaInfo.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

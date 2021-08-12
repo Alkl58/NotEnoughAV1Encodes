@@ -2641,7 +2641,7 @@ namespace NotEnoughAV1Encodes
                         // Resume all PIDs
                         foreach (int pid in Global.Launched_PIDs)
                         {
-                            Suspend.ResumeProcessTree(pid);
+                            Resume.ResumeProcessTree(pid);
                         }
                     }
 
