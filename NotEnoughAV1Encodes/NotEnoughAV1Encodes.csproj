@@ -103,8 +103,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="EncodeAudio.cs" />
-    <Compile Include="EncodeVideo.cs" />
-    <Compile Include="EncodeVideoPipe.cs" />
+    <Compile Include="Video\Encoder\EncodeVideo.cs" />
+    <Compile Include="Video\Encoder\EncodeVideoPipe.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Kill.cs" />
@@ -121,7 +121,7 @@
     <Compile Include="Views\Updater.xaml.cs">
       <DependentUpon>Updater.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VideoMuxing.cs" />
+    <Compile Include="Video\Muxer\VideoMuxing.cs" />
     <Page Include="lang\de-DE.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

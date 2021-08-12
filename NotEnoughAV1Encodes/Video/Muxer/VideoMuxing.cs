@@ -39,6 +39,8 @@ namespace NotEnoughAV1Encodes
             // Replace ' with "'", else muxing will fail with single quotes in filename
             Global.temp_path_folder.Replace("'", "\"'\"");
 
+            // ═══════════════════════════════════════ Chunk Muxing ══════════════════════════════════════
+
             if (!audio && !vfr && !sub)
             {
                 ffmpegCommand = "/C ffmpeg.exe -y -f concat -safe 0 -i " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks", "chunks.txt") + '\u0022' + " -c copy " + '\u0022' + Global.Video_Output + '\u0022';
