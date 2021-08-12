@@ -1207,6 +1207,7 @@ namespace NotEnoughAV1Encodes
                 // Progressbar Label when encoding finished
                 TimeSpan timespent = DateTime.Now - StartTime;
                 LabelProgressBar.Content = "Finished Encoding - Elapsed Time " + timespent.ToString("hh\\:mm\\:ss") + " - avg " + Math.Round(TotalFrames / timespent.TotalSeconds, 2) + "fps";
+                Title = "NEAV1E";
                 Helpers.Logging(LabelProgressBar.Content.ToString());
                 ProgressBar.Foreground = new SolidColorBrush(Color.FromRgb(6, 176, 37));
                 ProgressBar.Value = 0;
@@ -2774,7 +2775,8 @@ namespace NotEnoughAV1Encodes
                 string fileName = "";
                 if (BatchEncoding == true)
                     fileName = "Encoding: " + Global.temp_path_folder + " - ";
-                LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = fileName + totalencodedframes + " / " + totalframes + " Frames - " + Math.Round(totalencodedframes / timespent.TotalSeconds, 2) + "fps - " + Math.Round(((timespent.TotalSeconds / totalencodedframes) * (totalframes - totalencodedframes)) / 60, MidpointRounding.ToEven) + "min left");
+                LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = fileName + totalencodedframes + " / " + totalframes + " Frames - avg " + Math.Round(totalencodedframes / timespent.TotalSeconds, 2) + "fps - Elapsed Time " + timespent.ToString("hh\\:mm\\:ss") + " - " + ((decimal)totalencodedframes / (decimal)totalframes).ToString("0.00%"));
+                this.Dispatcher.Invoke(() => Title = "NEAV1E - " + ((decimal)totalencodedframes / (decimal)totalframes).ToString("0.00%"));
                 ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = totalencodedframes);
             }
             catch { }
