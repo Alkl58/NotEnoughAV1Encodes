@@ -12,14 +12,16 @@ namespace NotEnoughAV1Encodes
         public static BitmapImage Get_Uri_Source(string name)
         {
             // Returns lokal Bitmap Uri Images for UI usage
-            var uriSource = new Uri(@"/NotEnoughAV1Encodes;component/img/" + name, UriKind.Relative);
+            Uri uriSource = new Uri(@"/NotEnoughAV1Encodes;component/img/" + name, UriKind.Relative);
             return new BitmapImage(uriSource);
         }
 
         public static void Create_Temp_Folder(string path)
         {
             if (!Directory.Exists(path))
+            {
                 Directory.CreateDirectory(path);
+            }
         }
 
         public static void Logging(string log)
@@ -36,7 +38,7 @@ namespace NotEnoughAV1Encodes
         {
             // Gets Core Count
             int coreCount = 0;
-            foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
+            foreach (System.Management.ManagementBaseObject item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
             {
                 coreCount += int.Parse(item["NumberOfCores"].ToString());
             }
@@ -47,8 +49,8 @@ namespace NotEnoughAV1Encodes
         {
             // This function checks if the provided video file has compatible unicode characters in the filename
             // Reference: codesnippets.fesslersoft.de/how-to-check-if-a-string-is-unicode-in-c-and-vb-net/
-            var asciiBytesCount = Encoding.ASCII.GetByteCount(file_name);
-            var unicodBytesCount = Encoding.UTF8.GetByteCount(file_name);
+            int asciiBytesCount = Encoding.ASCII.GetByteCount(file_name);
+            int unicodBytesCount = Encoding.UTF8.GetByteCount(file_name);
             if (asciiBytesCount != unicodBytesCount)
             {
                 MessageBox.Show("The filename contains non unicode characters.\n\nPlease rename your file before proceeding to guarantee a successful encode!");

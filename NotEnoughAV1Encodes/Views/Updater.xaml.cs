@@ -28,19 +28,19 @@ namespace NotEnoughAV1Encodes
         private static string FFmpegCurrentVersion;
 
         // aomenc Update
-        public static string AomencUpdateVersion;
+        private static string AomencUpdateVersion;
 
-        public static string AomencCurrentVersion;
+        private static string AomencCurrentVersion;
 
         // rav1e Update
-        public static string Rav1eUpdateVersion;
+        private static string Rav1eUpdateVersion;
 
-        public static string Rav1eCurrentVersion;
+        private static string Rav1eCurrentVersion;
 
         // SVT-AV1 Update
-        public static string SVTAV1UpdateVersion;
+        private static string SVTAV1UpdateVersion;
 
-        public static string SVTAV1CurrentVersion;
+        private static string SVTAV1CurrentVersion;
 
         private static string Git_FFmpeg_Name = "";
 
@@ -72,9 +72,9 @@ namespace NotEnoughAV1Encodes
             try
             {
                 //Parses the latest neav1e release date directly from Github
-                var client = new GitHubClient(new ProductHeaderValue("NotEnoughAV1Encodes"));
-                var releases = client.Repository.Release.GetAll("Alkl58", "NotEnoughAV1Encodes").Result;
-                var latest = releases[0];
+                GitHubClient client = new GitHubClient(new ProductHeaderValue("NotEnoughAV1Encodes"));
+                System.Collections.Generic.IReadOnlyList<Release> releases = client.Repository.Release.GetAll("Alkl58", "NotEnoughAV1Encodes").Result;
+                Release latest = releases[0];
                 Neav1eUpdateVersion = Convert.ToDouble(latest.TagName.Remove(0, 1).Replace(".", ","));
                 LabelUpdateProgramVersion.Content = Neav1eUpdateVersion;
                 // Compares NEAV1E Versions and sets the color of the labels
@@ -115,7 +115,7 @@ namespace NotEnoughAV1Encodes
         {
             try
             {
-                var jsonWeb = new WebClient().DownloadString("https://jeremylee.sh/data/bin/packages.json");
+                string jsonWeb = new WebClient().DownloadString("https://jeremylee.sh/data/bin/packages.json");
                 dynamic json = JsonConvert.DeserializeObject(jsonWeb);
 
                 string aomencVersion = json.apps["aomenc.exe"].datetime;
@@ -263,7 +263,9 @@ namespace NotEnoughAV1Encodes
 
             // Creates the ffmpeg folder if not existent
             if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg")))
+            {
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "ffmpeg"));
+            }
 
             // Downloads ffmpeg
             await Task.Run(() => DownloadBin("https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z", Path.Combine(CurrentDir, "Apps", "ffmpeg-git-full.7z")));
@@ -315,15 +317,23 @@ namespace NotEnoughAV1Encodes
                 {
                     // Deletes aomdec
                     if (File.Exists(Path.Combine(CurrentDir, "Apps", "aomenc", "aomdec.exe")))
+                    {
                         File.Delete(Path.Combine(CurrentDir, "Apps", "aomenc", "aomdec.exe"));
+                    }
                     // Deletes txt file
                     if (File.Exists(Path.Combine(CurrentDir, "Apps", "aomenc", "aomenc.txt")))
+                    {
                         File.Delete(Path.Combine(CurrentDir, "Apps", "aomenc", "aomenc.txt"));
+                    }
+
                     File.WriteAllText(Path.Combine(CurrentDir, "Apps", "aomenc", "aomenc.txt"), AomencUpdateVersion);
                 }
                 // Deletes downloaded archive
                 if (File.Exists(Path.Combine(CurrentDir, "Apps", "aom.7z")))
+                {
                     File.Delete(Path.Combine(CurrentDir, "Apps", "aom.7z"));
+                }
+
                 CompareLocalVersion();
             }
 
@@ -350,12 +360,18 @@ namespace NotEnoughAV1Encodes
                 {
                     // Deletes txt file
                     if (File.Exists(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.txt")))
+                    {
                         File.Delete(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.txt"));
+                    }
+
                     File.WriteAllText(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.txt"), Rav1eUpdateVersion);
                 }
                 // Deletes downloaded archive
                 if (File.Exists(Path.Combine(CurrentDir, "Apps", "rav1e.7z")))
+                {
                     File.Delete(Path.Combine(CurrentDir, "Apps", "rav1e.7z"));
+                }
+
                 CompareLocalVersion();
             }
 
@@ -370,7 +386,9 @@ namespace NotEnoughAV1Encodes
 
             // Creates the svt-av1 folder if not existent
             if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1")))
+            {
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "svt-av1"));
+            }
             // Downloads rav1e
             await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/svt-av1.7z", Path.Combine(CurrentDir, "Apps", "svt-av1.7z")));
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1.7z")))
@@ -382,15 +400,23 @@ namespace NotEnoughAV1Encodes
                 {
                     // Deletes SVT-AV1 Decoder
                     if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1", "SvtAv1EncApp.exe")))
+                    {
                         File.Delete(Path.Combine(CurrentDir, "Apps", "svt-av1", "SvtAv1DecApp.exe"));
+                    }
                     // Deletes txt file
                     if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt")))
+                    {
                         File.Delete(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt"));
+                    }
+
                     File.WriteAllText(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt"), SVTAV1UpdateVersion);
                 }
                 // Deletes downloaded archive
                 if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1.7z")))
+                {
                     File.Delete(Path.Combine(CurrentDir, "Apps", "svt-av1.7z"));
+                }
+
                 CompareLocalVersion();
             }
 
@@ -409,13 +435,13 @@ namespace NotEnoughAV1Encodes
                 {
                     ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = e.ProgressPercentage);
                     LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = Math.Round(e.BytesReceived / 1024f / 1024f, 1) + "MB / " + Math.Round(e.TotalBytesToReceive / 1024f / 1024f, 1) + "MB - " + e.ProgressPercentage + "%");
-                    this.Dispatcher.Invoke(() => Title = "Updater " + e.ProgressPercentage + "%");
+                    Dispatcher.Invoke(() => Title = "Updater " + e.ProgressPercentage + "%");
                 };
                 webClient.DownloadFileCompleted += (s, e) =>
                 {
                     ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = 0);
                     LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Extracting...");
-                    this.Dispatcher.Invoke(() => Title = "Updater");
+                    Dispatcher.Invoke(() => Title = "Updater");
                 };
 
                 await webClient.DownloadFileTaskAsync(new Uri(DownloadURL), PathToFile);

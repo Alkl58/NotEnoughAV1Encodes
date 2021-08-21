@@ -53,7 +53,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>turbovid.ico</ApplicationIcon>
+    <ApplicationIcon>img\turbovid.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -249,7 +249,7 @@
     <Resource Include="img\resume.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="turbovid.ico" />
+    <Resource Include="img\turbovid.ico" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MediaInfo\MediaInfo.dll">

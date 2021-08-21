@@ -23,7 +23,7 @@ namespace NotEnoughAV1Encodes
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             // Closes this window
-            this.Close();
+            Close();
         }
 
         private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
