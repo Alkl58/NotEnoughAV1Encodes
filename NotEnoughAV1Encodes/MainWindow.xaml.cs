@@ -1751,143 +1751,146 @@ namespace NotEnoughAV1Encodes
 
         public void GetSubtitleTracks()
         {
-            MediaInfo mediaInfo = new MediaInfo();
-            mediaInfo.Open(Global.Video_Path);
-
-            List<string> subs_mediainfo = new List<string>();
-
-            foreach (int index in Enumerable.Range(0, 5))
+            if (ToggleSkipSubtitleExtraction.IsOn == false)
             {
-                try
+                MediaInfo mediaInfo = new MediaInfo();
+                mediaInfo.Open(Global.Video_Path);
+
+                List<string> subs_mediainfo = new List<string>();
+
+                foreach (int index in Enumerable.Range(0, 5))
                 {
-                    subs_mediainfo.Add(mediaInfo.Get(StreamKind.Text, index, "Format"));
-                }
-                catch { }
-            }
-
-            mediaInfo.Close();
-
-            //Creates Audio Directory in the temp dir
-            if (!Directory.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles")) && subs_mediainfo.Any())
-                Directory.CreateDirectory(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles"));
-
-            int a = 0;
-            int b = 0;
-            //Iterates over the lines from the splitted output
-            foreach (string line in subs_mediainfo)
-            {
-                if (line.Contains("PGS") || line.Contains("ASS") || line.Contains("SSA") || line.Contains("UTF-8") || line.Contains("VobSub"))
-                {
-                    string tempName = "";
-                    Process process = new Process();
-                    ProcessStartInfo startInfo = new ProcessStartInfo
-                    {
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        UseShellExecute = true,
-                        FileName = "cmd.exe",
-                        WorkingDirectory = Global.FFmpeg_Path
-                    };
-
-                    if (line.Contains("PGS"))
-                    {
-                        startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_" + b + ".sup") + '\u0022';
-                        tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_" + b + ".sup");
-                    }
-                    else if (line.Contains("ASS"))
-                    {
-                        startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ass_" + b + ".ass") + '\u0022';
-                        tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ass_" + b + ".ass");
-                    }
-                    else if (line.Contains("UTF-8"))
-                    {
-                        startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "subrip_" + b + ".srt") + '\u0022';
-                        tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "subrip_" + b + ".srt");
-                    }
-                    else if (line.Contains("SSA"))
-                    {
-                        startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ssa_" + b + ".ssa") + '\u0022';
-                        tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ssa_" + b + ".ssa");
-                    }
-                    else if (line.Contains("VobSub"))
-                    {
-                        startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".mkv") + '\u0022';
-                    }
-
-                    process.StartInfo = startInfo;
-                    process.Start();
-                    process.WaitForExit();
-
-                    if (line.Contains("VobSub") == true)
-                    {
-                        // Extract dvdsub from mkv with mkvextract
-                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                        startInfo.UseShellExecute = true;
-                        startInfo.FileName = "cmd.exe";
-                        startInfo.WorkingDirectory = Global.MKVToolNix_Path;
-
-                        startInfo.Arguments = "/C mkvextract.exe " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".mkv") + '\u0022' + " tracks 0:" + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".sub") + '\u0022';
-
-                        process.StartInfo = startInfo;
-                        process.Start();
-                        process.WaitForExit();
-
-                        // Convert dvdsub to bluraysub
-                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                        startInfo.UseShellExecute = true;
-                        startInfo.FileName = "cmd.exe";
-                        startInfo.WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "bdsup2sub");
-
-                        startInfo.Arguments = "/C bdsup2sub.exe -o " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_dvd_" + b + ".sup") + '\u0022' + " " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".sub") + '\u0022';
-                        process.StartInfo = startInfo;
-                        process.Start();
-                        process.WaitForExit();
-
-                        // Cleanup
-                        if (File.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_dvd_" + b + ".sup")))
-                        {
-                            try
-                            {
-                                File.Delete(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".sub"));
-                                File.Delete(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".idx"));
-                                File.Delete(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".mkv"));
-                            }
-                            catch { }
-                        }
-
-                        tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_dvd_" + b + ".sup");
-                    }
-
-                    //Sets the ToggleSwitches
-                    if (Path.GetExtension(Global.Video_Output) != ".mp4")
-                    {
-                        if (b == 0) { ToggleSwitchSubtitleActivatedOne.IsOn = true; }
-                        if (b == 1) { ToggleSwitchSubtitleActivatedTwo.IsOn = true; }
-                        if (b == 2) { ToggleSwitchSubtitleActivatedThree.IsOn = true; }
-                        if (b == 3) { ToggleSwitchSubtitleActivatedFour.IsOn = true; }
-                        if (b == 4) { ToggleSwitchSubtitleActivatedFive.IsOn = true; }
-                    }
-
                     try
                     {
-                        if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; }
-                        if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; }
-                        if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; }
-                        if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; }
-                        if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; }
+                        subs_mediainfo.Add(mediaInfo.Get(StreamKind.Text, index, "Format"));
                     }
                     catch { }
-                    b++;
                 }
-                a++;
-            }
-            if (VideoOutputSet && Path.GetExtension(Global.Video_Output) == ".mp4")
-            {
-                ToggleSwitchSubtitleActivatedOne.IsOn = false;
-                ToggleSwitchSubtitleActivatedTwo.IsOn = false;
-                ToggleSwitchSubtitleActivatedThree.IsOn = false;
-                ToggleSwitchSubtitleActivatedFour.IsOn = false;
-                ToggleSwitchSubtitleActivatedFive.IsOn = false;
-            }
+
+                mediaInfo.Close();
+
+                //Creates Audio Directory in the temp dir
+                if (!Directory.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles")) && subs_mediainfo.Any())
+                    Directory.CreateDirectory(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles"));
+
+                int a = 0;
+                int b = 0;
+                //Iterates over the lines from the splitted output
+                foreach (string line in subs_mediainfo)
+                {
+                    if (line.Contains("PGS") || line.Contains("ASS") || line.Contains("SSA") || line.Contains("UTF-8") || line.Contains("VobSub"))
+                    {
+                        string tempName = "";
+                        Process process = new Process();
+                        ProcessStartInfo startInfo = new ProcessStartInfo
+                        {
+                            WindowStyle = ProcessWindowStyle.Hidden,
+                            UseShellExecute = true,
+                            FileName = "cmd.exe",
+                            WorkingDirectory = Global.FFmpeg_Path
+                        };
+
+                        if (line.Contains("PGS"))
+                        {
+                            startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_" + b + ".sup") + '\u0022';
+                            tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_" + b + ".sup");
+                        }
+                        else if (line.Contains("ASS"))
+                        {
+                            startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ass_" + b + ".ass") + '\u0022';
+                            tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ass_" + b + ".ass");
+                        }
+                        else if (line.Contains("UTF-8"))
+                        {
+                            startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "subrip_" + b + ".srt") + '\u0022';
+                            tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "subrip_" + b + ".srt");
+                        }
+                        else if (line.Contains("SSA"))
+                        {
+                            startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ssa_" + b + ".ssa") + '\u0022';
+                            tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "ssa_" + b + ".ssa");
+                        }
+                        else if (line.Contains("VobSub"))
+                        {
+                            startInfo.Arguments = "/C ffmpeg.exe -y -i " + '\u0022' + Global.Video_Path + '\u0022' + " -map 0:s:" + a + " -c:s copy " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".mkv") + '\u0022';
+                        }
+
+                        process.StartInfo = startInfo;
+                        process.Start();
+                        process.WaitForExit();
+
+                        if (line.Contains("VobSub") == true)
+                        {
+                            // Extract dvdsub from mkv with mkvextract
+                            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                            startInfo.UseShellExecute = true;
+                            startInfo.FileName = "cmd.exe";
+                            startInfo.WorkingDirectory = Global.MKVToolNix_Path;
+
+                            startInfo.Arguments = "/C mkvextract.exe " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".mkv") + '\u0022' + " tracks 0:" + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".sub") + '\u0022';
+
+                            process.StartInfo = startInfo;
+                            process.Start();
+                            process.WaitForExit();
+
+                            // Convert dvdsub to bluraysub
+                            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                            startInfo.UseShellExecute = true;
+                            startInfo.FileName = "cmd.exe";
+                            startInfo.WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "bdsup2sub");
+
+                            startInfo.Arguments = "/C bdsup2sub.exe -o " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_dvd_" + b + ".sup") + '\u0022' + " " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".sub") + '\u0022';
+                            process.StartInfo = startInfo;
+                            process.Start();
+                            process.WaitForExit();
+
+                            // Cleanup
+                            if (File.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_dvd_" + b + ".sup")))
+                            {
+                                try
+                                {
+                                    File.Delete(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".sub"));
+                                    File.Delete(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".idx"));
+                                    File.Delete(Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "dvdsub_" + b + ".mkv"));
+                                }
+                                catch { }
+                            }
+
+                            tempName = Path.Combine(Global.temp_path, Global.temp_path_folder, "Subtitles", "pgs_dvd_" + b + ".sup");
+                        }
+
+                        //Sets the ToggleSwitches
+                        if (Path.GetExtension(Global.Video_Output) != ".mp4")
+                        {
+                            if (b == 0) { ToggleSwitchSubtitleActivatedOne.IsOn = true; }
+                            if (b == 1) { ToggleSwitchSubtitleActivatedTwo.IsOn = true; }
+                            if (b == 2) { ToggleSwitchSubtitleActivatedThree.IsOn = true; }
+                            if (b == 3) { ToggleSwitchSubtitleActivatedFour.IsOn = true; }
+                            if (b == 4) { ToggleSwitchSubtitleActivatedFive.IsOn = true; }
+                        }
+
+                        try
+                        {
+                            if (b == 0) { TextBoxSubtitleTrackOne.Text = tempName; }
+                            if (b == 1) { TextBoxSubtitleTrackTwo.Text = tempName; }
+                            if (b == 2) { TextBoxSubtitleTrackThree.Text = tempName; }
+                            if (b == 3) { TextBoxSubtitleTrackFour.Text = tempName; }
+                            if (b == 4) { TextBoxSubtitleTrackFive.Text = tempName; }
+                        }
+                        catch { }
+                        b++;
+                    }
+                    a++;
+                }
+                if (VideoOutputSet && Path.GetExtension(Global.Video_Output) == ".mp4")
+                {
+                    ToggleSwitchSubtitleActivatedOne.IsOn = false;
+                    ToggleSwitchSubtitleActivatedTwo.IsOn = false;
+                    ToggleSwitchSubtitleActivatedThree.IsOn = false;
+                    ToggleSwitchSubtitleActivatedFour.IsOn = false;
+                    ToggleSwitchSubtitleActivatedFive.IsOn = false;
+                }
+            } 
         }
 
         // ══════════════════════════════════ Encoder Settings ════════════════════════════════════
@@ -2799,6 +2802,7 @@ namespace NotEnoughAV1Encodes
                     writer.WriteElementString("BatchContainer", ComboBoxContainerBatchEncoding.SelectedIndex.ToString());
                     writer.WriteElementString("ReencodeMessage", reencodeMessage.ToString());
                     writer.WriteElementString("Language", language ?? "English");
+                    writer.WriteElementString("SkipSubtitles", ToggleSkipSubtitleExtraction.IsOn.ToString());
                     writer.WriteEndElement();
                     writer.Close();
                 }
@@ -2832,6 +2836,7 @@ namespace NotEnoughAV1Encodes
                             case "BatchContainer": ComboBoxContainerBatchEncoding.SelectedIndex = int.Parse(n.InnerText); break;
                             case "ReencodeMessage": reencodeMessage = n.InnerText == "True"; break;
                             case "Language": language = n.InnerText; break;
+                            case "SkipSubtitles": ToggleSkipSubtitleExtraction.IsOn = n.InnerText == "True"; break;
                             default: break;
                         }
                     }
