@@ -148,6 +148,7 @@
                             </CheckBox>
                         </Grid>
                     </GroupBox>
+                    <TextBox x:Name="TextBoxWorkerCountOverride" Visibility="Hidden" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="138,319,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="79" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                 </Grid>
             </mah:MetroTabItem>
             <mah:MetroTabItem Header="{DynamicResource filters}">

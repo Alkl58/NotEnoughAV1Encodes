@@ -63,6 +63,7 @@ namespace NotEnoughAV1Encodes
         private bool ShutdownAfterEncode = false;
         private bool UseCustomTempPath = false;
         private bool SkipSubtitleExtraction = false;
+        private bool WorkerOverride = false;
         private string CustomTempPath = null;
         private string BaseTheme = "Light";
         private string AccentTheme = "Blue";
@@ -205,7 +206,6 @@ namespace NotEnoughAV1Encodes
             settings.ShowDialog();
             LoadSettingsTab();
         }
-
 
         private void CheckBoxSkipReencode_Checked(object sender, RoutedEventArgs e)
         {
@@ -748,6 +748,7 @@ namespace NotEnoughAV1Encodes
                     SliderVideoQuality.Value = 50;
                     SliderVideoQuality.Maximum = 63;
                     ComboBoxWorkerCount.SelectedIndex = 0;
+                    TextBoxWorkerCountOverride.Text = "0";
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex == 3)
                 {
@@ -1228,7 +1229,16 @@ namespace NotEnoughAV1Encodes
 
         private void SetTempSettings()
         {
-            EncodeVideo.Worker_Count = int.Parse(ComboBoxWorkerCount.Text);             // Sets the worker count
+            // Sets the worker count
+            if (!WorkerOverride)
+            {
+                EncodeVideo.Worker_Count = int.Parse(ComboBoxWorkerCount.Text);
+            }
+            else
+            {
+                EncodeVideo.Worker_Count = int.Parse(TextBoxWorkerCountOverride.Text);
+            }
+           
             OnePass = ComboBoxVideoPasses.SelectedIndex == 0;                           // Sets the amount of passes (true = 1, false = 2)
             EncodeVideo.Process_Priority = ComboBoxProcessPriority.SelectedIndex == 0;  // Sets the Process Priority
             SetPipeCommand();
@@ -2366,8 +2376,6 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-
-
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
         {
             // Creates a new SavePreset Window
@@ -2676,6 +2684,9 @@ namespace NotEnoughAV1Encodes
                             case "SkipSubtitles":
                                 SkipSubtitleExtraction = n.InnerText == "True";
                                 break;
+                            case "OverrideWorkerCount":
+                                WorkerOverride = n.InnerText == "True";
+                                break;
                             default: break;
                         }
                     }
@@ -2784,6 +2795,17 @@ namespace NotEnoughAV1Encodes
                         break;
                     default:
                         break;
+                }
+
+                if (WorkerOverride)
+                {
+                    ComboBoxWorkerCount.Visibility = Visibility.Hidden;
+                    TextBoxWorkerCountOverride.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    ComboBoxWorkerCount.Visibility = Visibility.Visible;
+                    TextBoxWorkerCountOverride.Visibility = Visibility.Hidden;
                 }
 
                 ThemeManager.Current.ChangeTheme(this, this.BaseTheme + "." + this.AccentTheme);

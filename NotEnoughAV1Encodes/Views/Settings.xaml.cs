@@ -240,6 +240,9 @@ namespace NotEnoughAV1Encodes.Views
                             case "Language":
                                 language = n.InnerText;
                                 break;
+                            case "OverrideWorkerCount":
+                                ToggleOverrideWorkerCount.IsOn = n.InnerText == "True";
+                                break;
                             default: break;
                         }
                     }
@@ -286,6 +289,7 @@ namespace NotEnoughAV1Encodes.Views
                     writer.WriteElementString("ReencodeMessage", MainWindow.reencodeMessage.ToString());
                     writer.WriteElementString("Language", ComboBoxUILanguage.Text ?? "English");
                     writer.WriteElementString("SkipSubtitles", ToggleSkipSubtitleExtraction.IsOn.ToString());
+                    writer.WriteElementString("OverrideWorkerCount", ToggleOverrideWorkerCount.IsOn.ToString());
                     writer.WriteEndElement();
                     writer.Close();
                 }
