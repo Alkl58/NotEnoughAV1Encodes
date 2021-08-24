@@ -79,7 +79,7 @@
                 <CheckBox x:Name="CheckBoxBatchWithDifferentPresets" Content="Encode with Presets:" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" FontSize="14" ToolTip="Encodes each batch file with the selected presets." Checked="CheckBoxBatchWithDifferentPresets_Checked" />
             </Grid>
         </GroupBox>
-        <GroupBox Header="Language" HorizontalAlignment="Left" Height="91" Margin="656,244,0,0" VerticalAlignment="Top" Width="369">
+        <GroupBox Header="Language" Height="91" Margin="0,244,11,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="369">
             <Grid HorizontalAlignment="Left" Height="59" Margin="0,0,0,-3" VerticalAlignment="Top" Width="359">
                 <ComboBox x:Name="ComboBoxUILanguage" HorizontalAlignment="Left" Margin="89,15,0,0" VerticalAlignment="Top" Width="81" SelectedIndex="0">
                     <ComboBoxItem Content="English" />
