@@ -921,105 +921,6 @@
                     <mah:ToggleSwitch x:Name="ToggleSwitchSubtitleActivatedFive" Header="" Toggled="ToggleSwitchSubtitleActivatedOne_Toggled" HorizontalAlignment="Left" Height="100" Margin="62,277,0,0" VerticalAlignment="Top" Width="100" />
                 </Grid>
             </mah:MetroTabItem>
-            <mah:MetroTabItem Header="{DynamicResource preferences}">
-                <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="{DynamicResource program_settings}" HorizontalAlignment="Left" Height="277" Margin="10,10,0,0" VerticalAlignment="Top" Width="340">
-                        <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <mah:ToggleSwitch x:Name="ToggleSwitchShutdownAfterEncode" Header="{DynamicResource shutdown_after_encode}" HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" />
-                            <mah:ToggleSwitch x:Name="ToggleSwitchLogging" IsOn="True" Header="Logging" HorizontalAlignment="Left" Margin="243,177,-67,0" VerticalAlignment="Top" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Enables/Disables Logging - Saved to Video Output Path" />
-                            <mah:ToggleSwitch x:Name="ToggleSwitchHideTerminal" IsOn="True" Header="Hide Terminal" HorizontalAlignment="Left" Margin="10,177,0,0" VerticalAlignment="Top" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" />
-                            <mah:ToggleSwitch x:Name="ToggleSwitchUISounds" IsOn="True" Header="UI Sounds" HorizontalAlignment="Left" Margin="10,121,0,0" VerticalAlignment="Top" Toggled="CheckBoxSettingsUISounds_Checked" />
-                            <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" IsOn="True" Header="{DynamicResource delete_temp_files}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Toggled="CheckBoxSettingsDeleteTempFiles_Checked" />
-                            <mah:ToggleSwitch x:Name="ToggleSwitchShowWindow" Header="Popup Window" HorizontalAlignment="Left" Margin="134,177,0,0" VerticalAlignment="Top" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Opens a window after the encode to show generic information" />
-                            <mah:ToggleSwitch x:Name="ToggleSkipSubtitleExtraction" Header="Deactivate Subtitles" HorizontalAlignment="Left" Margin="134,121,0,0" VerticalAlignment="Top" Toggled="ToggleSwitchShutdownAfterEncode_Toggled" ToolTip="Skip Subtitle Extraction" Width="146" />
-                        </Grid>
-                    </GroupBox>
-                    <Button x:Name="ButtonOpenTempFolder" Content="{DynamicResource open_temp_folder}" HorizontalAlignment="Right" Margin="0,0,48,10" Width="57" Background="{x:Null}" Click="ButtonOpenTempFolder_Click" Height="33" VerticalAlignment="Bottom" />
-                    <TextBox x:Name="TextBoxCustomTempPath" IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="107,0,181,10" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="33" VerticalAlignment="Bottom" />
-                    <Button x:Name="ButtonSetTempPath" Content="..." IsEnabled="{Binding IsOn, ElementName=ToggleSwitchTempFolder}" Margin="0,0,110,10" Click="ButtonSetTempPath_Click" Height="33" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="66" />
-                    <Button x:Name="ButtonDeleteTempFiles" Content="🗑" Margin="0,0,10,10" Background="{x:Null}" Click="ButtonDeleteTempFiles_Click" Height="33" VerticalAlignment="Bottom" BorderBrush="#FFFD0202" HorizontalAlignment="Right" Width="33" />
-                    <GroupBox x:Name="GroubBoxVersion" Header="GroupBox" Margin="0,10,10,0" Height="160" VerticalAlignment="Top" HorizontalAlignment="Right" Width="369">
-                        <Grid>
-                            <Label Content="Theme:" Margin="5,6,0,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Left" Width="49" />
-                            <TextBlock Margin="70,12,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="282"><Hyperlink NavigateUri="https://mahapps.com/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://mahapps.com/" /></Hyperlink></TextBlock>
-                            <Label Content="Icon:" Margin="19,37,0,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Left" Width="35" />
-                            <TextBlock Margin="70,42,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="282"><Hyperlink NavigateUri="https://icons8.de/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://icons8.de/" /></Hyperlink></TextBlock>
-                            <Button x:Name="ButtonGithub" Margin="8,69,0,0" Background="{x:Null}" Click="ButtonGithub_Click" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="54">
-                                <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/github.png" />
-                            </Button>
-                            <Button x:Name="ButtonPayPal" Margin="125,69,0,0" Click="ButtonPayPal_Click" Background="{x:Null}" Height="50" VerticalAlignment="Top" ToolTip="" HorizontalAlignment="Left" Width="53">
-                                <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/paypal.png" ToolTip="Buy me lemons" />
-                            </Button>
-                            <Button x:Name="ButtonDiscord" Margin="67,69,0,0" Click="ButtonDiscord_Click" Background="{x:Null}" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="53">
-                                <Image HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="36" Source="img/discord.png" />
-                            </Button>
-                            <Button x:Name="ButtonUpdater" Content="Updater" Margin="183,69,0,0" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="169" />
-                        </Grid>
-                    </GroupBox>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchTempFolder" Header="{DynamicResource custom_temp_path}" HorizontalAlignment="Left" Margin="14,0,0,7" VerticalAlignment="Bottom" Toggled="ToggleSwitchTempFolder_Toggled" />
-                    <GroupBox Header="{DynamicResource theme}" Height="112" Margin="0,175,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="369">
-                        <Grid HorizontalAlignment="Left" Height="79" Margin="0,0,0,-2" VerticalAlignment="Top" Width="359">
-                            <ComboBox x:Name="ComboBoxAccentTheme" HorizontalAlignment="Left" Margin="89,0,0,41" VerticalAlignment="Bottom" Width="80">
-                                <ComboBoxItem Content="Blue" Foreground="#0767B3" IsSelected="True" />
-                                <ComboBoxItem Content="Red" Foreground="#EA4333" />
-                                <ComboBoxItem Content="Green" Foreground="#80BA45" />
-                                <ComboBoxItem Content="Purple" Foreground="#837AE5" />
-                                <ComboBoxItem Content="Orange" Foreground="#FB8633" />
-                                <ComboBoxItem Content="Lime"  Foreground="#B6D033" />
-                                <ComboBoxItem Content="Emerald" Foreground="#B6CE59" />
-                                <ComboBoxItem Content="Teal" Foreground="#33BCBA" />
-                                <ComboBoxItem Content="Cyan" Foreground="#49B4E8" />
-                                <ComboBoxItem Content="Cobalt" Foreground="#3373F2" />
-                                <ComboBoxItem Content="Indigo" Foreground="#8833FF" />
-                                <ComboBoxItem Content="Violet" Foreground="#BB33FF" />
-                                <ComboBoxItem Content="Pink" Foreground="#F68ED9" />
-                                <ComboBoxItem Content="Magenta" Foreground="#E0338F" />
-                                <ComboBoxItem Content="Crimson" Foreground="#B53351" />
-                                <ComboBoxItem Content="Amber" Foreground="#F3B53B" />
-                                <ComboBoxItem Content="Yellow" Foreground="#FEE538" />
-                                <ComboBoxItem Content="Brown" Foreground="#9B7B56" />
-                                <ComboBoxItem Content="Olive" Foreground="#8A9F83" />
-                                <ComboBoxItem Content="Steel" Foreground="#83919F" />
-                                <ComboBoxItem Content="Mauve" Foreground="#9180A1" />
-                                <ComboBoxItem Content="Taupe" Foreground="#9F9471" />
-                                <ComboBoxItem Content="Sienna" Foreground="#B37557" />
-                            </ComboBox>
-                            <Label Content="Accent:" HorizontalAlignment="Left" Margin="8,0,0,41" FontSize="12" Height="26" VerticalAlignment="Bottom" />
-                            <ComboBox x:Name="ComboBoxBaseTheme" HorizontalAlignment="Left" Margin="89,0,0,10" VerticalAlignment="Bottom" Width="80">
-                                <ComboBoxItem Content="Light" IsSelected="True" />
-                                <ComboBoxItem Content="Dark" />
-                            </ComboBox>
-                            <Label Content="Base Theme:" HorizontalAlignment="Left" Margin="8,0,0,10" FontSize="12" Height="26" VerticalAlignment="Bottom" RenderTransformOrigin="0.346,0.526" />
-                            <Button x:Name="ButtonSetTheme" Content="Set Theme" HorizontalAlignment="Left" Margin="185,0,0,39" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetTheme_Click" />
-                            <Button x:Name="ButtonSetBGImage" Content="Set BG Image" HorizontalAlignment="Left" Margin="185,0,0,8" VerticalAlignment="Bottom" Width="91" Height="29" Background="{x:Null}" Click="ButtonSetBGImage_Click" />
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="{DynamicResource batch_settings}" HorizontalAlignment="Left" Height="112" Margin="355,10,0,0" VerticalAlignment="Top" Width="296">
-                        <Grid HorizontalAlignment="Left" Height="76" VerticalAlignment="Top" Width="460">
-                            <Label Content="Container:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="111" FontSize="14" />
-                            <ComboBox x:Name="ComboBoxContainerBatchEncoding" HorizontalAlignment="Left" Margin="165,12,0,0" VerticalAlignment="Top" Width="90" ToolTip="Output Container used in Batch Mode" SelectionChanged="ToggleSwitchShutdownAfterEncode_Toggled" Height="27">
-                                <ComboBoxItem Content=".mkv" IsSelected="True" />
-                                <ComboBoxItem Content=".mp4" />
-                                <ComboBoxItem Content=".webm" />
-                            </ComboBox>
-                            <ComboBox x:Name="ComboBoxBatchSettings" HorizontalAlignment="Left" Margin="165,46,0,0" VerticalAlignment="Top" Width="120">
-                            </ComboBox>
-                            <CheckBox x:Name="CheckBoxBatchWithDifferentPresets" Content="Encode with Presets:" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" FontSize="14" ToolTip="Encodes each batch file with the selected presets." Checked="CheckBoxBatchWithDifferentPresets_Checked" />
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="Language" HorizontalAlignment="Left" Height="112" Margin="355,175,0,0" VerticalAlignment="Top" Width="296">
-                        <Grid HorizontalAlignment="Left" Height="79" Margin="0,0,0,-2" VerticalAlignment="Top" Width="286">
-                            <ComboBox x:Name="ComboBoxUILanguage" HorizontalAlignment="Left" Margin="77,27,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0">
-                                <ComboBoxItem Content="English" />
-                                <ComboBoxItem Content="Deutsch" />
-                                <ComboBoxItem Content="Français" />
-                            </ComboBox>
-                            <Label Content="Language:" HorizontalAlignment="Left" Margin="10,27,0,0" VerticalAlignment="Top" Width="67" />
-                            <Button x:Name="ButtonSaveUILanguage" Content="Save" HorizontalAlignment="Left" Margin="201,27,0,0" VerticalAlignment="Top" Width="75" Height="26" Click="ButtonSaveUILanguage_Click" />
-                        </Grid>
-                    </GroupBox>
-                </Grid>
-            </mah:MetroTabItem>
         </mah:MetroAnimatedSingleRowTabControl>
         <Button x:Name="ButtonOpenDestination" Margin="164,20,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="138" Background="{x:Null}" Click="ButtonOpenDestination_Click" BorderBrush="#FF707070">
             <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="100">
@@ -1046,5 +947,10 @@
         <Button x:Name="ButtonSavePreset" Content="Save" HorizontalAlignment="Left" Margin="268,78,0,0" VerticalAlignment="Top" Width="50" Height="29" Background="{x:Null}" Click="ButtonSavePreset_Click" />
         <Button x:Name="ButtonSetDefaultPreset" Content="Set Default" HorizontalAlignment="Left" Margin="317,78,0,0" VerticalAlignment="Top" Width="76" Height="29" Background="{x:Null}" Click="ButtonSetDefaultPreset_Click" />
         <Button x:Name="ButtonDeletePreset" Content="Delete" HorizontalAlignment="Left" Margin="392,78,0,0" VerticalAlignment="Top" Width="50" Height="29" Background="{x:Null}" Click="ButtonDeletePreset_Click" />
+        <Button x:Name="ButtonProgramSettings" HorizontalAlignment="Left" Margin="1000,20,0,0" VerticalAlignment="Top" Width="56" Height="48" Background="{x:Null}" BorderBrush="#FF707070" Click="ButtonProgramSettings_Click">
+            <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="46">
+                <Image HorizontalAlignment="Left" Height="44" VerticalAlignment="Top" Width="46" Source="img/settings.png" Canvas.Top="-6" />
+            </Canvas>
+        </Button>
     </Grid>
 </mah:MetroWindow>

@@ -59,8 +59,16 @@ namespace NotEnoughAV1Encodes
         public static bool StartUp = true;          // Avoids conflicts with Settings Tab
         public static bool PopupWindow = false;     // Shows a popup window after encode finished
         public static bool Yadif1 = false;          // If true -> double the frames
+        public static bool BatchWithDifferentPresets = false;
+        private bool ShutdownAfterEncode = false;
+        private bool UseCustomTempPath = false;
+        private bool SkipSubtitleExtraction = false;
+        private string CustomTempPath = null;
+        private string BaseTheme = "Light";
+        private string AccentTheme = "Blue";
         public static int TotalFrames = 0;          // used for progressbar and frame check
-        private string language = null;             // UI Language
+        public static string language = null;             // UI Language
+        public static System.Windows.Controls.ItemCollection BatchPresets = null;
         public static Dictionary<string, string> audio_languages = new Dictionary<string, string>();
         public DateTime StartTime;                  // used for eta calculation
 
@@ -75,10 +83,6 @@ namespace NotEnoughAV1Encodes
 
         private void Startup()
         {
-            // Sets the GUI Version
-            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            GroubBoxVersion.Header = "Version: " + version.Remove(version.Length - 2);
-
             CheckDependencies.Check();
 
             // Sets the workercount combobox
@@ -133,29 +137,7 @@ namespace NotEnoughAV1Encodes
             if (language != null)
             {
                 SetLanguageDictionary(language);
-
-                switch (language)
-                {
-                    case "Deutsch":
-                        ComboBoxUILanguage.SelectedIndex = 1;
-                        break;
-
-                    case "Français":
-                        ComboBoxUILanguage.SelectedIndex = 2;
-                        break;
-
-                    default:
-                        ComboBoxUILanguage.SelectedIndex = 0;
-                        break;
-                }
             }
-        }
-
-        private void ButtonSaveUILanguage_Click(object sender, RoutedEventArgs e)
-        {
-            language = ComboBoxUILanguage.Text;
-            SetLanguageDictionary(language);
-            SaveSettingsTab();
         }
 
         private void FillLanguagesStartup()
@@ -217,13 +199,13 @@ namespace NotEnoughAV1Encodes
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
 
-        private void CheckBoxBatchWithDifferentPresets_Checked(object sender, RoutedEventArgs e)
+        private void ButtonProgramSettings_Click(object sender, RoutedEventArgs e)
         {
-            if (CheckBoxBatchWithDifferentPresets.IsChecked == true)
-            {
-                ToggleSwitchDeleteTempFiles.IsOn = true;
-            }
+            Views.Settings settings = new Views.Settings(BaseTheme, AccentTheme);
+            settings.ShowDialog();
+            LoadSettingsTab();
         }
+
 
         private void CheckBoxSkipReencode_Checked(object sender, RoutedEventArgs e)
         {
@@ -231,7 +213,9 @@ namespace NotEnoughAV1Encodes
             {
                 MessageBox.Show("Disabling reencoding can lead to frameloss, if the video source has incorrect frame-metadata.\n\nPossible issues which are only visible after encoding:\n- Audio get's more and more desynced\n- Video stream is shorter", "Attention", MessageBoxButton.OK, MessageBoxImage.Information);
                 reencodeMessage = true;
-                SaveSettingsTab();
+                Views.Settings settings = new Views.Settings(BaseTheme, AccentTheme);
+                settings.SaveSettingsTab();
+                settings.Close();
             }
         }
 
@@ -647,16 +631,6 @@ namespace NotEnoughAV1Encodes
                     FileInfo[] Files = profiles.GetFiles("*.xml");
                     // Sets the ComboBox with the FileInfo Array
                     ComboBoxPresets.ItemsSource = Files;
-                    // Fills the ComobBox with checkable items for batch encoding
-                    foreach (FileInfo file in Files)
-                    {
-                        System.Windows.Controls.CheckBox comboBoxItem = new System.Windows.Controls.CheckBox
-                        {
-                            Content = file,
-                            IsChecked = false
-                        };
-                        ComboBoxBatchSettings.Items.Add(comboBoxItem);
-                    }
                 }
             }
             catch { }
@@ -718,22 +692,6 @@ namespace NotEnoughAV1Encodes
                 }
                 catch { }
             }
-        }
-
-        private void ButtonGithub_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://github.com/Alkl58/NotEnoughAV1Encodes");
-        }
-
-        private void ButtonPayPal_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://paypal.me/alkl58");
-        }
-
-        private void ButtonDiscord_Click(object sender, RoutedEventArgs e)
-        {
-            // NEAV1E Discord
-            Process.Start("https://discord.gg/yG27ArHBFe");
         }
 
         private void ComboBoxPresets_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -818,27 +776,6 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void CheckBoxSettingsUISounds_Checked(object sender, RoutedEventArgs e)
-        {
-            PlayUISounds = ToggleSwitchUISounds.IsOn == true;
-            SaveSettingsTab();
-        }
-
-        private void ToggleSwitchTempFolder_Toggled(object sender, RoutedEventArgs e)
-        {
-            SaveSettingsTab();
-        }
-
-        private void ToggleSwitchShutdownAfterEncode_Toggled(object sender, RoutedEventArgs e)
-        {
-            SaveSettingsTab();
-        }
-
-        private void CheckBoxSettingsDeleteTempFiles_Checked(object sender, RoutedEventArgs e)
-        {
-            SaveSettingsTab();
-        }
-
         private void TextBoxCustomVideoSettings_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             // Verifies the arguments the user inputs into the encoding settings textbox
@@ -849,7 +786,7 @@ namespace NotEnoughAV1Encodes
 
             foreach (string word in forbiddenWords)
             {
-                if (ComboBoxBaseTheme.SelectedIndex == 0)
+                if (BaseTheme == "Light")
                 {
                     // Lightmode
                     TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
@@ -866,12 +803,6 @@ namespace NotEnoughAV1Encodes
                     break;
                 }
             }
-        }
-
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            // Opens a Hyperlink in the browser
-            Process.Start(e.Uri.ToString());
         }
 
         private void CancelRoutine()
@@ -893,8 +824,10 @@ namespace NotEnoughAV1Encodes
             // Thats why we have this function "inbetween"
 
             // Sets the Temp Path
-            if (ToggleSwitchTempFolder.IsOn == true)
-                Global.temp_path = TextBoxCustomTempPath.Text;
+            if (UseCustomTempPath)
+            {
+                Global.temp_path = CustomTempPath;
+            }
 
             // Resets the global Cancellation Boolean
             SmallFunctions.Cancel.CancelAll = false;
@@ -906,8 +839,6 @@ namespace NotEnoughAV1Encodes
             ButtonStopEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(228, 228, 228));
             // Creates new Cancellation Token
             cancellationTokenSource = new CancellationTokenSource();
-            // Sets if popup window appears
-            PopupWindow = ToggleSwitchShowWindow.IsOn;
             // Sets if Video is VFR
             VFRVideo = ToggleSwitchVFR.IsOn == true;
 
@@ -918,10 +849,8 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                // Set the output container for batch encoding example: .mkv
-                BatchOutContainer = ComboBoxContainerBatchEncoding.Text;
                 // Toggle Delete Temp Files to prevent conflicts
-                ToggleSwitchDeleteTempFiles.IsOn = true;
+                DeleteTempFiles = true;
                 // Batch Encoding
                 BatchEncode(cancellationTokenSource.Token);
             }
@@ -934,9 +863,9 @@ namespace NotEnoughAV1Encodes
             // Loops over all files in folder
             foreach (FileInfo file in batchfiles.GetFiles())
             {
-                if (SmallFunctions.CheckFileType(file.ToString()) == true && SmallFunctions.Cancel.CancelAll == false)
+                if (SmallFunctions.CheckFileType(file.ToString()) && SmallFunctions.Cancel.CancelAll == false)
                 {
-                    if (CheckBoxBatchWithDifferentPresets.IsChecked == false)
+                    if (BatchWithDifferentPresets == false)
                     {
                         // Normal Batch Encoding
 
@@ -959,7 +888,7 @@ namespace NotEnoughAV1Encodes
                         GetSourceInformation(true);
 
                         // Set Subtitle
-                        if (ComboBoxContainerBatchEncoding.SelectedIndex == 2)
+                        if (BatchOutContainer != ".mkv")
                         {
                             // Resets Subtitle Settings, as it is mostly not compatible with .webm or .mp4
                             ResetSubtitles();
@@ -978,12 +907,10 @@ namespace NotEnoughAV1Encodes
                     }
                     else
                     {
-                        // Get all Items from ComboBox
-                        System.Windows.Controls.ItemCollection encode_presets = ComboBoxBatchSettings.Items;
                         List<string> encode_presets_to_encode = new List<string>();
 
                         // Fill List with Presets to use
-                        foreach (object preset in encode_presets)
+                        foreach (object preset in BatchPresets)
                         {
                             System.Windows.Controls.CheckBox pre = (System.Windows.Controls.CheckBox)preset;
 
@@ -1018,7 +945,7 @@ namespace NotEnoughAV1Encodes
                             GetSourceInformation(true);
 
                             // Set Subtitle
-                            if (ComboBoxContainerBatchEncoding.SelectedIndex == 2)
+                            if (BatchOutContainer != ".mkv")
                             {
                                 // Resets Subtitle Settings, as it is mostly not compatible with .webm or .mp4
                                 ResetSubtitles();
@@ -1214,7 +1141,7 @@ namespace NotEnoughAV1Encodes
                     ButtonStartEncode.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
                     if (PopupWindow)
                     {
-                        PopupWindow popupWindow = new PopupWindow(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text, timespent.ToString("hh\\:mm\\:ss"), TotalFrames.ToString(), Math.Round(TotalFrames / timespent.TotalSeconds, 2).ToString(), Global.Video_Output);
+                        PopupWindow popupWindow = new PopupWindow(BaseTheme, AccentTheme, timespent.ToString("hh\\:mm\\:ss"), TotalFrames.ToString(), Math.Round(TotalFrames / timespent.TotalSeconds, 2).ToString(), Global.Video_Output);
                         popupWindow.ShowDialog();
                     }
 
@@ -1224,7 +1151,7 @@ namespace NotEnoughAV1Encodes
                     // Set Encoding State to IDLE
                     encode_state = 0;
                 }
-                if (ToggleSwitchShutdownAfterEncode.IsOn && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
+                if (ShutdownAfterEncode && BatchEncoding == false) { Process.Start("shutdown.exe", "/s /t 0"); }
             }
             catch { SmallFunctions.PlayStopSound(); }
         }
@@ -1304,8 +1231,6 @@ namespace NotEnoughAV1Encodes
             EncodeVideo.Worker_Count = int.Parse(ComboBoxWorkerCount.Text);             // Sets the worker count
             OnePass = ComboBoxVideoPasses.SelectedIndex == 0;                           // Sets the amount of passes (true = 1, false = 2)
             EncodeVideo.Process_Priority = ComboBoxProcessPriority.SelectedIndex == 0;  // Sets the Process Priority
-            DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn;                         // Sets if Temp Files should be deleted
-            EncodeVideo.Show_Terminal = ToggleSwitchHideTerminal.IsOn == false;         // Sets if Terminal shall be shown during encode
             SetPipeCommand();
         }
 
@@ -1751,7 +1676,7 @@ namespace NotEnoughAV1Encodes
 
         public void GetSubtitleTracks()
         {
-            if (ToggleSkipSubtitleExtraction.IsOn == false)
+            if (!SkipSubtitleExtraction)
             {
                 MediaInfo mediaInfo = new MediaInfo();
                 mediaInfo.Open(Global.Video_Path);
@@ -2421,57 +2346,9 @@ namespace NotEnoughAV1Encodes
             return ffmpegProcess.ExitCode;
         }
 
-        private void ButtonSetTheme_Click(object sender, RoutedEventArgs e)
-        {
-            ThemeManager.Current.ChangeTheme(this, ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text);
-
-            // Changes the Color of the Custom Settings Textbox
-            // Reasoning is that the color gets changed by the arg verification
-            if (ComboBoxBaseTheme.SelectedIndex == 0)
-            {
-                // Lightmode
-                TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-            }
-            else
-            {
-                // Darkmode
-                TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            }
-            if (CustomBG)
-                SetBackGroundColor();
-            SaveSettingsTab();
-        }
-
-        private void ButtonSetBGImage_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                if (openFileDialog.ShowDialog() == true)
-                {
-                    Uri fileUri = new Uri(openFileDialog.FileName);
-                    imgDynamic.Source = new BitmapImage(fileUri);
-                    CustomBG = true;
-                    SetBackGroundColor();
-                    if (File.Exists("background.txt")) { File.Delete("background.txt"); }
-                    Helpers.WriteToFileThreadSafe(openFileDialog.FileName, "background.txt");
-                }
-                else
-                {
-                    // Reset BG Image
-                    if (File.Exists("background.txt")) { try { File.Delete("background.txt"); } catch { } }
-                    imgDynamic.Source = null;
-                    CustomBG = false;
-                    SolidColorBrush transparent = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-                    MetroTab.Background = transparent;
-                }
-            }
-            catch { }
-        }
-
         private void SetBackGroundColor()
         {
-            if (ComboBoxBaseTheme.SelectedIndex == 0)
+            if (BaseTheme == "Light")
             {
                 // Light Theme
                 SolidColorBrush transparentWhite = new SolidColorBrush(Color.FromArgb(65, 100, 100, 100));
@@ -2489,15 +2366,12 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void ButtonDeleteTempFiles_Click(object sender, RoutedEventArgs e)
-        {
-            SmallFunctions.DeleteTempFilesButton();
-        }
+
 
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
         {
             // Creates a new SavePreset Window
-            SavePreset savePreset = new SavePreset(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
+            SavePreset savePreset = new SavePreset(BaseTheme, AccentTheme);
             // Displays the Window and awaits exit
             savePreset.ShowDialog();
             // Gets the Data from the SavePreset Window
@@ -2514,7 +2388,7 @@ namespace NotEnoughAV1Encodes
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
         {
             // Creates a new object of the type "OpenVideoWindow"
-            OpenVideoWindow WindowVideoSource = new OpenVideoWindow(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
+            OpenVideoWindow WindowVideoSource = new OpenVideoWindow(BaseTheme, AccentTheme);
 
             // Shows the just created window object and awaits its exit
             WindowVideoSource.ShowDialog();
@@ -2531,7 +2405,7 @@ namespace NotEnoughAV1Encodes
                     SingleFileInput(result);
                 }
             }
-            else if (batchFolder == false && resultProject == true)
+            else if (batchFolder == false && resultProject)
             {
                 // Project File
                 if (WindowVideoSource.QuitCorrectly)
@@ -2598,34 +2472,8 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void ButtonOpenTempFolder_Click(object sender, RoutedEventArgs e)
-        {
-            // Opens the Temp Folder
-            if (ToggleSwitchTempFolder.IsOn == false)
-            {
-                //Creates the temp directoy if not existent
-                if (Directory.Exists(Path.Combine(Path.GetTempPath(), "NEAV1E")) == false) { Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "NEAV1E")); }
-                Process.Start(Path.Combine(Path.GetTempPath(), "NEAV1E"));
-            }
-            else
-            {
-                Process.Start(TextBoxCustomTempPath.Text);
-            }
-        }
-
-        private void ButtonSetTempPath_Click(object sender, RoutedEventArgs e)
-        {
-            // Custom Temp Path
-            System.Windows.Forms.FolderBrowserDialog browseOutputFolder = new System.Windows.Forms.FolderBrowserDialog();
-            if (browseOutputFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                TextBoxCustomTempPath.Text = browseOutputFolder.SelectedPath;
-                SaveSettingsTab();
-            }
-        }
-
         // Current State of Program - 0 = IDLE ; 1 = Encoding ; 2 = Paused
-        private static int encode_state = 0;
+        public static int encode_state = 0;
 
         private void ButtonStartEncode_Click(object sender, RoutedEventArgs e)
         {
@@ -2700,17 +2548,6 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void ButtonUpdater_Click(object sender, RoutedEventArgs e)
-        {
-            // Opens the program Updater
-            if (encode_state == 0)
-            {
-                Updater updater = new Updater(ComboBoxBaseTheme.Text, ComboBoxAccentTheme.Text);
-                updater.ShowDialog();
-                CheckDependencies.Check();
-            }
-        }
-
         // ═══════════════════════════════════ Progress Bar ═══════════════════════════════════════
 
         private void ProgressBarUpdating(object sender, EventArgs e)
@@ -2781,39 +2618,13 @@ namespace NotEnoughAV1Encodes
 
         // ═════════════════════════════════════ Presets IO ═══════════════════════════════════════
 
-        private void SaveSettingsTab()
-        {
-            try
-            {
-                if (StartUp != true)
-                {
-                    XmlWriter writer = XmlWriter.Create(Path.Combine(Directory.GetCurrentDirectory(), "settings.xml"));
-                    writer.WriteStartElement("Settings");
-                    writer.WriteElementString("DeleteTempFiles", ToggleSwitchDeleteTempFiles.IsOn.ToString());
-                    writer.WriteElementString("PlaySound", ToggleSwitchUISounds.IsOn.ToString());
-                    writer.WriteElementString("Logging", ToggleSwitchLogging.IsOn.ToString());
-                    writer.WriteElementString("ShowDialog", ToggleSwitchShowWindow.IsOn.ToString());
-                    writer.WriteElementString("Shutdown", ToggleSwitchShutdownAfterEncode.IsOn.ToString());
-                    writer.WriteElementString("TempPathActive", ToggleSwitchTempFolder.IsOn.ToString());
-                    writer.WriteElementString("TempPath", TextBoxCustomTempPath.Text);
-                    writer.WriteElementString("Terminal", ToggleSwitchHideTerminal.IsOn.ToString());
-                    writer.WriteElementString("ThemeAccent", ComboBoxAccentTheme.SelectedIndex.ToString());
-                    writer.WriteElementString("ThemeBase", ComboBoxBaseTheme.SelectedIndex.ToString());
-                    writer.WriteElementString("BatchContainer", ComboBoxContainerBatchEncoding.SelectedIndex.ToString());
-                    writer.WriteElementString("ReencodeMessage", reencodeMessage.ToString());
-                    writer.WriteElementString("Language", language ?? "English");
-                    writer.WriteElementString("SkipSubtitles", ToggleSkipSubtitleExtraction.IsOn.ToString());
-                    writer.WriteEndElement();
-                    writer.Close();
-                }
-            }
-            catch { }
-        }
-
         private void LoadSettingsTab()
         {
             if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "settings.xml")))
             {
+                int BaseTheme = 0;
+                int AccentTheme = 0;
+                int BatchContainer = 0;
                 try
                 {
                     XmlDocument doc = new XmlDocument();
@@ -2823,27 +2634,159 @@ namespace NotEnoughAV1Encodes
                     {
                         switch (n.Name)
                         {
-                            case "DeleteTempFiles": ToggleSwitchDeleteTempFiles.IsOn = n.InnerText == "True"; break;
-                            case "PlaySound": ToggleSwitchUISounds.IsOn = n.InnerText == "True"; break;
-                            case "Logging": ToggleSwitchLogging.IsOn = n.InnerText == "True"; break;
-                            case "ShowDialog": ToggleSwitchShowWindow.IsOn = n.InnerText == "True"; break;
-                            case "Shutdown": ToggleSwitchShutdownAfterEncode.IsOn = n.InnerText == "True"; break;
-                            case "TempPathActive": ToggleSwitchTempFolder.IsOn = n.InnerText == "True"; break;
-                            case "TempPath": TextBoxCustomTempPath.Text = n.InnerText; break;
-                            case "Terminal": ToggleSwitchHideTerminal.IsOn = n.InnerText == "True"; break;
-                            case "ThemeAccent": ComboBoxAccentTheme.SelectedIndex = int.Parse(n.InnerText); break;
-                            case "ThemeBase": ComboBoxBaseTheme.SelectedIndex = int.Parse(n.InnerText); break;
-                            case "BatchContainer": ComboBoxContainerBatchEncoding.SelectedIndex = int.Parse(n.InnerText); break;
-                            case "ReencodeMessage": reencodeMessage = n.InnerText == "True"; break;
-                            case "Language": language = n.InnerText; break;
-                            case "SkipSubtitles": ToggleSkipSubtitleExtraction.IsOn = n.InnerText == "True"; break;
+                            case "DeleteTempFiles":
+                                DeleteTempFiles = n.InnerText == "True";
+                                break;
+                            case "PlaySound":
+                                PlayUISounds = n.InnerText == "True";
+                                break;
+                            case "Logging":
+                                Logging = n.InnerText == "True";
+                                break;
+                            case "ShowDialog":
+                                PopupWindow = n.InnerText == "True";
+                                break;
+                            case "Shutdown":
+                                ShutdownAfterEncode = n.InnerText == "True";
+                                break;
+                            case "TempPathActive":
+                                UseCustomTempPath = n.InnerText == "True";
+                                break;
+                            case "TempPath":
+                                CustomTempPath = n.InnerText;
+                                break;
+                            case "Terminal":
+                                EncodeVideo.Show_Terminal = n.InnerText == "False";
+                                break;
+                            case "ThemeAccent":
+                                AccentTheme = int.Parse(n.InnerText);
+                                break;
+                            case "ThemeBase":
+                                BaseTheme = int.Parse(n.InnerText);
+                                break;
+                            case "BatchContainer":
+                                BatchContainer = int.Parse(n.InnerText);
+                                break;
+                            case "ReencodeMessage":
+                                reencodeMessage = n.InnerText == "True";
+                                break;
+                            case "Language":
+                                language = n.InnerText;
+                                break;
+                            case "SkipSubtitles":
+                                SkipSubtitleExtraction = n.InnerText == "True";
+                                break;
                             default: break;
                         }
                     }
                 }
                 catch { }
 
-                ThemeManager.Current.ChangeTheme(this, ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text);
+                switch (BaseTheme)
+                {
+                    case 0:
+                        this.BaseTheme = "Light";
+                        break;
+                    case 1:
+                        this.BaseTheme = "Dark";
+                        break;
+                    default:
+                        this.BaseTheme = "Light";
+                        break;
+                }
+
+                switch (AccentTheme)
+                {
+                    case 0:
+                        this.AccentTheme = "Blue";
+                        break;
+                    case 1:
+                        this.AccentTheme = "Red";
+                        break;
+                    case 2:
+                        this.AccentTheme = "Green";
+                        break;
+                    case 3:
+                        this.AccentTheme = "Purple";
+                        break;
+                    case 4:
+                        this.AccentTheme = "Orange";
+                        break;
+                    case 5:
+                        this.AccentTheme = "Lime";
+                        break;
+                    case 6:
+                        this.AccentTheme = "Emerald";
+                        break;
+                    case 7:
+                        this.AccentTheme = "Teal";
+                        break;
+                    case 8:
+                        this.AccentTheme = "Cyan";
+                        break;
+                    case 9:
+                        this.AccentTheme = "Cobalt";
+                        break;
+                    case 10:
+                        this.AccentTheme = "Indigo";
+                        break;
+                    case 11:
+                        this.AccentTheme = "Violet";
+                        break;
+                    case 12:
+                        this.AccentTheme = "Pink";
+                        break;
+                    case 13:
+                        this.AccentTheme = "Magenta";
+                        break;
+                    case 14:
+                        this.AccentTheme = "Crimson";
+                        break;
+                    case 15:
+                        this.AccentTheme = "Amber";
+                        break;
+                    case 16:
+                        this.AccentTheme = "Yellow";
+                        break;
+                    case 17:
+                        this.AccentTheme = "Brown";
+                        break;
+                    case 18:
+                        this.AccentTheme = "Olive";
+                        break;
+                    case 19:
+                        this.AccentTheme = "Steel";
+                        break;
+                    case 20:
+                        this.AccentTheme = "Mauve";
+                        break;
+                    case 21:
+                        this.AccentTheme = "Taupe";
+                        break;
+                    case 22:
+                        this.AccentTheme = "Sienna";
+                        break;
+                    default:
+                        this.AccentTheme = "Blue";
+                        break;
+                }
+
+                switch (BatchContainer)
+                {
+                    case 0:
+                        BatchOutContainer = ".mkv";
+                        break;
+                    case 1:
+                        BatchOutContainer = ".mp4";
+                        break;
+                    case 2:
+                        BatchOutContainer = ".webm";
+                        break;
+                    default:
+                        break;
+                }
+
+                ThemeManager.Current.ChangeTheme(this, this.BaseTheme + "." + this.AccentTheme);
             }
 
             // Custom BG
@@ -2857,6 +2800,24 @@ namespace NotEnoughAV1Encodes
                     SetBackGroundColor();
                 }
                 catch { }
+            }
+            else
+            {
+                imgDynamic.Source = null;
+                CustomBG = false;
+                SolidColorBrush transparent = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+                MetroTab.Background = transparent;
+            }
+
+            if (BaseTheme == "Light")
+            {
+                // Lightmode
+                TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            }
+            else
+            {
+                // Darkmode
+                TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
             }
         }
 
@@ -3306,5 +3267,6 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
+
     }
 }

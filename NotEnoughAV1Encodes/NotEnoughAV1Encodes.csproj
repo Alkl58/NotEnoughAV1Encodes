@@ -107,6 +107,9 @@
     <Compile Include="Video\Encoder\EncodeVideoPipe.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="Views\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="win32\Kill.cs" />
     <Compile Include="MediaInfo\MediaInfo.cs" />
     <Compile Include="Views\PopupWindow.xaml.cs">
@@ -157,6 +160,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SavePreset.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -252,6 +259,9 @@
     <Resource Include="img\turbovid.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="img\settings.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="MediaInfo\MediaInfo.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
