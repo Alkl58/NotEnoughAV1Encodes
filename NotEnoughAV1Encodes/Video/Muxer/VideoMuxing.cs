@@ -24,7 +24,7 @@ namespace NotEnoughAV1Encodes
 
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(Path.Combine(Global.temp_path, Global.temp_path_folder, "Chunks"), "chunks.txt")))
             {
-                foreach (var fileTemp in sorted)
+                foreach (string fileTemp in sorted)
                 {
                     string tempName = fileTemp.Replace("'", "'\\''");
                     outputFile.WriteLine("file '" + tempName + "'");
@@ -77,7 +77,7 @@ namespace NotEnoughAV1Encodes
                 else
                 {
                     // Muxes Video & Audio & Subtitles together - MP4 not supported - also supports VFR
-                    string mkvmergeCommand = "/C mkvmerge.exe --output " + '\u0022' + Global.Video_Output + '\u0022' + " " + MainWindow.VFRCMD + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Audio", "audio.mkv") + '\u0022' + " " + MainWindow.subCommand;
+                    string mkvmergeCommand = "/C mkvmerge.exe --output " + '\u0022' + Global.Video_Output + '\u0022' + " " + MainWindow.VFRCMD + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "temp.mkv") + '\u0022' + " --default-track 0:yes " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "Audio", "audio.mkv") + '\u0022' + " " + MainWindow.SubCommand;
                     Helpers.Logging("Muxing: " + mkvmergeCommand);
                     await Task.Run(() => SmallFunctions.ExecuteMKVMergeTask(mkvmergeCommand));
                 }
@@ -97,7 +97,7 @@ namespace NotEnoughAV1Encodes
                 else
                 {
                     // Muxes Video & Subtitles together
-                    string mkvmergeCommand = "/C mkvmerge.exe --output " + '\u0022' + Global.Video_Output + '\u0022' + " " + MainWindow.VFRCMD + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "temp.mkv") + '\u0022' + " " + MainWindow.subCommand;
+                    string mkvmergeCommand = "/C mkvmerge.exe --output " + '\u0022' + Global.Video_Output + '\u0022' + " " + MainWindow.VFRCMD + " --language 0:und --default-track 0:yes " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "temp.mkv") + '\u0022' + " " + MainWindow.SubCommand;
                     Helpers.Logging("Muxing: " + mkvmergeCommand);
                     await Task.Run(() => SmallFunctions.ExecuteMKVMergeTask(mkvmergeCommand));
                 }

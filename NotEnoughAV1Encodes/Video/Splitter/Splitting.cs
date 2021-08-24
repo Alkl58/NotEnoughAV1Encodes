@@ -199,7 +199,7 @@ namespace NotEnoughAV1Encodes
                     // Hardsub
                     if (MainWindow.subHardSubEnabled)
                     {
-                        ffmpeg_command += " " + MainWindow.hardsub_command;
+                        ffmpeg_command += " " + MainWindow.HardSubCommand;
                     }
 
                     // Filters

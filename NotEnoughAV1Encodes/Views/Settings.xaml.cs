@@ -25,7 +25,7 @@ namespace NotEnoughAV1Encodes.Views
             LoadSettingsTab();
 
             // Should only happen once
-            if (MainWindow.language == null)
+            if (MainWindow.UiLanguage == null)
             {
                 switch (Thread.CurrentThread.CurrentCulture.ToString())
                 {
@@ -98,7 +98,7 @@ namespace NotEnoughAV1Encodes.Views
 
         private void ButtonSaveUILanguage_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.language = ComboBoxUILanguage.Text;
+            MainWindow.UiLanguage = ComboBoxUILanguage.Text;
         }
 
         private void ButtonSetTheme_Click(object sender, RoutedEventArgs e)

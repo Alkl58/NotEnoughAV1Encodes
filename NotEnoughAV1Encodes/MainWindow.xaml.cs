@@ -22,59 +22,58 @@ namespace NotEnoughAV1Encodes
 {
     public partial class MainWindow : MetroWindow
     {
-        // Final Commands
+        // ══════════════════════════════ Public Static ══════════════════════════════
+
         public static string FilterCommand = null;
+        public static string UiLanguage = null;
+        public static string VSYNC = " -vsync 0 ";
+        public static string VFRCMD = "";
+        public static string HardSubCommand;
+        public static string SubCommand;
 
-        // Temp Settings
-        public static int EncodeMethod = 0;         // 0 = aomenc, 1 = rav1e, 2 = svt-av1...
+        public static int EncodeMethod = 0;
+        public static int TotalFrames = 0;
 
-        public static bool OnePass = true;          // true = Onepass, false = Twopass
-        public static bool Logging = true;          // Program Logging
-        public static bool VFRVideo = false;        // Wether or not timestamp file should be used
-        public static string VSYNC = " -vsync 0 ";  // Default Piping Frame Sync Method
-        public static string VFRCMD = "";           // VFR Muxing Command
+        public static bool DeleteTempFiles = false;
+        public static bool PlayUISounds = false;
+        public static bool VFRVideo = false;
+        public static bool OnePass = true;
+        public static bool Logging = true;
+        public static bool StartUp = true;
 
-        // Temp Settings Subtitles
-        public static string subCommand;            // Subtitle Muxing Command
+        public static bool subSoftSubEnabled;
+        public static bool subHardSubEnabled;
+        public static bool subMessageShowed = false;
+        public static bool reencodeMessage = false;
 
-        public static string hardsub_command;       // Subtitle Hardcoding Command
-        public static bool subSoftSubEnabled;       // Subtitle Toggle for later Muxing
-        public static bool subHardSubEnabled;       // Subtitle Toggle for hardsub
-        public static bool subMessageShowed = false;// Used to message the user when trying to do softsub in MP4 Container
-        public static bool reencodeMessage = false; // Show reencode warning once
-
-        // IO Paths
-        public static string BatchOutContainer = ".mkv";
-
-        public static bool VideoInputSet = false;   // Video Input Set Boolean
-        public static bool VideoOutputSet = false;  // Video Output Set Boolean
-        public static bool PySceneFound = false;    //
-
-        // Temp Variables
-        public static bool BatchEncoding = false;   // Batch Encoding
-
-        public static bool DeleteTempFiles = false; // Temp File Deletion
-        public static bool PlayUISounds = false;    // UI Sounds (Finished Encoding / Error)
-        public static bool CustomBG = false;        // Custom Image Background
-        public static bool StartUp = true;          // Avoids conflicts with Settings Tab
-        public static bool PopupWindow = false;     // Shows a popup window after encode finished
-        public static bool Yadif1 = false;          // If true -> double the frames
+        public static bool PySceneFound = false;
         public static bool BatchWithDifferentPresets = false;
+
+        public static System.Windows.Controls.ItemCollection BatchPresets = null;
+
+        // ═════════════════════════════════ Private ═════════════════════════════════
+
+        private string BatchOutContainer = ".mkv";
+        private string CustomTempPath = null;
+        private string AccentTheme = "Blue";
+        private string BaseTheme = "Light";
+
+        private bool SkipSubtitleExtraction = false;
         private bool ShutdownAfterEncode = false;
         private bool UseCustomTempPath = false;
-        private bool SkipSubtitleExtraction = false;
         private bool WorkerOverride = false;
-        private string CustomTempPath = null;
-        private string BaseTheme = "Light";
-        private string AccentTheme = "Blue";
-        public static int TotalFrames = 0;          // used for progressbar and frame check
-        public static string language = null;             // UI Language
-        public static System.Windows.Controls.ItemCollection BatchPresets = null;
-        public static Dictionary<string, string> audio_languages = new Dictionary<string, string>();
-        public DateTime StartTime;                  // used for eta calculation
+        private bool BatchEncoding = false;
+        private bool PopupWindow = false;
+        private bool Yadif1 = false;
 
-        // Progress Cancellation
+        private bool VideoInputSet = false;
+        private bool VideoOutputSet = false;
+
+        private DateTime StartTime;
+
         private CancellationTokenSource cancellationTokenSource;
+
+        private readonly Dictionary<string, string> AudioLanguages = new Dictionary<string, string>();
 
         public MainWindow()
         {
@@ -135,54 +134,54 @@ namespace NotEnoughAV1Encodes
         {
             SetLanguageDictionary(Thread.CurrentThread.CurrentCulture.ToString());
 
-            if (language != null)
+            if (UiLanguage != null)
             {
-                SetLanguageDictionary(language);
+                SetLanguageDictionary(UiLanguage);
             }
         }
 
         private void FillLanguagesStartup()
         {
             // Languages in ISO 639-2 Format: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
-            audio_languages.Add("English", "eng");
-            audio_languages.Add("Bosnian", "bos");
-            audio_languages.Add("Bulgarian", "bul");
-            audio_languages.Add("Chinese", "zho");
-            audio_languages.Add("Czech", "ces");
-            audio_languages.Add("Greek", "ell");
-            audio_languages.Add("Estonian", "est");
-            audio_languages.Add("Persian", "per");
-            audio_languages.Add("Filipino", "fil");
-            audio_languages.Add("Finnish", "fin");
-            audio_languages.Add("French", "fra");
-            audio_languages.Add("Georgian", "kat");
-            audio_languages.Add("German", "deu");
-            audio_languages.Add("Croatian", "hrv");
-            audio_languages.Add("Hungarian", "hun");
-            audio_languages.Add("Indonesian", "ind");
-            audio_languages.Add("Icelandic", "isl");
-            audio_languages.Add("Italian", "ita");
-            audio_languages.Add("Japanese", "jpn");
-            audio_languages.Add("Korean", "kor");
-            audio_languages.Add("Latin", "lat");
-            audio_languages.Add("Latvian", "lav");
-            audio_languages.Add("Lithuanian", "lit");
-            audio_languages.Add("Dutch", "nld");
-            audio_languages.Add("Norwegian", "nob");
-            audio_languages.Add("Polish", "pol");
-            audio_languages.Add("Portuguese", "por");
-            audio_languages.Add("Romanian", "ron");
-            audio_languages.Add("Russian", "rus");
-            audio_languages.Add("Slovak", "slk");
-            audio_languages.Add("Slovenian", "slv");
-            audio_languages.Add("Spanish", "spa");
-            audio_languages.Add("Swedish", "swe");
-            audio_languages.Add("Thai", "tha");
-            audio_languages.Add("Turkish", "tur");
-            audio_languages.Add("Ukrainian", "ukr");
-            audio_languages.Add("Vietnamese", "vie");
+            AudioLanguages.Add("English", "eng");
+            AudioLanguages.Add("Bosnian", "bos");
+            AudioLanguages.Add("Bulgarian", "bul");
+            AudioLanguages.Add("Chinese", "zho");
+            AudioLanguages.Add("Czech", "ces");
+            AudioLanguages.Add("Greek", "ell");
+            AudioLanguages.Add("Estonian", "est");
+            AudioLanguages.Add("Persian", "per");
+            AudioLanguages.Add("Filipino", "fil");
+            AudioLanguages.Add("Finnish", "fin");
+            AudioLanguages.Add("French", "fra");
+            AudioLanguages.Add("Georgian", "kat");
+            AudioLanguages.Add("German", "deu");
+            AudioLanguages.Add("Croatian", "hrv");
+            AudioLanguages.Add("Hungarian", "hun");
+            AudioLanguages.Add("Indonesian", "ind");
+            AudioLanguages.Add("Icelandic", "isl");
+            AudioLanguages.Add("Italian", "ita");
+            AudioLanguages.Add("Japanese", "jpn");
+            AudioLanguages.Add("Korean", "kor");
+            AudioLanguages.Add("Latin", "lat");
+            AudioLanguages.Add("Latvian", "lav");
+            AudioLanguages.Add("Lithuanian", "lit");
+            AudioLanguages.Add("Dutch", "nld");
+            AudioLanguages.Add("Norwegian", "nob");
+            AudioLanguages.Add("Polish", "pol");
+            AudioLanguages.Add("Portuguese", "por");
+            AudioLanguages.Add("Romanian", "ron");
+            AudioLanguages.Add("Russian", "rus");
+            AudioLanguages.Add("Slovak", "slk");
+            AudioLanguages.Add("Slovenian", "slv");
+            AudioLanguages.Add("Spanish", "spa");
+            AudioLanguages.Add("Swedish", "swe");
+            AudioLanguages.Add("Thai", "tha");
+            AudioLanguages.Add("Turkish", "tur");
+            AudioLanguages.Add("Ukrainian", "ukr");
+            AudioLanguages.Add("Vietnamese", "vie");
 
-            Dictionary<string, string>.KeyCollection keys = audio_languages.Keys;
+            Dictionary<string, string>.KeyCollection keys = AudioLanguages.Keys;
             foreach (string lang in keys)
             {
                 ComboBoxTrackOneLanguage.Items.Add(lang);
@@ -195,7 +194,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxSubTrackFourLanguage.Items.Add(lang);
                 ComboBoxSubTrackFiveLanguage.Items.Add(lang);
             }
-            audio_languages.Add("und", "und");
+            AudioLanguages.Add("und", "und");
         }
 
         // ═══════════════════════════════════════ UI Logic ═══════════════════════════════════════
@@ -203,7 +202,7 @@ namespace NotEnoughAV1Encodes
         private void ButtonProgramSettings_Click(object sender, RoutedEventArgs e)
         {
             Views.Settings settings = new Views.Settings(BaseTheme, AccentTheme);
-            settings.ShowDialog();
+            _ = settings.ShowDialog();
             LoadSettingsTab();
             SetLanguageStartup();
         }
@@ -1177,7 +1176,7 @@ namespace NotEnoughAV1Encodes
                 if (File.Exists(Path.Combine(Global.temp_path, Global.temp_path_folder, "tmpsub.mkv")) == false)
                 {
                     ProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Reencoding Video for Hardsubbing...");
-                    string ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + Global.Video_Path + '\u0022' + " " + hardsub_command + " -map_metadata -1 -c:v libx264 -crf 0 -preset veryfast -an " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "tmpsub.mkv") + '\u0022';
+                    string ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + Global.Video_Path + '\u0022' + " " + HardSubCommand + " -map_metadata -1 -c:v libx264 -crf 0 -preset veryfast -an " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "tmpsub.mkv") + '\u0022';
                     Helpers.Logging("Subtitle Hardcoding Command: " + ffmpegCommand);
                     // Reencodes the Video
                     SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
@@ -1185,7 +1184,7 @@ namespace NotEnoughAV1Encodes
                 else if (MessageBox.Show("The temp reencode seems to already exists!\nSkip reencoding?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
                 {
                     ProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Reencoding Video for Hardsubbing...");
-                    string ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + Global.Video_Path + '\u0022' + " " + hardsub_command + " -map_metadata -1 -c:v libx264 -crf 0 -preset veryfast -an " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "tmpsub.mkv") + '\u0022';
+                    string ffmpegCommand = "/C ffmpeg.exe -i " + '\u0022' + Global.Video_Path + '\u0022' + " " + HardSubCommand + " -map_metadata -1 -c:v libx264 -crf 0 -preset veryfast -an " + '\u0022' + Path.Combine(Global.temp_path, Global.temp_path_folder, "tmpsub.mkv") + '\u0022';
                     Helpers.Logging("Subtitle Hardcoding Command: " + ffmpegCommand);
                     // Reencodes the Video
                     SmallFunctions.ExecuteFfmpegTask(ffmpegCommand);
@@ -1273,10 +1272,10 @@ namespace NotEnoughAV1Encodes
             EncodeAudio.trackThree = ToggleSwitchAudioTrackThree.IsOn == true;
             EncodeAudio.trackFour = ToggleSwitchAudioTrackFour.IsOn == true;
             // Sets Audio Language
-            EncodeAudio.trackOneLanguage = audio_languages[ComboBoxTrackOneLanguage.Text];
-            EncodeAudio.trackTwoLanguage = audio_languages[ComboBoxTrackTwoLanguage.Text];
-            EncodeAudio.trackThreeLanguage = audio_languages[ComboBoxTrackThreeLanguage.Text];
-            EncodeAudio.trackFourLanguage = audio_languages[ComboBoxTrackFourLanguage.Text];
+            EncodeAudio.trackOneLanguage = AudioLanguages[ComboBoxTrackOneLanguage.Text];
+            EncodeAudio.trackTwoLanguage = AudioLanguages[ComboBoxTrackTwoLanguage.Text];
+            EncodeAudio.trackThreeLanguage = AudioLanguages[ComboBoxTrackThreeLanguage.Text];
+            EncodeAudio.trackFourLanguage = AudioLanguages[ComboBoxTrackFourLanguage.Text];
             // Sets Audio Bitrate
             EncodeAudio.audioBitrateTrackOne = int.Parse(TextBoxAudioBitrate.Text);
             EncodeAudio.audioBitrateTrackTwo = int.Parse(TextBoxAudioBitrateTrackTwo.Text);
@@ -1444,7 +1443,7 @@ namespace NotEnoughAV1Encodes
                 try
                 {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 0, "Language/String3"))) { lang = "und"; }
-                    ComboBoxTrackOneLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                    ComboBoxTrackOneLanguage.SelectedItem = AudioLanguages.FirstOrDefault(x => x.Value == lang).Key;
                 }
                 catch { }
             }
@@ -1462,7 +1461,7 @@ namespace NotEnoughAV1Encodes
                 try
                 {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 1, "Language/String3"))) { lang = "und"; }
-                    ComboBoxTrackTwoLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                    ComboBoxTrackTwoLanguage.SelectedItem = AudioLanguages.FirstOrDefault(x => x.Value == lang).Key;
                 }
                 catch { }
             }
@@ -1480,7 +1479,7 @@ namespace NotEnoughAV1Encodes
                 try
                 {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 2, "Language/String3"))) { lang = "und"; }
-                    ComboBoxTrackThreeLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                    ComboBoxTrackThreeLanguage.SelectedItem = AudioLanguages.FirstOrDefault(x => x.Value == lang).Key;
                 }
                 catch { }
             }
@@ -1498,7 +1497,7 @@ namespace NotEnoughAV1Encodes
                 try
                 {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Audio, 3, "Language/String3"))) { lang = "und"; }
-                    ComboBoxTrackFourLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                    ComboBoxTrackFourLanguage.SelectedItem = AudioLanguages.FirstOrDefault(x => x.Value == lang).Key;
                 }
                 catch { }
             }
@@ -1514,8 +1513,8 @@ namespace NotEnoughAV1Encodes
                 try
                 {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Text, 0, "Language/String3"))) { lang = "und"; }
-                    ComboBoxSubTrackOneLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
-                    Console.WriteLine(audio_languages.FirstOrDefault(x => x.Value == lang).Key);
+                    ComboBoxSubTrackOneLanguage.SelectedItem = AudioLanguages.FirstOrDefault(x => x.Value == lang).Key;
+                    Console.WriteLine(AudioLanguages.FirstOrDefault(x => x.Value == lang).Key);
                     Console.WriteLine(lang);
                 }
                 catch { }
@@ -1526,7 +1525,7 @@ namespace NotEnoughAV1Encodes
                 try
                 {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Text, 1, "Language/String3"))) { lang = "und"; }
-                    ComboBoxSubTrackTwoLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                    ComboBoxSubTrackTwoLanguage.SelectedItem = AudioLanguages.FirstOrDefault(x => x.Value == lang).Key;
                 }
                 catch { }
             }
@@ -1536,7 +1535,7 @@ namespace NotEnoughAV1Encodes
                 try
                 {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Text, 2, "Language/String3"))) { lang = "und"; }
-                    ComboBoxSubTrackThreeLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                    ComboBoxSubTrackThreeLanguage.SelectedItem = AudioLanguages.FirstOrDefault(x => x.Value == lang).Key;
                 }
                 catch { }
             }
@@ -1546,7 +1545,7 @@ namespace NotEnoughAV1Encodes
                 try
                 {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Text, 3, "Language/String3"))) { lang = "und"; }
-                    ComboBoxSubTrackFourLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                    ComboBoxSubTrackFourLanguage.SelectedItem = AudioLanguages.FirstOrDefault(x => x.Value == lang).Key;
                 }
                 catch { }
             }
@@ -1556,7 +1555,7 @@ namespace NotEnoughAV1Encodes
                 try
                 {
                     if (string.IsNullOrEmpty(lang = mediaInfo.Get(StreamKind.Text, 4, "Language/String3"))) { lang = "und"; }
-                    ComboBoxSubTrackFiveLanguage.SelectedItem = audio_languages.FirstOrDefault(x => x.Value == lang).Key;
+                    ComboBoxSubTrackFiveLanguage.SelectedItem = AudioLanguages.FirstOrDefault(x => x.Value == lang).Key;
                 }
                 catch { }
             }
@@ -1591,7 +1590,7 @@ namespace NotEnoughAV1Encodes
             // Has to be set, else it could create problems when running another encode in the same instance
             subSoftSubEnabled = false;
             subHardSubEnabled = false;
-            subCommand = "";
+            SubCommand = "";
 
             if (ToggleSwitchSubtitleActivatedOne.IsOn == true)
             {
@@ -1600,7 +1599,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    subCommand += SoftSubCMDGenerator(audio_languages[ComboBoxSubTrackOneLanguage.Text], TextBoxSubOneName.Text, TextBoxSubtitleTrackOne.Text, CheckBoxSubOneDefault.IsChecked == true);
+                    SubCommand += SoftSubCMDGenerator(AudioLanguages[ComboBoxSubTrackOneLanguage.Text], TextBoxSubOneName.Text, TextBoxSubtitleTrackOne.Text, CheckBoxSubOneDefault.IsChecked == true);
                 }
                 else { HardSubCMDGenerator(TextBoxSubtitleTrackOne.Text); }
             }
@@ -1612,7 +1611,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    subCommand += SoftSubCMDGenerator(audio_languages[ComboBoxSubTrackTwoLanguage.Text], TextBoxSubTwoName.Text, TextBoxSubtitleTrackTwo.Text, CheckBoxSubTwoDefault.IsChecked == true);
+                    SubCommand += SoftSubCMDGenerator(AudioLanguages[ComboBoxSubTrackTwoLanguage.Text], TextBoxSubTwoName.Text, TextBoxSubtitleTrackTwo.Text, CheckBoxSubTwoDefault.IsChecked == true);
                 }
                 else { HardSubCMDGenerator(TextBoxSubtitleTrackTwo.Text); }
             }
@@ -1624,7 +1623,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    subCommand += SoftSubCMDGenerator(audio_languages[ComboBoxSubTrackThreeLanguage.Text], TextBoxSubThreeName.Text, TextBoxSubtitleTrackThree.Text, CheckBoxSubThreeDefault.IsChecked == true);
+                    SubCommand += SoftSubCMDGenerator(AudioLanguages[ComboBoxSubTrackThreeLanguage.Text], TextBoxSubThreeName.Text, TextBoxSubtitleTrackThree.Text, CheckBoxSubThreeDefault.IsChecked == true);
                 }
                 else { HardSubCMDGenerator(TextBoxSubtitleTrackThree.Text); }
             }
@@ -1636,7 +1635,7 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    subCommand += SoftSubCMDGenerator(audio_languages[ComboBoxSubTrackFourLanguage.Text], TextBoxSubFourName.Text, TextBoxSubtitleTrackFour.Text, CheckBoxSubFourDefault.IsChecked == true);
+                    SubCommand += SoftSubCMDGenerator(AudioLanguages[ComboBoxSubTrackFourLanguage.Text], TextBoxSubFourName.Text, TextBoxSubtitleTrackFour.Text, CheckBoxSubFourDefault.IsChecked == true);
                 }
                 else { HardSubCMDGenerator(TextBoxSubtitleTrackFour.Text); }
             }
@@ -1648,11 +1647,11 @@ namespace NotEnoughAV1Encodes
                 {
                     // Softsub
                     subSoftSubEnabled = true;
-                    subCommand += SoftSubCMDGenerator(audio_languages[ComboBoxSubTrackFiveLanguage.Text], TextBoxSubFiveName.Text, TextBoxSubtitleTrackFive.Text, CheckBoxSubFiveDefault.IsChecked == true);
+                    SubCommand += SoftSubCMDGenerator(AudioLanguages[ComboBoxSubTrackFiveLanguage.Text], TextBoxSubFiveName.Text, TextBoxSubtitleTrackFive.Text, CheckBoxSubFiveDefault.IsChecked == true);
                 }
                 else { HardSubCMDGenerator(TextBoxSubtitleTrackFive.Text); }
             }
-            Helpers.Logging("Subtitle Command: " + subCommand);
+            Helpers.Logging("Subtitle Command: " + SubCommand);
         }
 
         private string SoftSubCMDGenerator(string lang, string name, string input, bool defaultSub)
@@ -1668,15 +1667,15 @@ namespace NotEnoughAV1Encodes
             string ext = Path.GetExtension(subInput);
             if (ext == ".ass" || ext == ".ssa")
             {
-                hardsub_command = "-vf ass=" + '\u0022' + subInput + '\u0022';
-                hardsub_command = hardsub_command.Replace("\u005c", "\u005c\u005c\u005c\u005c");
-                hardsub_command = hardsub_command.Replace(":", "\u005c\u005c\u005c:");
+                HardSubCommand = "-vf ass=" + '\u0022' + subInput + '\u0022';
+                HardSubCommand = HardSubCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
+                HardSubCommand = HardSubCommand.Replace(":", "\u005c\u005c\u005c:");
             }
             else if (ext == ".srt")
             {
-                hardsub_command = "-vf subtitles=" + '\u0022' + subInput + '\u0022';
-                hardsub_command = hardsub_command.Replace("\u005c", "\u005c\u005c\u005c\u005c");
-                hardsub_command = hardsub_command.Replace(":", "\u005c\u005c\u005c:");
+                HardSubCommand = "-vf subtitles=" + '\u0022' + subInput + '\u0022';
+                HardSubCommand = HardSubCommand.Replace("\u005c", "\u005c\u005c\u005c\u005c");
+                HardSubCommand = HardSubCommand.Replace(":", "\u005c\u005c\u005c:");
             }
             // Theoretically PGS Subtitles can be hardcoded
             // The Problem is that ffmpeg disregards the potential offset
@@ -2680,7 +2679,7 @@ namespace NotEnoughAV1Encodes
                                 reencodeMessage = n.InnerText == "True";
                                 break;
                             case "Language":
-                                language = n.InnerText;
+                                UiLanguage = n.InnerText;
                                 break;
                             case "SkipSubtitles":
                                 SkipSubtitleExtraction = n.InnerText == "True";
@@ -2819,7 +2818,6 @@ namespace NotEnoughAV1Encodes
                 {
                     Uri fileUri = new Uri(File.ReadAllText("background.txt"));
                     imgDynamic.Source = new BitmapImage(fileUri);
-                    CustomBG = true;
                     SetBackGroundColor();
                 }
                 catch { }
@@ -2827,7 +2825,6 @@ namespace NotEnoughAV1Encodes
             else
             {
                 imgDynamic.Source = null;
-                CustomBG = false;
                 SolidColorBrush transparent = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
                 MetroTab.Background = transparent;
             }
