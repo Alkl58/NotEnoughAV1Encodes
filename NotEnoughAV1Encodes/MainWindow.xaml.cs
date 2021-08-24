@@ -205,6 +205,7 @@ namespace NotEnoughAV1Encodes
             Views.Settings settings = new Views.Settings(BaseTheme, AccentTheme);
             settings.ShowDialog();
             LoadSettingsTab();
+            SetLanguageStartup();
         }
 
         private void CheckBoxSkipReencode_Checked(object sender, RoutedEventArgs e)
@@ -748,7 +749,7 @@ namespace NotEnoughAV1Encodes
                     SliderVideoQuality.Value = 50;
                     SliderVideoQuality.Maximum = 63;
                     ComboBoxWorkerCount.SelectedIndex = 0;
-                    TextBoxWorkerCountOverride.Text = "0";
+                    TextBoxWorkerCountOverride.Text = "1";
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex == 3)
                 {
