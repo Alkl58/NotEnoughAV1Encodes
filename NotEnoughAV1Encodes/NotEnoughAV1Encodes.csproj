@@ -102,6 +102,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Audio\AudioTracks.cs" />
+    <Compile Include="Audio\CommandGenerator.cs" />
     <Compile Include="Audio\Encoder\EncodeAudio.cs" />
     <Compile Include="Video\Encoder\EncodeVideo.cs" />
     <Compile Include="Video\Encoder\EncodeVideoPipe.cs" />

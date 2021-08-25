@@ -31,7 +31,7 @@ namespace NotEnoughAV1Encodes
                 }
             }
 
-            bool audio = EncodeAudio.trackOne || EncodeAudio.trackTwo || EncodeAudio.trackThree || EncodeAudio.trackFour;
+            bool audio = !EncodeAudio.noaudio;
             bool vfr = MainWindow.VFRVideo;
             bool sub = MainWindow.subSoftSubEnabled;
             string ffmpegCommand;
