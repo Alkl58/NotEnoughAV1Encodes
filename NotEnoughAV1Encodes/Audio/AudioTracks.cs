@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Controls;
 
 namespace NotEnoughAV1Encodes.Audio
 {

@@ -1,0 +1,13 @@
+﻿<mah:MetroWindow x:Class="NotEnoughAV1Encodes.Views.ProgramSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NotEnoughAV1Encodes.Views"
+        mc:Ignorable="d"
+        Title="{DynamicResource settings}" Height="450" Width="800" Topmost="True" ResizeMode="NoResize">
+    <Grid>
+        
+    </Grid>
+</mah:MetroWindow>

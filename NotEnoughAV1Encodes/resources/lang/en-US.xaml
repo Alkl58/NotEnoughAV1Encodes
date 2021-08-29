@@ -1,0 +1,34 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Main Window -->
+    <system:String x:Key="source">Source</system:String>
+    <system:String x:Key="destination">Destination</system:String>
+    <system:String x:Key="start">Start</system:String>
+    <system:String x:Key="settings">Settings</system:String>
+
+    <system:String x:Key="summary">Summary</system:String>
+    <system:String x:Key="video">Video</system:String>
+    <system:String x:Key="audio">Audio</system:String>
+    <system:String x:Key="channels">Channels:</system:String>
+    <system:String x:Key="language">Language:</system:String>
+    <system:String x:Key="noAudioFound">No Audio Found</system:String>
+    <system:String x:Key="inputOutput">Input / Output</system:String>
+    <system:String x:Key="noSource">No Source Selected</system:String>
+    <system:String x:Key="noDestination">No Destination Selected</system:String>
+    <system:String x:Key="videoInformation">Video Information</system:String>
+    <system:String x:Key="videoLength">Length</system:String>
+    <system:String x:Key="videoColorFormat">Color Format</system:String>
+    <system:String x:Key="videoFramerate">Framerate</system:String>
+    <system:String x:Key="videoResolution">Resolution</system:String>
+    <system:String x:Key="encoder">Encoder</system:String>
+    <system:String x:Key="bit-depth">Bit-Depth</system:String>
+
+    <!-- Open Source Window -->
+    <system:String x:Key="opensource.method">Method for opening a source.</system:String>
+    <system:String x:Key="opensource.singlefile">➔ Single File</system:String>
+    <system:String x:Key="opensource.projectfile">➔ Project File</system:String>
+    <system:String x:Key="opensource.batchfolder">➔ Batch Folder</system:String>
+
+</ResourceDictionary>
