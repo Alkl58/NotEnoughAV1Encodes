@@ -6,6 +6,10 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes
 {
@@ -14,6 +18,8 @@ namespace NotEnoughAV1Encodes
         public Views.ProgramSettings programSettings = new();
         private readonly Video.VideoDB videoDB = new();
         private int ProgramState;
+
+        public ObservableCollection<Queue.QueueElement> QueueList { get; set; } = new();
 
         public MainWindow()
         {
@@ -60,7 +66,7 @@ namespace NotEnoughAV1Encodes
             if (saveVideoFileDialog.ShowDialog() == true)
             {
                 videoDB.OutputPath = saveVideoFileDialog.FileName;
-                TextBoxVideoSource.Content = videoDB.OutputPath;
+                LabelVideoDestination.Content = videoDB.OutputPath;
             }
         }
 
@@ -70,13 +76,12 @@ namespace NotEnoughAV1Encodes
             {
                 if (ProgramState is 0 or 2)
                 {
-                    ProgramState = 1;
                     ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/pause.png", UriKind.Relative));
 
                     // Main Start
                     if (ProgramState is 0)
                     {
-
+                        PreStart();
                     }
 
                     // Resume all PIDs
@@ -84,6 +89,8 @@ namespace NotEnoughAV1Encodes
                     {
 
                     }
+
+                    ProgramState = 1;
                 }
                 else if (ProgramState is 1)
                 {
@@ -95,6 +102,19 @@ namespace NotEnoughAV1Encodes
             {
                 // To-Do: Error Meldung
             }
+        }
+
+        private void ButtonAddToQueue_Click(object sender, RoutedEventArgs e)
+        {
+            Queue.QueueElement queueElement = new();
+            Audio.CommandGenerator commandgenerator = new();
+
+            queueElement.Input = videoDB.InputPath;
+            queueElement.Output = videoDB.OutputPath;
+            queueElement.InputFileName = videoDB.FileName;
+            queueElement.AudioCommand = commandgenerator.Generate(ListBoxAudioTracks.Items);
+
+            ListBoxQueue.Items.Add(queueElement);
         }
         #endregion
 
@@ -108,6 +128,20 @@ namespace NotEnoughAV1Encodes
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             programSettings.Close();
+        }
+        #endregion
+
+        #region Main Entry
+        private async Task PreStart()
+        {
+            foreach(Queue.QueueElement queueElement in ListBoxQueue.Items)
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    queueElement.Progress = i;
+                    await Task.Delay(100);
+                }
+            }
         }
         #endregion
     }

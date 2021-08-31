@@ -20,10 +20,10 @@
                 <Label Content="{DynamicResource destination}" Canvas.Left="32" Width="88" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonStartStop" HorizontalAlignment="Left" Margin="280,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Click="ButtonStartStop_Click">
+        <Button x:Name="ButtonStartStop" Margin="0,10,60,0" VerticalAlignment="Top" Height="45" Click="ButtonStartStop_Click" HorizontalAlignment="Right" Width="118">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/start.png"/>
-                <Label Content="{DynamicResource start}" Canvas.Left="32" Width="88" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
+                <Label Content="{DynamicResource start}" Canvas.Left="32" Width="78" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
         <mah:MetroTabControl Margin="0,60,0,0">
@@ -34,7 +34,7 @@
                             <Label Content="{DynamicResource source}" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold" />
                             <Label Content="{DynamicResource destination}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold" />
                             <Label x:Name="TextBoxVideoSource" Height="29" Margin="105,1,8,0" Content="{DynamicResource noSource}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" MinWidth="50" />
-                            <Label x:Name="TextBoxVideoDestination" Height="29" Margin="105,30,8,0" Content="{DynamicResource noDestination}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" />
+                            <Label x:Name="LabelVideoDestination" Height="29" Margin="105,30,8,0" Content="{DynamicResource noDestination}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="{DynamicResource videoInformation}" Height="72" Margin="10,115,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
@@ -150,11 +150,68 @@
                     </ListBox>
                 </Grid>
             </TabItem>
+            <TabItem Header="{DynamicResource queue}">
+                <Grid>
+                    <GroupBox Header="{DynamicResource queue}">
+                        <ListBox x:Name="ListBoxQueue" ItemsSource="{Binding Path=QueueList}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60" />
+                                            <ColumnDefinition MinWidth="80" />
+                                            <ColumnDefinition Width="90" />
+                                            <ColumnDefinition MinWidth="50"/>
+                                            <ColumnDefinition Width="90" />
+                                            <ColumnDefinition MinWidth="50"/>
+                                            <ColumnDefinition MinWidth="50"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{DynamicResource source}" FontWeight="Bold"></Label>
+                                        <Label Grid.Column="1" Content="{Binding InputFileName}"></Label>
+                                        <Label Grid.Column="2" Content="{DynamicResource destination}" FontWeight="Bold"></Label>
+                                        <Label Grid.Column="3" Content="{Binding OutputFileName}"></Label>
+                                        <Label Grid.Column="4" Content="{DynamicResource status}" FontWeight="Bold"></Label>
+                                        <Label Grid.Column="5" Content="{Binding Status}"></Label>
+                                        <ProgressBar Grid.Column="6" Value="{Binding Progress}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <!--<ListBoxItem Height="40">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition MinWidth="80" />
+                                        <ColumnDefinition Width="90" />
+                                        <ColumnDefinition MinWidth="50"/>
+                                        <ColumnDefinition Width="90" />
+                                        <ColumnDefinition MinWidth="50"/>
+                                        <ColumnDefinition MinWidth="50"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Content="{DynamicResource source}" FontWeight="Bold"></Label>
+                                    <Label Grid.Column="1" Content="example.mp4"></Label>
+                                    <Label Grid.Column="2" Content="{DynamicResource destination}" FontWeight="Bold"></Label>
+                                    <Label Grid.Column="3" Content="example.mp4"></Label>
+                                    <Label Grid.Column="4" Content="{DynamicResource status}" FontWeight="Bold"></Label>
+                                    <Label Grid.Column="5" Content="Not Started yet"></Label>
+                                    <ProgressBar Grid.Column="6"/>
+                                </Grid>
+                            </ListBoxItem>-->
+                        </ListBox>
+                    </GroupBox>
+                    <Label Content="{DynamicResource encode-queue-parallel}" Margin="0,0,52,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="300"/>
+                    <mah:ToggleSwitch VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,-4,-107,0" Height="30"/>
+                </Grid>
+            </TabItem>
         </mah:MetroTabControl>
-        <Button x:Name="ButtonProgramSettings" HorizontalAlignment="Left" Margin="945,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Click="ButtonProgramSettings_Click">
+        <Button x:Name="ButtonProgramSettings" Margin="0,10,10,0" VerticalAlignment="Top" Height="45" Click="ButtonProgramSettings_Click" HorizontalAlignment="Right" Width="45">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop1" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/settings.png"/>
-                <Label Content="{DynamicResource settings}" Canvas.Left="32" Width="88" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
+            </Canvas>
+        </Button>
+        <Button x:Name="ButtonAddToQueue" Margin="0,10,655,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Right" Width="150" Click="ButtonAddToQueue_Click">
+            <Canvas Height="30" Width="120">
+                <Image x:Name="ImageStartStop2" Height="44" Canvas.Left="-10" Canvas.Top="-7" Width="44" Source="/resources/img/queue.png"/>
+                <Label Content="{DynamicResource addToQueue}" Canvas.Left="32" Width="103" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
     </Grid>

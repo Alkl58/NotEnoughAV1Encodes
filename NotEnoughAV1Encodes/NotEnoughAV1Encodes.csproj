@@ -9,6 +9,7 @@
   <ItemGroup>
     <None Remove="resources\img\neav1e.ico" />
     <None Remove="resources\img\pause.png" />
+    <None Remove="resources\img\queue.png" />
     <None Remove="resources\img\save.png" />
     <None Remove="resources\img\settings.png" />
     <None Remove="resources\img\start.png" />
@@ -23,6 +24,7 @@
   <ItemGroup>
     <Resource Include="resources\img\neav1e.ico" />
     <Resource Include="resources\img\pause.png" />
+    <Resource Include="resources\img\queue.png" />
     <Resource Include="resources\img\save.png" />
     <Resource Include="resources\img\settings.png" />
     <Resource Include="resources\img\start.png" />

@@ -7,10 +7,12 @@
     <system:String x:Key="destination">Destination</system:String>
     <system:String x:Key="start">Start</system:String>
     <system:String x:Key="settings">Settings</system:String>
+    <system:String x:Key="addToQueue">Add to Queue</system:String>
 
     <system:String x:Key="summary">Summary</system:String>
     <system:String x:Key="video">Video</system:String>
     <system:String x:Key="audio">Audio</system:String>
+    <system:String x:Key="queue">Queue</system:String>
     <system:String x:Key="channels">Channels:</system:String>
     <system:String x:Key="language">Language:</system:String>
     <system:String x:Key="noAudioFound">No Audio Found</system:String>
@@ -24,6 +26,8 @@
     <system:String x:Key="videoResolution">Resolution</system:String>
     <system:String x:Key="encoder">Encoder</system:String>
     <system:String x:Key="bit-depth">Bit-Depth</system:String>
+    <system:String x:Key="encode-queue-parallel">Encode Queue Parallel instead of chunking</system:String>
+    <system:String x:Key="status">Status</system:String>
 
     <!-- Open Source Window -->
     <system:String x:Key="opensource.method">Method for opening a source.</system:String>
