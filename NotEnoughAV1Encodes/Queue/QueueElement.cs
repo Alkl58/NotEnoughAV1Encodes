@@ -14,12 +14,13 @@ namespace NotEnoughAV1Encodes.Queue
         public string Status { get; set; }
         public string VideoCommand { get; set; }
         public string AudioCommand { get; set; }
+        public string UniqueIdentifier { get; set; }
         public double Progress
         {
             get => _progress;
             set { _progress = value; NotifyPropertyChanged("Progress"); }
         }
-        
+
         private void NotifyPropertyChanged(string property)
         {
             if (PropertyChanged != null)

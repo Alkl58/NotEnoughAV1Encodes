@@ -152,8 +152,9 @@
             </TabItem>
             <TabItem Header="{DynamicResource queue}">
                 <Grid>
+                    <Button Content="X" HorizontalAlignment="Left" Margin="466,31,0,0" VerticalAlignment="Top" Width="209" Height="39"/>
                     <GroupBox Header="{DynamicResource queue}">
-                        <ListBox x:Name="ListBoxQueue" ItemsSource="{Binding Path=QueueList}">
+                        <ListBox x:Name="ListBoxQueue" ItemsSource="{Binding Path=QueueList}" Margin="0,36,0,0">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -199,7 +200,7 @@
                         </ListBox>
                     </GroupBox>
                     <Label Content="{DynamicResource encode-queue-parallel}" Margin="0,0,52,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="300"/>
-                    <mah:ToggleSwitch VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,-4,-107,0" Height="30"/>
+                    <mah:ToggleSwitch VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,22,137,0" Height="30"/>
                 </Grid>
             </TabItem>
         </mah:MetroTabControl>

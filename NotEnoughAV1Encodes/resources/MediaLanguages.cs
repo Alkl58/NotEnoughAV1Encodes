@@ -2,7 +2,7 @@
 
 namespace NotEnoughAV1Encodes.resources
 {
-    class MediaLanguages
+    internal class MediaLanguages
     {
         public static Dictionary<string, string> Languages = new();
         public static List<string> LanguageKeys = new();

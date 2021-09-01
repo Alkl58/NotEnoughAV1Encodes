@@ -8,8 +8,11 @@ using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.IO;
+using System.Text;
 
 namespace NotEnoughAV1Encodes
 {
@@ -24,8 +27,26 @@ namespace NotEnoughAV1Encodes
         public MainWindow()
         {
             InitializeComponent();
-            resources.MediaLanguages.FillDictionary();
+            Initialize();
         }
+
+        #region Startup
+        private void Initialize()
+        {
+            resources.MediaLanguages.FillDictionary();
+
+            // Load Queue
+            if (Directory.Exists(Path.Combine(Global.AppData, "NEAV1E", "Queue")))
+            {
+                string[] filePaths = Directory.GetFiles(Path.Combine(Global.AppData, "NEAV1E", "Queue"), "*.json", SearchOption.TopDirectoryOnly);
+
+                foreach (string file in filePaths)
+                {
+                    ListBoxQueue.Items.Add(JsonConvert.DeserializeObject<Queue.QueueElement>(File.ReadAllText(file)));
+                }
+            }
+        }
+        #endregion
 
         #region Buttons
         private void ButtonProgramSettings_Click(object sender, RoutedEventArgs e)
@@ -106,6 +127,18 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonAddToQueue_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(videoDB.InputPath))
+            {
+                // Throw Error
+                return;
+            }
+
+            if (string.IsNullOrEmpty(videoDB.OutputPath))
+            {
+                // Throw Error
+                return;
+            }
+
             Queue.QueueElement queueElement = new();
             Audio.CommandGenerator commandgenerator = new();
 
@@ -114,7 +147,27 @@ namespace NotEnoughAV1Encodes
             queueElement.InputFileName = videoDB.FileName;
             queueElement.AudioCommand = commandgenerator.Generate(ListBoxAudioTracks.Items);
 
+            // Generate a random identifier to avoid filesystem conflicts
+            const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            StringBuilder identifier = new();
+            Random RNG = new();
+            for (int i = 0; i < 15; i++)
+            {
+                identifier.Append(src[RNG.Next(0, src.Length)]);
+            }
+
+            queueElement.UniqueIdentifier = identifier.ToString();
+
+            // Add to Queue
             ListBoxQueue.Items.Add(queueElement);
+
+            if(!Directory.Exists(Path.Combine(Global.AppData, "NEAV1E", "Queue")))
+            {
+                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E", "Queue"));
+            }
+
+            // Save as JSON
+            File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.FileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
         }
         #endregion
 
@@ -125,7 +178,7 @@ namespace NotEnoughAV1Encodes
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
-        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void MetroWindow_Closing(object sender, CancelEventArgs e)
         {
             programSettings.Close();
         }

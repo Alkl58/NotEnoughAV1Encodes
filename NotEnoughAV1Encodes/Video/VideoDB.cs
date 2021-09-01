@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace NotEnoughAV1Encodes.Video
 {
-    class VideoDB
+    internal class VideoDB
     {
         public string InputPath { get; set; }
         public string OutputPath { get; set; }
@@ -97,7 +97,7 @@ namespace NotEnoughAV1Encodes.Video
 
                 mediaInfo.Close();
 
-                FileName = Path.GetFileNameWithoutExtension(InputPath);
+                FileName = Path.GetFileName(InputPath);
             }
         }
     }
