@@ -13,6 +13,9 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Timers;
+using System.Linq;
 
 namespace NotEnoughAV1Encodes
 {
@@ -63,6 +66,7 @@ namespace NotEnoughAV1Encodes
                 videoDB.InputPath = openSource.Path;
                 videoDB.ParseMediaInfo();
                 ListBoxAudioTracks.Items.Clear();
+                //ListBoxAudioTracks.Items.Clear()
                 ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
                 TextBoxVideoSource.Content = videoDB.InputPath;
                 LabelVideoLength.Content = videoDB.MIDuration;
@@ -91,7 +95,7 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void ButtonStartStop_Click(object sender, RoutedEventArgs e)
+        private async void ButtonStartStop_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(videoDB.InputPath) && !string.IsNullOrEmpty(videoDB.OutputPath))
             {
@@ -102,7 +106,8 @@ namespace NotEnoughAV1Encodes
                     // Main Start
                     if (ProgramState is 0)
                     {
-                        PreStart();
+                        //await PreStart();
+                        await Task.Run(() => PreStart());
                     }
 
                     // Resume all PIDs
@@ -184,17 +189,77 @@ namespace NotEnoughAV1Encodes
         }
         #endregion
 
-        #region Main Entry
-        private async Task PreStart()
+
+        private int getTotalFramesProcessed(string stderr)
         {
-            foreach(Queue.QueueElement queueElement in ListBoxQueue.Items)
+            try
             {
-                for (int i = 0; i < 100; i++)
-                {
-                    queueElement.Progress = i;
-                    await Task.Delay(100);
-                }
+                int Start, End;
+                Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
+                End = stderr.IndexOf("fps=", Start);
+                return int.Parse(stderr.Substring(Start, End - Start));
             }
+            catch {
+                return 10;
+            }
+        }
+
+        #region Main Entry
+        private void PreStart()
+        {
+            // To-Do: Set WorkerCount either by QueueElement or Queue Parallel
+            int WorkerCountQueue = 1;
+            int WorkerCountElement = 1;
+
+            using SemaphoreSlim concurrencySemaphore = new(WorkerCountQueue);
+            // Creates a tasks list
+            List<Task> tasks = new();
+
+            foreach (Queue.QueueElement queueElement in ListBoxQueue.Items)
+            {
+                concurrencySemaphore.Wait();
+                var task = Task.Factory.StartNew(async () =>
+                {
+                    try
+                    {
+                        // Inner concurrency
+                        //using SemaphoreSlim concurrencySemaphoreInner = new(WorkerCountElement);
+
+                        //string[] VideoChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), "*mkv", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
+
+
+                        Process process = new Process();
+                        ProcessStartInfo startInfo = new ProcessStartInfo
+                        {
+                            WindowStyle = ProcessWindowStyle.Hidden,
+                            FileName = "cmd.exe",
+                            WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
+                            Arguments = "/C ffmpeg.exe -i \"" + queueElement.Input + "\" -c:v libx265 -crf 10 \"" + queueElement.Output,
+                            RedirectStandardError = true,
+                            CreateNoWindow = true
+                        };
+                        process.StartInfo = startInfo;
+                        process.Start();
+
+                        StreamReader sr = process.StandardError;
+
+                        while (!sr.EndOfStream)
+                        {
+                            queueElement.Progress = Convert.ToDouble(getTotalFramesProcessed(sr.ReadLine()));
+                        }
+
+                        process.WaitForExit();
+
+                    }
+                    finally
+                    {
+                        concurrencySemaphore.Release();
+                    }
+                });
+
+                tasks.Add(task);
+            }
+            Task.WaitAll(tasks.ToArray());
         }
         #endregion
     }
