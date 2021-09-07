@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows;
 using MahApps.Metro.Controls;
 using System.Windows.Media.Imaging;
@@ -14,8 +13,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Diagnostics;
 using System.Timers;
-using System.Linq;
 
 namespace NotEnoughAV1Encodes
 {
@@ -23,6 +22,7 @@ namespace NotEnoughAV1Encodes
     {
         public Views.ProgramSettings programSettings = new();
         private readonly Video.VideoDB videoDB = new();
+        private bool QueueParallel = true;
         private int ProgramState;
 
         public ObservableCollection<Queue.QueueElement> QueueList { get; set; } = new();
@@ -55,6 +55,20 @@ namespace NotEnoughAV1Encodes
         private void ButtonProgramSettings_Click(object sender, RoutedEventArgs e)
         {
             programSettings.ShowDialog();
+        }
+
+        private void ButtonRemoveSelectedQueueItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListBoxQueue.SelectedItem != null)
+            {
+                Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
+                ListBoxQueue.Items.Remove(ListBoxQueue.SelectedItem);
+                try
+                {
+                    File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", tmp.InputFileName + "_" + tmp.UniqueIdentifier + ".json"));
+                }
+                catch { }
+            }
         }
 
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
@@ -92,12 +106,13 @@ namespace NotEnoughAV1Encodes
             {
                 videoDB.OutputPath = saveVideoFileDialog.FileName;
                 LabelVideoDestination.Content = videoDB.OutputPath;
+                videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
             }
         }
 
         private async void ButtonStartStop_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(videoDB.InputPath) && !string.IsNullOrEmpty(videoDB.OutputPath))
+            if (ListBoxQueue.Items.Count != 0)
             {
                 if (ProgramState is 0 or 2)
                 {
@@ -106,7 +121,6 @@ namespace NotEnoughAV1Encodes
                     // Main Start
                     if (ProgramState is 0)
                     {
-                        //await PreStart();
                         await Task.Run(() => PreStart());
                     }
 
@@ -149,8 +163,10 @@ namespace NotEnoughAV1Encodes
 
             queueElement.Input = videoDB.InputPath;
             queueElement.Output = videoDB.OutputPath;
-            queueElement.InputFileName = videoDB.FileName;
+            queueElement.InputFileName = videoDB.InputFileName;
+            queueElement.OutputFileName = videoDB.OutputFileName;
             queueElement.AudioCommand = commandgenerator.Generate(ListBoxAudioTracks.Items);
+            queueElement.FrameCount = videoDB.MIFrameCount;
 
             // Generate a random identifier to avoid filesystem conflicts
             const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -172,7 +188,7 @@ namespace NotEnoughAV1Encodes
             }
 
             // Save as JSON
-            File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.FileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
+            File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.InputFileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
         }
         #endregion
 
@@ -189,21 +205,6 @@ namespace NotEnoughAV1Encodes
         }
         #endregion
 
-
-        private int getTotalFramesProcessed(string stderr)
-        {
-            try
-            {
-                int Start, End;
-                Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
-                End = stderr.IndexOf("fps=", Start);
-                return int.Parse(stderr.Substring(Start, End - Start));
-            }
-            catch {
-                return 10;
-            }
-        }
-
         #region Main Entry
         private void PreStart()
         {
@@ -218,38 +219,51 @@ namespace NotEnoughAV1Encodes
             foreach (Queue.QueueElement queueElement in ListBoxQueue.Items)
             {
                 concurrencySemaphore.Wait();
-                var task = Task.Factory.StartNew(async () =>
+                Task task = Task.Factory.StartNew(async () =>
                 {
                     try
                     {
-                        // Inner concurrency
-                        //using SemaphoreSlim concurrencySemaphoreInner = new(WorkerCountElement);
-
-                        //string[] VideoChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), "*mkv", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
-
-
-                        Process process = new Process();
-                        ProcessStartInfo startInfo = new ProcessStartInfo
+                        if (!Directory.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier)))
                         {
-                            WindowStyle = ProcessWindowStyle.Hidden,
-                            FileName = "cmd.exe",
-                            WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                            Arguments = "/C ffmpeg.exe -i \"" + queueElement.Input + "\" -c:v libx265 -crf 10 \"" + queueElement.Output,
-                            RedirectStandardError = true,
-                            CreateNoWindow = true
-                        };
-                        process.StartInfo = startInfo;
-                        process.Start();
-
-                        StreamReader sr = process.StandardError;
-
-                        while (!sr.EndOfStream)
-                        {
-                            queueElement.Progress = Convert.ToDouble(getTotalFramesProcessed(sr.ReadLine()));
+                            Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier));
                         }
 
-                        process.WaitForExit();
+                        List<string> VideoChunks = new();
 
+                        // Chunking
+                        if (QueueParallel)
+                        {
+                            VideoChunks.Add(queueElement.Input);
+                        }
+                        else
+                        {
+                            string[] filePaths = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), "*.mkv", SearchOption.TopDirectoryOnly);
+                            foreach (string file in filePaths)
+                            {
+                                VideoChunks.Add(file);
+                            }
+                        }
+
+                        // Audio Encoding
+                        Audio.EncodeAudio encodeAudio = new();
+                        await Task.Run(() => encodeAudio.Encode(queueElement));
+                        Debug.WriteLine("Pre Video");
+
+                        // Starts "a timer" for eta / fps calculation
+                        System.Timers.Timer aTimer = new System.Timers.Timer();
+                        aTimer.Elapsed += (sender, e) => { UpdateProgressBar(sender, e, queueElement); } ;
+                        aTimer.Interval = 1000;
+                        aTimer.Start();
+
+                        // Video Encoding
+                        Video.VideoEncodePipe videoEncodePipe = new();
+                        await Task.Run(() => videoEncodePipe.Encode(WorkerCountElement, VideoChunks, queueElement));
+
+                        aTimer.Stop();
+                        queueElement.Progress = queueElement.FrameCount;
+                        queueElement.Status = "Muxing files. Please wait.";
+
+                        Debug.WriteLine("After Video");
                     }
                     finally
                     {
@@ -261,6 +275,35 @@ namespace NotEnoughAV1Encodes
             }
             Task.WaitAll(tasks.ToArray());
         }
+
+        private void UpdateProgressBar(object sender, EventArgs e, Queue.QueueElement queueElement)
+        {
+            // Gets all Progress Files of ffmpeg
+            string[] filePaths = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Progress"), "*.log", SearchOption.TopDirectoryOnly);
+
+            int encodedFrames = 0;
+
+            foreach (string file in filePaths)
+            {
+                try
+                {
+                    // Reads the progress file of ffmpeg without locking it up
+                    Stream stream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    TextReader objstream = new StreamReader(stream);
+
+                    // Reads the content of the stream
+                    encodedFrames += int.Parse(objstream.ReadLine());
+
+                    stream.Close();
+                    objstream.Close();
+                }
+                catch { }
+
+                queueElement.Progress = Convert.ToDouble(encodedFrames);
+                queueElement.Status = "Encoded: " + ((decimal)encodedFrames / queueElement.FrameCount).ToString("0.00%");
+            }
+        }
+
         #endregion
     }
 }

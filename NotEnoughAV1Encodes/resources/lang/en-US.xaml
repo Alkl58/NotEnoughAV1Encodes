@@ -9,6 +9,8 @@
     <system:String x:Key="settings">Settings</system:String>
     <system:String x:Key="addToQueue">Add to Queue</system:String>
 
+    <system:String x:Key="removeSelectedItem">Remove selected Item</system:String>
+
     <system:String x:Key="summary">Summary</system:String>
     <system:String x:Key="video">Video</system:String>
     <system:String x:Key="audio">Audio</system:String>

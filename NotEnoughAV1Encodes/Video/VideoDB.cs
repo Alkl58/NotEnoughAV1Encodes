@@ -8,7 +8,8 @@ namespace NotEnoughAV1Encodes.Video
     {
         public string InputPath { get; set; }
         public string OutputPath { get; set; }
-        public string FileName { get; set; }
+        public string InputFileName { get; set; }
+        public string OutputFileName { get; set; }
         public string MIDuration { get; set; }
         public string MIFramerate { get; set; }
         public string MIColorSpace { get; set; }
@@ -97,7 +98,7 @@ namespace NotEnoughAV1Encodes.Video
 
                 mediaInfo.Close();
 
-                FileName = Path.GetFileName(InputPath);
+                InputFileName = Path.GetFileName(InputPath);
             }
         }
     }

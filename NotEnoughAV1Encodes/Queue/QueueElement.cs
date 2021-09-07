@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace NotEnoughAV1Encodes.Queue
 {
@@ -6,15 +7,21 @@ namespace NotEnoughAV1Encodes.Queue
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private double _progress;
+        private string _status;
 
         public string Input { get; set; }
         public string Output { get; set; }
         public string InputFileName { get; set; }
         public string OutputFileName { get; set; }
-        public string Status { get; set; }
+        public string Status
+        {
+            get => _status;
+            set { _status = value; NotifyPropertyChanged("Status"); }
+        }
         public string VideoCommand { get; set; }
         public string AudioCommand { get; set; }
         public string UniqueIdentifier { get; set; }
+        public long FrameCount { get; set; }
         public double Progress
         {
             get => _progress;

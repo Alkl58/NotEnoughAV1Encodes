@@ -152,32 +152,33 @@
             </TabItem>
             <TabItem Header="{DynamicResource queue}">
                 <Grid>
-                    <Button Content="X" HorizontalAlignment="Left" Margin="466,31,0,0" VerticalAlignment="Top" Width="209" Height="39"/>
                     <GroupBox Header="{DynamicResource queue}">
-                        <ListBox x:Name="ListBoxQueue" ItemsSource="{Binding Path=QueueList}" Margin="0,36,0,0">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="60" />
-                                            <ColumnDefinition MinWidth="80" />
-                                            <ColumnDefinition Width="90" />
-                                            <ColumnDefinition MinWidth="50"/>
-                                            <ColumnDefinition Width="90" />
-                                            <ColumnDefinition MinWidth="50"/>
-                                            <ColumnDefinition MinWidth="50"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Content="{DynamicResource source}" FontWeight="Bold"></Label>
-                                        <Label Grid.Column="1" Content="{Binding InputFileName}"></Label>
-                                        <Label Grid.Column="2" Content="{DynamicResource destination}" FontWeight="Bold"></Label>
-                                        <Label Grid.Column="3" Content="{Binding OutputFileName}"></Label>
-                                        <Label Grid.Column="4" Content="{DynamicResource status}" FontWeight="Bold"></Label>
-                                        <Label Grid.Column="5" Content="{Binding Status}"></Label>
-                                        <ProgressBar Grid.Column="6" Value="{Binding Progress}"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <!--<ListBoxItem Height="40">
+                        <Grid>
+                            <GroupBox Margin="0,34,0,0">
+                                <ListBox x:Name="ListBoxQueue" ItemsSource="{Binding Path=QueueList}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="60" />
+                                                    <ColumnDefinition MinWidth="80" />
+                                                    <ColumnDefinition Width="90" />
+                                                    <ColumnDefinition MinWidth="50"/>
+                                                    <ColumnDefinition Width="90" />
+                                                    <ColumnDefinition MinWidth="50"/>
+                                                    <ColumnDefinition MinWidth="50"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Label Grid.Column="0" Content="{DynamicResource source}" FontWeight="Bold"></Label>
+                                                <Label Grid.Column="1" Content="{Binding InputFileName}" ToolTip="{Binding Input}"></Label>
+                                                <Label Grid.Column="2" Content="{DynamicResource destination}" FontWeight="Bold"></Label>
+                                                <Label Grid.Column="3" Content="{Binding OutputFileName}" ToolTip="{Binding Output}"></Label>
+                                                <Label Grid.Column="4" Content="{DynamicResource status}" FontWeight="Bold"></Label>
+                                                <Label Grid.Column="5" Content="{Binding Status}"></Label>
+                                                <ProgressBar Grid.Column="6" Value="{Binding Progress}" Maximum="{Binding FrameCount}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <!--<ListBoxItem Height="40">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="60" />
@@ -197,10 +198,13 @@
                                     <ProgressBar Grid.Column="6"/>
                                 </Grid>
                             </ListBoxItem>-->
-                        </ListBox>
+                                </ListBox>
+                            </GroupBox>
+                            <Label Content="{DynamicResource encode-queue-parallel}" Margin="0,3,102,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="300"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchQueueParallel" IsOn="{Binding QueueParallel}" VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,1,-57,0" Height="30"/>
+                        </Grid>
                     </GroupBox>
-                    <Label Content="{DynamicResource encode-queue-parallel}" Margin="0,0,52,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="300"/>
-                    <mah:ToggleSwitch VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,22,137,0" Height="30"/>
+                    <Button x:Name="ButtonRemoveSelectedQueueItem" Content="{DynamicResource removeSelectedItem}" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonRemoveSelectedQueueItem_Click"/>
                 </Grid>
             </TabItem>
         </mah:MetroTabControl>
@@ -209,7 +213,7 @@
                 <Image x:Name="ImageStartStop1" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/settings.png"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonAddToQueue" Margin="0,10,655,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Right" Width="150" Click="ButtonAddToQueue_Click">
+        <Button x:Name="ButtonAddToQueue" Margin="280,10,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="150" Click="ButtonAddToQueue_Click">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop2" Height="44" Canvas.Left="-10" Canvas.Top="-7" Width="44" Source="/resources/img/queue.png"/>
                 <Label Content="{DynamicResource addToQueue}" Canvas.Left="32" Width="103" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
