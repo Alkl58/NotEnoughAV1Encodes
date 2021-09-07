@@ -8,7 +8,7 @@ namespace NotEnoughAV1Encodes.Video
 {
     class VideoEncodePipe
     {
-        public void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement)
+        public static void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement)
         {
             using SemaphoreSlim concurrencySemaphoreInner = new(_workerCount);
             // Creates a tasks list
@@ -33,7 +33,7 @@ namespace NotEnoughAV1Encodes.Video
                                 WindowStyle = ProcessWindowStyle.Hidden,
                                 FileName = "cmd.exe",
                                 WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                Arguments = "/C ffmpeg.exe -i \"" + chunk + "\" -an -sn -map_metadata -1 -c:v libx265 -crf 10 \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", Path.GetFileNameWithoutExtension(chunk) + ".mkv") + "\"",
+                                Arguments = "/C ffmpeg.exe -i \"" + chunk + "\" -an -sn -map_metadata -1 -c:v libvpx-vp9 -crf 10 \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", Path.GetFileNameWithoutExtension(chunk) + ".webm") + "\"",
                                 RedirectStandardError = true,
                                 CreateNoWindow = true
                             };

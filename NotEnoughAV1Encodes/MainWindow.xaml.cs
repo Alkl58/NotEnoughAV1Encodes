@@ -206,7 +206,7 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region Main Entry
-        private void PreStart()
+        private async Task PreStart()
         {
             // To-Do: Set WorkerCount either by QueueElement or Queue Parallel
             int WorkerCountQueue = 1;
@@ -219,7 +219,7 @@ namespace NotEnoughAV1Encodes
             foreach (Queue.QueueElement queueElement in ListBoxQueue.Items)
             {
                 concurrencySemaphore.Wait();
-                Task task = Task.Factory.StartNew(async () =>
+                Task task = Task.Factory.StartNew(async() =>
                 {
                     try
                     {
@@ -247,6 +247,7 @@ namespace NotEnoughAV1Encodes
                         // Audio Encoding
                         Audio.EncodeAudio encodeAudio = new();
                         await Task.Run(() => encodeAudio.Encode(queueElement));
+
                         Debug.WriteLine("Pre Video");
 
                         // Starts "a timer" for eta / fps calculation
@@ -257,13 +258,16 @@ namespace NotEnoughAV1Encodes
 
                         // Video Encoding
                         Video.VideoEncodePipe videoEncodePipe = new();
-                        await Task.Run(() => videoEncodePipe.Encode(WorkerCountElement, VideoChunks, queueElement));
+                        await Task.Run(() => Video.VideoEncodePipe.Encode(WorkerCountElement, VideoChunks, queueElement));
 
                         aTimer.Stop();
                         queueElement.Progress = queueElement.FrameCount;
                         queueElement.Status = "Muxing files. Please wait.";
 
                         Debug.WriteLine("After Video");
+
+                        Video.VideoMuxer videoMuxer = new();
+                        await Task.Run(() => videoMuxer.Concat(queueElement));
                     }
                     finally
                     {
