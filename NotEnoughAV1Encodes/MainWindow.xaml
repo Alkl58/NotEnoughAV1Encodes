@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
-        Title="NEAV1E" Height="650" Width="1085" Icon="/resources/img/neav1e.ico" Closing="MetroWindow_Closing">
+        Title="NEAV1E" Height="650" Width="1085" Icon="/resources/img/neav1e.ico">
     <Grid>
         <Button x:Name="ButtonOpenSource" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Click="ButtonOpenSource_Click">
             <Canvas Height="30" Width="114">
@@ -26,7 +26,7 @@
                 <Label Content="{DynamicResource start}" Canvas.Left="32" Width="78" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
-        <mah:MetroTabControl Margin="0,60,0,0">
+        <mah:MetroTabControl x:Name="TabControl" Margin="0,60,0,0">
             <TabItem Header="{DynamicResource summary}">
                 <Grid>
                     <GroupBox Header="{DynamicResource inputOutput}" Height="100" Margin="10,10,10,0" VerticalAlignment="Top" MinWidth="80">

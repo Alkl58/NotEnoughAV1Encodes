@@ -8,19 +8,17 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text;
 using System.Threading;
 using System.Diagnostics;
-using System.Timers;
 
 namespace NotEnoughAV1Encodes
 {
     public partial class MainWindow : MetroWindow
     {
-        public Views.ProgramSettings programSettings = new();
+        private SettingsDB settingsDB = new();
         private readonly Video.VideoDB videoDB = new();
         private bool QueueParallel = true;
         private int ProgramState;
@@ -37,7 +35,6 @@ namespace NotEnoughAV1Encodes
         private void Initialize()
         {
             resources.MediaLanguages.FillDictionary();
-
             // Load Queue
             if (Directory.Exists(Path.Combine(Global.AppData, "NEAV1E", "Queue")))
             {
@@ -54,7 +51,10 @@ namespace NotEnoughAV1Encodes
         #region Buttons
         private void ButtonProgramSettings_Click(object sender, RoutedEventArgs e)
         {
+            Views.ProgramSettings programSettings = new(settingsDB);
             programSettings.ShowDialog();
+            settingsDB.DeleteTempFiles = programSettings.DeleteTempFiles;
+            settingsDB.ShutdownAfterEncode = programSettings.ShutdownAfterEncode;
         }
 
         private void ButtonRemoveSelectedQueueItem_Click(object sender, RoutedEventArgs e)
@@ -121,7 +121,7 @@ namespace NotEnoughAV1Encodes
                     // Main Start
                     if (ProgramState is 0)
                     {
-                        await Task.Run(() => PreStart());
+                        await Task.Run(() => PreStartAsync());
                     }
 
                     // Resume all PIDs
@@ -189,6 +189,8 @@ namespace NotEnoughAV1Encodes
 
             // Save as JSON
             File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.InputFileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
+
+            Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 3));
         }
         #endregion
 
@@ -199,14 +201,50 @@ namespace NotEnoughAV1Encodes
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
-        private void MetroWindow_Closing(object sender, CancelEventArgs e)
+        #endregion
+
+        #region Small Functions
+        private void Shutdown()
         {
-            programSettings.Close();
+            if (settingsDB.ShutdownAfterEncode)
+            {
+                Process.Start("shutdown.exe", "/s /t 0");
+            }
+        }
+        private void DeleteTempFiles(Queue.QueueElement queueElement)
+        {
+            if (settingsDB.DeleteTempFiles)
+            {
+                if (File.Exists(queueElement.Output))
+                {
+                    FileInfo _videoOutput = new(queueElement.Output);
+                    if (_videoOutput.Length >= 50000)
+                    {
+                        try
+                        {
+                            DirectoryInfo tmp = new(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier));
+                            tmp.Delete(true);
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message, "Error Deleting Temp Files", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    else
+                    {
+                        queueElement.Status = "Potential Muxing Error";
+                    }
+                }
+                else
+                {
+                    queueElement.Status = "Error: No Output detected";
+                }
+            }
         }
         #endregion
 
         #region Main Entry
-        private async Task PreStart()
+        private async Task PreStartAsync()
         {
             // To-Do: Set WorkerCount either by QueueElement or Queue Parallel
             int WorkerCountQueue = 1;
@@ -219,7 +257,7 @@ namespace NotEnoughAV1Encodes
             foreach (Queue.QueueElement queueElement in ListBoxQueue.Items)
             {
                 concurrencySemaphore.Wait();
-                Task task = Task.Factory.StartNew(async() =>
+                Task task = Task.Run(async() =>
                 {
                     try
                     {
@@ -264,6 +302,8 @@ namespace NotEnoughAV1Encodes
 
                         Video.VideoMuxer videoMuxer = new();
                         await Task.Run(() => videoMuxer.Concat(queueElement));
+
+                        await Task.Run(() => DeleteTempFiles(queueElement));
                     }
                     finally
                     {
@@ -273,7 +313,9 @@ namespace NotEnoughAV1Encodes
 
                 tasks.Add(task);
             }
-            Task.WaitAll(tasks.ToArray());
+            await Task.WhenAll(tasks.ToArray());
+
+            Shutdown();
         }
 
         private void UpdateProgressBar(object sender, EventArgs e, Queue.QueueElement queueElement)
@@ -305,5 +347,6 @@ namespace NotEnoughAV1Encodes
         }
 
         #endregion
+
     }
 }

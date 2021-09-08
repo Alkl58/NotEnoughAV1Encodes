@@ -80,7 +80,7 @@ namespace NotEnoughAV1Encodes.Video
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
                     RedirectStandardOutput = true,
-                    CreateNoWindow = false,
+                    CreateNoWindow = true,
                     UseShellExecute = false,
                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "MKVToolNix"),
                     Arguments = "/C mkvmerge.exe " + _webmcmd + " --output \"" + queueElement.Output + "\" --language 0:und --default-track 0:yes \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv") + "\" " + audioMuxCommand

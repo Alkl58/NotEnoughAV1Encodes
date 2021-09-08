@@ -56,7 +56,8 @@ namespace NotEnoughAV1Encodes.Video
 
                             if (processVideo.ExitCode == 0)
                             {
-                                File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", Path.GetFileNameWithoutExtension(chunk) + "_finished.log"));
+                                FileStream _finishedLog = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", Path.GetFileNameWithoutExtension(chunk) + "_finished.log"));
+                                _finishedLog.Close();
                             }
                         }
                     }

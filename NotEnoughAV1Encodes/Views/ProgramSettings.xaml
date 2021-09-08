@@ -6,8 +6,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes.Views"
         mc:Ignorable="d"
-        Title="{DynamicResource settings}" Height="450" Width="800" ResizeMode="NoResize">
+        Title="{DynamicResource settings}" Height="450" Width="800" ResizeMode="NoResize" Closing="MetroWindow_Closing">
     <Grid>
         <Button x:Name="ButtonUpdater" Content="Updater" Margin="653,10,0,0" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click"  Height="54" VerticalAlignment="Top" HorizontalAlignment="Left" Width="137" />
+        <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" Header="{DynamicResource deleteTempFiles}" Height="54" Margin="10,10,0,0" Width="100" VerticalAlignment="Top"/>
+        <mah:ToggleSwitch x:Name="ToggleSwitchShutdown" Header="{DynamicResource shutdownAfterEncode}" Height="54" Margin="10,69,0,0" Width="100" VerticalAlignment="Top"/>
     </Grid>
 </mah:MetroWindow>

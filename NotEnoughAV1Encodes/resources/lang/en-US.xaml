@@ -36,5 +36,9 @@
     <system:String x:Key="opensource.singlefile">➔ Single File</system:String>
     <system:String x:Key="opensource.projectfile">➔ Project File</system:String>
     <system:String x:Key="opensource.batchfolder">➔ Batch Folder</system:String>
+    
+    <!-- Settings Window -->
+    <system:String x:Key="deleteTempFiles">Delete Temp Files</system:String>
+    <system:String x:Key="shutdownAfterEncode">Shutdown After Encode</system:String>
 
 </ResourceDictionary>
