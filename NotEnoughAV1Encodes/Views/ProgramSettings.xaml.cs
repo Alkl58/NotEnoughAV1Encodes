@@ -9,5 +9,11 @@ namespace NotEnoughAV1Encodes.Views
         {
             InitializeComponent();
         }
+
+        private void ButtonUpdater_Click(object sender, RoutedEventArgs e)
+        {
+            Updater updater = new("","");
+            updater.ShowDialog();
+        }
     }
 }

@@ -6,8 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes.Views"
         mc:Ignorable="d"
-        Title="{DynamicResource settings}" Height="450" Width="800" Topmost="True" ResizeMode="NoResize">
+        Title="{DynamicResource settings}" Height="450" Width="800" ResizeMode="NoResize">
     <Grid>
-        
+        <Button x:Name="ButtonUpdater" Content="Updater" Margin="653,10,0,0" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click"  Height="54" VerticalAlignment="Top" HorizontalAlignment="Left" Width="137" />
     </Grid>
 </mah:MetroWindow>

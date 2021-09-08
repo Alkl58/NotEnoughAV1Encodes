@@ -19,6 +19,7 @@
   <ItemGroup>
     <PackageReference Include="MahApps.Metro" Version="2.4.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
     <PackageReference Include="System.Management" Version="5.0.0" />
   </ItemGroup>
 

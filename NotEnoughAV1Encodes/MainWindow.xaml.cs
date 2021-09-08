@@ -248,8 +248,6 @@ namespace NotEnoughAV1Encodes
                         Audio.EncodeAudio encodeAudio = new();
                         await Task.Run(() => encodeAudio.Encode(queueElement));
 
-                        Debug.WriteLine("Pre Video");
-
                         // Starts "a timer" for eta / fps calculation
                         System.Timers.Timer aTimer = new System.Timers.Timer();
                         aTimer.Elapsed += (sender, e) => { UpdateProgressBar(sender, e, queueElement); } ;
@@ -263,8 +261,6 @@ namespace NotEnoughAV1Encodes
                         aTimer.Stop();
                         queueElement.Progress = queueElement.FrameCount;
                         queueElement.Status = "Muxing files. Please wait.";
-
-                        Debug.WriteLine("After Video");
 
                         Video.VideoMuxer videoMuxer = new();
                         await Task.Run(() => videoMuxer.Concat(queueElement));
