@@ -36,6 +36,13 @@ namespace NotEnoughAV1Encodes
         private void Initialize()
         {
             resources.MediaLanguages.FillDictionary();
+
+            try
+            {
+                settingsDB = JsonConvert.DeserializeObject<SettingsDB>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json")));
+            }
+            catch { }
+
             // Load Queue
             if (Directory.Exists(Path.Combine(Global.AppData, "NEAV1E", "Queue")))
             {
@@ -61,6 +68,11 @@ namespace NotEnoughAV1Encodes
             programSettings.ShowDialog();
             settingsDB.DeleteTempFiles = programSettings.DeleteTempFiles;
             settingsDB.ShutdownAfterEncode = programSettings.ShutdownAfterEncode;
+            try
+            {
+                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
+            }
+            catch { }
         }
 
         private void ButtonRemoveSelectedQueueItem_Click(object sender, RoutedEventArgs e)
@@ -150,7 +162,6 @@ namespace NotEnoughAV1Encodes
                     {
                         Suspend.SuspendProcessTree(pid);
                     }
-
                 }
             }
             else
