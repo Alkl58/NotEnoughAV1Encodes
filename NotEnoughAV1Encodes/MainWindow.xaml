@@ -20,7 +20,7 @@
                 <Label Content="{DynamicResource destination}" Canvas.Left="32" Width="88" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonStartStop" Margin="0,10,60,0" VerticalAlignment="Top" Height="45" Click="ButtonStartStop_Click" HorizontalAlignment="Right" Width="118">
+        <Button x:Name="ButtonStartStop" Margin="0,10,175,0" VerticalAlignment="Top" Height="45" Click="ButtonStartStop_Click" HorizontalAlignment="Right" Width="118">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/start.png"/>
                 <Label Content="{DynamicResource start}" Canvas.Left="32" Width="78" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
@@ -211,6 +211,12 @@
         <Button x:Name="ButtonProgramSettings" Margin="0,10,10,0" VerticalAlignment="Top" Height="45" Click="ButtonProgramSettings_Click" HorizontalAlignment="Right" Width="45">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop1" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/settings.png"/>
+            </Canvas>
+        </Button>
+        <Button x:Name="ButtonCancelEncode" Margin="0,10,60,0" VerticalAlignment="Top" Height="45" Click="ButtonCancelEncode_Click"  HorizontalAlignment="Right" Width="110">
+            <Canvas Height="30" Width="102">
+                <Label Content="{DynamicResource cancel}" Canvas.Left="38" Width="64" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
+                <Image Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/stop.png"/>
             </Canvas>
         </Button>
         <Button x:Name="ButtonAddToQueue" Margin="280,10,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="150" Click="ButtonAddToQueue_Click">

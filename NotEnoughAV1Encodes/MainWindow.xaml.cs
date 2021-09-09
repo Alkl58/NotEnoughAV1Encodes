@@ -22,6 +22,7 @@ namespace NotEnoughAV1Encodes
         private readonly Video.VideoDB videoDB = new();
         private bool QueueParallel = true;
         private int ProgramState;
+        private CancellationTokenSource cancellationTokenSource;
 
         public ObservableCollection<Queue.QueueElement> QueueList { get; set; } = new();
 
@@ -49,6 +50,11 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region Buttons
+        private void ButtonCancelEncode_Click(object sender, RoutedEventArgs e)
+        {
+            cancellationTokenSource.Cancel();
+            ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
+        }
         private void ButtonProgramSettings_Click(object sender, RoutedEventArgs e)
         {
             Views.ProgramSettings programSettings = new(settingsDB);
@@ -80,7 +86,6 @@ namespace NotEnoughAV1Encodes
                 videoDB.InputPath = openSource.Path;
                 videoDB.ParseMediaInfo();
                 ListBoxAudioTracks.Items.Clear();
-                //ListBoxAudioTracks.Items.Clear()
                 ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
                 TextBoxVideoSource.Content = videoDB.InputPath;
                 LabelVideoLength.Content = videoDB.MIDuration;
@@ -110,7 +115,7 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private async void ButtonStartStop_Click(object sender, RoutedEventArgs e)
+        private void ButtonStartStop_Click(object sender, RoutedEventArgs e)
         {
             if (ListBoxQueue.Items.Count != 0)
             {
@@ -121,13 +126,16 @@ namespace NotEnoughAV1Encodes
                     // Main Start
                     if (ProgramState is 0)
                     {
-                        await Task.Run(() => PreStartAsync());
+                        PreStart();
                     }
 
                     // Resume all PIDs
                     if (ProgramState is 2)
                     {
-
+                        foreach (int pid in Global.LaunchedPIDs)
+                        {
+                            Resume.ResumeProcessTree(pid);
+                        }
                     }
 
                     ProgramState = 1;
@@ -136,6 +144,13 @@ namespace NotEnoughAV1Encodes
                 {
                     ProgramState = 2;
                     ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/resume.png", UriKind.Relative));
+
+                    // Pause all PIDs
+                    foreach (int pid in Global.LaunchedPIDs)
+                    {
+                        Suspend.SuspendProcessTree(pid);
+                    }
+
                 }
             }
             else
@@ -244,7 +259,18 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region Main Entry
-        private async Task PreStartAsync()
+        private async void PreStart()
+        {
+            // Creates new Cancellation Token
+            cancellationTokenSource = new CancellationTokenSource();
+
+            await MainStartAsync(cancellationTokenSource.Token);
+
+            // Dispose Cancellation Source after Main Function finished
+            cancellationTokenSource.Dispose();
+        }
+
+        private async Task MainStartAsync(CancellationToken _cancelToken)
         {
             // To-Do: Set WorkerCount either by QueueElement or Queue Parallel
             int WorkerCountQueue = 1;
@@ -257,7 +283,7 @@ namespace NotEnoughAV1Encodes
             foreach (Queue.QueueElement queueElement in ListBoxQueue.Items)
             {
                 concurrencySemaphore.Wait();
-                Task task = Task.Run(async() =>
+                Task task = Task.Run(async () =>
                 {
                     try
                     {
@@ -284,7 +310,7 @@ namespace NotEnoughAV1Encodes
 
                         // Audio Encoding
                         Audio.EncodeAudio encodeAudio = new();
-                        await Task.Run(() => encodeAudio.Encode(queueElement));
+                        await Task.Run(() => encodeAudio.Encode(queueElement, _cancelToken), _cancelToken);
 
                         // Starts "a timer" for eta / fps calculation
                         System.Timers.Timer aTimer = new System.Timers.Timer();
@@ -294,16 +320,18 @@ namespace NotEnoughAV1Encodes
 
                         // Video Encoding
                         Video.VideoEncodePipe videoEncodePipe = new();
-                        await Task.Run(() => Video.VideoEncodePipe.Encode(WorkerCountElement, VideoChunks, queueElement));
+                        await Task.Run(() => Video.VideoEncodePipe.Encode(WorkerCountElement, VideoChunks, queueElement, _cancelToken), _cancelToken);
 
                         aTimer.Stop();
-                        queueElement.Progress = queueElement.FrameCount;
-                        queueElement.Status = "Muxing files. Please wait.";
 
                         Video.VideoMuxer videoMuxer = new();
-                        await Task.Run(() => videoMuxer.Concat(queueElement));
+                        await Task.Run(() => videoMuxer.Concat(queueElement), _cancelToken);
 
-                        await Task.Run(() => DeleteTempFiles(queueElement));
+                        await Task.Run(() => DeleteTempFiles(queueElement), _cancelToken);
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        queueElement.Status = "Cancelled!";
                     }
                     finally
                     {
@@ -314,6 +342,8 @@ namespace NotEnoughAV1Encodes
                 tasks.Add(task);
             }
             await Task.WhenAll(tasks.ToArray());
+
+            ProgramState = 0;
 
             Shutdown();
         }

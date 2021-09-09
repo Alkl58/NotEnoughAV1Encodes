@@ -8,7 +8,7 @@ namespace NotEnoughAV1Encodes.Video
 {
     class VideoEncodePipe
     {
-        public static void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement)
+        public static void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement, CancellationToken _token)
         {
             using SemaphoreSlim concurrencySemaphoreInner = new(_workerCount);
             // Creates a tasks list
@@ -33,13 +33,23 @@ namespace NotEnoughAV1Encodes.Video
                                 WindowStyle = ProcessWindowStyle.Hidden,
                                 FileName = "cmd.exe",
                                 WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                Arguments = "/C ffmpeg.exe -i \"" + chunk + "\" -an -sn -map_metadata -1 -c:v libvpx-vp9 -crf 10 \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", Path.GetFileNameWithoutExtension(chunk) + ".webm") + "\"",
+                                Arguments = "/C ffmpeg.exe -y -i \"" + chunk + "\" -an -sn -map_metadata -1 -c:v libvpx-vp9 -crf 10 \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", Path.GetFileNameWithoutExtension(chunk) + ".webm") + "\"",
                                 RedirectStandardError = true,
+                                RedirectStandardInput = true,
                                 CreateNoWindow = true
                             };
 
                             processVideo.StartInfo = startInfo;
+
+                            _token.Register(() => { try { processVideo.StandardInput.Write("q"); } catch { } });
+
                             processVideo.Start();
+
+                            // Get launched Process ID
+                            int _pid = processVideo.Id;
+
+                            // Add Process ID to Array, inorder to keep track / kill the instances
+                            Global.LaunchedPIDs.Add(_pid);
 
                             StreamReader sr = processVideo.StandardError;
 
@@ -54,7 +64,10 @@ namespace NotEnoughAV1Encodes.Video
 
                             processVideo.WaitForExit();
 
-                            if (processVideo.ExitCode == 0)
+                            // Remove PID from Array after Exit
+                            Global.LaunchedPIDs.RemoveAll(i => i == _pid);
+
+                            if (processVideo.ExitCode == 0 && _token.IsCancellationRequested == false)
                             {
                                 FileStream _finishedLog = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", Path.GetFileNameWithoutExtension(chunk) + "_finished.log"));
                                 _finishedLog.Close();

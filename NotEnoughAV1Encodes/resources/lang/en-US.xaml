@@ -6,6 +6,7 @@
     <system:String x:Key="source">Source</system:String>
     <system:String x:Key="destination">Destination</system:String>
     <system:String x:Key="start">Start</system:String>
+    <system:String x:Key="cancel">Cancel</system:String>
     <system:String x:Key="settings">Settings</system:String>
     <system:String x:Key="addToQueue">Add to Queue</system:String>
 

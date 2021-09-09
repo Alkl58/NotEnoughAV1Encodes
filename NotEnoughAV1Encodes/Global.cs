@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace NotEnoughAV1Encodes
@@ -7,5 +8,8 @@ namespace NotEnoughAV1Encodes
     {
         public static string AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         public static string Temp = Path.GetTempPath();
+
+        // Current Active PIDs
+        public static List<int> LaunchedPIDs = new List<int>();
     }
 }

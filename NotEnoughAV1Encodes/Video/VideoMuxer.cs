@@ -14,6 +14,8 @@ namespace NotEnoughAV1Encodes.Video
         public void Concat(Queue.QueueElement queueElement)
         {
             Debug.WriteLine("Landed in Concat()");
+            queueElement.Progress = queueElement.FrameCount;
+            queueElement.Status = "Muxing files. Please wait.";
             IOrderedEnumerable<string> sortedChunks = null;
             sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.webm").OrderBy(f => f);
             Debug.WriteLine("Chunks read: " + sortedChunks.ToString());

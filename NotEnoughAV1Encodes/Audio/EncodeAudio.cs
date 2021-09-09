@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace NotEnoughAV1Encodes.Audio
 {
     class EncodeAudio
     {
-        public void Encode(Queue.QueueElement queueElement)
+        public void Encode(Queue.QueueElement queueElement, CancellationToken _token)
         {
             if (queueElement.AudioCommand != null && !File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "exit.log")))
             {
@@ -24,17 +24,20 @@ namespace NotEnoughAV1Encodes.Audio
                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
                     Arguments = "/C ffmpeg.exe -i \"" + queueElement.Input + "\" -vn -sn -map_metadata -1 " + queueElement.AudioCommand + " \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "audio.mkv") + "\"",
                     RedirectStandardError = true,
+                    RedirectStandardInput = true,
                     CreateNoWindow = true
                 };
-
                 processAudio.StartInfo = startInfo;
+
+                _token.Register(() => { try { processAudio.StandardInput.Write("q"); } catch { } });
+
                 processAudio.Start();
 
                 StreamReader sr = processAudio.StandardError;
                 while (!sr.EndOfStream)
                 {
                     queueElement.Progress = Convert.ToDouble(getTotalFramesProcessed(sr.ReadLine()));
-                    queueElement.Status = "Encoding Audio - " + queueElement.Progress.ToString();
+                    queueElement.Status = "Encoding Audio - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
                 }
 
                 processAudio.WaitForExit();
@@ -42,7 +45,7 @@ namespace NotEnoughAV1Encodes.Audio
                 // Reset Progressbar
                 queueElement.Progress = 0.00;
 
-                if (processAudio.ExitCode == 0)
+                if (processAudio.ExitCode == 0 && _token.IsCancellationRequested == false)
                 {
                     File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "exit.log"));
                 }
