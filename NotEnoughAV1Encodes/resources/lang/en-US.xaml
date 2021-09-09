@@ -41,5 +41,9 @@
     <!-- Settings Window -->
     <system:String x:Key="deleteTempFiles">Delete Temp Files</system:String>
     <system:String x:Key="shutdownAfterEncode">Shutdown After Encode</system:String>
+    <system:String x:Key="saveAndExit">Save and Exit</system:String>
+    <system:String x:Key="themeSettings">Theme Settings</system:String>
+    <system:String x:Key="baseTheme">Base Theme</system:String>
+    <system:String x:Key="accentTheme">Accent Theme</system:String>
 
 </ResourceDictionary>

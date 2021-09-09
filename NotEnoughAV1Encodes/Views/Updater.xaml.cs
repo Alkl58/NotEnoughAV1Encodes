@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Newtonsoft.Json;
 using Octokit;
@@ -50,7 +51,7 @@ namespace NotEnoughAV1Encodes.Views
         {
             InitializeComponent();
             LabelCurrentProgramVersion.Content = Neav1eCurrentVersion;
-            //ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
+            ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
             ParseNEAV1EGithub();
             ParseGyanFFmpeg();
             ParseJeremyleeJSON();

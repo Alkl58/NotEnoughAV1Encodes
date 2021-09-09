@@ -12,5 +12,9 @@ namespace NotEnoughAV1Encodes
         public bool DeleteTempFiles { get; set; }
         /// <summary>Sets if System shutsdown after the queue finished.</summary>
         public bool ShutdownAfterEncode { get; set; }
+        /// <summary>Program Theme e.g. "Dark.Blue"</summary>
+        public string Theme { get; set; }
+        public int BaseTheme { get; set; }
+        public int AccentTheme { get; set; }
     }
 }

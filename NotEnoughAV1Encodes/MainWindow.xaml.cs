@@ -13,6 +13,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Diagnostics;
+using ControlzEx.Theming;
 
 namespace NotEnoughAV1Encodes
 {
@@ -43,6 +44,16 @@ namespace NotEnoughAV1Encodes
             }
             catch { }
 
+            // Set Theme
+            if (settingsDB.Theme != null)
+            {
+                try
+                {
+                    ThemeManager.Current.ChangeTheme(this, settingsDB.Theme);
+                }
+                catch { }
+            }
+
             // Load Queue
             if (Directory.Exists(Path.Combine(Global.AppData, "NEAV1E", "Queue")))
             {
@@ -68,6 +79,14 @@ namespace NotEnoughAV1Encodes
             programSettings.ShowDialog();
             settingsDB.DeleteTempFiles = programSettings.DeleteTempFiles;
             settingsDB.ShutdownAfterEncode = programSettings.ShutdownAfterEncode;
+            settingsDB.BaseTheme = programSettings.BaseTheme;
+            settingsDB.AccentTheme = programSettings.AccentTheme;
+            settingsDB.Theme = programSettings.Theme;
+            try
+            {
+                ThemeManager.Current.ChangeTheme(this, settingsDB.Theme);
+            }
+            catch { }
             try
             {
                 File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
@@ -91,7 +110,7 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
         {
-            Views.OpenSource openSource = new();
+            Views.OpenSource openSource = new(settingsDB.Theme);
             openSource.ShowDialog();
             if (openSource.Quit)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Microsoft.Win32;
 
@@ -9,9 +10,14 @@ namespace NotEnoughAV1Encodes.Views
     {
         public string Path { get; set; }
         public bool Quit { get; set; }
-        public OpenSource()
+        public OpenSource(string _theme)
         {
             InitializeComponent();
+            try
+            {
+                ThemeManager.Current.ChangeTheme(this, _theme);
+            }
+            catch { }
         }
 
         private void ButtonOpenVideoFile_Click(object sender, RoutedEventArgs e)

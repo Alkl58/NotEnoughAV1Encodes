@@ -8,8 +8,50 @@
         mc:Ignorable="d"
         Title="{DynamicResource settings}" Height="450" Width="800" ResizeMode="NoResize" Closing="MetroWindow_Closing">
     <Grid>
-        <Button x:Name="ButtonUpdater" Content="Updater" Margin="653,10,0,0" Background="{x:Null}" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click"  Height="54" VerticalAlignment="Top" HorizontalAlignment="Left" Width="137" />
-        <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" Header="{DynamicResource deleteTempFiles}" Height="54" Margin="10,10,0,0" Width="100" VerticalAlignment="Top"/>
-        <mah:ToggleSwitch x:Name="ToggleSwitchShutdown" Header="{DynamicResource shutdownAfterEncode}" Height="54" Margin="10,69,0,0" Width="100" VerticalAlignment="Top"/>
+        <Button x:Name="ButtonUpdater" Content="Updater" Margin="0,0,10,54" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click"  Height="39" VerticalAlignment="Bottom" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="137" />
+        <Button x:Name="ButtonExit" Content="{DynamicResource saveAndExit}" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="39" Width="137" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonExit_Click"/>
+        <GroupBox Header="{DynamicResource themeSettings}" Margin="10,0,0,15" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Left" Width="254" Height="122" VerticalAlignment="Bottom">
+            <Grid>
+                <Label Content="{DynamicResource accentTheme}" Margin="10,10,122,0" FontSize="12" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
+                <ComboBox x:Name="ComboBoxAccentTheme" HorizontalAlignment="Left" Margin="127,10,0,0" Width="107" Height="26" VerticalAlignment="Top">
+                    <ComboBoxItem Content="Blue" Foreground="#0767B3" IsSelected="True" />
+                    <ComboBoxItem Content="Red" Foreground="#EA4333" />
+                    <ComboBoxItem Content="Green" Foreground="#80BA45" />
+                    <ComboBoxItem Content="Purple" Foreground="#837AE5" />
+                    <ComboBoxItem Content="Orange" Foreground="#FB8633" />
+                    <ComboBoxItem Content="Lime"  Foreground="#B6D033" />
+                    <ComboBoxItem Content="Emerald" Foreground="#B6CE59" />
+                    <ComboBoxItem Content="Teal" Foreground="#33BCBA" />
+                    <ComboBoxItem Content="Cyan" Foreground="#49B4E8" />
+                    <ComboBoxItem Content="Cobalt" Foreground="#3373F2" />
+                    <ComboBoxItem Content="Indigo" Foreground="#8833FF" />
+                    <ComboBoxItem Content="Violet" Foreground="#BB33FF" />
+                    <ComboBoxItem Content="Pink" Foreground="#F68ED9" />
+                    <ComboBoxItem Content="Magenta" Foreground="#E0338F" />
+                    <ComboBoxItem Content="Crimson" Foreground="#B53351" />
+                    <ComboBoxItem Content="Amber" Foreground="#F3B53B" />
+                    <ComboBoxItem Content="Yellow" Foreground="#FEE538" />
+                    <ComboBoxItem Content="Brown" Foreground="#9B7B56" />
+                    <ComboBoxItem Content="Olive" Foreground="#8A9F83" />
+                    <ComboBoxItem Content="Steel" Foreground="#83919F" />
+                    <ComboBoxItem Content="Mauve" Foreground="#9180A1" />
+                    <ComboBoxItem Content="Taupe" Foreground="#9F9471" />
+                    <ComboBoxItem Content="Sienna" Foreground="#B37557" />
+                </ComboBox>
+                <ComboBox x:Name="ComboBoxBaseTheme" HorizontalAlignment="Left" Margin="127,51,0,0" Width="107" Height="26" VerticalAlignment="Top">
+                    <ComboBoxItem Content="Light" IsSelected="True" />
+                    <ComboBoxItem Content="Dark" />
+                </ComboBox>
+                <Label Content="{DynamicResource baseTheme}" Margin="10,51,122,0" FontSize="12" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
+
+            </Grid>
+        </GroupBox>
+        <GroupBox Margin="10,10,536,142">
+            <Grid>
+                <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" Header="{DynamicResource deleteTempFiles}" Height="54" Margin="10,10,0,0" Width="100" VerticalAlignment="Top"/>
+                <mah:ToggleSwitch x:Name="ToggleSwitchShutdown" Header="{DynamicResource shutdownAfterEncode}" Height="53" Margin="10,69,0,0" Width="100" VerticalAlignment="Top"/>
+
+            </Grid>
+        </GroupBox>
     </Grid>
 </mah:MetroWindow>
