@@ -10,6 +10,6 @@ namespace NotEnoughAV1Encodes
         public static string Temp = Path.GetTempPath();
 
         // Current Active PIDs
-        public static List<int> LaunchedPIDs = new List<int>();
+        public static List<int> LaunchedPIDs = new();
     }
 }

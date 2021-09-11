@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Diagnostics;
 using ControlzEx.Theming;
+using System.Windows.Media;
 
 namespace NotEnoughAV1Encodes
 {
@@ -54,6 +55,32 @@ namespace NotEnoughAV1Encodes
                 catch { }
             }
 
+            // Set BG Image
+            try
+            {
+                if (settingsDB.BGImage != null)
+                {
+                    Uri fileUri = new(settingsDB.BGImage);
+                    bgImage.Source = new BitmapImage(fileUri);
+                    SolidColorBrush bg = new(Color.FromArgb(150, 100, 100, 100));
+                    SolidColorBrush fg = new(Color.FromArgb(180, 100, 100, 100));
+                    if (settingsDB.BaseTheme == 1)
+                    {
+                        // Dark
+                        bg = new(Color.FromArgb(150, 20, 20, 20));
+                        fg = new(Color.FromArgb(180, 20, 20, 20));
+                    }
+
+                    TabControl.Background = bg;
+                    ListBoxAudioTracks.Background = fg;
+                }
+                else
+                {
+                    bgImage.Source = null;
+                }
+            }
+            catch { }
+
             // Load Queue
             if (Directory.Exists(Path.Combine(Global.AppData, "NEAV1E", "Queue")))
             {
@@ -82,9 +109,35 @@ namespace NotEnoughAV1Encodes
             settingsDB.BaseTheme = programSettings.BaseTheme;
             settingsDB.AccentTheme = programSettings.AccentTheme;
             settingsDB.Theme = programSettings.Theme;
+            settingsDB.BGImage = programSettings.BGImage;
             try
             {
                 ThemeManager.Current.ChangeTheme(this, settingsDB.Theme);
+            }
+            catch { }
+            try
+            {
+                if (settingsDB.BGImage != null)
+                {
+                    Uri fileUri = new(settingsDB.BGImage);
+                    bgImage.Source = new BitmapImage(fileUri);
+
+                    SolidColorBrush bg = new(Color.FromArgb(150, 100, 100, 100));
+                    SolidColorBrush fg = new(Color.FromArgb(180, 100, 100, 100));
+                    if (settingsDB.BaseTheme == 1)
+                    {
+                        // Dark
+                        bg = new(Color.FromArgb(150, 20, 20, 20));
+                        fg = new(Color.FromArgb(180, 20, 20, 20));
+                    }
+
+                    TabControl.Background = bg;
+                    ListBoxAudioTracks.Background = fg;
+                }
+                else
+                {
+                    bgImage.Source = null;
+                }
             }
             catch { }
             try
@@ -243,7 +296,7 @@ namespace NotEnoughAV1Encodes
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             // Validates that the TextBox Input are only numbers
-            Regex regex = new Regex("[^0-9]+");
+            Regex regex = new("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
         #endregion
@@ -312,7 +365,7 @@ namespace NotEnoughAV1Encodes
 
             foreach (Queue.QueueElement queueElement in ListBoxQueue.Items)
             {
-                concurrencySemaphore.Wait();
+                concurrencySemaphore.Wait(_cancelToken);
                 Task task = Task.Run(async () =>
                 {
                     try
@@ -338,24 +391,25 @@ namespace NotEnoughAV1Encodes
                             }
                         }
 
-                        // Audio Encoding
                         Audio.EncodeAudio encodeAudio = new();
-                        await Task.Run(() => encodeAudio.Encode(queueElement, _cancelToken), _cancelToken);
+                        Video.VideoEncodePipe videoEncodePipe = new();
+                        Video.VideoMuxer videoMuxer = new();
+
+                        // Audio Encoding
+                        await Task.Run(() => Audio.EncodeAudio.Encode(queueElement, _cancelToken), _cancelToken);
 
                         // Starts "a timer" for eta / fps calculation
-                        System.Timers.Timer aTimer = new System.Timers.Timer();
+                        System.Timers.Timer aTimer = new();
                         aTimer.Elapsed += (sender, e) => { UpdateProgressBar(sender, e, queueElement); } ;
                         aTimer.Interval = 1000;
                         aTimer.Start();
 
                         // Video Encoding
-                        Video.VideoEncodePipe videoEncodePipe = new();
                         await Task.Run(() => Video.VideoEncodePipe.Encode(WorkerCountElement, VideoChunks, queueElement, _cancelToken), _cancelToken);
 
                         aTimer.Stop();
 
-                        Video.VideoMuxer videoMuxer = new();
-                        await Task.Run(() => videoMuxer.Concat(queueElement), _cancelToken);
+                        await Task.Run(() => Video.VideoMuxer.Concat(queueElement), _cancelToken);
 
                         await Task.Run(() => DeleteTempFiles(queueElement), _cancelToken);
                     }
@@ -367,7 +421,7 @@ namespace NotEnoughAV1Encodes
                     {
                         concurrencySemaphore.Release();
                     }
-                });
+                }, _cancelToken);
 
                 tasks.Add(task);
             }
@@ -378,7 +432,7 @@ namespace NotEnoughAV1Encodes
             Shutdown();
         }
 
-        private void UpdateProgressBar(object sender, EventArgs e, Queue.QueueElement queueElement)
+        private static void UpdateProgressBar(object sender, EventArgs e, Queue.QueueElement queueElement)
         {
             // Gets all Progress Files of ffmpeg
             string[] filePaths = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Progress"), "*.log", SearchOption.TopDirectoryOnly);

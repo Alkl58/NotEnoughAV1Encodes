@@ -16,5 +16,6 @@ namespace NotEnoughAV1Encodes
         public string Theme { get; set; }
         public int BaseTheme { get; set; }
         public int AccentTheme { get; set; }
+        public string BGImage { get; set; }
     }
 }

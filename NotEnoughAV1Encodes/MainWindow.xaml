@@ -8,29 +8,30 @@
         mc:Ignorable="d"
         Title="NEAV1E" Height="650" Width="1085" Icon="/resources/img/neav1e.ico">
     <Grid>
-        <Button x:Name="ButtonOpenSource" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Click="ButtonOpenSource_Click">
+        <Image x:Name="bgImage" Stretch="UniformToFill" />
+        <Button x:Name="ButtonOpenSource" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Click="ButtonOpenSource_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="114">
                 <Image Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/video.png"/>
                 <Label Content="{DynamicResource source}" Canvas.Left="38" Width="76" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonSetDestination" HorizontalAlignment="Left" Margin="145,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Click="ButtonSetDestination_Click">
+        <Button x:Name="ButtonSetDestination" HorizontalAlignment="Left" Margin="145,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Click="ButtonSetDestination_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="120">
                 <Image Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/save.png"/>
                 <Label Content="{DynamicResource destination}" Canvas.Left="32" Width="88" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonStartStop" Margin="0,10,175,0" VerticalAlignment="Top" Height="45" Click="ButtonStartStop_Click" HorizontalAlignment="Right" Width="118">
+        <Button x:Name="ButtonStartStop" Margin="0,10,175,0" VerticalAlignment="Top" Height="45" Click="ButtonStartStop_Click" HorizontalAlignment="Right" Width="118" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/start.png"/>
                 <Label Content="{DynamicResource start}" Canvas.Left="32" Width="78" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
-        <mah:MetroTabControl x:Name="TabControl" Margin="0,60,0,0">
+        <mah:MetroTabControl x:Name="TabControl" Margin="0,60,0,0" >
             <TabItem Header="{DynamicResource summary}">
                 <Grid>
                     <GroupBox Header="{DynamicResource inputOutput}" Height="100" Margin="10,10,10,0" VerticalAlignment="Top" MinWidth="80">
-                        <Grid Height="66" VerticalAlignment="Center">
+                        <Grid Height="66" VerticalAlignment="Center" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{DynamicResource source}" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold" />
                             <Label Content="{DynamicResource destination}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold" />
                             <Label x:Name="TextBoxVideoSource" Height="29" Margin="105,1,8,0" Content="{DynamicResource noSource}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" MinWidth="50" />
@@ -38,7 +39,7 @@
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="{DynamicResource videoInformation}" Height="72" Margin="10,115,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
-                        <Grid>
+                        <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60" />
                                 <ColumnDefinition MinWidth="80" />
@@ -64,7 +65,7 @@
             <TabItem Header="{DynamicResource video}">
                 <Grid>
                     <GroupBox Header="{DynamicResource video}" HorizontalAlignment="Left" Height="176" Margin="10,10,0,0" VerticalAlignment="Top" Width="385">
-                        <Grid>
+                        <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{DynamicResource encoder}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="111" />
                             <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectedIndex="0">
                                 <ComboBoxItem Content="aom (AV1)" IsSelected="True" />
@@ -95,11 +96,16 @@
             <TabItem Header="{DynamicResource audio}">
                 <Grid>
                     <ListBox x:Name="ListBoxAudioTracks" HorizontalContentAlignment="Stretch" Margin="10">
-                        <ListBoxItem>
+                        <ListBoxItem Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Grid>
                                 <Label Content="{DynamicResource noAudioFound}" HorizontalContentAlignment="Center" FontSize="20" />
                             </Grid>
                         </ListBoxItem>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Background" Value="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"></Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0,2">
@@ -155,7 +161,12 @@
                     <GroupBox Header="{DynamicResource queue}">
                         <Grid>
                             <GroupBox Margin="0,34,0,0">
-                                <ListBox x:Name="ListBoxQueue" ItemsSource="{Binding Path=QueueList}">
+                                <ListBox x:Name="ListBoxQueue" ItemsSource="{Binding Path=QueueList}" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="Background" Value="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"></Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -204,22 +215,22 @@
                             <mah:ToggleSwitch x:Name="ToggleSwitchQueueParallel" IsOn="{Binding QueueParallel}" VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,1,-57,0" Height="30"/>
                         </Grid>
                     </GroupBox>
-                    <Button x:Name="ButtonRemoveSelectedQueueItem" Content="{DynamicResource removeSelectedItem}" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonRemoveSelectedQueueItem_Click"/>
+                    <Button x:Name="ButtonRemoveSelectedQueueItem" Content="{DynamicResource removeSelectedItem}" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonRemoveSelectedQueueItem_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </TabItem>
         </mah:MetroTabControl>
-        <Button x:Name="ButtonProgramSettings" Margin="0,10,10,0" VerticalAlignment="Top" Height="45" Click="ButtonProgramSettings_Click" HorizontalAlignment="Right" Width="45">
+        <Button x:Name="ButtonProgramSettings" Margin="0,10,10,0" VerticalAlignment="Top" Height="45" Click="ButtonProgramSettings_Click" HorizontalAlignment="Right" Width="45" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop1" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/settings.png"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonCancelEncode" Margin="0,10,60,0" VerticalAlignment="Top" Height="45" Click="ButtonCancelEncode_Click"  HorizontalAlignment="Right" Width="110">
+        <Button x:Name="ButtonCancelEncode" Margin="0,10,60,0" VerticalAlignment="Top" Height="45" Click="ButtonCancelEncode_Click"  HorizontalAlignment="Right" Width="110" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="102">
                 <Label Content="{DynamicResource cancel}" Canvas.Left="38" Width="64" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
                 <Image Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/stop.png"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonAddToQueue" Margin="280,10,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="150" Click="ButtonAddToQueue_Click">
+        <Button x:Name="ButtonAddToQueue" Margin="280,10,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="150" Click="ButtonAddToQueue_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop2" Height="44" Canvas.Left="-10" Canvas.Top="-7" Width="44" Source="/resources/img/queue.png"/>
                 <Label Content="{DynamicResource addToQueue}" Canvas.Left="32" Width="103" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>

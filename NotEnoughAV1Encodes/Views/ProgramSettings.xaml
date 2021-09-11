@@ -53,5 +53,11 @@
 
             </Grid>
         </GroupBox>
+        <GroupBox Header="{DynamicResource bgImage}" Margin="269,0,276,15" Height="122" VerticalAlignment="Bottom" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid>
+                <Button x:Name="ButtonSelectBGImage" Content="{DynamicResource select}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Height="32" Width="77" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectBGImage_Click"/>
+
+            </Grid>
+        </GroupBox>
     </Grid>
 </mah:MetroWindow>

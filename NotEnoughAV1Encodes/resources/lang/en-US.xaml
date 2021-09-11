@@ -45,5 +45,7 @@
     <system:String x:Key="themeSettings">Theme Settings</system:String>
     <system:String x:Key="baseTheme">Base Theme</system:String>
     <system:String x:Key="accentTheme">Accent Theme</system:String>
+    <system:String x:Key="bgImage">Background Image</system:String>
+    <system:String x:Key="select">Select</system:String>
 
 </ResourceDictionary>

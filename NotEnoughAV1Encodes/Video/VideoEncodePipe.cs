@@ -17,8 +17,8 @@ namespace NotEnoughAV1Encodes.Video
             foreach (string chunk in VideoChunks)
             {
                 Debug.WriteLine("Video: " + chunk);
-                concurrencySemaphoreInner.Wait();
-                Task taskInner = Task.Factory.StartNew(() =>
+                concurrencySemaphoreInner.Wait(_token);
+                Task taskInner = Task.Run(() =>
                 {
                     try
                     {
@@ -79,10 +79,10 @@ namespace NotEnoughAV1Encodes.Video
                         concurrencySemaphoreInner.Release();
                     }
 
-                });
+                }, _token);
                 tasksInner.Add(taskInner);
             }
-            Task.WaitAll(tasksInner.ToArray());
+            Task.WaitAll(tasksInner.ToArray(), _token);
         }
 
         private static int GetTotalFramesProcessed(string stderr)
@@ -92,7 +92,7 @@ namespace NotEnoughAV1Encodes.Video
                 int Start, End;
                 Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
                 End = stderr.IndexOf("fps=", Start);
-                return int.Parse(stderr.Substring(Start, End - Start));
+                return int.Parse(stderr[Start..End]);
             }
             catch
             {

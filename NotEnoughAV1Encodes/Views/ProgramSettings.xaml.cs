@@ -1,5 +1,6 @@
 ﻿using ControlzEx.Theming;
 using MahApps.Metro.Controls;
+using Microsoft.Win32;
 using System.Windows;
 
 namespace NotEnoughAV1Encodes.Views
@@ -11,6 +12,7 @@ namespace NotEnoughAV1Encodes.Views
         public int BaseTheme { get; set; }
         public int AccentTheme { get; set; }
         public string Theme { get; set; }
+        public string BGImage { get; set; }
         public ProgramSettings(SettingsDB settingsDB)
         {
             InitializeComponent();
@@ -18,11 +20,22 @@ namespace NotEnoughAV1Encodes.Views
             ToggleSwitchShutdown.IsOn = settingsDB.ShutdownAfterEncode;
             ComboBoxAccentTheme.SelectedIndex = settingsDB.AccentTheme;
             ComboBoxBaseTheme.SelectedIndex = settingsDB.BaseTheme;
+            BGImage = settingsDB.BGImage;
             try
             {
                 ThemeManager.Current.ChangeTheme(this, settingsDB.Theme);
             }
             catch { }
+        }
+
+        private void ButtonSelectBGImage_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                BGImage = openFileDialog.FileName;
+            }
         }
 
         private void ButtonUpdater_Click(object sender, RoutedEventArgs e)
