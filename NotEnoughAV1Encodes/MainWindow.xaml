@@ -60,6 +60,16 @@
                             <Label Grid.Column="7" x:Name="LabelVideoResolution" Content="1920x1080" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
                         </Grid>
                     </GroupBox>
+                    <GroupBox Header="{DynamicResource workerssAndSplitting}" Margin="10,192,10,0" Height="76" VerticalAlignment="Top">
+                        <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="100" MaxWidth="120"/>
+                                <ColumnDefinition MinWidth="100"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="{DynamicResource workerCount}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <ComboBox Grid.Column="1" x:Name="ComboBoxWorkerCount" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="{DynamicResource video}">

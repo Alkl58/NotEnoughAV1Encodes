@@ -9,15 +9,14 @@
     <system:String x:Key="cancel">Cancel</system:String>
     <system:String x:Key="settings">Settings</system:String>
     <system:String x:Key="addToQueue">Add to Queue</system:String>
-
-    <system:String x:Key="removeSelectedItem">Remove selected Item</system:String>
-
     <system:String x:Key="summary">Summary</system:String>
     <system:String x:Key="video">Video</system:String>
     <system:String x:Key="audio">Audio</system:String>
     <system:String x:Key="queue">Queue</system:String>
     <system:String x:Key="channels">Channels:</system:String>
     <system:String x:Key="language">Language:</system:String>
+    <system:String x:Key="workerssAndSplitting">Workers and Splitting</system:String>
+    <system:String x:Key="workerCount">Worker Count:</system:String>
     <system:String x:Key="noAudioFound">No Audio Found</system:String>
     <system:String x:Key="inputOutput">Input / Output</system:String>
     <system:String x:Key="noSource">No Source Selected</system:String>
@@ -29,6 +28,7 @@
     <system:String x:Key="videoResolution">Resolution</system:String>
     <system:String x:Key="encoder">Encoder</system:String>
     <system:String x:Key="bit-depth">Bit-Depth</system:String>
+    <system:String x:Key="removeSelectedItem">Remove selected Item</system:String>
     <system:String x:Key="encode-queue-parallel">Encode Queue Parallel instead of chunking</system:String>
     <system:String x:Key="status">Status</system:String>
 

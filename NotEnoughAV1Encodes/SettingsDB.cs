@@ -13,7 +13,7 @@ namespace NotEnoughAV1Encodes
         /// <summary>Sets if System shutsdown after the queue finished.</summary>
         public bool ShutdownAfterEncode { get; set; }
         /// <summary>Program Theme e.g. "Dark.Blue"</summary>
-        public string Theme { get; set; }
+        public string Theme { get; set; } = "Light.Blue";
         public int BaseTheme { get; set; }
         public int AccentTheme { get; set; }
         public string BGImage { get; set; }

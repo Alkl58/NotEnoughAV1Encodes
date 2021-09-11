@@ -39,22 +39,21 @@ namespace NotEnoughAV1Encodes
         {
             resources.MediaLanguages.FillDictionary();
 
-            try
+            // Load Worker Count
+            int coreCount = 0;
+            foreach (System.Management.ManagementBaseObject item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
             {
-                settingsDB = JsonConvert.DeserializeObject<SettingsDB>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json")));
+                coreCount += int.Parse(item["NumberOfCores"].ToString());
             }
-            catch { }
+            for (int i = 1; i <= coreCount; i++) { ComboBoxWorkerCount.Items.Add(i); }
+            ComboBoxWorkerCount.SelectedItem = Convert.ToInt32(coreCount * 75 / 100);
+
+            // Load Settings from JSON
+            try { settingsDB = JsonConvert.DeserializeObject<SettingsDB>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"))); } catch { }
 
             // Set Theme
-            if (settingsDB.Theme != null)
-            {
-                try
-                {
-                    ThemeManager.Current.ChangeTheme(this, settingsDB.Theme);
-                }
-                catch { }
-            }
-
+            try { ThemeManager.Current.ChangeTheme(this, settingsDB.Theme); } catch { }
+    
             // Set BG Image
             try
             {
@@ -355,9 +354,18 @@ namespace NotEnoughAV1Encodes
 
         private async Task MainStartAsync(CancellationToken _cancelToken)
         {
-            // To-Do: Set WorkerCount either by QueueElement or Queue Parallel
+            // Sets amount of Workers
             int WorkerCountQueue = 1;
-            int WorkerCountElement = 1;
+            int WorkerCountElement = int.Parse(ComboBoxWorkerCount.Text);
+
+            // If user wants to encode the queue in parallel,
+            // it will set the worker count to 1 and the "outer"
+            // SemaphoreSlim will be set to the original worker count
+            if (QueueParallel)
+            {
+                WorkerCountQueue = WorkerCountElement;
+                WorkerCountElement = 1;
+            }
 
             using SemaphoreSlim concurrencySemaphore = new(WorkerCountQueue);
             // Creates a tasks list
