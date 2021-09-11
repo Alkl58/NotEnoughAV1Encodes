@@ -68,6 +68,7 @@
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Content="{DynamicResource workerCount}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
                             <ComboBox Grid.Column="1" x:Name="ComboBoxWorkerCount" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left"/>
+                            <TextBox Grid.Column="1" Visibility="Hidden" x:Name="TextBoxWorkerCount" PreviewTextInput="NumberValidationTextBox" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         </Grid>
                     </GroupBox>
                 </Grid>

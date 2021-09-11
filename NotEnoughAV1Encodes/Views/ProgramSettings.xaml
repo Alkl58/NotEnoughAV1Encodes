@@ -48,15 +48,21 @@
         </GroupBox>
         <GroupBox Margin="10,10,536,142">
             <Grid>
-                <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" Header="{DynamicResource deleteTempFiles}" Height="54" Margin="10,10,0,0" Width="100" VerticalAlignment="Top"/>
-                <mah:ToggleSwitch x:Name="ToggleSwitchShutdown" Header="{DynamicResource shutdownAfterEncode}" Height="53" Margin="10,69,0,0" Width="100" VerticalAlignment="Top"/>
-
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+                <mah:ToggleSwitch Grid.Row="0" x:Name="ToggleSwitchDeleteTempFiles" Header="{DynamicResource deleteTempFiles}" Height="54" Margin="10,10,0,0" Width="100" VerticalAlignment="Top"/>
+                <mah:ToggleSwitch Grid.Row="1" x:Name="ToggleSwitchShutdown" Header="{DynamicResource shutdownAfterEncode}" Height="53" Margin="10,10,0,0" Width="100" VerticalAlignment="Top"/>
+                <mah:ToggleSwitch Grid.Row="2" x:Name="ToggleSwitchOverrideWorkerCount" Header="{DynamicResource overrideWorkerCount}" Height="53" Margin="10,10,0,0" Width="100" VerticalAlignment="Top"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="{DynamicResource bgImage}" Margin="269,0,276,15" Height="122" VerticalAlignment="Bottom" mah:ControlsHelper.ContentCharacterCasing="Normal">
+        <GroupBox Header="{DynamicResource bgImage}" Margin="269,0,400,15" Height="122" VerticalAlignment="Bottom" mah:ControlsHelper.ContentCharacterCasing="Normal">
             <Grid>
-                <Button x:Name="ButtonSelectBGImage" Content="{DynamicResource select}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Height="32" Width="77" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectBGImage_Click"/>
-
+                <Button x:Name="ButtonSelectBGImage" Content="{DynamicResource select}" HorizontalAlignment="Center" Margin="0,12,0,0" VerticalAlignment="Top" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectBGImage_Click"/>
+                <Button x:Name="ButtonResetBGImage" Content="{DynamicResource reset}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="100" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonResetBGImage_Click"/>
             </Grid>
         </GroupBox>
     </Grid>

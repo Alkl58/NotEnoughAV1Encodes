@@ -16,6 +16,9 @@ namespace NotEnoughAV1Encodes
         public string Theme { get; set; } = "Light.Blue";
         public int BaseTheme { get; set; }
         public int AccentTheme { get; set; }
+        /// <summary>Sets Background Image of Program</summary>
         public string BGImage { get; set; }
+        /// <summary>Overrides Worker Count -> User can specify it manually</summary>
+        public bool OverrideWorkerCount { get; set; }
     }
 }

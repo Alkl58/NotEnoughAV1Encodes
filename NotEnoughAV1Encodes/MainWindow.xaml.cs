@@ -47,38 +47,12 @@ namespace NotEnoughAV1Encodes
             }
             for (int i = 1; i <= coreCount; i++) { ComboBoxWorkerCount.Items.Add(i); }
             ComboBoxWorkerCount.SelectedItem = Convert.ToInt32(coreCount * 75 / 100);
+            TextBoxWorkerCount.Text = coreCount.ToString();
 
             // Load Settings from JSON
             try { settingsDB = JsonConvert.DeserializeObject<SettingsDB>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"))); } catch { }
 
-            // Set Theme
-            try { ThemeManager.Current.ChangeTheme(this, settingsDB.Theme); } catch { }
-    
-            // Set BG Image
-            try
-            {
-                if (settingsDB.BGImage != null)
-                {
-                    Uri fileUri = new(settingsDB.BGImage);
-                    bgImage.Source = new BitmapImage(fileUri);
-                    SolidColorBrush bg = new(Color.FromArgb(150, 100, 100, 100));
-                    SolidColorBrush fg = new(Color.FromArgb(180, 100, 100, 100));
-                    if (settingsDB.BaseTheme == 1)
-                    {
-                        // Dark
-                        bg = new(Color.FromArgb(150, 20, 20, 20));
-                        fg = new(Color.FromArgb(180, 20, 20, 20));
-                    }
-
-                    TabControl.Background = bg;
-                    ListBoxAudioTracks.Background = fg;
-                }
-                else
-                {
-                    bgImage.Source = null;
-                }
-            }
-            catch { }
+            LoadSettings();
 
             // Load Queue
             if (Directory.Exists(Path.Combine(Global.AppData, "NEAV1E", "Queue")))
@@ -109,36 +83,10 @@ namespace NotEnoughAV1Encodes
             settingsDB.AccentTheme = programSettings.AccentTheme;
             settingsDB.Theme = programSettings.Theme;
             settingsDB.BGImage = programSettings.BGImage;
-            try
-            {
-                ThemeManager.Current.ChangeTheme(this, settingsDB.Theme);
-            }
-            catch { }
-            try
-            {
-                if (settingsDB.BGImage != null)
-                {
-                    Uri fileUri = new(settingsDB.BGImage);
-                    bgImage.Source = new BitmapImage(fileUri);
+            settingsDB.OverrideWorkerCount = programSettings.OverrideWorkerCount;
 
-                    SolidColorBrush bg = new(Color.FromArgb(150, 100, 100, 100));
-                    SolidColorBrush fg = new(Color.FromArgb(180, 100, 100, 100));
-                    if (settingsDB.BaseTheme == 1)
-                    {
-                        // Dark
-                        bg = new(Color.FromArgb(150, 20, 20, 20));
-                        fg = new(Color.FromArgb(180, 20, 20, 20));
-                    }
+            LoadSettings();
 
-                    TabControl.Background = bg;
-                    ListBoxAudioTracks.Background = fg;
-                }
-                else
-                {
-                    bgImage.Source = null;
-                }
-            }
-            catch { }
             try
             {
                 File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
@@ -301,6 +249,52 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region Small Functions
+
+        private void LoadSettings()
+        {
+            if (settingsDB.OverrideWorkerCount)
+            {
+                ComboBoxWorkerCount.Visibility = Visibility.Hidden;
+                TextBoxWorkerCount.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ComboBoxWorkerCount.Visibility = Visibility.Visible;
+                TextBoxWorkerCount.Visibility = Visibility.Visible;
+            }
+
+            try
+            {
+                ThemeManager.Current.ChangeTheme(this, settingsDB.Theme);
+            }
+            catch { }
+            try
+            {
+                if (settingsDB.BGImage != null)
+                {
+                    Uri fileUri = new(settingsDB.BGImage);
+                    bgImage.Source = new BitmapImage(fileUri);
+
+                    SolidColorBrush bg = new(Color.FromArgb(150, 100, 100, 100));
+                    SolidColorBrush fg = new(Color.FromArgb(180, 100, 100, 100));
+                    if (settingsDB.BaseTheme == 1)
+                    {
+                        // Dark
+                        bg = new(Color.FromArgb(150, 20, 20, 20));
+                        fg = new(Color.FromArgb(180, 20, 20, 20));
+                    }
+
+                    TabControl.Background = bg;
+                    ListBoxAudioTracks.Background = fg;
+                }
+                else
+                {
+                    bgImage.Source = null;
+                }
+            }
+            catch { }
+        }
+
         private void Shutdown()
         {
             if (settingsDB.ShutdownAfterEncode)
@@ -357,6 +351,11 @@ namespace NotEnoughAV1Encodes
             // Sets amount of Workers
             int WorkerCountQueue = 1;
             int WorkerCountElement = int.Parse(ComboBoxWorkerCount.Text);
+
+            if (settingsDB.OverrideWorkerCount)
+            {
+                WorkerCountElement = int.Parse(TextBoxWorkerCount.Text);
+            }
 
             // If user wants to encode the queue in parallel,
             // it will set the worker count to 1 and the "outer"

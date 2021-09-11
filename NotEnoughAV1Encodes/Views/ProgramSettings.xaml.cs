@@ -9,6 +9,7 @@ namespace NotEnoughAV1Encodes.Views
     {
         public bool DeleteTempFiles { get; set; }
         public bool ShutdownAfterEncode { get; set; }
+        public bool OverrideWorkerCount { get; set; }
         public int BaseTheme { get; set; }
         public int AccentTheme { get; set; }
         public string Theme { get; set; }
@@ -18,6 +19,7 @@ namespace NotEnoughAV1Encodes.Views
             InitializeComponent();
             ToggleSwitchDeleteTempFiles.IsOn = settingsDB.DeleteTempFiles;
             ToggleSwitchShutdown.IsOn = settingsDB.ShutdownAfterEncode;
+            ToggleSwitchOverrideWorkerCount.IsOn = settingsDB.OverrideWorkerCount;
             ComboBoxAccentTheme.SelectedIndex = settingsDB.AccentTheme;
             ComboBoxBaseTheme.SelectedIndex = settingsDB.BaseTheme;
             BGImage = settingsDB.BGImage;
@@ -48,9 +50,15 @@ namespace NotEnoughAV1Encodes.Views
         {
             DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn;
             ShutdownAfterEncode = ToggleSwitchShutdown.IsOn;
+            OverrideWorkerCount = ToggleSwitchOverrideWorkerCount.IsOn;
             BaseTheme = ComboBoxBaseTheme.SelectedIndex;
             AccentTheme = ComboBoxAccentTheme.SelectedIndex;
             Theme = ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text;
+        }
+
+        private void ButtonResetBGImage_Click(object sender, RoutedEventArgs e)
+        {
+            BGImage = null;
         }
 
         private void ButtonExit_Click(object sender, RoutedEventArgs e)
