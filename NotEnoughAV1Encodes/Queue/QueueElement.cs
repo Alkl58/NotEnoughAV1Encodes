@@ -21,6 +21,9 @@ namespace NotEnoughAV1Encodes.Queue
         public string VideoCommand { get; set; }
         public string AudioCommand { get; set; }
         public string UniqueIdentifier { get; set; }
+        public int ChunkingMethod { get; set; }
+        public int ReencodeMethod { get; set; }
+        public int ChunkLength { get; set; }
         public long FrameCount { get; set; }
         public double Progress
         {

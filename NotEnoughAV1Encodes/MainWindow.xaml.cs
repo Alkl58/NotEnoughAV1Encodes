@@ -20,9 +20,9 @@ namespace NotEnoughAV1Encodes
 {
     public partial class MainWindow : MetroWindow
     {
+        private bool QueueParallel;
         private SettingsDB settingsDB = new();
         private readonly Video.VideoDB videoDB = new();
-        private bool QueueParallel = true;
         private int ProgramState;
         private CancellationTokenSource cancellationTokenSource;
 
@@ -212,6 +212,9 @@ namespace NotEnoughAV1Encodes
             queueElement.OutputFileName = videoDB.OutputFileName;
             queueElement.AudioCommand = commandgenerator.Generate(ListBoxAudioTracks.Items);
             queueElement.FrameCount = videoDB.MIFrameCount;
+            queueElement.ChunkingMethod = ComboBoxChunkingMethod.SelectedIndex;
+            queueElement.ReencodeMethod = ComboBoxReencodeMethod.SelectedIndex;
+            queueElement.ChunkLength = int.Parse(TextBoxChunkLength.Text);
 
             // Generate a random identifier to avoid filesystem conflicts
             const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -348,6 +351,7 @@ namespace NotEnoughAV1Encodes
 
         private async Task MainStartAsync(CancellationToken _cancelToken)
         {
+            QueueParallel = ToggleSwitchQueueParallel.IsOn;
             // Sets amount of Workers
             int WorkerCountQueue = 1;
             int WorkerCountElement = int.Parse(ComboBoxWorkerCount.Text);
@@ -382,6 +386,11 @@ namespace NotEnoughAV1Encodes
                             Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier));
                         }
 
+                        Audio.EncodeAudio encodeAudio = new();
+                        Video.VideoSplitter videoSplitter = new();
+                        Video.VideoEncodePipe videoEncodePipe = new();
+                        Video.VideoMuxer videoMuxer = new();
+
                         List<string> VideoChunks = new();
 
                         // Chunking
@@ -391,16 +400,14 @@ namespace NotEnoughAV1Encodes
                         }
                         else
                         {
+                            await Task.Run(() => videoSplitter.Split(queueElement, _cancelToken), _cancelToken);
+
                             string[] filePaths = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), "*.mkv", SearchOption.TopDirectoryOnly);
                             foreach (string file in filePaths)
                             {
                                 VideoChunks.Add(file);
                             }
                         }
-
-                        Audio.EncodeAudio encodeAudio = new();
-                        Video.VideoEncodePipe videoEncodePipe = new();
-                        Video.VideoMuxer videoMuxer = new();
 
                         // Audio Encoding
                         await Task.Run(() => Audio.EncodeAudio.Encode(queueElement, _cancelToken), _cancelToken);
@@ -412,7 +419,7 @@ namespace NotEnoughAV1Encodes
                         aTimer.Start();
 
                         // Video Encoding
-                        await Task.Run(() => Video.VideoEncodePipe.Encode(WorkerCountElement, VideoChunks, queueElement, _cancelToken), _cancelToken);
+                        await Task.Run(() => Video.VideoEncodePipe.Encode(WorkerCountElement, VideoChunks, queueElement, _cancelToken, QueueParallel), _cancelToken);
 
                         aTimer.Stop();
 

@@ -17,6 +17,9 @@
     <system:String x:Key="language">Language:</system:String>
     <system:String x:Key="workerssAndSplitting">Workers and Splitting</system:String>
     <system:String x:Key="workerCount">Worker Count:</system:String>
+    <system:String x:Key="splittingMethod">Splitting Method:</system:String>
+    <system:String x:Key="reencodeMethod">Reencode Method:</system:String>
+    <system:String x:Key="chunkLength">Chunk Length (seconds):</system:String>
     <system:String x:Key="noAudioFound">No Audio Found</system:String>
     <system:String x:Key="inputOutput">Input / Output</system:String>
     <system:String x:Key="noSource">No Source Selected</system:String>

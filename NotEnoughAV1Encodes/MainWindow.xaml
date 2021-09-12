@@ -65,10 +65,33 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition MinWidth="100" MaxWidth="120"/>
                                 <ColumnDefinition MinWidth="100"/>
+                                <ColumnDefinition MinWidth="100" MaxWidth="120"/>
+                                <ColumnDefinition MinWidth="100"/>
+                                <ColumnDefinition MinWidth="100" MaxWidth="120"/>
+                                <ColumnDefinition MinWidth="100"/>
+                                <ColumnDefinition MinWidth="150" MaxWidth="150"/>
+                                <ColumnDefinition MinWidth="100"/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Content="{DynamicResource workerCount}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
                             <ComboBox Grid.Column="1" x:Name="ComboBoxWorkerCount" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left"/>
                             <TextBox Grid.Column="1" Visibility="Hidden" x:Name="TextBoxWorkerCount" PreviewTextInput="NumberValidationTextBox" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Label Grid.Column="2" Content="{DynamicResource splittingMethod}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <ComboBox Grid.Column="3" x:Name="ComboBoxChunkingMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left">
+                                <ComboBoxItem Content="Equal Chunking" IsSelected="True"/>
+                                <ComboBoxItem Content="FFmpeg Scenedetect"/>
+                                <ComboBoxItem Content="PySceneDetect"/>
+                            </ComboBox>
+                            <Label Grid.Column="4" Content="{DynamicResource reencodeMethod}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <ComboBox Grid.Column="5" x:Name="ComboBoxReencodeMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left">
+                                <ComboBoxItem Content="x264" IsSelected="True"/>
+                                <ComboBoxItem Content="ffv1"/>
+                                <ComboBoxItem Content="utvideo"/>
+                                <ComboBoxItem Content="copy (not reencoding)"/>
+                            </ComboBox>
+                            <Label Grid.Column="6" Content="{DynamicResource chunkLength}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <TextBox Grid.Column="7"  x:Name="TextBoxChunkLength" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="10"  PreviewTextInput="NumberValidationTextBox" Width="80">
+                                <TextBox.ToolTip>Sets the chunk length in seconds. Recommended: 10</TextBox.ToolTip>
+                            </TextBox>
                         </Grid>
                     </GroupBox>
                 </Grid>
@@ -223,7 +246,7 @@
                                 </ListBox>
                             </GroupBox>
                             <Label Content="{DynamicResource encode-queue-parallel}" Margin="0,3,102,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="300"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchQueueParallel" IsOn="{Binding QueueParallel}" VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,1,-57,0" Height="30"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchQueueParallel" VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,1,-57,0" Height="30"/>
                         </Grid>
                     </GroupBox>
                     <Button x:Name="ButtonRemoveSelectedQueueItem" Content="{DynamicResource removeSelectedItem}" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonRemoveSelectedQueueItem_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"/>
