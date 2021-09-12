@@ -263,7 +263,7 @@ namespace NotEnoughAV1Encodes
             else
             {
                 ComboBoxWorkerCount.Visibility = Visibility.Visible;
-                TextBoxWorkerCount.Visibility = Visibility.Visible;
+                TextBoxWorkerCount.Visibility = Visibility.Hidden;
             }
 
             try
