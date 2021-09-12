@@ -23,21 +23,6 @@ namespace NotEnoughAV1Encodes.Video
             }
         }
 
-        private static int GetTotalFramesProcessed(string stderr)
-        {
-            try
-            {
-                int Start, End;
-                Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
-                End = stderr.IndexOf("fps=", Start);
-                return int.Parse(stderr[Start..End]);
-            }
-            catch
-            {
-                return 0;
-            }
-        }
-
         private void FFmpegChunking(CancellationToken _token)
         {
             // Skips Splitting of already existent
@@ -85,6 +70,7 @@ namespace NotEnoughAV1Encodes.Video
                     FileName = "cmd.exe",
                     RedirectStandardInput = true,
                     RedirectStandardError = true,
+                    CreateNoWindow = true,
                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
                     Arguments = ffmpeg_command
                 };
@@ -104,8 +90,12 @@ namespace NotEnoughAV1Encodes.Video
                 StreamReader sr = chunkingProcess.StandardError;
                 while (!sr.EndOfStream)
                 {
-                    queueElement.Progress = Convert.ToDouble(GetTotalFramesProcessed(sr.ReadLine()));
-                    queueElement.Status = "Splitting - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
+                    int processedFrames = GetTotalFramesProcessed(sr.ReadLine());
+                    if (processedFrames != 0)
+                    {
+                        queueElement.Progress = Convert.ToDouble(processedFrames);
+                        queueElement.Status = "Splitting - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
+                    }
                 }
 
                 // Wait for Exit
@@ -124,6 +114,23 @@ namespace NotEnoughAV1Encodes.Video
                     _finishedLog.Close();
                 }
             }
+        }
+
+        private static int GetTotalFramesProcessed(string stderr)
+        {
+            try
+            {
+                if (stderr.Contains("frame="))
+                {
+                    int Start, End;
+                    Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
+                    End = stderr.IndexOf("fps=", Start);
+                    return int.Parse(stderr[Start..End]);
+                }
+            }
+            catch { }
+
+            return 0;
         }
     }
 }

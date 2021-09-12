@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +24,6 @@ namespace NotEnoughAV1Encodes.Video
                     try
                     {
                         Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"));
-                        Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Progress"));
 
                         if (!File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", Path.GetFileNameWithoutExtension(chunk) + "_finished.log")))
                         {
@@ -53,6 +53,16 @@ namespace NotEnoughAV1Encodes.Video
                             // Add Process ID to Array, inorder to keep track / kill the instances
                             Global.LaunchedPIDs.Add(_pid);
 
+                            // Create Progress Object
+                            Queue.ChunkProgress chunkProgress = new();
+                            chunkProgress.ChunkName = chunk;
+                            chunkProgress.Progress = 0;
+
+                            if (!queueElement.ChunkProgress.Any(n => n.ChunkName == chunk))
+                            {
+                                queueElement.ChunkProgress.Add(chunkProgress);
+                            }
+
                             StreamReader sr = processVideo.StandardError;
 
                             while (!sr.EndOfStream)
@@ -60,7 +70,10 @@ namespace NotEnoughAV1Encodes.Video
                                 int processedFrames = GetTotalFramesProcessed(sr.ReadLine());
                                 if (processedFrames != 0)
                                 {
-                                    File.WriteAllText(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Progress", Path.GetFileNameWithoutExtension(chunk) + ".log"), processedFrames.ToString());
+                                    foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
+                                    {
+                                        progressElement.Progress = processedFrames;
+                                    }
                                 }
                             }
 
@@ -91,15 +104,17 @@ namespace NotEnoughAV1Encodes.Video
         {
             try
             {
-                int Start, End;
-                Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
-                End = stderr.IndexOf("fps=", Start);
-                return int.Parse(stderr[Start..End]);
+                if (stderr.Contains("frame="))
+                {
+                    int Start, End;
+                    Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
+                    End = stderr.IndexOf("fps=", Start);
+                    return int.Parse(stderr[Start..End]);
+                }
             }
-            catch
-            {
-                return 0;
-            }
+            catch { }
+
+            return 0;
         }
     }
 }

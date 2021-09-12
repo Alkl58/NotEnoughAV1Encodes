@@ -25,6 +25,7 @@ namespace NotEnoughAV1Encodes.Queue
         public int ReencodeMethod { get; set; }
         public int ChunkLength { get; set; }
         public long FrameCount { get; set; }
+        public List<ChunkProgress> ChunkProgress { get; set; } = new();
         public double Progress
         {
             get => _progress;

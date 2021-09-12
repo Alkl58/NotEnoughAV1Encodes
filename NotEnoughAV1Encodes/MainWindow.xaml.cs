@@ -448,30 +448,19 @@ namespace NotEnoughAV1Encodes
 
         private static void UpdateProgressBar(object sender, EventArgs e, Queue.QueueElement queueElement)
         {
-            // Gets all Progress Files of ffmpeg
-            string[] filePaths = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Progress"), "*.log", SearchOption.TopDirectoryOnly);
+            long encodedFrames = 0;
 
-            int encodedFrames = 0;
-
-            foreach (string file in filePaths)
+            foreach (Queue.ChunkProgress _progress in queueElement.ChunkProgress)
             {
                 try
                 {
-                    // Reads the progress file of ffmpeg without locking it up
-                    Stream stream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                    TextReader objstream = new StreamReader(stream);
-
-                    // Reads the content of the stream
-                    encodedFrames += int.Parse(objstream.ReadLine());
-
-                    stream.Close();
-                    objstream.Close();
+                    encodedFrames += _progress.Progress;
                 }
                 catch { }
-
-                queueElement.Progress = Convert.ToDouble(encodedFrames);
-                queueElement.Status = "Encoded: " + ((decimal)encodedFrames / queueElement.FrameCount).ToString("0.00%");
             }
+
+            queueElement.Progress = Convert.ToDouble(encodedFrames);
+            queueElement.Status = "Encoded: " + ((decimal)encodedFrames / queueElement.FrameCount).ToString("0.00%");
         }
 
         #endregion

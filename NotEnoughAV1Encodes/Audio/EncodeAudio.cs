@@ -36,8 +36,12 @@ namespace NotEnoughAV1Encodes.Audio
                 StreamReader sr = processAudio.StandardError;
                 while (!sr.EndOfStream)
                 {
-                    queueElement.Progress = Convert.ToDouble(GetTotalFramesProcessed(sr.ReadLine()));
-                    queueElement.Status = "Encoding Audio - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
+                    int processedFrames = GetTotalFramesProcessed(sr.ReadLine());
+                    if (processedFrames != 0)
+                    {
+                        queueElement.Progress = Convert.ToDouble(processedFrames);
+                        queueElement.Status = "Encoding Audio - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
+                    }
                 }
 
                 processAudio.WaitForExit();
@@ -56,15 +60,17 @@ namespace NotEnoughAV1Encodes.Audio
         {
             try
             {
-                int Start, End;
-                Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
-                End = stderr.IndexOf("fps=", Start);
-                return int.Parse(stderr[Start..End]);
+                if (stderr.Contains("frame="))
+                {
+                    int Start, End;
+                    Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
+                    End = stderr.IndexOf("fps=", Start);
+                    return int.Parse(stderr[Start..End]);
+                }
             }
-            catch
-            {
-                return 0;
-            }
+            catch { }
+
+            return 0;
         }
     }
 }
