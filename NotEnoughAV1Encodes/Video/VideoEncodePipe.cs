@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -18,14 +19,22 @@ namespace NotEnoughAV1Encodes.Video
             foreach (string chunk in VideoChunks)
             {
                 Debug.WriteLine("Video: " + chunk);
-                concurrencySemaphoreInner.Wait(_token);
+
+                try
+                {
+                    concurrencySemaphoreInner.Wait(_token);
+                }
+                catch (OperationCanceledException) { }
+                
                 Task taskInner = Task.Run(() =>
                 {
                     try
                     {
                         Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"));
 
-                        if (!File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", Path.GetFileNameWithoutExtension(chunk) + "_finished.log")))
+                        int index = VideoChunks.IndexOf(chunk);
+
+                        if (!File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_finished.log")))
                         {
                             string ChunkInput = queueElement.ChunkingMethod == 0 || _queueParallel ? " \"" + chunk + "\"" : " \"" + queueElement.Input + "\" " + chunk;
 
@@ -35,7 +44,7 @@ namespace NotEnoughAV1Encodes.Video
                                 WindowStyle = ProcessWindowStyle.Hidden,
                                 FileName = "cmd.exe",
                                 WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 -c:v libvpx-vp9 -crf 10 \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", Path.GetFileNameWithoutExtension(chunk) + ".webm") + "\"",
+                                Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 -c:v libvpx-vp9 -crf 10 \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm") + "\"",
                                 RedirectStandardError = true,
                                 RedirectStandardInput = true,
                                 CreateNoWindow = true
@@ -84,7 +93,7 @@ namespace NotEnoughAV1Encodes.Video
 
                             if (processVideo.ExitCode == 0 && _token.IsCancellationRequested == false)
                             {
-                                FileStream _finishedLog = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", Path.GetFileNameWithoutExtension(chunk) + "_finished.log"));
+                                FileStream _finishedLog = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_finished.log"));
                                 _finishedLog.Close();
                             }
                         }
@@ -97,7 +106,12 @@ namespace NotEnoughAV1Encodes.Video
                 }, _token);
                 tasksInner.Add(taskInner);
             }
-            Task.WaitAll(tasksInner.ToArray(), _token);
+
+            try
+            {
+                Task.WaitAll(tasksInner.ToArray(), _token);
+            }
+            catch (OperationCanceledException) { }
         }
 
         private static int GetTotalFramesProcessed(string stderr)

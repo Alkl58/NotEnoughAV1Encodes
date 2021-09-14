@@ -76,21 +76,87 @@
                             <ComboBox Grid.Column="1" x:Name="ComboBoxWorkerCount" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left"/>
                             <TextBox Grid.Column="1" Visibility="Hidden" x:Name="TextBoxWorkerCount" PreviewTextInput="NumberValidationTextBox" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             <Label Grid.Column="2" Content="{DynamicResource splittingMethod}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
-                            <ComboBox Grid.Column="3" x:Name="ComboBoxChunkingMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left">
+                            <ComboBox Grid.Column="3" x:Name="ComboBoxChunkingMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left" SelectedIndex="1">
                                 <ComboBoxItem Content="Equal Chunking" IsSelected="True"/>
-                                <ComboBoxItem Content="FFmpeg Scenedetect"/>
                                 <ComboBoxItem Content="PySceneDetect"/>
                             </ComboBox>
-                            <Label Grid.Column="4" Content="{DynamicResource reencodeMethod}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <Label Grid.Column="4" Content="{DynamicResource reencodeMethod}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
+                                <Label.Style>
+                                    <Style TargetType="Label" BasedOn="{StaticResource MahApps.Styles.Label}">
+                                        <Setter Property="UIElement.Visibility" Value="Hidden" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="0">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
                             <ComboBox Grid.Column="5" x:Name="ComboBoxReencodeMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left">
                                 <ComboBoxItem Content="x264" IsSelected="True"/>
                                 <ComboBoxItem Content="ffv1"/>
                                 <ComboBoxItem Content="utvideo"/>
                                 <ComboBoxItem Content="copy (not reencoding)"/>
+                                <ComboBox.Style>
+                                    <Style TargetType="ComboBox" BasedOn="{StaticResource MahApps.Styles.ComboBox}">
+                                        <Setter Property="UIElement.Visibility" Value="Hidden" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="0">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
                             </ComboBox>
-                            <Label Grid.Column="6" Content="{DynamicResource chunkLength}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <Label Grid.Column="6" Content="{DynamicResource chunkLength}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
+                                <Label.Style>
+                                    <Style TargetType="Label" BasedOn="{StaticResource MahApps.Styles.Label}">
+                                        <Setter Property="UIElement.Visibility" Value="Hidden" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="0">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
                             <TextBox Grid.Column="7"  x:Name="TextBoxChunkLength" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="10"  PreviewTextInput="NumberValidationTextBox" Width="80">
                                 <TextBox.ToolTip>Sets the chunk length in seconds. Recommended: 10</TextBox.ToolTip>
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+                                        <Setter Property="UIElement.Visibility" Value="Hidden" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="0">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                            <Label Grid.Column="4" Content="{DynamicResource threshold}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
+                                <Label.Style>
+                                    <Style TargetType="Label" BasedOn="{StaticResource MahApps.Styles.Label}">
+                                        <Setter Property="UIElement.Visibility" Value="Hidden" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="1">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
+                            <TextBox Grid.Column="5"  x:Name="TextBoxPySceneDetectThreshold" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="30"  PreviewTextInput="NumberValidationTextBox" Width="80">
+                                <TextBox.ToolTip>Sets the threshold of scenedetection. (Default 30)</TextBox.ToolTip>
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+                                        <Setter Property="UIElement.Visibility" Value="Hidden" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="1">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
                             </TextBox>
                         </Grid>
                     </GroupBox>

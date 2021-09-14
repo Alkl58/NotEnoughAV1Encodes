@@ -15,6 +15,7 @@ using System.Threading;
 using System.Diagnostics;
 using ControlzEx.Theming;
 using System.Windows.Media;
+using System.Linq;
 
 namespace NotEnoughAV1Encodes
 {
@@ -215,6 +216,7 @@ namespace NotEnoughAV1Encodes
             queueElement.ChunkingMethod = ComboBoxChunkingMethod.SelectedIndex;
             queueElement.ReencodeMethod = ComboBoxReencodeMethod.SelectedIndex;
             queueElement.ChunkLength = int.Parse(TextBoxChunkLength.Text);
+            queueElement.PySceneDetectThreshold = float.Parse(TextBoxPySceneDetectThreshold.Text);
 
             // Generate a random identifier to avoid filesystem conflicts
             const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -343,7 +345,11 @@ namespace NotEnoughAV1Encodes
             // Creates new Cancellation Token
             cancellationTokenSource = new CancellationTokenSource();
 
-            await MainStartAsync(cancellationTokenSource.Token);
+            try
+            {
+                await MainStartAsync(cancellationTokenSource.Token);
+            }
+            catch (OperationCanceledException) { }
 
             // Dispose Cancellation Source after Main Function finished
             cancellationTokenSource.Dispose();
@@ -381,10 +387,7 @@ namespace NotEnoughAV1Encodes
                 {
                     try
                     {
-                        if (!Directory.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier)))
-                        {
-                            Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier));
-                        }
+                        Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier));
 
                         Audio.EncodeAudio encodeAudio = new();
                         Video.VideoSplitter videoSplitter = new();
@@ -402,35 +405,51 @@ namespace NotEnoughAV1Encodes
                         {
                             await Task.Run(() => videoSplitter.Split(queueElement, _cancelToken), _cancelToken);
 
-                            string[] filePaths = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), "*.mkv", SearchOption.TopDirectoryOnly);
-                            foreach (string file in filePaths)
+                            if (queueElement.ChunkingMethod == 0)
                             {
-                                VideoChunks.Add(file);
+                                // Equal Chunking
+                                string[] filePaths = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), "*.mkv", SearchOption.TopDirectoryOnly);
+                                foreach (string file in filePaths)
+                                {
+                                    VideoChunks.Add(file);
+                                }
+                            }
+                            else
+                            {
+                                // Scene Detect
+                                if (File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splits.txt")))
+                                {
+                                    VideoChunks = File.ReadAllLines(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splits.txt")).ToList();
+                                }
                             }
                         }
 
-                        // Audio Encoding
-                        await Task.Run(() => Audio.EncodeAudio.Encode(queueElement, _cancelToken), _cancelToken);
+                        if (VideoChunks.Count == 0)
+                        {
+                            queueElement.Status = "Error: No Video Chunk found";
+                        }
+                        else
+                        {
+                            // Audio Encoding
+                            await Task.Run(() => Audio.EncodeAudio.Encode(queueElement, _cancelToken), _cancelToken);
 
-                        // Starts "a timer" for eta / fps calculation
-                        System.Timers.Timer aTimer = new();
-                        aTimer.Elapsed += (sender, e) => { UpdateProgressBar(sender, e, queueElement); } ;
-                        aTimer.Interval = 1000;
-                        aTimer.Start();
+                            // Starts "a timer" for eta / fps calculation
+                            System.Timers.Timer aTimer = new();
+                            aTimer.Elapsed += (sender, e) => { UpdateProgressBar(sender, e, queueElement); };
+                            aTimer.Interval = 1000;
+                            aTimer.Start();
 
-                        // Video Encoding
-                        await Task.Run(() => Video.VideoEncodePipe.Encode(WorkerCountElement, VideoChunks, queueElement, _cancelToken, QueueParallel), _cancelToken);
+                            // Video Encoding
+                            await Task.Run(() => Video.VideoEncodePipe.Encode(WorkerCountElement, VideoChunks, queueElement, _cancelToken, QueueParallel), _cancelToken);
 
-                        aTimer.Stop();
+                            aTimer.Stop();
 
-                        await Task.Run(() => Video.VideoMuxer.Concat(queueElement), _cancelToken);
+                            await Task.Run(() => Video.VideoMuxer.Concat(queueElement), _cancelToken);
 
-                        await Task.Run(() => DeleteTempFiles(queueElement), _cancelToken);
+                            await Task.Run(() => DeleteTempFiles(queueElement), _cancelToken);
+                        }
                     }
-                    catch (TaskCanceledException)
-                    {
-                        queueElement.Status = "Cancelled!";
-                    }
+                    catch (TaskCanceledException) { }
                     finally
                     {
                         concurrencySemaphore.Release();
@@ -439,7 +458,11 @@ namespace NotEnoughAV1Encodes
 
                 tasks.Add(task);
             }
-            await Task.WhenAll(tasks.ToArray());
+            try
+            {
+                await Task.WhenAll(tasks.ToArray());
+            }
+            catch (OperationCanceledException) { }
 
             ProgramState = 0;
 
