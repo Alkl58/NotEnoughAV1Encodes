@@ -394,6 +394,8 @@ namespace NotEnoughAV1Encodes
                         Video.VideoEncodePipe videoEncodePipe = new();
                         Video.VideoMuxer videoMuxer = new();
 
+                        await Task.Run(() => queueElement.GetFrameCount());
+
                         List<string> VideoChunks = new();
 
                         // Chunking

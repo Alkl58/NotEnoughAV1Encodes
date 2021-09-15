@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 
 namespace NotEnoughAV1Encodes.Queue
 {
@@ -53,6 +55,52 @@ namespace NotEnoughAV1Encodes.Queue
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
                 PropertyChanged(this, new PropertyChangedEventArgs("DisplayMember"));
             }
+        }
+
+        public void GetFrameCount()
+        {
+            // Only do manual Framecount, if MediaInfo did not detect it
+            if (FrameCount == 0)
+            {
+                try
+                {
+                    // This function calculates the total number of frames
+                    Process process = new()
+                    {
+                        StartInfo = new ProcessStartInfo()
+                        {
+                            UseShellExecute = false,
+                            CreateNoWindow = true,
+                            WindowStyle = ProcessWindowStyle.Hidden,
+                            FileName = "cmd.exe",
+                            WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
+                            Arguments = "/C ffmpeg.exe -i \"" + Input + "\" -hide_banner -loglevel 32 -map 0:v:0 -f null -",
+                            RedirectStandardError = true,
+                            RedirectStandardOutput = true
+                        }
+                    };
+                    process.Start();
+                    string stream = process.StandardError.ReadToEnd();
+                    process.WaitForExit();
+                    string tempStream = stream[stream.LastIndexOf("frame=")..];
+                    string data = GetBetween(tempStream, "frame=", "fps=");
+                    FrameCount = long.Parse(data);
+                }
+                catch { }
+            }
+        }
+
+        private static string GetBetween(string strSource, string strStart, string strEnd)
+        {
+            // This function parses data between two points
+            if (strSource.Contains(strStart) && strSource.Contains(strEnd))
+            {
+                int Start, End;
+                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+                End = strSource.IndexOf(strEnd, Start);
+                return strSource[Start..End];
+            }
+            return "0";
         }
     }
 }

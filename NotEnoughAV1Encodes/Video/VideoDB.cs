@@ -34,7 +34,7 @@ namespace NotEnoughAV1Encodes.Video
                 try { MIColorSpace = mediaInfo.Get(StreamKind.Video, 0, "ColorSpace"); } catch { }
                 try { MIChromaSubsampling = mediaInfo.Get(StreamKind.Video, 0, "ChromaSubsampling"); } catch { }
                 try { MIBitDepth = mediaInfo.Get(StreamKind.Video, 0, "BitDepth"); } catch { }
-                try { MIFrameCount = long.Parse(mediaInfo.Get(StreamKind.Video, 0, "FrameCount")); } catch { }
+                try { MIFrameCount = long.Parse(mediaInfo.Get(StreamKind.Video, 0, "FrameCount")); } catch { MIFrameCount = 0; }
                 try { MIIsVFR = mediaInfo.Get(StreamKind.Video, 0, "FrameRate_Mode") == "VFR"; } catch { MIIsVFR = false; }
                 try { MIWidth = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "Width")); } catch { }
                 try { MIHeight = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "Height")); } catch { }
