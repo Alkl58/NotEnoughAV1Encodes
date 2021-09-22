@@ -290,6 +290,12 @@ namespace NotEnoughAV1Encodes
                 else if (ComboBoxVideoEncoder.SelectedIndex == 3)
                 {
                     //vpx-vp9 ffmpeg
+                    TextBoxMaxBitrate.Visibility = Visibility.Visible;
+                    TextBoxMinBitrate.Visibility = Visibility.Visible;
+                    SliderEncoderPreset.Maximum = 9;
+                    SliderEncoderPreset.Value = 4;
+                    SliderQuality.Maximum = 63;
+                    SliderQuality.Value = 25;
                 }
             }
         }
@@ -444,6 +450,10 @@ namespace NotEnoughAV1Encodes
             {
                 return GenerateSvtAV1Command();
             }
+            else if (ComboBoxVideoEncoder.SelectedIndex == 3)
+            {
+                return GenerateVpxVP9Command();
+            }
 
             return "";
         }
@@ -506,6 +516,32 @@ namespace NotEnoughAV1Encodes
             }
 
             _settings += " -preset " + SliderEncoderPreset.Value;
+
+            return _settings;
+        }
+
+        private string GenerateVpxVP9Command()
+        {
+            string _settings = "-c:v libvpx-vp9";
+
+            if (ComboBoxQualityMode.SelectedIndex == 0)
+            {
+                _settings += " -crf " + SliderQuality.Value + " -b:v 0";
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 1)
+            {
+                _settings += " -crf " + SliderQuality.Value + " -b:v " + TextBoxMaxBitrate.Text + "k";
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 2)
+            {
+                _settings += " -b:v " + TextBoxMinBitrate.Text + "k";
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 3)
+            {
+                _settings += " -minrate " + TextBoxMinBitrate.Text + "k -b:v " + TextBoxAVGBitrate.Text + "k -maxrate " + TextBoxMaxBitrate.Text + "k";
+            }
+
+            _settings += " -cpu-used " + SliderEncoderPreset.Value;
 
             return _settings;
         }
