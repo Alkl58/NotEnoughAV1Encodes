@@ -7,7 +7,7 @@ namespace NotEnoughAV1Encodes.Video
 {
     class VideoMuxer
     {
-        public static void Concat(Queue.QueueElement queueElement)
+        public void Concat(Queue.QueueElement queueElement)
         {
             Debug.WriteLine("Landed in Concat()");
             queueElement.Progress = queueElement.FrameCount;

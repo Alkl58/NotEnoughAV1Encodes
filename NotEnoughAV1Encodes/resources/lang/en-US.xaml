@@ -13,6 +13,16 @@
     <system:String x:Key="video">Video</system:String>
     <system:String x:Key="audio">Audio</system:String>
     <system:String x:Key="queue">Queue</system:String>
+    <system:String x:Key="optimisation">Optimization</system:String>
+    <system:String x:Key="speed">Speed</system:String>
+    <system:String x:Key="quality">Quality</system:String>
+    <system:String x:Key="qualityMode">Quality Mode</system:String>
+    <system:String x:Key="cq">Constant Quality</system:String>
+    <system:String x:Key="constrainedQuality">Constrained Quality</system:String>
+    <system:String x:Key="bitrate">Target Bitrate</system:String>
+    <system:String x:Key="constrainedBitrate">Constrained Bitrate</system:String>
+    <system:String x:Key="maxBitrate">Max Bitrate:</system:String>
+    <system:String x:Key="twoPassEncoding">2-Pass encoding</system:String>
     <system:String x:Key="channels">Channels:</system:String>
     <system:String x:Key="language">Language:</system:String>
     <system:String x:Key="workerssAndSplitting">Workers and Splitting</system:String>

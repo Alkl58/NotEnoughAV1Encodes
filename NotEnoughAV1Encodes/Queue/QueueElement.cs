@@ -30,12 +30,16 @@ namespace NotEnoughAV1Encodes.Queue
         public string AudioCommand { get; set; }
         /// <summary>Unique Identifier to avoid Filesystem conflicts.</summary>
         public string UniqueIdentifier { get; set; }
+        /// <summary>Encoding Method; 0=aom ffmpeg, 1=rav1e ffmpeg, 2=svt-av1 ffmpeg ...</summary>
+        public int EncodingMethod { get; set; }
         /// <summary>Chunking Method; 0=Equal Chunking, 1=FFmpeg Scenedetect, 2=PySceneDetect.</summary>
         public int ChunkingMethod { get; set; }
         /// <summary>Re-Encoding Method (only for Equal Chunking).</summary>
         public int ReencodeMethod { get; set; }
         /// <summary>Chunk Length (only for Equal Chunking).</summary>
         public int ChunkLength { get; set; }
+        /// <summary>Amount of Encoding Passes.</summary>
+        public int Passes { get; set; }
         /// <summary>PySceneDetect Threshold (after Decimal).</summary>
         public float PySceneDetectThreshold { get; set; }
         /// <summary>Framecount of Source Video.</summary>

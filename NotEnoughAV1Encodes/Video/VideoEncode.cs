@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace NotEnoughAV1Encodes.Video
 {
-    class VideoEncodePipe
+    class VideoEncode
     {
-        public static void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement, CancellationToken _token, bool _queueParallel)
+        public void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement, CancellationToken _token, bool _queueParallel)
         {
             using SemaphoreSlim concurrencySemaphoreInner = new(_workerCount);
             // Creates a tasks list
@@ -38,13 +38,27 @@ namespace NotEnoughAV1Encodes.Video
                         {
                             string ChunkInput = queueElement.ChunkingMethod == 0 || _queueParallel ? " \"" + chunk + "\"" : " \"" + queueElement.Input + "\" " + chunk;
 
+                            string ChunkOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log");
+
+                            if (queueElement.Passes == 1)
+                            {
+                                if (queueElement.EncodingMethod is 0 or 1 or 2 or 3)
+                                {
+                                    ChunkOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm");
+                                }
+                                else if(queueElement.EncodingMethod is 5 or 6 or 7)
+                                {
+                                    ChunkOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf");
+                                }
+                            }
+
                             Process processVideo = new();
                             ProcessStartInfo startInfo = new()
                             {
                                 WindowStyle = ProcessWindowStyle.Hidden,
                                 FileName = "cmd.exe",
                                 WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 -c:v libvpx-vp9 -crf 10 \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm") + "\"",
+                                Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " \"" + ChunkOutput + "\"",
                                 RedirectStandardError = true,
                                 RedirectStandardInput = true,
                                 CreateNoWindow = true
@@ -90,6 +104,71 @@ namespace NotEnoughAV1Encodes.Video
 
                             // Remove PID from Array after Exit
                             Global.LaunchedPIDs.RemoveAll(i => i == _pid);
+
+                            // Second Pass
+                            if (queueElement.Passes == 2 && _token.IsCancellationRequested == false)
+                            {
+                                if (queueElement.EncodingMethod is 0 or 1 or 2 or 3)
+                                {
+                                    ChunkOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm");
+                                }
+                                else if (queueElement.EncodingMethod is 5 or 6 or 7)
+                                {
+                                    ChunkOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf");
+                                }
+
+                                startInfo = new()
+                                {
+                                    WindowStyle = ProcessWindowStyle.Hidden,
+                                    FileName = "cmd.exe",
+                                    WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
+                                    Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " \"" + ChunkOutput + "\"",
+                                    RedirectStandardError = true,
+                                    RedirectStandardInput = true,
+                                    CreateNoWindow = true
+                                };
+
+                                processVideo.StartInfo = startInfo;
+
+                                _token.Register(() => { try { processVideo.StandardInput.Write("q"); } catch { } });
+
+                                processVideo.Start();
+
+                                // Get launched Process ID
+                                _pid = processVideo.Id;
+
+                                // Add Process ID to Array, inorder to keep track / kill the instances
+                                Global.LaunchedPIDs.Add(_pid);
+
+                                // Create Progress Object
+                                chunkProgress.ChunkName = chunk + "_2ndpass";
+                                chunkProgress.Progress = 0;
+
+                                if (!queueElement.ChunkProgress.Any(n => n.ChunkName == chunk))
+                                {
+                                    queueElement.ChunkProgress.Add(chunkProgress);
+                                }
+
+                                sr = processVideo.StandardError;
+
+                                while (!sr.EndOfStream)
+                                {
+                                    int processedFrames = GetTotalFramesProcessed(sr.ReadLine());
+                                    if (processedFrames != 0)
+                                    {
+                                        foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
+                                        {
+                                            progressElement.Progress = processedFrames;
+                                        }
+                                    }
+                                }
+
+                                processVideo.WaitForExit();
+
+                                // Remove PID from Array after Exit
+                                Global.LaunchedPIDs.RemoveAll(i => i == _pid);
+                            }
+
 
                             if (processVideo.ExitCode == 0 && _token.IsCancellationRequested == false)
                             {

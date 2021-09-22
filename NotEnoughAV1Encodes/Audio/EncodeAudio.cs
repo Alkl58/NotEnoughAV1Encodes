@@ -7,7 +7,7 @@ namespace NotEnoughAV1Encodes.Audio
 {
     class EncodeAudio
     {
-        public static void Encode(Queue.QueueElement queueElement, CancellationToken _token)
+        public void Encode(Queue.QueueElement queueElement, CancellationToken _token)
         {
             if (queueElement.AudioCommand != null && !File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "exit.log")))
             {

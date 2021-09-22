@@ -211,12 +211,21 @@ namespace NotEnoughAV1Encodes
             queueElement.Output = videoDB.OutputPath;
             queueElement.InputFileName = videoDB.InputFileName;
             queueElement.OutputFileName = videoDB.OutputFileName;
+            queueElement.VideoCommand = GenerateEncoderCommand();
             queueElement.AudioCommand = commandgenerator.Generate(ListBoxAudioTracks.Items);
             queueElement.FrameCount = videoDB.MIFrameCount;
+            queueElement.EncodingMethod = ComboBoxVideoEncoder.SelectedIndex;
             queueElement.ChunkingMethod = ComboBoxChunkingMethod.SelectedIndex;
             queueElement.ReencodeMethod = ComboBoxReencodeMethod.SelectedIndex;
+            queueElement.Passes = CheckBoxTwoPassEncoding.IsChecked == true ? 2 : 1;
             queueElement.ChunkLength = int.Parse(TextBoxChunkLength.Text);
             queueElement.PySceneDetectThreshold = float.Parse(TextBoxPySceneDetectThreshold.Text);
+
+            // Double the framecount for two pass encoding
+            if (queueElement.Passes == 2)
+            {
+                queueElement.FrameCount = videoDB.MIFrameCount * 2;
+            }
 
             // Generate a random identifier to avoid filesystem conflicts
             const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -232,10 +241,7 @@ namespace NotEnoughAV1Encodes
             // Add to Queue
             ListBoxQueue.Items.Add(queueElement);
 
-            if(!Directory.Exists(Path.Combine(Global.AppData, "NEAV1E", "Queue")))
-            {
-                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E", "Queue"));
-            }
+            Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E", "Queue"));
 
             // Save as JSON
             File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.InputFileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
@@ -245,6 +251,40 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region UI Functions
+        private void ComboBoxQualityMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (TextBoxAVGBitrate != null)
+            {
+                if (ComboBoxQualityMode.SelectedIndex == 0)
+                {
+                    SliderQuality.IsEnabled = true;
+                    TextBoxAVGBitrate.IsEnabled = false;
+                    TextBoxMaxBitrate.IsEnabled = false;
+                    TextBoxMinBitrate.IsEnabled = false;
+                }
+                else if (ComboBoxQualityMode.SelectedIndex == 1)
+                {
+                    SliderQuality.IsEnabled = true;
+                    TextBoxAVGBitrate.IsEnabled = false;
+                    TextBoxMaxBitrate.IsEnabled = true;
+                    TextBoxMinBitrate.IsEnabled = false;
+                }
+                else if (ComboBoxQualityMode.SelectedIndex == 2)
+                {
+                    SliderQuality.IsEnabled = false;
+                    TextBoxAVGBitrate.IsEnabled = true;
+                    TextBoxMaxBitrate.IsEnabled = false;
+                    TextBoxMinBitrate.IsEnabled = false;
+                }
+                else if (ComboBoxQualityMode.SelectedIndex == 3)
+                {
+                    SliderQuality.IsEnabled = false;
+                    TextBoxAVGBitrate.IsEnabled = true;
+                    TextBoxMaxBitrate.IsEnabled = true;
+                    TextBoxMinBitrate.IsEnabled = true;
+                }
+            }
+        }
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             // Validates that the TextBox Input are only numbers
@@ -254,7 +294,6 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region Small Functions
-
         private void LoadSettings()
         {
             if (settingsDB.OverrideWorkerCount)
@@ -339,6 +378,44 @@ namespace NotEnoughAV1Encodes
         }
         #endregion
 
+        #region Encoder Settings
+        private string GenerateEncoderCommand()
+        {
+            if (ComboBoxVideoEncoder.SelectedIndex == 0)
+            {
+                return GenerateAomFFmpegCommand();
+            }
+
+            return "";
+        }
+
+        private string GenerateAomFFmpegCommand()
+        {
+            string _settings = "-c:v libaom-av1";
+
+            if (ComboBoxQualityMode.SelectedIndex == 0)
+            {
+                _settings += " -crf " + SliderQuality.Value + " -b:v 0";
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 1)
+            {
+                _settings += " -crf " + SliderQuality.Value + " -b:v " + TextBoxMaxBitrate.Text + "k";
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 2)
+            {
+                _settings += " -b:v " + TextBoxMinBitrate.Text + "k";
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 3)
+            {
+                _settings += " -minrate " + TextBoxMinBitrate.Text + "k -b:v " + TextBoxAVGBitrate.Text + "k -maxrate " + TextBoxMaxBitrate.Text + "k";
+            }
+
+            _settings += " -cpu-used " + SliderEncoderPreset.Value;
+
+            return _settings;
+        }
+        #endregion
+
         #region Main Entry
         private async void PreStart()
         {
@@ -391,7 +468,7 @@ namespace NotEnoughAV1Encodes
 
                         Audio.EncodeAudio encodeAudio = new();
                         Video.VideoSplitter videoSplitter = new();
-                        Video.VideoEncodePipe videoEncodePipe = new();
+                        Video.VideoEncode videoEncoder = new();
                         Video.VideoMuxer videoMuxer = new();
 
                         await Task.Run(() => queueElement.GetFrameCount());
@@ -433,7 +510,7 @@ namespace NotEnoughAV1Encodes
                         else
                         {
                             // Audio Encoding
-                            await Task.Run(() => Audio.EncodeAudio.Encode(queueElement, _cancelToken), _cancelToken);
+                            await Task.Run(() => encodeAudio.Encode(queueElement, _cancelToken), _cancelToken);
 
                             // Starts "a timer" for eta / fps calculation
                             System.Timers.Timer aTimer = new();
@@ -442,11 +519,11 @@ namespace NotEnoughAV1Encodes
                             aTimer.Start();
 
                             // Video Encoding
-                            await Task.Run(() => Video.VideoEncodePipe.Encode(WorkerCountElement, VideoChunks, queueElement, _cancelToken, QueueParallel), _cancelToken);
+                            await Task.Run(() => videoEncoder.Encode(WorkerCountElement, VideoChunks, queueElement, _cancelToken, QueueParallel), _cancelToken);
 
                             aTimer.Stop();
 
-                            await Task.Run(() => Video.VideoMuxer.Concat(queueElement), _cancelToken);
+                            await Task.Run(() => videoMuxer.Concat(queueElement), _cancelToken);
 
                             await Task.Run(() => DeleteTempFiles(queueElement), _cancelToken);
                         }
@@ -489,6 +566,5 @@ namespace NotEnoughAV1Encodes
         }
 
         #endregion
-
     }
 }
