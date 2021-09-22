@@ -251,10 +251,54 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region UI Functions
+        private void ComboBoxVideoEncoder_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (TextBoxMaxBitrate != null)
+            {
+                if (ComboBoxVideoEncoder.SelectedIndex == 0)
+                {
+                    //aom ffmpeg
+                    TextBoxMaxBitrate.Visibility = Visibility.Visible;
+                    TextBoxMinBitrate.Visibility = Visibility.Visible;
+                    SliderEncoderPreset.Maximum = 9;
+                    SliderEncoderPreset.Value = 4;
+                    SliderQuality.Maximum = 63;
+                    SliderQuality.Value = 25;
+                }
+                else if (ComboBoxVideoEncoder.SelectedIndex == 1)
+                {
+                    //rav1e ffmpeg
+                    TextBoxMaxBitrate.Visibility = Visibility.Collapsed;
+                    TextBoxMinBitrate.Visibility = Visibility.Collapsed;
+                    ComboBoxQualityMode.SelectedIndex = 0;
+                    SliderEncoderPreset.Maximum = 10;
+                    SliderEncoderPreset.Value = 5;
+                    SliderQuality.Maximum = 255;
+                    SliderQuality.Value = 80;
+                }
+                else if (ComboBoxVideoEncoder.SelectedIndex == 2)
+                {
+                    //svt-av1 ffmpeg
+                }
+                else if (ComboBoxVideoEncoder.SelectedIndex == 3)
+                {
+                    //vpx-vp9 ffmpeg
+                }
+            }
+        }
         private void ComboBoxQualityMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (TextBoxAVGBitrate != null)
             {
+                if (ComboBoxVideoEncoder.SelectedIndex == 1)
+                {
+                    if (ComboBoxQualityMode.SelectedIndex is 1 or 3)
+                    {
+                        ComboBoxQualityMode.SelectedIndex = 0;
+                        MessageBox.Show("NEAV1E currently only supports Constant Quality or Bitrate Mode (rav1e)");
+                        return;
+                    }
+                }
                 if (ComboBoxQualityMode.SelectedIndex == 0)
                 {
                     SliderQuality.IsEnabled = true;
@@ -385,6 +429,10 @@ namespace NotEnoughAV1Encodes
             {
                 return GenerateAomFFmpegCommand();
             }
+            else if (ComboBoxVideoEncoder.SelectedIndex == 1)
+            {
+                return GenereateRav1eFFmpegCommand();
+            }
 
             return "";
         }
@@ -411,6 +459,23 @@ namespace NotEnoughAV1Encodes
             }
 
             _settings += " -cpu-used " + SliderEncoderPreset.Value;
+
+            return _settings;
+        }
+        
+        private string GenereateRav1eFFmpegCommand()
+        {
+            string _settings = "-c:v librav1e";
+            if (ComboBoxQualityMode.SelectedIndex == 0)
+            {
+                _settings += " -qp " + SliderQuality.Value;
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 2)
+            {
+                _settings += " -b:v " + TextBoxAVGBitrate.Text + "k";
+            }
+
+            _settings += " -speed " + SliderEncoderPreset.Value;
 
             return _settings;
         }

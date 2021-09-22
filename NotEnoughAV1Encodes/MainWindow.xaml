@@ -167,7 +167,7 @@
                     <GroupBox Header="{DynamicResource video}" HorizontalAlignment="Left" Margin="10,10,0,0" Width="385" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{DynamicResource encoder}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="111" />
-                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectedIndex="0">
+                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectedIndex="0" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
                                 <ComboBoxItem Content="aom (AV1 FFmpeg)" IsSelected="True" />
                                 <ComboBoxItem Content="rav1e (AV1 FFmpeg)" />
                                 <ComboBoxItem Content="svt-av1 (AV1 FFmpeg)" />
@@ -239,9 +239,9 @@
                                 <ComboBoxItem Content="Constrained Bitrate"/>
                             </ComboBox>
                             <Label Content="Quanitzer" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
-                            <Label Content="Bitrate (min)" IsEnabled="{Binding ElementName=TextBoxMinBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                            <Label Content="Bitrate (min)" Visibility="{Binding ElementName=TextBoxMinBitrate, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMinBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
                             <Label Content="Bitrate (avg)" IsEnabled="{Binding ElementName=TextBoxAVGBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="254,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
-                            <Label Content="Bitrate (max)" IsEnabled="{Binding ElementName=TextBoxMaxBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="498,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                            <Label Content="Bitrate (max)" Visibility="{Binding ElementName=TextBoxMaxBitrate, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMaxBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="498,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
                             <TextBox x:Name="TextBoxMinBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="106,142,0,0" Text="500" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
                             <TextBox x:Name="TextBoxAVGBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="350,142,0,0" Text="1000" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
                             <TextBox x:Name="TextBoxMaxBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="604,142,0,0" Text="1500" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
