@@ -279,6 +279,13 @@ namespace NotEnoughAV1Encodes
                 else if (ComboBoxVideoEncoder.SelectedIndex == 2)
                 {
                     //svt-av1 ffmpeg
+                    TextBoxMaxBitrate.Visibility = Visibility.Collapsed;
+                    TextBoxMinBitrate.Visibility = Visibility.Collapsed;
+                    ComboBoxQualityMode.SelectedIndex = 0;
+                    SliderEncoderPreset.Maximum = 8;
+                    SliderEncoderPreset.Value = 6;
+                    SliderQuality.Maximum = 63;
+                    SliderQuality.Value = 40;
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex == 3)
                 {
@@ -290,12 +297,12 @@ namespace NotEnoughAV1Encodes
         {
             if (TextBoxAVGBitrate != null)
             {
-                if (ComboBoxVideoEncoder.SelectedIndex == 1)
+                if (ComboBoxVideoEncoder.SelectedIndex is 1 or 2)
                 {
                     if (ComboBoxQualityMode.SelectedIndex is 1 or 3)
                     {
                         ComboBoxQualityMode.SelectedIndex = 0;
-                        MessageBox.Show("NEAV1E currently only supports Constant Quality or Bitrate Mode (rav1e)");
+                        MessageBox.Show("NEAV1E currently only supports Constant Quality or Bitrate Mode (rav1e / svt-av1)");
                         return;
                     }
                 }
@@ -431,7 +438,11 @@ namespace NotEnoughAV1Encodes
             }
             else if (ComboBoxVideoEncoder.SelectedIndex == 1)
             {
-                return GenereateRav1eFFmpegCommand();
+                return GenerateRav1eFFmpegCommand();
+            }
+            else if (ComboBoxVideoEncoder.SelectedIndex == 2)
+            {
+                return GenerateSvtAV1Command();
             }
 
             return "";
@@ -463,9 +474,10 @@ namespace NotEnoughAV1Encodes
             return _settings;
         }
         
-        private string GenereateRav1eFFmpegCommand()
+        private string GenerateRav1eFFmpegCommand()
         {
             string _settings = "-c:v librav1e";
+
             if (ComboBoxQualityMode.SelectedIndex == 0)
             {
                 _settings += " -qp " + SliderQuality.Value;
@@ -476,6 +488,24 @@ namespace NotEnoughAV1Encodes
             }
 
             _settings += " -speed " + SliderEncoderPreset.Value;
+
+            return _settings;
+        }
+
+        private string GenerateSvtAV1Command()
+        {
+            string _settings = "-c:v libsvtav1";
+
+            if (ComboBoxQualityMode.SelectedIndex == 0)
+            {
+                _settings += " -rc 0 -qp " + SliderQuality.Value;
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 2)
+            {
+                _settings += " -rc 1 -b:v " + TextBoxAVGBitrate.Text + "k";
+            }
+
+            _settings += " -preset " + SliderEncoderPreset.Value;
 
             return _settings;
         }
