@@ -224,7 +224,7 @@ namespace NotEnoughAV1Encodes
             // Double the framecount for two pass encoding
             if (queueElement.Passes == 2)
             {
-                queueElement.FrameCount = videoDB.MIFrameCount * 2;
+                queueElement.FrameCount = videoDB.MIFrameCount + videoDB.MIFrameCount;
             }
 
             // Generate a random identifier to avoid filesystem conflicts
@@ -255,7 +255,7 @@ namespace NotEnoughAV1Encodes
         {
             if (TextBoxMaxBitrate != null)
             {
-                if (ComboBoxVideoEncoder.SelectedIndex == 0)
+                if (ComboBoxVideoEncoder.SelectedIndex is 0 or 5)
                 {
                     //aom ffmpeg
                     TextBoxMaxBitrate.Visibility = Visibility.Visible;
@@ -265,7 +265,7 @@ namespace NotEnoughAV1Encodes
                     SliderQuality.Maximum = 63;
                     SliderQuality.Value = 25;
                 }
-                else if (ComboBoxVideoEncoder.SelectedIndex == 1)
+                else if (ComboBoxVideoEncoder.SelectedIndex is 1 or 6)
                 {
                     //rav1e ffmpeg
                     TextBoxMaxBitrate.Visibility = Visibility.Collapsed;
@@ -276,7 +276,7 @@ namespace NotEnoughAV1Encodes
                     SliderQuality.Maximum = 255;
                     SliderQuality.Value = 80;
                 }
-                else if (ComboBoxVideoEncoder.SelectedIndex == 2)
+                else if (ComboBoxVideoEncoder.SelectedIndex is 2 or 7)
                 {
                     //svt-av1 ffmpeg
                     TextBoxMaxBitrate.Visibility = Visibility.Collapsed;
@@ -303,12 +303,21 @@ namespace NotEnoughAV1Encodes
         {
             if (TextBoxAVGBitrate != null)
             {
-                if (ComboBoxVideoEncoder.SelectedIndex is 1 or 2)
+                if (ComboBoxVideoEncoder.SelectedIndex is 1 or 2 or 6 or 7)
                 {
                     if (ComboBoxQualityMode.SelectedIndex is 1 or 3)
                     {
                         ComboBoxQualityMode.SelectedIndex = 0;
                         MessageBox.Show("NEAV1E currently only supports Constant Quality or Bitrate Mode (rav1e / svt-av1)");
+                        return;
+                    }
+                }
+                if (ComboBoxVideoEncoder.SelectedIndex is 5)
+                {
+                    if (ComboBoxQualityMode.SelectedIndex is 3)
+                    {
+                        ComboBoxQualityMode.SelectedIndex = 0;
+                        MessageBox.Show("NEAV1E currently does not support Constrained Bitrate (aomenc)");
                         return;
                     }
                 }
@@ -454,6 +463,10 @@ namespace NotEnoughAV1Encodes
             {
                 return GenerateVpxVP9Command();
             }
+            else if (ComboBoxVideoEncoder.SelectedIndex == 5)
+            {
+                return GenerateAomencCommand();
+            }
 
             return "";
         }
@@ -542,6 +555,30 @@ namespace NotEnoughAV1Encodes
             }
 
             _settings += " -cpu-used " + SliderEncoderPreset.Value;
+
+            return _settings;
+        }
+
+        private string GenerateAomencCommand()
+        {
+            string _settings = "-f yuv4mpegpipe - | ";
+
+            _settings += "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "aomenc", "aomenc.exe") + "\" -";
+
+            if (ComboBoxQualityMode.SelectedIndex == 0)
+            {
+                _settings += " --cq-level=" + SliderQuality.Value + " --end-usage=q";
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 1)
+            {
+                _settings += " --cq-level=" + SliderQuality.Value + " --target-bitrate=" + TextBoxMaxBitrate.Text + " --end-usage=cq";
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 2)
+            {
+                _settings += " --target-bitrate=" + TextBoxMinBitrate.Text + " --end-usage=vbr";
+            }
+
+            _settings += " --cpu-used=" + SliderEncoderPreset.Value;
 
             return _settings;
         }

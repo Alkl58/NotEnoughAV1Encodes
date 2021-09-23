@@ -14,6 +14,10 @@ namespace NotEnoughAV1Encodes.Video
             queueElement.Status = "Muxing files. Please wait.";
             IOrderedEnumerable<string> sortedChunks = null;
             sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.webm").OrderBy(f => f);
+            if (queueElement.EncodingMethod > 4)
+            {
+                sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.ivf").OrderBy(f => f);
+            }
             Debug.WriteLine("Chunks read: " + sortedChunks.ToString());
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "chunks.txt")))
             {

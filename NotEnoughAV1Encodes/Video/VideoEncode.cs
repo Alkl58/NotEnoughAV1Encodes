@@ -38,18 +38,33 @@ namespace NotEnoughAV1Encodes.Video
                         {
                             string ChunkInput = queueElement.ChunkingMethod == 0 || _queueParallel ? " \"" + chunk + "\"" : " \"" + queueElement.Input + "\" " + chunk;
 
-                            string ChunkOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log");
+                            string ChunkOutput = "";
+                            string _passSettings = "";
 
                             if (queueElement.Passes == 1)
                             {
-                                if (queueElement.EncodingMethod is 0 or 1 or 2 or 3)
+                                ChunkOutput = "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm") + "\"";
+
+                                if (queueElement.EncodingMethod > 4)
                                 {
-                                    ChunkOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm");
+                                    if (queueElement.EncodingMethod is 5) { _passSettings = " --passes=1 --output="; }
+                                    ChunkOutput = _passSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf") + "\"";
                                 }
-                                else if(queueElement.EncodingMethod is 5 or 6 or 7)
+                            }
+                            else if (queueElement.Passes == 2)
+                            {
+                                string _NULoutput = "";
+                                if (queueElement.EncodingMethod < 4)
                                 {
-                                    ChunkOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf");
+                                    _passSettings = " -pass 1 -passlogfile ";
+                                    _NULoutput = " -f webm NUL";
                                 }
+                                else if(queueElement.EncodingMethod > 4)
+                                {
+                                    if (queueElement.EncodingMethod == 5) { _passSettings = " --passes=2 --pass=1 --fpf="; _NULoutput = " --output=NUL"; }
+                                }
+
+                                ChunkOutput = _passSettings + "\"" +  Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\"" + _NULoutput;
                             }
 
                             Process processVideo = new();
@@ -58,11 +73,13 @@ namespace NotEnoughAV1Encodes.Video
                                 WindowStyle = ProcessWindowStyle.Hidden,
                                 FileName = "cmd.exe",
                                 WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " \"" + ChunkOutput + "\"",
+                                Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
                                 RedirectStandardError = true,
                                 RedirectStandardInput = true,
                                 CreateNoWindow = true
                             };
+
+                            Debug.WriteLine("/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput);
 
                             processVideo.StartInfo = startInfo;
 
@@ -108,62 +125,70 @@ namespace NotEnoughAV1Encodes.Video
                             // Second Pass
                             if (queueElement.Passes == 2 && _token.IsCancellationRequested == false)
                             {
-                                if (queueElement.EncodingMethod is 0 or 1 or 2 or 3)
+                                if (queueElement.EncodingMethod < 4)
                                 {
-                                    ChunkOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm");
+                                    _passSettings = " -pass 2 -passlogfile " + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" ";
+                                    ChunkOutput = _passSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm") + "\"";
                                 }
-                                else if (queueElement.EncodingMethod is 5 or 6 or 7)
+                                else if (queueElement.EncodingMethod > 4)
                                 {
-                                    ChunkOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf");
+                                    if (queueElement.EncodingMethod == 5)
+                                    {
+                                        _passSettings = " --passes=2 --pass=2 --fpf=" + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" --output=";
+                                    }
+
+                                    ChunkOutput = _passSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf") + "\"";
                                 }
 
+                                Process processVideo2ndPass = new();
                                 startInfo = new()
                                 {
                                     WindowStyle = ProcessWindowStyle.Hidden,
                                     FileName = "cmd.exe",
                                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                    Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " \"" + ChunkOutput + "\"",
+                                    Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
                                     RedirectStandardError = true,
                                     RedirectStandardInput = true,
                                     CreateNoWindow = true
                                 };
 
-                                processVideo.StartInfo = startInfo;
+                                processVideo2ndPass.StartInfo = startInfo;
 
-                                _token.Register(() => { try { processVideo.StandardInput.Write("q"); } catch { } });
+                                _token.Register(() => { try { processVideo2ndPass.StandardInput.Write("q"); } catch { } });
 
-                                processVideo.Start();
+                                processVideo2ndPass.Start();
 
                                 // Get launched Process ID
-                                _pid = processVideo.Id;
+                                _pid = processVideo2ndPass.Id;
 
                                 // Add Process ID to Array, inorder to keep track / kill the instances
                                 Global.LaunchedPIDs.Add(_pid);
 
                                 // Create Progress Object
-                                chunkProgress.ChunkName = chunk + "_2ndpass";
-                                chunkProgress.Progress = 0;
+                                Queue.ChunkProgress chunkProgress2ndPass = new();
+                                chunkProgress2ndPass.ChunkName = chunk + "_2ndpass";
+                                chunkProgress2ndPass.Progress = 0;
 
-                                if (!queueElement.ChunkProgress.Any(n => n.ChunkName == chunk))
+                                if (!queueElement.ChunkProgress.Any(n => n.ChunkName == chunk + "_2ndpass"))
                                 {
-                                    queueElement.ChunkProgress.Add(chunkProgress);
+                                    queueElement.ChunkProgress.Add(chunkProgress2ndPass);
                                 }
 
-                                sr = processVideo.StandardError;
+                                sr = processVideo2ndPass.StandardError;
 
                                 while (!sr.EndOfStream)
                                 {
                                     int processedFrames = GetTotalFramesProcessed(sr.ReadLine());
                                     if (processedFrames != 0)
                                     {
-                                        foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
+                                        foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk + "_2ndpass"))
                                         {
                                             progressElement.Progress = processedFrames;
                                         }
                                     }
                                 }
 
-                                processVideo.WaitForExit();
+                                processVideo2ndPass.WaitForExit();
 
                                 // Remove PID from Array after Exit
                                 Global.LaunchedPIDs.RemoveAll(i => i == _pid);
