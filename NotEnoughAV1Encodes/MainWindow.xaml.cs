@@ -464,33 +464,34 @@ namespace NotEnoughAV1Encodes
         #region Encoder Settings
         private string GenerateEncoderCommand()
         {
+            string _settings = GenerateFFmpegColorSpace() + " ";
             if (ComboBoxVideoEncoder.SelectedIndex == 0)
             {
-                return GenerateAomFFmpegCommand();
+                return _settings + GenerateAomFFmpegCommand();
             }
             else if (ComboBoxVideoEncoder.SelectedIndex == 1)
             {
-                return GenerateRav1eFFmpegCommand();
+                return _settings + GenerateRav1eFFmpegCommand();
             }
             else if (ComboBoxVideoEncoder.SelectedIndex == 2)
             {
-                return GenerateSvtAV1FFmpegCommand();
+                return _settings + GenerateSvtAV1FFmpegCommand();
             }
             else if (ComboBoxVideoEncoder.SelectedIndex == 3)
             {
-                return GenerateVpxVP9Command();
+                return _settings + GenerateVpxVP9Command();
             }
             else if (ComboBoxVideoEncoder.SelectedIndex == 5)
             {
-                return GenerateAomencCommand();
+                return _settings + GenerateAomencCommand();
             }
             else if (ComboBoxVideoEncoder.SelectedIndex == 6)
             {
-                return GenerateRav1eCommand();
+                return _settings + GenerateRav1eCommand();
             }
             else if (ComboBoxVideoEncoder.SelectedIndex == 7)
             {
-                return GenerateSvtAV1Command();
+                return _settings + GenerateSvtAV1Command();
             }
 
             return "";
@@ -645,6 +646,32 @@ namespace NotEnoughAV1Encodes
 
             _settings += " --preset " + SliderEncoderPreset.Value;
 
+            return _settings;
+        }
+
+        private string GenerateFFmpegColorSpace()
+        {
+            string _settings = "-pix_fmt yuv4";
+            if (ComboBoxColorFormat.SelectedIndex == 0)
+            {
+                _settings += "20p";
+            }
+            else if (ComboBoxColorFormat.SelectedIndex == 1)
+            {
+                _settings += "22p";
+            }
+            else if (ComboBoxColorFormat.SelectedIndex == 2)
+            {
+                _settings += "44p";
+            }
+            if (ComboBoxVideoBitDepth.SelectedIndex == 1)
+            {
+                _settings += "10le -strict -1";
+            }
+            else if (ComboBoxVideoBitDepth.SelectedIndex == 2)
+            {
+                _settings += "12le -strict -1";
+            }
             return _settings;
         }
         #endregion
