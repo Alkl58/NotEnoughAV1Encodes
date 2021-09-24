@@ -48,6 +48,7 @@ namespace NotEnoughAV1Encodes.Video
                                 if (queueElement.EncodingMethod > 4)
                                 {
                                     if (queueElement.EncodingMethod is 5) { _passSettings = " --passes=1 --output="; }
+                                    if (queueElement.EncodingMethod is 6) { _passSettings = " --output "; }
                                     ChunkOutput = _passSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf") + "\"";
                                 }
                             }

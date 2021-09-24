@@ -264,6 +264,7 @@ namespace NotEnoughAV1Encodes
                     SliderEncoderPreset.Value = 4;
                     SliderQuality.Maximum = 63;
                     SliderQuality.Value = 25;
+                    CheckBoxTwoPassEncoding.IsEnabled = true;
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex is 1 or 6)
                 {
@@ -275,6 +276,8 @@ namespace NotEnoughAV1Encodes
                     SliderEncoderPreset.Value = 5;
                     SliderQuality.Maximum = 255;
                     SliderQuality.Value = 80;
+                    CheckBoxTwoPassEncoding.IsChecked = false;
+                    CheckBoxTwoPassEncoding.IsEnabled = false;
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex is 2 or 7)
                 {
@@ -286,6 +289,7 @@ namespace NotEnoughAV1Encodes
                     SliderEncoderPreset.Value = 6;
                     SliderQuality.Maximum = 63;
                     SliderQuality.Value = 40;
+                    CheckBoxTwoPassEncoding.IsEnabled = true;
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex == 3)
                 {
@@ -296,6 +300,7 @@ namespace NotEnoughAV1Encodes
                     SliderEncoderPreset.Value = 4;
                     SliderQuality.Maximum = 63;
                     SliderQuality.Value = 25;
+                    CheckBoxTwoPassEncoding.IsEnabled = true;
                 }
             }
         }
@@ -467,6 +472,10 @@ namespace NotEnoughAV1Encodes
             {
                 return GenerateAomencCommand();
             }
+            else if (ComboBoxVideoEncoder.SelectedIndex == 6)
+            {
+                return GenerateRav1eCommand();
+            }
 
             return "";
         }
@@ -579,6 +588,26 @@ namespace NotEnoughAV1Encodes
             }
 
             _settings += " --cpu-used=" + SliderEncoderPreset.Value;
+
+            return _settings;
+        }
+
+        private string GenerateRav1eCommand()
+        {
+            string _settings = "-f yuv4mpegpipe - | ";
+
+            _settings += "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e", "rav1e.exe") + "\" -";
+
+            if (ComboBoxQualityMode.SelectedIndex == 0)
+            {
+                _settings += " --quantizer " + SliderQuality.Value;
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 2)
+            {
+                _settings += " --bitrate " + TextBoxAVGBitrate.Text;
+            }
+
+            _settings += " --speed " + SliderEncoderPreset.Value;
 
             return _settings;
         }
