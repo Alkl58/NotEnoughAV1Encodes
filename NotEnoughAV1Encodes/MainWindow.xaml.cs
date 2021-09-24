@@ -464,7 +464,7 @@ namespace NotEnoughAV1Encodes
         #region Encoder Settings
         private string GenerateEncoderCommand()
         {
-            string _settings = GenerateFFmpegColorSpace() + " ";
+            string _settings = GenerateFFmpegColorSpace() + " " + GenerateFFmpegFramerate() + " ";
             if (ComboBoxVideoEncoder.SelectedIndex == 0)
             {
                 return _settings + GenerateAomFFmpegCommand();
@@ -672,6 +672,21 @@ namespace NotEnoughAV1Encodes
             {
                 _settings += "12le -strict -1";
             }
+            return _settings;
+        }
+
+        private string GenerateFFmpegFramerate()
+        {
+            string _settings = "";
+
+            if (ComboBoxVideoFrameRate.SelectedIndex != 0)
+            {
+                _settings = "-vf fps=" + ComboBoxVideoFrameRate.Text;
+                if (ComboBoxVideoFrameRate.SelectedIndex == 6) { _settings = "-vf fps=24000/1001"; }
+                if (ComboBoxVideoFrameRate.SelectedIndex == 9) { _settings = "-vf fps=30000/1001"; }
+                if (ComboBoxVideoFrameRate.SelectedIndex == 13) { _settings = "-vf fps=60000/1001"; }
+            }
+
             return _settings;
         }
         #endregion

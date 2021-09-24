@@ -101,7 +101,8 @@ namespace NotEnoughAV1Encodes.Video
                             chunkProgress.ChunkName = chunk;
                             chunkProgress.Progress = 0;
 
-                            if (!queueElement.ChunkProgress.Any(n => n.ChunkName == chunk))
+                            List<Queue.ChunkProgress> _tempList = queueElement.ChunkProgress;
+                            if (!_tempList.Any(n => n.ChunkName == chunk))
                             {
                                 queueElement.ChunkProgress.Add(chunkProgress);
                             }
@@ -170,7 +171,8 @@ namespace NotEnoughAV1Encodes.Video
                                 chunkProgress2ndPass.ChunkName = chunk + "_2ndpass";
                                 chunkProgress2ndPass.Progress = 0;
 
-                                if (!queueElement.ChunkProgress.Any(n => n.ChunkName == chunk + "_2ndpass"))
+                                List<Queue.ChunkProgress> _tempList2ndPass = queueElement.ChunkProgress;
+                                if (!_tempList2ndPass.Any(n => n.ChunkName == chunk + "_2ndpass"))
                                 {
                                     queueElement.ChunkProgress.Add(chunkProgress2ndPass);
                                 }
