@@ -49,6 +49,7 @@ namespace NotEnoughAV1Encodes.Video
                                 {
                                     if (queueElement.EncodingMethod is 5) { _passSettings = " --passes=1 --output="; }
                                     if (queueElement.EncodingMethod is 6) { _passSettings = " --output "; }
+                                    if (queueElement.EncodingMethod is 7) { _passSettings = " --passes 1 --output "; }
                                     ChunkOutput = _passSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf") + "\"";
                                 }
                             }
@@ -63,6 +64,7 @@ namespace NotEnoughAV1Encodes.Video
                                 else if(queueElement.EncodingMethod > 4)
                                 {
                                     if (queueElement.EncodingMethod == 5) { _passSettings = " --passes=2 --pass=1 --fpf="; _NULoutput = " --output=NUL"; }
+                                    if (queueElement.EncodingMethod == 7) { _passSettings = " --pass 1 --stats "; _NULoutput = " --output NUL"; }
                                 }
 
                                 ChunkOutput = _passSettings + "\"" +  Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\"" + _NULoutput;
@@ -133,10 +135,8 @@ namespace NotEnoughAV1Encodes.Video
                                 }
                                 else if (queueElement.EncodingMethod > 4)
                                 {
-                                    if (queueElement.EncodingMethod == 5)
-                                    {
-                                        _passSettings = " --passes=2 --pass=2 --fpf=" + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" --output=";
-                                    }
+                                    if (queueElement.EncodingMethod == 5) { _passSettings = " --passes=2 --pass=2 --fpf=" + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" --output="; }
+                                    if (queueElement.EncodingMethod == 7) { _passSettings = " --pass 2 --stats " + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" --output "; }
 
                                     ChunkOutput = _passSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf") + "\"";
                                 }

@@ -290,6 +290,7 @@ namespace NotEnoughAV1Encodes
                     SliderQuality.Maximum = 63;
                     SliderQuality.Value = 40;
                     CheckBoxTwoPassEncoding.IsEnabled = true;
+                    CheckBoxTwoPassEncoding.IsChecked = false;
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex == 3)
                 {
@@ -304,6 +305,13 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
+        private void CheckBoxTwoPassEncoding_Checked(object sender, RoutedEventArgs e)
+        {
+            if (ComboBoxVideoEncoder.SelectedIndex is 2 or 7 && ComboBoxQualityMode.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsChecked == true)
+            {
+                CheckBoxTwoPassEncoding.IsChecked = false;
+            }
+        }
         private void ComboBoxQualityMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (TextBoxAVGBitrate != null)
@@ -315,6 +323,10 @@ namespace NotEnoughAV1Encodes
                         ComboBoxQualityMode.SelectedIndex = 0;
                         MessageBox.Show("NEAV1E currently only supports Constant Quality or Bitrate Mode (rav1e / svt-av1)");
                         return;
+                    }
+                    if(CheckBoxTwoPassEncoding.IsChecked == true && ComboBoxVideoEncoder.SelectedIndex is 2 or 7 && ComboBoxQualityMode.SelectedIndex == 0)
+                    {
+                        CheckBoxTwoPassEncoding.IsChecked = false;
                     }
                 }
                 if (ComboBoxVideoEncoder.SelectedIndex is 5)
@@ -462,7 +474,7 @@ namespace NotEnoughAV1Encodes
             }
             else if (ComboBoxVideoEncoder.SelectedIndex == 2)
             {
-                return GenerateSvtAV1Command();
+                return GenerateSvtAV1FFmpegCommand();
             }
             else if (ComboBoxVideoEncoder.SelectedIndex == 3)
             {
@@ -475,6 +487,10 @@ namespace NotEnoughAV1Encodes
             else if (ComboBoxVideoEncoder.SelectedIndex == 6)
             {
                 return GenerateRav1eCommand();
+            }
+            else if (ComboBoxVideoEncoder.SelectedIndex == 7)
+            {
+                return GenerateSvtAV1Command();
             }
 
             return "";
@@ -524,7 +540,7 @@ namespace NotEnoughAV1Encodes
             return _settings;
         }
 
-        private string GenerateSvtAV1Command()
+        private string GenerateSvtAV1FFmpegCommand()
         {
             string _settings = "-c:v libsvtav1";
 
@@ -608,6 +624,26 @@ namespace NotEnoughAV1Encodes
             }
 
             _settings += " --speed " + SliderEncoderPreset.Value;
+
+            return _settings;
+        }
+
+        private string GenerateSvtAV1Command()
+        {
+            string _settings = "-nostdin -f yuv4mpegpipe - | ";
+
+            _settings += "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1", "SvtAv1EncApp.exe") + "\" -i stdin";
+
+            if (ComboBoxQualityMode.SelectedIndex == 0)
+            {
+                _settings += " --rc 0 --crf " + SliderQuality.Value;
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 2)
+            {
+                _settings += " --rc 1 --tbr " + TextBoxAVGBitrate.Text;
+            }
+
+            _settings += " --preset " + SliderEncoderPreset.Value;
 
             return _settings;
         }

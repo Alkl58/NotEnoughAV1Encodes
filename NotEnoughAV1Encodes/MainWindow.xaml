@@ -222,7 +222,7 @@
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{DynamicResource speed}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
                             <Slider x:Name="SliderEncoderPreset" HorizontalAlignment="Left" Margin="104,16,0,0" VerticalAlignment="Top" Width="227" Maximum="9" SmallChange="1" Value="5" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
-                            <CheckBox x:Name="CheckBoxTwoPassEncoding" Content="{DynamicResource twoPassEncoding}" HorizontalAlignment="Left" Margin="19,69,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="CheckBoxTwoPassEncoding" Content="{DynamicResource twoPassEncoding}" HorizontalAlignment="Left" Margin="19,69,0,0" VerticalAlignment="Top" Checked="CheckBoxTwoPassEncoding_Checked"/>
                             <Label Content="{Binding ElementName=SliderEncoderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="337,16,0,0" VerticalAlignment="Top"/>
 
                         </Grid>
