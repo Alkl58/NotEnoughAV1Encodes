@@ -111,7 +111,7 @@ namespace NotEnoughAV1Encodes.Video
 
                             while (!sr.EndOfStream)
                             {
-                                int processedFrames = GetTotalFramesProcessed(sr.ReadLine());
+                                int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
                                 if (processedFrames != 0)
                                 {
                                     foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
@@ -181,7 +181,7 @@ namespace NotEnoughAV1Encodes.Video
 
                                 while (!sr.EndOfStream)
                                 {
-                                    int processedFrames = GetTotalFramesProcessed(sr.ReadLine());
+                                    int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
                                     if (processedFrames != 0)
                                     {
                                         foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk + "_2ndpass"))
@@ -219,23 +219,6 @@ namespace NotEnoughAV1Encodes.Video
                 Task.WaitAll(tasksInner.ToArray(), _token);
             }
             catch (OperationCanceledException) { }
-        }
-
-        private static int GetTotalFramesProcessed(string stderr)
-        {
-            try
-            {
-                if (stderr.Contains("frame="))
-                {
-                    int Start, End;
-                    Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
-                    End = stderr.IndexOf("fps=", Start);
-                    return int.Parse(stderr[Start..End]);
-                }
-            }
-            catch { }
-
-            return 0;
         }
     }
 }

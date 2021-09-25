@@ -36,7 +36,7 @@ namespace NotEnoughAV1Encodes.Audio
                 StreamReader sr = processAudio.StandardError;
                 while (!sr.EndOfStream)
                 {
-                    int processedFrames = GetTotalFramesProcessed(sr.ReadLine());
+                    int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
                     if (processedFrames != 0)
                     {
                         queueElement.Progress = Convert.ToDouble(processedFrames);
@@ -54,23 +54,6 @@ namespace NotEnoughAV1Encodes.Audio
                     File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "exit.log"));
                 }
             }
-        }
-
-        private static int GetTotalFramesProcessed(string stderr)
-        {
-            try
-            {
-                if (stderr.Contains("frame="))
-                {
-                    int Start, End;
-                    Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
-                    End = stderr.IndexOf("fps=", Start);
-                    return int.Parse(stderr[Start..End]);
-                }
-            }
-            catch { }
-
-            return 0;
         }
     }
 }

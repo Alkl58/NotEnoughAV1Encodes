@@ -215,7 +215,7 @@
                                 <ComboBoxItem Content="240"/>
                                 <ComboBoxItem Content="360"/>
                             </ComboBox>
-                            <CheckBox Content="VFR" HorizontalAlignment="Left" Margin="296,141,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="CheckBoxVideoVFR" Content="VFR" HorizontalAlignment="Left" Margin="296,141,0,0" VerticalAlignment="Top"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="{DynamicResource optimisation}" Margin="690,10,10,0" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">

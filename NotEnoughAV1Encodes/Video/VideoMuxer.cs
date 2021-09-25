@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -10,15 +11,18 @@ namespace NotEnoughAV1Encodes.Video
         public void Concat(Queue.QueueElement queueElement)
         {
             Debug.WriteLine("Landed in Concat()");
-            queueElement.Progress = queueElement.FrameCount;
+            queueElement.Progress = 0.0;
             queueElement.Status = "Muxing files. Please wait.";
-            IOrderedEnumerable<string> sortedChunks = null;
-            sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.webm").OrderBy(f => f);
+
+            // Getting all Chunks
+            IOrderedEnumerable<string> sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.webm").OrderBy(f => f);
             if (queueElement.EncodingMethod > 4)
             {
                 sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.ivf").OrderBy(f => f);
             }
+
             Debug.WriteLine("Chunks read: " + sortedChunks.ToString());
+
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "chunks.txt")))
             {
                 foreach (string fileTemp in sortedChunks)
@@ -28,16 +32,14 @@ namespace NotEnoughAV1Encodes.Video
                 }
             }
 
-            string FFmpegOutput;
-            if (queueElement.AudioCommand == null)
+            // Setting Output for FFmpeg
+            string FFmpegOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv");
+            if (queueElement.AudioCommand == null && queueElement.VFR == false)
             {
                 FFmpegOutput = queueElement.Output;
             }
-            else
-            {
-                FFmpegOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv");
-            }
 
+            // Muxing Chunks
             Process processVideo = new();
             ProcessStartInfo startInfo = new()
             {
@@ -51,9 +53,19 @@ namespace NotEnoughAV1Encodes.Video
 
             processVideo.StartInfo = startInfo;
             processVideo.Start();
-            string _output = processVideo.StandardError.ReadToEnd();
+
+            StreamReader sr = processVideo.StandardError;
+            while (!sr.EndOfStream)
+            {
+                int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
+                if (processedFrames != 0)
+                {
+                    queueElement.Progress = Convert.ToDouble(processedFrames);
+                    queueElement.Status = "Muxing Chunks - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
+                }
+            }
             processVideo.WaitForExit();
-            Debug.WriteLine(_output);
+            
 
             bool MuxWithMKVMerge = false;
 
@@ -64,8 +76,15 @@ namespace NotEnoughAV1Encodes.Video
                 MuxWithMKVMerge = true;
             }
 
+            string vfrMuxCommand = "";
+            if (queueElement.VFR)
+            {
+                vfrMuxCommand = "--timestamps 0:\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "vsync.txt") + "\"";
+            }
+
             Debug.WriteLine("MuxWithMKVMerge " + MuxWithMKVMerge.ToString());
             Debug.WriteLine("AudioCommand " + audioMuxCommand);
+            Debug.WriteLine("VFRCommand " + vfrMuxCommand);
 
             if (MuxWithMKVMerge)
             {
@@ -85,17 +104,16 @@ namespace NotEnoughAV1Encodes.Video
                     CreateNoWindow = true,
                     UseShellExecute = false,
                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "MKVToolNix"),
-                    Arguments = "/C mkvmerge.exe " + _webmcmd + " --output \"" + queueElement.Output + "\" --language 0:und --default-track 0:yes \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv") + "\" " + audioMuxCommand
+                    Arguments = "/C mkvmerge.exe " + _webmcmd + " --output \"" + queueElement.Output + "\" --language 0:und --default-track 0:yes \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv") + "\" " + audioMuxCommand + " " + vfrMuxCommand
                 };
                 processMKVMerge.StartInfo = startInfoMKVMerge;
 
                 processMKVMerge.Start();
-                _output = processMKVMerge.StandardOutput.ReadToEnd();
+                string _output = processMKVMerge.StandardOutput.ReadToEnd();
                 processMKVMerge.WaitForExit();
 
                 if (processMKVMerge.ExitCode != 0)
                 {
-                    //Helpers.Logging(_output);
                     MessageBox.Show(_output, "mkvmerge", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }

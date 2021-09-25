@@ -138,12 +138,17 @@ namespace NotEnoughAV1Encodes.Video
 
                 if (queueElement.ChunkingMethod != 3)
                 {
+                    if (queueElement.VFR)
+                    {
+                        ffmpeg_command += " -vsync drop";
+                    }
+
                     ffmpeg_command += " -sc_threshold 0 -g " + queueElement.ChunkLength.ToString();
                     ffmpeg_command += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + queueElement.ChunkLength.ToString() + ")" + '\u0022';
                 }
 
-                ffmpeg_command += " -segment_time " + queueElement.ChunkLength.ToString() + " -f segment " + '\u0022';
-                ffmpeg_command += Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks", "split%6d.mkv") + '\u0022';
+                ffmpeg_command += " -segment_time " + queueElement.ChunkLength.ToString() + " -f segment \"";
+                ffmpeg_command += Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks", "split%6d.mkv") + "\"";
 
                 // Start Splitting
                 Process chunkingProcess = new();
@@ -173,7 +178,7 @@ namespace NotEnoughAV1Encodes.Video
                 StreamReader sr = chunkingProcess.StandardError;
                 while (!sr.EndOfStream)
                 {
-                    int processedFrames = GetTotalFramesProcessed(sr.ReadLine());
+                    int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
                     if (processedFrames != 0)
                     {
                         queueElement.Progress = Convert.ToDouble(processedFrames);
@@ -197,23 +202,6 @@ namespace NotEnoughAV1Encodes.Video
                     _finishedLog.Close();
                 }
             }
-        }
-
-        private static int GetTotalFramesProcessed(string stderr)
-        {
-            try
-            {
-                if (stderr.Contains("frame="))
-                {
-                    int Start, End;
-                    Start = stderr.IndexOf("frame=", 0) + "frame=".Length;
-                    End = stderr.IndexOf("fps=", Start);
-                    return int.Parse(stderr[Start..End]);
-                }
-            }
-            catch { }
-
-            return 0;
         }
 
         private static void KillProcessAndChildren(int pid)

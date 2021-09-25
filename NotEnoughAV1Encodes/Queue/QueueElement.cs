@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -40,6 +41,8 @@ namespace NotEnoughAV1Encodes.Queue
         public int ChunkLength { get; set; }
         /// <summary>Amount of Encoding Passes.</summary>
         public int Passes { get; set; }
+        /// <summary>If Video should be handled as VFR.</summary>
+        public bool VFR { get; set; }
         /// <summary>PySceneDetect Threshold (after Decimal).</summary>
         public float PySceneDetectThreshold { get; set; }
         /// <summary>Framecount of Source Video.</summary>
@@ -92,6 +95,33 @@ namespace NotEnoughAV1Encodes.Queue
                 }
                 catch { }
             }
+        }
+
+        public void GetVFRTimeStamps()
+        {
+            if (!VFR || File.Exists(Path.Combine(Global.Temp, "NEAV1E", UniqueIdentifier, "vsync.txt")))
+            {
+                return;
+            }
+
+            try
+            {
+                // Run mkvextract command
+                Process mkvExtract = new();
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "MKVToolNix"),
+                    Arguments = "/C mkvextract.exe \"" + Input + "\" timestamps_v2 0:\"" + Path.Combine(Global.Temp, "NEAV1E", UniqueIdentifier, "vsync.txt") + "\""
+                };
+                Debug.WriteLine("VSYNC Extract: " + startInfo.Arguments);
+                mkvExtract.StartInfo = startInfo;
+                mkvExtract.Start();
+                Status = "Extracting VFR Timestamps";
+                mkvExtract.WaitForExit();
+            }
+            catch { }
         }
 
         private static string GetBetween(string strSource, string strStart, string strEnd)

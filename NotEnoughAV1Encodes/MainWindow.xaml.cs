@@ -127,6 +127,19 @@ namespace NotEnoughAV1Encodes
                 if (videoDB.MIIsVFR)
                 {
                     vfr = " (VFR)";
+                    if (Path.GetExtension(videoDB.InputPath) is ".mkv" or ".MKV")
+                    {
+                        CheckBoxVideoVFR.IsEnabled = true;
+                        CheckBoxVideoVFR.IsChecked = true;
+                    }
+                    else
+                    {
+                        // VFR Video only currently supported in .mkv container
+                        // Reasoning is, that splitting a VFR MP4 Video to MKV Chunks will result in ffmpeg making it CFR
+                        // Additionally Copying the MP4 Video to a MKV Video will result in the same behavior, leading to incorrect extracted timestamps
+                        CheckBoxVideoVFR.IsChecked = false;
+                        CheckBoxVideoVFR.IsEnabled = false;
+                    }
                 }
                 LabelVideoFramerate.Content = videoDB.MIFramerate + vfr;
             }
@@ -220,6 +233,7 @@ namespace NotEnoughAV1Encodes
             queueElement.Passes = CheckBoxTwoPassEncoding.IsChecked == true ? 2 : 1;
             queueElement.ChunkLength = int.Parse(TextBoxChunkLength.Text);
             queueElement.PySceneDetectThreshold = float.Parse(TextBoxPySceneDetectThreshold.Text);
+            queueElement.VFR = CheckBoxVideoVFR.IsChecked == true;
 
             // Double the framecount for two pass encoding
             if (queueElement.Passes == 2)
@@ -786,6 +800,9 @@ namespace NotEnoughAV1Encodes
                         {
                             // Audio Encoding
                             await Task.Run(() => encodeAudio.Encode(queueElement, _cancelToken), _cancelToken);
+
+                            // Extract VFR Timestamps
+                            await Task.Run(() => queueElement.GetVFRTimeStamps(), _cancelToken);
 
                             // Starts "a timer" for eta / fps calculation
                             System.Timers.Timer aTimer = new();
