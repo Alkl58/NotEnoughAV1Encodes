@@ -138,11 +138,6 @@ namespace NotEnoughAV1Encodes.Video
 
                 if (queueElement.ChunkingMethod != 3)
                 {
-                    if (queueElement.VFR)
-                    {
-                        ffmpeg_command += " -vsync drop";
-                    }
-
                     ffmpeg_command += " -sc_threshold 0 -g " + queueElement.ChunkLength.ToString();
                     ffmpeg_command += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + queueElement.ChunkLength.ToString() + ")" + '\u0022';
                 }
