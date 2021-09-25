@@ -167,6 +167,7 @@ namespace NotEnoughAV1Encodes
                 if (ProgramState is 0 or 2)
                 {
                     ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/pause.png", UriKind.Relative));
+                    LabelStartPauseButton.Content = "Pause";
 
                     // Main Start
                     if (ProgramState is 0)
@@ -189,6 +190,7 @@ namespace NotEnoughAV1Encodes
                 {
                     ProgramState = 2;
                     ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/resume.png", UriKind.Relative));
+                    LabelStartPauseButton.Content = "Resume";
 
                     // Pause all PIDs
                     foreach (int pid in Global.LaunchedPIDs)
@@ -836,6 +838,8 @@ namespace NotEnoughAV1Encodes
             catch (OperationCanceledException) { }
 
             ProgramState = 0;
+            ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
+            LabelStartPauseButton.Content = "Start";
 
             Shutdown();
         }

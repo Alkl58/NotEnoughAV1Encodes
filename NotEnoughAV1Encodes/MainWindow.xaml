@@ -24,7 +24,7 @@
         <Button x:Name="ButtonStartStop" Margin="0,10,175,0" VerticalAlignment="Top" Height="45" Click="ButtonStartStop_Click" HorizontalAlignment="Right" Width="118" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/start.png"/>
-                <Label Content="{DynamicResource start}" Canvas.Left="32" Width="78" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
+                <Label x:Name="LabelStartPauseButton" Content="{DynamicResource start}" Canvas.Left="32" Width="78" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
         <mah:MetroTabControl x:Name="TabControl" Margin="0,60,0,0" >
@@ -327,45 +327,33 @@
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="60" />
-                                                    <ColumnDefinition MinWidth="80" />
-                                                    <ColumnDefinition Width="90" />
-                                                    <ColumnDefinition MinWidth="50"/>
-                                                    <ColumnDefinition Width="90" />
-                                                    <ColumnDefinition MinWidth="50"/>
-                                                    <ColumnDefinition MinWidth="50"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Label Grid.Column="0" Content="{DynamicResource source}" FontWeight="Bold"></Label>
-                                                <Label Grid.Column="1" Content="{Binding InputFileName}" ToolTip="{Binding Input}"></Label>
-                                                <Label Grid.Column="2" Content="{DynamicResource destination}" FontWeight="Bold"></Label>
-                                                <Label Grid.Column="3" Content="{Binding OutputFileName}" ToolTip="{Binding Output}"></Label>
-                                                <Label Grid.Column="4" Content="{DynamicResource status}" FontWeight="Bold"></Label>
-                                                <Label Grid.Column="5" Content="{Binding Status}"></Label>
-                                                <ProgressBar Grid.Column="6" Value="{Binding Progress}" Maximum="{Binding FrameCount}"/>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="25"/>
+                                                    <RowDefinition Height="25"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid Grid.Row="0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="60" />
+                                                        <ColumnDefinition MinWidth="80" />
+                                                        <ColumnDefinition Width="90" />
+                                                        <ColumnDefinition MinWidth="50"/>
+                                                        <ColumnDefinition Width="90" />
+                                                        <ColumnDefinition MinWidth="50"/>
+                                                        <ColumnDefinition MinWidth="50"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Grid.Column="0" Content="{DynamicResource source}" FontWeight="Bold"></Label>
+                                                    <Label Grid.Column="1" Content="{Binding InputFileName}" ToolTip="{Binding Input}"></Label>
+                                                    <Label Grid.Column="2" Content="{DynamicResource destination}" FontWeight="Bold"></Label>
+                                                    <Label Grid.Column="3" Content="{Binding OutputFileName}" ToolTip="{Binding Output}"></Label>
+                                                    <Label Grid.Column="4" Content="{DynamicResource status}" FontWeight="Bold"></Label>
+                                                    <Label Grid.Column="5" Content="{Binding Status}"></Label>
+                                                </Grid>
+                                                <Grid Grid.Row="1">
+                                                    <ProgressBar Value="{Binding Progress}" Maximum="{Binding FrameCount}"/>
+                                                </Grid>
                                             </Grid>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
-                                    <!--<ListBoxItem Height="40">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="60" />
-                                        <ColumnDefinition MinWidth="80" />
-                                        <ColumnDefinition Width="90" />
-                                        <ColumnDefinition MinWidth="50"/>
-                                        <ColumnDefinition Width="90" />
-                                        <ColumnDefinition MinWidth="50"/>
-                                        <ColumnDefinition MinWidth="50"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Content="{DynamicResource source}" FontWeight="Bold"></Label>
-                                    <Label Grid.Column="1" Content="example.mp4"></Label>
-                                    <Label Grid.Column="2" Content="{DynamicResource destination}" FontWeight="Bold"></Label>
-                                    <Label Grid.Column="3" Content="example.mp4"></Label>
-                                    <Label Grid.Column="4" Content="{DynamicResource status}" FontWeight="Bold"></Label>
-                                    <Label Grid.Column="5" Content="Not Started yet"></Label>
-                                    <ProgressBar Grid.Column="6"/>
-                                </Grid>
-                            </ListBoxItem>-->
                                 </ListBox>
                             </GroupBox>
                             <Label Content="{DynamicResource encode-queue-parallel}" Margin="0,3,102,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="300"/>

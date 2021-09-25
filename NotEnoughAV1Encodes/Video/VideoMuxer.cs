@@ -15,8 +15,13 @@ namespace NotEnoughAV1Encodes.Video
             queueElement.Status = "Muxing files. Please wait.";
 
             // Getting all Chunks
-            IOrderedEnumerable<string> sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.webm").OrderBy(f => f);
-            if (queueElement.EncodingMethod > 4)
+            IOrderedEnumerable<string> sortedChunks = null;
+
+            if(queueElement.EncodingMethod <= 4)
+            {
+                sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.webm").OrderBy(f => f);
+            }
+            else if (queueElement.EncodingMethod > 4)
             {
                 sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.ivf").OrderBy(f => f);
             }
