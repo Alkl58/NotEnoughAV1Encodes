@@ -25,6 +25,10 @@
     <system:String x:Key="twoPassEncoding">2-Pass encoding</system:String>
     <system:String x:Key="channels">Channels:</system:String>
     <system:String x:Key="language">Language:</system:String>
+    <system:String x:Key="presets">Presets</system:String>
+    <system:String x:Key="save">Save</system:String>
+    <system:String x:Key="delete">Delete</system:String>
+    <system:String x:Key="preset">Preset:</system:String>
     <system:String x:Key="workerssAndSplitting">Workers and Splitting</system:String>
     <system:String x:Key="workerCount">Worker Count:</system:String>
     <system:String x:Key="splittingMethod">Splitting Method:</system:String>
@@ -63,5 +67,8 @@
     <system:String x:Key="select">Select</system:String>
     <system:String x:Key="reset">Reset</system:String>
     <system:String x:Key="overrideWorkerCount">Override Worker Count</system:String>
+    
+    <!-- Save Preset Window -->
+    <system:String x:Key="presetName">Preset Name:</system:String>
 
 </ResourceDictionary>

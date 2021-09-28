@@ -30,7 +30,7 @@
         <mah:MetroTabControl x:Name="TabControl" Margin="0,60,0,0" >
             <TabItem Header="{DynamicResource summary}">
                 <Grid>
-                    <GroupBox Header="{DynamicResource inputOutput}" Height="100" Margin="10,10,10,0" VerticalAlignment="Top" MinWidth="80">
+                    <GroupBox Header="{DynamicResource inputOutput}" Height="100" Margin="10,10,10,0" VerticalAlignment="Top" MinWidth="80" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Height="66" VerticalAlignment="Center" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{DynamicResource source}" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold" />
                             <Label Content="{DynamicResource destination}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold" />
@@ -38,7 +38,7 @@
                             <Label x:Name="LabelVideoDestination" Height="29" Margin="105,30,8,0" Content="{DynamicResource noDestination}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource videoInformation}" Height="72" Margin="10,115,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                    <GroupBox Header="{DynamicResource videoInformation}" Height="72" Margin="10,115,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60" />
@@ -60,7 +60,7 @@
                             <Label Grid.Column="7" x:Name="LabelVideoResolution" Content="1920x1080" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource workerssAndSplitting}" Margin="10,192,10,0" Height="76" VerticalAlignment="Top">
+                    <GroupBox Header="{DynamicResource workerssAndSplitting}" Margin="10,268,10,0" Height="76" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition MinWidth="100" MaxWidth="120"/>
@@ -160,6 +160,19 @@
                             </TextBox>
                         </Grid>
                     </GroupBox>
+                    <GroupBox Header="{DynamicResource presets}" Margin="10,192,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="71" VerticalAlignment="Top">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition MinWidth="100" MaxWidth="160"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="{DynamicResource preset}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <ComboBox x:Name="ComboBoxPresets" Grid.Column="1" Height="28" HorizontalAlignment="Left" VerticalAlignment="Center" Width="150" SelectionChanged="ComboBoxPresets_SelectionChanged"/>
+                            <Button x:Name="ButtonSavePreset" Content="{DynamicResource save}" Grid.Column="2" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Center" mah:ControlsHelper.ContentCharacterCasing="Normal" Width="66" Click="ButtonSavePreset_Click"/>
+                            <Button x:Name="ButtonDeletePreset" Content="{DynamicResource delete}" Grid.Column="2" HorizontalAlignment="Left" Margin="78,0,0,0" VerticalAlignment="Center" mah:ControlsHelper.ContentCharacterCasing="Normal" Width="66" Click="ButtonDeletePreset_Click"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="{DynamicResource video}">
@@ -167,7 +180,7 @@
                     <GroupBox Header="{DynamicResource video}" HorizontalAlignment="Left" Margin="10,10,0,0" Width="385" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{DynamicResource encoder}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="111" />
-                            <ComboBox x:Name="ComboBoxVideoEncoder" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectedIndex="0" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
+                            <ComboBox x:Name="ComboBoxVideoEncoder"  HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectedIndex="{Binding Encoder}" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
                                 <ComboBoxItem Content="aom (AV1 FFmpeg)" IsSelected="True" />
                                 <ComboBoxItem Content="rav1e (AV1 FFmpeg)" />
                                 <ComboBoxItem Content="svt-av1 (AV1 FFmpeg)" />
@@ -178,19 +191,19 @@
                                 <ComboBoxItem Content="svt-av1 (AV1)" />
                             </ComboBox>
                             <Label Content="{DynamicResource bit-depth}" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top" Width="111" />
-                            <ComboBox x:Name="ComboBoxVideoBitDepth" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center">
+                            <ComboBox x:Name="ComboBoxVideoBitDepth" SelectedIndex="{Binding BitDepth}" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center">
                                 <ComboBoxItem Content="8" IsSelected="True" />
                                 <ComboBoxItem Content="10" />
                                 <ComboBoxItem Content="12" />
                             </ComboBox>
                             <Label Content="{DynamicResource videoColorFormat}" HorizontalAlignment="Left" Margin="19,95,0,0" VerticalAlignment="Top" Height="30" Width="111" />
-                            <ComboBox x:Name="ComboBoxColorFormat" HorizontalAlignment="Left" Margin="135,93,0,0" VerticalAlignment="Top" Width="70" Height="30">
+                            <ComboBox x:Name="ComboBoxColorFormat" SelectedIndex="{Binding ColorFormat}" HorizontalAlignment="Left" Margin="135,93,0,0" VerticalAlignment="Top" Width="70" Height="30">
                                 <ComboBoxItem Content="4:2:0" IsSelected="True" />
                                 <ComboBoxItem Content="4:2:2" />
                                 <ComboBoxItem Content="4:4:4" />
                             </ComboBox>
                             <Label Content="{DynamicResource videoFramerate}" HorizontalAlignment="Left" Margin="19,137,0,0" VerticalAlignment="Top" Height="30" Width="111" />
-                            <ComboBox x:Name="ComboBoxVideoFrameRate" HorizontalAlignment="Left" Margin="135,135,0,0" VerticalAlignment="Top" Height="30" Width="140">
+                            <ComboBox x:Name="ComboBoxVideoFrameRate" SelectedIndex="{Binding FrameRate}" HorizontalAlignment="Left" Margin="135,135,0,0" VerticalAlignment="Top" Height="30" Width="140">
                                 <ComboBoxItem Content="Same as Source" IsSelected="True"/>
                                 <ComboBoxItem Content="5"/>
                                 <ComboBoxItem Content="10"/>
@@ -221,18 +234,18 @@
                     <GroupBox Header="{DynamicResource optimisation}" Margin="690,10,10,0" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{DynamicResource speed}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
-                            <Slider x:Name="SliderEncoderPreset" HorizontalAlignment="Left" Margin="104,16,0,0" VerticalAlignment="Top" Width="227" Maximum="9" SmallChange="1" Value="5" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
-                            <CheckBox x:Name="CheckBoxTwoPassEncoding" Content="{DynamicResource twoPassEncoding}" HorizontalAlignment="Left" Margin="19,69,0,0" VerticalAlignment="Top" Checked="CheckBoxTwoPassEncoding_Checked"/>
+                            <Slider x:Name="SliderEncoderPreset" HorizontalAlignment="Left" Margin="104,16,0,0" VerticalAlignment="Top" Width="227" Maximum="9" SmallChange="1" Value="{Binding SpeedPreset}" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                            <CheckBox x:Name="CheckBoxTwoPassEncoding" Content="{DynamicResource twoPassEncoding}" IsChecked="{Binding TwoPassEncoding}" HorizontalAlignment="Left" Margin="19,69,0,0" VerticalAlignment="Top" Checked="CheckBoxTwoPassEncoding_Checked"/>
                             <Label Content="{Binding ElementName=SliderEncoderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="337,16,0,0" VerticalAlignment="Top"/>
 
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="{DynamicResource quality}" Margin="10,237,10,10" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="131,69,0,0" VerticalAlignment="Top" Width="732" SmallChange="1" Maximum="63" Value="25" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True"/>
+                            <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="131,69,0,0" VerticalAlignment="Top" Width="732" SmallChange="1" Maximum="63" Value="{Binding Quantizer}" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True"/>
                             <Label Content="{Binding ElementName=SliderQuality, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="884,73,0,0" VerticalAlignment="Top" Width="78"/>
                             <Label Content="{DynamicResource qualityMode}" HorizontalAlignment="Left" Margin="18,12,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxQualityMode" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectedIndex="0" SelectionChanged="ComboBoxQualityMode_SelectionChanged">
+                            <ComboBox x:Name="ComboBoxQualityMode" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectedIndex="{Binding QualityMode}" SelectionChanged="ComboBoxQualityMode_SelectionChanged">
                                 <ComboBoxItem Content="Constant Quality"/>
                                 <ComboBoxItem Content="Constrained Quality"/>
                                 <ComboBoxItem Content="Average Bitrate"/>
@@ -242,9 +255,9 @@
                             <Label Content="Bitrate (min)" Visibility="{Binding ElementName=TextBoxMinBitrate, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMinBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
                             <Label Content="Bitrate (avg)" IsEnabled="{Binding ElementName=TextBoxAVGBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="254,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
                             <Label Content="Bitrate (max)" Visibility="{Binding ElementName=TextBoxMaxBitrate, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMaxBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="498,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
-                            <TextBox x:Name="TextBoxMinBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="106,142,0,0" Text="500" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
-                            <TextBox x:Name="TextBoxAVGBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="350,142,0,0" Text="1000" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
-                            <TextBox x:Name="TextBoxMaxBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="604,142,0,0" Text="1500" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
+                            <TextBox x:Name="TextBoxMinBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="106,142,0,0" Text="{Binding MinBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
+                            <TextBox x:Name="TextBoxAVGBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="350,142,0,0" Text="{Binding AvgBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
+                            <TextBox x:Name="TextBoxMaxBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="604,142,0,0" Text="{Binding MaxBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
 
                         </Grid>
                     </GroupBox>

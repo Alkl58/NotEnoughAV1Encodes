@@ -13,11 +13,7 @@ namespace NotEnoughAV1Encodes.Views
         public OpenSource(string _theme)
         {
             InitializeComponent();
-            try
-            {
-                ThemeManager.Current.ChangeTheme(this, _theme);
-            }
-            catch { }
+            try { ThemeManager.Current.ChangeTheme(this, _theme); } catch { }
         }
 
         private void ButtonOpenVideoFile_Click(object sender, RoutedEventArgs e)

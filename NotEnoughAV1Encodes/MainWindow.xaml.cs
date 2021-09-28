@@ -26,6 +26,7 @@ namespace NotEnoughAV1Encodes
         private readonly Video.VideoDB videoDB = new();
         private int ProgramState;
         private CancellationTokenSource cancellationTokenSource;
+        public Settings PresetSettings = new();
 
         public ObservableCollection<Queue.QueueElement> QueueList { get; set; } = new();
 
@@ -33,6 +34,7 @@ namespace NotEnoughAV1Encodes
         {
             InitializeComponent();
             Initialize();
+            DataContext = PresetSettings;
         }
 
         #region Startup
@@ -65,6 +67,22 @@ namespace NotEnoughAV1Encodes
                     ListBoxQueue.Items.Add(JsonConvert.DeserializeObject<Queue.QueueElement>(File.ReadAllText(file)));
                 }
             }
+
+            LoadPresets();
+        }
+
+        private void LoadPresets()
+        {
+            // Load Presets
+            if (Directory.Exists(Path.Combine(Global.AppData, "NEAV1E", "Presets")))
+            {
+                string[] filePaths = Directory.GetFiles(Path.Combine(Global.AppData, "NEAV1E", "Presets"), "*.json", SearchOption.TopDirectoryOnly);
+
+                foreach (string file in filePaths)
+                {
+                    ComboBoxPresets.Items.Add(Path.GetFileNameWithoutExtension(file));
+                }
+            }
         }
         #endregion
 
@@ -92,7 +110,7 @@ namespace NotEnoughAV1Encodes
             {
                 File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
             }
-            catch { }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         private void ButtonRemoveSelectedQueueItem_Click(object sender, RoutedEventArgs e)
@@ -264,9 +282,49 @@ namespace NotEnoughAV1Encodes
 
             Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 3));
         }
+
+        private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
+        {
+            Views.SavePresetDialog savePresetDialog = new(settingsDB.Theme);
+            savePresetDialog.ShowDialog();
+            if (savePresetDialog.Quit)
+            {
+                Debug.WriteLine("Save: " + savePresetDialog.PresetName);
+                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E", "Presets"));
+                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", savePresetDialog.PresetName + ".json"), JsonConvert.SerializeObject(PresetSettings, Formatting.Indented));
+                ComboBoxPresets.Items.Clear();
+                LoadPresets();
+            }
+        }
+
+        private void ButtonDeletePreset_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Presets", ComboBoxPresets.Text + ".json"));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+
+            try
+            {
+                ComboBoxPresets.Items.Clear();
+                LoadPresets();
+            }
+            catch { }
+
+        }
         #endregion
 
         #region UI Functions
+        private void ComboBoxPresets_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            try
+            {
+                PresetSettings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", ComboBoxPresets.SelectedItem.ToString() + ".json")));
+                DataContext = PresetSettings;
+            }
+            catch { }
+        }
         private void ComboBoxVideoEncoder_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (TextBoxMaxBitrate != null)
