@@ -115,18 +115,18 @@ namespace NotEnoughAV1Encodes.Views
         {
             try
             {
-                string jsonWeb = new WebClient().DownloadString("https://jeremylee.sh/data/bin/packages.json");
+                string jsonWeb = new WebClient().DownloadString("https://jeremylee.sh/bins/manifest.json");
                 dynamic json = JsonConvert.DeserializeObject(jsonWeb);
 
-                string aomencVersion = json.apps["aomenc.exe"].datetime;
+                string aomencVersion = json.files["aomenc.exe"].datetime;
                 AomencUpdateVersion = aomencVersion.Replace("-", ".").Remove(aomencVersion.Length - 6);
                 LabelUpdateAomencVersion.Content = AomencUpdateVersion;
 
-                string rav1eVersion = json.apps["rav1e.exe"].datetime;
+                string rav1eVersion = json.files["rav1e.exe"].datetime;
                 Rav1eUpdateVersion = rav1eVersion.Replace("-", ".").Remove(rav1eVersion.Length - 6);
                 LabelUpdateRav1eVersion.Content = Rav1eUpdateVersion;
 
-                string svtav1Version = json.apps["SvtAv1EncApp.exe"].datetime;
+                string svtav1Version = json.files["SvtAv1EncApp.exe"].datetime;
                 SVTAV1UpdateVersion = svtav1Version.Replace("-", ".").Remove(svtav1Version.Length - 6);
                 LabelUpdateSVTAV1Version.Content = SVTAV1UpdateVersion;
             }
@@ -311,7 +311,7 @@ namespace NotEnoughAV1Encodes.Views
             if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "aomenc")))
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "aomenc"));
             // Downloads aomenc
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/aom.7z", Path.Combine(CurrentDir, "Apps", "aom.7z")));
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/aom.7z", Path.Combine(CurrentDir, "Apps", "aom.7z")));
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "aom.7z")))
             {
                 // Extracts aomenc
@@ -354,7 +354,7 @@ namespace NotEnoughAV1Encodes.Views
             if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "rav1e")))
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "rav1e"));
             // Downloads rav1e
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/rav1e.7z", Path.Combine(CurrentDir, "Apps", "rav1e.7z")));
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/rav1e.7z", Path.Combine(CurrentDir, "Apps", "rav1e.7z")));
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "rav1e.7z")))
             {
                 // Extracts rav1e
@@ -388,7 +388,7 @@ namespace NotEnoughAV1Encodes.Views
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "svt-av1"));
             }
             // Downloads rav1e
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/svt-av1.7z", Path.Combine(CurrentDir, "Apps", "svt-av1.7z")));
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/svt-av1.7z", Path.Combine(CurrentDir, "Apps", "svt-av1.7z")));
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1.7z")))
             {
                 // Extracts rav1e
