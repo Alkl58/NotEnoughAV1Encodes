@@ -108,6 +108,7 @@ namespace NotEnoughAV1Encodes
 
             try
             {
+                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
                 File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
