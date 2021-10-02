@@ -36,7 +36,7 @@ namespace NotEnoughAV1Encodes.Video
 
                         if (!File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_finished.log")))
                         {
-                            string ChunkInput = queueElement.ChunkingMethod == 0 || _queueParallel ? " \"" + chunk + "\"" : " \"" + queueElement.Input + "\" " + chunk;
+                            string ChunkInput = queueElement.ChunkingMethod == 0 || _queueParallel ? " \"" + chunk + "\"" : " \"" + queueElement.VideoDB.InputPath + "\" " + chunk;
 
                             string ChunkOutput = "";
                             string _passSettings = "";

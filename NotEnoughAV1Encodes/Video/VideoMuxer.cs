@@ -41,7 +41,7 @@ namespace NotEnoughAV1Encodes.Video
             string FFmpegOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv");
             if (queueElement.AudioCommand == null && queueElement.VFR == false)
             {
-                FFmpegOutput = queueElement.Output;
+                FFmpegOutput = queueElement.VideoDB.OutputPath;
             }
 
             // Muxing Chunks
@@ -94,7 +94,7 @@ namespace NotEnoughAV1Encodes.Video
             if (MuxWithMKVMerge)
             {
                 string _webmcmd = "";
-                if (Path.GetExtension(queueElement.Output).ToLower() == ".webm")
+                if (Path.GetExtension(queueElement.VideoDB.OutputPath).ToLower() == ".webm")
                 {
                     _webmcmd = " --webm ";
                 }
@@ -109,7 +109,7 @@ namespace NotEnoughAV1Encodes.Video
                     CreateNoWindow = true,
                     UseShellExecute = false,
                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "MKVToolNix"),
-                    Arguments = "/C mkvmerge.exe " + _webmcmd + " --output \"" + queueElement.Output + "\" --language 0:und --default-track 0:yes \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv") + "\" " + audioMuxCommand + " " + vfrMuxCommand
+                    Arguments = "/C mkvmerge.exe " + _webmcmd + " --output \"" + queueElement.VideoDB.OutputPath + "\" --language 0:und --default-track 0:yes \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv") + "\" " + audioMuxCommand + " " + vfrMuxCommand
                 };
                 processMKVMerge.StartInfo = startInfoMKVMerge;
 

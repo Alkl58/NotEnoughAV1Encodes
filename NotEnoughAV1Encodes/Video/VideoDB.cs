@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace NotEnoughAV1Encodes.Video
 {
-    internal class VideoDB
+    public class VideoDB
     {
         public string InputPath { get; set; }
         public string OutputPath { get; set; }

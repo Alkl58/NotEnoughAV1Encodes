@@ -2,7 +2,7 @@
 
 namespace NotEnoughAV1Encodes.Audio
 {
-    internal class AudioTracks
+    public class AudioTracks
     {
         public bool Active { get; set; }
         public int Index { get; set; }

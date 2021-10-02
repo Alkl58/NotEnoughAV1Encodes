@@ -34,7 +34,7 @@
                         <Grid Height="66" VerticalAlignment="Center" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{DynamicResource source}" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold" />
                             <Label Content="{DynamicResource destination}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold" />
-                            <Label x:Name="TextBoxVideoSource" Height="29" Margin="105,1,8,0" Content="{DynamicResource noSource}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" MinWidth="50" />
+                            <Label x:Name="LabelVideoSource" Height="29" Margin="105,1,8,0" Content="{DynamicResource noSource}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" MinWidth="50" />
                             <Label x:Name="LabelVideoDestination" Height="29" Margin="105,30,8,0" Content="{DynamicResource noDestination}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" />
                         </Grid>
                     </GroupBox>
@@ -355,9 +355,9 @@
                                                         <ColumnDefinition MinWidth="50"/>
                                                     </Grid.ColumnDefinitions>
                                                     <Label Grid.Column="0" Content="{DynamicResource source}" FontWeight="Bold"></Label>
-                                                    <Label Grid.Column="1" Content="{Binding InputFileName}" ToolTip="{Binding Input}"></Label>
+                                                    <Label Grid.Column="1" Content="{Binding VideoDB.InputFileName}" ToolTip="{Binding Input}"></Label>
                                                     <Label Grid.Column="2" Content="{DynamicResource destination}" FontWeight="Bold"></Label>
-                                                    <Label Grid.Column="3" Content="{Binding OutputFileName}" ToolTip="{Binding Output}"></Label>
+                                                    <Label Grid.Column="3" Content="{Binding VideoDB.OutputFileName}" ToolTip="{Binding Output}"></Label>
                                                     <Label Grid.Column="4" Content="{DynamicResource status}" FontWeight="Bold"></Label>
                                                     <Label Grid.Column="5" Content="{Binding Status}"></Label>
                                                 </Grid>
@@ -374,6 +374,7 @@
                         </Grid>
                     </GroupBox>
                     <Button x:Name="ButtonRemoveSelectedQueueItem" Content="{DynamicResource removeSelectedItem}" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonRemoveSelectedQueueItem_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button x:Name="ButtonEditSelectedItem" Content="{DynamicResource editSelectedItem}" HorizontalAlignment="Left" Margin="130,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Background="{Binding Background, ElementName=ListBoxAudioTracks, UpdateSourceTrigger=PropertyChanged}" Click="ButtonEditSelectedItem_Click"/>
                 </Grid>
             </TabItem>
         </mah:MetroTabControl>

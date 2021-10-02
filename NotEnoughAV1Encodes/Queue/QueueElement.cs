@@ -11,14 +11,7 @@ namespace NotEnoughAV1Encodes.Queue
         public event PropertyChangedEventHandler PropertyChanged;
         private double _progress;
         private string _status;
-        /// <summary>Full Video Input Path.</summary>
-        public string Input { get; set; }
-        /// <summary>Full Video Output Path.</summary>
-        public string Output { get; set; }
-        /// <summary>Video Input Filename without extension.</summary>
-        public string InputFileName { get; set; }
-        /// <summary>Video Output Filename without extension.</summary>
-        public string OutputFileName { get; set; }
+
         /// <summary>Current Status displayed in the Queue.</summary>
         public string Status
         {
@@ -49,6 +42,10 @@ namespace NotEnoughAV1Encodes.Queue
         public long FrameCount { get; set; }
         /// <summary>List of Progress of each Chunk.</summary>
         public List<ChunkProgress> ChunkProgress { get; set; } = new();
+        /// <summary>State of UI Settings</summary>
+        public Settings Preset { get; set; } = new();
+        /// <summary>Video DB</summary>
+        public Video.VideoDB VideoDB { get; set; } = new();
         public double Progress
         {
             get => _progress;
@@ -81,7 +78,7 @@ namespace NotEnoughAV1Encodes.Queue
                             WindowStyle = ProcessWindowStyle.Hidden,
                             FileName = "cmd.exe",
                             WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                            Arguments = "/C ffmpeg.exe -i \"" + Input + "\" -hide_banner -loglevel 32 -map 0:v:0 -f null -",
+                            Arguments = "/C ffmpeg.exe -i \"" + VideoDB.InputPath + "\" -hide_banner -loglevel 32 -map 0:v:0 -f null -",
                             RedirectStandardError = true,
                             RedirectStandardOutput = true
                         }
@@ -113,7 +110,7 @@ namespace NotEnoughAV1Encodes.Queue
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "MKVToolNix"),
-                    Arguments = "/C mkvextract.exe \"" + Input + "\" timestamps_v2 0:\"" + Path.Combine(Global.Temp, "NEAV1E", UniqueIdentifier, "vsync.txt") + "\""
+                    Arguments = "/C mkvextract.exe \"" + VideoDB.InputPath + "\" timestamps_v2 0:\"" + Path.Combine(Global.Temp, "NEAV1E", UniqueIdentifier, "vsync.txt") + "\""
                 };
                 Debug.WriteLine("VSYNC Extract: " + startInfo.Arguments);
                 mkvExtract.StartInfo = startInfo;
