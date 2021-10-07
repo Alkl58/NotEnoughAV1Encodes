@@ -11,6 +11,8 @@
     <system:String x:Key="addToQueue">Add to Queue</system:String>
     <system:String x:Key="summary">Summary</system:String>
     <system:String x:Key="video">Video</system:String>
+    <system:String x:Key="advanced">Advanced</system:String>
+    <system:String x:Key="advancedSettings">Advanced Settings</system:String>
     <system:String x:Key="audio">Audio</system:String>
     <system:String x:Key="queue">Queue</system:String>
     <system:String x:Key="optimisation">Optimization</system:String>
@@ -71,5 +73,8 @@
     
     <!-- Save Preset Window -->
     <system:String x:Key="presetName">Preset Name:</system:String>
+    
+    <!-- Custom Settings Tab -->
+    <system:String x:Key="customSettings">Custom Settings</system:String>
 
 </ResourceDictionary>

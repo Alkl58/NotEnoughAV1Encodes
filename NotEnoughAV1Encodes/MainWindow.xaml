@@ -7,6 +7,9 @@
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
         Title="NEAV1E" Height="650" Width="1085" Icon="/resources/img/neav1e.ico">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="b2v" />
+    </Window.Resources>
     <Grid>
         <Image x:Name="bgImage" Stretch="UniformToFill" />
         <Button x:Name="ButtonOpenSource" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Click="ButtonOpenSource_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
@@ -234,9 +237,11 @@
                     <GroupBox Header="{DynamicResource optimisation}" Margin="690,10,10,0" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{DynamicResource speed}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
-                            <Slider x:Name="SliderEncoderPreset" HorizontalAlignment="Left" Margin="104,16,0,0" VerticalAlignment="Top" Width="227" Maximum="9" SmallChange="1" Value="{Binding SpeedPreset}" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
-                            <CheckBox x:Name="CheckBoxTwoPassEncoding" Content="{DynamicResource twoPassEncoding}" IsChecked="{Binding TwoPassEncoding}" HorizontalAlignment="Left" Margin="19,69,0,0" VerticalAlignment="Top" Checked="CheckBoxTwoPassEncoding_Checked"/>
+                            <Slider x:Name="SliderEncoderPreset" HorizontalAlignment="Left" Margin="104,16,0,0" VerticalAlignment="Top" Width="227" Maximum="9" SmallChange="1" Value="{Binding SpeedPreset}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" ValueChanged="SliderEncoderPreset_ValueChanged"/>
+                            <mah:ToggleSwitch x:Name="CheckBoxTwoPassEncoding" Content="{DynamicResource twoPassEncoding}" IsOn="{Binding TwoPassEncoding}" Margin="19,66,0,0" VerticalAlignment="Top" Toggled="CheckBoxTwoPassEncoding_Checked"/>
                             <Label Content="{Binding ElementName=SliderEncoderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="337,16,0,0" VerticalAlignment="Top"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedSettings" Content="{DynamicResource advancedSettings}" IsOn="{Binding AdvancedSettings}" Height="36" Margin="19,129,0,0" VerticalAlignment="Top" Width="198"/>
+                            <mah:ToggleSwitch x:Name="CheckBoxRealTimeMode" Content="Realtime Mode" IsOn="{Binding AomencRTMode}" Margin="196,66,0,0" VerticalAlignment="Top" Toggled="CheckBoxRealTimeMode_Toggled"/>
 
                         </Grid>
                     </GroupBox>
@@ -262,6 +267,180 @@
                         </Grid>
                     </GroupBox>
                 </Grid>
+            </TabItem>
+            <TabItem Header="{DynamicResource advanced}" Visibility="{Binding ElementName=ToggleSwitchAdvancedSettings, Path=IsOn, Converter={StaticResource b2v}}">
+                <GroupBox Header="{DynamicResource advancedSettings}" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <Grid>
+                        <Canvas Height="237" VerticalAlignment="Top" Margin="10,10,10,0">
+                            <Canvas.Style>
+                                <Style>
+                                    <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="0">
+                                            <Setter Property="UIElement.Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="5">
+                                            <Setter Property="UIElement.Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Canvas.Style>
+                            <Label x:Name="LabelAomencThreads" Content="Threads:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="21" />
+                            <ComboBox x:Name="ComboBoxAomencThreads" SelectedIndex="{Binding AomencThreads}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="21" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="3" />
+                                <ComboBoxItem Content="4" />
+                                <ComboBoxItem Content="5" />
+                                <ComboBoxItem Content="6" />
+                                <ComboBoxItem Content="7" />
+                                <ComboBoxItem Content="8" />
+                            </ComboBox>
+                            <Label x:Name="LabelAomencTileCols"  Content="Tile Columns:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="55" />
+                            <Label x:Name="LabelAomencTileRows"  Content="Tile Rows:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="89" />
+                            <Label x:Name="LabelAomencMaxGOP"  Content="Max GOP Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="123" />
+                            <Label x:Name="LabelAomencLagInFrames"  Content="Lag In Frames:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="157" />
+                            <Label x:Name="LabelAomencColorPrimaries" Content="Color Primaries:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="21" />
+                            <ComboBox x:Name="ComboBoxAomencColorPrimaries" SelectedIndex="{Binding AomencColorPrimaries}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="21" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="unspecified" IsSelected="True" />
+                                <ComboBoxItem Content="bt470m" />
+                                <ComboBoxItem Content="bt470bg" />
+                                <ComboBoxItem Content="bt601" />
+                                <ComboBoxItem Content="bt709" />
+                                <ComboBoxItem Content="bt2020" />
+                                <ComboBoxItem Content="smpte240" />
+                                <ComboBoxItem Content="smpte431" />
+                                <ComboBoxItem Content="smpte432" />
+                                <ComboBoxItem Content="ebu3213" />
+                                <ComboBoxItem Content="film" />
+                                <ComboBoxItem Content="xyz" />
+                            </ComboBox>
+                            <Label x:Name="LabelAomencColorTransfer" Content="Color Transfer:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="55" />
+                            <ComboBox x:Name="ComboBoxAomencColorTransfer" SelectedIndex="{Binding AomencColorTransfer}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="55" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="unspecified" IsSelected="True" />
+                                <ComboBoxItem Content="bt470m" />
+                                <ComboBoxItem Content="bt470bg" />
+                                <ComboBoxItem Content="bt601" />
+                                <ComboBoxItem Content="bt709" />
+                                <ComboBoxItem Content="bt1361" />
+                                <ComboBoxItem Content="bt2020-10bit" />
+                                <ComboBoxItem Content="bt2020-12bit" />
+                                <ComboBoxItem Content="smpte240" />
+                                <ComboBoxItem Content="smpte428" />
+                                <ComboBoxItem Content="smpte2084" />
+                                <ComboBoxItem Content="lin" />
+                                <ComboBoxItem Content="log100" />
+                                <ComboBoxItem Content="log100sq10" />
+                                <ComboBoxItem Content="iec61966" />
+                                <ComboBoxItem Content="srgb" />
+                                <ComboBoxItem Content="hlg" />
+                            </ComboBox>
+                            <Label x:Name="LabelAomencColorMatrix" Content="Color Matrix:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="89" />
+                            <ComboBox x:Name="ComboBoxAomencColorMatrix" SelectedIndex="{Binding AomencColorMatrix}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="89" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="unspecified" IsSelected="True" />
+                                <ComboBoxItem Content="bt470bg" />
+                                <ComboBoxItem Content="bt601" />
+                                <ComboBoxItem Content="bt709" />
+                                <ComboBoxItem Content="bt2020ncl" />
+                                <ComboBoxItem Content="bt2020cl" />
+                                <ComboBoxItem Content="smpte240" />
+                                <ComboBoxItem Content="smpte2085" />
+                                <ComboBoxItem Content="ycgco" />
+                                <ComboBoxItem Content="chromncl" />
+                                <ComboBoxItem Content="chromcl" />
+                                <ComboBoxItem Content="ictcp" />
+                                <ComboBoxItem Content="fcc73" />
+                                <ComboBoxItem Content="identity" />
+                            </ComboBox>
+                            <ComboBox x:Name="ComboBoxAomencTileColumns" SelectedIndex="{Binding AomencTileColumns}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="55" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="3" />
+                                <ComboBoxItem Content="4" />
+                            </ComboBox>
+                            <ComboBox x:Name="ComboBoxAomencTileRows" SelectedIndex="{Binding AomencTileRows}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="89" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="3" />
+                                <ComboBoxItem Content="4" />
+                                <ComboBoxItem Content="5" />
+                                <ComboBoxItem Content="6" />
+                            </ComboBox>
+                            <TextBox x:Name="TextBoxAomencMaxGOP" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding AomencGOPSize}" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="123"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxAomencLagInFrames" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding AomencLagInFrames}" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="157"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label x:Name="LabelAomencAQMode" Content="AQ-Mode:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="123" />
+                            <ComboBox x:Name="ComboBoxAomencAQMode" SelectedIndex="{Binding AomencAQMode}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="123" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="0: off (default)" IsSelected="True" />
+                                <ComboBoxItem Content="1: Variance" />
+                                <ComboBoxItem Content="2: Complexity" />
+                                <ComboBoxItem Content="3: Cyclic Refresh" />
+                            </ComboBox>
+                            <Label x:Name="LabelAomencSharpness" Content="Sharpness:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="191" />
+                            <ComboBox x:Name="ComboBoxAomencSharpness" SelectedIndex="{Binding AomencSharpness}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="142" Canvas.Top="191" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="3" />
+                                <ComboBoxItem Content="4" />
+                                <ComboBoxItem Content="5" />
+                                <ComboBoxItem Content="6" />
+                                <ComboBoxItem Content="7" />
+                            </ComboBox>
+                            <Label x:Name="LabelAomencKeyframeFiltering" Content="Keyframe Filtering:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="602" Canvas.Top="89" />
+                            <ComboBox x:Name="ComboBoxAomencKeyFiltering" SelectedIndex="{Binding AomencKeyFrameFiltering}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="731" Canvas.Top="89" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" IsSelected="True" />
+                                <ComboBoxItem Content="2" />
+                            </ComboBox>
+                            <Label x:Name="LabelAomencTune" Content="Tune:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="191" />
+                            <ComboBox x:Name="ComboBoxAomencTune" SelectedIndex="{Binding AomencTune}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="191" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="psnr" IsSelected="True" />
+                                <ComboBoxItem Content="ssim" />
+                            </ComboBox>
+                            <CheckBox x:Name="CheckBoxAomencRowMT" Content="Row based Multi-Threading" IsChecked="{Binding AomencRowBasedMultiThreading}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="602" Canvas.Top="131" Width="197" />
+                            <CheckBox x:Name="CheckBoxAomencCDEF" Content="CDEF" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="602" Canvas.Top="163" Width="62" IsChecked="{Binding AomencCDEF}" ToolTip="Enable the constrained directional enhancement filter (0: false, 1: true (default))" />
+                            <ComboBox x:Name="ComboBoxAomencARNRMax" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}" SelectedIndex="{Binding AomencARNRMaxFramesIndex}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="731" Canvas.Top="21" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="15" IsSelected="True" />
+                                <ComboBoxItem Content="14" />
+                                <ComboBoxItem Content="13" />
+                                <ComboBoxItem Content="12" />
+                                <ComboBoxItem Content="11" />
+                                <ComboBoxItem Content="10" />
+                                <ComboBoxItem Content="9" />
+                                <ComboBoxItem Content="8" />
+                                <ComboBoxItem Content="7" />
+                                <ComboBoxItem Content="6" />
+                                <ComboBoxItem Content="5" />
+                                <ComboBoxItem Content="4" />
+                                <ComboBoxItem Content="3" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="0" />
+                            </ComboBox>
+                            <CheckBox x:Name="CheckBoxAomencARNRMax" IsChecked="{Binding AomencARNRMaxFrames}" Content="ARNR Max Frames:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="144" Canvas.Left="582" Canvas.Top="25" />
+                            <Label x:Name="LabelAomencTune_Copy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}" Content="ARNR Strength:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="602" Canvas.Top="55" />
+                            <ComboBox x:Name="ComboBoxAomencARNRStrength" SelectedIndex="{Binding AomencARNRStrength}" IsEnabled="{Binding IsChecked, ElementName=CheckBoxAomencARNRMax}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="731" Canvas.Top="55" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="6" IsSelected="True" />
+                                <ComboBoxItem Content="5" />
+                                <ComboBoxItem Content="4" />
+                                <ComboBoxItem Content="3" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="0" />
+                            </ComboBox>
+                            <Label x:Name="LabelAomencTune_Copy1" Content="Tune-Content:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="278" Canvas.Top="157" />
+                            <ComboBox x:Name="ComboBoxAomencTuneContent" SelectedIndex="{Binding AomencTuneContent}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="421" Canvas.Top="157" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="default" IsSelected="True" />
+                                <ComboBoxItem Content="screen" />
+                            </ComboBox>
+                        </Canvas>
+                        <TextBox x:Name="TextBoxCustomVideoSettings" IsEnabled="{Binding IsOn, ElementName=CheckBoxCustomVideoSettings}" Text="{Binding CustomSettings}"  Margin="10,313,10,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged" />
+                        <mah:ToggleSwitch x:Name="CheckBoxCustomVideoSettings" Content="{DynamicResource customSettings}" Margin="10,281,0,0" VerticalAlignment="Top" Toggled="CheckBoxCustomVideoSettings_Toggled" />
+                        
+                    </Grid>
+                </GroupBox>
             </TabItem>
             <TabItem Header="{DynamicResource audio}">
                 <Grid>

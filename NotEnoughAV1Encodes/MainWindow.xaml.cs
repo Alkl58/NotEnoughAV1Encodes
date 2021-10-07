@@ -241,13 +241,13 @@ namespace NotEnoughAV1Encodes
             Queue.QueueElement queueElement = new();
             Audio.CommandGenerator commandgenerator = new();
 
-            queueElement.VideoCommand = GenerateEncoderCommand();
+            queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
             queueElement.AudioCommand = commandgenerator.Generate(ListBoxAudioTracks.Items);
             queueElement.FrameCount = videoDB.MIFrameCount;
             queueElement.EncodingMethod = ComboBoxVideoEncoder.SelectedIndex;
             queueElement.ChunkingMethod = ComboBoxChunkingMethod.SelectedIndex;
             queueElement.ReencodeMethod = ComboBoxReencodeMethod.SelectedIndex;
-            queueElement.Passes = CheckBoxTwoPassEncoding.IsChecked == true ? 2 : 1;
+            queueElement.Passes = CheckBoxTwoPassEncoding.IsOn ? 2 : 1;
             queueElement.ChunkLength = int.Parse(TextBoxChunkLength.Text);
             queueElement.PySceneDetectThreshold = float.Parse(TextBoxPySceneDetectThreshold.Text);
             queueElement.VFR = CheckBoxVideoVFR.IsChecked == true;
@@ -279,7 +279,7 @@ namespace NotEnoughAV1Encodes
             // Save as JSON
             File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.InputFileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
 
-            Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 3));
+            Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 4));
         }
 
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
@@ -330,7 +330,7 @@ namespace NotEnoughAV1Encodes
 
                 ComboBoxChunkingMethod.SelectedIndex = tmp.ChunkingMethod;
                 ComboBoxReencodeMethod.SelectedIndex = tmp.ReencodeMethod;
-                CheckBoxTwoPassEncoding.IsChecked = tmp.Passes == 2;
+                CheckBoxTwoPassEncoding.IsOn = tmp.Passes == 2;
                 TextBoxChunkLength.Text = tmp.ChunkLength.ToString();
                 TextBoxPySceneDetectThreshold.Text = tmp.PySceneDetectThreshold.ToString();
 
@@ -356,6 +356,7 @@ namespace NotEnoughAV1Encodes
             }
             catch { }
         }
+
         private void ComboBoxVideoEncoder_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (TextBoxMaxBitrate != null)
@@ -381,8 +382,10 @@ namespace NotEnoughAV1Encodes
                     SliderEncoderPreset.Value = 5;
                     SliderQuality.Maximum = 255;
                     SliderQuality.Value = 80;
-                    CheckBoxTwoPassEncoding.IsChecked = false;
+                    CheckBoxTwoPassEncoding.IsOn = false;
                     CheckBoxTwoPassEncoding.IsEnabled = false;
+                    CheckBoxRealTimeMode.IsOn = false;
+                    CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex is 2 or 7)
                 {
@@ -395,7 +398,9 @@ namespace NotEnoughAV1Encodes
                     SliderQuality.Maximum = 63;
                     SliderQuality.Value = 40;
                     CheckBoxTwoPassEncoding.IsEnabled = true;
-                    CheckBoxTwoPassEncoding.IsChecked = false;
+                    CheckBoxTwoPassEncoding.IsOn = false;
+                    CheckBoxRealTimeMode.IsOn = false;
+                    CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
                 }
                 else if (ComboBoxVideoEncoder.SelectedIndex == 3)
                 {
@@ -407,16 +412,58 @@ namespace NotEnoughAV1Encodes
                     SliderQuality.Maximum = 63;
                     SliderQuality.Value = 25;
                     CheckBoxTwoPassEncoding.IsEnabled = true;
+                    CheckBoxRealTimeMode.IsOn = false;
+                    CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
                 }
             }
         }
+
         private void CheckBoxTwoPassEncoding_Checked(object sender, RoutedEventArgs e)
         {
-            if (ComboBoxVideoEncoder.SelectedIndex is 2 or 7 && ComboBoxQualityMode.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsChecked == true)
+            if (ComboBoxVideoEncoder.SelectedIndex is 2 or 7 && ComboBoxQualityMode.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
             {
-                CheckBoxTwoPassEncoding.IsChecked = false;
+                CheckBoxTwoPassEncoding.IsOn = false;
+            }
+
+            if (CheckBoxRealTimeMode.IsOn && CheckBoxTwoPassEncoding.IsOn)
+            {
+                CheckBoxTwoPassEncoding.IsOn = false;
             }
         }
+
+        private void CheckBoxRealTimeMode_Toggled(object sender, RoutedEventArgs e)
+        {
+            // Reverts to 1 Pass encoding if Real Time Mode is activated
+            if (CheckBoxRealTimeMode.IsOn && CheckBoxTwoPassEncoding.IsOn)
+            {
+                CheckBoxTwoPassEncoding.IsOn = false;
+            }
+        }
+
+        private void SliderEncoderPreset_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            // Shows / Hides Real Time Mode CheckBox
+            if (CheckBoxRealTimeMode != null && ComboBoxVideoEncoder != null)
+            {
+                if (ComboBoxVideoEncoder.SelectedIndex == 0 || ComboBoxVideoEncoder.SelectedIndex == 5)
+                {
+                    if (SliderEncoderPreset.Value >= 5)
+                    {
+                        CheckBoxRealTimeMode.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        CheckBoxRealTimeMode.IsOn = false;
+                        CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
+                    }
+                }
+                else
+                {
+                    CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
         private void ComboBoxQualityMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (TextBoxAVGBitrate != null)
@@ -429,9 +476,9 @@ namespace NotEnoughAV1Encodes
                         MessageBox.Show("NEAV1E currently only supports Constant Quality or Bitrate Mode (rav1e / svt-av1)");
                         return;
                     }
-                    if(CheckBoxTwoPassEncoding.IsChecked == true && ComboBoxVideoEncoder.SelectedIndex is 2 or 7 && ComboBoxQualityMode.SelectedIndex == 0)
+                    if(CheckBoxTwoPassEncoding.IsOn && ComboBoxVideoEncoder.SelectedIndex is 2 or 7 && ComboBoxQualityMode.SelectedIndex == 0)
                     {
-                        CheckBoxTwoPassEncoding.IsChecked = false;
+                        CheckBoxTwoPassEncoding.IsOn = false;
                     }
                 }
                 if (ComboBoxVideoEncoder.SelectedIndex is 5)
@@ -473,11 +520,49 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
+
+        private void CheckBoxCustomVideoSettings_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxCustomVideoSettings.IsOn)
+            {
+                TextBoxCustomVideoSettings.Text = GenerateEncoderCommand();
+            }
+        }
+
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             // Validates that the TextBox Input are only numbers
             Regex regex = new("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void TextBoxCustomVideoSettings_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            // Verifies the arguments the user inputs into the encoding settings textbox
+            // If the users writes a "forbidden" argument, it will display the text red
+            string[] forbiddenWords = { "help", "cfg", "debug", "output", "passes", "pass", "fpf", "limit",
+            "skip", "webm", "ivf", "obu", "q-hist", "rate-hist", "fullhelp", "benchmark", "first-pass", "second-pass",
+            "reconstruction", "enc-mode-2p", "input-stat-file", "output-stat-file" };
+
+            foreach (string word in forbiddenWords)
+            {
+                if (settingsDB.BaseTheme == 0)
+                {
+                    // Lightmode
+                    TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+                }
+                else
+                {
+                    // Darkmode
+                    TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                }
+
+                if (TextBoxCustomVideoSettings.Text.Contains(word))
+                {
+                    TextBoxCustomVideoSettings.Foreground = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                    break;
+                }
+            }
         }
         #endregion
 
@@ -625,6 +710,60 @@ namespace NotEnoughAV1Encodes
 
             _settings += " -cpu-used " + SliderEncoderPreset.Value;
 
+            if (ToggleSwitchAdvancedSettings.IsOn)
+            {
+                _settings += " -threads " + ComboBoxAomencThreads.Text;                                      // Threads
+                _settings += " -tile-columns " + ComboBoxAomencTileColumns.Text;                             // Tile Columns
+                _settings += " -tile-rows " + ComboBoxAomencTileRows.Text;                                   // Tile Rows
+                _settings += " -lag-in-frames " + TextBoxAomencLagInFrames.Text;                             // Lag in Frames
+                _settings += " -aq-mode " + ComboBoxAomencAQMode.SelectedIndex;                              // AQ-Mode
+                _settings += " -tune " + ComboBoxAomencTune.Text;                                            // Tune
+
+                if (TextBoxAomencMaxGOP.Text != "0")
+                {
+                    _settings += " -g " + TextBoxAomencMaxGOP.Text;                                           // Keyframe Interval
+                }
+                if (CheckBoxAomencRowMT.IsChecked == false)
+                {
+                    _settings += " -row-mt 0";                                                                // Row Based Multithreading
+                }
+                if (CheckBoxAomencCDEF.IsChecked == false)
+                {
+                    _settings += " -enable-cdef 0";                                                           // Constrained Directional Enhancement Filter
+                }
+
+                if (CheckBoxAomencARNRMax.IsChecked == true)
+                {
+                    _settings += " -arnr-max-frames " + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
+                    _settings += " -arnr-strength " + ComboBoxAomencARNRStrength.Text;                        // ARNR Strength
+                }
+                if (CheckBoxRealTimeMode.IsOn)
+                {
+                    _settings += " -usage realtime ";                                                         // Real Time Mode
+                }
+
+                _settings += " -aom-params ";
+                _settings += " tune-content=" + ComboBoxAomencTuneContent.Text;                             // Tune-Content
+                _settings += ":sharpness=" + ComboBoxAomencSharpness.Text;                                  // Sharpness (Filter)
+                _settings += ":enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex;      // Key Frame Filtering
+                if (ComboBoxAomencColorPrimaries.SelectedIndex != 0)
+                {
+                    _settings += ":color-primaries=" + ComboBoxAomencColorPrimaries.Text;                   // Color Primaries
+                }
+                if (ComboBoxAomencColorTransfer.SelectedIndex != 0)
+                {
+                    _settings += ":transfer-characteristics=" + ComboBoxAomencColorTransfer.Text;           // Color Transfer
+                }
+                if (ComboBoxAomencColorMatrix.SelectedIndex != 0)
+                {
+                    _settings += ":matrix-coefficients=" + ComboBoxAomencColorMatrix.Text;                  // Color Matrix
+                }
+            }
+            else
+            {
+                _settings += " -threads 4 -tile-columns 2 -tile-rows 1";
+            }
+
             return _settings;
         }
         
@@ -710,6 +849,56 @@ namespace NotEnoughAV1Encodes
             }
 
             _settings += " --cpu-used=" + SliderEncoderPreset.Value;
+
+            if (ToggleSwitchAdvancedSettings.IsOn)
+            {
+                _settings += " --threads=" + ComboBoxAomencThreads.Text;                                      // Threads
+                _settings += " --tile-columns=" + ComboBoxAomencTileColumns.Text;                             // Tile Columns
+                _settings += " --tile-rows=" + ComboBoxAomencTileRows.Text;                                   // Tile Rows
+                _settings += " --lag-in-frames=" + TextBoxAomencLagInFrames.Text;                             // Lag in Frames
+                _settings += " --sharpness=" + ComboBoxAomencSharpness.Text;                                  // Sharpness (Filter)
+                _settings += " --aq-mode=" + ComboBoxAomencAQMode.SelectedIndex;                              // AQ-Mode
+                _settings += " --enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex;      // Key Frame Filtering
+                _settings += " --tune=" + ComboBoxAomencTune.Text;                                            // Tune
+                _settings += " --tune-content=" + ComboBoxAomencTuneContent.Text;                             // Tune-Content
+                if (TextBoxAomencMaxGOP.Text != "0")
+                {
+                    _settings += " --kf-max-dist=" + TextBoxAomencMaxGOP.Text;                                // Keyframe Interval
+                }
+                if (CheckBoxAomencRowMT.IsChecked == false)
+                {
+                    _settings += " --row-mt=0";                                                               // Row Based Multithreading
+                }
+                if (ComboBoxAomencColorPrimaries.SelectedIndex != 0)
+                {
+                    _settings += " --color-primaries=" + ComboBoxAomencColorPrimaries.Text;                   // Color Primaries
+                }
+                if (ComboBoxAomencColorTransfer.SelectedIndex != 0)
+                {
+                    _settings += " --transfer-characteristics=" + ComboBoxAomencColorTransfer.Text;           // Color Transfer
+                }
+                if (ComboBoxAomencColorMatrix.SelectedIndex != 0)
+                {
+                    _settings += " --matrix-coefficients=" + ComboBoxAomencColorMatrix.Text;                  // Color Matrix
+                }
+                if (CheckBoxAomencCDEF.IsChecked == false)
+                {
+                    _settings += " --enable-cdef=0";                                                          // Constrained Directional Enhancement Filter
+                }
+                if (CheckBoxAomencARNRMax.IsChecked == true)
+                {
+                    _settings += " --arnr-maxframes=" + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
+                    _settings += " --arnr-strength=" + ComboBoxAomencARNRStrength.Text;                       // ARNR Strength
+                }
+                if (CheckBoxRealTimeMode.IsOn)
+                {
+                    _settings += " --rt";                                                                     // Real Time Mode
+                }
+            }
+            else
+            {
+                _settings += " --threads=4 --tile-columns=2 --tile-rows=1";
+            }
 
             return _settings;
         }
@@ -951,6 +1140,5 @@ namespace NotEnoughAV1Encodes
         }
 
         #endregion
-
     }
 }
