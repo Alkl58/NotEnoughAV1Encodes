@@ -882,6 +882,28 @@ namespace NotEnoughAV1Encodes
 
             _settings += " -cpu-used " + SliderEncoderPreset.Value;
 
+            if (ToggleSwitchAdvancedSettings.IsOn)
+            {
+                _settings += " -threads " + ComboBoxVP9Threads.Text;                        // Max Threads
+                _settings += " -tile-columns " + ComboBoxVP9TileColumns.SelectedIndex;      // Tile Columns
+                _settings += " -tile-rows " + ComboBoxVP9TileRows.SelectedIndex;            // Tile Rows
+                _settings += " -lag-in-frames " + TextBoxVP9LagInFrames.Text;               // Lag in Frames
+                _settings += " -g " + TextBoxVP9MaxKF.Text;                                 // Max GOP
+                _settings += " -aq-mode " + ComboBoxVP9AQMode.SelectedIndex;                // AQ-Mode
+                _settings += " -tune " + ComboBoxVP9ATune.SelectedIndex;                    // Tune
+                _settings += " -tune-content " + ComboBoxVP9ATuneContent.SelectedIndex;     // Tune-Content
+                if (CheckBoxVP9ARNR.IsChecked == true)
+                {
+                    _settings += " -arnr-maxframes " + ComboBoxAomencVP9Max.Text;           // ARNR Max Frames
+                    _settings += " -arnr-strength " + ComboBoxAomencVP9Strength.Text;       // ARNR Strength
+                    _settings += " -arnr-type " + ComboBoxAomencVP9ARNRType.Text;           // ARNR Type
+                }
+            }
+            else
+            {
+                _settings += " -threads 4 -tile-columns 2 -tile-rows 1";
+            }
+
             return _settings;
         }
 

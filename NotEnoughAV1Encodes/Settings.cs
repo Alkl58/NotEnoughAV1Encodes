@@ -67,5 +67,19 @@
         public int SvtAv1TileRows { get; set; }
         public string SvtAv1KeyInt { get; set; } = "-1";
         public string SvtAv1Lookahead { get; set; } = "33";
+
+        // Advanced VPX-VP9 Settings
+        public int Vp9Threads { get; set; } = 5;
+        public int Vp9TileColumns { get; set; }
+        public int Vp9TileRows { get; set; }
+        public string Vp9LagInFrames { get; set; } = "25";
+        public bool Vp9ARNR { get; set; }
+        public int Vp9ARNRIndex { get; set; }
+        public int Vp9ARNRStrength { get; set; }
+        public int Vp9ARNRType { get; set; }
+        public int Vp9AQMode { get; set; }
+        public int Vp9TuneContent { get; set; }
+        public int Vp9Tune { get; set; }
+        public string Vp9MaxKf { get; set; } = "240";
     }
 }
