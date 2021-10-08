@@ -271,6 +271,134 @@
             <TabItem Header="{DynamicResource advanced}" Visibility="{Binding ElementName=ToggleSwitchAdvancedSettings, Path=IsOn, Converter={StaticResource b2v}}">
                 <GroupBox Header="{DynamicResource advancedSettings}" mah:ControlsHelper.ContentCharacterCasing="Normal">
                     <Grid>
+                        <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="1025" Margin="5,6,0,0">
+                            <Canvas.Style>
+                                <Style>
+                                    <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="1">
+                                            <Setter Property="UIElement.Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="6">
+                                            <Setter Property="UIElement.Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Canvas.Style>
+                            <Label x:Name="LabelRav1eThreads" Content="Threads:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="25" />
+                            <ComboBox x:Name="ComboBoxRav1eThreads" SelectedIndex="{Binding Rav1eThreads}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="25" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="3" />
+                                <ComboBoxItem Content="4" />
+                                <ComboBoxItem Content="5" />
+                                <ComboBoxItem Content="6" />
+                                <ComboBoxItem Content="7" />
+                                <ComboBoxItem Content="8" />
+                            </ComboBox>
+                            <Label x:Name="LabelRav1eTileCols"  Content="Tile Columns:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="59" />
+                            <Label x:Name="LabelRav1eTileRows"  Content="Tile Rows:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="93" />
+                            <ComboBox x:Name="ComboBoxRav1eTileColumns" SelectedIndex="{Binding Rav1eTileColumns}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="59" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="3" />
+                                <ComboBoxItem Content="4" />
+                            </ComboBox>
+                            <ComboBox x:Name="ComboBoxRav1eTileRows" SelectedIndex="{Binding Rav1eTileRows}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="93" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="3" />
+                                <ComboBoxItem Content="4" />
+                                <ComboBoxItem Content="5" />
+                                <ComboBoxItem Content="6" />
+                            </ComboBox>
+                            <Label x:Name="LabelRav1eMaxGOP" Content="Max GOP Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="127" />
+                            <TextBox x:Name="TextBoxRav1eMaxGOP" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eMaxGOP}" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="127"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxRav1eLookahead" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eLookahead}" VerticalAlignment="Top" Width="90" Canvas.Left="147" Canvas.Top="161"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label x:Name="LabelRav1eLookahead"  Content="RDO Lookahead:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="161" />
+                            <Label x:Name="LabelRav1eColorPrimaries" Content="Color Primaries:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="127" />
+                            <ComboBox x:Name="ComboBoxRav1eColorPrimaries" SelectedIndex="{Binding Rav1eColorPrimaries}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="127" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="Unspecified" />
+                                <ComboBoxItem Content="BT470M" />
+                                <ComboBoxItem Content="BT470BG" />
+                                <ComboBoxItem Content="BT601" />
+                                <ComboBoxItem Content="BT709" />
+                                <ComboBoxItem Content="BT2020" />
+                                <ComboBoxItem Content="SMPTE240" />
+                                <ComboBoxItem Content="SMPTE431" />
+                                <ComboBoxItem Content="SMPTE432" />
+                                <ComboBoxItem Content="EBU3213" />
+                                <ComboBoxItem Content="GenericFilm" />
+                                <ComboBoxItem Content="XYZ" />
+                            </ComboBox>
+                            <Label x:Name="LabelRav1eColorTransfer" Content="Color Transfer:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="59" />
+                            <ComboBox x:Name="ComboBoxRav1eColorTransfer" SelectedIndex="{Binding Rav1eColorTransfer}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="59" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="Unspecified" />
+                                <ComboBoxItem Content="BT470M" />
+                                <ComboBoxItem Content="BT470BG" />
+                                <ComboBoxItem Content="BT601" />
+                                <ComboBoxItem Content="BT709" />
+                                <ComboBoxItem Content="BT1361" />
+                                <ComboBoxItem Content="BT2020_10Bit" />
+                                <ComboBoxItem Content="BT2020_12Bit" />
+                                <ComboBoxItem Content="SMPTE240" />
+                                <ComboBoxItem Content="SMPTE428" />
+                                <ComboBoxItem Content="SMPTE2084" />
+                                <ComboBoxItem Content="Linear" />
+                                <ComboBoxItem Content="Log100" />
+                                <ComboBoxItem Content="Log100Sqrt10" />
+                                <ComboBoxItem Content="IEC61966" />
+                                <ComboBoxItem Content="SRGB" />
+                                <ComboBoxItem Content="HLG" />
+                            </ComboBox>
+                            <Label x:Name="LabelRav1eColorMatrix" Content="Color Matrix:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="93" />
+                            <ComboBox x:Name="ComboBoxRav1eColorMatrix" SelectedIndex="{Binding Rav1eColorMatrix}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="93" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="Unspecified" />
+                                <ComboBoxItem Content="BT470BG" />
+                                <ComboBoxItem Content="BT601" />
+                                <ComboBoxItem Content="BT709" />
+                                <ComboBoxItem Content="BT2020NCL" />
+                                <ComboBoxItem Content="BT2020CL" />
+                                <ComboBoxItem Content="SMPTE240" />
+                                <ComboBoxItem Content="SMPTE2085" />
+                                <ComboBoxItem Content="YCgCo" />
+                                <ComboBoxItem Content="ChromatNCL" />
+                                <ComboBoxItem Content="ChromatCL" />
+                                <ComboBoxItem Content="ICtCp" />
+                                <ComboBoxItem Content="Identity" />
+                            </ComboBox>
+                            <Label x:Name="LabelRav1eTune" Content="Tune:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="283" Canvas.Top="25" />
+                            <ComboBox x:Name="ComboBoxRav1eTune" SelectedIndex="{Binding Rav1eTune}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Canvas.Left="426" Canvas.Top="25" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="Psychovisual" />
+                                <ComboBoxItem Content="Psnr" />
+                            </ComboBox>
+                            <CheckBox x:Name="CheckBoxRav1eMasteringDisplay" IsChecked="{Binding Rav1eMasteringDisplay}" Content="Mastering Display:" Canvas.Left="573" Canvas.Top="31" />
+                            <Label x:Name="LabelRav1eMasteringG" Content="G" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="721" Canvas.Top="27"  Foreground="#FF13DC09" />
+                            <TextBox x:Name="TextBoxRav1eMasteringGx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eMasteringGx}" VerticalAlignment="Top" Width="60" Canvas.Left="746" Canvas.Top="25"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxRav1eMasteringGy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eMasteringGy}" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="25"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label x:Name="LabelRav1eMasteringB" Content="B"  IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="721" Canvas.Top="59"  Foreground="#FF0986DC" Width="20" />
+                            <TextBox x:Name="TextBoxRav1eMasteringBx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eMasteringBx}" VerticalAlignment="Top" Width="60" Canvas.Left="745" Canvas.Top="59"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxRav1eMasteringBy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eMasteringBy}" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="59"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label x:Name="LabelRav1eMasteringR" Content="R" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="721" Canvas.Top="93"  Foreground="#FFDC0909" Width="20" />
+                            <TextBox x:Name="TextBoxRav1eMasteringRx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eMasteringRx}" VerticalAlignment="Top" Width="60" Canvas.Left="746" Canvas.Top="93"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxRav1eMasteringRy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eMasteringRy}" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="93"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label x:Name="LabelRav1eMasteringWP" Content="WP" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="709" Canvas.Top="127"  Foreground="Black" Width="32" />
+                            <TextBox x:Name="TextBoxRav1eMasteringWPx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eMasteringWPx}" VerticalAlignment="Top" Width="60" Canvas.Left="746" Canvas.Top="127"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxRav1eMasteringWPy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eMasteringWPy}" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="127"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label x:Name="LabelRav1eMasteringWP_Copy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" Content="|       x      " HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="734" Canvas.Top="-2"  Foreground="#FFABADB3" Width="72" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                            <Label x:Name="LabelRav1eMasteringWP_Copy1" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" Content="|" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="795" Canvas.Top="-3"  Foreground="#FFABADB3" Width="19" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                            <Label x:Name="LabelRav1eMasteringWP_Copy2" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}"  Content="|       y      " HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="799" Canvas.Top="-3"  Foreground="#FFABADB3" Width="72" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                            <Label x:Name="LabelRav1eMasteringWP_Copy3" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" Content="|" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="860" Canvas.Top="-2"  Foreground="#FFABADB3" Width="19" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                            <CheckBox x:Name="CheckBoxRav1eContentLight" IsChecked="{Binding Rav1eContentLight}" Content="Content-Light (cll, fall):" Canvas.Left="573" Canvas.Top="203" />
+                            <TextBox x:Name="TextBoxRav1eContentLightCll" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eContentLight}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eContentLightCll}" VerticalAlignment="Top" Width="60" Canvas.Left="746" Canvas.Top="197"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxRav1eContentLightFall" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eContentLight}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eContentLightFall}" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="197"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label x:Name="LabelRav1eMasteringWP_Copy4" Content="L" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="721" Canvas.Top="161"  Foreground="Black" Width="32" />
+                            <TextBox x:Name="TextBoxRav1eMasteringLx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eMasteringLx}" VerticalAlignment="Top" Width="60" Canvas.Left="746" Canvas.Top="161"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxRav1eMasteringLy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxRav1eMasteringDisplay}" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding Rav1eMasteringLy}" VerticalAlignment="Top" Width="60" Canvas.Left="810" Canvas.Top="161"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                        </Canvas>
                         <Canvas Height="237" VerticalAlignment="Top" Margin="10,10,10,0">
                             <Canvas.Style>
                                 <Style>

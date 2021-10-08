@@ -766,7 +766,7 @@ namespace NotEnoughAV1Encodes
 
             return _settings;
         }
-        
+
         private string GenerateRav1eFFmpegCommand()
         {
             string _settings = "-c:v librav1e";
@@ -781,6 +781,54 @@ namespace NotEnoughAV1Encodes
             }
 
             _settings += " -speed " + SliderEncoderPreset.Value;
+
+            if (ToggleSwitchAdvancedSettings.IsOn)
+            {
+                _settings += " -tile-columns " + ComboBoxRav1eTileColumns.SelectedIndex;                     // Tile Columns
+                _settings += " -tile-rows " + ComboBoxRav1eTileRows.SelectedIndex;                           // Tile Rows
+                _settings += " -rav1e-params ";
+                _settings += "threads=" + ComboBoxRav1eThreads.SelectedIndex;                                 // Threads
+                _settings += ":rdo-lookahead-frames=" + TextBoxRav1eLookahead.Text;                           // RDO Lookahead
+                _settings += ":tune=" + ComboBoxRav1eTune.Text;                                               // Tune
+                if (TextBoxRav1eMaxGOP.Text != "0")
+                {
+                    _settings += ":keyint=" + TextBoxRav1eMaxGOP.Text;                                        // Keyframe Interval
+                }
+                if (ComboBoxRav1eColorPrimaries.SelectedIndex != 0)
+                {
+                    _settings += ":primaries=" + ComboBoxRav1eColorPrimaries.Text;                            // Color Primaries
+                }
+                if (ComboBoxRav1eColorTransfer.SelectedIndex != 0)
+                {
+                    _settings += ":transfer=" + ComboBoxRav1eColorTransfer.Text;                              // Color Transfer
+                }
+                if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
+                {
+                    _settings += ":matrix=" + ComboBoxRav1eColorMatrix.Text;                                  // Color Matrix
+                }
+                if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
+                {
+                    _settings += ":mastering-display=G(" + TextBoxRav1eMasteringGx.Text + ",";                // Mastering Gx
+                    _settings += TextBoxRav1eMasteringGy.Text + ")B(";                                        // Mastering Gy
+                    _settings += TextBoxRav1eMasteringBx.Text + ",";                                          // Mastering Bx
+                    _settings += TextBoxRav1eMasteringBy.Text + ")R(";                                        // Mastering By
+                    _settings += TextBoxRav1eMasteringRx.Text + ",";                                          // Mastering Rx
+                    _settings += TextBoxRav1eMasteringRy.Text + ")WP(";                                       // Mastering Ry
+                    _settings += TextBoxRav1eMasteringWPx.Text + ",";                                         // Mastering WPx
+                    _settings += TextBoxRav1eMasteringWPy.Text + ")L(";                                       // Mastering WPy
+                    _settings += TextBoxRav1eMasteringLx.Text + ",";                                          // Mastering Lx
+                    _settings += TextBoxRav1eMasteringLy.Text + ")";                                          // Mastering Ly
+                }
+                if (CheckBoxRav1eContentLight.IsChecked == true)
+                {
+                    _settings += ":content-light=" + TextBoxRav1eContentLightCll.Text;                        // Content Light CLL
+                    _settings += "," + TextBoxRav1eContentLightFall.Text;                                     // Content Light FALL
+                }
+            }
+            else
+            {
+                _settings += " -tile-columns 2 -tile-rows 1 -rav1e-params threads=4";
+            }
 
             return _settings;
         }
@@ -919,6 +967,54 @@ namespace NotEnoughAV1Encodes
             }
 
             _settings += " --speed " + SliderEncoderPreset.Value;
+
+            if (ToggleSwitchAdvancedSettings.IsOn)
+            {
+                _settings += " --threads " + ComboBoxRav1eThreads.SelectedIndex;                              // Threads
+                _settings += " --tile-cols " + ComboBoxRav1eTileColumns.SelectedIndex;                        // Tile Columns
+                _settings += " --tile-rows " + ComboBoxRav1eTileRows.SelectedIndex;                           // Tile Rows
+                _settings += " --rdo-lookahead-frames " + TextBoxRav1eLookahead.Text;                         // RDO Lookahead
+                _settings += " --tune " + ComboBoxRav1eTune.Text;                                             // Tune
+
+                if (TextBoxRav1eMaxGOP.Text != "0")
+                {
+                    _settings += " --keyint " + TextBoxRav1eMaxGOP.Text;                                      // Keyframe Interval
+                }
+                if (ComboBoxRav1eColorPrimaries.SelectedIndex != 0)
+                {
+                    _settings += " --primaries " + ComboBoxRav1eColorPrimaries.Text;                          // Color Primaries
+                }
+                if (ComboBoxRav1eColorTransfer.SelectedIndex != 0)
+                {
+                    _settings += " --transfer " + ComboBoxRav1eColorTransfer.Text;                            // Color Transfer
+                }
+                if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
+                {
+                    _settings += " --matrix " + ComboBoxRav1eColorMatrix.Text;                                // Color Matrix
+                }
+                if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
+                {
+                    _settings += " --mastering-display G(" + TextBoxRav1eMasteringGx.Text + ",";              // Mastering Gx
+                    _settings += TextBoxRav1eMasteringGy.Text + ")B(";                                        // Mastering Gy
+                    _settings += TextBoxRav1eMasteringBx.Text + ",";                                          // Mastering Bx
+                    _settings += TextBoxRav1eMasteringBy.Text + ")R(";                                        // Mastering By
+                    _settings += TextBoxRav1eMasteringRx.Text + ",";                                          // Mastering Rx
+                    _settings += TextBoxRav1eMasteringRy.Text + ")WP(";                                       // Mastering Ry
+                    _settings += TextBoxRav1eMasteringWPx.Text + ",";                                         // Mastering WPx
+                    _settings += TextBoxRav1eMasteringWPy.Text + ")L(";                                       // Mastering WPy
+                    _settings += TextBoxRav1eMasteringLx.Text + ",";                                          // Mastering Lx
+                    _settings += TextBoxRav1eMasteringLy.Text + ")";                                          // Mastering Ly
+                }
+                if (CheckBoxRav1eContentLight.IsChecked == true)
+                {
+                    _settings += " --content-light " + TextBoxRav1eContentLightCll.Text;                      // Content Light CLL
+                    _settings += "," + TextBoxRav1eContentLightFall.Text;                                     // Content Light FALL
+                }
+            }
+            else
+            {
+                _settings += " --threads 4 --tile-cols 2 --tile-rows 1";
+            }
 
             return _settings;
         }

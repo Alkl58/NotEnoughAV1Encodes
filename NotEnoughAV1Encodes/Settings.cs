@@ -37,5 +37,29 @@
         public bool AomencRowBasedMultiThreading { get; set; } = true;
         public bool AomencCDEF { get; set; }
 
+        // Advanved Rav1e Settings
+        public int Rav1eThreads { get; set; } = 5;
+        public int Rav1eTileColumns { get; set; }
+        public int Rav1eTileRows { get; set; }
+        public string Rav1eMaxGOP { get; set; } = "0";
+        public string Rav1eLookahead { get; set; } = "40";
+        public int Rav1eColorPrimaries { get; set; }
+        public int Rav1eColorTransfer { get; set; }
+        public int Rav1eColorMatrix { get; set; }
+        public int Rav1eTune { get; set; }
+        public bool Rav1eMasteringDisplay { get; set; }
+        public string Rav1eMasteringGx { get; set; } = "0";
+        public string Rav1eMasteringGy { get; set; } = "0";
+        public string Rav1eMasteringBx { get; set; } = "0";
+        public string Rav1eMasteringBy { get; set; } = "0";
+        public string Rav1eMasteringRx { get; set; } = "0";
+        public string Rav1eMasteringRy { get; set; } = "0";
+        public string Rav1eMasteringWPx { get; set; } = "0";
+        public string Rav1eMasteringWPy { get; set; } = "0";
+        public string Rav1eMasteringLx { get; set; } = "0";
+        public string Rav1eMasteringLy { get; set; } = "0";
+        public bool Rav1eContentLight { get; set; }
+        public string Rav1eContentLightCll { get; set; } = "0";
+        public string Rav1eContentLightFall { get; set; } = "0";
     }
 }
