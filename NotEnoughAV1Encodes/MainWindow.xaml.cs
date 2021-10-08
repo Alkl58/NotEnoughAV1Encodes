@@ -848,6 +848,14 @@ namespace NotEnoughAV1Encodes
 
             _settings += " -preset " + SliderEncoderPreset.Value;
 
+            if (ToggleSwitchAdvancedSettings.IsOn)
+            {
+                _settings += " -tile_columns " + ComboBoxSVTAV1TileColumns.Text;                              // Tile Columns
+                _settings += " -tile_rows " + ComboBoxSVTAV1TileRows.Text;                                    // Tile Rows
+                _settings += " -g " + TextBoxSVTAV1MaxGOP.Text;                                               // Keyframe Interval
+                _settings += " -la_depth " + TextBoxSVTAV1Lookahead.Text;                                     // Lookahead
+            }
+
             return _settings;
         }
 
@@ -1035,6 +1043,14 @@ namespace NotEnoughAV1Encodes
             }
 
             _settings += " --preset " + SliderEncoderPreset.Value;
+
+            if (ToggleSwitchAdvancedSettings.IsOn)
+            {
+                _settings += " --tile-columns " + ComboBoxSVTAV1TileColumns.Text;                             // Tile Columns
+                _settings += " --tile-rows " + ComboBoxSVTAV1TileRows.Text;                                   // Tile Rows
+                _settings += " --keyint " + TextBoxSVTAV1MaxGOP.Text;                                         // Keyframe Interval
+                _settings += " --lookahead " + TextBoxSVTAV1Lookahead.Text;                                   // Lookahead
+            }
 
             return _settings;
         }

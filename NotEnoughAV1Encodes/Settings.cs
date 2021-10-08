@@ -61,5 +61,11 @@
         public bool Rav1eContentLight { get; set; }
         public string Rav1eContentLightCll { get; set; } = "0";
         public string Rav1eContentLightFall { get; set; } = "0";
+
+        // Advanced SVT-AV1 Settings
+        public int SvtAv1TileColumns { get; set; }
+        public int SvtAv1TileRows { get; set; }
+        public string SvtAv1KeyInt { get; set; } = "-1";
+        public string SvtAv1Lookahead { get; set; } = "33";
     }
 }

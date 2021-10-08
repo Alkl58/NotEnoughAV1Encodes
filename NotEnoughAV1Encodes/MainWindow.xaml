@@ -271,6 +271,45 @@
             <TabItem Header="{DynamicResource advanced}" Visibility="{Binding ElementName=ToggleSwitchAdvancedSettings, Path=IsOn, Converter={StaticResource b2v}}">
                 <GroupBox Header="{DynamicResource advancedSettings}" mah:ControlsHelper.ContentCharacterCasing="Normal">
                     <Grid>
+                        <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="1025" Margin="0,41,0,0">
+                            <Canvas.Style>
+                                <Style>
+                                    <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="2">
+                                            <Setter Property="UIElement.Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="7">
+                                            <Setter Property="UIElement.Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Canvas.Style>
+                            <Label x:Name="LabelSVTAV1TileColumns" Content="Tile Columns:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="17" />
+                            <Label x:Name="LabelSVTAV1TileRows" Content="Tile Rows:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="51" />
+                            <ComboBox x:Name="ComboBoxSVTAV1TileColumns" SelectedIndex="{Binding SvtAv1TileColumns}"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="17" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="3" />
+                                <ComboBoxItem Content="4" />
+                                <ComboBoxItem Content="5" />
+                                <ComboBoxItem Content="6" />
+                            </ComboBox>
+                            <ComboBox x:Name="ComboBoxSVTAV1TileRows" SelectedIndex="{Binding SvtAv1TileRows}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="51" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="3" />
+                                <ComboBoxItem Content="4" />
+                                <ComboBoxItem Content="5" />
+                                <ComboBoxItem Content="6" />
+                            </ComboBox>
+                            <Label x:Name="LabelSVTAV1MaxGOP"  Content="Max GOP Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="85" />
+                            <TextBox x:Name="TextBoxSVTAV1MaxGOP" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding SvtAv1KeyInt}" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="85"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label x:Name="LabelSVTAV1Lookahead"  Content="Lookahead:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="119" />
+                            <TextBox x:Name="TextBoxSVTAV1Lookahead" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding SvtAv1Lookahead}" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="119"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                        </Canvas>
                         <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="1025" Margin="5,6,0,0">
                             <Canvas.Style>
                                 <Style>
