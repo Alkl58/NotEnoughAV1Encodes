@@ -3,15 +3,12 @@ name: Build NEAV1E V2
 on: [ push, workflow_dispatch ]
 
 jobs:
-
   build:
-
     strategy:
       matrix:
         configuration: [Release]
 
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    runs-on: windows-latest
 
     steps:
     - name: Checkout
@@ -19,7 +16,6 @@ jobs:
       with:
         fetch-depth: 0
 
-    # Install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -33,7 +29,5 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.4
       with:
-       # Artifact name
        name: Build
-       # A file, directory or wildcard pattern that describes what to upload
        path: 'NotEnoughAV1Encodes\bin\Release\net5.0-windows\win-x64\publish\'
