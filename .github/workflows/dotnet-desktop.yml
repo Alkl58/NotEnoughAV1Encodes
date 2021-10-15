@@ -1,0 +1,37 @@
+name: Build NEAV1E V1
+
+on: [ push, workflow_dispatch ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        configuration: [Release]
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.3
+    
+    - name: Restore
+      run: nuget restore
+      
+    - name: Build
+      run: msbuild "NotEnoughAV1Encodes.sln" /verbosity:minimal /property:Configuration=Release
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.4
+      with:
+       name: Build
+       path: 'NotEnoughAV1Encodes\bin\Release'
