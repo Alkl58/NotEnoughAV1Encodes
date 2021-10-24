@@ -1,7 +1,9 @@
 ﻿using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Microsoft.Win32;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace NotEnoughAV1Encodes.Views
 {
@@ -59,6 +61,19 @@ namespace NotEnoughAV1Encodes.Views
         private void ButtonResetBGImage_Click(object sender, RoutedEventArgs e)
         {
             BGImage = null;
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            ProcessStartInfo psi = new()
+            {
+                FileName = "cmd",
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                Arguments = $"/c start {e.Uri}"
+            };
+            Process.Start(psi);
         }
 
         private void ButtonExit_Click(object sender, RoutedEventArgs e)

@@ -8,8 +8,8 @@
         mc:Ignorable="d"
         Title="{DynamicResource settings}" Height="450" Width="800" ResizeMode="NoResize" Closing="MetroWindow_Closing">
     <Grid>
-        <Button x:Name="ButtonUpdater" Content="Updater" Margin="0,0,10,54" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click"  Height="39" VerticalAlignment="Bottom" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="137" />
-        <Button x:Name="ButtonExit" Content="{DynamicResource saveAndExit}" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="39" Width="137" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonExit_Click"/>
+        <Button x:Name="ButtonUpdater" Content="Updater" Margin="0,0,10,61" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click"  Height="39" VerticalAlignment="Bottom" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="137" />
+        <Button x:Name="ButtonExit" Content="{DynamicResource saveAndExit}" HorizontalAlignment="Right" Margin="0,0,10,17" VerticalAlignment="Bottom" Height="39" Width="137" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonExit_Click"/>
         <GroupBox Header="{DynamicResource themeSettings}" Margin="10,0,0,15" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Left" Width="254" Height="122" VerticalAlignment="Bottom">
             <Grid>
                 <Label Content="{DynamicResource accentTheme}" Margin="10,10,122,0" FontSize="12" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
@@ -63,6 +63,16 @@
             <Grid>
                 <Button x:Name="ButtonSelectBGImage" Content="{DynamicResource select}" HorizontalAlignment="Center" Margin="0,12,0,0" VerticalAlignment="Top" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectBGImage_Click"/>
                 <Button x:Name="ButtonResetBGImage" Content="{DynamicResource reset}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="100" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonResetBGImage_Click"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Margin="0,10,10,0" Height="122" VerticalAlignment="Top" HorizontalAlignment="Right" Width="237">
+            <Grid>
+                <Label Content="Theme:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="0,26,0,0"/>
+                <Label Content="Icons:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="0,52,0,0"/>
+                <Label Content="Version:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56"/>
+                <TextBlock Margin="61,31,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="156"><Hyperlink NavigateUri="https://mahapps.com/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://mahapps.com/" /></Hyperlink></TextBlock>
+                <TextBlock Margin="61,57,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="156"><Hyperlink NavigateUri="https://icons8.de/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://icons8.de/" /></Hyperlink></TextBlock>
+                <Label Content="2.0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="56,0,0,0"/>
             </Grid>
         </GroupBox>
     </Grid>
