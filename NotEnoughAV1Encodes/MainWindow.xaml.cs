@@ -243,6 +243,7 @@ namespace NotEnoughAV1Encodes
 
             queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
             queueElement.AudioCommand = commandgenerator.Generate(ListBoxAudioTracks.Items);
+            queueElement.FilterCommand = GenerateVideoFilters();
             queueElement.FrameCount = videoDB.MIFrameCount;
             queueElement.EncodingMethod = ComboBoxVideoEncoder.SelectedIndex;
             queueElement.ChunkingMethod = ComboBoxChunkingMethod.SelectedIndex;
@@ -279,7 +280,7 @@ namespace NotEnoughAV1Encodes
             // Save as JSON
             File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.InputFileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
 
-            Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 4));
+            Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 5));
         }
 
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
@@ -652,6 +653,106 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region Encoder Settings
+
+        // ════════════════════════════════════ Video Filters ═════════════════════════════════════
+
+        private string GenerateVideoFilters()
+        {
+            bool crop = ToggleSwitchFilterCrop.IsOn;
+            bool rotate = ToggleSwitchFilterRotate.IsOn;
+            bool resize = ToggleSwitchFilterResize.IsOn;
+            bool deinterlace = ToggleSwitchFilterDeinterlace.IsOn;
+            bool _oneFilter = false;
+
+            string FilterCommand = "";
+
+            if (crop || rotate || resize || deinterlace)
+            {
+                FilterCommand = " -vf ";
+                if (resize)
+                {
+                    // Has to be last, due to scaling algorithm
+                    FilterCommand += VideoFiltersResize();
+                    _oneFilter = true;
+                }
+                if (crop)
+                {
+                    if (_oneFilter) { FilterCommand += ","; }
+                    FilterCommand += VideoFiltersCrop();
+                    _oneFilter = true;
+                }
+                if (rotate)
+                {
+                    if (_oneFilter) { FilterCommand += ","; }
+                    FilterCommand += VideoFiltersRotate();
+                    _oneFilter = true;
+                }
+                if (deinterlace)
+                {
+                    if (_oneFilter) { FilterCommand += ","; }
+                    FilterCommand += VideoFiltersDeinterlace();
+                }
+            }
+
+            return FilterCommand;
+        }
+
+        private string VideoFiltersCrop()
+        {
+            // Sets the values for cropping the video
+            string widthNew = (int.Parse(TextBoxFiltersCropRight.Text) + int.Parse(TextBoxFiltersCropLeft.Text)).ToString();
+            string heightNew = (int.Parse(TextBoxFiltersCropTop.Text) + int.Parse(TextBoxFiltersCropBottom.Text)).ToString();
+            return "crop=iw-" + widthNew + ":ih-" + heightNew + ":" + TextBoxFiltersCropLeft.Text + ":" + TextBoxFiltersCropTop.Text;
+        }
+
+        private string VideoFiltersRotate()
+        {
+            // Sets the values for rotating the video
+            if (ComboBoxFiltersRotate.SelectedIndex == 1) return "transpose=1";
+            else if (ComboBoxFiltersRotate.SelectedIndex == 2) return "transpose=2,transpose=2";
+            else if (ComboBoxFiltersRotate.SelectedIndex == 3) return "transpose=2";
+            else return ""; // If user selected no ratation but still has it enabled
+        }
+
+        private string VideoFiltersDeinterlace()
+        {
+            int _filterIndex = ComboBoxFiltersDeinterlace.SelectedIndex;
+            string _filter = "";
+
+            if (_filterIndex == 0)
+            {
+                _filter = "bwdif=mode=0";
+            }
+            else if (_filterIndex == 1)
+            {
+                _filter = "estdif=mode=0";
+            }
+            else if (_filterIndex == 2)
+            {
+                string _bin = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "nnedi", "nnedi3_weights.bin");
+                _bin = _bin.Replace("\u005c", "\u005c\u005c").Replace(":", "\u005c:");
+                _filter = "nnedi=weights='" + _bin + "'";
+            }
+            else if (_filterIndex == 3)
+            {
+                _filter = "yadif=mode=0";
+            }
+
+            return _filter;
+        }
+
+        private string VideoFiltersResize()
+        {
+            // Sets the values for scaling the video
+            if (TextBoxFiltersResizeWidth.Text != "0")
+            {
+                // Custom Scale
+                return "scale=" + TextBoxFiltersResizeWidth.Text + ":" + TextBoxFiltersResizeHeight.Text;
+            }
+            // Auto Scale
+            return "scale=trunc(oh*a/2)*2:" + TextBoxFiltersResizeHeight.Text;
+        }
+
         private string GenerateEncoderCommand()
         {
             string _settings = GenerateFFmpegColorSpace() + " " + GenerateFFmpegFramerate() + " ";

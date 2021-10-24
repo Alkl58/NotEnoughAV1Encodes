@@ -178,6 +178,57 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
+            <TabItem Header="{DynamicResource filters}">
+                <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                    <GroupBox Header="{DynamicResource crop}" HorizontalAlignment="Left" Height="203" Margin="14,20,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                        <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterCrop}">
+                            <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="49,75,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="160,75,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="105,43,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxFiltersCropBottom" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="105,107,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label Content="{DynamicResource bottom}" HorizontalAlignment="Left" Margin="105,133,0,0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                            <Label Content="{DynamicResource top}" HorizontalAlignment="Center" Margin="105,17,104,125" VerticalAlignment="Center" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                            <Label Content="{DynamicResource left}" HorizontalAlignment="Left" Margin="-3,75,0,0" VerticalAlignment="Top" Height="26" Width="52" HorizontalContentAlignment="Right" />
+                            <Label Content="{DynamicResource right}" HorizontalAlignment="Left" Margin="215,75,-5,0" VerticalAlignment="Top" Height="28" Width="54" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="{DynamicResource resize}" HorizontalAlignment="Left" Height="92" Margin="14,231,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                        <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterResize}">
+                            <Label Content="{DynamicResource width}" HorizontalAlignment="Left" Margin="11,12,0,0" VerticalAlignment="Top" Height="28" Width="56" HorizontalContentAlignment="Right" />
+                            <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="72,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="If set to 0 it will automatically set the corresponding width to the height." />
+                            <Label Content="{DynamicResource height}" HorizontalAlignment="Left" Margin="142,12,0,0" VerticalAlignment="Top" Height="28" Width="53" HorizontalContentAlignment="Right" />
+                            <TextBox x:Name="TextBoxFiltersResizeHeight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="200,10,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label Content="0 = Auto" HorizontalAlignment="Left" Margin="72,31,0,0" VerticalAlignment="Top" FontStyle="Italic" RenderTransformOrigin="0.504,0.51" Width="60" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="{DynamicResource rotate}" HorizontalAlignment="Left" Height="92" Margin="294,231,0,0" VerticalAlignment="Top" Width="285" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                        <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterRotate}">
+                            <Label Content="{DynamicResource rotateClockwise}" HorizontalAlignment="Right" Margin="0,20,129,0" VerticalAlignment="Top" Height="28" HorizontalContentAlignment="Right" Width="146" />
+                            <ComboBox x:Name="ComboBoxFiltersRotate" HorizontalAlignment="Left" Margin="151,18,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="0°" IsSelected="True" />
+                                <ComboBoxItem Content="90°" />
+                                <ComboBoxItem Content="180°" />
+                                <ComboBoxItem Content="270°" />
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="{DynamicResource deinterlace}" HorizontalAlignment="Left" Height="92" Margin="584,231,0,0" VerticalAlignment="Top" Width="285" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                        <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterDeinterlace}">
+                            <Label Content="{DynamicResource deinterlace}" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Height="28" />
+                            <ComboBox x:Name="ComboBoxFiltersDeinterlace" HorizontalAlignment="Left" Margin="85,20,0,0" VerticalAlignment="Top" Width="169" Height="29" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="bwdif" IsSelected="True" />
+                                <ComboBoxItem Content="estdif" />
+                                <ComboBoxItem Content="nnedi" />
+                                <ComboBoxItem Content="yadif" />
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" Header="" HorizontalAlignment="Left" Height="61" Margin="204,-6,0,0" VerticalAlignment="Top" Width="100" />
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" Header="" Height="100" Margin="204,206,0,0" VerticalAlignment="Top" Width="100" />
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" Header="" Height="100" Margin="495,206,0,0" VerticalAlignment="Top" Width="159" />
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" Header="" Height="100" Margin="786,206,0,0" VerticalAlignment="Top" Width="100" />
+                </Grid>
+            </TabItem>
             <TabItem Header="{DynamicResource video}">
                 <Grid>
                     <GroupBox Header="{DynamicResource video}" HorizontalAlignment="Left" Margin="10,10,0,0" Width="385" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
@@ -704,7 +755,7 @@
                         </Canvas>
                         <TextBox x:Name="TextBoxCustomVideoSettings" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsOn, ElementName=CheckBoxCustomVideoSettings}" Text="{Binding CustomSettings}"  Margin="10,313,10,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged" />
                         <mah:ToggleSwitch x:Name="CheckBoxCustomVideoSettings" Content="{DynamicResource customSettings}" Margin="10,281,0,0" VerticalAlignment="Top" Toggled="CheckBoxCustomVideoSettings_Toggled" />
-                        
+
                     </Grid>
                 </GroupBox>
             </TabItem>

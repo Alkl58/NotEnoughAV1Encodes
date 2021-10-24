@@ -10,6 +10,7 @@
     <system:String x:Key="settings">Settings</system:String>
     <system:String x:Key="addToQueue">Add to Queue</system:String>
     <system:String x:Key="summary">Summary</system:String>
+    <system:String x:Key="filters">Filters</system:String>
     <system:String x:Key="video">Video</system:String>
     <system:String x:Key="advanced">Advanced</system:String>
     <system:String x:Key="advancedSettings">Advanced Settings</system:String>
@@ -76,5 +77,19 @@
     
     <!-- Custom Settings Tab -->
     <system:String x:Key="customSettings">Custom Settings</system:String>
+    
+    <!-- Filters Tab -->
+    <system:String x:Key="crop">Crop</system:String>
+    <system:String x:Key="top">Top</system:String>
+    <system:String x:Key="bottom">Bottom</system:String>
+    <system:String x:Key="left">Left</system:String>
+    <system:String x:Key="right">Right</system:String>
+    <system:String x:Key="resize">Resize</system:String>
+    <system:String x:Key="width">Width</system:String>
+    <system:String x:Key="height">Height</system:String>
+    <system:String x:Key="scalingAlgorithm">Scale Algorithm</system:String>
+    <system:String x:Key="deinterlace">Deinterlace</system:String>
+    <system:String x:Key="rotate">Rotate</system:String>
+    <system:String x:Key="rotateClockwise">Rotate (Clockwise)</system:String>
 
 </ResourceDictionary>

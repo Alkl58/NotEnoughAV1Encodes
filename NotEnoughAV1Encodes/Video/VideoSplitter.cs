@@ -140,6 +140,7 @@ namespace NotEnoughAV1Encodes.Video
                 {
                     ffmpeg_command += " -sc_threshold 0 -g " + queueElement.ChunkLength.ToString();
                     ffmpeg_command += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + queueElement.ChunkLength.ToString() + ")" + '\u0022';
+                    ffmpeg_command += queueElement.FilterCommand;
                 }
 
                 ffmpeg_command += " -segment_time " + queueElement.ChunkLength.ToString() + " -f segment \"";

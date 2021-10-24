@@ -22,11 +22,13 @@ namespace NotEnoughAV1Encodes.Queue
         public string VideoCommand { get; set; }
         /// <summary>Audio Encoding parameters.</summary>
         public string AudioCommand { get; set; }
+        /// <summary>Filtering parameters.</summary>
+        public string FilterCommand { get; set; }
         /// <summary>Unique Identifier to avoid Filesystem conflicts.</summary>
         public string UniqueIdentifier { get; set; }
         /// <summary>Encoding Method; 0=aom ffmpeg, 1=rav1e ffmpeg, 2=svt-av1 ffmpeg ...</summary>
         public int EncodingMethod { get; set; }
-        /// <summary>Chunking Method; 0=Equal Chunking, 1=FFmpeg Scenedetect, 2=PySceneDetect.</summary>
+        /// <summary>Chunking Method; 0=Equal Chunking, 2=PySceneDetect.</summary>
         public int ChunkingMethod { get; set; }
         /// <summary>Re-Encoding Method (only for Equal Chunking).</summary>
         public int ReencodeMethod { get; set; }

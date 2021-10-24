@@ -70,19 +70,26 @@ namespace NotEnoughAV1Encodes.Video
                                 ChunkOutput = _passSettings + "\"" +  Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\"" + _NULoutput;
                             }
 
+                            string _filter = "";
+                            // Only apply filter if the video has not been processed before
+                            if (queueElement.ChunkingMethod == 1 || (queueElement.ChunkingMethod == 0 && queueElement.ReencodeMethod == 3))
+                            {
+                                _filter = queueElement.FilterCommand;
+                            }
+
                             Process processVideo = new();
                             ProcessStartInfo startInfo = new()
                             {
                                 WindowStyle = ProcessWindowStyle.Hidden,
                                 FileName = "cmd.exe",
                                 WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
+                                Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " " + _filter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
                                 RedirectStandardError = true,
                                 RedirectStandardInput = true,
                                 CreateNoWindow = true
                             };
 
-                            Debug.WriteLine("/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput);
+                            Debug.WriteLine("/C ffmpeg.exe -y -i " + ChunkInput + " " + _filter +  " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput);
 
                             processVideo.StartInfo = startInfo;
 
@@ -148,7 +155,7 @@ namespace NotEnoughAV1Encodes.Video
                                     WindowStyle = ProcessWindowStyle.Hidden,
                                     FileName = "cmd.exe",
                                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                    Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
+                                    Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " " + _filter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
                                     RedirectStandardError = true,
                                     RedirectStandardInput = true,
                                     CreateNoWindow = true
