@@ -11,6 +11,7 @@ namespace NotEnoughAV1Encodes.resources
         {
             // Languages in ISO 639-2 Format: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
             Languages.Add("English", "eng");
+            Languages.Add("Arabic", "ara");
             Languages.Add("Bosnian", "bos");
             Languages.Add("Bulgarian", "bul");
             Languages.Add("Chinese", "zho");
