@@ -48,8 +48,9 @@ namespace NotEnoughAV1Encodes.resources
             Languages.Add("Turkish", "tur");
             Languages.Add("Ukrainian", "ukr");
             Languages.Add("Vietnamese", "vie");
+            Languages.Add("Undefined", "und");
 
-            foreach(string language in Languages.Keys)
+            foreach (string language in Languages.Keys)
             {
                 LanguageKeys.Add(language);
             }

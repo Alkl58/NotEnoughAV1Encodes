@@ -77,6 +77,10 @@ namespace NotEnoughAV1Encodes.Video
                         try
                         {
                             lang = mediaInfo.Get(StreamKind.Audio, i, "Language/String3");
+                            if (!resources.MediaLanguages.Languages.ContainsValue(lang))
+                            {
+                                lang = "und";
+                            }
                             lang = resources.MediaLanguages.Languages.FirstOrDefault(x => x.Value == lang).Key;
                         }
                         catch { }
