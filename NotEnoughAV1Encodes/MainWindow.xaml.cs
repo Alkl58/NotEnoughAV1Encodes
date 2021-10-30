@@ -261,6 +261,11 @@ namespace NotEnoughAV1Encodes
                 queueElement.FrameCount = videoDB.MIFrameCount + videoDB.MIFrameCount;
             }
 
+            if(ToggleSwitchFilterDeinterlace.IsOn && ComboBoxFiltersDeinterlace.SelectedIndex is 1 or 2)
+            {
+                queueElement.FrameCount += queueElement.FrameCount;
+            }
+
             // Generate a random identifier to avoid filesystem conflicts
             const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             StringBuilder identifier = new();
