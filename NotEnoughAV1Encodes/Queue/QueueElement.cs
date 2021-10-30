@@ -91,6 +91,11 @@ namespace NotEnoughAV1Encodes.Queue
                     string tempStream = stream[stream.LastIndexOf("frame=")..];
                     string data = GetBetween(tempStream, "frame=", "fps=");
                     FrameCount = long.Parse(data);
+
+                    if (Passes == 2)
+                    {
+                        FrameCount += FrameCount;
+                    }
                 }
                 catch { }
             }
