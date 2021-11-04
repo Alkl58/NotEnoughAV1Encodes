@@ -16,6 +16,20 @@
         public bool AdvancedSettings { get; set; }
         public string CustomSettings { get; set; }
 
+        // Filters
+        public bool FilterCrop { get; set; }
+        public bool FilterResize { get; set; }
+        public bool FilterRotate { get; set; }
+        public bool FilterDeinterlace { get; set; }
+        public string FilterCropTop { get; set; } = "0";
+        public string FilterCropRight { get; set; } = "0";
+        public string FilterCropBottom { get; set; } = "0";
+        public string FilterCropLeft { get; set; } = "0";
+        public string FilterResizeWidth { get; set; } = "0";
+        public string FilterResizeHeight { get; set; } = "1080";
+        public int FilterRotateIndex { get; set; }
+        public int FilterDeinterlaceIndex { get; set; }
+
         // Advanced Aomenc Settings
         public bool AomencRTMode { get; set; }
         public int AomencThreads { get; set; } = 3;
