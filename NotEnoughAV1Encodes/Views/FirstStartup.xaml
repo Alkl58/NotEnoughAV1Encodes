@@ -1,0 +1,21 @@
+﻿<mah:MetroWindow x:Class="NotEnoughAV1Encodes.Views.FirstStartup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NotEnoughAV1Encodes.Views"
+        mc:Ignorable="d"
+        Title="NEAV1E - First Startup" Height="647" Width="800" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterScreen" mah:ControlsHelper.ContentCharacterCasing="Normal">
+    <Grid>
+        <Image HorizontalAlignment="Center" Height="100" VerticalAlignment="Top" Width="100" Source="/resources/img/neav1e.ico"/>
+        <Label Content="Welcome to NEAV1E " HorizontalAlignment="Center" Margin="0,90,0,0" VerticalAlignment="Top" Width="200" Height="36" FontSize="18" FontWeight="Bold" FontStyle="Italic" HorizontalContentAlignment="Center"/>
+        <Label Content="Please read carefully!" HorizontalAlignment="Center" Margin="0,126,0,0" VerticalAlignment="Top" Width="210" Height="38" FontWeight="Bold" FontSize="16" Foreground="#FFFB1616" HorizontalContentAlignment="Center"/>
+        <TextBox HorizontalAlignment="Center" Margin="0,189,0,0" Text="1. NEAV1E is Free and Open Source. &#xD;&#xA;➤ This means that there is absolutely no guarantee that it works - it might waste hundreds of hours of encoding.&#xD;&#xA;&#xD;&#xA;2. NEAV1E does not accept any liability.&#xD;&#xA;➤ Using NEAV1E could in theory damage your hardware - using this is at your own risk!&#xD;&#xA;➤ Using NEAV1E for commercial purposes is not recommended. If your loose your &quot;trillion dollar&quot; project, it's your fault for using this software!&#xD;&#xA;" TextWrapping="Wrap" VerticalAlignment="Top" Width="780" Height="147" FontSize="14" IsReadOnly="True"/>
+        <Label Content="Legal Stuff" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Width="280" FontSize="14" FontWeight="Bold" Foreground="Red"/>
+        <Label Content="Usage (Very Important)" HorizontalAlignment="Left" Margin="10,352,0,0" VerticalAlignment="Top" Width="280" FontSize="14" FontWeight="Bold" Foreground="Red"/>
+        <Button x:Name="ButtonClose" Content="OK, Understood" HorizontalAlignment="Center" Margin="0,571,0,0" VerticalAlignment="Top" Height="41" Width="164" FontSize="12" Click="ButtonClose_Click"/>
+        <TextBox HorizontalAlignment="Center" Margin="0,386,0,0" Text="1. Splitting / Chunking Methods are not saved!&#xD;&#xA;➤ NEAV1E can process different videos at the same time, meaning these methods are &quot;global&quot; and thus shall not be changed if other unfinished queue items exist.&#xD;&#xA;➤ This might be fixed / improved in the future, but I recommend to think that this program is &quot;dumb&quot;. &#xA;" TextWrapping="Wrap" VerticalAlignment="Top" Width="780" Height="147" FontSize="14" IsReadOnly="True"/>
+
+    </Grid>
+</mah:MetroWindow>

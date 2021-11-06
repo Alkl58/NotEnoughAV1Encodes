@@ -34,8 +34,10 @@ namespace NotEnoughAV1Encodes.Views
 
         private void ButtonSelectBGImage_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+            OpenFileDialog openFileDialog = new()
+            {
+                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp"
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 BGImage = openFileDialog.FileName;

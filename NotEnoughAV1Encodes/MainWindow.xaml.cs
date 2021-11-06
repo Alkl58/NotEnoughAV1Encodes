@@ -35,6 +35,15 @@ namespace NotEnoughAV1Encodes
             InitializeComponent();
             Initialize();
             DataContext = PresetSettings;
+
+            if (!File.Exists(Path.Combine(Global.AppData, "NEAV1E", "settings.json")))
+            {
+                // First Launch
+                Views.FirstStartup firstStartup = new(settingsDB);
+                Hide();
+                firstStartup.ShowDialog();
+                Show();
+            }
         }
 
         #region Startup
