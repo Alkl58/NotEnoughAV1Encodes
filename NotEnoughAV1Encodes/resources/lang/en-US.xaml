@@ -42,6 +42,7 @@
     <system:String x:Key="inputOutput">Input / Output</system:String>
     <system:String x:Key="noSource">No Source Selected</system:String>
     <system:String x:Key="noDestination">No Destination Selected</system:String>
+    <system:String x:Key="currentEncodingSettings">Current Encoding Settings</system:String>
     <system:String x:Key="videoInformation">Video Information</system:String>
     <system:String x:Key="videoLength">Length</system:String>
     <system:String x:Key="videoColorFormat">Color Format</system:String>
