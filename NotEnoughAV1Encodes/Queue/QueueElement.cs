@@ -18,6 +18,10 @@ namespace NotEnoughAV1Encodes.Queue
             get => _status;
             set { _status = value; NotifyPropertyChanged("Status"); }
         }
+        /// <summary>Full Video Input Path.</summary>
+        public string Input { get; set; }
+        /// <summary>Full Video Output Path.</summary>
+        public string Output { get; set; }
         /// <summary>Video Encoding parameters.</summary>
         public string VideoCommand { get; set; }
         /// <summary>Audio Encoding parameters.</summary>

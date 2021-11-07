@@ -176,7 +176,7 @@
                             <Button x:Name="ButtonDeletePreset" Content="{DynamicResource delete}" Grid.Column="2" HorizontalAlignment="Left" Margin="78,0,0,0" VerticalAlignment="Center" mah:ControlsHelper.ContentCharacterCasing="Normal" Width="66" Click="ButtonDeletePreset_Click"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource currentEncodingSettings}" Margin="10,192,10,276" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox Header="{DynamicResource currentEncodingSettings}" Margin="10,192,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="67" VerticalAlignment="Top">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60" />
@@ -201,7 +201,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="{DynamicResource filters}">
-                <Grid Background="{Binding ElementName=Grid0, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                     <GroupBox Header="{DynamicResource crop}" HorizontalAlignment="Left" Height="203" Margin="14,107,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterCrop}">
                             <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="49,75,0,0" TextWrapping="Wrap" Text="{Binding FilterCropLeft}" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />

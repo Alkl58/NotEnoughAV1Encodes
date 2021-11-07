@@ -250,6 +250,8 @@ namespace NotEnoughAV1Encodes
             Queue.QueueElement queueElement = new();
             Audio.CommandGenerator commandgenerator = new();
 
+            queueElement.Input = videoDB.InputPath;
+            queueElement.Output = videoDB.OutputPath;
             queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
             queueElement.AudioCommand = commandgenerator.Generate(ListBoxAudioTracks.Items);
             queueElement.FilterCommand = GenerateVideoFilters();
