@@ -112,6 +112,7 @@ namespace NotEnoughAV1Encodes
             settingsDB.Theme = programSettings.Theme;
             settingsDB.BGImage = programSettings.BGImage;
             settingsDB.OverrideWorkerCount = programSettings.OverrideWorkerCount;
+            settingsDB.TempPath = programSettings.TempPath;
 
             LoadSettings();
 
@@ -596,6 +597,9 @@ namespace NotEnoughAV1Encodes
                 ComboBoxWorkerCount.Visibility = Visibility.Visible;
                 TextBoxWorkerCount.Visibility = Visibility.Hidden;
             }
+
+            // Sets Temp Path
+            Global.Temp = settingsDB.TempPath;
 
             try
             {

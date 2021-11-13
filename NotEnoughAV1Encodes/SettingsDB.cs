@@ -1,4 +1,6 @@
-﻿namespace NotEnoughAV1Encodes
+﻿using System.IO;
+
+namespace NotEnoughAV1Encodes
 {
     public class SettingsDB
     {
@@ -14,5 +16,7 @@
         public string BGImage { get; set; }
         /// <summary>Overrides Worker Count -> User can specify it manually</summary>
         public bool OverrideWorkerCount { get; set; }
+        /// <summary>Specifies the Temp Folder used</summary>
+        public string TempPath { get; set; } = Path.GetTempPath();
     }
 }
