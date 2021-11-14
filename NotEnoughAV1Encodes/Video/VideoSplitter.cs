@@ -14,6 +14,7 @@ namespace NotEnoughAV1Encodes.Video
         public void Split(Queue.QueueElement _queueElement, CancellationToken _token)
         {
             queueElement = _queueElement;
+            Global.Logger("INFO  - VideoSplitter.Split()", queueElement.Output + ".log");
 
             if (queueElement.ChunkingMethod == 0)
             {
@@ -29,6 +30,7 @@ namespace NotEnoughAV1Encodes.Video
 
         private void PySceneDetect(CancellationToken _token)
         {
+            Global.Logger("DEBUG - VideoSplitter.Split() => PySceneDetect()", queueElement.Output + ".log");
             // Skip Scene Detect if the file already exist
             if (!File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splits.txt")))
             {
@@ -69,6 +71,14 @@ namespace NotEnoughAV1Encodes.Video
                 {
                     PySceneDetectParse();
                 }
+                else
+                {
+                    Global.Logger("FATAL - Cancellation Requested - Currently in VideoSplitter.Split() => PySceneDetect()", queueElement.Output + ".log");
+                }
+            }
+            else
+            {
+                Global.Logger("WARN  - VideoSplitter.Split() => PySceneDetect() => File already exist - Resuming?", queueElement.Output + ".log");
             }
         }
 
@@ -108,11 +118,13 @@ namespace NotEnoughAV1Encodes.Video
 
         private void FFmpegChunking(CancellationToken _token)
         {
+            Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking()", queueElement.Output + ".log");
             // Skips Splitting of already existent
             if (!File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splitted.log")))
             {
                 // Create Chunks Folder
                 Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"));
+                Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking() => Path: " + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), queueElement.Output + ".log");
 
                 // Generate Command
                 string ffmpeg_command = "/C ffmpeg.exe";
@@ -145,6 +157,8 @@ namespace NotEnoughAV1Encodes.Video
 
                 ffmpeg_command += " -segment_time " + queueElement.ChunkLength.ToString() + " -f segment \"";
                 ffmpeg_command += Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks", "split%6d.mkv") + "\"";
+
+                Global.Logger("INFO  - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Command: " + ffmpeg_command, queueElement.Output + ".log");
 
                 // Start Splitting
                 Process chunkingProcess = new();
@@ -187,6 +201,7 @@ namespace NotEnoughAV1Encodes.Video
 
                 // Get Exit Code
                 int exit_code = chunkingProcess.ExitCode;
+                
 
                 // Remove PID from Array after Exit
                 Global.LaunchedPIDs.RemoveAll(i => i == tempPID);
@@ -196,7 +211,16 @@ namespace NotEnoughAV1Encodes.Video
                 {
                     FileStream _finishedLog = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splitted.log"));
                     _finishedLog.Close();
+                    Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Exit Code: " + exit_code, queueElement.Output + ".log");
                 }
+                else
+                {
+                    Global.Logger("FATAL - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Exit Code: " + exit_code, queueElement.Output + ".log");
+                }
+            }
+            else
+            {
+                Global.Logger("WARN - VideoSplitter.Split() => FFmpegChunking() => Skipped Splitting - Resuming?", queueElement.Output + ".log");
             }
         }
 

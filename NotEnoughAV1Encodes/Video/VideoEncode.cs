@@ -12,14 +12,14 @@ namespace NotEnoughAV1Encodes.Video
     {
         public void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement, CancellationToken _token, bool _queueParallel)
         {
+            Global.Logger("TRACE - VideoEncode.Encode()", queueElement.Output + ".log");
             using SemaphoreSlim concurrencySemaphoreInner = new(_workerCount);
             // Creates a tasks list
             List<Task> tasksInner = new();
 
             foreach (string chunk in VideoChunks)
             {
-                Debug.WriteLine("Video: " + chunk);
-
+                Global.Logger("INFO  - VideoEncode.Encode() => Chunk: " + chunk, queueElement.Output + ".log");
                 try
                 {
                     concurrencySemaphoreInner.Wait(_token);
@@ -89,7 +89,8 @@ namespace NotEnoughAV1Encodes.Video
                                 CreateNoWindow = true
                             };
 
-                            Debug.WriteLine("/C ffmpeg.exe -y -i " + ChunkInput + " " + _filter +  " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput);
+                            string debugCommand = "/C ffmpeg.exe -y -i " + ChunkInput + " " + _filter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput;
+                            Global.Logger("INFO  - VideoEncode.Encode() => Command: " + debugCommand, queueElement.Output + ".log");
 
                             processVideo.StartInfo = startInfo;
 
@@ -102,6 +103,7 @@ namespace NotEnoughAV1Encodes.Video
 
                             // Add Process ID to Array, inorder to keep track / kill the instances
                             Global.LaunchedPIDs.Add(_pid);
+                            Global.Logger("TRACE - VideoEncode.Encode() => Added PID: " + _pid + "  Chunk: " + chunk, queueElement.Output + ".log");
 
                             // Create Progress Object
                             Queue.ChunkProgress chunkProgress = new();
@@ -132,6 +134,7 @@ namespace NotEnoughAV1Encodes.Video
 
                             // Remove PID from Array after Exit
                             Global.LaunchedPIDs.RemoveAll(i => i == _pid);
+                            Global.Logger("TRACE - VideoEncode.Encode() => Removed PID: " + _pid + "  Chunk: " + chunk, queueElement.Output + ".log");
 
                             // Second Pass
                             if (queueElement.Passes == 2 && _token.IsCancellationRequested == false)
@@ -161,6 +164,9 @@ namespace NotEnoughAV1Encodes.Video
                                     CreateNoWindow = true
                                 };
 
+                                string DebugCommand = "/C ffmpeg.exe -y -i " + ChunkInput + " " + _filter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput;
+                                Global.Logger("INFO  - VideoEncode.Encode() 2nd Pass => Command: " + DebugCommand, queueElement.Output + ".log");
+
                                 processVideo2ndPass.StartInfo = startInfo;
 
                                 _token.Register(() => { try { processVideo2ndPass.StandardInput.Write("q"); } catch { } });
@@ -172,6 +178,7 @@ namespace NotEnoughAV1Encodes.Video
 
                                 // Add Process ID to Array, inorder to keep track / kill the instances
                                 Global.LaunchedPIDs.Add(_pid);
+                                Global.Logger("TRACE - VideoEncode.Encode() 2nd Pass => Added PID: " + _pid + "  Chunk: " + chunk, queueElement.Output + ".log");
 
                                 // Create Progress Object
                                 Queue.ChunkProgress chunkProgress2ndPass = new();
@@ -200,8 +207,11 @@ namespace NotEnoughAV1Encodes.Video
 
                                 processVideo2ndPass.WaitForExit();
 
+                                Global.Logger("INFO  - VideoEncode.Encode() => Exit Code: " + processVideo2ndPass.ExitCode + "  Chunk: " + chunk, queueElement.Output + ".log");
+
                                 // Remove PID from Array after Exit
                                 Global.LaunchedPIDs.RemoveAll(i => i == _pid);
+                                Global.Logger("TRACE - VideoEncode.Encode() 2nd Pass => Removed PID: " + _pid + "  Chunk: " + chunk, queueElement.Output + ".log");
                             }
 
 
@@ -209,6 +219,11 @@ namespace NotEnoughAV1Encodes.Video
                             {
                                 FileStream _finishedLog = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_finished.log"));
                                 _finishedLog.Close();
+                                Global.Logger("INFO  - VideoEncode.Encode() => Exit Code: 0  Chunk: " + chunk, queueElement.Output + ".log");
+                            }
+                            else
+                            {
+                                Global.Logger("FATAL - VideoEncode.Encode() => Exit Code: " + processVideo.ExitCode + "  Chunk: " + chunk, queueElement.Output + ".log");
                             }
                         }
                     }

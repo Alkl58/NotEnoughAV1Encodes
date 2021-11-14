@@ -10,7 +10,7 @@ namespace NotEnoughAV1Encodes.Video
     {
         public void Concat(Queue.QueueElement queueElement)
         {
-            Debug.WriteLine("Landed in Concat()");
+            Global.Logger("DEBUG - VideoMuxer.Concat()", queueElement.Output + ".log");
             queueElement.Progress = 0.0;
             queueElement.Status = "Muxing files. Please wait.";
 
@@ -19,22 +19,27 @@ namespace NotEnoughAV1Encodes.Video
 
             if(queueElement.EncodingMethod <= 4)
             {
+                Global.Logger("DEBUG - VideoMuxer.Concat() => Reading Chunk Directory by *.webm files", queueElement.Output + ".log");
                 sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.webm").OrderBy(f => f);
             }
             else if (queueElement.EncodingMethod > 4)
             {
+                Global.Logger("DEBUG - VideoMuxer.Concat() => Reading Chunk Directory by *.ivf files", queueElement.Output + ".log");
                 sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.ivf").OrderBy(f => f);
             }
 
-            Debug.WriteLine("Chunks read: " + sortedChunks.ToString());
-
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "chunks.txt")))
             {
+                int counter = 0;
+                Global.Logger("DEBUG - VideoMuxer.Concat() => Writing chunks.txt ...", queueElement.Output + ".log");
                 foreach (string fileTemp in sortedChunks)
                 {
                     string tempName = fileTemp.Replace("'", "'\\''");
                     outputFile.WriteLine("file '" + tempName + "'");
+                    Global.Logger("TRACE - VideoMuxer.Concat() => Wrote " + counter.ToString() + " => " + tempName + " Chunk to chunks.txt", queueElement.Output + ".log");
+                    counter++;
                 }
+                Global.Logger("DEBUG - VideoMuxer.Concat() => Wrote " + counter.ToString() + " Chunk(s) to chunks.txt", queueElement.Output + ".log");
             }
 
             // Setting Output for FFmpeg
@@ -55,6 +60,8 @@ namespace NotEnoughAV1Encodes.Video
                 Arguments = "/C ffmpeg.exe -y -f concat -safe 0 -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "chunks.txt") + "\" -c copy \"" + FFmpegOutput + "\"",
                 CreateNoWindow = true
             };
+
+            Global.Logger("DEBUG - VideoMuxer.Concat() => Command: ffmpeg.exe -y -f concat -safe 0 -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "chunks.txt") + "\" -c copy \"" + FFmpegOutput + "\"" , queueElement.Output + ".log");
 
             processVideo.StartInfo = startInfo;
             processVideo.Start();
@@ -87,9 +94,9 @@ namespace NotEnoughAV1Encodes.Video
                 vfrMuxCommand = "--timestamps 0:\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "vsync.txt") + "\"";
             }
 
-            Debug.WriteLine("MuxWithMKVMerge " + MuxWithMKVMerge.ToString());
-            Debug.WriteLine("AudioCommand " + audioMuxCommand);
-            Debug.WriteLine("VFRCommand " + vfrMuxCommand);
+            Global.Logger("DEBUG - VideoMuxer.Concat() => MuxWithMKVMerge? : " + MuxWithMKVMerge.ToString(), queueElement.Output + ".log");
+            Global.Logger("DEBUG - VideoMuxer.Concat() => AudioCommand?    : " + audioMuxCommand, queueElement.Output + ".log");
+            Global.Logger("DEBUG - VideoMuxer.Concat() => VFRCommand?      : " + vfrMuxCommand, queueElement.Output + ".log");
 
             if (MuxWithMKVMerge)
             {
@@ -120,6 +127,13 @@ namespace NotEnoughAV1Encodes.Video
                 if (processMKVMerge.ExitCode != 0)
                 {
                     MessageBox.Show(_output, "mkvmerge", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Global.Logger("FATAL - VideoMuxer.Concat() => Exit Code: " + processMKVMerge.ExitCode, queueElement.Output + ".log");
+                    Global.Logger("FATAL - VideoMuxer.Concat() => STDOUT: " + _output, queueElement.Output + ".log");
+                }
+                else
+                {
+                    Global.Logger("DEBUG - VideoMuxer.Concat() => Exit Code: 0", queueElement.Output + ".log");
+                    Global.Logger("DEBUG - VideoMuxer.Concat() => STDOUT: " + _output, queueElement.Output + ".log");
                 }
             }
         }

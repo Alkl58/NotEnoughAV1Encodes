@@ -9,12 +9,15 @@ namespace NotEnoughAV1Encodes.Audio
     {
         public void Encode(Queue.QueueElement queueElement, CancellationToken _token)
         {
+            Global.Logger("DEBUG - EncodeAudio.Encode()", queueElement.Output + ".log");
             if (queueElement.AudioCommand != null && !File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "exit.log")))
             {
                 if (!Directory.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio")))
                 {
                     Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio"));
                 }
+
+                Global.Logger("INFO  - EncodeAudio.Encode() => Command: " + queueElement.AudioCommand, queueElement.Output + ".log");
 
                 Process processAudio = new();
                 ProcessStartInfo startInfo = new()
@@ -52,7 +55,16 @@ namespace NotEnoughAV1Encodes.Audio
                 if (processAudio.ExitCode == 0 && _token.IsCancellationRequested == false)
                 {
                     File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "exit.log"));
+                    Global.Logger("DEBUG - EncodeAudio.Encode() => ExitCode: " + processAudio.ExitCode, queueElement.Output + ".log");
                 }
+                else
+                {
+                    Global.Logger("FATAL - EncodeAudio.Encode() => ExitCode: " + processAudio.ExitCode, queueElement.Output + ".log");
+                }
+            }
+            else
+            {
+                Global.Logger("WARN  - EncodeAudio.Encode() => File already exist - Resuming?", queueElement.Output + ".log");
             }
         }
     }

@@ -1289,6 +1289,12 @@ namespace NotEnoughAV1Encodes
                     try
                     {
                         Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier));
+                        Global.Logger("==========================================================", queueElement.Output + ".log");
+                        Global.Logger("INFO  - Started Async Task - UID: " + queueElement.UniqueIdentifier, queueElement.Output + ".log");
+                        Global.Logger("INFO  - Input: " + queueElement.Input, queueElement.Output + ".log");
+                        Global.Logger("INFO  - Output: " + queueElement.Input, queueElement.Output + ".log");
+                        Global.Logger("INFO  - Temp Folder: " + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier), queueElement.Output + ".log");
+                        Global.Logger("==========================================================", queueElement.Output + ".log");
 
                         Audio.EncodeAudio encodeAudio = new();
                         Video.VideoSplitter videoSplitter = new();
@@ -1303,6 +1309,7 @@ namespace NotEnoughAV1Encodes
                         if (QueueParallel)
                         {
                             VideoChunks.Add(queueElement.VideoDB.InputPath);
+                            Global.Logger("WARN  - Queue is being processed in Parallel", queueElement.Output + ".log");
                         }
                         else
                         {
@@ -1315,6 +1322,7 @@ namespace NotEnoughAV1Encodes
                                 foreach (string file in filePaths)
                                 {
                                     VideoChunks.Add(file);
+                                    Global.Logger("TRACE - Equal Chunking VideoChunks Add " + file, queueElement.Output + ".log");
                                 }
                             }
                             else
@@ -1323,6 +1331,7 @@ namespace NotEnoughAV1Encodes
                                 if (File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splits.txt")))
                                 {
                                     VideoChunks = File.ReadAllLines(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splits.txt")).ToList();
+                                    Global.Logger("TRACE - SceneDetect VideoChunks Add " + VideoChunks, queueElement.Output + ".log");
                                 }
                             }
                         }
@@ -1330,6 +1339,7 @@ namespace NotEnoughAV1Encodes
                         if (VideoChunks.Count == 0)
                         {
                             queueElement.Status = "Error: No Video Chunk found";
+                            Global.Logger("FATAL - Error: No Video Chunk found", queueElement.Output + ".log");
                         }
                         else
                         {

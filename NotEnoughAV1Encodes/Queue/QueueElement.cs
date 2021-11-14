@@ -69,11 +69,13 @@ namespace NotEnoughAV1Encodes.Queue
 
         public void GetFrameCount()
         {
+            Global.Logger("DEBUG - GetFrameCount() ", Output + ".log");
             // Only do manual Framecount, if MediaInfo did not detect it
             if (FrameCount == 0)
             {
                 try
                 {
+                    Global.Logger("INFO  - GetFrameCount() => Detecting with FFmpeg", Output + ".log");
                     // This function calculates the total number of frames
                     Process process = new()
                     {
@@ -101,22 +103,29 @@ namespace NotEnoughAV1Encodes.Queue
                         FrameCount += FrameCount;
                     }
                 }
-                catch { }
+                catch(Exception ex)
+                {
+                    Global.Logger("ERROR - Exception => GetFrameCount() : " + ex.Message, Output + ".log");
+                }
             }
+            Global.Logger("INFO  - GetFrameCount() => " + FrameCount, Output + ".log");
         }
 
         public void GetVFRTimeStamps()
         {
+            Global.Logger("TRACE - GetVFRTimeStamps()", Output + ".log");
             if (!VFR || File.Exists(Path.Combine(Global.Temp, "NEAV1E", UniqueIdentifier, "vsync.txt")))
             {
+                Global.Logger("TRACE - GetVFRTimeStamps() => return", Output + ".log");
                 return;
             }
 
             try
             {
+                Global.Logger("DEBUG - GetVFRTimeStamps() => Extracting...", Output + ".log");
                 // Run mkvextract command
                 Process mkvExtract = new();
-                ProcessStartInfo startInfo = new ProcessStartInfo
+                ProcessStartInfo startInfo = new()
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
@@ -128,8 +137,19 @@ namespace NotEnoughAV1Encodes.Queue
                 mkvExtract.Start();
                 Status = "Extracting VFR Timestamps";
                 mkvExtract.WaitForExit();
+                if(mkvExtract.ExitCode == 0)
+                {
+                    Global.Logger("DEBUG - GetVFRTimeStamps() => Exit Code 0", Output + ".log");
+                }
+                else
+                {
+                    Global.Logger("FATAL - GetVFRTimeStamps() => Exit Code " + mkvExtract.ExitCode, Output + ".log");
+                }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Global.Logger("FATAL - GetVFRTimeStamps() => Exception: " + ex.Message, Output + ".log");
+            }
         }
 
         private static string GetBetween(string strSource, string strStart, string strEnd)

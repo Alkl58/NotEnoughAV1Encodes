@@ -28,5 +28,15 @@ namespace NotEnoughAV1Encodes
 
             return 0;
         }
+
+        public static void Logger(string logMessage, string logPath)
+        {
+            // We could use a better logging method with different logging levels
+            // However for this "small" application this is enough
+
+            using StreamWriter sw = new(logPath, true);
+            sw.WriteLine($"{DateTime.Now} : {logMessage}");
+            sw.Close();
+        }
     }
 }
