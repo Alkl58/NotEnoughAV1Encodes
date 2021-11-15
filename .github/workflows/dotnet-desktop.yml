@@ -24,7 +24,7 @@ jobs:
       run: nuget restore
       
     - name: Build
-      run: dotnet publish -r win-x64 --configuration Release
+      run: dotnet publish -r win-x64 --configuration Release --no-self-contained
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.4
