@@ -27,6 +27,7 @@ namespace NotEnoughAV1Encodes
         private int ProgramState;
         private CancellationTokenSource cancellationTokenSource;
         public Settings PresetSettings = new();
+        public static bool Logging { get; set; }
 
         public ObservableCollection<Queue.QueueElement> QueueList { get; set; } = new();
 
@@ -105,14 +106,7 @@ namespace NotEnoughAV1Encodes
         {
             Views.ProgramSettings programSettings = new(settingsDB);
             programSettings.ShowDialog();
-            settingsDB.DeleteTempFiles = programSettings.DeleteTempFiles;
-            settingsDB.ShutdownAfterEncode = programSettings.ShutdownAfterEncode;
-            settingsDB.BaseTheme = programSettings.BaseTheme;
-            settingsDB.AccentTheme = programSettings.AccentTheme;
-            settingsDB.Theme = programSettings.Theme;
-            settingsDB.BGImage = programSettings.BGImage;
-            settingsDB.OverrideWorkerCount = programSettings.OverrideWorkerCount;
-            settingsDB.TempPath = programSettings.TempPath;
+            settingsDB = programSettings.settingsDBTemp;
 
             LoadSettings();
 
@@ -600,6 +594,7 @@ namespace NotEnoughAV1Encodes
 
             // Sets Temp Path
             Global.Temp = settingsDB.TempPath;
+            Logging = settingsDB.Logging;
 
             try
             {

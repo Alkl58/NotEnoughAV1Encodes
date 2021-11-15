@@ -10,24 +10,19 @@ namespace NotEnoughAV1Encodes.Views
 {
     public partial class ProgramSettings : MetroWindow
     {
-        public bool DeleteTempFiles { get; set; }
-        public bool ShutdownAfterEncode { get; set; }
-        public bool OverrideWorkerCount { get; set; }
-        public int BaseTheme { get; set; }
-        public int AccentTheme { get; set; }
-        public string Theme { get; set; }
-        public string BGImage { get; set; }
-        public string TempPath { get; set; }
+        public SettingsDB settingsDBTemp = new();
+        
         public ProgramSettings(SettingsDB settingsDB)
         {
             InitializeComponent();
             ToggleSwitchDeleteTempFiles.IsOn = settingsDB.DeleteTempFiles;
             ToggleSwitchShutdown.IsOn = settingsDB.ShutdownAfterEncode;
             ToggleSwitchOverrideWorkerCount.IsOn = settingsDB.OverrideWorkerCount;
+            ToggleSwitchLogging.IsOn = settingsDB.Logging;
             ComboBoxAccentTheme.SelectedIndex = settingsDB.AccentTheme;
             ComboBoxBaseTheme.SelectedIndex = settingsDB.BaseTheme;
             TextBoxTempPath.Text = settingsDB.TempPath;
-            BGImage = settingsDB.BGImage;
+            settingsDBTemp.BGImage = settingsDB.BGImage;
             
             try
             {
@@ -44,7 +39,7 @@ namespace NotEnoughAV1Encodes.Views
             };
             if (openFileDialog.ShowDialog() == true)
             {
-                BGImage = openFileDialog.FileName;
+                settingsDBTemp.BGImage = openFileDialog.FileName;
             }
         }
 
@@ -72,18 +67,19 @@ namespace NotEnoughAV1Encodes.Views
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn;
-            ShutdownAfterEncode = ToggleSwitchShutdown.IsOn;
-            OverrideWorkerCount = ToggleSwitchOverrideWorkerCount.IsOn;
-            BaseTheme = ComboBoxBaseTheme.SelectedIndex;
-            AccentTheme = ComboBoxAccentTheme.SelectedIndex;
-            Theme = ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text;
-            TempPath = TextBoxTempPath.Text;
+            settingsDBTemp.DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn;
+            settingsDBTemp.ShutdownAfterEncode = ToggleSwitchShutdown.IsOn;
+            settingsDBTemp.OverrideWorkerCount = ToggleSwitchOverrideWorkerCount.IsOn;
+            settingsDBTemp.Logging = ToggleSwitchLogging.IsOn;
+            settingsDBTemp.BaseTheme = ComboBoxBaseTheme.SelectedIndex;
+            settingsDBTemp.AccentTheme = ComboBoxAccentTheme.SelectedIndex;
+            settingsDBTemp.Theme = ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text;
+            settingsDBTemp.TempPath = TextBoxTempPath.Text;
         }
 
         private void ButtonResetBGImage_Click(object sender, RoutedEventArgs e)
         {
-            BGImage = null;
+            settingsDBTemp.BGImage = null;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

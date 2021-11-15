@@ -18,5 +18,7 @@ namespace NotEnoughAV1Encodes
         public bool OverrideWorkerCount { get; set; }
         /// <summary>Specifies the Temp Folder used</summary>
         public string TempPath { get; set; } = Path.GetTempPath();
+        /// <summary>Toggles Logging functionality</summary>
+        public bool Logging { get; set; }
     }
 }

@@ -36,6 +36,11 @@ namespace NotEnoughAV1Encodes
             // We could use a better logging method with different logging levels
             // However for this "small" application this is enough
 
+            if(MainWindow.Logging == false)
+            {
+                return;
+            }
+
             // Set Status to Locked
             readWriteLock.EnterWriteLock();
             try
