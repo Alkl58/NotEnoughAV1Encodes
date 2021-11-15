@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 namespace NotEnoughAV1Encodes
 {
@@ -29,14 +30,25 @@ namespace NotEnoughAV1Encodes
             return 0;
         }
 
+        private static ReaderWriterLockSlim readWriteLock = new();
         public static void Logger(string logMessage, string logPath)
         {
             // We could use a better logging method with different logging levels
             // However for this "small" application this is enough
 
-            using StreamWriter sw = new(logPath, true);
-            sw.WriteLine($"{DateTime.Now} : {logMessage}");
-            sw.Close();
+            // Set Status to Locked
+            readWriteLock.EnterWriteLock();
+            try
+            {
+                using StreamWriter sw = new(logPath, true);
+                sw.WriteLine($"{DateTime.Now} : {logMessage}");
+                sw.Close();
+            }
+            finally
+            {
+                // Release Lock
+                readWriteLock.ExitWriteLock();
+            }
         }
     }
 }
