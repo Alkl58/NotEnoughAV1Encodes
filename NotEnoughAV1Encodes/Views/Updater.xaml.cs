@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -52,9 +53,14 @@ namespace NotEnoughAV1Encodes.Views
             InitializeComponent();
             LabelCurrentProgramVersion.Content = Neav1eCurrentVersion;
             ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
+            ParseEverything();
+        }
+
+        private async void ParseEverything()
+        {
             ParseNEAV1EGithub();
-            ParseGyanFFmpeg();
-            ParseJeremyleeJSON();
+            await ParseGyanFFmpeg();
+            await ParseJeremyleeJSONAsync();
             CompareLocalVersion();
         }
 
@@ -72,7 +78,7 @@ namespace NotEnoughAV1Encodes.Views
             try
             {
                 //Parses the latest neav1e release date directly from Github
-                GitHubClient client = new GitHubClient(new ProductHeaderValue("NotEnoughAV1Encodes"));
+                GitHubClient client = new(new ProductHeaderValue("NotEnoughAV1Encodes"));
                 IReadOnlyList<Release> releases = client.Repository.Release.GetAll("Alkl58", "NotEnoughAV1Encodes").Result;
                 Release latest = releases[0];
                 Neav1eUpdateVersion = Convert.ToDouble(latest.TagName.Remove(0, 1).Replace(".", ","));
@@ -92,13 +98,14 @@ namespace NotEnoughAV1Encodes.Views
             catch { }
         }
 
-        private void ParseGyanFFmpeg()
+        private async Task ParseGyanFFmpeg()
         {
             try
             {
-                WebClient wc = new WebClient();
-                byte[] data = wc.DownloadData("https://www.gyan.dev/ffmpeg/builds/git-version");
-                string temp_date = Encoding.UTF8.GetString(data);
+                HttpClient wc = new();
+                HttpResponseMessage response = await wc.GetAsync("https://www.gyan.dev/ffmpeg/builds/git-version");
+                byte[] content = await response.Content.ReadAsByteArrayAsync();
+                string temp_date = Encoding.UTF8.GetString(content);
 
                 // Required to later have the correct path
                 Git_FFmpeg_Name = "ffmpeg-" + temp_date + "-full_build";
@@ -111,11 +118,13 @@ namespace NotEnoughAV1Encodes.Views
             catch { }
         }
 
-        private void ParseJeremyleeJSON()
+        private async Task ParseJeremyleeJSONAsync()
         {
             try
             {
-                string jsonWeb = new WebClient().DownloadString("https://jeremylee.sh/bins/manifest.json");
+                HttpClient client = new();
+                HttpResponseMessage response = await client.GetAsync("https://jeremylee.sh/bins/manifest.json");
+                string jsonWeb = await response.Content.ReadAsStringAsync();
                 dynamic json = JsonConvert.DeserializeObject(jsonWeb);
 
                 string aomencVersion = json.files["aomenc.exe"].datetime;
@@ -428,7 +437,8 @@ namespace NotEnoughAV1Encodes.Views
             // Downloads the archive provided in the Link
             try
             {
-                WebClient webClient = new WebClient();
+                HttpClient client = new();
+                WebClient webClient = new();
                 webClient.DownloadProgressChanged += (s, e) =>
                 {
                     ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = e.ProgressPercentage);
