@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -19,9 +20,8 @@ namespace NotEnoughAV1Encodes.Views
     public partial class Updater : MetroWindow
     {
         // NEAV1E Update
-        private static double Neav1eUpdateVersion = 0.0;
-
-        private static double Neav1eCurrentVersion = 1.9; // current neav1e version (hardcoded)
+        private string UpdateVersion = "0";
+        private string CurrentVersion = "2.0.0"; // current neav1e version (hardcoded)
 
         // FFmpeg Update
         public static string FFmpegUpdateVersion;
@@ -51,8 +51,10 @@ namespace NotEnoughAV1Encodes.Views
         public Updater(string baseTheme, string accentTheme)
         {
             InitializeComponent();
-            LabelCurrentProgramVersion.Content = Neav1eCurrentVersion;
+            LabelCurrentProgramVersion.Content = CurrentVersion;
             ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
+            LabelProgressBar.Content = "Downloading Version Lists...";
+            ProgressBar.IsIndeterminate = true;
             ParseEverything();
         }
 
@@ -62,6 +64,8 @@ namespace NotEnoughAV1Encodes.Views
             await ParseGyanFFmpeg();
             await ParseJeremyleeJSONAsync();
             CompareLocalVersion();
+            LabelProgressBar.Content = "";
+            ProgressBar.IsIndeterminate = false;
         }
 
         private void ToggleAllButtons(bool _toggle)
@@ -81,21 +85,40 @@ namespace NotEnoughAV1Encodes.Views
                 GitHubClient client = new(new ProductHeaderValue("NotEnoughAV1Encodes"));
                 IReadOnlyList<Release> releases = client.Repository.Release.GetAll("Alkl58", "NotEnoughAV1Encodes").Result;
                 Release latest = releases[0];
-                Neav1eUpdateVersion = Convert.ToDouble(latest.TagName.Remove(0, 1).Replace(".", ","));
-                LabelUpdateProgramVersion.Content = Neav1eUpdateVersion;
+
+                string tmpUpdateVersion = latest.TagName.Remove(0, 1);
+                if(tmpUpdateVersion.Length == 3)
+                {
+                    // This is only for backwards compatibility
+                    tmpUpdateVersion += ".0";
+                }
+
+                LabelUpdateProgramVersion.Content = tmpUpdateVersion;
+                UpdateVersion = GetNumbers(tmpUpdateVersion);
+
                 // Compares NEAV1E Versions and sets the color of the labels
-                if (Neav1eUpdateVersion > Neav1eCurrentVersion)
+                if (int.Parse(GetNumbers(UpdateVersion)) > int.Parse(GetNumbers(CurrentVersion)))
                 {
                     LabelCurrentProgramVersion.Foreground = Brushes.Red;
                     LabelUpdateProgramVersion.Foreground = Brushes.Green;
                 }
-                else if (Neav1eUpdateVersion == Neav1eCurrentVersion)
+                else if (int.Parse(GetNumbers(UpdateVersion)) == int.Parse(GetNumbers(CurrentVersion)))
                 {
                     LabelCurrentProgramVersion.Foreground = Brushes.Green;
                     LabelUpdateProgramVersion.Foreground = Brushes.Green;
                 }
+                else if (int.Parse(GetNumbers(UpdateVersion)) < int.Parse(GetNumbers(CurrentVersion)))
+                {
+                    LabelCurrentProgramVersion.Foreground = Brushes.Green;
+                    LabelUpdateProgramVersion.Foreground = Brushes.Red;
+                }
             }
             catch { }
+        }
+
+        private static string GetNumbers(string input)
+        {
+            return new string(input.Where(c => char.IsDigit(c)).ToArray());
         }
 
         private async Task ParseGyanFFmpeg()
