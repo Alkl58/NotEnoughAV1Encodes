@@ -15,6 +15,7 @@
     <system:String x:Key="advanced">Advanced</system:String>
     <system:String x:Key="advancedSettings">Advanced Settings</system:String>
     <system:String x:Key="audio">Audio</system:String>
+    <system:String x:Key="subtitles">Subtitles</system:String>
     <system:String x:Key="queue">Queue</system:String>
     <system:String x:Key="optimisation">Optimization</system:String>
     <system:String x:Key="speed">Speed</system:String>
@@ -31,6 +32,7 @@
     <system:String x:Key="presets">Presets</system:String>
     <system:String x:Key="save">Save</system:String>
     <system:String x:Key="delete">Delete</system:String>
+    <system:String x:Key="default">Default:</system:String>
     <system:String x:Key="preset">Preset:</system:String>
     <system:String x:Key="workerssAndSplitting">Workers and Splitting</system:String>
     <system:String x:Key="workerCount">Worker Count:</system:String>
@@ -39,6 +41,8 @@
     <system:String x:Key="chunkLength">Chunk Length (seconds):</system:String>
     <system:String x:Key="threshold">Threshold:</system:String>
     <system:String x:Key="noAudioFound">No Audio Found</system:String>
+    <system:String x:Key="noSubtitleFound">No Subtitle Found</system:String>
+    <system:String x:Key="burnIn">Burn in:</system:String>
     <system:String x:Key="inputOutput">Input / Output</system:String>
     <system:String x:Key="noSource">No Source Selected</system:String>
     <system:String x:Key="noDestination">No Destination Selected</system:String>

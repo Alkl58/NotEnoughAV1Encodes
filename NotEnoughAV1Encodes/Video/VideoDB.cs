@@ -22,6 +22,8 @@ namespace NotEnoughAV1Encodes.Video
 
         public List<Audio.AudioTracks> AudioTracks { get; set; }
 
+        public List<Subtitle.SubtitleTracks> SubtitleTracks { get; set; }
+
         public void ParseMediaInfo()
         {
             if (!string.IsNullOrEmpty(InputPath))
@@ -96,6 +98,42 @@ namespace NotEnoughAV1Encodes.Video
                             CustomName = name,
                             Channels = channels,
                             PCM = pcm
+                        });
+                    }
+                }
+
+                int subtitleCount = mediaInfo.Count_Get(StreamKind.Text);
+                if (subtitleCount > 0)
+                {
+                    SubtitleTracks = new();
+
+                    for (int i = 0; i < subtitleCount; i++)
+                    {
+                        
+                        string name = "";
+                        try { name = mediaInfo.Get(StreamKind.Text, i, "Title"); } catch { }
+
+                        string lang = "und";
+                        try
+                        {
+                            lang = mediaInfo.Get(StreamKind.Text, i, "Language/String3");
+                            if (!resources.MediaLanguages.Languages.ContainsValue(lang))
+                            {
+                                lang = "und";
+                            }
+                            lang = resources.MediaLanguages.Languages.FirstOrDefault(x => x.Value == lang).Key;
+                        }
+                        catch { }
+
+                        SubtitleTracks.Add(new Subtitle.SubtitleTracks()
+                        {
+                            Active = true,
+                            Index = i,
+                            Languages = resources.MediaLanguages.LanguageKeys,
+                            Language = lang,
+                            CustomName = name,
+                            Default = false,
+                            BurnIn = false
                         });
                     }
                 }

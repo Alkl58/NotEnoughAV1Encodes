@@ -142,6 +142,8 @@ namespace NotEnoughAV1Encodes
                 videoDB.ParseMediaInfo();
                 ListBoxAudioTracks.Items.Clear();
                 ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                ListBoxSubtitleTracks.Items.Clear();
+                ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
                 LabelVideoSource.Content = videoDB.InputPath;
                 LabelVideoLength.Content = videoDB.MIDuration;
                 LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
@@ -291,7 +293,7 @@ namespace NotEnoughAV1Encodes
             // Save as JSON
             File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.InputFileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
 
-            Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 5));
+            Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 6));
         }
 
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
@@ -334,6 +336,8 @@ namespace NotEnoughAV1Encodes
                 videoDB = tmp.VideoDB;
                 ListBoxAudioTracks.Items.Clear();
                 ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                ListBoxSubtitleTracks.Items.Clear();
+                ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
                 LabelVideoSource.Content = videoDB.InputPath;
                 LabelVideoDestination.Content = videoDB.OutputPath;
                 LabelVideoLength.Content = videoDB.MIDuration;
@@ -619,6 +623,7 @@ namespace NotEnoughAV1Encodes
 
                     TabControl.Background = bg;
                     ListBoxAudioTracks.Background = fg;
+                    ListBoxSubtitleTracks.Background = fg;
                 }
                 else
                 {

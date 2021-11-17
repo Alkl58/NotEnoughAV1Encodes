@@ -844,6 +844,52 @@
                     </ListBox>
                 </Grid>
             </TabItem>
+            <TabItem Header="{DynamicResource subtitles}">
+                <Grid>
+                    <ListBox x:Name="ListBoxSubtitleTracks" HorizontalContentAlignment="Stretch" Margin="10">
+                        <ListBoxItem Background="{Binding ElementName=ListBoxSubtitleTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                            <Grid>
+                                <Label Content="{DynamicResource noSubtitleFound}" HorizontalContentAlignment="Center" FontSize="20" />
+                            </Grid>
+                        </ListBoxItem>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Background" Value="{Binding ElementName=ListBoxSubtitleTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"></Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition MinWidth="50" />
+                                        <ColumnDefinition Width="140" />
+                                        <ColumnDefinition MinWidth="70" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition MinWidth="90" />
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition MinWidth="40" Width="*" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition MinWidth="95" Width="*" />
+                                        <ColumnDefinition Width="150" />
+                                    </Grid.ColumnDefinitions>
+                                    <mah:ToggleSwitch Grid.Column="0" x:Name="ToggleOnOff" IsOn="{Binding Active}"></mah:ToggleSwitch>
+                                    <Label Grid.Column="1" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{Binding Index}" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
+                                    <Label Grid.Column="2" Content="Track Name:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="3" x:Name="TextBoxSubtitleTrackName" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" TextWrapping="Wrap" VerticalContentAlignment="Center" VerticalAlignment="Center" Text="{Binding CustomName}" />
+                                    <Label Grid.Column="4" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{DynamicResource language}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                                    <ComboBox Grid.Column="5" x:Name="ComboBoxTrackLanguage" VerticalAlignment="Center" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}"/>
+                                    <Label Grid.Column="6" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{DynamicResource default}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                                    <CheckBox Grid.Column="7" x:Name="CheckBoxDefault" IsChecked="{Binding Default}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <Label Grid.Column="8" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{DynamicResource burnIn}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                                    <CheckBox Grid.Column="9" x:Name="CheckBoxBurnIn" IsChecked="{Binding BurnIn}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
             <TabItem Header="{DynamicResource queue}">
                 <Grid>
                     <GroupBox Header="{DynamicResource queue}">
