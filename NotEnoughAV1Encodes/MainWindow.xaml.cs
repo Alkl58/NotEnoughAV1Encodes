@@ -245,12 +245,15 @@ namespace NotEnoughAV1Encodes
             }
 
             Queue.QueueElement queueElement = new();
-            Audio.CommandGenerator commandgenerator = new();
+            Audio.CommandGenerator audioCommandGenerator = new();
+            Subtitle.CommandGenerator subCommandGenerator = new();
 
             queueElement.Input = videoDB.InputPath;
             queueElement.Output = videoDB.OutputPath;
             queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
-            queueElement.AudioCommand = commandgenerator.Generate(ListBoxAudioTracks.Items);
+            queueElement.AudioCommand = audioCommandGenerator.Generate(ListBoxAudioTracks.Items);
+            queueElement.SubtitleCommand = subCommandGenerator.GenerateSoftsub(ListBoxSubtitleTracks.Items);
+            queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(ListBoxSubtitleTracks.Items);
             queueElement.FilterCommand = GenerateVideoFilters();
             queueElement.FrameCount = videoDB.MIFrameCount;
             queueElement.EncodingMethod = ComboBoxVideoEncoder.SelectedIndex;
@@ -1297,6 +1300,7 @@ namespace NotEnoughAV1Encodes
                         Global.Logger("==========================================================", queueElement.Output + ".log");
 
                         Audio.EncodeAudio encodeAudio = new();
+                        Subtitle.ExtractSubtitles extractSubtitles = new();
                         Video.VideoSplitter videoSplitter = new();
                         Video.VideoEncode videoEncoder = new();
                         Video.VideoMuxer videoMuxer = new();
@@ -1345,6 +1349,9 @@ namespace NotEnoughAV1Encodes
                         {
                             // Audio Encoding
                             await Task.Run(() => encodeAudio.Encode(queueElement, _cancelToken), _cancelToken);
+
+                            // Subtitle Extraction
+                            await Task.Run(() => extractSubtitles.Extract(queueElement, _cancelToken), _cancelToken);
 
                             // Extract VFR Timestamps
                             await Task.Run(() => queueElement.GetVFRTimeStamps(), _cancelToken);

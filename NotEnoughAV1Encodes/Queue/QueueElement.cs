@@ -26,6 +26,10 @@ namespace NotEnoughAV1Encodes.Queue
         public string VideoCommand { get; set; }
         /// <summary>Audio Encoding parameters.</summary>
         public string AudioCommand { get; set; }
+        /// <summary>Softsub Command</summary>
+        public string SubtitleCommand { get; set; }
+        /// <summary>Hardsub Command</summary>
+        public string SubtitleBurnCommand { get; set; }
         /// <summary>Filtering parameters.</summary>
         public string FilterCommand { get; set; }
         /// <summary>Unique Identifier to avoid Filesystem conflicts.</summary>
