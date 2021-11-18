@@ -11,6 +11,9 @@
 
             foreach (AudioTracks track in tracks)
             {
+                // Skip Audio Track if not active
+                if(track.Active == false) continue;
+
                 audioCommand += MultipleTrackCommandGenerator(int.Parse(track.Bitrate), track.Index, endIndex, track.Codec, track.Channels, track.Language, track.CustomName, track.PCM);
                 endIndex += 1;
 

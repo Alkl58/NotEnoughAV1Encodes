@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NotEnoughAV1Encodes.Subtitle
+﻿namespace NotEnoughAV1Encodes.Subtitle
 {
     internal class CommandGenerator
     {
@@ -14,6 +8,9 @@ namespace NotEnoughAV1Encodes.Subtitle
             string command = "";
             foreach (SubtitleTracks track in tracks)
             {
+                // Skip Subtitle Track if not active
+                if (track.Active == false) continue;
+
                 command += SoftsubGenerator(track.Index, resources.MediaLanguages.Languages[track.Language], track.CustomName, track.Default);
                 noSubs = false;
             }
