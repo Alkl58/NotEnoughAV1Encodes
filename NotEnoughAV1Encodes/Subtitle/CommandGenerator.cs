@@ -8,6 +8,8 @@ namespace NotEnoughAV1Encodes.Subtitle
         {
             bool noSubs = true;
             string command = "";
+            bool firstMap = true;
+            string map = " --subtitle-tracks ";
             foreach (SubtitleTracks track in tracks)
             {
                 // Skip Subtitle Track if not active
@@ -15,13 +17,17 @@ namespace NotEnoughAV1Encodes.Subtitle
                 // Skip Subtitle Track if burned in
                 if (track.BurnIn == true) continue;
 
+                // Mapping Subtitles
+                map += firstMap ? track.Index : "," + track.Index;
+                firstMap = false;
+               
                 command += SoftsubGenerator(track.Index, resources.MediaLanguages.Languages[track.Language], track.CustomName, track.Default);
                 noSubs = false;
             }
 
             // Only return non null, if subs actually exists
             // Needed for Muxing Logic in Video/VideoMuxer.cs
-            return noSubs ? null : command;
+            return noSubs ? null : map + command;
         }
 
         public string GenerateHardsub(System.Windows.Controls.ItemCollection tracks, string identifier)
