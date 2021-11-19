@@ -33,9 +33,9 @@ namespace NotEnoughAV1Encodes
 
         public static List<int> GetChildProcesses(int process_id)
         {
-            List<int> children = new List<int>();
+            List<int> children = new();
 
-            ManagementObjectSearcher mos = new ManagementObjectSearcher(String.Format("Select * From Win32_Process Where ParentProcessID={0}", process_id));
+            ManagementObjectSearcher mos = new(string.Format("Select * From Win32_Process Where ParentProcessID={0}", process_id));
 
             foreach (ManagementObject mo in mos.Get())
             {
@@ -59,7 +59,7 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        public static void SuspendProcess(int pid)
+        private static void SuspendProcess(int pid)
         {
             var process = Process.GetProcessById(pid); // throws exception if process does not exist
 

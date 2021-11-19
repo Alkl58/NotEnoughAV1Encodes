@@ -31,7 +31,7 @@ namespace NotEnoughAV1Encodes
         [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern bool CloseHandle(IntPtr handle);
 
-        public static List<int> GetChildProcesses(int process_id)
+        private static List<int> GetChildProcesses(int process_id)
         {
             List<int> children = new List<int>();
 

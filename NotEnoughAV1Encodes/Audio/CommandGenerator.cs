@@ -1,18 +1,21 @@
 ﻿namespace NotEnoughAV1Encodes.Audio
 {
-    class CommandGenerator
+    internal class CommandGenerator
     {
         public string Generate(System.Windows.Controls.ItemCollection tracks)
         {
-            string audio_command = "";
-            int end_index = 0;
+            string audioCommand = "";
+            int endIndex = 0;
             bool copyaudio = false;
             bool noaudio = true;
 
             foreach (AudioTracks track in tracks)
             {
-                audio_command += MultipleTrackCommandGenerator(int.Parse(track.Bitrate), track.Index, end_index, track.Codec, track.Channels, track.Language, track.CustomName, track.PCM);
-                end_index += 1;
+                // Skip Audio Track if not active
+                if(track.Active == false) continue;
+
+                audioCommand += MultipleTrackCommandGenerator(int.Parse(track.Bitrate), track.Index, endIndex, track.Codec, track.Channels, track.Language, track.CustomName, track.PCM);
+                endIndex += 1;
 
                 if (track.Codec == 5)
                 {
@@ -24,65 +27,62 @@
 
             if (!copyaudio)
             {
-                audio_command += " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022' + " ";
+                audioCommand += " -af aformat=channel_layouts=" + '\u0022' + "7.1|5.1|stereo|mono" + '\u0022';
             }
 
-            return noaudio ? null : audio_command;
+            return noaudio ? null : audioCommand;
         }
 
-        private string SwitchCodec(int audio_codec, bool pcm_bluray)
+        private static string SwitchCodec(int _audioCodec, bool _pcmBluray)
         {
-            string audio_codec_switch = "";
-            switch (audio_codec)
+            string audioCodeSwitch = _audioCodec switch
             {
-                case 0: audio_codec_switch = "libopus"; break;
-                case 1: audio_codec_switch = "ac3"; break;
-                case 2: audio_codec_switch = "eac3"; break;
-                case 3: audio_codec_switch = "aac"; break;
-                case 4: audio_codec_switch = "libmp3lame"; break;
-                case 5:
-                    if (pcm_bluray) { audio_codec_switch = "pcm_s16le"; }
-                    else { audio_codec_switch = "copy"; }
-                    break;
-
-                default: break;
-            }
-            return audio_codec_switch;
+                0 => " libopus",
+                1 => " ac3",
+                2 => " eac3",
+                3 => " aac",
+                4 => " libmp3lame",
+                5 => _pcmBluray ? " pcm_s16le" : " copy",
+                _ => " ",
+            };
+            return audioCodeSwitch;
         }
 
-        private string audioCodecCommand = "";
-
-        private string MultipleTrackCommandGenerator(int activetrackbitrate, int map_index, int end_index, int activtrackcodec, int channellayout, string lang, string track_name, bool pcm_bluray)
+        private string MultipleTrackCommandGenerator(int _activeTrackBitrate, int _mapIndex, int _endIndex, int _activTrackCodec, int _channelLayout, string _language, string _trackName, bool _pcmBluray)
         {
-            // Command Builder for Audio
+            string audioCodecCommand;
             // Audio Mapping
-            audioCodecCommand = " -map 0:a:" + map_index + " -c:a:" + end_index + " ";
+            audioCodecCommand = " -map 0:a:" + _mapIndex + " -c:a:" + _endIndex;
             // Codec
-            audioCodecCommand += SwitchCodec(activtrackcodec, pcm_bluray);
-            // Channel Layout / Bitrate
-            if (activtrackcodec != 5) { audioCodecCommand += " -b:a:" + end_index + " " + activetrackbitrate + "k"; }
-            audioCodecCommand += " -ac:a:" + end_index + " " + SetChannelLayout(channellayout) + " ";
-            // Metadata
-            audioCodecCommand += " -metadata:s:a:" + end_index + " language=" + lang;
-            if (activtrackcodec != 5)
+            audioCodecCommand += SwitchCodec(_activTrackCodec, _pcmBluray);
+            // Bitrate
+            if (_activTrackCodec != 5)
             {
-                audioCodecCommand += " -metadata:s:a:" + end_index + " title=" + '\u0022' + track_name + '\u0022' + " ";
+                audioCodecCommand += " -b:a:" + _endIndex + " " + _activeTrackBitrate + "k";
+            }
+            // Channel Layout
+            audioCodecCommand += " -ac:a:" + _endIndex + " " + SetChannelLayout(_channelLayout);
+            // Metadata
+            audioCodecCommand += " -metadata:s:a:" + _endIndex + " language=" + _language;
+            // Title
+            if (_activTrackCodec != 5)
+            {
+                audioCodecCommand += " -metadata:s:a:" + _endIndex + " title=" + '\u0022' + _trackName + '\u0022';
             }
             return audioCodecCommand;
         }
 
-        private static string SetChannelLayout(int layout)
+        private static string SetChannelLayout(int _layout)
         {
-            string returnLayout;
-            switch (layout)
+            string _returnLayout = _layout switch
             {
-                case 0: returnLayout = "1"; break;
-                case 1: returnLayout = "2"; break;
-                case 2: returnLayout = "6"; break;
-                case 3: returnLayout = "8"; break;
-                default: returnLayout = "2"; break;
-            }
-            return returnLayout;
+                0 => "1",
+                1 => "2",
+                2 => "6",
+                3 => "8",
+                _ => "2",
+            };
+            return _returnLayout;
         }
     }
 }

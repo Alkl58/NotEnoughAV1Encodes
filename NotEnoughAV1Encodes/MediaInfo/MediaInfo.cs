@@ -117,10 +117,7 @@ namespace NotEnoughAV1Encodes
         public MediaInfo()
         {
             Handle = MediaInfo_New();
-            if (Environment.OSVersion.ToString().IndexOf("Windows") == -1)
-                MustUseAnsi = true;
-            else
-                MustUseAnsi = false;
+            MustUseAnsi = !Environment.OSVersion.ToString().Contains("Windows", StringComparison.CurrentCulture);
         }
 
         ~MediaInfo()
@@ -128,7 +125,7 @@ namespace NotEnoughAV1Encodes
             MediaInfo_Delete(Handle);
         }
 
-        public int Open(String FileName)
+        public int Open(string FileName)
         {
             if (MustUseAnsi)
             {
@@ -141,7 +138,7 @@ namespace NotEnoughAV1Encodes
                 return (int)MediaInfo_Open(Handle, FileName);
         }
 
-        public int Open_Buffer_Init(Int64 File_Size, Int64 File_Offset)
+        public int Open_Buffer_Init(long File_Size, long File_Offset)
         {
             return (int)MediaInfo_Open_Buffer_Init(Handle, File_Size, File_Offset);
         }
@@ -151,7 +148,7 @@ namespace NotEnoughAV1Encodes
             return (int)MediaInfo_Open_Buffer_Continue(Handle, Buffer, Buffer_Size);
         }
 
-        public Int64 Open_Buffer_Continue_GoTo_Get()
+        public long Open_Buffer_Continue_GoTo_Get()
         {
             return (int)MediaInfo_Open_Buffer_Continue_GoTo_Get(Handle);
         }
@@ -166,48 +163,50 @@ namespace NotEnoughAV1Encodes
             MediaInfo_Close(Handle);
         }
 
-        public String Inform()
+        public string Inform()
         {
-            if (MustUseAnsi)
-                return Marshal.PtrToStringAnsi(MediaInfoA_Inform(Handle, (IntPtr)0));
-            else
-                return Marshal.PtrToStringUni(MediaInfo_Inform(Handle, (IntPtr)0));
+            return MustUseAnsi
+                ? Marshal.PtrToStringAnsi(MediaInfoA_Inform(Handle, (IntPtr)0))
+                : Marshal.PtrToStringUni(MediaInfo_Inform(Handle, (IntPtr)0));
         }
 
-        public String Get(StreamKind StreamKind, int StreamNumber, String Parameter, InfoKind KindOfInfo, InfoKind KindOfSearch)
+        public string Get(StreamKind StreamKind, int StreamNumber, String Parameter, InfoKind KindOfInfo, InfoKind KindOfSearch)
         {
             if (MustUseAnsi)
             {
                 IntPtr Parameter_Ptr = Marshal.StringToHGlobalAnsi(Parameter);
-                String ToReturn = Marshal.PtrToStringAnsi(MediaInfoA_Get(Handle, (IntPtr)StreamKind, (IntPtr)StreamNumber, Parameter_Ptr, (IntPtr)KindOfInfo, (IntPtr)KindOfSearch));
+                string ToReturn = Marshal.PtrToStringAnsi(MediaInfoA_Get(Handle, (IntPtr)StreamKind, (IntPtr)StreamNumber, Parameter_Ptr, (IntPtr)KindOfInfo, (IntPtr)KindOfSearch));
                 Marshal.FreeHGlobal(Parameter_Ptr);
                 return ToReturn;
             }
             else
+            {
                 return Marshal.PtrToStringUni(MediaInfo_Get(Handle, (IntPtr)StreamKind, (IntPtr)StreamNumber, Parameter, (IntPtr)KindOfInfo, (IntPtr)KindOfSearch));
+            }
         }
 
-        public String Get(StreamKind StreamKind, int StreamNumber, int Parameter, InfoKind KindOfInfo)
+        public string Get(StreamKind StreamKind, int StreamNumber, int Parameter, InfoKind KindOfInfo)
         {
-            if (MustUseAnsi)
-                return Marshal.PtrToStringAnsi(MediaInfoA_GetI(Handle, (IntPtr)StreamKind, (IntPtr)StreamNumber, (IntPtr)Parameter, (IntPtr)KindOfInfo));
-            else
-                return Marshal.PtrToStringUni(MediaInfo_GetI(Handle, (IntPtr)StreamKind, (IntPtr)StreamNumber, (IntPtr)Parameter, (IntPtr)KindOfInfo));
+            return MustUseAnsi
+                ? Marshal.PtrToStringAnsi(MediaInfoA_GetI(Handle, (IntPtr)StreamKind, (IntPtr)StreamNumber, (IntPtr)Parameter, (IntPtr)KindOfInfo))
+                : Marshal.PtrToStringUni(MediaInfo_GetI(Handle, (IntPtr)StreamKind, (IntPtr)StreamNumber, (IntPtr)Parameter, (IntPtr)KindOfInfo));
         }
 
-        public String Option(String Option, String Value)
+        public string Option(string Option, string Value)
         {
             if (MustUseAnsi)
             {
                 IntPtr Option_Ptr = Marshal.StringToHGlobalAnsi(Option);
                 IntPtr Value_Ptr = Marshal.StringToHGlobalAnsi(Value);
-                String ToReturn = Marshal.PtrToStringAnsi(MediaInfoA_Option(Handle, Option_Ptr, Value_Ptr));
+                string ToReturn = Marshal.PtrToStringAnsi(MediaInfoA_Option(Handle, Option_Ptr, Value_Ptr));
                 Marshal.FreeHGlobal(Option_Ptr);
                 Marshal.FreeHGlobal(Value_Ptr);
                 return ToReturn;
             }
             else
+            {
                 return Marshal.PtrToStringUni(MediaInfo_Option(Handle, Option, Value));
+            }
         }
 
         public int State_Get()
@@ -220,23 +219,23 @@ namespace NotEnoughAV1Encodes
             return (int)MediaInfo_Count_Get(Handle, (IntPtr)StreamKind, (IntPtr)StreamNumber);
         }
 
-        private IntPtr Handle;
-        private bool MustUseAnsi;
+        private readonly IntPtr Handle;
+        private readonly bool MustUseAnsi;
 
         //Default values, if you know how to set default values in C#, say me
-        public String Get(StreamKind StreamKind, int StreamNumber, String Parameter, InfoKind KindOfInfo) { return Get(StreamKind, StreamNumber, Parameter, KindOfInfo, InfoKind.Name); }
+        public string Get(StreamKind StreamKind, int StreamNumber, string Parameter, InfoKind KindOfInfo) { return Get(StreamKind, StreamNumber, Parameter, KindOfInfo, InfoKind.Name); }
 
-        public String Get(StreamKind StreamKind, int StreamNumber, String Parameter)
+        public string Get(StreamKind StreamKind, int StreamNumber, string Parameter)
         {
             return Get(StreamKind, StreamNumber, Parameter, InfoKind.Text, InfoKind.Name);
         }
 
-        public String Get(StreamKind StreamKind, int StreamNumber, int Parameter)
+        public string Get(StreamKind StreamKind, int StreamNumber, int Parameter)
         {
             return Get(StreamKind, StreamNumber, Parameter, InfoKind.Text);
         }
 
-        public String Option(String Option_)
+        public string Option(string Option_)
         {
             return Option(Option_, "");
         }
@@ -288,7 +287,7 @@ namespace NotEnoughAV1Encodes
             MediaInfoList_Delete(Handle);
         }
 
-        public int Open(String FileName, InfoFileOptions Options)
+        public int Open(string FileName, InfoFileOptions Options)
         {
             return (int)MediaInfoList_Open(Handle, FileName, (IntPtr)Options);
         }
@@ -298,22 +297,22 @@ namespace NotEnoughAV1Encodes
             MediaInfoList_Close(Handle, (IntPtr)FilePos);
         }
 
-        public String Inform(int FilePos)
+        public string Inform(int FilePos)
         {
             return Marshal.PtrToStringUni(MediaInfoList_Inform(Handle, (IntPtr)FilePos, (IntPtr)0));
         }
 
-        public String Get(int FilePos, StreamKind StreamKind, int StreamNumber, String Parameter, InfoKind KindOfInfo, InfoKind KindOfSearch)
+        public string Get(int FilePos, StreamKind StreamKind, int StreamNumber, string Parameter, InfoKind KindOfInfo, InfoKind KindOfSearch)
         {
             return Marshal.PtrToStringUni(MediaInfoList_Get(Handle, (IntPtr)FilePos, (IntPtr)StreamKind, (IntPtr)StreamNumber, Parameter, (IntPtr)KindOfInfo, (IntPtr)KindOfSearch));
         }
 
-        public String Get(int FilePos, StreamKind StreamKind, int StreamNumber, int Parameter, InfoKind KindOfInfo)
+        public string Get(int FilePos, StreamKind StreamKind, int StreamNumber, int Parameter, InfoKind KindOfInfo)
         {
             return Marshal.PtrToStringUni(MediaInfoList_GetI(Handle, (IntPtr)FilePos, (IntPtr)StreamKind, (IntPtr)StreamNumber, (IntPtr)Parameter, (IntPtr)KindOfInfo));
         }
 
-        public String Option(String Option, String Value)
+        public string Option(string Option, string Value)
         {
             return Marshal.PtrToStringUni(MediaInfoList_Option(Handle, Option, Value));
         }
@@ -328,32 +327,32 @@ namespace NotEnoughAV1Encodes
             return (int)MediaInfoList_Count_Get(Handle, (IntPtr)FilePos, (IntPtr)StreamKind, (IntPtr)StreamNumber);
         }
 
-        private IntPtr Handle;
+        private readonly IntPtr Handle;
 
         //Default values, if you know how to set default values in C#, say me
-        public void Open(String FileName) { Open(FileName, 0); }
+        public void Open(string FileName) { Open(FileName, 0); }
 
         public void Close()
         {
             Close(-1);
         }
 
-        public String Get(int FilePos, StreamKind StreamKind, int StreamNumber, String Parameter, InfoKind KindOfInfo)
+        public string Get(int FilePos, StreamKind StreamKind, int StreamNumber, string Parameter, InfoKind KindOfInfo)
         {
             return Get(FilePos, StreamKind, StreamNumber, Parameter, KindOfInfo, InfoKind.Name);
         }
 
-        public String Get(int FilePos, StreamKind StreamKind, int StreamNumber, String Parameter)
+        public string Get(int FilePos, StreamKind StreamKind, int StreamNumber, string Parameter)
         {
             return Get(FilePos, StreamKind, StreamNumber, Parameter, InfoKind.Text, InfoKind.Name);
         }
 
-        public String Get(int FilePos, StreamKind StreamKind, int StreamNumber, int Parameter)
+        public string Get(int FilePos, StreamKind StreamKind, int StreamNumber, int Parameter)
         {
             return Get(FilePos, StreamKind, StreamNumber, Parameter, InfoKind.Text);
         }
 
-        public String Option(String Option_)
+        public string Option(string Option_)
         {
             return Option(Option_, "");
         }

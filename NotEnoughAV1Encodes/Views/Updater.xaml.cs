@@ -1,31 +1,32 @@
-﻿using ControlzEx.Theming;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Newtonsoft.Json;
 using Octokit;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Threading;
 
-namespace NotEnoughAV1Encodes
+namespace NotEnoughAV1Encodes.Views
 {
     public partial class Updater : MetroWindow
     {
         // NEAV1E Update
-        private static double Neav1eUpdateVersion = 0.0;
-
-        private static double Neav1eCurrentVersion = 1.9; // current neav1e version (hardcoded)
+        private string UpdateVersion = "0";
+        private string CurrentVersion = "2.0.0"; // current neav1e version (hardcoded)
 
         // FFmpeg Update
-        private static string FFmpegUpdateVersion;
+        public static string FFmpegUpdateVersion;
 
-        private static string FFmpegCurrentVersion;
+        public static string FFmpegCurrentVersion;
 
         // aomenc Update
         private static string AomencUpdateVersion;
@@ -50,12 +51,21 @@ namespace NotEnoughAV1Encodes
         public Updater(string baseTheme, string accentTheme)
         {
             InitializeComponent();
-            LabelCurrentProgramVersion.Content = Neav1eCurrentVersion;
+            LabelCurrentProgramVersion.Content = CurrentVersion;
             ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
+            LabelProgressBar.Content = "Downloading Version Lists...";
+            ProgressBar.IsIndeterminate = true;
+            ParseEverything();
+        }
+
+        private async void ParseEverything()
+        {
             ParseNEAV1EGithub();
-            ParseGyanFFmpeg();
-            ParseJeremyleeJSON();
+            await ParseGyanFFmpeg();
+            await ParseJeremyleeJSONAsync();
             CompareLocalVersion();
+            LabelProgressBar.Content = "";
+            ProgressBar.IsIndeterminate = false;
         }
 
         private void ToggleAllButtons(bool _toggle)
@@ -72,33 +82,53 @@ namespace NotEnoughAV1Encodes
             try
             {
                 //Parses the latest neav1e release date directly from Github
-                GitHubClient client = new GitHubClient(new ProductHeaderValue("NotEnoughAV1Encodes"));
-                System.Collections.Generic.IReadOnlyList<Release> releases = client.Repository.Release.GetAll("Alkl58", "NotEnoughAV1Encodes").Result;
+                GitHubClient client = new(new ProductHeaderValue("NotEnoughAV1Encodes"));
+                IReadOnlyList<Release> releases = client.Repository.Release.GetAll("Alkl58", "NotEnoughAV1Encodes").Result;
                 Release latest = releases[0];
-                Neav1eUpdateVersion = Convert.ToDouble(latest.TagName.Remove(0, 1).Replace(".", ","));
-                LabelUpdateProgramVersion.Content = Neav1eUpdateVersion;
+
+                string tmpUpdateVersion = latest.TagName.Remove(0, 1);
+                if(tmpUpdateVersion.Length == 3)
+                {
+                    // This is only for backwards compatibility
+                    tmpUpdateVersion += ".0";
+                }
+
+                LabelUpdateProgramVersion.Content = tmpUpdateVersion;
+                UpdateVersion = GetNumbers(tmpUpdateVersion);
+
                 // Compares NEAV1E Versions and sets the color of the labels
-                if (Neav1eUpdateVersion > Neav1eCurrentVersion)
+                if (int.Parse(GetNumbers(UpdateVersion)) > int.Parse(GetNumbers(CurrentVersion)))
                 {
                     LabelCurrentProgramVersion.Foreground = Brushes.Red;
                     LabelUpdateProgramVersion.Foreground = Brushes.Green;
                 }
-                else if (Neav1eUpdateVersion == Neav1eCurrentVersion)
+                else if (int.Parse(GetNumbers(UpdateVersion)) == int.Parse(GetNumbers(CurrentVersion)))
                 {
                     LabelCurrentProgramVersion.Foreground = Brushes.Green;
                     LabelUpdateProgramVersion.Foreground = Brushes.Green;
+                }
+                else if (int.Parse(GetNumbers(UpdateVersion)) < int.Parse(GetNumbers(CurrentVersion)))
+                {
+                    LabelCurrentProgramVersion.Foreground = Brushes.Green;
+                    LabelUpdateProgramVersion.Foreground = Brushes.Red;
                 }
             }
             catch { }
         }
 
-        private void ParseGyanFFmpeg()
+        private static string GetNumbers(string input)
+        {
+            return new string(input.Where(c => char.IsDigit(c)).ToArray());
+        }
+
+        private async Task ParseGyanFFmpeg()
         {
             try
             {
-                WebClient wc = new WebClient();
-                byte[] data = wc.DownloadData("https://www.gyan.dev/ffmpeg/builds/git-version");
-                string temp_date = Encoding.UTF8.GetString(data);
+                HttpClient wc = new();
+                HttpResponseMessage response = await wc.GetAsync("https://www.gyan.dev/ffmpeg/builds/git-version");
+                byte[] content = await response.Content.ReadAsByteArrayAsync();
+                string temp_date = Encoding.UTF8.GetString(content);
 
                 // Required to later have the correct path
                 Git_FFmpeg_Name = "ffmpeg-" + temp_date + "-full_build";
@@ -111,22 +141,24 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
 
-        private void ParseJeremyleeJSON()
+        private async Task ParseJeremyleeJSONAsync()
         {
             try
             {
-                string jsonWeb = new WebClient().DownloadString("https://jeremylee.sh/data/bin/packages.json");
+                HttpClient client = new();
+                HttpResponseMessage response = await client.GetAsync("https://jeremylee.sh/bins/manifest.json");
+                string jsonWeb = await response.Content.ReadAsStringAsync();
                 dynamic json = JsonConvert.DeserializeObject(jsonWeb);
 
-                string aomencVersion = json.apps["aomenc.exe"].datetime;
+                string aomencVersion = json.files["aomenc.exe"].datetime;
                 AomencUpdateVersion = aomencVersion.Replace("-", ".").Remove(aomencVersion.Length - 6);
                 LabelUpdateAomencVersion.Content = AomencUpdateVersion;
 
-                string rav1eVersion = json.apps["rav1e.exe"].datetime;
+                string rav1eVersion = json.files["rav1e.exe"].datetime;
                 Rav1eUpdateVersion = rav1eVersion.Replace("-", ".").Remove(rav1eVersion.Length - 6);
                 LabelUpdateRav1eVersion.Content = Rav1eUpdateVersion;
 
-                string svtav1Version = json.apps["SvtAv1EncApp.exe"].datetime;
+                string svtav1Version = json.files["SvtAv1EncApp.exe"].datetime;
                 SVTAV1UpdateVersion = svtav1Version.Replace("-", ".").Remove(svtav1Version.Length - 6);
                 LabelUpdateSVTAV1Version.Content = SVTAV1UpdateVersion;
             }
@@ -136,9 +168,9 @@ namespace NotEnoughAV1Encodes
         private void CompareLocalVersion()
         {
             // ffmpeg
-            if (File.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.txt")))
+            if (File.Exists(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.txt")))
             {
-                FFmpegCurrentVersion = File.ReadAllText(Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.txt"));
+                FFmpegCurrentVersion = File.ReadAllText(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.txt"));
                 LabelCurrentFFmpegVersion.Content = FFmpegCurrentVersion;
                 if (ParseDate(FFmpegCurrentVersion) < ParseDate(FFmpegUpdateVersion))
                 {
@@ -254,7 +286,12 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonUpdateProgram_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://github.com/Alkl58/NotEnoughAV1Encodes/releases");
+            ProcessStartInfo psi = new()
+            {
+                FileName = "https://github.com/Alkl58/NotEnoughAV1Encodes/releases",
+                UseShellExecute = true
+            };
+            Process.Start(psi);
         }
 
         private async void ButtonUpdateFFmpeg_Click(object sender, RoutedEventArgs e)
@@ -262,9 +299,9 @@ namespace NotEnoughAV1Encodes
             ToggleAllButtons(false);
 
             // Creates the ffmpeg folder if not existent
-            if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg")))
+            if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "FFmpeg")))
             {
-                Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "ffmpeg"));
+                Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "FFmpeg"));
             }
 
             // Downloads ffmpeg
@@ -273,22 +310,21 @@ namespace NotEnoughAV1Encodes
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg-git-full.7z")))
             {
                 // Extracts ffmpeg
-                ExtractFile(Path.Combine(CurrentDir, "Apps", "ffmpeg-git-full.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "ffmpeg"));
+                ExtractFile(Path.Combine(CurrentDir, "Apps", "ffmpeg-git-full.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"));
 
-                if (File.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg", Git_FFmpeg_Name, "bin", "ffmpeg.exe")))
+                if (File.Exists(Path.Combine(CurrentDir, "Apps", "FFmpeg", Git_FFmpeg_Name, "bin", "ffmpeg.exe")))
                 {
-                    if (File.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.exe")))
+                    if (File.Exists(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.exe")))
                     {
-                        File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.txt"));
-                        File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.exe"));
+                        File.Delete(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.exe"));
                     }
 
-                    File.Move(Path.Combine(CurrentDir, "Apps", "ffmpeg", Git_FFmpeg_Name, "bin", "ffmpeg.exe"), Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.exe"));
+                    File.Move(Path.Combine(CurrentDir, "Apps", "FFmpeg", Git_FFmpeg_Name, "bin", "ffmpeg.exe"), Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.exe"));
 
-                    File.WriteAllText(Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.txt"), FFmpegUpdateVersion);
+                    File.WriteAllText(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.txt"), FFmpegUpdateVersion);
 
                     File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg-git-full.7z"));
-                    Directory.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg", Git_FFmpeg_Name), true);
+                    Directory.Delete(Path.Combine(CurrentDir, "Apps", "FFmpeg", Git_FFmpeg_Name), true);
 
                     CompareLocalVersion();
                 }
@@ -307,7 +343,7 @@ namespace NotEnoughAV1Encodes
             if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "aomenc")))
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "aomenc"));
             // Downloads aomenc
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/aom.7z", Path.Combine(CurrentDir, "Apps", "aom.7z")));
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/aom.7z", Path.Combine(CurrentDir, "Apps", "aom.7z")));
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "aom.7z")))
             {
                 // Extracts aomenc
@@ -350,7 +386,7 @@ namespace NotEnoughAV1Encodes
             if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "rav1e")))
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "rav1e"));
             // Downloads rav1e
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/rav1e.7z", Path.Combine(CurrentDir, "Apps", "rav1e.7z")));
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/rav1e.7z", Path.Combine(CurrentDir, "Apps", "rav1e.7z")));
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "rav1e.7z")))
             {
                 // Extracts rav1e
@@ -358,12 +394,6 @@ namespace NotEnoughAV1Encodes
                 // Writes the version to file
                 if (File.Exists(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.exe")))
                 {
-                    // Deletes txt file
-                    if (File.Exists(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.txt")))
-                    {
-                        File.Delete(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.txt"));
-                    }
-
                     File.WriteAllText(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.txt"), Rav1eUpdateVersion);
                 }
                 // Deletes downloaded archive
@@ -390,7 +420,7 @@ namespace NotEnoughAV1Encodes
                 Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "svt-av1"));
             }
             // Downloads rav1e
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/data/bin/svt-av1.7z", Path.Combine(CurrentDir, "Apps", "svt-av1.7z")));
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/svt-av1.7z", Path.Combine(CurrentDir, "Apps", "svt-av1.7z")));
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1.7z")))
             {
                 // Extracts rav1e
@@ -430,7 +460,8 @@ namespace NotEnoughAV1Encodes
             // Downloads the archive provided in the Link
             try
             {
-                WebClient webClient = new WebClient();
+                HttpClient client = new();
+                WebClient webClient = new();
                 webClient.DownloadProgressChanged += (s, e) =>
                 {
                     ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = e.ProgressPercentage);
@@ -456,9 +487,10 @@ namespace NotEnoughAV1Encodes
             // change the path and give yours
             try
             {
-                ProcessStartInfo pro = new ProcessStartInfo
+                ProcessStartInfo pro = new()
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true,
                     FileName = zPath,
                     Arguments = "x \"" + source + "\" -aoa -o" + '\u0022' + destination + '\u0022'
                 };
