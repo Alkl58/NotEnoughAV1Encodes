@@ -127,38 +127,70 @@ namespace NotEnoughAV1Encodes.Video
                 Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking() => Path: " + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), queueElement.Output + ".log");
 
                 // Generate Command
-                string ffmpeg_command = "/C ffmpeg.exe";
-                ffmpeg_command += " -y -i " + '\u0022' + queueElement.VideoDB.InputPath + '\u0022';
-                ffmpeg_command += " -reset_timestamps 1 -map_metadata -1 -sn -an";
+                string ffmpegCommand = "/C ffmpeg.exe";
+                ffmpegCommand += " -y -i " + '\u0022' + queueElement.VideoDB.InputPath + '\u0022';
+
+                // Subtitle Input for Hardcoding
+                if(!string.IsNullOrEmpty(queueElement.SubtitleBurnCommand))
+                {
+                    // Filter not compatible with filter_complex
+                    if (string.IsNullOrEmpty(queueElement.FilterCommand))
+                    {
+                        if (queueElement.SubtitleBurnCommand.Contains("-filter_complex"))
+                        {
+                            ffmpegCommand += " -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Subtitles", "subs.mkv") + "\"";
+                        }
+                    }
+                }
+
+                ffmpegCommand += " -reset_timestamps 1 -map_metadata -1 -sn -an";
 
                 if (queueElement.ChunkingMethod == 0)
                 {
-                    ffmpeg_command += " -c:v libx264 -preset ultrafast -crf 0";
+                    ffmpegCommand += " -c:v libx264 -preset ultrafast -crf 0";
                 }
                 else if(queueElement.ChunkingMethod == 1)
                 {
-                    ffmpeg_command += " -c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -slicecrc 0 -slices 4";
+                    ffmpegCommand += " -c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -slicecrc 0 -slices 4";
                 }
                 else if (queueElement.ChunkingMethod == 2)
                 {
-                    ffmpeg_command += " -c:v utvideo";
+                    ffmpegCommand += " -c:v utvideo";
                 }
                 else if (queueElement.ChunkingMethod == 3)
                 {
-                    ffmpeg_command += " -c:v copy";
+                    ffmpegCommand += " -c:v copy";
                 }
 
                 if (queueElement.ChunkingMethod != 3)
                 {
-                    ffmpeg_command += " -sc_threshold 0 -g " + queueElement.ChunkLength.ToString();
-                    ffmpeg_command += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + queueElement.ChunkLength.ToString() + ")" + '\u0022';
-                    ffmpeg_command += queueElement.FilterCommand;
+                    ffmpegCommand += " -sc_threshold 0 -g " + queueElement.ChunkLength.ToString();
+                    ffmpegCommand += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + queueElement.ChunkLength.ToString() + ")" + '\u0022';
+                    ffmpegCommand += queueElement.FilterCommand;
+                    if (queueElement.SubtitleBurnCommand != null)
+                    {
+                        if (string.IsNullOrEmpty(queueElement.FilterCommand))
+                        {
+                            ffmpegCommand += queueElement.SubtitleBurnCommand;
+                        }
+                        else
+                        {
+                            // Don't want to mix filter_complex with vf
+                            if (!queueElement.SubtitleBurnCommand.Contains("-filter_complex"))
+                            {
+                                // Prevents using "-vf" two times
+                                ffmpegCommand += queueElement.SubtitleBurnCommand.Remove(0, 5);
+                            }
+                        }
+                       
+                    }
+                        
                 }
 
-                ffmpeg_command += " -segment_time " + queueElement.ChunkLength.ToString() + " -f segment \"";
-                ffmpeg_command += Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks", "split%6d.mkv") + "\"";
+                ffmpegCommand += " -segment_time " + queueElement.ChunkLength.ToString() + " -f segment \"";
+                ffmpegCommand += Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks", "split%6d.mkv") + "\"";
 
-                Global.Logger("INFO  - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Command: " + ffmpeg_command, queueElement.Output + ".log");
+                Global.Logger("INFO  - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Command: " + ffmpegCommand, queueElement.Output + ".log");
 
                 // Start Splitting
                 Process chunkingProcess = new();
@@ -170,7 +202,7 @@ namespace NotEnoughAV1Encodes.Video
                     RedirectStandardError = true,
                     CreateNoWindow = true,
                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                    Arguments = ffmpeg_command
+                    Arguments = ffmpegCommand
                 };
                 chunkingProcess.StartInfo = startInfo;
 

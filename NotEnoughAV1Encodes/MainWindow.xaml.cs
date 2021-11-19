@@ -248,12 +248,22 @@ namespace NotEnoughAV1Encodes
             Audio.CommandGenerator audioCommandGenerator = new();
             Subtitle.CommandGenerator subCommandGenerator = new();
 
+            // Generate a random identifier to avoid filesystem conflicts
+            const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            StringBuilder identifier = new();
+            Random RNG = new();
+            for (int i = 0; i < 15; i++)
+            {
+                identifier.Append(src[RNG.Next(0, src.Length)]);
+            }
+
+            queueElement.UniqueIdentifier = identifier.ToString();
             queueElement.Input = videoDB.InputPath;
             queueElement.Output = videoDB.OutputPath;
             queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
             queueElement.AudioCommand = audioCommandGenerator.Generate(ListBoxAudioTracks.Items);
             queueElement.SubtitleCommand = subCommandGenerator.GenerateSoftsub(ListBoxSubtitleTracks.Items);
-            queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(ListBoxSubtitleTracks.Items);
+            queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(ListBoxSubtitleTracks.Items, identifier.ToString());
             queueElement.FilterCommand = GenerateVideoFilters();
             queueElement.FrameCount = videoDB.MIFrameCount;
             queueElement.EncodingMethod = ComboBoxVideoEncoder.SelectedIndex;
@@ -276,17 +286,6 @@ namespace NotEnoughAV1Encodes
             {
                 queueElement.FrameCount += queueElement.FrameCount;
             }
-
-            // Generate a random identifier to avoid filesystem conflicts
-            const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            StringBuilder identifier = new();
-            Random RNG = new();
-            for (int i = 0; i < 15; i++)
-            {
-                identifier.Append(src[RNG.Next(0, src.Length)]);
-            }
-
-            queueElement.UniqueIdentifier = identifier.ToString();
 
             // Add to Queue
             ListBoxQueue.Items.Add(queueElement);
@@ -1305,7 +1304,11 @@ namespace NotEnoughAV1Encodes
                         Video.VideoEncode videoEncoder = new();
                         Video.VideoMuxer videoMuxer = new();
 
+                        // Get Framecount
                         await Task.Run(() => queueElement.GetFrameCount());
+
+                        // Subtitle Extraction
+                        await Task.Run(() => extractSubtitles.Extract(queueElement, _cancelToken), _cancelToken);
 
                         List<string> VideoChunks = new();
 
@@ -1349,9 +1352,6 @@ namespace NotEnoughAV1Encodes
                         {
                             // Audio Encoding
                             await Task.Run(() => encodeAudio.Encode(queueElement, _cancelToken), _cancelToken);
-
-                            // Subtitle Extraction
-                            await Task.Run(() => extractSubtitles.Extract(queueElement, _cancelToken), _cancelToken);
 
                             // Extract VFR Timestamps
                             await Task.Run(() => queueElement.GetVFRTimeStamps(), _cancelToken);

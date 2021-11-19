@@ -125,6 +125,14 @@ namespace NotEnoughAV1Encodes.Video
                         }
                         catch { }
 
+                        bool pictureBased = false;
+                        try
+                        {
+                            string format = mediaInfo.Get(StreamKind.Text, i, "Format");
+                            if (format == "PGS" || format == "VobSub") { pictureBased = true; }
+                        }
+                        catch { }
+
                         SubtitleTracks.Add(new Subtitle.SubtitleTracks()
                         {
                             Active = true,
@@ -133,7 +141,8 @@ namespace NotEnoughAV1Encodes.Video
                             Language = lang,
                             CustomName = name,
                             Default = false,
-                            BurnIn = false
+                            BurnIn = false,
+                            PictureBased = pictureBased
                         });
                     }
                 }

@@ -11,5 +11,6 @@ namespace NotEnoughAV1Encodes.Subtitle
         public string CustomName { get; set; }
         public bool Default { get; set; }
         public bool BurnIn { get; set; }
+        public bool PictureBased { get; set; }
     }
 }
