@@ -99,6 +99,7 @@ namespace NotEnoughAV1Encodes
         #region Buttons
         private void ButtonCancelEncode_Click(object sender, RoutedEventArgs e)
         {
+            if (cancellationTokenSource == null) return;
             cancellationTokenSource.Cancel();
             ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
         }
