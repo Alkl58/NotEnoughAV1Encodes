@@ -226,6 +226,38 @@ namespace NotEnoughAV1Encodes
                         Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 6));
                     }
                 }
+                else if(openSource.ProjectFile)
+                {
+                    // Project File Input
+                    try
+                    {
+                        string file = openSource.Path;
+                        Queue.QueueElement queueElement = JsonConvert.DeserializeObject<Queue.QueueElement>(File.ReadAllText(file));
+
+                        PresetSettings = queueElement.Preset;
+                        DataContext = PresetSettings;
+                        videoDB = queueElement.VideoDB;
+                        ListBoxAudioTracks.Items.Clear();
+                        ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                        ListBoxSubtitleTracks.Items.Clear();
+                        ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+                        LabelVideoSource.Content = videoDB.InputPath;
+                        LabelVideoDestination.Content = videoDB.OutputPath;
+                        LabelVideoLength.Content = videoDB.MIDuration;
+                        LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
+                        LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
+
+                        ComboBoxChunkingMethod.SelectedIndex = queueElement.ChunkingMethod;
+                        ComboBoxReencodeMethod.SelectedIndex = queueElement.ReencodeMethod;
+                        CheckBoxTwoPassEncoding.IsOn = queueElement.Passes == 2;
+                        TextBoxChunkLength.Text = queueElement.ChunkLength.ToString();
+                        TextBoxPySceneDetectThreshold.Text = queueElement.PySceneDetectThreshold.ToString();
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
                 else
                 {
                     // Single File Input

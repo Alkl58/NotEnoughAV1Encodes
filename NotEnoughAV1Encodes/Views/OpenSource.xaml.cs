@@ -12,6 +12,7 @@ namespace NotEnoughAV1Encodes.Views
         public string Path { get; set; }
         public bool Quit { get; set; }
         public bool BatchFolder { get; set; }
+        public bool ProjectFile { get; set; }
 
         public OpenSource(string theme)
         {
@@ -29,6 +30,7 @@ namespace NotEnoughAV1Encodes.Views
             {
                 Path = openVideoFileDialog.FileName;
                 BatchFolder = false;
+                ProjectFile = false;
                 Quit = true;
                 Close();
             }
@@ -37,12 +39,29 @@ namespace NotEnoughAV1Encodes.Views
         private void ButtonOpenBatchFolder_Click(object sender, RoutedEventArgs e)
         {
             // Folder Input
-            System.Windows.Forms.FolderBrowserDialog openFileDlg = new();
-            var result = openFileDlg.ShowDialog();
+            System.Windows.Forms.FolderBrowserDialog openFolderDialog = new();
+            var result = openFolderDialog.ShowDialog();
             if (result.ToString() != string.Empty)
             {
-                Path = openFileDlg.SelectedPath;
+                Path = openFolderDialog.SelectedPath;
                 BatchFolder = true;
+                ProjectFile = false;
+                Quit = true;
+                Close();
+            }
+        }
+
+        private void ButtonOpenProjectFile_Click(object sender, RoutedEventArgs e)
+        {
+            // Project File Input
+            OpenFileDialog openFileDialog = new();
+            openFileDialog.Filter = "JSON File|*.json;";
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                Path = openFileDialog.FileName;
+                BatchFolder = false;
+                ProjectFile = true;
                 Quit = true;
                 Close();
             }
