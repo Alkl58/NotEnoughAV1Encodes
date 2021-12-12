@@ -19,6 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="resources\img\folder.png" />
     <None Remove="resources\img\neav1e.ico" />
     <None Remove="resources\img\pause.png" />
     <None Remove="resources\img\queue.png" />
@@ -38,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="resources\img\folder.png" />
     <Resource Include="resources\img\neav1e.ico" />
     <Resource Include="resources\img\pause.png" />
     <Resource Include="resources\img\queue.png" />

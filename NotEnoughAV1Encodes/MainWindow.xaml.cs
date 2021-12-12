@@ -139,35 +139,126 @@ namespace NotEnoughAV1Encodes
             openSource.ShowDialog();
             if (openSource.Quit)
             {
-                videoDB.InputPath = openSource.Path;
-                videoDB.ParseMediaInfo();
-                ListBoxAudioTracks.Items.Clear();
-                ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                ListBoxSubtitleTracks.Items.Clear();
-                ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
-                LabelVideoSource.Content = videoDB.InputPath;
-                LabelVideoLength.Content = videoDB.MIDuration;
-                LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
-                LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
-                string vfr = "";
-                if (videoDB.MIIsVFR)
+                if (openSource.BatchFolder)
                 {
-                    vfr = " (VFR)";
-                    if (Path.GetExtension(videoDB.InputPath) is ".mkv" or ".MKV")
+                    // Check if Presets exist
+                    if(ComboBoxPresets.Items.Count == 0)
                     {
-                        CheckBoxVideoVFR.IsEnabled = true;
-                        CheckBoxVideoVFR.IsChecked = true;
+                        MessageBox.Show("Please create a Preset before adding batch files.");
+                        return;
                     }
-                    else
+
+                    // Batch Folder Input
+                    Views.BatchFolderDialog batchFolderDialog = new(settingsDB.Theme, openSource.Path);
+                    batchFolderDialog.ShowDialog();
+                    if (batchFolderDialog.Quit)
                     {
-                        // VFR Video only currently supported in .mkv container
-                        // Reasoning is, that splitting a VFR MP4 Video to MKV Chunks will result in ffmpeg making it CFR
-                        // Additionally Copying the MP4 Video to a MKV Video will result in the same behavior, leading to incorrect extracted timestamps
-                        CheckBoxVideoVFR.IsChecked = false;
-                        CheckBoxVideoVFR.IsEnabled = false;
+                        List<string> files =  batchFolderDialog.Files;
+                        string preset = batchFolderDialog.Preset;
+                        string output = batchFolderDialog.Output;
+                        int container = batchFolderDialog.Container;
+
+                        string outputContainer = "";
+                        if (container == 0) outputContainer = ".mkv";
+                        else if (container == 1) outputContainer = ".webm";
+                        else if (container == 2) outputContainer = ".mp4";
+
+                        const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                        try
+                        {
+                            foreach (string file in files)
+                            {
+                                // Generate a random identifier to avoid filesystem conflicts
+                                StringBuilder identifier = new();
+                                Random RNG = new();
+                                for (int i = 0; i < 15; i++)
+                                {
+                                    identifier.Append(src[RNG.Next(0, src.Length)]);
+                                }
+
+                                // Load Preset
+                                PresetSettings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", preset + ".json")));
+                                DataContext = PresetSettings;
+
+                                // Create video object
+                                videoDB = new();
+                                videoDB.InputPath = file;
+                                videoDB.OutputPath = Path.Combine(output, Path.GetFileNameWithoutExtension(file) + identifier.ToString() + outputContainer);
+                                videoDB.ParseMediaInfo();
+                                try
+                                {
+                                    ListBoxAudioTracks.ItemsSource = null;
+                                    ListBoxAudioTracks.Items.Clear();
+                                }
+                                catch { }
+                                ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                                try
+                                {
+                                    ListBoxSubtitleTracks.ItemsSource = null;
+                                    ListBoxSubtitleTracks.Items.Clear();
+                                }
+                                catch { }
+                                ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+
+                                // Automatically toggle VFR Support, if source is MKV
+                                if (videoDB.MIIsVFR && Path.GetExtension(videoDB.InputPath) is ".mkv" or ".MKV")
+                                {
+                                    CheckBoxVideoVFR.IsEnabled = true;
+                                    CheckBoxVideoVFR.IsChecked = true;
+                                }
+                                else
+                                {
+                                    CheckBoxVideoVFR.IsChecked = false;
+                                    CheckBoxVideoVFR.IsEnabled = false;
+                                }
+
+                                // Skip Subtitles if Container is not MKV to avoid conflicts
+                                bool skipSubs = container != 0;
+
+                                AddToQueue(identifier.ToString(), skipSubs);
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
+                        Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 6));
                     }
                 }
-                LabelVideoFramerate.Content = videoDB.MIFramerate + vfr;
+                else
+                {
+                    // Single File Input
+                    videoDB.InputPath = openSource.Path;
+                    videoDB.ParseMediaInfo();
+                    ListBoxAudioTracks.Items.Clear();
+                    ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                    ListBoxSubtitleTracks.Items.Clear();
+                    ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+                    LabelVideoSource.Content = videoDB.InputPath;
+                    LabelVideoLength.Content = videoDB.MIDuration;
+                    LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
+                    LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
+                    string vfr = "";
+                    if (videoDB.MIIsVFR)
+                    {
+                        vfr = " (VFR)";
+                        if (Path.GetExtension(videoDB.InputPath) is ".mkv" or ".MKV")
+                        {
+                            CheckBoxVideoVFR.IsEnabled = true;
+                            CheckBoxVideoVFR.IsChecked = true;
+                        }
+                        else
+                        {
+                            // VFR Video only currently supported in .mkv container
+                            // Reasoning is, that splitting a VFR MP4 Video to MKV Chunks will result in ffmpeg making it CFR
+                            // Additionally Copying the MP4 Video to a MKV Video will result in the same behavior, leading to incorrect extracted timestamps
+                            CheckBoxVideoVFR.IsChecked = false;
+                            CheckBoxVideoVFR.IsEnabled = false;
+                        }
+                    }
+                    LabelVideoFramerate.Content = videoDB.MIFramerate + vfr;
+                }
             }
         }
 
@@ -233,22 +324,6 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonAddToQueue_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(videoDB.InputPath))
-            {
-                // Throw Error
-                return;
-            }
-
-            if (string.IsNullOrEmpty(videoDB.OutputPath))
-            {
-                // Throw Error
-                return;
-            }
-
-            Queue.QueueElement queueElement = new();
-            Audio.CommandGenerator audioCommandGenerator = new();
-            Subtitle.CommandGenerator subCommandGenerator = new();
-
             // Generate a random identifier to avoid filesystem conflicts
             const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             StringBuilder identifier = new();
@@ -257,45 +332,7 @@ namespace NotEnoughAV1Encodes
             {
                 identifier.Append(src[RNG.Next(0, src.Length)]);
             }
-
-            queueElement.UniqueIdentifier = identifier.ToString();
-            queueElement.Input = videoDB.InputPath;
-            queueElement.Output = videoDB.OutputPath;
-            queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
-            queueElement.AudioCommand = audioCommandGenerator.Generate(ListBoxAudioTracks.Items);
-            queueElement.SubtitleCommand = subCommandGenerator.GenerateSoftsub(ListBoxSubtitleTracks.Items);
-            queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(ListBoxSubtitleTracks.Items, identifier.ToString());
-            queueElement.FilterCommand = GenerateVideoFilters();
-            queueElement.FrameCount = videoDB.MIFrameCount;
-            queueElement.EncodingMethod = ComboBoxVideoEncoder.SelectedIndex;
-            queueElement.ChunkingMethod = ComboBoxChunkingMethod.SelectedIndex;
-            queueElement.ReencodeMethod = ComboBoxReencodeMethod.SelectedIndex;
-            queueElement.Passes = CheckBoxTwoPassEncoding.IsOn ? 2 : 1;
-            queueElement.ChunkLength = int.Parse(TextBoxChunkLength.Text);
-            queueElement.PySceneDetectThreshold = float.Parse(TextBoxPySceneDetectThreshold.Text);
-            queueElement.VFR = CheckBoxVideoVFR.IsChecked == true;
-            queueElement.Preset = PresetSettings;
-            queueElement.VideoDB = videoDB;
-
-            // Double the framecount for two pass encoding
-            if (queueElement.Passes == 2)
-            {
-                queueElement.FrameCount = videoDB.MIFrameCount + videoDB.MIFrameCount;
-            }
-
-            if(ToggleSwitchFilterDeinterlace.IsOn && ComboBoxFiltersDeinterlace.SelectedIndex is 1 or 2)
-            {
-                queueElement.FrameCount += queueElement.FrameCount;
-            }
-
-            // Add to Queue
-            ListBoxQueue.Items.Add(queueElement);
-
-            Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E", "Queue"));
-
-            // Save as JSON
-            File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.InputFileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
-
+            AddToQueue(identifier.ToString(), false);
             Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 6));
         }
 
@@ -329,6 +366,7 @@ namespace NotEnoughAV1Encodes
             catch { }
 
         }
+
         private void ButtonEditSelectedItem_Click(object sender, RoutedEventArgs e)
         {
             if (ListBoxQueue.SelectedItem != null)
@@ -636,6 +674,63 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
 
+        private void AddToQueue(string identifier, bool skipSubs)
+        {
+            if (string.IsNullOrEmpty(videoDB.InputPath))
+            {
+                // Throw Error
+                return;
+            }
+
+            if (string.IsNullOrEmpty(videoDB.OutputPath))
+            {
+                // Throw Error
+                return;
+            }
+
+            Queue.QueueElement queueElement = new();
+            Audio.CommandGenerator audioCommandGenerator = new();
+            Subtitle.CommandGenerator subCommandGenerator = new();
+
+            queueElement.UniqueIdentifier = identifier;
+            queueElement.Input = videoDB.InputPath;
+            queueElement.Output = videoDB.OutputPath;
+            queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
+            queueElement.AudioCommand = audioCommandGenerator.Generate(ListBoxAudioTracks.Items);
+            queueElement.SubtitleCommand = skipSubs ? null : subCommandGenerator.GenerateSoftsub(ListBoxSubtitleTracks.Items);
+            queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(ListBoxSubtitleTracks.Items, identifier);
+            queueElement.FilterCommand = GenerateVideoFilters();
+            queueElement.FrameCount = videoDB.MIFrameCount;
+            queueElement.EncodingMethod = ComboBoxVideoEncoder.SelectedIndex;
+            queueElement.ChunkingMethod = ComboBoxChunkingMethod.SelectedIndex;
+            queueElement.ReencodeMethod = ComboBoxReencodeMethod.SelectedIndex;
+            queueElement.Passes = CheckBoxTwoPassEncoding.IsOn ? 2 : 1;
+            queueElement.ChunkLength = int.Parse(TextBoxChunkLength.Text);
+            queueElement.PySceneDetectThreshold = float.Parse(TextBoxPySceneDetectThreshold.Text);
+            queueElement.VFR = CheckBoxVideoVFR.IsChecked == true;
+            queueElement.Preset = PresetSettings;
+            queueElement.VideoDB = videoDB;
+
+            // Double the framecount for two pass encoding
+            if (queueElement.Passes == 2)
+            {
+                queueElement.FrameCount = videoDB.MIFrameCount + videoDB.MIFrameCount;
+            }
+
+            if (ToggleSwitchFilterDeinterlace.IsOn && ComboBoxFiltersDeinterlace.SelectedIndex is 1 or 2)
+            {
+                queueElement.FrameCount += queueElement.FrameCount;
+            }
+
+            // Add to Queue
+            ListBoxQueue.Items.Add(queueElement);
+
+            Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E", "Queue"));
+
+            // Save as JSON
+            File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.InputFileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
+        }
+
         private void Shutdown()
         {
             if (settingsDB.ShutdownAfterEncode)
@@ -643,6 +738,7 @@ namespace NotEnoughAV1Encodes
                 Process.Start("shutdown.exe", "/s /t 0");
             }
         }
+
         private void DeleteTempFiles(Queue.QueueElement queueElement)
         {
             if (settingsDB.DeleteTempFiles)

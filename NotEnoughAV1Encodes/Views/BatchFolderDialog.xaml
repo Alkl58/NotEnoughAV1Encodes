@@ -1,0 +1,55 @@
+﻿<mah:MetroWindow x:Class="NotEnoughAV1Encodes.Views.BatchFolderDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NotEnoughAV1Encodes.Views"
+        mc:Ignorable="d"
+        Title="NEAV1E" Height="495" Width="800" ResizeMode="NoResize">
+    <Grid>
+        <GroupBox Header="{DynamicResource source}" Margin="10,10,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="236" VerticalAlignment="Top">
+            <Grid>
+                <ListBox x:Name="ListBoxVideoItems" />
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="{DynamicResource destination}" Margin="10,246,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="84" VerticalAlignment="Top">
+            <Grid>
+                <Button x:Name="ButtonSelectDestination" HorizontalAlignment="Left" Margin="724,0,0,0" VerticalAlignment="Center" Click="ButtonSelectDestination_Click">
+                    <Image Height="19" Width="21" Source="/resources/img/folder.png"/>
+                </Button>
+                <TextBox x:Name="TextBoxDestination" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{DynamicResource noDestination}" VerticalAlignment="Center" Width="719" IsReadOnly="True"/>
+
+            </Grid>
+        </GroupBox>
+        <Button x:Name="ButtonAddToQueue" Margin="0,0,10,10" Click="ButtonAddToQueue_Click" HorizontalAlignment="Right" Width="130" Height="43" VerticalAlignment="Bottom">
+            <Canvas Height="30" Width="120">
+                <Image x:Name="ImageStartStop2" Height="38" Canvas.Top="-4" Width="37" Source="/resources/img/queue.png"/>
+                <Label Content="{DynamicResource addToQueue}" Canvas.Left="32" Width="103" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="12" FontWeight="Normal"/>
+            </Canvas>
+        </Button>
+        <Button x:Name="ButtonCancel" Margin="0,0,145,10" Click="ButtonCancelEncode_Click"  HorizontalAlignment="Right" Width="110" Height="43" VerticalAlignment="Bottom">
+            <Canvas Height="30" Width="102">
+                <Label Content="{DynamicResource cancel}" Canvas.Left="38" Width="64" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14" FontWeight="Normal"/>
+                <Image Height="38" Canvas.Top="-4" Width="38" Source="/resources/img/stop.png"/>
+            </Canvas>
+        </Button>
+        <GroupBox Header="{DynamicResource preset}" Margin="10,330,400,0" Height="76" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid>
+                <Label Grid.Column="0" Content="{DynamicResource selectPreset}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <ComboBox x:Name="ComboBoxPresets" Height="28" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200" Margin="167,0,0,0"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="{DynamicResource videoContainer}" Margin="400,330,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="76" VerticalAlignment="Top">
+            <Grid>
+                <ComboBox x:Name="ComboBoxContainer" HorizontalAlignment="Left" Height="28" VerticalAlignment="Center" Width="120" Margin="70,0,0,0">
+                    <ComboBoxItem Content="MKV (Matroska)" IsSelected="True"/>
+                    <ComboBoxItem Content="WEBM"/>
+                    <ComboBoxItem Content="MP4"/>
+                </ComboBox>
+                <Label Grid.Column="0" Content="{DynamicResource container}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            </Grid>
+        </GroupBox>
+    </Grid>
+</mah:MetroWindow>

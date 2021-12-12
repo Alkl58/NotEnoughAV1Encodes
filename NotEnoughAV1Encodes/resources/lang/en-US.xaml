@@ -33,7 +33,7 @@
     <system:String x:Key="save">Save</system:String>
     <system:String x:Key="delete">Delete</system:String>
     <system:String x:Key="default">Default:</system:String>
-    <system:String x:Key="preset">Preset:</system:String>
+    <system:String x:Key="preset">Preset</system:String>
     <system:String x:Key="workerssAndSplitting">Workers and Splitting</system:String>
     <system:String x:Key="workerCount">Worker Count:</system:String>
     <system:String x:Key="splittingMethod">Splitting Method:</system:String>
@@ -98,5 +98,10 @@
     <system:String x:Key="deinterlace">Deinterlace</system:String>
     <system:String x:Key="rotate">Rotate</system:String>
     <system:String x:Key="rotateClockwise">Rotate (Clockwise)</system:String>
+    
+    <!-- Batch Add Folder Window -->
+    <system:String x:Key="selectPreset">Select Preset for Encoding</system:String>
+    <system:String x:Key="videoContainer">Video Container</system:String>
+    <system:String x:Key="container">Container</system:String>
 
 </ResourceDictionary>
