@@ -10,7 +10,17 @@
     <Grid>
         <GroupBox Header="{DynamicResource source}" Margin="10,10,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="236" VerticalAlignment="Top">
             <Grid>
-                <ListBox x:Name="ListBoxVideoItems" />
+                <ListBox x:Name="ListBoxVideoItems" >
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem x:Name="QueueMenuItemDelete" Header="{DynamicResource delete}" Click="QueueMenuItemDelete_Click">
+                                <MenuItem.Icon>
+                                    <Image Source="/resources/img/stop.png" Height="20" Width="20"></Image>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
             </Grid>
         </GroupBox>
         <GroupBox Header="{DynamicResource destination}" Margin="10,246,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="84" VerticalAlignment="Top">

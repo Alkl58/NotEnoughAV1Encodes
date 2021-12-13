@@ -59,6 +59,12 @@ namespace NotEnoughAV1Encodes.Views
             }
         }
 
+        private void QueueMenuItemDelete_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (ListBoxVideoItems.SelectedItem == null) return;
+            ListBoxVideoItems.Items.Remove(ListBoxVideoItems.SelectedItem);
+        }
+
         private void ButtonAddToQueue_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             foreach(string files in ListBoxVideoItems.Items) Files.Add(files);
