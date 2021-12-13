@@ -457,6 +457,21 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
+
+        private void ListBoxQueue_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (ListBoxQueue.SelectedItem == null) return;
+            if (e.Key == Key.Delete)
+            {
+                Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
+                ListBoxQueue.Items.Remove(ListBoxQueue.SelectedItem);
+                try
+                {
+                    File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", tmp.VideoDB.InputFileName + "_" + tmp.UniqueIdentifier + ".json"));
+                }
+                catch { }
+            }
+        }
         #endregion
 
         #region UI Functions
