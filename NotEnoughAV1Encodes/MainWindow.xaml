@@ -901,6 +901,25 @@
                                             <Setter Property="Background" Value="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"></Setter>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem x:Name="QueueMenuItemDelete" Header="{DynamicResource delete}" Click="ButtonRemoveSelectedQueueItem_Click">
+                                                <MenuItem.Icon>
+                                                    <Image Source="resources/img/stop.png" Height="20" Width="20"></Image>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem x:Name="QueueMenuItemEdit" Header="{DynamicResource edit}" Click="ButtonEditSelectedItem_Click">
+                                                <MenuItem.Icon>
+                                                    <Image Source="resources/img/settings.png" Height="20" Width="20"></Image>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem x:Name="QueueMenuItemSave" Header="{DynamicResource save}" Click="QueueMenuItemSave_Click">
+                                                <MenuItem.Icon>
+                                                    <Image Source="resources/img/save.png" Height="20" Width="20"></Image>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>

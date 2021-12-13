@@ -431,6 +431,30 @@ namespace NotEnoughAV1Encodes
                 catch { }
 
                 ListBoxQueue.Items.Remove(ListBoxQueue.SelectedItem);
+
+                Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 0));
+            }
+        }
+
+        private void QueueMenuItemSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListBoxQueue.SelectedItem != null)
+            {
+                try
+                {
+                    Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
+                    SaveFileDialog saveVideoFileDialog = new();
+                    saveVideoFileDialog.AddExtension = true;
+                    saveVideoFileDialog.Filter = "JSON File|*.json";
+                    if (saveVideoFileDialog.ShowDialog() == true)
+                    {
+                        File.WriteAllText(saveVideoFileDialog.FileName, JsonConvert.SerializeObject(tmp, Formatting.Indented));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
         #endregion
