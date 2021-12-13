@@ -59,6 +59,15 @@ namespace NotEnoughAV1Encodes.Views
             }
         }
 
+        private void ListBoxVideoItems_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (ListBoxVideoItems.SelectedItem == null) return;
+            if (e.Key == System.Windows.Input.Key.Delete)
+            {
+                ListBoxVideoItems.Items.Remove(ListBoxVideoItems.SelectedItem);
+            }
+        }
+
         private void QueueMenuItemDelete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (ListBoxVideoItems.SelectedItem == null) return;

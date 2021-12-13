@@ -10,7 +10,7 @@
     <Grid>
         <GroupBox Header="{DynamicResource source}" Margin="10,10,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="236" VerticalAlignment="Top">
             <Grid>
-                <ListBox x:Name="ListBoxVideoItems" >
+                <ListBox x:Name="ListBoxVideoItems" KeyDown="ListBoxVideoItems_KeyDown" >
                     <ListBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem x:Name="QueueMenuItemDelete" Header="{DynamicResource delete}" Click="QueueMenuItemDelete_Click">
