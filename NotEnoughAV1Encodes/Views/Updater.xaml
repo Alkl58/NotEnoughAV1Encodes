@@ -6,35 +6,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes.Views"
         mc:Ignorable="d"
-        Title="Updater" Height="305" Width="550" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Updater" Height="340" Width="550" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Button x:Name="ButtonUpdateProgram" Content="Update Program" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateProgram_Click" />
+        <Button x:Name="ButtonUpdateProgram" Content="Update Program" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateProgram_Click" mah:ControlsHelper.ContentCharacterCasing="Normal" />
         <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,39,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center" />
         <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,39,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center" />
         <Label x:Name="LabelCurrentProgramVersion" Content="" HorizontalAlignment="Left" Margin="241,39,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center" />
         <Label x:Name="LabelUpdateProgramVersion" Content="" HorizontalAlignment="Left" Margin="439,39,0,0" VerticalAlignment="Top" Width="58" Height="34" VerticalContentAlignment="Center" />
-        <Button x:Name="ButtonUpdateFFmpeg" Content="Update FFmpeg" HorizontalAlignment="Left" Margin="10,78,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateFFmpeg_Click" />
+        <Button x:Name="ButtonUpdateFFmpeg" Content="Update FFmpeg" HorizontalAlignment="Left" Margin="10,78,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateFFmpeg_Click" mah:ControlsHelper.ContentCharacterCasing="Normal" />
         <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,78,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center" />
         <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,78,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center" />
         <Label x:Name="LabelCurrentFFmpegVersion" Content="" HorizontalAlignment="Left" Margin="241,78,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center" />
         <Label x:Name="LabelUpdateFFmpegVersion" Content="" HorizontalAlignment="Left" Margin="439,78,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center" />
-        <Button x:Name="ButtonUpdateAomenc" Content="Update aomenc" HorizontalAlignment="Left" Margin="10,117,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateAomenc_Click" />
+        <Button x:Name="ButtonUpdateAomenc" Content="Update aomenc" HorizontalAlignment="Left" Margin="10,117,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateAomenc_Click" mah:ControlsHelper.ContentCharacterCasing="Normal" />
         <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,117,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center" />
         <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,117,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center" />
         <Label x:Name="LabelCurrentAomencVersion" Content="" HorizontalAlignment="Left" Margin="241,117,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center" />
         <Label x:Name="LabelUpdateAomencVersion" Content="" HorizontalAlignment="Left" Margin="439,117,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center" />
-        <Button x:Name="ButtonUpdateRav1e" Content="Update rav1e" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateRav1e_Click" />
+        <Button x:Name="ButtonUpdateRav1e" Content="Update rav1e" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateRav1e_Click" mah:ControlsHelper.ContentCharacterCasing="Normal" />
         <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,156,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center" />
         <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,156,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center" />
         <Label x:Name="LabelCurrentRav1eVersion" Content="" HorizontalAlignment="Left" Margin="241,156,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center" />
         <Label x:Name="LabelUpdateRav1eVersion" Content="" HorizontalAlignment="Left" Margin="439,156,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center" />
-        <Button x:Name="ButtonUpdateSVTAV1" Content="Update SVT-AV1" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateSVTAV1_Click" />
+        <Button x:Name="ButtonUpdateSVTAV1" Content="Update SVT-AV1" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateSVTAV1_Click" mah:ControlsHelper.ContentCharacterCasing="Normal" />
         <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,195,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center" />
         <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,195,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center" />
         <Label x:Name="LabelCurrentSVTAV1Version" Content="" HorizontalAlignment="Left" Margin="241,195,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center" />
         <Label x:Name="LabelUpdateSVTAV1Version" Content="" HorizontalAlignment="Left" Margin="439,195,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center" />
-        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="30" Margin="10,236,0,0" VerticalAlignment="Top" Width="526" />
+        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="30" Margin="9,274,0,0" VerticalAlignment="Top" Width="526" />
         <Label Content="Builds provided by jeremylee.sh under GPLv3" HorizontalAlignment="Left" Margin="10,-9,0,0" VerticalAlignment="Top" Width="403" Height="48" VerticalContentAlignment="Center" FontStyle="Italic" />
-        <Label x:Name="LabelProgressBar" Content="" HorizontalAlignment="Left" Margin="10,236,0,0" VerticalAlignment="Top" Width="524" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label x:Name="LabelProgressBar" Content="" HorizontalAlignment="Left" Margin="10,274,0,0" VerticalAlignment="Top" Width="524" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Button x:Name="ButtonUpdateMKVToolnix" Content="Manual Update" HorizontalAlignment="Left" Margin="10,234,0,0" VerticalAlignment="Top" Width="115" Background="{x:Null}" Height="34" Click="ButtonUpdateMKVToolnix_Click"  mah:ControlsHelper.ContentCharacterCasing="Normal" IsEnabled="False" ToolTip="" />
+        <Label Content="Current Version:" HorizontalAlignment="Left" Margin="130,233,0,0" VerticalAlignment="Top" Width="111" Height="34" VerticalContentAlignment="Center" />
+        <Label Content="Update Version:" HorizontalAlignment="Left" Margin="334,233,0,0" VerticalAlignment="Top" Width="112" Height="34" VerticalContentAlignment="Center" />
+        <Label x:Name="LabelCurrentMKVToolnixVersion" Content="" HorizontalAlignment="Left" Margin="241,233,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center" />
+        <Label x:Name="LabelUpdateMKVToolnixVersion" Content="" HorizontalAlignment="Left" Margin="439,233,0,0" VerticalAlignment="Top" Width="88" Height="34" VerticalContentAlignment="Center" />
     </Grid>
 </mah:MetroWindow>

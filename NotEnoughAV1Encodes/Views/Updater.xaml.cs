@@ -43,8 +43,13 @@ namespace NotEnoughAV1Encodes.Views
 
         private static string SVTAV1CurrentVersion;
 
+        // MKVToolnix Update
+        private static string MKVToolnixUpdateVersion;
+
+        private static string MKVToolnixCurrentVersion;
+
         // Current Directory
-        private static string CurrentDir = Directory.GetCurrentDirectory();
+        private static readonly string CurrentDir = Directory.GetCurrentDirectory();
 
         public Updater(string baseTheme, string accentTheme)
         {
@@ -60,6 +65,8 @@ namespace NotEnoughAV1Encodes.Views
         {
             ParseNEAV1EGithub();
             await ParseJeremyleeJSONAsync();
+            await GetOnlineMKVToolnixVersion();
+            GetLocalMKVToolnixVersion();
             CompareLocalVersion();
             LabelProgressBar.Content = "";
             ProgressBar.IsIndeterminate = false;
@@ -146,6 +153,53 @@ namespace NotEnoughAV1Encodes.Views
             catch { }
         }
 
+        private void GetLocalMKVToolnixVersion()
+        {
+            try
+            {
+                var versionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(CurrentDir, "Apps", "mkvtoolnix", "mkvmerge.exe"));
+                if (versionInfo != null)
+                {
+                    string version = versionInfo.FileVersion;
+                    LabelCurrentMKVToolnixVersion.Content = version;
+                    MKVToolnixCurrentVersion = version;
+                }
+            } catch { }
+        }
+
+        private async Task GetOnlineMKVToolnixVersion()
+        {
+            try
+            {
+                HttpClient client = new();
+                // Download Release Notes
+                HttpResponseMessage response = await client.GetAsync("https://mkvtoolnix.download/doc/NEWS.md");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    // Split by Line
+                    string[] lines = content.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+                    string version = "";
+                    // Iterate over Lines
+                    foreach (string line in lines)
+                    {
+                        if (line.Contains("# Version"))
+                        {
+                            version = line;
+                            break;
+                        }
+                    }
+                    //Remove First 10 Characters
+                    version = version[10..];
+                    version = version.Split()[0];
+                    LabelUpdateMKVToolnixVersion.Content = version;
+                    MKVToolnixUpdateVersion = version;
+                }
+            }
+            catch { }
+        }
+
         private void CompareLocalVersion()
         {
             // ffmpeg
@@ -199,6 +253,7 @@ namespace NotEnoughAV1Encodes.Views
                 }
             }
             else { LabelCurrentAomencVersion.Content = "unknown"; LabelCurrentAomencVersion.Foreground = Brushes.Red; }
+
             // rav1e
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.txt")))
             {
@@ -224,6 +279,7 @@ namespace NotEnoughAV1Encodes.Views
                 }
             }
             else { LabelCurrentRav1eVersion.Content = "unknown"; LabelCurrentRav1eVersion.Foreground = Brushes.Red; }
+
             // svt-av1
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt")))
             {
@@ -249,6 +305,33 @@ namespace NotEnoughAV1Encodes.Views
                 }
             }
             else { LabelCurrentSVTAV1Version.Content = "unknown"; LabelCurrentSVTAV1Version.Foreground = Brushes.Red; }
+
+            // MKVToolnix
+            if (MKVToolnixCurrentVersion != null && MKVToolnixUpdateVersion != null)
+            {
+                try
+                {
+                    int update = int.Parse(MKVToolnixUpdateVersion.Replace(".", string.Empty));
+                    int current = int.Parse(MKVToolnixCurrentVersion.Replace(".", string.Empty));
+                    // Simple Version Comparison Logic
+                    if (current == update)
+                    {
+                        LabelCurrentMKVToolnixVersion.Foreground = Brushes.Green;
+                        LabelUpdateMKVToolnixVersion.Foreground = Brushes.Green;
+                    }
+                    else if (current > update)
+                    {
+                        LabelCurrentMKVToolnixVersion.Foreground = Brushes.Green;
+                        LabelUpdateMKVToolnixVersion.Foreground = Brushes.Red;
+                    }
+                    else if (update > current)
+                    {
+                        LabelCurrentMKVToolnixVersion.Foreground = Brushes.Red;
+                        LabelUpdateMKVToolnixVersion.Foreground = Brushes.Green;
+                    }
+                }
+                catch { }
+            }
         }
 
         private DateTime? ParseDate(string input)
@@ -393,10 +476,8 @@ namespace NotEnoughAV1Encodes.Views
             ToggleAllButtons(false);
 
             // Creates the svt-av1 folder if not existent
-            if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1")))
-            {
-                Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "svt-av1"));
-            }
+            Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "svt-av1"));
+
             // Downloads rav1e
             await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/svt-av1.7z", Path.Combine(CurrentDir, "Apps", "svt-av1.7z")));
             if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1.7z")))
@@ -433,12 +514,21 @@ namespace NotEnoughAV1Encodes.Views
             LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Finished updating SVT-AV1");
         }
 
+        private void ButtonUpdateMKVToolnix_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessStartInfo psi = new()
+            {
+                FileName = "https://www.fosshub.com/MKVToolNix.html",
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
+
         private async Task DownloadBin(string DownloadURL, string PathToFile)
         {
             // Downloads the archive provided in the Link
             try
             {
-                HttpClient client = new();
                 WebClient webClient = new();
                 webClient.DownloadProgressChanged += (s, e) =>
                 {
@@ -452,13 +542,13 @@ namespace NotEnoughAV1Encodes.Views
                     LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Extracting...");
                     Dispatcher.Invoke(() => Title = "Updater");
                 };
-
+                
                 await webClient.DownloadFileTaskAsync(new Uri(DownloadURL), PathToFile);
             }
             catch { }
         }
 
-        public void ExtractFile(string source, string destination)
+        private void ExtractFile(string source, string destination)
         {
             // Extracts the downloaded archives with 7zip
             string zPath = Path.Combine(CurrentDir, "Apps", "7zip", "7za.exe");
