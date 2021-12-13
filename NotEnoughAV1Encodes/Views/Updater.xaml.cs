@@ -43,8 +43,6 @@ namespace NotEnoughAV1Encodes.Views
 
         private static string SVTAV1CurrentVersion;
 
-        private static string Git_FFmpeg_Name = "";
-
         // Current Directory
         private static string CurrentDir = Directory.GetCurrentDirectory();
 
@@ -61,7 +59,6 @@ namespace NotEnoughAV1Encodes.Views
         private async void ParseEverything()
         {
             ParseNEAV1EGithub();
-            await ParseGyanFFmpeg();
             await ParseJeremyleeJSONAsync();
             CompareLocalVersion();
             LabelProgressBar.Content = "";
@@ -121,26 +118,6 @@ namespace NotEnoughAV1Encodes.Views
             return new string(input.Where(c => char.IsDigit(c)).ToArray());
         }
 
-        private async Task ParseGyanFFmpeg()
-        {
-            try
-            {
-                HttpClient wc = new();
-                HttpResponseMessage response = await wc.GetAsync("https://www.gyan.dev/ffmpeg/builds/git-version");
-                byte[] content = await response.Content.ReadAsByteArrayAsync();
-                string temp_date = Encoding.UTF8.GetString(content);
-
-                // Required to later have the correct path
-                Git_FFmpeg_Name = "ffmpeg-" + temp_date + "-full_build";
-
-                temp_date = temp_date.Replace("-", ".").Remove(temp_date.Length - 15);
-
-                FFmpegUpdateVersion = temp_date;
-                LabelUpdateFFmpegVersion.Content = FFmpegUpdateVersion;
-            }
-            catch { }
-        }
-
         private async Task ParseJeremyleeJSONAsync()
         {
             try
@@ -149,6 +126,10 @@ namespace NotEnoughAV1Encodes.Views
                 HttpResponseMessage response = await client.GetAsync("https://jeremylee.sh/bins/manifest.json");
                 string jsonWeb = await response.Content.ReadAsStringAsync();
                 dynamic json = JsonConvert.DeserializeObject(jsonWeb);
+
+                string ffmpegVersion = json.files["ffmpeg.exe"].datetime;
+                FFmpegUpdateVersion = ffmpegVersion.Replace("-", ".").Remove(ffmpegVersion.Length - 6);
+                LabelUpdateFFmpegVersion.Content = FFmpegUpdateVersion;
 
                 string aomencVersion = json.files["aomenc.exe"].datetime;
                 AomencUpdateVersion = aomencVersion.Replace("-", ".").Remove(aomencVersion.Length - 6);
@@ -305,26 +286,23 @@ namespace NotEnoughAV1Encodes.Views
             }
 
             // Downloads ffmpeg
-            await Task.Run(() => DownloadBin("https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z", Path.Combine(CurrentDir, "Apps", "ffmpeg-git-full.7z")));
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/ffmpeg.7z", Path.Combine(CurrentDir, "Apps", "ffmpeg.7z")));
 
-            if (File.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg-git-full.7z")))
+            if (File.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z")))
             {
                 // Extracts ffmpeg
-                ExtractFile(Path.Combine(CurrentDir, "Apps", "ffmpeg-git-full.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"));
+                ExtractFile(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"));
 
-                if (File.Exists(Path.Combine(CurrentDir, "Apps", "FFmpeg", Git_FFmpeg_Name, "bin", "ffmpeg.exe")))
+                if (File.Exists(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.exe")))
                 {
                     if (File.Exists(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.exe")))
                     {
-                        File.Delete(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.exe"));
+                        File.Delete(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.txt"));
                     }
-
-                    File.Move(Path.Combine(CurrentDir, "Apps", "FFmpeg", Git_FFmpeg_Name, "bin", "ffmpeg.exe"), Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.exe"));
 
                     File.WriteAllText(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.txt"), FFmpegUpdateVersion);
 
-                    File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg-git-full.7z"));
-                    Directory.Delete(Path.Combine(CurrentDir, "Apps", "FFmpeg", Git_FFmpeg_Name), true);
+                    File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z"));
 
                     CompareLocalVersion();
                 }
