@@ -366,7 +366,7 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                // To-Do: Error Meldung
+                MessageBox.Show("Queue is empty!", "Queue", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -766,12 +766,14 @@ namespace NotEnoughAV1Encodes
             if (string.IsNullOrEmpty(videoDB.InputPath))
             {
                 // Throw Error
+                MessageBox.Show("No Input selected!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (string.IsNullOrEmpty(videoDB.OutputPath))
             {
                 // Throw Error
+                MessageBox.Show("No Output selected!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
