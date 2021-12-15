@@ -193,19 +193,13 @@ namespace NotEnoughAV1Encodes
                                 videoDB.InputPath = file;
                                 videoDB.OutputPath = Path.Combine(output, Path.GetFileNameWithoutExtension(file) + identifier.ToString() + outputContainer);
                                 videoDB.ParseMediaInfo();
-                                try
-                                {
-                                    ListBoxAudioTracks.ItemsSource = null;
-                                    ListBoxAudioTracks.Items.Clear();
-                                }
-                                catch { }
+
+                                try { ListBoxAudioTracks.Items.Clear(); } catch { }
+                                try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+                                try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
+                                try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+
                                 ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                                try
-                                {
-                                    ListBoxSubtitleTracks.ItemsSource = null;
-                                    ListBoxSubtitleTracks.Items.Clear();
-                                }
-                                catch { }
                                 ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
 
                                 // Automatically toggle VFR Support, if source is MKV
@@ -253,9 +247,13 @@ namespace NotEnoughAV1Encodes
                         PresetSettings = queueElement.Preset;
                         DataContext = PresetSettings;
                         videoDB = queueElement.VideoDB;
-                        ListBoxAudioTracks.Items.Clear();
+
+                        try { ListBoxAudioTracks.Items.Clear(); } catch { }
+                        try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+                        try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
+                        try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+
                         ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                        ListBoxSubtitleTracks.Items.Clear();
                         ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
                         LabelVideoSource.Content = videoDB.InputPath;
                         LabelVideoDestination.Content = videoDB.OutputPath;
@@ -279,9 +277,13 @@ namespace NotEnoughAV1Encodes
                     // Single File Input
                     videoDB.InputPath = openSource.Path;
                     videoDB.ParseMediaInfo();
-                    ListBoxAudioTracks.Items.Clear();
+
+                    try { ListBoxAudioTracks.Items.Clear(); } catch { }
+                    try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+                    try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
+                    try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+
                     ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                    ListBoxSubtitleTracks.Items.Clear();
                     ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
                     LabelVideoSource.Content = videoDB.InputPath;
                     LabelVideoLength.Content = videoDB.MIDuration;
@@ -423,9 +425,13 @@ namespace NotEnoughAV1Encodes
                 PresetSettings = tmp.Preset;
                 DataContext = PresetSettings;
                 videoDB = tmp.VideoDB;
-                ListBoxAudioTracks.Items.Clear();
+
+                try { ListBoxAudioTracks.Items.Clear(); } catch { }
+                try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+                try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
+                try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+
                 ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                ListBoxSubtitleTracks.Items.Clear();
                 ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
                 LabelVideoSource.Content = videoDB.InputPath;
                 LabelVideoDestination.Content = videoDB.OutputPath;
@@ -1549,7 +1555,7 @@ namespace NotEnoughAV1Encodes
                             aTimer.Start();
 
                             // Video Encoding
-                            await Task.Run(() => videoEncoder.Encode(WorkerCountElement, VideoChunks, queueElement, _cancelToken, QueueParallel), _cancelToken);
+                            await Task.Run(() => videoEncoder.Encode(WorkerCountElement, VideoChunks, queueElement, QueueParallel, settingsDB.PriorityNormal, _cancelToken), _cancelToken);
 
                             aTimer.Stop();
 

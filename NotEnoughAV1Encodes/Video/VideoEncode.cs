@@ -10,7 +10,7 @@ namespace NotEnoughAV1Encodes.Video
 {
     class VideoEncode
     {
-        public void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement, CancellationToken _token, bool _queueParallel)
+        public void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement, bool queueParallel, bool normalPriority, CancellationToken token)
         {
             Global.Logger("TRACE - VideoEncode.Encode()", queueElement.Output + ".log");
             using SemaphoreSlim concurrencySemaphoreInner = new(_workerCount);
@@ -20,7 +20,7 @@ namespace NotEnoughAV1Encodes.Video
             foreach (string chunk in VideoChunks)
             {
                 Global.Logger("INFO  - VideoEncode.Encode() => Chunk: " + chunk, queueElement.Output + ".log");
-                try { concurrencySemaphoreInner.Wait(_token); }
+                try { concurrencySemaphoreInner.Wait(token); }
                 catch (OperationCanceledException) { }
                 
                 Task taskInner = Task.Run(() =>
@@ -68,7 +68,7 @@ namespace NotEnoughAV1Encodes.Video
                             }
 
                             // Set Chunk Input
-                            if (queueElement.ChunkingMethod == 0 || _queueParallel)
+                            if (queueElement.ChunkingMethod == 0 || queueParallel)
                             {
                                 // Input for Chunked Encoding or Parallel Queue Processing
                                 ChunkInput = " \"" + chunk + "\"";
@@ -127,9 +127,12 @@ namespace NotEnoughAV1Encodes.Video
 
                             processVideo.StartInfo = startInfo;
 
-                            _token.Register(() => { try { processVideo.StandardInput.Write("q"); } catch { } });
+                            token.Register(() => { try { processVideo.StandardInput.Write("q"); } catch { } });
 
                             processVideo.Start();
+
+                            // Set Proccess Priority
+                            if(!normalPriority) processVideo.PriorityClass = ProcessPriorityClass.BelowNormal;
 
                             // Get launched Process ID
                             int _pid = processVideo.Id;
@@ -170,7 +173,7 @@ namespace NotEnoughAV1Encodes.Video
                             Global.Logger("TRACE - VideoEncode.Encode() => Removed PID: " + _pid + "  Chunk: " + chunk, queueElement.Output + ".log");
 
                             // Second Pass
-                            if (queueElement.Passes == 2 && _token.IsCancellationRequested == false)
+                            if (queueElement.Passes == 2 && token.IsCancellationRequested == false)
                             {
                                 if (queueElement.EncodingMethod < 4)
                                 {
@@ -202,9 +205,12 @@ namespace NotEnoughAV1Encodes.Video
 
                                 processVideo2ndPass.StartInfo = startInfo;
 
-                                _token.Register(() => { try { processVideo2ndPass.StandardInput.Write("q"); } catch { } });
+                                token.Register(() => { try { processVideo2ndPass.StandardInput.Write("q"); } catch { } });
 
                                 processVideo2ndPass.Start();
+
+                                // Set Proccess Priority
+                                if (!normalPriority) processVideo2ndPass.PriorityClass = ProcessPriorityClass.BelowNormal;
 
                                 // Get launched Process ID
                                 _pid = processVideo2ndPass.Id;
@@ -248,7 +254,7 @@ namespace NotEnoughAV1Encodes.Video
                             }
 
 
-                            if (processVideo.ExitCode == 0 && _token.IsCancellationRequested == false)
+                            if (processVideo.ExitCode == 0 && token.IsCancellationRequested == false)
                             {
                                 FileStream _finishedLog = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_finished.log"));
                                 _finishedLog.Close();
@@ -265,13 +271,13 @@ namespace NotEnoughAV1Encodes.Video
                         concurrencySemaphoreInner.Release();
                     }
 
-                }, _token);
+                }, token);
                 tasksInner.Add(taskInner);
             }
 
             try
             {
-                Task.WaitAll(tasksInner.ToArray(), _token);
+                Task.WaitAll(tasksInner.ToArray(), token);
             }
             catch (OperationCanceledException) { }
         }

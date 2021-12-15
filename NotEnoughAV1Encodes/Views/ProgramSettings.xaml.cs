@@ -23,6 +23,7 @@ namespace NotEnoughAV1Encodes.Views
             ComboBoxBaseTheme.SelectedIndex = settingsDB.BaseTheme;
             TextBoxTempPath.Text = settingsDB.TempPath;
             settingsDBTemp.BGImage = settingsDB.BGImage;
+            ComboBoxProcessPriority.SelectedIndex = settingsDB.PriorityNormal ? 0 : 1;
             
             try
             {
@@ -75,6 +76,7 @@ namespace NotEnoughAV1Encodes.Views
             settingsDBTemp.AccentTheme = ComboBoxAccentTheme.SelectedIndex;
             settingsDBTemp.Theme = ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text;
             settingsDBTemp.TempPath = TextBoxTempPath.Text;
+            settingsDBTemp.PriorityNormal = ComboBoxProcessPriority.SelectedIndex == 0 ? true : false;
         }
 
         private void ButtonResetBGImage_Click(object sender, RoutedEventArgs e)

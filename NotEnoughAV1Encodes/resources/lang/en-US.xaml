@@ -80,6 +80,7 @@
     <system:String x:Key="overrideWorkerCount">Override Worker Count</system:String>
     <system:String x:Key="tempPath">Temp Path</system:String>
     <system:String x:Key="logging">Logging</system:String>
+    <system:String x:Key="processPriority">Process Priority</system:String>
     
     <!-- Save Preset Window -->
     <system:String x:Key="presetName">Preset Name:</system:String>
