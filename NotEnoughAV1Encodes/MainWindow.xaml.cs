@@ -97,12 +97,19 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region Buttons
+        private void ButtonTestSettings_Click(object sender, RoutedEventArgs e)
+        {
+            Views.TestCustomSettings testCustomSettings = new(settingsDB.Theme, ComboBoxVideoEncoder.SelectedIndex, CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand());
+            testCustomSettings.ShowDialog();
+        }
+
         private void ButtonCancelEncode_Click(object sender, RoutedEventArgs e)
         {
             if (cancellationTokenSource == null) return;
             cancellationTokenSource.Cancel();
             ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
         }
+
         private void ButtonProgramSettings_Click(object sender, RoutedEventArgs e)
         {
             Views.ProgramSettings programSettings = new(settingsDB);
@@ -1276,7 +1283,7 @@ namespace NotEnoughAV1Encodes
         {
             string _settings = "-f yuv4mpegpipe - | ";
 
-            _settings += "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e", "rav1e.exe") + "\" -";
+            _settings += "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e", "rav1e.exe") + "\" - -y";
 
             if (ComboBoxQualityMode.SelectedIndex == 0)
             {

@@ -777,7 +777,7 @@
                         </Canvas>
                         <TextBox x:Name="TextBoxCustomVideoSettings" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsOn, ElementName=CheckBoxCustomVideoSettings}" Text="{Binding CustomSettings}"  Margin="10,313,10,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged" />
                         <mah:ToggleSwitch x:Name="CheckBoxCustomVideoSettings" Content="{DynamicResource customSettings}" Margin="10,281,0,0" VerticalAlignment="Top" Toggled="CheckBoxCustomVideoSettings_Toggled" />
-
+                        <Button x:Name="ButtonTestSettings" Content="{DynamicResource testSettings}" HorizontalAlignment="Left" Margin="934,277,0,0" VerticalAlignment="Top" Height="32" Width="131" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonTestSettings_Click"/>
                     </Grid>
                 </GroupBox>
             </TabItem>

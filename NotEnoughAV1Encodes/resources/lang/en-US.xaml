@@ -59,6 +59,7 @@
     <system:String x:Key="edit">Edit</system:String>
     <system:String x:Key="encode-queue-parallel">Encode Queue Parallel instead of chunking</system:String>
     <system:String x:Key="status">Status</system:String>
+    <system:String x:Key="testSettings">Test Settings</system:String>
 
     <!-- Open Source Window -->
     <system:String x:Key="opensource.method">Method for opening a source.</system:String>
