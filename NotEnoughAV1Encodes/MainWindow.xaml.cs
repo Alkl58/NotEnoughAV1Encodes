@@ -164,6 +164,7 @@ namespace NotEnoughAV1Encodes
                         string preset = batchFolderDialog.Preset;
                         string output = batchFolderDialog.Output;
                         int container = batchFolderDialog.Container;
+                        bool presetBitdepth = batchFolderDialog.PresetBitdepth;
 
                         string outputContainer = "";
                         if (container == 0) outputContainer = ".mkv";
@@ -217,6 +218,14 @@ namespace NotEnoughAV1Encodes
                                 {
                                     CheckBoxVideoVFR.IsChecked = false;
                                     CheckBoxVideoVFR.IsEnabled = false;
+                                }
+
+                                // Uses Bit-Depth of Video
+                                if (!presetBitdepth)
+                                {
+                                    if (videoDB.MIBitDepth == "8") ComboBoxVideoBitDepth.SelectedIndex = 0;
+                                    if (videoDB.MIBitDepth == "10") ComboBoxVideoBitDepth.SelectedIndex = 1;
+                                    if (videoDB.MIBitDepth == "12") ComboBoxVideoBitDepth.SelectedIndex = 2;
                                 }
 
                                 // Skip Subtitles if Container is not MKV to avoid conflicts

@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes.Views"
         mc:Ignorable="d"
-        Title="NEAV1E" Height="495" Width="800" ResizeMode="NoResize">
+        Title="NEAV1E" Height="500" Width="800" ResizeMode="NoResize">
     <Grid>
         <GroupBox Header="{DynamicResource source}" Margin="10,10,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="236" VerticalAlignment="Top">
             <Grid>
@@ -61,5 +61,6 @@
 
             </Grid>
         </GroupBox>
+        <mah:ToggleSwitch x:Name="ToggleSwitchUsePresetBitDepth" Height="62" Header="{DynamicResource forceBitdepthFromPreset}" Margin="10,411,0,0" Width="241" VerticalAlignment="Top"/>
     </Grid>
 </mah:MetroWindow>

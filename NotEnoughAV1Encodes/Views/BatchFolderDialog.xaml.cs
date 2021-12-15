@@ -9,6 +9,7 @@ namespace NotEnoughAV1Encodes.Views
     public partial class BatchFolderDialog : MetroWindow
     {
         public bool Quit { get; set; }
+        public bool PresetBitdepth { get; set; }
         public string Preset { get; set; }
         public string Output { get; set; }
         public int Container { get; set; }
@@ -47,6 +48,9 @@ namespace NotEnoughAV1Encodes.Views
 
                 try { ComboBoxPresets.SelectedIndex = 0; } catch { }
             }
+
+            // Set Default Values
+            ToggleSwitchUsePresetBitDepth.IsOn = true;
         }
 
         private void ButtonSelectDestination_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -80,6 +84,7 @@ namespace NotEnoughAV1Encodes.Views
             Container = ComboBoxContainer.SelectedIndex;
             Preset = ComboBoxPresets.SelectedItem.ToString();
             Output = TextBoxDestination.Text;
+            PresetBitdepth = ToggleSwitchUsePresetBitDepth.IsOn;
             Quit = true;
             Close();
         }

@@ -105,5 +105,6 @@
     <system:String x:Key="selectPreset">Select Preset for Encoding</system:String>
     <system:String x:Key="videoContainer">Video Container</system:String>
     <system:String x:Key="container">Container</system:String>
+    <system:String x:Key="forceBitdepthFromPreset">Use Bit-Depth from Preset?</system:String>
 
 </ResourceDictionary>
