@@ -241,6 +241,7 @@ namespace NotEnoughAV1Encodes
                     // Project File Input
                     try
                     {
+                        videoDB = new();
                         string file = openSource.Path;
                         Queue.QueueElement queueElement = JsonConvert.DeserializeObject<Queue.QueueElement>(File.ReadAllText(file));
 
@@ -275,6 +276,7 @@ namespace NotEnoughAV1Encodes
                 else
                 {
                     // Single File Input
+                    videoDB = new();
                     videoDB.InputPath = openSource.Path;
                     videoDB.ParseMediaInfo();
 
