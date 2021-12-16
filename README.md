@@ -4,7 +4,7 @@
 
 A tool to make encoding faster and easier for AV1 encoders.
 
-![alt text](https://i.imgur.com/BqYWv24.png "Darkmode")
+![alt text](https://i.imgur.com/EcF3P1l.png "Darkmode")
 
 
 ---
