@@ -808,12 +808,6 @@ namespace NotEnoughAV1Encodes
             queueElement.Preset = PresetSettings;
             queueElement.VideoDB = videoDB;
 
-            // Double the framecount for two pass encoding
-            if (queueElement.Passes == 2)
-            {
-                queueElement.FrameCount = videoDB.MIFrameCount + videoDB.MIFrameCount;
-            }
-
             if (ToggleSwitchFilterDeinterlace.IsOn && ComboBoxFiltersDeinterlace.SelectedIndex is 1 or 2)
             {
                 queueElement.FrameCount += queueElement.FrameCount;
@@ -1619,6 +1613,10 @@ namespace NotEnoughAV1Encodes
 
                 // Progress 2nd-Pass of 2-Pass Encoding
                 queueElement.ProgressSecondPass = Convert.ToDouble(encodedFramesSecondPass);
+
+                // Divide by 2
+                try { encodedFrames /= 2; } catch { }
+                try { encodedFramesSecondPass /= 2; } catch { }
             }
             
             queueElement.Status = "Encoded: " + ((decimal)(encodedFrames + encodedFramesSecondPass) / queueElement.FrameCount).ToString("0.00%");

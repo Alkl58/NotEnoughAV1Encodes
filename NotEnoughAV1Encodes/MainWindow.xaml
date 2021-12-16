@@ -952,8 +952,8 @@
                                                         <ColumnDefinition/>
                                                         <ColumnDefinition/>
                                                     </Grid.ColumnDefinitions>
-                                                    <ProgressBar Grid.Column="0" Value="{Binding Progress}" Maximum="{Binding FrameCountTwoPass}"/>
-                                                    <ProgressBar Grid.Column="1" Value="{Binding ProgressSecondPass}" Maximum="{Binding FrameCountTwoPass}"/>
+                                                    <ProgressBar Grid.Column="0" Value="{Binding Progress}" Maximum="{Binding FrameCount}"/>
+                                                    <ProgressBar Grid.Column="1" Value="{Binding ProgressSecondPass}" Maximum="{Binding FrameCount}"/>
                                                 </Grid>
                                             </Grid>
                                         </DataTemplate>
