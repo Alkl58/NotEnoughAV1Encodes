@@ -145,6 +145,7 @@ namespace NotEnoughAV1Encodes.Video
                             Queue.ChunkProgress chunkProgress = new();
                             chunkProgress.ChunkName = chunk;
                             chunkProgress.Progress = 0;
+                            chunkProgress.ProgressSecondPass = 0;
 
                             List<Queue.ChunkProgress> _tempList = queueElement.ChunkProgress;
                             if (!_tempList.Any(n => n.ChunkName == chunk))
@@ -223,6 +224,7 @@ namespace NotEnoughAV1Encodes.Video
                                 Queue.ChunkProgress chunkProgress2ndPass = new();
                                 chunkProgress2ndPass.ChunkName = chunk + "_2ndpass";
                                 chunkProgress2ndPass.Progress = 0;
+                                chunkProgress2ndPass.ProgressSecondPass = 0;
 
                                 List<Queue.ChunkProgress> _tempList2ndPass = queueElement.ChunkProgress;
                                 if (!_tempList2ndPass.Any(n => n.ChunkName == chunk + "_2ndpass"))
@@ -239,7 +241,7 @@ namespace NotEnoughAV1Encodes.Video
                                     {
                                         foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk + "_2ndpass"))
                                         {
-                                            progressElement.Progress = processedFrames;
+                                            progressElement.ProgressSecondPass = processedFrames;
                                         }
                                     }
                                 }
@@ -268,7 +270,11 @@ namespace NotEnoughAV1Encodes.Video
                     }
                     finally
                     {
-                        concurrencySemaphoreInner.Release();
+                        try
+                        {
+                            concurrencySemaphoreInner.Release();
+                        }
+                        catch { }
                     }
 
                 }, token);

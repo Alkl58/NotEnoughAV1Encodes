@@ -10,6 +10,7 @@ namespace NotEnoughAV1Encodes.Queue
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private double _progress;
+        private double _progressSecondPass;
         private string _status;
 
         /// <summary>Current Status displayed in the Queue.</summary>
@@ -44,22 +45,33 @@ namespace NotEnoughAV1Encodes.Queue
         public int ChunkLength { get; set; }
         /// <summary>Amount of Encoding Passes.</summary>
         public int Passes { get; set; }
+        /// <summary>If two progressbars should be displayed for two pass encoding.</summary>
+        public bool TwoProgressbars { get => Passes > 1; }
         /// <summary>If Video should be handled as VFR.</summary>
         public bool VFR { get; set; }
         /// <summary>PySceneDetect Threshold (after Decimal).</summary>
         public float PySceneDetectThreshold { get; set; }
         /// <summary>Framecount of Source Video.</summary>
         public long FrameCount { get; set; }
+        /// <summary>Framecount Progressbar Two Pass Encoding.</summary>
+        public long FrameCountTwoPass { get => FrameCount / 2; }
         /// <summary>List of Progress of each Chunk.</summary>
         public List<ChunkProgress> ChunkProgress { get; set; } = new();
         /// <summary>State of UI Settings</summary>
         public Settings Preset { get; set; } = new();
         /// <summary>Video DB</summary>
         public Video.VideoDB VideoDB { get; set; } = new();
+        /// <summary>Encoding Process</summary>
         public double Progress
         {
             get => _progress;
             set { _progress = value; NotifyPropertyChanged("Progress"); }
+        }
+        /// <summary>Encoding Process of Second Pass</summary>
+        public double ProgressSecondPass
+        {
+            get => _progressSecondPass;
+            set { _progressSecondPass = value; NotifyPropertyChanged("ProgressSecondPass"); }
         }
 
         private void NotifyPropertyChanged(string property)

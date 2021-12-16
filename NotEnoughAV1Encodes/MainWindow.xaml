@@ -947,6 +947,14 @@
                                                 <Grid Grid.Row="1">
                                                     <ProgressBar Value="{Binding Progress}" Maximum="{Binding FrameCount}"/>
                                                 </Grid>
+                                                <Grid Grid.Row="1" Visibility="{Binding TwoProgressbars, Converter={StaticResource b2v}}">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <ProgressBar Grid.Column="0" Value="{Binding Progress}" Maximum="{Binding FrameCountTwoPass}"/>
+                                                    <ProgressBar Grid.Column="1" Value="{Binding ProgressSecondPass}" Maximum="{Binding FrameCountTwoPass}"/>
+                                                </Grid>
                                             </Grid>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>

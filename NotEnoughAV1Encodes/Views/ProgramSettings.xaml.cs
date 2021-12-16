@@ -76,7 +76,7 @@ namespace NotEnoughAV1Encodes.Views
             settingsDBTemp.AccentTheme = ComboBoxAccentTheme.SelectedIndex;
             settingsDBTemp.Theme = ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text;
             settingsDBTemp.TempPath = TextBoxTempPath.Text;
-            settingsDBTemp.PriorityNormal = ComboBoxProcessPriority.SelectedIndex == 0 ? true : false;
+            settingsDBTemp.PriorityNormal = ComboBoxProcessPriority.SelectedIndex == 0;
         }
 
         private void ButtonResetBGImage_Click(object sender, RoutedEventArgs e)

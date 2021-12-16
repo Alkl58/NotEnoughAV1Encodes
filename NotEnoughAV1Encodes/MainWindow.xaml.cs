@@ -1589,18 +1589,37 @@ namespace NotEnoughAV1Encodes
         private static void UpdateProgressBar(object sender, EventArgs e, Queue.QueueElement queueElement)
         {
             long encodedFrames = 0;
+            long encodedFramesSecondPass = 0;
 
-            foreach (Queue.ChunkProgress _progress in queueElement.ChunkProgress)
+            foreach (Queue.ChunkProgress progress in queueElement.ChunkProgress)
             {
                 try
                 {
-                    encodedFrames += _progress.Progress;
+                    encodedFrames += progress.Progress;
                 }
                 catch { }
             }
 
+            // Progress 1-Pass encoding or 1st Pass of 2-Pass encoding
             queueElement.Progress = Convert.ToDouble(encodedFrames);
-            queueElement.Status = "Encoded: " + ((decimal)encodedFrames / queueElement.FrameCount).ToString("0.00%");
+
+            // 2 Pass encoding
+            if (queueElement.Passes == 2)
+            {
+                foreach (Queue.ChunkProgress progress in queueElement.ChunkProgress)
+                {
+                    try
+                    {
+                        encodedFramesSecondPass += progress.ProgressSecondPass;
+                    }
+                    catch { }
+                }
+
+                // Progress 2nd-Pass of 2-Pass Encoding
+                queueElement.ProgressSecondPass = Convert.ToDouble(encodedFramesSecondPass);
+            }
+            
+            queueElement.Status = "Encoded: " + ((decimal)(encodedFrames + encodedFramesSecondPass) / queueElement.FrameCount).ToString("0.00%");
         }
 
         #endregion
