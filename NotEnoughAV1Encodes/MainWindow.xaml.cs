@@ -1473,7 +1473,7 @@ namespace NotEnoughAV1Encodes
 
             foreach (Queue.QueueElement queueElement in ListBoxQueue.Items)
             {
-                concurrencySemaphore.Wait(_cancelToken);
+                await concurrencySemaphore.WaitAsync(_cancelToken);
                 Task task = Task.Run(async () =>
                 {
                     try
@@ -1598,7 +1598,7 @@ namespace NotEnoughAV1Encodes
 
             // Progress 1-Pass encoding or 1st Pass of 2-Pass encoding
             queueElement.Progress = Convert.ToDouble(encodedFrames);
-
+            
             // 2 Pass encoding
             if (queueElement.Passes == 2)
             {
@@ -1618,7 +1618,7 @@ namespace NotEnoughAV1Encodes
                 try { encodedFrames /= 2; } catch { }
                 try { encodedFramesSecondPass /= 2; } catch { }
             }
-            
+
             queueElement.Status = "Encoded: " + ((decimal)(encodedFrames + encodedFramesSecondPass) / queueElement.FrameCount).ToString("0.00%");
         }
 
