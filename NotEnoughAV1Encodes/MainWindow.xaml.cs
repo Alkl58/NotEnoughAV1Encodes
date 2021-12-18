@@ -197,6 +197,7 @@ namespace NotEnoughAV1Encodes
                                 videoDB = new();
                                 videoDB.InputPath = file;
                                 videoDB.OutputPath = Path.Combine(output, Path.GetFileNameWithoutExtension(file) + identifier.ToString() + outputContainer);
+                                videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
                                 videoDB.ParseMediaInfo();
 
                                 try { ListBoxAudioTracks.Items.Clear(); } catch { }

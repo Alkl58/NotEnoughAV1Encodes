@@ -3,6 +3,7 @@ using MahApps.Metro.Controls;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows;
 
 namespace NotEnoughAV1Encodes.Views
 {
@@ -15,6 +16,8 @@ namespace NotEnoughAV1Encodes.Views
         public int Container { get; set; }
 
         public List<string> Files = new();
+
+        private bool OutputSelected = false;
 
         public BatchFolderDialog(string theme, string folderPath)
         {
@@ -53,13 +56,14 @@ namespace NotEnoughAV1Encodes.Views
             ToggleSwitchUsePresetBitDepth.IsOn = true;
         }
 
-        private void ButtonSelectDestination_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void ButtonSelectDestination_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog openFileDlg = new System.Windows.Forms.FolderBrowserDialog();
             var result = openFileDlg.ShowDialog();
             if (result.ToString() != string.Empty)
             {
                 TextBoxDestination.Text = openFileDlg.SelectedPath;
+                OutputSelected = true;
             }
         }
 
@@ -72,21 +76,35 @@ namespace NotEnoughAV1Encodes.Views
             }
         }
 
-        private void QueueMenuItemDelete_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void QueueMenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
             if (ListBoxVideoItems.SelectedItem == null) return;
             ListBoxVideoItems.Items.Remove(ListBoxVideoItems.SelectedItem);
         }
 
-        private void ButtonAddToQueue_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void ButtonAddToQueue_Click(object sender, RoutedEventArgs e)
         {
-            foreach(string files in ListBoxVideoItems.Items) Files.Add(files);
-            Container = ComboBoxContainer.SelectedIndex;
-            Preset = ComboBoxPresets.SelectedItem.ToString();
-            Output = TextBoxDestination.Text;
-            PresetBitdepth = ToggleSwitchUsePresetBitDepth.IsOn;
-            Quit = true;
-            Close();
+            // Return if Output is not selected
+            if (!OutputSelected)
+            {
+                
+                MessageBoxResult result = MessageBox.Show("Please select a Destination!", "Error", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    ButtonSelectDestination_Click(sender, e);
+                }
+                return;
+            }
+            else
+            {
+                foreach (string files in ListBoxVideoItems.Items) Files.Add(files);
+                Container = ComboBoxContainer.SelectedIndex;
+                Preset = ComboBoxPresets.SelectedItem.ToString();
+                Output = TextBoxDestination.Text;
+                PresetBitdepth = ToggleSwitchUsePresetBitDepth.IsOn;
+                Quit = true;
+                Close();
+            }
         }
 
         private void ButtonCancelEncode_Click(object sender, System.Windows.RoutedEventArgs e)
