@@ -4,8 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes"
         mc:Ignorable="d"
+        lex:LocalizeDictionary.DesignCulture="en"
+        lex:ResxLocalizationProvider.DefaultAssembly="NotEnoughAV1Encodes"
+        lex:ResxLocalizationProvider.DefaultDictionary="Strings"
         Title="NEAV1E" Height="650" Width="1085" Icon="/resources/img/neav1e.ico">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="b2v" />
@@ -15,55 +19,55 @@
         <Button x:Name="ButtonOpenSource" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Click="ButtonOpenSource_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="114">
                 <Image Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/video.png"/>
-                <Label Content="{DynamicResource source}" Canvas.Left="38" Width="76" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
+                <Label x:Name="LabelSource" Content="{lex:Loc}" Canvas.Left="38" Width="76" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
         <Button x:Name="ButtonSetDestination" HorizontalAlignment="Left" Margin="145,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Click="ButtonSetDestination_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="120">
                 <Image Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/save.png"/>
-                <Label Content="{DynamicResource destination}" Canvas.Left="32" Width="88" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
+                <Label x:Name="LabelDestination" Content="{lex:Loc}" Canvas.Left="32" Width="88" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonStartStop" Margin="0,10,175,0" VerticalAlignment="Top" Height="45" Click="ButtonStartStop_Click" HorizontalAlignment="Right" Width="118" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+        <Button x:Name="ButtonStartStop" Margin="0,10,189,0" VerticalAlignment="Top" Height="45" Click="ButtonStartStop_Click" HorizontalAlignment="Right" Width="118" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/start.png"/>
-                <Label x:Name="LabelStartPauseButton" Content="{DynamicResource start}" Canvas.Left="32" Width="78" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
+                <Label x:Name="LabelStartPauseButton" Content="{lex:Loc}" Canvas.Left="32" Width="78" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
         <mah:MetroTabControl x:Name="TabControl" Margin="0,60,0,0" >
-            <TabItem Header="{DynamicResource summary}">
+            <TabItem x:Name="TabItemSummary" Header="{lex:Loc}">
                 <Grid>
-                    <GroupBox Header="{DynamicResource inputOutput}" Height="100" Margin="10,10,10,0" VerticalAlignment="Top" MinWidth="80" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxInputOutput" Header="{lex:Loc}" Height="100" Margin="10,10,10,0" VerticalAlignment="Top" MinWidth="80" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Height="66" VerticalAlignment="Center" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <Label Content="{DynamicResource source}" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold" />
-                            <Label Content="{DynamicResource destination}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold" />
-                            <Label x:Name="LabelVideoSource" Height="29" Margin="105,1,8,0" Content="{DynamicResource noSource}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" MinWidth="50" />
-                            <Label x:Name="LabelVideoDestination" Height="29" Margin="105,30,8,0" Content="{DynamicResource noDestination}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" />
+                            <Label x:Name="LabelVideoSource1" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="75" />
+                            <Label x:Name="LabelVideoDestination1" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold" />
+                            <Label x:Name="LabelVideoSource" Height="29" Margin="105,1,8,0" Content="{lex:Loc}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" MinWidth="50" />
+                            <Label x:Name="LabelVideoDestination" Height="29" Margin="105,30,8,0" Content="{lex:Loc}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource videoInformation}" Height="72" Margin="10,115,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxVideoInformation" Header="{lex:Loc}" Height="72" Margin="10,115,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60" />
                                 <ColumnDefinition MinWidth="80" />
                                 <ColumnDefinition Width="90" />
                                 <ColumnDefinition MinWidth="60" />
-                                <ColumnDefinition Width="90" />
+                                <ColumnDefinition Width="100" />
                                 <ColumnDefinition MinWidth="60" />
                                 <ColumnDefinition Width="90" />
                                 <ColumnDefinition MinWidth="60" />
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="{DynamicResource videoLength}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
+                            <Label x:Name="LabelLength" Grid.Column="0" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
                             <Label Grid.Column="1" x:Name="LabelVideoLength" Content="00:00:00" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
-                            <Label Grid.Column="2" Content="{DynamicResource videoColorFormat}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
+                            <Label x:Name="LabelColorFormat" Grid.Column="2" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
                             <Label Grid.Column="3" x:Name="LabelVideoColorFomat" Content="yuv420p" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
-                            <Label Grid.Column="4" Content="{DynamicResource videoFramerate}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
+                            <Label x:Name="LabelFramerate" Grid.Column="4" Content="{lex:Loc}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Width="90" />
                             <Label Grid.Column="5" x:Name="LabelVideoFramerate" Content="24" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                            <Label Grid.Column="6" Content="{DynamicResource videoResolution}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
+                            <Label x:Name="LabelResolution" Grid.Column="6" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
                             <Label Grid.Column="7" x:Name="LabelVideoResolution" Content="1920x1080" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource workerssAndSplitting}" Margin="10,340,10,0" Height="76" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxWorkersAndSplitting" Header="{lex:Loc}" Margin="10,340,10,0" Height="76" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition MinWidth="100" MaxWidth="120"/>
@@ -75,15 +79,15 @@
                                 <ColumnDefinition MinWidth="150" MaxWidth="150"/>
                                 <ColumnDefinition MinWidth="100"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="{DynamicResource workerCount}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <Label x:Name="LabelWorkerCount" Grid.Column="0" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
                             <ComboBox Grid.Column="1" x:Name="ComboBoxWorkerCount" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left"/>
                             <TextBox Grid.Column="1" Visibility="Hidden" x:Name="TextBoxWorkerCount" PreviewTextInput="NumberValidationTextBox" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <Label Grid.Column="2" Content="{DynamicResource splittingMethod}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <Label x:Name="LabelSplittingMethod" Grid.Column="2" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
                             <ComboBox Grid.Column="3" x:Name="ComboBoxChunkingMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left" SelectedIndex="1">
                                 <ComboBoxItem Content="Equal Chunking" IsSelected="True"/>
                                 <ComboBoxItem Content="PySceneDetect"/>
                             </ComboBox>
-                            <Label Grid.Column="4" Content="{DynamicResource reencodeMethod}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
+                            <Label x:Name="LabelReencodeMethod" Grid.Column="4" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
                                 <Label.Style>
                                     <Style TargetType="Label" BasedOn="{StaticResource MahApps.Styles.Label}">
                                         <Setter Property="UIElement.Visibility" Value="Hidden" />
@@ -111,7 +115,7 @@
                                     </Style>
                                 </ComboBox.Style>
                             </ComboBox>
-                            <Label Grid.Column="6" Content="{DynamicResource chunkLength}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
+                            <Label x:Name="LabelChunkLength" Grid.Column="6" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
                                 <Label.Style>
                                     <Style TargetType="Label" BasedOn="{StaticResource MahApps.Styles.Label}">
                                         <Setter Property="UIElement.Visibility" Value="Hidden" />
@@ -136,7 +140,7 @@
                                     </Style>
                                 </TextBox.Style>
                             </TextBox>
-                            <Label Grid.Column="4" Content="{DynamicResource threshold}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
+                            <Label x:Name="LabelThreshold" Grid.Column="4" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
                                 <Label.Style>
                                     <Style TargetType="Label" BasedOn="{StaticResource MahApps.Styles.Label}">
                                         <Setter Property="UIElement.Visibility" Value="Hidden" />
@@ -163,69 +167,69 @@
                             </TextBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource presets}" Margin="10,264,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="71" VerticalAlignment="Top">
+                    <GroupBox x:Name="GroupBoxPresets" Header="{lex:Loc}" Margin="10,264,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="71" VerticalAlignment="Top">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120"/>
                                 <ColumnDefinition MinWidth="100" MaxWidth="160"/>
-                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="200"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="{DynamicResource preset}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <Label x:Name="LabelPreset" Grid.Column="0" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"/>
                             <ComboBox x:Name="ComboBoxPresets" Grid.Column="1" Height="28" HorizontalAlignment="Left" VerticalAlignment="Center" Width="150" SelectionChanged="ComboBoxPresets_SelectionChanged"/>
-                            <Button x:Name="ButtonSavePreset" Content="{DynamicResource save}" Grid.Column="2" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Center" mah:ControlsHelper.ContentCharacterCasing="Normal" Width="66" Click="ButtonSavePreset_Click"/>
-                            <Button x:Name="ButtonDeletePreset" Content="{DynamicResource delete}" Grid.Column="2" HorizontalAlignment="Left" Margin="78,0,0,0" VerticalAlignment="Center" mah:ControlsHelper.ContentCharacterCasing="Normal" Width="66" Click="ButtonDeletePreset_Click"/>
+                            <Button x:Name="ButtonSavePreset" Content="{lex:Loc}" Grid.Column="2" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Center" mah:ControlsHelper.ContentCharacterCasing="Normal" Width="90" Click="ButtonSavePreset_Click"/>
+                            <Button x:Name="ButtonDeletePreset" Content="{lex:Loc}" Grid.Column="2" HorizontalAlignment="Left" Margin="102,0,0,0" VerticalAlignment="Center" mah:ControlsHelper.ContentCharacterCasing="Normal" Width="90" Click="ButtonDeletePreset_Click"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource currentEncodingSettings}" Margin="10,192,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="67" VerticalAlignment="Top">
+                    <GroupBox x:Name="GroupBoxCurrentSettings" Header="{lex:Loc}" Margin="10,192,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="67" VerticalAlignment="Top">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60" />
                                 <ColumnDefinition MinWidth="80" />
                                 <ColumnDefinition Width="90" />
                                 <ColumnDefinition MinWidth="60" />
-                                <ColumnDefinition Width="90" />
+                                <ColumnDefinition Width="100" />
                                 <ColumnDefinition MinWidth="60" />
                                 <ColumnDefinition Width="90" />
                                 <ColumnDefinition MinWidth="60" />
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="{DynamicResource encoder}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
+                            <Label x:Name="LabelEncoder" Grid.Column="0" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
                             <Label Grid.Column="1" Content="{Binding Text, ElementName=ComboBoxVideoEncoder, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="150" />
-                            <Label Grid.Column="2" Content="{DynamicResource videoColorFormat}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
+                            <Label Grid.Column="2" Content="{lex:Loc LabelColorFormat}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
                             <Label Grid.Column="3" Content="{Binding Text, ElementName=ComboBoxColorFormat, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
-                            <Label Grid.Column="4" Content="{DynamicResource videoFramerate}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
+                            <Label Grid.Column="4" Content="{lex:Loc LabelFramerate}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Width="90" />
                             <Label Grid.Column="5" Content="{Binding Text, ElementName=ComboBoxVideoFrameRate, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                            <Label Grid.Column="6" Content="{DynamicResource bit-depth}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
+                            <Label x:Name="LabelBitDepth" Grid.Column="6" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
                             <Label Grid.Column="7" Content="{Binding Text, ElementName=ComboBoxVideoBitDepth, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
                         </Grid>
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="{DynamicResource filters}">
+            <TabItem x:Name="TabItemFilters" Header="{lex:Loc}">
                 <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox Header="{DynamicResource crop}" HorizontalAlignment="Left" Height="203" Margin="14,107,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxCrop" Header="{lex:Loc}" HorizontalAlignment="Left" Height="203" Margin="14,107,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterCrop}">
                             <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="49,75,0,0" TextWrapping="Wrap" Text="{Binding FilterCropLeft}" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                             <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="160,75,0,0" TextWrapping="Wrap" Text="{Binding FilterCropRight}" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                             <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="105,43,0,0" TextWrapping="Wrap" Text="{Binding FilterCropTop}" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                             <TextBox x:Name="TextBoxFiltersCropBottom" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="105,107,0,0" TextWrapping="Wrap" Text="{Binding FilterCropBottom}" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-                            <Label Content="{DynamicResource bottom}" HorizontalAlignment="Left" Margin="105,133,0,0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-                            <Label Content="{DynamicResource top}" HorizontalAlignment="Center" Margin="105,17,104,125" VerticalAlignment="Center" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-                            <Label Content="{DynamicResource left}" HorizontalAlignment="Left" Margin="-3,75,0,0" VerticalAlignment="Top" Height="26" Width="52" HorizontalContentAlignment="Right" />
-                            <Label Content="{DynamicResource right}" HorizontalAlignment="Left" Margin="215,75,-5,0" VerticalAlignment="Top" Height="28" Width="54" />
+                            <Label x:Name="LabelBottom" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="105,133,0,0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                            <Label x:Name="LabelTop" Content="{lex:Loc}" HorizontalAlignment="Center" Margin="105,17,104,125" VerticalAlignment="Center" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                            <Label x:Name="LabelLeft" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="-3,75,0,0" VerticalAlignment="Top" Height="26" Width="52" HorizontalContentAlignment="Right" />
+                            <Label x:Name="LabelRight" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="215,75,-5,0" VerticalAlignment="Top" Height="28" Width="54" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource resize}" HorizontalAlignment="Left" Height="92" Margin="14,10,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxResize" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="14,10,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterResize}">
-                            <Label Content="{DynamicResource width}" HorizontalAlignment="Left" Margin="11,12,0,0" VerticalAlignment="Top" Height="28" Width="56" HorizontalContentAlignment="Right" />
+                            <Label x:Name="LabelWidth" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="11,12,0,0" VerticalAlignment="Top" Height="28" Width="56" HorizontalContentAlignment="Right" />
                             <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="72,10,0,0" TextWrapping="Wrap" Text="{Binding FilterResizeWidth}" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="If set to 0 it will automatically set the corresponding width to the height." />
-                            <Label Content="{DynamicResource height}" HorizontalAlignment="Left" Margin="142,12,0,0" VerticalAlignment="Top" Height="28" Width="53" HorizontalContentAlignment="Right" />
+                            <Label x:Name="LabelHeight" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="142,12,0,0" VerticalAlignment="Top" Height="28" Width="53" HorizontalContentAlignment="Right" />
                             <TextBox x:Name="TextBoxFiltersResizeHeight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="200,10,0,0" TextWrapping="Wrap" Text="{Binding FilterResizeHeight}" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                             <Label Content="0 = Auto" HorizontalAlignment="Left" Margin="72,31,0,0" VerticalAlignment="Top" FontStyle="Italic" RenderTransformOrigin="0.504,0.51" Width="60" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource rotate}" HorizontalAlignment="Left" Height="92" Margin="294,10,0,0" VerticalAlignment="Top" Width="286" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxRotate" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="294,10,0,0" VerticalAlignment="Top" Width="286" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterRotate}">
-                            <Label Content="{DynamicResource rotateClockwise}" HorizontalAlignment="Right" Margin="0,20,129,0" VerticalAlignment="Top" Height="28" HorizontalContentAlignment="Right" Width="146" />
+                            <Label x:Name="LabelRotate" Content="{lex:Loc}" HorizontalAlignment="Right" Margin="0,20,129,0" VerticalAlignment="Top" Height="28" HorizontalContentAlignment="Right" Width="146" />
                             <ComboBox x:Name="ComboBoxFiltersRotate" HorizontalAlignment="Left" Margin="151,18,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center" SelectedIndex="{Binding FilterRotateIndex}">
                                 <ComboBoxItem Content="0°" />
                                 <ComboBoxItem Content="90°" />
@@ -234,9 +238,9 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource deinterlace}" HorizontalAlignment="Left" Height="92" Margin="585,10,0,0" VerticalAlignment="Top" Width="285" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxDeinterlace" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="585,10,0,0" VerticalAlignment="Top" Width="285" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterDeinterlace}">
-                            <Label Content="{DynamicResource deinterlace}" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Height="28" />
+                            <Label x:Name="LabelDeinterlace" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Height="28" />
                             <ComboBox x:Name="ComboBoxFiltersDeinterlace" HorizontalAlignment="Left" Margin="85,20,0,0" VerticalAlignment="Top" Width="169" Height="29" VerticalContentAlignment="Center" SelectedIndex="{Binding FilterDeinterlaceIndex}">
                                 <ComboBoxItem Content="bwdif" IsSelected="True" />
                                 <ComboBoxItem Content="estdif" />
@@ -251,11 +255,11 @@
                     <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" IsOn="{Binding FilterDeinterlace}" Header="" Height="100" Margin="782,-15,0,0" VerticalAlignment="Top" Width="100" />
                 </Grid>
             </TabItem>
-            <TabItem Header="{DynamicResource video}">
+            <TabItem x:Name="TabItemVideo" Header="{lex:Loc}">
                 <Grid>
-                    <GroupBox Header="{DynamicResource video}" HorizontalAlignment="Left" Margin="10,10,0,0" Width="385" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox Header="{lex:Loc TabItemVideo}" HorizontalAlignment="Left" Margin="10,10,0,0" Width="385" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <Label Content="{DynamicResource encoder}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="111" />
+                            <Label Content="{lex:Loc LabelEncoder}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="111" />
                             <ComboBox x:Name="ComboBoxVideoEncoder"  HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectedIndex="{Binding Encoder}" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
                                 <ComboBoxItem Content="aom (AV1 FFmpeg)" IsSelected="True" />
                                 <ComboBoxItem Content="rav1e (AV1 FFmpeg)" />
@@ -266,19 +270,19 @@
                                 <ComboBoxItem Content="rav1e (AV1)" />
                                 <ComboBoxItem Content="svt-av1 (AV1)" />
                             </ComboBox>
-                            <Label Content="{DynamicResource bit-depth}" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top" Width="111" />
+                            <Label Content="{lex:Loc LabelBitDepth}" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top" Width="111" />
                             <ComboBox x:Name="ComboBoxVideoBitDepth" SelectedIndex="{Binding BitDepth}" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center">
                                 <ComboBoxItem Content="8" IsSelected="True" />
                                 <ComboBoxItem Content="10" />
                                 <ComboBoxItem Content="12" />
                             </ComboBox>
-                            <Label Content="{DynamicResource videoColorFormat}" HorizontalAlignment="Left" Margin="19,95,0,0" VerticalAlignment="Top" Height="30" Width="111" />
+                            <Label Content="{lex:Loc LabelColorFormat}" HorizontalAlignment="Left" Margin="19,95,0,0" VerticalAlignment="Top" Height="30" Width="111" />
                             <ComboBox x:Name="ComboBoxColorFormat" SelectedIndex="{Binding ColorFormat}" HorizontalAlignment="Left" Margin="135,93,0,0" VerticalAlignment="Top" Width="70" Height="30">
                                 <ComboBoxItem Content="4:2:0" IsSelected="True" />
                                 <ComboBoxItem Content="4:2:2" />
                                 <ComboBoxItem Content="4:4:4" />
                             </ComboBox>
-                            <Label Content="{DynamicResource videoFramerate}" HorizontalAlignment="Left" Margin="19,137,0,0" VerticalAlignment="Top" Height="30" Width="111" />
+                            <Label Content="{lex:Loc LabelFramerate}" HorizontalAlignment="Left" Margin="19,137,0,0" VerticalAlignment="Top" Height="30" Width="111" />
                             <ComboBox x:Name="ComboBoxVideoFrameRate" SelectedIndex="{Binding FrameRate}" HorizontalAlignment="Left" Margin="135,135,0,0" VerticalAlignment="Top" Height="30" Width="140">
                                 <ComboBoxItem Content="Same as Source" IsSelected="True"/>
                                 <ComboBoxItem Content="5"/>
@@ -307,42 +311,42 @@
                             <CheckBox x:Name="CheckBoxVideoVFR" Content="VFR" HorizontalAlignment="Left" Margin="296,141,0,0" VerticalAlignment="Top"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource optimisation}" Margin="690,10,10,0" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxOptimization" Header="{lex:Loc}" Margin="0,10,10,0" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="385">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <Label Content="{DynamicResource speed}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top"/>
+                            <Label x:Name="LabelSpeed" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="68"/>
                             <Slider x:Name="SliderEncoderPreset" HorizontalAlignment="Left" Margin="104,16,0,0" VerticalAlignment="Top" Width="227" Maximum="9" SmallChange="1" Value="{Binding SpeedPreset}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" ValueChanged="SliderEncoderPreset_ValueChanged"/>
-                            <mah:ToggleSwitch x:Name="CheckBoxTwoPassEncoding" Content="{DynamicResource twoPassEncoding}" IsOn="{Binding TwoPassEncoding}" Margin="19,66,0,0" VerticalAlignment="Top" Toggled="CheckBoxTwoPassEncoding_Checked"/>
+                            <mah:ToggleSwitch x:Name="CheckBoxTwoPassEncoding" Content="{lex:Loc}" IsOn="{Binding TwoPassEncoding}" Margin="19,66,0,0" VerticalAlignment="Top" Toggled="CheckBoxTwoPassEncoding_Checked"/>
                             <Label Content="{Binding ElementName=SliderEncoderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="337,16,0,0" VerticalAlignment="Top"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedSettings" Content="{DynamicResource advancedSettings}" IsOn="{Binding AdvancedSettings}" Height="36" Margin="19,129,0,0" VerticalAlignment="Top" Width="198"/>
-                            <mah:ToggleSwitch x:Name="CheckBoxRealTimeMode" Content="Realtime Mode" IsOn="{Binding AomencRTMode}" Margin="196,66,0,0" VerticalAlignment="Top" Toggled="CheckBoxRealTimeMode_Toggled"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedSettings" Content="{lex:Loc}" IsOn="{Binding AdvancedSettings}" Height="36" Margin="19,129,0,0" VerticalAlignment="Top" Width="224"/>
+                            <mah:ToggleSwitch x:Name="CheckBoxRealTimeMode" Content="{lex:Loc}" IsOn="{Binding AomencRTMode}" Margin="196,66,0,0" VerticalAlignment="Top" Toggled="CheckBoxRealTimeMode_Toggled" Width="169"/>
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="{DynamicResource quality}" Margin="10,237,10,10" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxQuality" Header="{lex:Loc}" Margin="10,237,10,10" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <Slider x:Name="SliderQuality" HorizontalAlignment="Left" Margin="131,69,0,0" VerticalAlignment="Top" Width="732" SmallChange="1" Maximum="63" Value="{Binding Quantizer}" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True"/>
-                            <Label Content="{Binding ElementName=SliderQuality, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="884,73,0,0" VerticalAlignment="Top" Width="78"/>
-                            <Label Content="{DynamicResource qualityMode}" HorizontalAlignment="Left" Margin="18,12,0,0" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="ComboBoxQualityMode" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectedIndex="{Binding QualityMode}" SelectionChanged="ComboBoxQualityMode_SelectionChanged">
+                            <Slider x:Name="SliderQuality" Margin="131,69,192,0" VerticalAlignment="Top" SmallChange="1" Maximum="63" Value="{Binding Quantizer}" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True"/>
+                            <Label Content="{Binding ElementName=SliderQuality, Path=Value, UpdateSourceTrigger=PropertyChanged}" Margin="0,73,93,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78"/>
+                            <Label x:Name="LabelQualityMode" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="18,12,0,0" VerticalAlignment="Top" Width="108"/>
+                            <ComboBox x:Name="ComboBoxQualityMode" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectedIndex="{Binding QualityMode}" SelectionChanged="ComboBoxQualityMode_SelectionChanged">
                                 <ComboBoxItem Content="Constant Quality"/>
                                 <ComboBoxItem Content="Constrained Quality"/>
                                 <ComboBoxItem Content="Average Bitrate"/>
                                 <ComboBoxItem Content="Constrained Bitrate"/>
                             </ComboBox>
-                            <Label Content="Quanitzer" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
-                            <Label Content="Bitrate (min)" Visibility="{Binding ElementName=TextBoxMinBitrate, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMinBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
-                            <Label Content="Bitrate (avg)" IsEnabled="{Binding ElementName=TextBoxAVGBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,173,0,0" VerticalAlignment="Top" Width="85" Height="30"/>
-                            <Label Content="Bitrate (max)" Visibility="{Binding ElementName=TextBoxMaxBitrate, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMaxBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,206,0,0" VerticalAlignment="Top" Width="85" Height="30"/>
-                            <TextBox x:Name="TextBoxMinBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="106,142,0,0" Text="{Binding MinBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
-                            <TextBox x:Name="TextBoxAVGBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="106,175,0,0" Text="{Binding AvgBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
-                            <TextBox x:Name="TextBoxMaxBitrate" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Margin="106,208,0,0" Text="{Binding MaxBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False"/>
+                            <Label x:Name="LabelQuantizer" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                            <Label x:Name="LabelBitrateMin" Content="{lex:Loc}" Visibility="{Binding ElementName=TextBoxMinBitrate, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMinBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                            <Label x:Name="LabelBitrateAvg" Content="{lex:Loc}" IsEnabled="{Binding ElementName=TextBoxAVGBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,173,0,0" VerticalAlignment="Top" Width="105" Height="30"/>
+                            <Label x:Name="LabelBitrateMax" Content="{lex:Loc}" Visibility="{Binding ElementName=TextBoxMaxBitrate, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMaxBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,206,0,0" VerticalAlignment="Top" Width="105" Height="30"/>
+                            <TextBox x:Name="TextBoxMinBitrate" PreviewTextInput="NumberValidationTextBox" Margin="131,142,0,0" Text="{Binding MinBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
+                            <TextBox x:Name="TextBoxAVGBitrate" PreviewTextInput="NumberValidationTextBox" Margin="131,175,0,0" Text="{Binding AvgBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
+                            <TextBox x:Name="TextBoxMaxBitrate" PreviewTextInput="NumberValidationTextBox" Margin="131,208,0,0" Text="{Binding MaxBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
 
                         </Grid>
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="{DynamicResource advanced}" Visibility="{Binding ElementName=ToggleSwitchAdvancedSettings, Path=IsOn, Converter={StaticResource b2v}}">
-                <GroupBox Header="{DynamicResource advancedSettings}" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <TabItem x:Name="TabItemAdvanced" Header="{lex:Loc}" Visibility="{Binding ElementName=ToggleSwitchAdvancedSettings, Path=IsOn, Converter={StaticResource b2v}}">
+                <GroupBox Header="{lex:Loc ToggleSwitchAdvancedSettings}" mah:ControlsHelper.ContentCharacterCasing="Normal">
                     <Grid>
                         <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="1025" Margin="-30,15,0,0">
                             <Canvas.Style>
@@ -776,17 +780,17 @@
                             </ComboBox>
                         </Canvas>
                         <TextBox x:Name="TextBoxCustomVideoSettings" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsOn, ElementName=CheckBoxCustomVideoSettings}" Text="{Binding CustomSettings}"  Margin="10,313,10,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged" />
-                        <mah:ToggleSwitch x:Name="CheckBoxCustomVideoSettings" Content="{DynamicResource customSettings}" Margin="10,281,0,0" VerticalAlignment="Top" Toggled="CheckBoxCustomVideoSettings_Toggled" />
-                        <Button x:Name="ButtonTestSettings" Content="{DynamicResource testSettings}" HorizontalAlignment="Left" Margin="934,277,0,0" VerticalAlignment="Top" Height="32" Width="131" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonTestSettings_Click"/>
+                        <mah:ToggleSwitch x:Name="CheckBoxCustomVideoSettings" Content="{lex:Loc}" Margin="10,281,0,0" VerticalAlignment="Top" Toggled="CheckBoxCustomVideoSettings_Toggled" Width="290" />
+                        <Button x:Name="ButtonTestSettings" Content="{lex:Loc}" HorizontalAlignment="Right" Margin="0,277,10,0" VerticalAlignment="Top" Height="32" Width="131" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonTestSettings_Click"/>
                     </Grid>
                 </GroupBox>
             </TabItem>
-            <TabItem Header="{DynamicResource audio}">
+            <TabItem x:Name="TabItemAudio" Header="{lex:Loc}">
                 <Grid>
                     <ListBox x:Name="ListBoxAudioTracks" HorizontalContentAlignment="Stretch" Margin="10">
                         <ListBoxItem Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Grid>
-                                <Label Content="{DynamicResource noAudioFound}" HorizontalContentAlignment="Center" FontSize="20" />
+                                <Label x:Name="LabelNoAudioFound" Content="{lex:Loc}" HorizontalContentAlignment="Center" FontSize="20" />
                             </Grid>
                         </ListBoxItem>
                         <ListBox.ItemContainerStyle>
@@ -813,7 +817,7 @@
                                     </Grid.ColumnDefinitions>
                                     <mah:ToggleSwitch Grid.Column="0" x:Name="ToggleOnOff" IsOn="{Binding Active}"></mah:ToggleSwitch>
                                     <Label Grid.Column="1" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{Binding Index}" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
-                                    <Label Grid.Column="2" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="Codec:" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                                    <Label x:Name="LabelCodec" Grid.Column="2" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelCodec}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
                                     <ComboBox Grid.Column="3" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" x:Name="ComboBoxAudioCodec" VerticalAlignment="Center" SelectedIndex="{Binding Codec}">
                                         <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
                                         <ComboBoxItem Content="Opus" IsSelected="True" />
@@ -823,20 +827,20 @@
                                         <ComboBoxItem Content="MP3" />
                                         <ComboBoxItem Content="Copy Audio" />
                                     </ComboBox>
-                                    <Label Grid.Column="4" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{DynamicResource channels}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                                    <Label x:Name="LabelChannels" Grid.Column="4" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelChannels}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
                                     <ComboBox Grid.Column="5" x:Name="ComboBoxChannels" VerticalAlignment="Center" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" SelectedIndex="{Binding Channels}">
                                         <ComboBoxItem Content="1 (Mono)" Tag="1" />
                                         <ComboBoxItem Content="2.0 (Stereo)" Tag="2" />
                                         <ComboBoxItem Content="5.1" Tag="6" />
                                         <ComboBoxItem Content="7.1" Tag="8" />
                                     </ComboBox>
-                                    <Label Grid.Column="6" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="Bitrate (kbps):" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                                    <Label x:Name="LabelBitrate" Grid.Column="6" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelBitrate}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
                                     <TextBox Grid.Column="7"  x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="{Binding Bitrate}" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" PreviewTextInput="NumberValidationTextBox" Width="80">
                                         <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
                                     </TextBox>
-                                    <Label Grid.Column="8" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{DynamicResource language}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                                    <Label x:Name="LabelLanguage" Grid.Column="8" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelLanguage}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
                                     <ComboBox Grid.Column="9" x:Name="ComboBoxTrackLanguage" VerticalAlignment="Center" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}"/>
-                                    <Label Grid.Column="10" Content="Track Name:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    <Label x:Name="LabelTrackName" Grid.Column="10" Content="{lex:Loc LabelTrackName}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                     <TextBox Grid.Column="11" x:Name="TextBoxAudioTrackName" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" TextWrapping="Wrap" VerticalContentAlignment="Center" VerticalAlignment="Center" Text="{Binding CustomName}" />
                                 </Grid>
                             </DataTemplate>
@@ -844,12 +848,12 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="{DynamicResource subtitles}">
+            <TabItem x:Name="TabItemSubtitles" Header="{lex:Loc}">
                 <Grid>
                     <ListBox x:Name="ListBoxSubtitleTracks" HorizontalContentAlignment="Stretch" Margin="10">
                         <ListBoxItem Background="{Binding ElementName=ListBoxSubtitleTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Grid>
-                                <Label Content="{DynamicResource noSubtitleFound}" HorizontalContentAlignment="Center" FontSize="20" />
+                                <Label x:Name="LabelNoSubtitleFound" Content="{lex:Loc}" HorizontalContentAlignment="Center" FontSize="20" />
                             </Grid>
                         </ListBoxItem>
                         <ListBox.ItemContainerStyle>
@@ -876,13 +880,13 @@
                                     </Grid.ColumnDefinitions>
                                     <mah:ToggleSwitch Grid.Column="0" x:Name="ToggleOnOff" IsOn="{Binding Active}"></mah:ToggleSwitch>
                                     <Label Grid.Column="1" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{Binding Index}" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
-                                    <Label Grid.Column="2" Content="Track Name:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    <Label Grid.Column="2" Content="{lex:Loc LabelTrackName}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                     <TextBox Grid.Column="3" x:Name="TextBoxSubtitleTrackName" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" TextWrapping="Wrap" VerticalContentAlignment="Center" VerticalAlignment="Center" Text="{Binding CustomName}" />
-                                    <Label Grid.Column="4" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{DynamicResource language}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                                    <Label Grid.Column="4" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelLanguage}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
                                     <ComboBox Grid.Column="5" x:Name="ComboBoxTrackLanguage" VerticalAlignment="Center" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}"/>
-                                    <Label Grid.Column="6" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{DynamicResource default}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                                    <Label x:Name="LabelDefault" Grid.Column="6" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelDefault}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
                                     <CheckBox Grid.Column="7" x:Name="CheckBoxDefault" IsChecked="{Binding Default}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    <Label Grid.Column="8" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{DynamicResource burnIn}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                                    <Label x:Name="LabelBurnIn" Grid.Column="8" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelBurnIn}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
                                     <CheckBox Grid.Column="9" x:Name="CheckBoxBurnIn" IsChecked="{Binding BurnIn}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 </Grid>
                             </DataTemplate>
@@ -890,9 +894,9 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="{DynamicResource queue}">
+            <TabItem x:Name="TabItemQueue" Header="{lex:Loc}">
                 <Grid>
-                    <GroupBox Header="{DynamicResource queue}">
+                    <GroupBox Header="{lex:Loc TabItemQueue}" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid>
                             <GroupBox Margin="0,34,0,0">
                                 <ListBox x:Name="ListBoxQueue" ItemsSource="{Binding Path=QueueList}" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" KeyDown="ListBoxQueue_KeyDown">
@@ -903,17 +907,17 @@
                                     </ListBox.ItemContainerStyle>
                                     <ListBox.ContextMenu>
                                         <ContextMenu>
-                                            <MenuItem x:Name="QueueMenuItemDelete" Header="{DynamicResource delete}" Click="ButtonRemoveSelectedQueueItem_Click">
+                                            <MenuItem x:Name="QueueMenuItemDelete" Header="{lex:Loc ButtonDeletePreset}" Click="ButtonRemoveSelectedQueueItem_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="resources/img/stop.png" Height="20" Width="20"></Image>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem x:Name="QueueMenuItemEdit" Header="{DynamicResource edit}" Click="ButtonEditSelectedItem_Click">
+                                            <MenuItem x:Name="QueueMenuItemEdit" Header="{lex:Loc}" Click="ButtonEditSelectedItem_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="resources/img/settings.png" Height="20" Width="20"></Image>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem x:Name="QueueMenuItemSave" Header="{DynamicResource save}" Click="QueueMenuItemSave_Click">
+                                            <MenuItem x:Name="QueueMenuItemSave" Header="{lex:Loc ButtonSavePreset}" Click="QueueMenuItemSave_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="resources/img/save.png" Height="20" Width="20"></Image>
                                                 </MenuItem.Icon>
@@ -937,11 +941,11 @@
                                                         <ColumnDefinition MinWidth="50"/>
                                                         <ColumnDefinition MinWidth="50"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <Label Grid.Column="0" Content="{DynamicResource source}" FontWeight="Bold"></Label>
+                                                    <Label Grid.Column="0" Content="{lex:Loc LabelVideoSource1}" FontWeight="Bold"></Label>
                                                     <Label Grid.Column="1" Content="{Binding VideoDB.InputFileName}" ToolTip="{Binding Input}"></Label>
-                                                    <Label Grid.Column="2" Content="{DynamicResource destination}" FontWeight="Bold"></Label>
+                                                    <Label Grid.Column="2" Content="{lex:Loc LabelVideoDestination1}" FontWeight="Bold"></Label>
                                                     <Label Grid.Column="3" Content="{Binding VideoDB.OutputFileName}" ToolTip="{Binding Output}"></Label>
-                                                    <Label Grid.Column="4" Content="{DynamicResource status}" FontWeight="Bold"></Label>
+                                                    <Label x:Name="LabelStatus" Grid.Column="4" Content="{lex:Loc LabelStatus}" FontWeight="Bold"></Label>
                                                     <Label Grid.Column="5" Content="{Binding Status}"></Label>
                                                 </Grid>
                                                 <Grid Grid.Row="1">
@@ -960,12 +964,12 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </GroupBox>
-                            <Label Content="{DynamicResource encode-queue-parallel}" Margin="0,3,102,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="300"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchQueueParallel" VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,1,-57,0" Height="30"/>
+                            <Label x:Name="LabelEncodeQueueParallel" Content="{lex:Loc}" Margin="0,1,67,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="398"/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchQueueParallel" VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,-1,-97,0" Height="30" Content=" "/>
                         </Grid>
                     </GroupBox>
-                    <Button x:Name="ButtonRemoveSelectedQueueItem" Content="{DynamicResource removeSelectedItem}" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonRemoveSelectedQueueItem_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button x:Name="ButtonEditSelectedItem" Content="{DynamicResource editSelectedItem}" HorizontalAlignment="Left" Margin="130,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Background="{Binding Background, ElementName=ListBoxAudioTracks, UpdateSourceTrigger=PropertyChanged}" Click="ButtonEditSelectedItem_Click"/>
+                    <Button x:Name="ButtonRemoveSelectedQueueItem" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonRemoveSelectedQueueItem_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" Width="115"/>
+                    <Button x:Name="ButtonEditSelectedItem" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="130,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Background="{Binding Background, ElementName=ListBoxAudioTracks, UpdateSourceTrigger=PropertyChanged}" Click="ButtonEditSelectedItem_Click" Width="115"/>
                 </Grid>
             </TabItem>
         </mah:MetroTabControl>
@@ -974,16 +978,16 @@
                 <Image x:Name="ImageStartStop1" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/settings.png"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonCancelEncode" Margin="0,10,60,0" VerticalAlignment="Top" Height="45" Click="ButtonCancelEncode_Click"  HorizontalAlignment="Right" Width="110" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+        <Button x:Name="ButtonCancelEncode" Margin="0,10,60,0" VerticalAlignment="Top" Height="45" Click="ButtonCancelEncode_Click"  HorizontalAlignment="Right" Width="124" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="102">
-                <Label Content="{DynamicResource cancel}" Canvas.Left="38" Width="64" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
-                <Image Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/stop.png"/>
+                <Label x:Name="LabelCancel" Content="{lex:Loc}" Canvas.Left="30" Width="81" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
+                <Image Height="44" Canvas.Left="-10" Canvas.Top="-7" Width="44" Source="/resources/img/stop.png"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonAddToQueue" Margin="280,10,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="150" Click="ButtonAddToQueue_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+        <Button x:Name="ButtonAddToQueue" Margin="280,10,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="180" Click="ButtonAddToQueue_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
             <Canvas Height="30" Width="120">
-                <Image x:Name="ImageStartStop2" Height="44" Canvas.Left="-10" Canvas.Top="-7" Width="44" Source="/resources/img/queue.png"/>
-                <Label Content="{DynamicResource addToQueue}" Canvas.Left="32" Width="103" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
+                <Image x:Name="ImageStartStop2" Height="44" Canvas.Left="-23" Canvas.Top="-7" Width="44" Source="/resources/img/queue.png"/>
+                <Label x:Name="LabelAddToQueue" Content="{lex:Loc}" Canvas.Left="26" Width="122" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
     </Grid>

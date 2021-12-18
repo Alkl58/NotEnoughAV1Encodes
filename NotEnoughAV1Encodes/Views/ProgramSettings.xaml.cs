@@ -2,9 +2,11 @@
 using MahApps.Metro.Controls;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Navigation;
+using WPFLocalizeExtension.Engine;
 
 namespace NotEnoughAV1Encodes.Views
 {
@@ -30,6 +32,14 @@ namespace NotEnoughAV1Encodes.Views
                 ThemeManager.Current.ChangeTheme(this, settingsDB.Theme);
             }
             catch { }
+
+
+            ComboBoxLanguage.SelectedIndex = settingsDB.CultureInfo.Name switch
+            {
+                "en" => 0,
+                "de" => 1,
+                _ => 0,
+            };
         }
 
         private void ButtonSelectBGImage_Click(object sender, RoutedEventArgs e)
@@ -82,6 +92,18 @@ namespace NotEnoughAV1Encodes.Views
         private void ButtonResetBGImage_Click(object sender, RoutedEventArgs e)
         {
             settingsDBTemp.BGImage = null;
+        }
+
+        private void ComboBoxLanguage_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (ComboBoxLanguage == null) return;
+            settingsDBTemp.CultureInfo = ComboBoxLanguage.SelectedIndex switch
+            {
+                0 => new CultureInfo("en"),
+                1 => new CultureInfo("de"),
+                _ => new CultureInfo("en"),
+            };
+            LocalizeDictionary.Instance.Culture = settingsDBTemp.CultureInfo;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

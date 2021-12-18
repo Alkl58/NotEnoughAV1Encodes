@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 
 namespace NotEnoughAV1Encodes
 {
@@ -22,5 +23,7 @@ namespace NotEnoughAV1Encodes
         public bool Logging { get; set; }
         /// <summary>Toggles Process Priority (false => low)</summary>
         public bool PriorityNormal { get; set; } = true;
+        /// <summary>CultureInfo for Language (Default: en-US)</summary>
+        public CultureInfo CultureInfo { get; set; } = new("en");
     }
 }

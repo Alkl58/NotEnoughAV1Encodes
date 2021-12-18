@@ -35,7 +35,8 @@
     <PackageReference Include="MahApps.Metro" Version="2.4.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Octokit" Version="0.50.0" />
-    <PackageReference Include="System.Management" Version="5.0.0" />
+    <PackageReference Include="System.Management" Version="6.0.0" />
+    <PackageReference Include="WPFLocalizeExtension" Version="3.9.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +50,24 @@
     <Resource Include="resources\img\start.png" />
     <Resource Include="resources\img\stop.png" />
     <Resource Include="resources\img\video.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="resources\lang\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="resources\lang\Strings.de.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="resources\lang\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

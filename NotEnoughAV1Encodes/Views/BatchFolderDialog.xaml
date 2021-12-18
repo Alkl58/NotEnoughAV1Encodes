@@ -4,16 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
         xmlns:local="clr-namespace:NotEnoughAV1Encodes.Views"
         mc:Ignorable="d"
+        lex:LocalizeDictionary.DesignCulture="en"
+        lex:ResxLocalizationProvider.DefaultAssembly="NotEnoughAV1Encodes"
+        lex:ResxLocalizationProvider.DefaultDictionary="Strings"
         Title="NEAV1E" Height="500" Width="800" ResizeMode="NoResize">
     <Grid>
-        <GroupBox Header="{DynamicResource source}" Margin="10,10,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="236" VerticalAlignment="Top">
+        <GroupBox Header="{lex:Loc LabelSource}" Margin="10,10,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="236" VerticalAlignment="Top">
             <Grid>
                 <ListBox x:Name="ListBoxVideoItems" KeyDown="ListBoxVideoItems_KeyDown" >
                     <ListBox.ContextMenu>
                         <ContextMenu>
-                            <MenuItem x:Name="QueueMenuItemDelete" Header="{DynamicResource delete}" Click="QueueMenuItemDelete_Click">
+                            <MenuItem x:Name="QueueMenuItemDelete" Header="{lex:Loc ButtonDeletePreset}" Click="QueueMenuItemDelete_Click">
                                 <MenuItem.Icon>
                                     <Image Source="/resources/img/stop.png" Height="20" Width="20"></Image>
                                 </MenuItem.Icon>
@@ -23,44 +27,44 @@
                 </ListBox>
             </Grid>
         </GroupBox>
-        <GroupBox Header="{DynamicResource destination}" Margin="10,246,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="84" VerticalAlignment="Top">
+        <GroupBox Header="{lex:Loc LabelDestination}" Margin="10,246,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="84" VerticalAlignment="Top">
             <Grid>
                 <Button x:Name="ButtonSelectDestination" HorizontalAlignment="Left" Margin="724,0,0,0" VerticalAlignment="Center" Click="ButtonSelectDestination_Click">
                     <Image Height="19" Width="21" Source="/resources/img/folder.png"/>
                 </Button>
-                <TextBox x:Name="TextBoxDestination" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{DynamicResource noDestination}" VerticalAlignment="Center" Width="719" IsReadOnly="True"/>
+                <TextBox x:Name="TextBoxDestination" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{lex:Loc}" VerticalAlignment="Center" Width="719" IsReadOnly="True"/>
 
             </Grid>
         </GroupBox>
-        <Button x:Name="ButtonAddToQueue" Margin="0,0,10,10" Click="ButtonAddToQueue_Click" HorizontalAlignment="Right" Width="130" Height="43" VerticalAlignment="Bottom">
+        <Button x:Name="ButtonAddToQueue" Margin="0,0,10,10" Click="ButtonAddToQueue_Click" HorizontalAlignment="Right" Width="160" Height="43" VerticalAlignment="Bottom">
             <Canvas Height="30" Width="120">
-                <Image x:Name="ImageStartStop2" Height="38" Canvas.Top="-4" Width="37" Source="/resources/img/queue.png"/>
-                <Label Content="{DynamicResource addToQueue}" Canvas.Left="32" Width="103" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="12" FontWeight="Normal"/>
+                <Image x:Name="ImageStartStop2" Height="38" Canvas.Top="-4" Width="37" Source="/resources/img/queue.png" Canvas.Left="-15"/>
+                <Label Content="{lex:Loc LabelAddToQueue}" Canvas.Left="22" Width="117" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="12" FontWeight="Normal"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonCancel" Margin="0,0,145,10" Click="ButtonCancelEncode_Click"  HorizontalAlignment="Right" Width="110" Height="43" VerticalAlignment="Bottom">
+        <Button x:Name="ButtonCancel" Margin="0,0,175,10" Click="ButtonCancelEncode_Click"  HorizontalAlignment="Right" Width="130" Height="43" VerticalAlignment="Bottom">
             <Canvas Height="30" Width="102">
-                <Label Content="{DynamicResource cancel}" Canvas.Left="38" Width="64" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14" FontWeight="Normal"/>
-                <Image Height="38" Canvas.Top="-4" Width="38" Source="/resources/img/stop.png"/>
+                <Label Content="{lex:Loc LabelCancel}" Canvas.Left="28" Width="86" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14" FontWeight="Normal"/>
+                <Image Height="38" Canvas.Top="-4" Width="38" Source="/resources/img/stop.png" Canvas.Left="-10"/>
             </Canvas>
         </Button>
-        <GroupBox Header="{DynamicResource preset}" Margin="10,330,400,0" Height="76" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
+        <GroupBox Header="{lex:Loc GroupBoxPresets}" Margin="10,330,400,0" Height="76" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
             <Grid>
-                <Label Grid.Column="0" Content="{DynamicResource selectPreset}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <ComboBox x:Name="ComboBoxPresets" Height="28" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200" Margin="167,0,0,0"/>
+                <Label x:Name="LabelSelectPresetForEncoding" Grid.Column="0" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <ComboBox x:Name="ComboBoxPresets" Height="28" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190" Margin="177,0,0,0"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="{DynamicResource videoContainer}" Margin="400,330,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="76" VerticalAlignment="Top">
+        <GroupBox x:Name="GroupBoxVideoContainer" Header="{lex:Loc}" Margin="400,330,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="76" VerticalAlignment="Top">
             <Grid>
-                <ComboBox x:Name="ComboBoxContainer" HorizontalAlignment="Left" Height="28" VerticalAlignment="Center" Width="120" Margin="70,0,0,0">
+                <ComboBox x:Name="ComboBoxContainer" HorizontalAlignment="Left" Height="28" VerticalAlignment="Center" Width="120" Margin="91,0,0,0">
                     <ComboBoxItem Content="MKV (Matroska)" IsSelected="True"/>
                     <ComboBoxItem Content="WEBM"/>
                     <ComboBoxItem Content="MP4"/>
                 </ComboBox>
-                <Label Grid.Column="0" Content="{DynamicResource container}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Label x:Name="LabelContainer" Grid.Column="0" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="86"/>
 
             </Grid>
         </GroupBox>
-        <mah:ToggleSwitch x:Name="ToggleSwitchUsePresetBitDepth" Height="62" Header="{DynamicResource forceBitdepthFromPreset}" Margin="10,411,0,0" Width="241" VerticalAlignment="Top"/>
+        <mah:ToggleSwitch x:Name="ToggleSwitchUsePresetBitDepth" Height="62" Header="{lex:Loc}" Margin="10,411,0,0" Width="241" VerticalAlignment="Top"/>
     </Grid>
 </mah:MetroWindow>

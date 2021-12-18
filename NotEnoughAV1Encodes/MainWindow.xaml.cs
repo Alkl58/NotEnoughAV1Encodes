@@ -16,6 +16,9 @@ using System.Diagnostics;
 using ControlzEx.Theming;
 using System.Windows.Media;
 using System.Linq;
+using WPFLocalizeExtension.Engine;
+using System.Globalization;
+using NotEnoughAV1Encodes.resources.lang;
 
 namespace NotEnoughAV1Encodes
 {
@@ -45,6 +48,8 @@ namespace NotEnoughAV1Encodes
                 firstStartup.ShowDialog();
                 Show();
             }
+
+            LocalizeDictionary.Instance.Culture = settingsDB.CultureInfo;
         }
 
         #region Startup
@@ -151,7 +156,7 @@ namespace NotEnoughAV1Encodes
                     // Check if Presets exist
                     if(ComboBoxPresets.Items.Count == 0)
                     {
-                        MessageBox.Show("Please create a Preset before adding batch files.");
+                        MessageBox.Show(LocalizedStrings.Instance["MessageCreatePresetBeforeBatch"]);
                         return;
                     }
 
@@ -336,7 +341,7 @@ namespace NotEnoughAV1Encodes
                 if (ProgramState is 0 or 2)
                 {
                     ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/pause.png", UriKind.Relative));
-                    LabelStartPauseButton.Content = "Pause";
+                    LabelStartPauseButton.Content = LocalizedStrings.Instance["Pause"];
 
                     // Main Start
                     if (ProgramState is 0)
@@ -359,7 +364,7 @@ namespace NotEnoughAV1Encodes
                 {
                     ProgramState = 2;
                     ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/resume.png", UriKind.Relative));
-                    LabelStartPauseButton.Content = "Resume";
+                    LabelStartPauseButton.Content = LocalizedStrings.Instance["Resume"];
 
                     // Pause all PIDs
                     foreach (int pid in Global.LaunchedPIDs)
@@ -370,7 +375,7 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                MessageBox.Show("Queue is empty!", "Queue", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(LocalizedStrings.Instance["MessageQueueEmpty"], LocalizedStrings.Instance["TabItemQueue"], MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -501,6 +506,7 @@ namespace NotEnoughAV1Encodes
         #region UI Functions
         private void ComboBoxPresets_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            if (ComboBoxPresets.SelectedItem == null) return;
             try
             {
                 PresetSettings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", ComboBoxPresets.SelectedItem.ToString() + ".json")));
@@ -625,7 +631,7 @@ namespace NotEnoughAV1Encodes
                     if (ComboBoxQualityMode.SelectedIndex is 1 or 3)
                     {
                         ComboBoxQualityMode.SelectedIndex = 0;
-                        MessageBox.Show("NEAV1E currently only supports Constant Quality or Bitrate Mode (rav1e / svt-av1)");
+                        MessageBox.Show(LocalizedStrings.Instance["MessageQualityModeRav1eSVT"]);
                         return;
                     }
                     if(CheckBoxTwoPassEncoding.IsOn && ComboBoxVideoEncoder.SelectedIndex is 2 or 7 && ComboBoxQualityMode.SelectedIndex == 0)
@@ -638,7 +644,7 @@ namespace NotEnoughAV1Encodes
                     if (ComboBoxQualityMode.SelectedIndex is 3)
                     {
                         ComboBoxQualityMode.SelectedIndex = 0;
-                        MessageBox.Show("NEAV1E currently does not support Constrained Bitrate (aomenc)");
+                        MessageBox.Show(LocalizedStrings.Instance["MessageConstrainedBitrateAomenc"]);
                         return;
                     }
                 }
@@ -774,14 +780,14 @@ namespace NotEnoughAV1Encodes
             if (string.IsNullOrEmpty(videoDB.InputPath))
             {
                 // Throw Error
-                MessageBox.Show("No Input selected!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(LocalizedStrings.Instance["MessageNoInput"], LocalizedStrings.Instance["Error"], MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (string.IsNullOrEmpty(videoDB.OutputPath))
             {
                 // Throw Error
-                MessageBox.Show("No Output selected!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(LocalizedStrings.Instance["MessageNoOutput"], LocalizedStrings.Instance["Error"], MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -1546,7 +1552,7 @@ namespace NotEnoughAV1Encodes
 
                             // Starts "a timer" for eta / fps calculation
                             System.Timers.Timer aTimer = new();
-                            aTimer.Elapsed += (sender, e) => { UpdateProgressBar(sender, e, queueElement); };
+                            aTimer.Elapsed += (sender, e) => { UpdateProgressBar(queueElement); };
                             aTimer.Interval = 1000;
                             aTimer.Start();
 
@@ -1582,7 +1588,7 @@ namespace NotEnoughAV1Encodes
             Shutdown();
         }
 
-        private static void UpdateProgressBar(object sender, EventArgs e, Queue.QueueElement queueElement)
+        private static void UpdateProgressBar(Queue.QueueElement queueElement)
         {
             long encodedFrames = 0;
             long encodedFramesSecondPass = 0;

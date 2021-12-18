@@ -33,9 +33,9 @@ namespace NotEnoughAV1Encodes
 
         private static List<int> GetChildProcesses(int process_id)
         {
-            List<int> children = new List<int>();
+            List<int> children = new();
 
-            ManagementObjectSearcher mos = new ManagementObjectSearcher(String.Format("Select * From Win32_Process Where ParentProcessID={0}", process_id));
+            ManagementObjectSearcher mos = new(String.Format("Select * From Win32_Process Where ParentProcessID={0}", process_id));
 
             foreach (ManagementObject mo in mos.Get())
             {
@@ -75,7 +75,7 @@ namespace NotEnoughAV1Encodes
                     continue;
                 }
 
-                var suspendCount = 0;
+                int suspendCount;
                 do
                 {
                     suspendCount = ResumeThread(pOpenThread);
