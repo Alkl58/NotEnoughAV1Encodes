@@ -409,8 +409,17 @@
   <data name="ProgramSettings" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
+  <data name="Queue1stPass" xml:space="preserve">
+    <value>1. Pass:</value>
+  </data>
+  <data name="Queue2ndPass" xml:space="preserve">
+    <value>2. Pass:</value>
+  </data>
   <data name="QueueMenuItemEdit" xml:space="preserve">
     <value>Bearbeiten</value>
+  </data>
+  <data name="QueueMinLeft" xml:space="preserve">
+    <value>min verbl.</value>
   </data>
   <data name="Resume" xml:space="preserve">
     <value>Fortsetzen</value>

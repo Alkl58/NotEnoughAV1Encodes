@@ -1585,7 +1585,7 @@ namespace NotEnoughAV1Encodes
 
             ProgramState = 0;
             ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
-            LabelStartPauseButton.Content = "Start";
+            LabelStartPauseButton.Content = LocalizedStrings.Instance["LabelStartPauseButton"];
 
             Shutdown();
         }
