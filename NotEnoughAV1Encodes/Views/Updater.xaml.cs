@@ -21,7 +21,7 @@ namespace NotEnoughAV1Encodes.Views
     {
         // NEAV1E Update
         private string UpdateVersion = "0";
-        private string CurrentVersion = "2.0.0"; // current neav1e version (hardcoded)
+        private string CurrentVersion = "2.0.1"; // current neav1e version (hardcoded)
 
         // FFmpeg Update
         public static string FFmpegUpdateVersion;
