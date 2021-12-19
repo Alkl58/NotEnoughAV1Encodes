@@ -943,11 +943,38 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 1st Pass: ähnelt.
+        /// </summary>
+        public static string Queue1stPass {
+            get {
+                return ResourceManager.GetString("Queue1stPass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 2nd Pass: ähnelt.
+        /// </summary>
+        public static string Queue2ndPass {
+            get {
+                return ResourceManager.GetString("Queue2ndPass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit ähnelt.
         /// </summary>
         public static string QueueMenuItemEdit {
             get {
                 return ResourceManager.GetString("QueueMenuItemEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die min left ähnelt.
+        /// </summary>
+        public static string QueueMinLeft {
+            get {
+                return ResourceManager.GetString("QueueMinLeft", resourceCulture);
             }
         }
         

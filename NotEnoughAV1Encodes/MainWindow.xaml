@@ -930,6 +930,7 @@
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="25"/>
                                                     <RowDefinition Height="25"/>
+                                                    <RowDefinition Height="25"/>
                                                 </Grid.RowDefinitions>
                                                 <Grid Grid.Row="0">
                                                     <Grid.ColumnDefinitions>
@@ -938,20 +939,24 @@
                                                         <ColumnDefinition Width="90" />
                                                         <ColumnDefinition MinWidth="50"/>
                                                         <ColumnDefinition Width="90" />
-                                                        <ColumnDefinition MinWidth="50"/>
-                                                        <ColumnDefinition MinWidth="50"/>
                                                     </Grid.ColumnDefinitions>
                                                     <Label Grid.Column="0" Content="{lex:Loc LabelVideoSource1}" FontWeight="Bold"></Label>
                                                     <Label Grid.Column="1" Content="{Binding VideoDB.InputFileName}" ToolTip="{Binding Input}"></Label>
                                                     <Label Grid.Column="2" Content="{lex:Loc LabelVideoDestination1}" FontWeight="Bold"></Label>
                                                     <Label Grid.Column="3" Content="{Binding VideoDB.OutputFileName}" ToolTip="{Binding Output}"></Label>
-                                                    <Label x:Name="LabelStatus" Grid.Column="4" Content="{lex:Loc LabelStatus}" FontWeight="Bold"></Label>
-                                                    <Label Grid.Column="5" Content="{Binding Status}"></Label>
                                                 </Grid>
                                                 <Grid Grid.Row="1">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="60"/>
+                                                        <ColumnDefinition MinWidth="100"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label x:Name="LabelStatus" Grid.Column="0" Content="{lex:Loc LabelStatus}" FontWeight="Bold"></Label>
+                                                    <Label Grid.Column="1" Content="{Binding Status}"></Label>
+                                                </Grid>
+                                                <Grid Grid.Row="2">
                                                     <ProgressBar Value="{Binding Progress}" Maximum="{Binding FrameCount}"/>
                                                 </Grid>
-                                                <Grid Grid.Row="1" Visibility="{Binding TwoProgressbars, Converter={StaticResource b2v}}">
+                                                <Grid Grid.Row="2" Visibility="{Binding TwoProgressbars, Converter={StaticResource b2v}}">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition/>
                                                         <ColumnDefinition/>
