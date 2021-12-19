@@ -113,6 +113,9 @@ namespace NotEnoughAV1Encodes
             if (cancellationTokenSource == null) return;
             cancellationTokenSource.Cancel();
             ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
+            ButtonAddToQueue.IsEnabled = true;
+            ButtonRemoveSelectedQueueItem.IsEnabled = true;
+            ButtonEditSelectedItem.IsEnabled = true;
         }
 
         private void ButtonProgramSettings_Click(object sender, RoutedEventArgs e)
@@ -133,6 +136,7 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonRemoveSelectedQueueItem_Click(object sender, RoutedEventArgs e)
         {
+            if (ProgramState != 0) return;
             if (ListBoxQueue.SelectedItem != null)
             {
                 Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
@@ -352,6 +356,10 @@ namespace NotEnoughAV1Encodes
                     // Main Start
                     if (ProgramState is 0)
                     {
+                        ButtonAddToQueue.IsEnabled = false;
+                        ButtonRemoveSelectedQueueItem.IsEnabled = false;
+                        ButtonEditSelectedItem.IsEnabled = false;
+
                         PreStart();
                     }
 
@@ -432,6 +440,7 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonEditSelectedItem_Click(object sender, RoutedEventArgs e)
         {
+            if (ProgramState != 0) return;
             if (ListBoxQueue.SelectedItem != null)
             {
                 Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
@@ -1591,6 +1600,9 @@ namespace NotEnoughAV1Encodes
             ProgramState = 0;
             ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
             LabelStartPauseButton.Content = LocalizedStrings.Instance["LabelStartPauseButton"];
+            ButtonAddToQueue.IsEnabled = true;
+            ButtonRemoveSelectedQueueItem.IsEnabled = true;
+            ButtonEditSelectedItem.IsEnabled = true;
 
             Shutdown();
         }
