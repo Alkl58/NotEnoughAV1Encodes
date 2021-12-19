@@ -220,8 +220,17 @@
   <data name="LabelAddToQueue" xml:space="preserve">
     <value>Warteschl. hinz.</value>
   </data>
+  <data name="LabelAvailableBatchFilename" xml:space="preserve">
+    <value>{filename} = Name der Quelle</value>
+  </data>
+  <data name="LabelAvailableBatchPresetName" xml:space="preserve">
+    <value>{presetname} = Name vom Preset</value>
+  </data>
   <data name="LabelBaseTheme" xml:space="preserve">
     <value>Basis-Theme:</value>
+  </data>
+  <data name="LabelBatchFileName" xml:space="preserve">
+    <value>Batch Dateiname:</value>
   </data>
   <data name="LabelBitDepth" xml:space="preserve">
     <value>Bit-Depth:</value>

@@ -196,7 +196,12 @@ namespace NotEnoughAV1Encodes
                                 // Create video object
                                 videoDB = new();
                                 videoDB.InputPath = file;
-                                videoDB.OutputPath = Path.Combine(output, Path.GetFileNameWithoutExtension(file) + identifier.ToString() + outputContainer);
+
+                                // Output Video
+                                string outname = PresetSettings.PresetBatchName;
+                                outname = outname.Replace("{filename}", Path.GetFileNameWithoutExtension(file));
+                                outname = outname.Replace("{presetname}", preset);
+                                videoDB.OutputPath = Path.Combine(output, outname + outputContainer);
                                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
                                 videoDB.ParseMediaInfo();
 
@@ -400,8 +405,8 @@ namespace NotEnoughAV1Encodes
             savePresetDialog.ShowDialog();
             if (savePresetDialog.Quit)
             {
-                Debug.WriteLine("Save: " + savePresetDialog.PresetName);
                 Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E", "Presets"));
+                PresetSettings.PresetBatchName = savePresetDialog.PresetBatchName;
                 File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", savePresetDialog.PresetName + ".json"), JsonConvert.SerializeObject(PresetSettings, Formatting.Indented));
                 ComboBoxPresets.Items.Clear();
                 LoadPresets();

@@ -7,6 +7,7 @@ namespace NotEnoughAV1Encodes.Views
     public partial class SavePresetDialog : MetroWindow
     {
         public string PresetName { get; set; }
+        public string PresetBatchName { get; set; }
         public bool Quit { get; set; }
         public SavePresetDialog(string _theme)
         {
@@ -22,6 +23,7 @@ namespace NotEnoughAV1Encodes.Views
                 return;
             }
             PresetName = TextBoxPresetName.Text;
+            PresetBatchName = TextBoxBatchFileName.Text;
             Quit = true;
             Close();
         }

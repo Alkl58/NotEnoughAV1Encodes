@@ -220,8 +220,17 @@
   <data name="LabelAddToQueue" xml:space="preserve">
     <value>Add to Queue</value>
   </data>
+  <data name="LabelAvailableBatchFilename" xml:space="preserve">
+    <value>{filename} = Input Filename</value>
+  </data>
+  <data name="LabelAvailableBatchPresetName" xml:space="preserve">
+    <value>{presetname} = Name of Preset</value>
+  </data>
   <data name="LabelBaseTheme" xml:space="preserve">
     <value>Base Theme:</value>
+  </data>
+  <data name="LabelBatchFileName" xml:space="preserve">
+    <value>Batch Filename:</value>
   </data>
   <data name="LabelBitDepth" xml:space="preserve">
     <value>Bit-Depth:</value>

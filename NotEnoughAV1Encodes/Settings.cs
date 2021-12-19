@@ -15,6 +15,7 @@
         public string AvgBitrate { get; set; } = "1000";
         public bool AdvancedSettings { get; set; }
         public string CustomSettings { get; set; }
+        public string PresetBatchName { get; set; } = "{filename}";
 
         // Filters
         public bool FilterCrop { get; set; }

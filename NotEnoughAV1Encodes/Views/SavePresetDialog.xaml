@@ -10,11 +10,15 @@
         lex:LocalizeDictionary.DesignCulture="en"
         lex:ResxLocalizationProvider.DefaultAssembly="NotEnoughAV1Encodes"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-        Title="Save Preset" Height="150" Width="300" ResizeMode="NoResize" mah:ControlsHelper.ContentCharacterCasing="Normal">
+        Title="Save Preset" Height="255" Width="340" ResizeMode="NoResize" mah:ControlsHelper.ContentCharacterCasing="Normal">
     <Grid>
-        <Label x:Name="LabelPresetName" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100"/>
-        <TextBox x:Name="TextBoxPresetName" HorizontalAlignment="Left" Margin="110,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
-        <Button x:Name="ButtonSave" Content="{lex:Loc ButtonExit}" HorizontalAlignment="Center" Margin="0,85,0,0" VerticalAlignment="Top" Width="280" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSave_Click"/>
+        <Label x:Name="LabelPresetName" Content="{lex:Loc}" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="280" HorizontalContentAlignment="Center"/>
+        <TextBox x:Name="TextBoxPresetName" HorizontalAlignment="Center" Margin="0,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280"/>
+        <Button x:Name="ButtonSave" Content="{lex:Loc ButtonExit}" HorizontalAlignment="Center" Margin="0,193,0,0" VerticalAlignment="Top" Width="280" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSave_Click"/>
+        <Label x:Name="LabelBatchFileName" Content="{lex:Loc}" HorizontalAlignment="Center" VerticalAlignment="Top" Width="280" HorizontalContentAlignment="Center" Margin="0,74,0,0"/>
+        <TextBox x:Name="TextBoxBatchFileName" HorizontalAlignment="Center" Margin="0,105,0,0" VerticalAlignment="Top" Width="280" Text="{}{filename} [AV1][1080p]" Height="10"/>
+        <Label x:Name="LabelAvailableBatchFilename" Content="{lex:Loc}" HorizontalAlignment="Center" Margin="0,136,0,0" VerticalAlignment="Top" Height="27" Width="280" FontStyle="Italic"/>
+        <Label x:Name="LabelAvailableBatchPresetName" Content="{lex:Loc}" HorizontalAlignment="Center" Margin="0,158,0,0" VerticalAlignment="Top" Height="30" Width="280" FontStyle="Italic"/>
 
     </Grid>
 </mah:MetroWindow>

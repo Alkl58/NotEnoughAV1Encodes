@@ -367,11 +367,38 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die {filename} = Input Filename ähnelt.
+        /// </summary>
+        public static string LabelAvailableBatchFilename {
+            get {
+                return ResourceManager.GetString("LabelAvailableBatchFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die {presetname} = Name of Preset ähnelt.
+        /// </summary>
+        public static string LabelAvailableBatchPresetName {
+            get {
+                return ResourceManager.GetString("LabelAvailableBatchPresetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Base Theme: ähnelt.
         /// </summary>
         public static string LabelBaseTheme {
             get {
                 return ResourceManager.GetString("LabelBaseTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Batch Filename: ähnelt.
+        /// </summary>
+        public static string LabelBatchFileName {
+            get {
+                return ResourceManager.GetString("LabelBatchFileName", resourceCulture);
             }
         }
         
