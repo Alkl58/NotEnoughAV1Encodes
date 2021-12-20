@@ -1093,7 +1093,7 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                _settings += " -threads 4 -tile-columns 2 -tile-rows 1";
+                _settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval();
             }
 
             return _settings;
@@ -1159,7 +1159,7 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                _settings += " -tile-columns 2 -tile-rows 1 -rav1e-params threads=4";
+                _settings += " -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval() + " -rav1e-params threads=4";
             }
 
             return _settings;
@@ -1186,6 +1186,10 @@ namespace NotEnoughAV1Encodes
                 _settings += " -tile_rows " + ComboBoxSVTAV1TileRows.Text;                                    // Tile Rows
                 _settings += " -g " + TextBoxSVTAV1MaxGOP.Text;                                               // Keyframe Interval
                 _settings += " -la_depth " + TextBoxSVTAV1Lookahead.Text;                                     // Lookahead
+            }
+            else
+            {
+                _settings += " -g " + GenerateKeyFrameInerval();
             }
 
             return _settings;
@@ -1233,7 +1237,7 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                _settings += " -threads 4 -tile-columns 2 -tile-rows 1";
+                _settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval();
             }
 
             return _settings;
@@ -1307,7 +1311,7 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                _settings += " --threads=4 --tile-columns=2 --tile-rows=1";
+                _settings += " --threads=4 --tile-columns=2 --tile-rows=1 --kf-max-dist=" + GenerateKeyFrameInerval();
             }
 
             return _settings;
@@ -1375,7 +1379,7 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                _settings += " --threads 4 --tile-cols 2 --tile-rows 1";
+                _settings += " --threads 4 --tile-cols 2 --tile-rows 1 --keyint " + GenerateKeyFrameInerval();
             }
 
             return _settings;
@@ -1405,8 +1409,44 @@ namespace NotEnoughAV1Encodes
                 _settings += " --keyint " + TextBoxSVTAV1MaxGOP.Text;                                         // Keyframe Interval
                 _settings += " --lookahead " + TextBoxSVTAV1Lookahead.Text;                                   // Lookahead
             }
+            else
+            {
+                _settings += " --keyint " + GenerateKeyFrameInerval();
+            }
 
             return _settings;
+        }
+
+        private string GenerateKeyFrameInerval()
+        {
+            int seconds = 10;
+
+            // Custom Framerate
+            if (ComboBoxVideoFrameRate.SelectedIndex != 0)
+            {
+                try
+                {
+                    string selectedFramerate = ComboBoxVideoFrameRate.Text;
+                    if (ComboBoxVideoFrameRate.SelectedIndex == 6) { selectedFramerate = "24"; }
+                    if (ComboBoxVideoFrameRate.SelectedIndex == 9) { selectedFramerate = "30"; }
+                    if (ComboBoxVideoFrameRate.SelectedIndex == 13) { selectedFramerate = "60"; }
+                    int frames = int.Parse(selectedFramerate) * seconds;
+                    return frames.ToString()
+                } catch { }
+            }
+
+            // Framerate of Video if it's not VFR and MediaInfo Detected it
+            if (!videoDB.MIIsVFR && !string.IsNullOrEmpty(videoDB.MIFramerate))
+            {  
+                try
+                {
+                    int framerate = int.Parse(videoDB.MIFramerate);
+                    int frames = framerate * seconds;
+                    return frames.ToString();
+                } catch { }
+            }
+
+            return "240";
         }
 
         private string GenerateFFmpegColorSpace()
