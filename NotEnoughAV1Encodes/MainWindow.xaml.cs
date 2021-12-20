@@ -1431,7 +1431,7 @@ namespace NotEnoughAV1Encodes
                     if (ComboBoxVideoFrameRate.SelectedIndex == 9) { selectedFramerate = "30"; }
                     if (ComboBoxVideoFrameRate.SelectedIndex == 13) { selectedFramerate = "60"; }
                     int frames = int.Parse(selectedFramerate) * seconds;
-                    return frames.ToString()
+                    return frames.ToString();
                 } catch { }
             }
 
