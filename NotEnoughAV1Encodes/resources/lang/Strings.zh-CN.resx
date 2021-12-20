@@ -1,0 +1,481 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" />
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string" />
+							<xsd:attribute name="name" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="ButtonClose" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+	<data name="ButtonDeletePreset" xml:space="preserve">
+    <value>删除</value>
+  </data>
+	<data name="ButtonEditSelectedItem" xml:space="preserve">
+    <value>编辑项目</value>
+  </data>
+	<data name="ButtonExit" xml:space="preserve">
+    <value>保存并退出</value>
+  </data>
+	<data name="ButtonOpenBatchFolder" xml:space="preserve">
+    <value>➔ 批处理文件夹</value>
+  </data>
+	<data name="ButtonOpenProjectFile" xml:space="preserve">
+    <value>➔ 项目文件</value>
+  </data>
+	<data name="ButtonOpenVideoFile" xml:space="preserve">
+    <value>➔ 单个文件</value>
+  </data>
+	<data name="ButtonRemoveSelectedQueueItem" xml:space="preserve">
+    <value>删除项目</value>
+  </data>
+	<data name="ButtonResetBGImage" xml:space="preserve">
+    <value>重置</value>
+  </data>
+	<data name="ButtonSavePreset" xml:space="preserve">
+    <value>保存</value>
+  </data>
+	<data name="ButtonSelectBGImage" xml:space="preserve">
+    <value>选择</value>
+  </data>
+	<data name="ButtonTestSettings" xml:space="preserve">
+    <value>测试设置</value>
+  </data>
+	<data name="ButtonUpdater" xml:space="preserve">
+    <value>更新器</value>
+  </data>
+	<data name="CheckBoxCustomVideoSettings" xml:space="preserve">
+    <value>自定义设置</value>
+  </data>
+	<data name="CheckBoxRealTimeMode" xml:space="preserve">
+    <value>即时模式</value>
+  </data>
+	<data name="CheckBoxTwoPassEncoding" xml:space="preserve">
+    <value>2 遍编码</value>
+  </data>
+	<data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+	<data name="GroupBoxBackroundImage" xml:space="preserve">
+    <value>背景图像</value>
+  </data>
+	<data name="GroupBoxCrop" xml:space="preserve">
+    <value>裁剪</value>
+  </data>
+	<data name="GroupBoxCurrentSettings" xml:space="preserve">
+    <value>当前编码设置</value>
+  </data>
+	<data name="GroupBoxDeinterlace" xml:space="preserve">
+    <value>隔行扫描</value>
+  </data>
+	<data name="GroupBoxInputOutput" xml:space="preserve">
+    <value>输入/输出</value>
+  </data>
+	<data name="GroupBoxLanguage" xml:space="preserve">
+    <value>语言</value>
+    <comment>Other Languages MUST use "&lt;Lang&gt; (Language)"</comment>
+  </data>
+	<data name="GroupBoxOptimization" xml:space="preserve">
+    <value>优化</value>
+  </data>
+	<data name="GroupBoxPresets" xml:space="preserve">
+    <value>预设</value>
+  </data>
+	<data name="GroupBoxQuality" xml:space="preserve">
+    <value>质量</value>
+  </data>
+	<data name="GroupBoxResize" xml:space="preserve">
+    <value>调整大小</value>
+  </data>
+	<data name="GroupBoxRotate" xml:space="preserve">
+    <value>旋转</value>
+  </data>
+	<data name="GroupBoxThemeSettings" xml:space="preserve">
+    <value>主题设置</value>
+  </data>
+	<data name="GroupBoxVideoContainer" xml:space="preserve">
+    <value>视频容器</value>
+  </data>
+	<data name="GroupBoxVideoInformation" xml:space="preserve">
+    <value>视频信息</value>
+  </data>
+	<data name="GroupBoxWorkersAndSplitting" xml:space="preserve">
+    <value>工作和分割</value>
+  </data>
+	<data name="LabelAccentTheme" xml:space="preserve">
+    <value>皮肤主题：</value>
+  </data>
+	<data name="LabelAddToQueue" xml:space="preserve">
+    <value>添加到队列</value>
+  </data>
+	<data name="LabelAvailableBatchFilename" xml:space="preserve">
+    <value>{filename} = 输入文件名</value>
+  </data>
+	<data name="LabelAvailableBatchPresetName" xml:space="preserve">
+    <value>{presetname} = 预设名称</value>
+  </data>
+	<data name="LabelBaseTheme" xml:space="preserve">
+    <value>基本主题：</value>
+  </data>
+	<data name="LabelBatchFileName" xml:space="preserve">
+    <value>批处理文件名：</value>
+  </data>
+	<data name="LabelBitDepth" xml:space="preserve">
+    <value>位深度：</value>
+  </data>
+	<data name="LabelBitrate" xml:space="preserve">
+    <value>比特率(kbps)：</value>
+  </data>
+	<data name="LabelBitrateAvg" xml:space="preserve">
+    <value>比特率(平均)：</value>
+  </data>
+	<data name="LabelBitrateMax" xml:space="preserve">
+    <value>比特率(最大)：</value>
+  </data>
+	<data name="LabelBitrateMin" xml:space="preserve">
+    <value>比特率(分钟)：</value>
+  </data>
+	<data name="LabelBottom" xml:space="preserve">
+    <value>底部</value>
+  </data>
+	<data name="LabelBuildsProvidedBy" xml:space="preserve">
+    <value>由 jeremylee.sh 在 GPLv3 下提供的构建</value>
+  </data>
+	<data name="LabelBurnIn" xml:space="preserve">
+    <value>刻录在：</value>
+  </data>
+	<data name="LabelCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+	<data name="LabelChannels" xml:space="preserve">
+    <value>声道：</value>
+  </data>
+	<data name="LabelChunkLength" xml:space="preserve">
+    <value>块长度（秒）：</value>
+  </data>
+	<data name="LabelCodec" xml:space="preserve">
+    <value>编解码器：</value>
+  </data>
+	<data name="LabelColorFormat" xml:space="preserve">
+    <value>颜色格式：</value>
+  </data>
+	<data name="LabelContainer" xml:space="preserve">
+    <value>容器：</value>
+  </data>
+	<data name="LabelDefault" xml:space="preserve">
+    <value>默认：</value>
+  </data>
+	<data name="LabelDeinterlace" xml:space="preserve">
+    <value>隔行扫描：</value>
+  </data>
+	<data name="LabelDestination" xml:space="preserve">
+    <value>目的地</value>
+  </data>
+	<data name="LabelEncodeQueueParallel" xml:space="preserve">
+    <value>编码队列并行而不是分块：</value>
+  </data>
+	<data name="LabelEncoder" xml:space="preserve">
+    <value>编码器：</value>
+  </data>
+	<data name="LabelFramerate" xml:space="preserve">
+    <value>帧速率：</value>
+  </data>
+	<data name="LabelHeight" xml:space="preserve">
+    <value>高度：</value>
+  </data>
+	<data name="LabelIcons" xml:space="preserve">
+    <value>图标：</value>
+  </data>
+	<data name="LabelLanguage" xml:space="preserve">
+    <value>语言：</value>
+  </data>
+	<data name="LabelLeft" xml:space="preserve">
+    <value>左侧</value>
+  </data>
+	<data name="LabelLength" xml:space="preserve">
+    <value>长度：</value>
+  </data>
+	<data name="LabelMethodOpeningSource" xml:space="preserve">
+    <value>打开来源的方法。</value>
+  </data>
+	<data name="LabelNoAudioFound" xml:space="preserve">
+    <value>未找到音频</value>
+  </data>
+	<data name="LabelNoSubtitleFound" xml:space="preserve">
+    <value>未找到字幕</value>
+  </data>
+	<data name="LabelPreset" xml:space="preserve">
+    <value>预设：</value>
+  </data>
+	<data name="LabelPresetName" xml:space="preserve">
+    <value>预设名称：</value>
+  </data>
+	<data name="LabelProcessPriority" xml:space="preserve">
+    <value>进程优先级：</value>
+  </data>
+	<data name="LabelQualityMode" xml:space="preserve">
+    <value>质量模式：</value>
+  </data>
+	<data name="LabelQuantizer" xml:space="preserve">
+    <value>量化器：</value>
+  </data>
+	<data name="LabelReencodeMethod" xml:space="preserve">
+    <value>重新编码方式：</value>
+  </data>
+	<data name="LabelResolution" xml:space="preserve">
+    <value>分辨率：</value>
+  </data>
+	<data name="LabelRight" xml:space="preserve">
+    <value>右侧</value>
+  </data>
+	<data name="LabelRotate" xml:space="preserve">
+    <value>旋转（顺时针）：</value>
+  </data>
+	<data name="LabelSelectPresetForEncoding" xml:space="preserve">
+    <value>选择预设进行编码：</value>
+  </data>
+	<data name="LabelSource" xml:space="preserve">
+    <value>来源</value>
+  </data>
+	<data name="LabelSpeed" xml:space="preserve">
+    <value>速度</value>
+  </data>
+	<data name="LabelSplittingMethod" xml:space="preserve">
+    <value>分割方式：</value>
+  </data>
+	<data name="LabelStartPauseButton" xml:space="preserve">
+    <value>开始</value>
+  </data>
+	<data name="LabelStatus" xml:space="preserve">
+    <value>状态：</value>
+  </data>
+	<data name="LabelTempPath" xml:space="preserve">
+    <value>临时路径</value>
+  </data>
+	<data name="LabelTheme" xml:space="preserve">
+    <value>主题：</value>
+  </data>
+	<data name="LabelThreshold" xml:space="preserve">
+    <value>阈值：</value>
+  </data>
+	<data name="LabelTop" xml:space="preserve">
+    <value>顶部</value>
+  </data>
+	<data name="LabelTrackName" xml:space="preserve">
+    <value>轨道名称：</value>
+  </data>
+	<data name="LabelVersion" xml:space="preserve">
+    <value>版本：</value>
+  </data>
+	<data name="LabelVideoDestination" xml:space="preserve">
+    <value>未选择目的地</value>
+  </data>
+	<data name="LabelVideoDestination1" xml:space="preserve">
+    <value>目的地：</value>
+  </data>
+	<data name="LabelVideoSource" xml:space="preserve">
+    <value>未选择来源</value>
+  </data>
+	<data name="LabelVideoSource1" xml:space="preserve">
+    <value>来源：</value>
+  </data>
+	<data name="LabelWidth" xml:space="preserve">
+    <value>宽度：</value>
+  </data>
+	<data name="LabelWorkerCount" xml:space="preserve">
+    <value>工作数量：</value>
+  </data>
+	<data name="MessageConstrainedBitrateAomenc" xml:space="preserve">
+    <value>NEAV1E 目前不支持受限比特率 (aomenc)</value>
+  </data>
+	<data name="MessageCreatePresetBeforeBatch" xml:space="preserve">
+    <value>请在添加批处理文件之前创建一个预设。</value>
+  </data>
+	<data name="MessageNoInput" xml:space="preserve">
+    <value>未选择输入！</value>
+  </data>
+	<data name="MessageNoOutput" xml:space="preserve">
+    <value>未选择输出！</value>
+  </data>
+	<data name="MessageQualityModeRav1eSVT" xml:space="preserve">
+    <value>NEAV1E 目前仅支持恒定质量或比特率模式 (rav1e/svt-av1)</value>
+  </data>
+	<data name="MessageQueueEmpty" xml:space="preserve">
+    <value>队列为空！ \n请将您的作业添加到队列中。</value>
+  </data>
+	<data name="Pause" xml:space="preserve">
+    <value>暂停</value>
+  </data>
+	<data name="ProgramSettings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+	<data name="Queue1stPass" xml:space="preserve">
+    <value>第一遍：</value>
+  </data>
+	<data name="Queue2ndPass" xml:space="preserve">
+    <value>第二遍：</value>
+  </data>
+	<data name="QueueMenuItemEdit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+	<data name="QueueMinLeft" xml:space="preserve">
+    <value>剩余分钟</value>
+  </data>
+	<data name="Resume" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+	<data name="TabItemAdvanced" xml:space="preserve">
+    <value>高级</value>
+  </data>
+	<data name="TabItemAudio" xml:space="preserve">
+    <value>音频</value>
+  </data>
+	<data name="TabItemFilters" xml:space="preserve">
+    <value>过滤器</value>
+  </data>
+	<data name="TabItemQueue" xml:space="preserve">
+    <value>队列</value>
+  </data>
+	<data name="TabItemSubtitles" xml:space="preserve">
+    <value>字幕</value>
+  </data>
+	<data name="TabItemSummary" xml:space="preserve">
+    <value>摘要</value>
+  </data>
+	<data name="TabItemVideo" xml:space="preserve">
+    <value>视频</value>
+  </data>
+	<data name="TextBoxDestination" xml:space="preserve">
+    <value>未选择目的地</value>
+  </data>
+	<data name="ToggleSwitchAdvancedSettings" xml:space="preserve">
+    <value>高级设置</value>
+  </data>
+	<data name="ToggleSwitchDeleteTempFiles" xml:space="preserve">
+    <value>删除临时文件</value>
+  </data>
+	<data name="ToggleSwitchLogging" xml:space="preserve">
+    <value>日志</value>
+  </data>
+	<data name="ToggleSwitchOverrideWorkerCount" xml:space="preserve">
+    <value>覆盖工作数量</value>
+  </data>
+	<data name="ToggleSwitchShutdown" xml:space="preserve">
+    <value>编码后关机</value>
+  </data>
+	<data name="ToggleSwitchUsePresetBitDepth" xml:space="preserve">
+    <value>使用预设的位深度？</value>
+  </data>
+</root>
