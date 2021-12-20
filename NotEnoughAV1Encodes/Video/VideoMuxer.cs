@@ -49,6 +49,15 @@ namespace NotEnoughAV1Encodes.Video
                 FFmpegOutput = queueElement.VideoDB.OutputPath;
             }
 
+            // Create Output Directory
+            try
+            {
+                if(!Directory.Exists(Path.GetDirectoryName(queueElement.VideoDB.OutputPath)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(queueElement.VideoDB.OutputPath));
+                }
+            } catch { }
+
             // Muxing Chunks
             Process processVideo = new();
             ProcessStartInfo startInfo = new()
