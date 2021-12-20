@@ -40,7 +40,9 @@ NEAV1E supports the following encoders:
 - svt-av1 / libsvt-av1
 - libvpx-vp9
 
-### 📋 Installation / Usage / Wiki: https://github.com/Alkl58/NotEnoughAV1Encodes/wiki
+### 🎉 Special Thanks To
+- [@wcxu21](https://github.com/wcxu21) for Chinese Translations!
+- All other wonderful people reporting Bugs and being so patient!
 
 ---
 
