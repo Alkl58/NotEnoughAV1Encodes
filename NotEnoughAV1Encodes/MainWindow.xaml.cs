@@ -290,43 +290,48 @@ namespace NotEnoughAV1Encodes
                 }
                 else
                 {
-                    // Single File Input
-                    videoDB = new();
-                    videoDB.InputPath = openSource.Path;
-                    videoDB.ParseMediaInfo();
-
-                    try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                    try { ListBoxAudioTracks.ItemsSource = null; } catch { }
-                    try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-                    try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
-
-                    ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                    ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
-                    LabelVideoSource.Content = videoDB.InputPath;
-                    LabelVideoLength.Content = videoDB.MIDuration;
-                    LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
-                    LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
-                    string vfr = "";
-                    if (videoDB.MIIsVFR)
-                    {
-                        vfr = " (VFR)";
-                        if (Path.GetExtension(videoDB.InputPath) is ".mkv" or ".MKV")
-                        {
-                            CheckBoxVideoVFR.IsEnabled = true;
-                            CheckBoxVideoVFR.IsChecked = true;
-                        }
-                        else
-                        {
-                            // VFR Video only currently supported in .mkv container
-                            // Reasoning is, that splitting a VFR MP4 Video to MKV Chunks will result in ffmpeg making it CFR
-                            // Additionally Copying the MP4 Video to a MKV Video will result in the same behavior, leading to incorrect extracted timestamps
-                            CheckBoxVideoVFR.IsChecked = false;
-                            CheckBoxVideoVFR.IsEnabled = false;
-                        }
-                    }
-                    LabelVideoFramerate.Content = videoDB.MIFramerate + vfr;
+                    SingleFileInput(openSource.Path);
                 }
             }
+        }
+
+        private void SingleFileInput(string path)
+        {
+            // Single File Input
+            videoDB = new();
+            videoDB.InputPath = path;
+            videoDB.ParseMediaInfo();
+
+            try { ListBoxAudioTracks.Items.Clear(); } catch { }
+            try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+            try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
+            try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+
+            ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+            ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+            LabelVideoSource.Content = videoDB.InputPath;
+            LabelVideoLength.Content = videoDB.MIDuration;
+            LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
+            LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
+            string vfr = "";
+            if (videoDB.MIIsVFR)
+            {
+                vfr = " (VFR)";
+                if (Path.GetExtension(videoDB.InputPath) is ".mkv" or ".MKV")
+                {
+                    CheckBoxVideoVFR.IsEnabled = true;
+                    CheckBoxVideoVFR.IsChecked = true;
+                }
+                else
+                {
+                    // VFR Video only currently supported in .mkv container
+                    // Reasoning is, that splitting a VFR MP4 Video to MKV Chunks will result in ffmpeg making it CFR
+                    // Additionally Copying the MP4 Video to a MKV Video will result in the same behavior, leading to incorrect extracted timestamps
+                    CheckBoxVideoVFR.IsChecked = false;
+                    CheckBoxVideoVFR.IsEnabled = false;
+                }
+            }
+            LabelVideoFramerate.Content = videoDB.MIFramerate + vfr;
         }
 
         private void ButtonSetDestination_Click(object sender, RoutedEventArgs e)
@@ -519,6 +524,28 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region UI Functions
+
+        private void MetroWindow_Drop(object sender, DragEventArgs e)
+        {
+            // Drag & Drop Video Files into GUI
+            List<string> filepaths = new();
+            foreach (var s in (string[])e.Data.GetData(DataFormats.FileDrop, false)) { filepaths.Add(s); }
+            int counter = 0;
+            foreach (var item in filepaths) { counter += 1; }
+            foreach (var item in filepaths)
+            {
+                if (counter == 1)
+                {
+                    // Single File Input
+                    SingleFileInput(item);
+                }
+            }
+            if (counter > 1)
+            {
+                MessageBox.Show("Please use Batch Input (Drag & Drop multiple Files is not supported)");
+            }
+        }
+
         private void ComboBoxPresets_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (ComboBoxPresets.SelectedItem == null) return;
