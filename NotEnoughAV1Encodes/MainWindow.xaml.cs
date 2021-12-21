@@ -1566,6 +1566,15 @@ namespace NotEnoughAV1Encodes
                 {
                     try
                     {
+                        // Create Output Directory
+                        try
+                        {
+                            if (!Directory.Exists(Path.GetDirectoryName(queueElement.VideoDB.OutputPath)))
+                            {
+                                Directory.CreateDirectory(Path.GetDirectoryName(queueElement.VideoDB.OutputPath));
+                            }
+                        }
+                        catch { }
                         Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier));
                         Global.Logger("==========================================================", queueElement.Output + ".log");
                         Global.Logger("INFO  - Started Async Task - UID: " + queueElement.UniqueIdentifier, queueElement.Output + ".log");

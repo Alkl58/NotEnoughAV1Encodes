@@ -41,7 +41,7 @@ namespace NotEnoughAV1Encodes.Views
             // Folder Input
             System.Windows.Forms.FolderBrowserDialog openFolderDialog = new();
             var result = openFolderDialog.ShowDialog();
-            if (result.ToString() != string.Empty)
+            if (result == System.Windows.Forms.DialogResult.OK)
             {
                 Path = openFolderDialog.SelectedPath;
                 BatchFolder = true;
