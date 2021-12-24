@@ -103,6 +103,7 @@
                     <ComboBoxItem Content="English"/>
                     <ComboBoxItem Content="Deutsch (German)"/>
                     <ComboBoxItem Content="中国人 (Chinese Simplified)"/>
+                    <ComboBoxItem Content="Русский (Russian)"/>
                 </ComboBox>
 
             </Grid>

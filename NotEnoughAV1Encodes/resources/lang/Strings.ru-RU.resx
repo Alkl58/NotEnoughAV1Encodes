@@ -1,0 +1,481 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ButtonClose" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="ButtonDeletePreset" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="ButtonEditSelectedItem" xml:space="preserve">
+    <value>Изменить элемент</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>Сохранить и выйти</value>
+  </data>
+  <data name="ButtonOpenBatchFolder" xml:space="preserve">
+    <value>➔ Целая папка</value>
+  </data>
+  <data name="ButtonOpenProjectFile" xml:space="preserve">
+    <value>➔ Файл проекта</value>
+  </data>
+  <data name="ButtonOpenVideoFile" xml:space="preserve">
+    <value>➔ Один файл</value>
+  </data>
+  <data name="ButtonRemoveSelectedQueueItem" xml:space="preserve">
+    <value>Удалить элемент</value>
+  </data>
+  <data name="ButtonResetBGImage" xml:space="preserve">
+    <value>Сбросить</value>
+  </data>
+  <data name="ButtonSavePreset" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="ButtonSelectBGImage" xml:space="preserve">
+    <value>Выбрать</value>
+  </data>
+  <data name="ButtonTestSettings" xml:space="preserve">
+    <value>Проверить настройки</value>
+  </data>
+  <data name="ButtonUpdater" xml:space="preserve">
+    <value>Обновления</value>
+  </data>
+  <data name="CheckBoxCustomVideoSettings" xml:space="preserve">
+    <value>Свои настройки</value>
+  </data>
+  <data name="CheckBoxRealTimeMode" xml:space="preserve">
+    <value>Режим реального времени</value>
+  </data>
+  <data name="CheckBoxTwoPassEncoding" xml:space="preserve">
+    <value>2-х проходное кодирование</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="GroupBoxBackroundImage" xml:space="preserve">
+    <value>Фоновое изображине</value>
+  </data>
+  <data name="GroupBoxCrop" xml:space="preserve">
+    <value>Обрезка</value>
+  </data>
+  <data name="GroupBoxCurrentSettings" xml:space="preserve">
+    <value>Текущие настройки кодирования</value>
+  </data>
+  <data name="GroupBoxDeinterlace" xml:space="preserve">
+    <value>Деинтерлейс</value>
+  </data>
+  <data name="GroupBoxInputOutput" xml:space="preserve">
+    <value>Вход / Выход</value>
+  </data>
+  <data name="GroupBoxLanguage" xml:space="preserve">
+    <value>Язык (Language)</value>
+    <comment>Other Languages MUST use "&lt;Lang&gt; (Language)"</comment>
+  </data>
+  <data name="GroupBoxOptimization" xml:space="preserve">
+    <value>Оптимизация</value>
+  </data>
+  <data name="GroupBoxPresets" xml:space="preserve">
+    <value>Пресеты</value>
+  </data>
+  <data name="GroupBoxQuality" xml:space="preserve">
+    <value>Качество</value>
+  </data>
+  <data name="GroupBoxResize" xml:space="preserve">
+    <value>Измнение разрешения</value>
+  </data>
+  <data name="GroupBoxRotate" xml:space="preserve">
+    <value>Поворот</value>
+  </data>
+  <data name="GroupBoxThemeSettings" xml:space="preserve">
+    <value>Настройки оформления</value>
+  </data>
+  <data name="GroupBoxVideoContainer" xml:space="preserve">
+    <value>Видео контейнер</value>
+  </data>
+  <data name="GroupBoxVideoInformation" xml:space="preserve">
+    <value>Информация о видео</value>
+  </data>
+  <data name="GroupBoxWorkersAndSplitting" xml:space="preserve">
+    <value>Воркеры (Workers) и Сплиттеры (Splitting)</value>
+  </data>
+  <data name="LabelAccentTheme" xml:space="preserve">
+    <value>Акцент оформления:</value>
+  </data>
+  <data name="LabelAddToQueue" xml:space="preserve">
+    <value>Добавить в очередь</value>
+  </data>
+  <data name="LabelAvailableBatchFilename" xml:space="preserve">
+    <value>{filename} = Входное имя файла</value>
+  </data>
+  <data name="LabelAvailableBatchPresetName" xml:space="preserve">
+    <value>{presetname} = Имя пресета</value>
+  </data>
+  <data name="LabelBaseTheme" xml:space="preserve">
+    <value>Базовое оформление:</value>
+  </data>
+  <data name="LabelBatchFileName" xml:space="preserve">
+    <value>Batch Filename:</value>
+  </data>
+  <data name="LabelBitDepth" xml:space="preserve">
+    <value>Глубина цвета:</value>
+  </data>
+  <data name="LabelBitrate" xml:space="preserve">
+    <value>Битрейт (кбит):</value>
+  </data>
+  <data name="LabelBitrateAvg" xml:space="preserve">
+    <value>Битрейт (срд):</value>
+  </data>
+  <data name="LabelBitrateMax" xml:space="preserve">
+    <value>Битрейт (макс):</value>
+  </data>
+  <data name="LabelBitrateMin" xml:space="preserve">
+    <value>Битрейт (мин):</value>
+  </data>
+  <data name="LabelBottom" xml:space="preserve">
+    <value>Низ</value>
+  </data>
+  <data name="LabelBuildsProvidedBy" xml:space="preserve">
+    <value>Сборки предоставлены jeremylee.sh под лицензией GPLv3</value>
+  </data>
+  <data name="LabelBurnIn" xml:space="preserve">
+    <value>Записать на:</value>
+  </data>
+  <data name="LabelCancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="LabelChannels" xml:space="preserve">
+    <value>Каналы:</value>
+  </data>
+  <data name="LabelChunkLength" xml:space="preserve">
+    <value>Длительность чанка (секунды):</value>
+  </data>
+  <data name="LabelCodec" xml:space="preserve">
+    <value>Кодек:</value>
+  </data>
+  <data name="LabelColorFormat" xml:space="preserve">
+    <value>Формат цвета:</value>
+  </data>
+  <data name="LabelContainer" xml:space="preserve">
+    <value>Контейнер:</value>
+  </data>
+  <data name="LabelDefault" xml:space="preserve">
+    <value>По умолчанию:</value>
+  </data>
+  <data name="LabelDeinterlace" xml:space="preserve">
+    <value>Деинтерлейс:</value>
+  </data>
+  <data name="LabelDestination" xml:space="preserve">
+    <value>Место назначения</value>
+  </data>
+  <data name="LabelEncodeQueueParallel" xml:space="preserve">
+    <value>Кодировать очередь параллельно вместо разделения на чанки:</value>
+  </data>
+  <data name="LabelEncoder" xml:space="preserve">
+    <value>Кодировщик:</value>
+  </data>
+  <data name="LabelFramerate" xml:space="preserve">
+    <value>Частотак кадров:</value>
+  </data>
+  <data name="LabelHeight" xml:space="preserve">
+    <value>Высота:</value>
+  </data>
+  <data name="LabelIcons" xml:space="preserve">
+    <value>Иконки:</value>
+  </data>
+  <data name="LabelLanguage" xml:space="preserve">
+    <value>Язык:</value>
+  </data>
+  <data name="LabelLeft" xml:space="preserve">
+    <value>Лево</value>
+  </data>
+  <data name="LabelLength" xml:space="preserve">
+    <value>Длина:</value>
+  </data>
+  <data name="LabelMethodOpeningSource" xml:space="preserve">
+    <value>Способ открытия источника.</value>
+  </data>
+  <data name="LabelNoAudioFound" xml:space="preserve">
+    <value>Звук не найден</value>
+  </data>
+  <data name="LabelNoSubtitleFound" xml:space="preserve">
+    <value>Субтитры не найдены</value>
+  </data>
+  <data name="LabelPreset" xml:space="preserve">
+    <value>Пресет:</value>
+  </data>
+  <data name="LabelPresetName" xml:space="preserve">
+    <value>Имя пресета:</value>
+  </data>
+  <data name="LabelProcessPriority" xml:space="preserve">
+    <value>Приоритет процесса:</value>
+  </data>
+  <data name="LabelQualityMode" xml:space="preserve">
+    <value>Качество:</value>
+  </data>
+  <data name="LabelQuantizer" xml:space="preserve">
+    <value>Квантователь:</value>
+  </data>
+  <data name="LabelReencodeMethod" xml:space="preserve">
+    <value>Способ перекодирования:</value>
+  </data>
+  <data name="LabelResolution" xml:space="preserve">
+    <value>Разрешение:</value>
+  </data>
+  <data name="LabelRight" xml:space="preserve">
+    <value>Право</value>
+  </data>
+  <data name="LabelRotate" xml:space="preserve">
+    <value>Поворот (по часовой стрелке):</value>
+  </data>
+  <data name="LabelSelectPresetForEncoding" xml:space="preserve">
+    <value>Выбрать пресет для кодирования:</value>
+  </data>
+  <data name="LabelSource" xml:space="preserve">
+    <value>Источник</value>
+  </data>
+  <data name="LabelSpeed" xml:space="preserve">
+    <value>Скорость</value>
+  </data>
+  <data name="LabelSplittingMethod" xml:space="preserve">
+    <value>Метод склеивания (splitting):</value>
+  </data>
+  <data name="LabelStartPauseButton" xml:space="preserve">
+    <value>Начать</value>
+  </data>
+  <data name="LabelStatus" xml:space="preserve">
+    <value>Статус:</value>
+  </data>
+  <data name="LabelTempPath" xml:space="preserve">
+    <value>Временная дериктория</value>
+  </data>
+  <data name="LabelTheme" xml:space="preserve">
+    <value>Оформление:</value>
+  </data>
+  <data name="LabelThreshold" xml:space="preserve">
+    <value>Порог:</value>
+  </data>
+  <data name="LabelTop" xml:space="preserve">
+    <value>Вверх</value>
+  </data>
+  <data name="LabelTrackName" xml:space="preserve">
+    <value>Имя дорожки:</value>
+  </data>
+  <data name="LabelVersion" xml:space="preserve">
+    <value>Версия:</value>
+  </data>
+  <data name="LabelVideoDestination" xml:space="preserve">
+    <value>Пункт назначения не выбран</value>
+  </data>
+  <data name="LabelVideoDestination1" xml:space="preserve">
+    <value>Назначение:</value>
+  </data>
+  <data name="LabelVideoSource" xml:space="preserve">
+    <value>Исходник не выбран</value>
+  </data>
+  <data name="LabelVideoSource1" xml:space="preserve">
+    <value>Источник:</value>
+  </data>
+  <data name="LabelWidth" xml:space="preserve">
+    <value>Ширина:</value>
+  </data>
+  <data name="LabelWorkerCount" xml:space="preserve">
+    <value>Количество воркеров (workers):</value>
+  </data>
+  <data name="MessageConstrainedBitrateAomenc" xml:space="preserve">
+    <value>NEAV1E в настоящее время не поддерживает ограниченный битрейт (aomenc)</value>
+  </data>
+  <data name="MessageCreatePresetBeforeBatch" xml:space="preserve">
+    <value>Please create a Preset before adding batch files.</value>
+  </data>
+  <data name="MessageNoInput" xml:space="preserve">
+    <value>No Input selected!</value>
+  </data>
+  <data name="MessageNoOutput" xml:space="preserve">
+    <value>No Output selected!</value>
+  </data>
+  <data name="MessageQualityModeRav1eSVT" xml:space="preserve">
+    <value>NEAV1E currently only supports Constant Quality or Bitrate Mode (rav1e / svt-av1)</value>
+  </data>
+  <data name="MessageQueueEmpty" xml:space="preserve">
+    <value>Очередь пуста! \nПожалуйста, добавьте задачу в очередь для выполнения.</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="ProgramSettings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Queue1stPass" xml:space="preserve">
+    <value>1-й проход:</value>
+  </data>
+  <data name="Queue2ndPass" xml:space="preserve">
+    <value>2-й проход:</value>
+  </data>
+  <data name="QueueMenuItemEdit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
+  <data name="QueueMinLeft" xml:space="preserve">
+    <value>min left</value>
+  </data>
+  <data name="Resume" xml:space="preserve">
+    <value>Возобновить</value>
+  </data>
+  <data name="TabItemAdvanced" xml:space="preserve">
+    <value>Дополнтельно</value>
+  </data>
+  <data name="TabItemAudio" xml:space="preserve">
+    <value>Звук</value>
+  </data>
+  <data name="TabItemFilters" xml:space="preserve">
+    <value>Фильтры</value>
+  </data>
+  <data name="TabItemQueue" xml:space="preserve">
+    <value>Очередь</value>
+  </data>
+  <data name="TabItemSubtitles" xml:space="preserve">
+    <value>Субтитры</value>
+  </data>
+  <data name="TabItemSummary" xml:space="preserve">
+    <value>Общее</value>
+  </data>
+  <data name="TabItemVideo" xml:space="preserve">
+    <value>Видео</value>
+  </data>
+  <data name="TextBoxDestination" xml:space="preserve">
+    <value>Пункт назначения не выбран</value>
+  </data>
+  <data name="ToggleSwitchAdvancedSettings" xml:space="preserve">
+    <value>Дополнительные настройки</value>
+  </data>
+  <data name="ToggleSwitchDeleteTempFiles" xml:space="preserve">
+    <value>Удалить временные файлы</value>
+  </data>
+  <data name="ToggleSwitchLogging" xml:space="preserve">
+    <value>Журнал событий</value>
+  </data>
+  <data name="ToggleSwitchOverrideWorkerCount" xml:space="preserve">
+    <value>Override Worker Count</value>
+  </data>
+  <data name="ToggleSwitchShutdown" xml:space="preserve">
+    <value>Закрыть программу после кодирования</value>
+  </data>
+  <data name="ToggleSwitchUsePresetBitDepth" xml:space="preserve">
+    <value>Использовать глубину цвета из пресета?</value>
+  </data>
+</root>

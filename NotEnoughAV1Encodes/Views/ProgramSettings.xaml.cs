@@ -39,6 +39,7 @@ namespace NotEnoughAV1Encodes.Views
                 "en" => 0,
                 "de" => 1,
                 "zh-CN" => 2,
+                "ru-RU" => 3,
                 _ => 0,
             };
         }
@@ -103,6 +104,7 @@ namespace NotEnoughAV1Encodes.Views
                 0 => new CultureInfo("en"),
                 1 => new CultureInfo("de"),
                 2 => new CultureInfo("zh-CN"),
+                3 => new CultureInfo("ru-RU"),
                 _ => new CultureInfo("en"),
             };
             LocalizeDictionary.Instance.Culture = settingsDBTemp.CultureInfo;
