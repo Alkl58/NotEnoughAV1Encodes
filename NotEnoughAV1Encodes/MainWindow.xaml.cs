@@ -207,7 +207,7 @@ namespace NotEnoughAV1Encodes
                                 outname = outname.Replace("{presetname}", preset);
                                 videoDB.OutputPath = Path.Combine(output, outname + outputContainer);
                                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
-                                videoDB.ParseMediaInfo();
+                                videoDB.ParseMediaInfo(PresetSettings);
 
                                 try { ListBoxAudioTracks.Items.Clear(); } catch { }
                                 try { ListBoxAudioTracks.ItemsSource = null; } catch { }
@@ -300,7 +300,7 @@ namespace NotEnoughAV1Encodes
             // Single File Input
             videoDB = new();
             videoDB.InputPath = path;
-            videoDB.ParseMediaInfo();
+            videoDB.ParseMediaInfo(PresetSettings);
 
             try { ListBoxAudioTracks.Items.Clear(); } catch { }
             try { ListBoxAudioTracks.ItemsSource = null; } catch { }
@@ -420,6 +420,14 @@ namespace NotEnoughAV1Encodes
             {
                 Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E", "Presets"));
                 PresetSettings.PresetBatchName = savePresetDialog.PresetBatchName;
+                PresetSettings.AudioCodecMono = savePresetDialog.AudioCodecMono;
+                PresetSettings.AudioCodecStereo = savePresetDialog.AudioCodecStereo;
+                PresetSettings.AudioCodecSixChannel = savePresetDialog.AudioCodecSixChannel;
+                PresetSettings.AudioCodecEightChannel = savePresetDialog.AudioCodecEightChannel;
+                PresetSettings.AudioBitrateMono = savePresetDialog.AudioBitrateMono;
+                PresetSettings.AudioBitrateStereo = savePresetDialog.AudioBitrateStereo;
+                PresetSettings.AudioBitrateSixChannel = savePresetDialog.AudioBitrateSixChannel;
+                PresetSettings.AudioBitrateEightChannel = savePresetDialog.AudioBitrateEightChannel;
                 File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", savePresetDialog.PresetName + ".json"), JsonConvert.SerializeObject(PresetSettings, Formatting.Indented));
                 ComboBoxPresets.Items.Clear();
                 LoadPresets();

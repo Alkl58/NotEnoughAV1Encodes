@@ -17,6 +17,17 @@
         public string CustomSettings { get; set; }
         public string PresetBatchName { get; set; } = "{filename}";
 
+        // Audio
+        public int AudioCodecMono { get; set; } = 0;
+        public int AudioBitrateMono { get; set; } = 64;
+        public int AudioCodecStereo { get; set; } = 0;
+        public int AudioBitrateStereo { get; set; } = 128;
+        public int AudioCodecSixChannel { get; set; } = 0;
+        public int AudioBitrateSixChannel { get; set; } = 256;
+        public int AudioCodecEightChannel { get; set; } = 0;
+        public int AudioBitrateEightChannel { get; set; } = 450;
+
+
         // Filters
         public bool FilterCrop { get; set; }
         public bool FilterResize { get; set; }

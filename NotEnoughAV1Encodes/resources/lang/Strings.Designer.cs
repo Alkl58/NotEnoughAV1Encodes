@@ -538,6 +538,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Default Audio Behavior: ähnelt.
+        /// </summary>
+        public static string LabelDefaultAudioBehavior {
+            get {
+                return ResourceManager.GetString("LabelDefaultAudioBehavior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Deinterlace: ähnelt.
         /// </summary>
         public static string LabelDeinterlace {

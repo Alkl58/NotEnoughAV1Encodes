@@ -24,7 +24,7 @@ namespace NotEnoughAV1Encodes.Video
 
         public List<Subtitle.SubtitleTracks> SubtitleTracks { get; set; }
 
-        public void ParseMediaInfo()
+        public void ParseMediaInfo(Settings settings)
         {
             if (!string.IsNullOrEmpty(InputPath))
             {
@@ -57,19 +57,29 @@ namespace NotEnoughAV1Encodes.Video
                         int channels = 1;
                         try { channels = int.Parse(mediaInfo.Get(StreamKind.Audio, i, "Channels")); } catch { }
 
+                        int bitrate = 128;
+                        int codec = 0;
                         switch (channels)
                         {
                             case 1:
                                 channels = 0;
+                                bitrate = settings.AudioBitrateMono;
+                                codec = settings.AudioCodecMono;
                                 break;
                             case 2:
                                 channels = 1;
+                                bitrate = settings.AudioBitrateStereo;
+                                codec = settings.AudioCodecStereo;
                                 break;
                             case 6:
                                 channels = 2;
+                                bitrate = settings.AudioBitrateSixChannel;
+                                codec = settings.AudioCodecSixChannel;
                                 break;
                             case 8:
                                 channels = 3;
+                                bitrate = settings.AudioBitrateEightChannel;
+                                codec = settings.AudioCodecEightChannel;
                                 break;
                             default:
                                 break;
@@ -91,8 +101,8 @@ namespace NotEnoughAV1Encodes.Video
                         {
                             Active = true,
                             Index = i,
-                            Codec = 0,
-                            Bitrate = "128",
+                            Codec = codec,
+                            Bitrate = bitrate.ToString(),
                             Languages = resources.MediaLanguages.LanguageKeys,
                             Language = lang,
                             CustomName = name,
