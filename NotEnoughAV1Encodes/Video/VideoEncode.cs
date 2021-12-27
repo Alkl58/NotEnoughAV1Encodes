@@ -145,10 +145,9 @@ namespace NotEnoughAV1Encodes.Video
                             Queue.ChunkProgress chunkProgress = new();
                             chunkProgress.ChunkName = chunk;
                             chunkProgress.Progress = 0;
-                            chunkProgress.ProgressSecondPass = 0;
 
-                            List<Queue.ChunkProgress> _tempList = queueElement.ChunkProgress;
-                            if (!_tempList.Any(n => n.ChunkName == chunk))
+                            List<Queue.ChunkProgress> tempList = queueElement.ChunkProgress;
+                            if (!tempList.Any(n => n.ChunkName == chunk))
                             {
                                 queueElement.ChunkProgress.Add(chunkProgress);
                             }
@@ -221,16 +220,7 @@ namespace NotEnoughAV1Encodes.Video
                                 Global.Logger("TRACE - VideoEncode.Encode() 2nd Pass => Added PID: " + _pid + "  Chunk: " + chunk, queueElement.Output + ".log");
 
                                 // Create Progress Object
-                                Queue.ChunkProgress chunkProgress2ndPass = new();
-                                chunkProgress2ndPass.ChunkName = chunk + "_2ndpass";
-                                chunkProgress2ndPass.Progress = 0;
-                                chunkProgress2ndPass.ProgressSecondPass = 0;
-
-                                List<Queue.ChunkProgress> _tempList2ndPass = queueElement.ChunkProgress;
-                                if (!_tempList2ndPass.Any(n => n.ChunkName == chunk + "_2ndpass"))
-                                {
-                                    queueElement.ChunkProgress.Add(chunkProgress2ndPass);
-                                }
+                                chunkProgress.ProgressSecondPass = 0;
 
                                 sr = processVideo2ndPass.StandardError;
 
@@ -239,7 +229,7 @@ namespace NotEnoughAV1Encodes.Video
                                     int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
                                     if (processedFrames != 0)
                                     {
-                                        foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk + "_2ndpass"))
+                                        foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
                                         {
                                             progressElement.ProgressSecondPass = processedFrames;
                                         }

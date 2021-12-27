@@ -269,9 +269,9 @@
                                 <ComboBoxItem Content="aomenc (AV1)" />
                                 <ComboBoxItem Content="rav1e (AV1)" />
                                 <ComboBoxItem Content="svt-av1 (AV1)" />
-                                <Separator />
+                                <!--<Separator />
                                 <ComboBoxItem Content="x265 (HEVC FFmpeg)" />
-                                <ComboBoxItem Content="x264 (AVC FFmpeg)" />
+                                <ComboBoxItem Content="x264 (AVC FFmpeg)" />-->
                             </ComboBox>
                             <Label Content="{lex:Loc LabelBitDepth}" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top" Width="111" />
                             <ComboBox x:Name="ComboBoxVideoBitDepth" SelectedIndex="{Binding BitDepth}" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center">
