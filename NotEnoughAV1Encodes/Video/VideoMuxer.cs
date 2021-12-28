@@ -22,10 +22,15 @@ namespace NotEnoughAV1Encodes.Video
                 Global.Logger("DEBUG - VideoMuxer.Concat() => Reading Chunk Directory by *.webm files", queueElement.Output + ".log");
                 sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.webm").OrderBy(f => f);
             }
-            else if (queueElement.EncodingMethod > 4)
+            else if (queueElement.EncodingMethod > 4 && queueElement.EncodingMethod < 9)
             {
                 Global.Logger("DEBUG - VideoMuxer.Concat() => Reading Chunk Directory by *.ivf files", queueElement.Output + ".log");
                 sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.ivf").OrderBy(f => f);
+            }
+            else if (queueElement.EncodingMethod is 9 or 10)
+            {
+                Global.Logger("DEBUG - VideoMuxer.Concat() => Reading Chunk Directory by *.mp4 files", queueElement.Output + ".log");
+                sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.mp4").OrderBy(f => f);
             }
 
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "chunks.txt")))

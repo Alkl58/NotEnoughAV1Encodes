@@ -270,12 +270,12 @@
                                 <ComboBoxItem Content="aomenc (AV1)" />
                                 <ComboBoxItem Content="rav1e (AV1)" />
                                 <ComboBoxItem Content="svt-av1 (AV1)" />
-                                <!--<Separator />
+                                <Separator />
                                 <ComboBoxItem Content="x265 (HEVC FFmpeg)" />
-                                <ComboBoxItem Content="x264 (AVC FFmpeg)" />-->
+                                <ComboBoxItem Content="x264 (AVC FFmpeg)" />
                             </ComboBox>
                             <Label Content="{lex:Loc LabelBitDepth}" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top" Width="111" />
-                            <ComboBox x:Name="ComboBoxVideoBitDepth" SelectedIndex="{Binding BitDepth}" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center">
+                            <ComboBox x:Name="ComboBoxVideoBitDepth" SelectedIndex="{Binding BitDepth}" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoBitDepth_SelectionChanged">
                                 <ComboBoxItem Content="8" IsSelected="True" />
                                 <ComboBoxItem Content="10" />
                                 <ComboBoxItem Content="12" />
@@ -315,12 +315,12 @@
                             <CheckBox x:Name="CheckBoxVideoVFR" Content="VFR" HorizontalAlignment="Left" Margin="296,141,0,0" VerticalAlignment="Top"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="GroupBoxOptimization" Header="{lex:Loc}" Margin="0,10,10,0" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="385">
+                    <GroupBox x:Name="GroupBoxOptimization" Header="{lex:Loc}" Margin="0,10,10,0" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="410">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label x:Name="LabelSpeed" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="68"/>
                             <Slider x:Name="SliderEncoderPreset" HorizontalAlignment="Left" Margin="104,16,0,0" VerticalAlignment="Top" Width="227" Maximum="9" SmallChange="1" Value="{Binding SpeedPreset}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" ValueChanged="SliderEncoderPreset_ValueChanged"/>
                             <mah:ToggleSwitch x:Name="CheckBoxTwoPassEncoding" Content="{lex:Loc}" IsOn="{Binding TwoPassEncoding}" Margin="19,66,0,0" VerticalAlignment="Top" Toggled="CheckBoxTwoPassEncoding_Checked"/>
-                            <Label Content="{Binding ElementName=SliderEncoderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="337,16,0,0" VerticalAlignment="Top"/>
+                            <Label x:Name="LabelSpeedValue" Content="{Binding ElementName=SliderEncoderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="337,16,0,0" VerticalAlignment="Top"/>
                             <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedSettings" Content="{lex:Loc}" IsOn="{Binding AdvancedSettings}" Height="36" Margin="19,129,0,0" VerticalAlignment="Top" Width="224"/>
                             <mah:ToggleSwitch x:Name="CheckBoxRealTimeMode" Content="{lex:Loc}" IsOn="{Binding AomencRTMode}" Margin="196,66,0,0" VerticalAlignment="Top" Toggled="CheckBoxRealTimeMode_Toggled" Width="169"/>
 

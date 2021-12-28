@@ -623,7 +623,7 @@ namespace NotEnoughAV1Encodes
                     CheckBoxRealTimeMode.IsOn = false;
                     CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
                 }
-                else if (ComboBoxVideoEncoder.SelectedIndex == 3)
+                else if (ComboBoxVideoEncoder.SelectedIndex is 3)
                 {
                     //vpx-vp9 ffmpeg
                     TextBoxMaxBitrate.Visibility = Visibility.Visible;
@@ -633,6 +633,20 @@ namespace NotEnoughAV1Encodes
                     SliderQuality.Maximum = 63;
                     SliderQuality.Value = 25;
                     CheckBoxTwoPassEncoding.IsEnabled = true;
+                    CheckBoxRealTimeMode.IsOn = false;
+                    CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
+                }
+                else if (ComboBoxVideoEncoder.SelectedIndex is 9 or 10)
+                {
+                    //libx265 libx264 ffmpeg
+                    TextBoxMaxBitrate.Visibility = Visibility.Collapsed;
+                    TextBoxMinBitrate.Visibility = Visibility.Collapsed;
+                    SliderEncoderPreset.Maximum = 9;
+                    SliderEncoderPreset.Value = 4;
+                    SliderQuality.Maximum = 51;
+                    SliderQuality.Value = 18;
+                    CheckBoxTwoPassEncoding.IsEnabled = false;
+                    CheckBoxTwoPassEncoding.IsOn = false;
                     CheckBoxRealTimeMode.IsOn = false;
                     CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
                 }
@@ -683,13 +697,17 @@ namespace NotEnoughAV1Encodes
                     CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
                 }
             }
+            if (ComboBoxVideoEncoder.SelectedIndex is 9 or 10)
+            {
+                LabelSpeedValue.Content = GenerateMPEGEncoderSpeed();
+            }
         }
 
         private void ComboBoxQualityMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (TextBoxAVGBitrate != null)
             {
-                if (ComboBoxVideoEncoder.SelectedIndex is 1 or 2 or 6 or 7)
+                if (ComboBoxVideoEncoder.SelectedIndex is 1 or 2 or 6 or 7 or 9 or 10)
                 {
                     if (ComboBoxQualityMode.SelectedIndex is 1 or 3)
                     {
@@ -739,6 +757,14 @@ namespace NotEnoughAV1Encodes
                     TextBoxMaxBitrate.IsEnabled = true;
                     TextBoxMinBitrate.IsEnabled = true;
                 }
+            }
+        }
+
+        private void ComboBoxVideoBitDepth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (ComboBoxVideoEncoder.SelectedIndex == 10 && ComboBoxVideoBitDepth.SelectedIndex == 2)
+            {
+                ComboBoxVideoBitDepth.SelectedIndex = 1;
             }
         }
 
@@ -1062,6 +1088,14 @@ namespace NotEnoughAV1Encodes
             else if (ComboBoxVideoEncoder.SelectedIndex == 7)
             {
                 return _settings + GenerateSvtAV1Command();
+            }
+            else if (ComboBoxVideoEncoder.SelectedIndex == 9)
+            {
+                return _settings + GenerateHEVCFFmpegCommand();
+            }
+            else if (ComboBoxVideoEncoder.SelectedIndex == 10)
+            {
+                return _settings + GenerateAVCFFmpegCommand();
             }
 
             return "";
@@ -1463,6 +1497,62 @@ namespace NotEnoughAV1Encodes
             }
 
             return _settings;
+        }
+
+        private string GenerateHEVCFFmpegCommand()
+        {
+            string _settings = "-c:v libx265";
+
+            if (ComboBoxQualityMode.SelectedIndex == 0)
+            {
+                _settings += " -crf " + SliderQuality.Value;
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 2)
+            {
+                _settings += " -b:v " + TextBoxAVGBitrate.Text + "k";
+            }
+
+            _settings += " -preset ";
+            _settings += GenerateMPEGEncoderSpeed();
+
+            return _settings;
+        }
+
+        private string GenerateAVCFFmpegCommand()
+        {
+            string _settings = "-c:v libx264";
+
+            if (ComboBoxQualityMode.SelectedIndex == 0)
+            {
+                _settings += " -crf " + SliderQuality.Value;
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 2)
+            {
+                _settings += " -b:v " + TextBoxAVGBitrate.Text + "k";
+            }
+
+            _settings += " -preset ";
+            _settings += GenerateMPEGEncoderSpeed();
+
+            return _settings;
+        }
+
+        private string GenerateMPEGEncoderSpeed()
+        {
+            return SliderEncoderPreset.Value switch
+            {
+                0 => "placebo",
+                1 => "veryslow",
+                2 => "slower",
+                3 => "slow",
+                4 => "medium",
+                5 => "fast",
+                6 => "faster",
+                7 => "veryfast",
+                8 => "superfast",
+                9 => "ultrafast",
+                _ => "medium",
+            };
         }
 
         private string GenerateKeyFrameInerval()
