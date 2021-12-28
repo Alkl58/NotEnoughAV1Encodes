@@ -172,12 +172,13 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120"/>
                                 <ColumnDefinition MinWidth="100" MaxWidth="160"/>
-                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="400"/>
                             </Grid.ColumnDefinitions>
                             <Label x:Name="LabelPreset" Grid.Column="0" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"/>
                             <ComboBox x:Name="ComboBoxPresets" Grid.Column="1" Height="28" HorizontalAlignment="Left" VerticalAlignment="Center" Width="150" SelectionChanged="ComboBoxPresets_SelectionChanged"/>
                             <Button x:Name="ButtonSavePreset" Content="{lex:Loc}" Grid.Column="2" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Center" mah:ControlsHelper.ContentCharacterCasing="Normal" Width="90" Click="ButtonSavePreset_Click"/>
                             <Button x:Name="ButtonDeletePreset" Content="{lex:Loc}" Grid.Column="2" HorizontalAlignment="Left" Margin="102,0,0,0" VerticalAlignment="Center" mah:ControlsHelper.ContentCharacterCasing="Normal" Width="90" Click="ButtonDeletePreset_Click"/>
+                            <Button x:Name="ButtonSetPresetDefault" Content="{lex:Loc}" Grid.Column="2" HorizontalAlignment="Left" Margin="197,0,0,0" VerticalAlignment="Center" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSetPresetDefault_Click"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="GroupBoxCurrentSettings" Header="{lex:Loc}" Margin="10,192,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="67" VerticalAlignment="Top">

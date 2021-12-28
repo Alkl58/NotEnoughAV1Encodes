@@ -25,5 +25,7 @@ namespace NotEnoughAV1Encodes
         public bool PriorityNormal { get; set; } = true;
         /// <summary>CultureInfo for Language (Default: en-US)</summary>
         public CultureInfo CultureInfo { get; set; } = new("en");
+        /// <summary>Default Preset to load on startup</summary>
+        public string DefaultPreset { get; set; }
     }
 }

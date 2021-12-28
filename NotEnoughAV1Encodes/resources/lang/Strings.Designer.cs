@@ -160,6 +160,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Set as Default ähnelt.
+        /// </summary>
+        public static string ButtonSetPresetDefault {
+            get {
+                return ResourceManager.GetString("ButtonSetPresetDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test Settings ähnelt.
         /// </summary>
         public static string ButtonTestSettings {

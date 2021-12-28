@@ -84,6 +84,8 @@ namespace NotEnoughAV1Encodes
             }
 
             LoadPresets();
+
+            try { ComboBoxPresets.SelectedItem = settingsDB.DefaultPreset; } catch { }
         }
 
         private void LoadPresets()
@@ -449,6 +451,17 @@ namespace NotEnoughAV1Encodes
             }
             catch { }
 
+        }
+
+        private void ButtonSetPresetDefault_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                settingsDB.DefaultPreset = ComboBoxPresets.Text;
+                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
+                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         private void ButtonEditSelectedItem_Click(object sender, RoutedEventArgs e)

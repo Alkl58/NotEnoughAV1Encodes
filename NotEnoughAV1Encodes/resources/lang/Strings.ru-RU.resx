@@ -150,6 +150,9 @@
   <data name="ButtonSelectBGImage" xml:space="preserve">
     <value>Выбрать</value>
   </data>
+  <data name="ButtonSetPresetDefault" xml:space="preserve">
+    <value>Установить по умолчанию</value>
+  </data>
   <data name="ButtonTestSettings" xml:space="preserve">
     <value>Проверить настройки</value>
   </data>

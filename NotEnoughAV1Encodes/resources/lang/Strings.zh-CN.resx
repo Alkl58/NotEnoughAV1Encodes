@@ -150,6 +150,9 @@
   <data name="ButtonSelectBGImage" xml:space="preserve">
     <value>选择</value>
   </data>
+  <data name="ButtonSetPresetDefault" xml:space="preserve">
+    <value>设为默认</value>
+  </data>
   <data name="ButtonTestSettings" xml:space="preserve">
     <value>测试设置</value>
   </data>

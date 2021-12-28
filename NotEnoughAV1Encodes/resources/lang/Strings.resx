@@ -150,6 +150,9 @@
   <data name="ButtonSelectBGImage" xml:space="preserve">
     <value>Select</value>
   </data>
+  <data name="ButtonSetPresetDefault" xml:space="preserve">
+    <value>Set as Default</value>
+  </data>
   <data name="ButtonTestSettings" xml:space="preserve">
     <value>Test Settings</value>
   </data>
