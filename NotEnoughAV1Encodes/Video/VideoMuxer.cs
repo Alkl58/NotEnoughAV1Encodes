@@ -85,12 +85,25 @@ namespace NotEnoughAV1Encodes.Video
             
 
             bool MuxWithMKVMerge = false;
+            bool MuxWithFFmpeg = false;
 
             string audioMuxCommand = "";
+            string audioFFmpegMapping = "";
             if (queueElement.AudioCommand != null)
             {
-                audioMuxCommand = "--default-track 0:yes \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "audio.mkv") + "\"";
-                MuxWithMKVMerge = true;
+                if (Path.GetExtension(queueElement.VideoDB.OutputPath).ToLower() == ".mp4" && queueElement.VFR == false && queueElement.SubtitleCommand == null)
+                {
+                    audioMuxCommand = " -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "audio.mkv") + "\"";
+                    audioFFmpegMapping = " -map 1:a";
+                    MuxWithFFmpeg = true;
+                    MuxWithMKVMerge = false;
+                }
+                else
+                {
+                    audioMuxCommand = "--default-track 0:yes \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "audio.mkv") + "\"";
+                    MuxWithMKVMerge = true;
+                    MuxWithFFmpeg = false;
+                }
             }
 
             string subsMuxCommand = "";
@@ -98,18 +111,55 @@ namespace NotEnoughAV1Encodes.Video
             {
                 subsMuxCommand = queueElement.SubtitleCommand + " \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Subtitles", "subs.mkv") + "\"";
                 MuxWithMKVMerge = true;
+                MuxWithFFmpeg = false;
             }
 
             string vfrMuxCommand = "";
             if (queueElement.VFR)
             {
                 vfrMuxCommand = "--timestamps 0:\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "vsync.txt") + "\"";
+                MuxWithMKVMerge = true;
+                MuxWithFFmpeg = false;
             }
 
             Global.Logger("DEBUG - VideoMuxer.Concat() => MuxWithMKVMerge? : " + MuxWithMKVMerge.ToString(), queueElement.Output + ".log");
+            Global.Logger("DEBUG - VideoMuxer.Concat() => MuxWithFFmpeg?   : " + MuxWithFFmpeg.ToString(), queueElement.Output + ".log");
             Global.Logger("DEBUG - VideoMuxer.Concat() => AudioCommand?    : " + audioMuxCommand, queueElement.Output + ".log");
             Global.Logger("DEBUG - VideoMuxer.Concat() => SubsCommand?     : " + subsMuxCommand, queueElement.Output + ".log");
             Global.Logger("DEBUG - VideoMuxer.Concat() => VFRCommand?      : " + vfrMuxCommand, queueElement.Output + ".log");
+
+            if (MuxWithFFmpeg)
+            {
+                string ffmpegCommand = "/C ffmpeg.exe -y -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv") + "\"" + audioMuxCommand + " -map 0:v" +  audioFFmpegMapping + " -c copy \"" + queueElement.VideoDB.OutputPath + "\"";
+                // Muxing Chunks
+                processVideo = new();
+                startInfo = new()
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
+                    RedirectStandardError = true,
+                    Arguments = ffmpegCommand,
+                    CreateNoWindow = true
+                };
+
+                Global.Logger("DEBUG - VideoMuxer.Concat() => Command: " + ffmpegCommand, queueElement.Output + ".log");
+
+                processVideo.StartInfo = startInfo;
+                processVideo.Start();
+
+                sr = processVideo.StandardError;
+                while (!sr.EndOfStream)
+                {
+                    int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
+                    if (processedFrames != 0)
+                    {
+                        queueElement.Progress = Convert.ToDouble(processedFrames);
+                        queueElement.Status = "Muxing Video - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
+                    }
+                }
+                processVideo.WaitForExit();
+            }
 
             if (MuxWithMKVMerge)
             {
