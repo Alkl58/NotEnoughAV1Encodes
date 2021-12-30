@@ -882,7 +882,7 @@
                                         <ColumnDefinition MinWidth="95" Width="*" />
                                         <ColumnDefinition Width="150" />
                                     </Grid.ColumnDefinitions>
-                                    <mah:ToggleSwitch Grid.Column="0" x:Name="ToggleOnOff" IsOn="{Binding Active}"></mah:ToggleSwitch>
+                                    <mah:ToggleSwitch Grid.Column="0" x:Name="ToggleOnOff" IsOn="{Binding Active}" IsEnabled="{Binding Enabled}" />
                                     <Label Grid.Column="1" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{Binding Index}" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
                                     <Label Grid.Column="2" Content="{lex:Loc LabelTrackName}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                     <TextBox Grid.Column="3" x:Name="TextBoxSubtitleTrackName" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" TextWrapping="Wrap" VerticalContentAlignment="Center" VerticalAlignment="Center" Text="{Binding CustomName}" />

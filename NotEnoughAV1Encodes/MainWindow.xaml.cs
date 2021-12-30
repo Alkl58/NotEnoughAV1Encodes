@@ -303,6 +303,7 @@ namespace NotEnoughAV1Encodes
             videoDB = new();
             videoDB.InputPath = path;
             videoDB.ParseMediaInfo(PresetSettings);
+            LabelVideoDestination.Content = LocalizedStrings.Instance["LabelVideoDestination"];
 
             try { ListBoxAudioTracks.Items.Clear(); } catch { }
             try { ListBoxAudioTracks.ItemsSource = null; } catch { }
@@ -348,6 +349,26 @@ namespace NotEnoughAV1Encodes
                 videoDB.OutputPath = saveVideoFileDialog.FileName;
                 LabelVideoDestination.Content = videoDB.OutputPath;
                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
+                try
+                {
+                    if (Path.GetExtension(videoDB.OutputPath).ToLower() == ".mp4")
+                    {
+                        // Disable Subtitles if Output is MP4
+                        foreach (Subtitle.SubtitleTracks subtitleTracks in ListBoxSubtitleTracks.Items)
+                        {
+                            subtitleTracks.Active = false;
+                            subtitleTracks.Enabled = false;
+                        }
+                    }
+                    else
+                    {
+                        foreach (Subtitle.SubtitleTracks subtitleTracks in ListBoxSubtitleTracks.Items)
+                        {
+                            subtitleTracks.Enabled = true;
+                        }
+                    }
+                }
+                catch { }
             }
         }
 
