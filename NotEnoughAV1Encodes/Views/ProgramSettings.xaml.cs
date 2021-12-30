@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Navigation;
 using WPFLocalizeExtension.Engine;
@@ -26,7 +27,8 @@ namespace NotEnoughAV1Encodes.Views
             TextBoxTempPath.Text = settingsDB.TempPath;
             settingsDBTemp.BGImage = settingsDB.BGImage;
             ComboBoxProcessPriority.SelectedIndex = settingsDB.PriorityNormal ? 0 : 1;
-            
+            string AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            LabelVersion1.Content = AssemblyVersion.Remove(AssemblyVersion.Length - 2);
             try
             {
                 ThemeManager.Current.ChangeTheme(this, settingsDB.Theme);

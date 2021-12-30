@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,9 +20,11 @@ namespace NotEnoughAV1Encodes.Views
 {
     public partial class Updater : MetroWindow
     {
+        private static readonly string AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
         // NEAV1E Update
         private string UpdateVersion = "0";
-        private string CurrentVersion = "2.0.1"; // current neav1e version (hardcoded)
+        private string CurrentVersion = AssemblyVersion.Remove(AssemblyVersion.Length - 2);
 
         // FFmpeg Update
         public static string FFmpegUpdateVersion;
