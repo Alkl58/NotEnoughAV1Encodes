@@ -63,7 +63,7 @@
             // Channel Layout
             audioCodecCommand += " -ac:a:" + _endIndex + " " + SetChannelLayout(_channelLayout);
             // Metadata
-            audioCodecCommand += " -metadata:s:a:" + _endIndex + " language=" + _language;
+            audioCodecCommand += " -metadata:s:a:" + _endIndex + " language=" + resources.MediaLanguages.Languages[_language];
             // Title
             if (_activTrackCodec != 5)
             {
