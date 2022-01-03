@@ -608,7 +608,14 @@ namespace NotEnoughAV1Encodes
                     //aom ffmpeg
                     TextBoxMaxBitrate.Visibility = Visibility.Visible;
                     TextBoxMinBitrate.Visibility = Visibility.Visible;
-                    SliderEncoderPreset.Maximum = 9;
+                    if (ComboBoxVideoEncoder.SelectedIndex == 0)
+                    {
+                        SliderEncoderPreset.Maximum = 8;
+                    }
+                    else
+                    {
+                        SliderEncoderPreset.Maximum = 9;
+                    }
                     SliderEncoderPreset.Value = 4;
                     SliderQuality.Maximum = 63;
                     SliderQuality.Value = 25;
