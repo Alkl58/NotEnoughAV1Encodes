@@ -14,6 +14,7 @@
         public string MaxBitrate { get; set; } = "1500";
         public string AvgBitrate { get; set; } = "1000";
         public bool AdvancedSettings { get; set; }
+        public bool CustomSettingsActive { get; set; }
         public string CustomSettings { get; set; }
         public string PresetBatchName { get; set; } = "{filename}";
 

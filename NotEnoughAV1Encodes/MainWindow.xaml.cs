@@ -587,14 +587,16 @@ namespace NotEnoughAV1Encodes
                 MessageBox.Show("Please use Batch Input (Drag & Drop multiple Files is not supported)");
             }
         }
-
+        private bool presetLoadLock = false;
         private void ComboBoxPresets_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (ComboBoxPresets.SelectedItem == null) return;
             try
             {
+                presetLoadLock = true;
                 PresetSettings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", ComboBoxPresets.SelectedItem.ToString() + ".json")));
                 DataContext = PresetSettings;
+                presetLoadLock = false;
             }
             catch { }
         }
@@ -798,7 +800,7 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxCustomVideoSettings_Toggled(object sender, RoutedEventArgs e)
         {
-            if (CheckBoxCustomVideoSettings.IsOn)
+            if (CheckBoxCustomVideoSettings.IsOn && presetLoadLock == false)
             {
                 TextBoxCustomVideoSettings.Text = GenerateEncoderCommand();
             }
