@@ -145,24 +145,24 @@ namespace NotEnoughAV1Encodes.Video
 
                 ffmpegCommand += " -reset_timestamps 1 -map_metadata -1 -sn -an";
 
-                if (queueElement.ChunkingMethod == 0)
+                if (queueElement.ReencodeMethod == 0)
                 {
                     ffmpegCommand += " -c:v libx264 -preset ultrafast -crf 0";
                 }
-                else if(queueElement.ChunkingMethod == 1)
+                else if(queueElement.ReencodeMethod == 1)
                 {
                     ffmpegCommand += " -c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -slicecrc 0 -slices 4";
                 }
-                else if (queueElement.ChunkingMethod == 2)
+                else if (queueElement.ReencodeMethod == 2)
                 {
                     ffmpegCommand += " -c:v utvideo";
                 }
-                else if (queueElement.ChunkingMethod == 3)
+                else if (queueElement.ReencodeMethod == 3)
                 {
                     ffmpegCommand += " -c:v copy";
                 }
 
-                if (queueElement.ChunkingMethod != 3)
+                if (queueElement.ReencodeMethod != 3)
                 {
                     ffmpegCommand += " -sc_threshold 0 -g " + queueElement.ChunkLength.ToString();
                     ffmpegCommand += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + queueElement.ChunkLength.ToString() + ")" + '\u0022';
