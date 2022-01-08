@@ -24,6 +24,7 @@ namespace NotEnoughAV1Encodes
 {
     public partial class MainWindow : MetroWindow
     {
+        private bool startupLock = true;
         private bool QueueParallel;
         private SettingsDB settingsDB = new();
         private Video.VideoDB videoDB = new();
@@ -86,6 +87,7 @@ namespace NotEnoughAV1Encodes
             LoadPresets();
 
             try { ComboBoxPresets.SelectedItem = settingsDB.DefaultPreset; } catch { }
+            startupLock = false;
         }
 
         private void LoadPresets()
@@ -844,6 +846,30 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region Small Functions
+        private void ComboBoxChunkingMethod_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (startupLock) return;
+            settingsDB.ChunkingMethod = ComboBoxChunkingMethod.SelectedIndex;
+            settingsDB.ReencodeMethod = ComboBoxReencodeMethod.SelectedIndex;
+            try
+            {
+                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
+                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+        private void TextBoxChunkLength_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (startupLock) return;
+            settingsDB.ChunkLength = TextBoxChunkLength.Text;
+            settingsDB.PySceneDetectThreshold = TextBoxPySceneDetectThreshold.Text;
+            try
+            {
+                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
+                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
         private void LoadSettings()
         {
             if (settingsDB.OverrideWorkerCount)
@@ -857,10 +883,16 @@ namespace NotEnoughAV1Encodes
                 TextBoxWorkerCount.Visibility = Visibility.Hidden;
             }
 
+            ComboBoxChunkingMethod.SelectedIndex = settingsDB.ChunkingMethod;
+            ComboBoxReencodeMethod.SelectedIndex = settingsDB.ReencodeMethod;
+            TextBoxChunkLength.Text = settingsDB.ChunkLength;
+            TextBoxPySceneDetectThreshold.Text = settingsDB.PySceneDetectThreshold;
+
             // Sets Temp Path
             Global.Temp = settingsDB.TempPath;
             Logging = settingsDB.Logging;
 
+            // Set Theme
             try
             {
                 ThemeManager.Current.ChangeTheme(this, settingsDB.Theme);

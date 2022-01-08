@@ -27,5 +27,13 @@ namespace NotEnoughAV1Encodes
         public CultureInfo CultureInfo { get; set; } = new("en");
         /// <summary>Default Preset to load on startup</summary>
         public string DefaultPreset { get; set; }
+        /// <summary>Default Chunking Method</summary>
+        public int ChunkingMethod { get; set; }
+        /// <summary>Default Reencode Method</summary>
+        public int ReencodeMethod { get; set; }
+        /// <summary>Default Chunk Length</summary>
+        public string ChunkLength { get; set; } = "10";
+        /// <summary>Default PySceneDetect Threshold</summary>
+        public string PySceneDetectThreshold { get; set; } = "30";
     }
 }

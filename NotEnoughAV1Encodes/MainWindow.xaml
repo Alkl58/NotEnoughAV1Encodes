@@ -83,7 +83,7 @@
                             <ComboBox Grid.Column="1" x:Name="ComboBoxWorkerCount" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left"/>
                             <TextBox Grid.Column="1" Visibility="Hidden" x:Name="TextBoxWorkerCount" PreviewTextInput="NumberValidationTextBox" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             <Label x:Name="LabelSplittingMethod" Grid.Column="2" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
-                            <ComboBox Grid.Column="3" x:Name="ComboBoxChunkingMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left" SelectedIndex="1">
+                            <ComboBox Grid.Column="3" x:Name="ComboBoxChunkingMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left" SelectedIndex="1" SelectionChanged="ComboBoxChunkingMethod_SelectionChanged">
                                 <ComboBoxItem Content="Equal Chunking" IsSelected="True"/>
                                 <ComboBoxItem Content="PySceneDetect"/>
                             </ComboBox>
@@ -99,7 +99,7 @@
                                     </Style>
                                 </Label.Style>
                             </Label>
-                            <ComboBox Grid.Column="5" x:Name="ComboBoxReencodeMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left">
+                            <ComboBox Grid.Column="5" x:Name="ComboBoxReencodeMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left" SelectionChanged="ComboBoxChunkingMethod_SelectionChanged">
                                 <ComboBoxItem Content="x264" IsSelected="True"/>
                                 <ComboBoxItem Content="ffv1"/>
                                 <ComboBoxItem Content="utvideo"/>
@@ -127,7 +127,7 @@
                                     </Style>
                                 </Label.Style>
                             </Label>
-                            <TextBox Grid.Column="7"  x:Name="TextBoxChunkLength" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="10"  PreviewTextInput="NumberValidationTextBox" Width="80">
+                            <TextBox Grid.Column="7"  x:Name="TextBoxChunkLength" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="10" TextChanged="TextBoxChunkLength_TextChanged" PreviewTextInput="NumberValidationTextBox" Width="80">
                                 <TextBox.ToolTip>Sets the chunk length in seconds. Recommended: 10</TextBox.ToolTip>
                                 <TextBox.Style>
                                     <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
@@ -152,7 +152,7 @@
                                     </Style>
                                 </Label.Style>
                             </Label>
-                            <TextBox Grid.Column="5"  x:Name="TextBoxPySceneDetectThreshold" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="30"  PreviewTextInput="NumberValidationTextBox" Width="80">
+                            <TextBox Grid.Column="5"  x:Name="TextBoxPySceneDetectThreshold" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="30" TextChanged="TextBoxChunkLength_TextChanged" PreviewTextInput="NumberValidationTextBox" Width="80">
                                 <TextBox.ToolTip>Sets the threshold of scenedetection. (Default 30)</TextBox.ToolTip>
                                 <TextBox.Style>
                                     <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
