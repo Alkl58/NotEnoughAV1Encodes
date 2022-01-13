@@ -115,11 +115,15 @@ namespace NotEnoughAV1Encodes
         private void ButtonCancelEncode_Click(object sender, RoutedEventArgs e)
         {
             if (cancellationTokenSource == null) return;
-            cancellationTokenSource.Cancel();
-            ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
-            ButtonAddToQueue.IsEnabled = true;
-            ButtonRemoveSelectedQueueItem.IsEnabled = true;
-            ButtonEditSelectedItem.IsEnabled = true;
+            try
+            {
+                cancellationTokenSource.Cancel();
+                ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
+                ButtonAddToQueue.IsEnabled = true;
+                ButtonRemoveSelectedQueueItem.IsEnabled = true;
+                ButtonEditSelectedItem.IsEnabled = true;
+            }
+            catch { }
         }
 
         private void ButtonProgramSettings_Click(object sender, RoutedEventArgs e)
