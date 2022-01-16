@@ -46,7 +46,7 @@ namespace NotEnoughAV1Encodes.Views
             AudioBitrateMono = int.Parse(TextBoxAudioBitrateMono.Text);
             // Stereo Audio
             AudioCodecStereo = ComboBoxAudioCodecStereo.SelectedIndex;
-            AudioBitrateMono = int.Parse(TextBoxAudioBitrateStereo.Text);
+            AudioBitrateStereo = int.Parse(TextBoxAudioBitrateStereo.Text);
             // 5.1 Audio
             AudioCodecSixChannel = ComboBoxAudioCodecSixChannel.SelectedIndex;
             AudioBitrateSixChannel = int.Parse(TextBoxAudioBitrateSixChannel.Text);
