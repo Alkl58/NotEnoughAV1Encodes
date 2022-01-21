@@ -1,0 +1,487 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ButtonClose" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="ButtonDeletePreset" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="ButtonEditSelectedItem" xml:space="preserve">
+    <value>項目編集</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>保存して戻る</value>
+  </data>
+  <data name="ButtonOpenBatchFolder" xml:space="preserve">
+    <value>➔ フォルダ内をバッチ処理</value>
+  </data>
+  <data name="ButtonOpenProjectFile" xml:space="preserve">
+    <value>➔ プロジェクトファイル</value>
+  </data>
+  <data name="ButtonOpenVideoFile" xml:space="preserve">
+    <value>➔ 単一ファイル</value>
+  </data>
+  <data name="ButtonRemoveSelectedQueueItem" xml:space="preserve">
+    <value>項目削除</value>
+  </data>
+  <data name="ButtonResetBGImage" xml:space="preserve">
+    <value>リセット</value>
+  </data>
+  <data name="ButtonSavePreset" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="ButtonSelectBGImage" xml:space="preserve">
+    <value>選択</value>
+  </data>
+  <data name="ButtonSetPresetDefault" xml:space="preserve">
+    <value>既定にする</value>
+  </data>
+  <data name="ButtonTestSettings" xml:space="preserve">
+    <value>テスト設定</value>
+  </data>
+  <data name="ButtonUpdater" xml:space="preserve">
+    <value>更新の確認</value>
+  </data>
+  <data name="CheckBoxCustomVideoSettings" xml:space="preserve">
+    <value>カスタム設定</value>
+  </data>
+  <data name="CheckBoxRealTimeMode" xml:space="preserve">
+    <value>リアルタイムモード</value>
+  </data>
+  <data name="CheckBoxTwoPassEncoding" xml:space="preserve">
+    <value>2-Passエンコード</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="GroupBoxBackroundImage" xml:space="preserve">
+    <value>背景画像</value>
+  </data>
+  <data name="GroupBoxCrop" xml:space="preserve">
+    <value>クロップ</value>
+  </data>
+  <data name="GroupBoxCurrentSettings" xml:space="preserve">
+    <value>現在のエンコード設定</value>
+  </data>
+  <data name="GroupBoxDeinterlace" xml:space="preserve">
+    <value>デインターレース</value>
+  </data>
+  <data name="GroupBoxInputOutput" xml:space="preserve">
+    <value>入力 / 出力</value>
+  </data>
+  <data name="GroupBoxLanguage" xml:space="preserve">
+    <value>言語 (Language)</value>
+    <comment>Other Languages MUST use "&lt;Lang&gt; (Language)"</comment>
+  </data>
+  <data name="GroupBoxOptimization" xml:space="preserve">
+    <value>最適化</value>
+  </data>
+  <data name="GroupBoxPresets" xml:space="preserve">
+    <value>プリセット</value>
+  </data>
+  <data name="GroupBoxQuality" xml:space="preserve">
+    <value>品質</value>
+  </data>
+  <data name="GroupBoxResize" xml:space="preserve">
+    <value>リサイズ</value>
+  </data>
+  <data name="GroupBoxRotate" xml:space="preserve">
+    <value>回転</value>
+  </data>
+  <data name="GroupBoxThemeSettings" xml:space="preserve">
+    <value>テーマ設定</value>
+  </data>
+  <data name="GroupBoxVideoContainer" xml:space="preserve">
+    <value>動画コンテナ</value>
+  </data>
+  <data name="GroupBoxVideoInformation" xml:space="preserve">
+    <value>動画情報</value>
+  </data>
+  <data name="GroupBoxWorkersAndSplitting" xml:space="preserve">
+    <value>処理単位と分割</value>
+  </data>
+  <data name="LabelAccentTheme" xml:space="preserve">
+    <value>アクセントテーマ:</value>
+  </data>
+  <data name="LabelAddToQueue" xml:space="preserve">
+    <value>キューに追加</value>
+  </data>
+  <data name="LabelAvailableBatchFilename" xml:space="preserve">
+    <value>{filename} = 入力ファイル名</value>
+  </data>
+  <data name="LabelAvailableBatchPresetName" xml:space="preserve">
+    <value>{presetname} = プリセット名</value>
+  </data>
+  <data name="LabelBaseTheme" xml:space="preserve">
+    <value>基本テーマ:</value>
+  </data>
+  <data name="LabelBatchFileName" xml:space="preserve">
+    <value>バッチファイル名:</value>
+  </data>
+  <data name="LabelBitDepth" xml:space="preserve">
+    <value>ビット深度:</value>
+  </data>
+  <data name="LabelBitrate" xml:space="preserve">
+    <value>ビットレート (kbps):</value>
+  </data>
+  <data name="LabelBitrateAvg" xml:space="preserve">
+    <value>ビットレート (平均):</value>
+  </data>
+  <data name="LabelBitrateMax" xml:space="preserve">
+    <value>ビットレート (最大):</value>
+  </data>
+  <data name="LabelBitrateMin" xml:space="preserve">
+    <value>ビットレート (最小):</value>
+  </data>
+  <data name="LabelBottom" xml:space="preserve">
+    <value>下</value>
+  </data>
+  <data name="LabelBuildsProvidedBy" xml:space="preserve">
+    <value>Builds provided by jeremylee.sh under GPLv3</value>
+  </data>
+  <data name="LabelBurnIn" xml:space="preserve">
+    <value>焼き込み:</value>
+  </data>
+  <data name="LabelCancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="LabelChannels" xml:space="preserve">
+    <value>チャンネル:</value>
+  </data>
+  <data name="LabelChunkLength" xml:space="preserve">
+    <value>チャンクの長さ(秒):</value>
+  </data>
+  <data name="LabelCodec" xml:space="preserve">
+    <value>コーデック:</value>
+  </data>
+  <data name="LabelColorFormat" xml:space="preserve">
+    <value>カラーフォーマット:</value>
+  </data>
+  <data name="LabelContainer" xml:space="preserve">
+    <value>コンテナ:</value>
+  </data>
+  <data name="LabelDefault" xml:space="preserve">
+    <value>既定:</value>
+  </data>
+  <data name="LabelDefaultAudioBehavior" xml:space="preserve">
+    <value>音声の既定動作:</value>
+  </data>
+  <data name="LabelDeinterlace" xml:space="preserve">
+    <value>デインターレース:</value>
+  </data>
+  <data name="LabelDestination" xml:space="preserve">
+    <value>出力先</value>
+  </data>
+  <data name="LabelEncodeQueueParallel" xml:space="preserve">
+    <value>チャンク分割ではなくキューを並列にエンコードする:</value>
+  </data>
+  <data name="LabelEncoder" xml:space="preserve">
+    <value>エンコーダー:</value>
+  </data>
+  <data name="LabelFramerate" xml:space="preserve">
+    <value>フレームレート:</value>
+  </data>
+  <data name="LabelHeight" xml:space="preserve">
+    <value>高さ:</value>
+  </data>
+  <data name="LabelIcons" xml:space="preserve">
+    <value>アイコン:</value>
+  </data>
+  <data name="LabelLanguage" xml:space="preserve">
+    <value>言語:</value>
+  </data>
+  <data name="LabelLeft" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="LabelLength" xml:space="preserve">
+    <value>長さ:</value>
+  </data>
+  <data name="LabelMethodOpeningSource" xml:space="preserve">
+    <value>入力元の開き方</value>
+  </data>
+  <data name="LabelNoAudioFound" xml:space="preserve">
+    <value>音声が見つかりません</value>
+  </data>
+  <data name="LabelNoSubtitleFound" xml:space="preserve">
+    <value>字幕が見つかりません</value>
+  </data>
+  <data name="LabelPreset" xml:space="preserve">
+    <value>プリセット:</value>
+  </data>
+  <data name="LabelPresetName" xml:space="preserve">
+    <value>プリセット名:</value>
+  </data>
+  <data name="LabelProcessPriority" xml:space="preserve">
+    <value>プロセス優先度:</value>
+  </data>
+  <data name="LabelQualityMode" xml:space="preserve">
+    <value>品質モード:</value>
+  </data>
+  <data name="LabelQuantizer" xml:space="preserve">
+    <value>量子化器:</value>
+  </data>
+  <data name="LabelReencodeMethod" xml:space="preserve">
+    <value>再エンコード方式:</value>
+  </data>
+  <data name="LabelResolution" xml:space="preserve">
+    <value>解像度:</value>
+  </data>
+  <data name="LabelRight" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="LabelRotate" xml:space="preserve">
+    <value>回転 (時計回り):</value>
+  </data>
+  <data name="LabelSelectPresetForEncoding" xml:space="preserve">
+    <value>エンコードするプリセットを選択:</value>
+  </data>
+  <data name="LabelSource" xml:space="preserve">
+    <value>入力元</value>
+  </data>
+  <data name="LabelSpeed" xml:space="preserve">
+    <value>速度</value>
+  </data>
+  <data name="LabelSplittingMethod" xml:space="preserve">
+    <value>分割方式:</value>
+  </data>
+  <data name="LabelStartPauseButton" xml:space="preserve">
+    <value>開始</value>
+  </data>
+  <data name="LabelStatus" xml:space="preserve">
+    <value>ステータス:</value>
+  </data>
+  <data name="LabelTempPath" xml:space="preserve">
+    <value>一時パス</value>
+  </data>
+  <data name="LabelTheme" xml:space="preserve">
+    <value>テーマ:</value>
+  </data>
+  <data name="LabelThreshold" xml:space="preserve">
+    <value>しきい値:</value>
+  </data>
+  <data name="LabelTop" xml:space="preserve">
+    <value>上</value>
+  </data>
+  <data name="LabelTrackName" xml:space="preserve">
+    <value>トラック名:</value>
+  </data>
+  <data name="LabelVersion" xml:space="preserve">
+    <value>バージョン:</value>
+  </data>
+  <data name="LabelVideoDestination" xml:space="preserve">
+    <value>出力先が選択されていません</value>
+  </data>
+  <data name="LabelVideoDestination1" xml:space="preserve">
+    <value>出力先:</value>
+  </data>
+  <data name="LabelVideoSource" xml:space="preserve">
+    <value>入力元が選択されていません</value>
+  </data>
+  <data name="LabelVideoSource1" xml:space="preserve">
+    <value>入力元:</value>
+  </data>
+  <data name="LabelWidth" xml:space="preserve">
+    <value>幅:</value>
+  </data>
+  <data name="LabelWorkerCount" xml:space="preserve">
+    <value>処理単位数:</value>
+  </data>
+  <data name="MessageConstrainedBitrateAomenc" xml:space="preserve">
+    <value>NEAV1Eは現在、Constrained Bitrateに対応していません (aomenc)</value>
+  </data>
+  <data name="MessageCreatePresetBeforeBatch" xml:space="preserve">
+    <value>バッチファイルを追加する前に、プリセットを作成してください</value>
+  </data>
+  <data name="MessageNoInput" xml:space="preserve">
+    <value>入力が選択されていません！</value>
+  </data>
+  <data name="MessageNoOutput" xml:space="preserve">
+    <value>出力が選択されていません！</value>
+  </data>
+  <data name="MessageQualityModeRav1eSVT" xml:space="preserve">
+    <value>NEAV1Eは現在、Constant QualityまたはBitrate Modeのみをサポートしています (rav1e / svt-av1)</value>
+  </data>
+  <data name="MessageQueueEmpty" xml:space="preserve">
+    <value>キューが空です! \nキューにジョブを追加してください</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>一時停止</value>
+  </data>
+  <data name="ProgramSettings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Queue1stPass" xml:space="preserve">
+    <value>1st Pass:</value>
+  </data>
+  <data name="Queue2ndPass" xml:space="preserve">
+    <value>2nd Pass:</value>
+  </data>
+  <data name="QueueMenuItemEdit" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="QueueMinLeft" xml:space="preserve">
+    <value>分後</value>
+  </data>
+  <data name="Resume" xml:space="preserve">
+    <value>再開</value>
+  </data>
+  <data name="TabItemAdvanced" xml:space="preserve">
+    <value>高度</value>
+  </data>
+  <data name="TabItemAudio" xml:space="preserve">
+    <value>音声</value>
+  </data>
+  <data name="TabItemFilters" xml:space="preserve">
+    <value>フィルター</value>
+  </data>
+  <data name="TabItemQueue" xml:space="preserve">
+    <value>キュー</value>
+  </data>
+  <data name="TabItemSubtitles" xml:space="preserve">
+    <value>字幕</value>
+  </data>
+  <data name="TabItemSummary" xml:space="preserve">
+    <value>基本</value>
+  </data>
+  <data name="TabItemVideo" xml:space="preserve">
+    <value>動画</value>
+  </data>
+  <data name="TextBoxDestination" xml:space="preserve">
+    <value>出力先が選択されていません</value>
+  </data>
+  <data name="ToggleSwitchAdvancedSettings" xml:space="preserve">
+    <value>高度な設定</value>
+  </data>
+  <data name="ToggleSwitchDeleteTempFiles" xml:space="preserve">
+    <value>一時ファイルを削除</value>
+  </data>
+  <data name="ToggleSwitchLogging" xml:space="preserve">
+    <value>ログ</value>
+  </data>
+  <data name="ToggleSwitchOverrideWorkerCount" xml:space="preserve">
+    <value>処理単位数を優先</value>
+  </data>
+  <data name="ToggleSwitchShutdown" xml:space="preserve">
+    <value>エンコード後シャットダウン</value>
+  </data>
+  <data name="ToggleSwitchUsePresetBitDepth" xml:space="preserve">
+    <value>プリセットのビット深度を使いますか？</value>
+  </data>
+</root>
