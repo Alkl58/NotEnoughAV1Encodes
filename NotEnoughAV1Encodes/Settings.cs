@@ -40,6 +40,7 @@
         public string FilterCropLeft { get; set; } = "0";
         public string FilterResizeWidth { get; set; } = "0";
         public string FilterResizeHeight { get; set; } = "1080";
+        public int FilterResizeAlgorithm { get; set; } = 2;
         public int FilterRotateIndex { get; set; }
         public int FilterDeinterlaceIndex { get; set; }
 

@@ -754,6 +754,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Algorithm: ähnelt.
+        /// </summary>
+        public static string LabelScalingAlgorithm {
+            get {
+                return ResourceManager.GetString("LabelScalingAlgorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select Preset for encoding: ähnelt.
         /// </summary>
         public static string LabelSelectPresetForEncoding {

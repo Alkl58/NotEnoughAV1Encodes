@@ -219,16 +219,30 @@
                             <Label x:Name="LabelRight" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="215,75,-5,0" VerticalAlignment="Top" Height="28" Width="54" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="GroupBoxResize" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="14,10,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxResize" Header="{lex:Loc}" HorizontalAlignment="Left" Height="203" Margin="293,107,0,0" VerticalAlignment="Top" Width="285" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterResize}">
-                            <Label x:Name="LabelWidth" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="11,12,0,0" VerticalAlignment="Top" Height="28" Width="56" HorizontalContentAlignment="Right" />
-                            <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="72,10,0,0" TextWrapping="Wrap" Text="{Binding FilterResizeWidth}" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="If set to 0 it will automatically set the corresponding width to the height." />
-                            <Label x:Name="LabelHeight" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="142,12,0,0" VerticalAlignment="Top" Height="28" Width="53" HorizontalContentAlignment="Right" />
-                            <TextBox x:Name="TextBoxFiltersResizeHeight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="200,10,0,0" TextWrapping="Wrap" Text="{Binding FilterResizeHeight}" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-                            <Label Content="0 = Auto" HorizontalAlignment="Left" Margin="72,31,0,0" VerticalAlignment="Top" FontStyle="Italic" RenderTransformOrigin="0.504,0.51" Width="60" />
+                            <Label x:Name="LabelWidth" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="28" Width="56" HorizontalContentAlignment="Right" />
+                            <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="85,10,0,0" TextWrapping="Wrap" Text="{Binding FilterResizeWidth}" VerticalAlignment="Top" Width="169" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="If set to 0 it will automatically set the corresponding width to the height." />
+                            <Label x:Name="LabelHeight" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="27,62,0,0" VerticalAlignment="Top" Height="28" Width="53" HorizontalContentAlignment="Right" />
+                            <TextBox x:Name="TextBoxFiltersResizeHeight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="85,62,0,0" TextWrapping="Wrap" Text="{Binding FilterResizeHeight}" VerticalAlignment="Top" Width="169" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label Content="0 = Auto" HorizontalAlignment="Left" Margin="200,31,0,0" VerticalAlignment="Top" FontStyle="Italic" RenderTransformOrigin="0.504,0.51" Width="60" />
+                            <Label x:Name="LabelScalingAlgorithm" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,113,0,0" VerticalAlignment="Top" Height="28" Width="70" HorizontalContentAlignment="Right" />
+                            <ComboBox x:Name="ComboBoxResizeAlgorithm" HorizontalAlignment="Left" Margin="85,114,0,0" VerticalAlignment="Top" Width="169" SelectedIndex="{Binding FilterResizeAlgorithm}">
+                                <ComboBoxItem Content="fast_bilinear"/>
+                                <ComboBoxItem Content="bilinear"/>
+                                <ComboBoxItem Content="bicubic" IsSelected="True"/>
+                                <ComboBoxItem Content="experimental"/>
+                                <ComboBoxItem Content="neighbor"/>
+                                <ComboBoxItem Content="area"/>
+                                <ComboBoxItem Content="bicublin"/>
+                                <ComboBoxItem Content="gauss"/>
+                                <ComboBoxItem Content="sinc"/>
+                                <ComboBoxItem Content="lanczos"/>
+                                <ComboBoxItem Content="spline"/>
+                            </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="GroupBoxRotate" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="294,10,0,0" VerticalAlignment="Top" Width="286" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxRotate" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="14,10,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterRotate}">
                             <Label x:Name="LabelRotate" Content="{lex:Loc}" HorizontalAlignment="Right" Margin="0,20,129,0" VerticalAlignment="Top" Height="28" HorizontalContentAlignment="Right" Width="146" />
                             <ComboBox x:Name="ComboBoxFiltersRotate" HorizontalAlignment="Left" Margin="151,18,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center" SelectedIndex="{Binding FilterRotateIndex}">
@@ -239,7 +253,7 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="GroupBoxDeinterlace" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="585,10,0,0" VerticalAlignment="Top" Width="285" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxDeinterlace" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="293,10,0,0" VerticalAlignment="Top" Width="285" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterDeinterlace}">
                             <Label x:Name="LabelDeinterlace" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Height="28" />
                             <ComboBox x:Name="ComboBoxFiltersDeinterlace" HorizontalAlignment="Left" Margin="85,20,0,0" VerticalAlignment="Top" Width="169" Height="29" VerticalContentAlignment="Center" SelectedIndex="{Binding FilterDeinterlaceIndex}">
@@ -251,9 +265,9 @@
                         </Grid>
                     </GroupBox>
                     <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" IsOn="{Binding FilterCrop}" Header="" Height="61" Margin="202,82,0,0" VerticalAlignment="Top" Width="100" />
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" IsOn="{Binding FilterResize}" Header="" Height="62" Margin="202,-15,0,0" VerticalAlignment="Top" Width="100" />
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" IsOn="{Binding FilterRotate}" Header="" Height="100" Margin="494,-15,0,0" VerticalAlignment="Top" Width="159" />
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" IsOn="{Binding FilterDeinterlace}" Header="" Height="100" Margin="782,-15,0,0" VerticalAlignment="Top" Width="100" />
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" IsOn="{Binding FilterResize}" Header="" Height="62" Margin="492,82,0,0" VerticalAlignment="Top" Width="100" />
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" IsOn="{Binding FilterRotate}" Header="" Height="100" Margin="202,-15,0,0" VerticalAlignment="Top" Width="159" />
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" IsOn="{Binding FilterDeinterlace}" Header="" Height="100" Margin="492,-15,0,0" VerticalAlignment="Top" Width="100" />
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabItemVideo" Header="{lex:Loc}">

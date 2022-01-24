@@ -346,6 +346,9 @@
   <data name="LabelRotate" xml:space="preserve">
     <value>Rotieren (Uhrzeig.):</value>
   </data>
+  <data name="LabelScalingAlgorithm" xml:space="preserve">
+    <value>Algorithmus:</value>
+  </data>
   <data name="LabelSelectPresetForEncoding" xml:space="preserve">
     <value>Preset zum Encoden auswählen:</value>
   </data>

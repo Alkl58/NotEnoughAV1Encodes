@@ -1089,29 +1089,29 @@ namespace NotEnoughAV1Encodes
 
         private string VideoFiltersDeinterlace()
         {
-            int _filterIndex = ComboBoxFiltersDeinterlace.SelectedIndex;
-            string _filter = "";
+            int filterIndex = ComboBoxFiltersDeinterlace.SelectedIndex;
+            string filter = "";
 
-            if (_filterIndex == 0)
+            if (filterIndex == 0)
             {
-                _filter = "bwdif=mode=0";
+                filter = "bwdif=mode=0";
             }
-            else if (_filterIndex == 1)
+            else if (filterIndex == 1)
             {
-                _filter = "estdif=mode=0";
+                filter = "estdif=mode=0";
             }
-            else if (_filterIndex == 2)
+            else if (filterIndex == 2)
             {
-                string _bin = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "nnedi", "nnedi3_weights.bin");
-                _bin = _bin.Replace("\u005c", "\u005c\u005c").Replace(":", "\u005c:");
-                _filter = "nnedi=weights='" + _bin + "'";
+                string bin = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "nnedi", "nnedi3_weights.bin");
+                bin = bin.Replace("\u005c", "\u005c\u005c").Replace(":", "\u005c:");
+                filter = "nnedi=weights='" + bin + "'";
             }
-            else if (_filterIndex == 3)
+            else if (filterIndex == 3)
             {
-                _filter = "yadif=mode=0";
+                filter = "yadif=mode=0";
             }
 
-            return _filter;
+            return filter;
         }
 
         private string VideoFiltersResize()
@@ -1120,10 +1120,10 @@ namespace NotEnoughAV1Encodes
             if (TextBoxFiltersResizeWidth.Text != "0")
             {
                 // Custom Scale
-                return "scale=" + TextBoxFiltersResizeWidth.Text + ":" + TextBoxFiltersResizeHeight.Text;
+                return "scale=" + TextBoxFiltersResizeWidth.Text + ":" + TextBoxFiltersResizeHeight.Text + ":flags=" + ComboBoxResizeAlgorithm.Text;
             }
             // Auto Scale
-            return "scale=trunc(oh*a/2)*2:" + TextBoxFiltersResizeHeight.Text;
+            return "scale=trunc(oh*a/2)*2:" + TextBoxFiltersResizeHeight.Text + ":flags=" + ComboBoxResizeAlgorithm.Text;
         }
 
         private string GenerateEncoderCommand()
