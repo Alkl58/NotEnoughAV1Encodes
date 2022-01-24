@@ -991,33 +991,35 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void DeleteTempFiles(Queue.QueueElement queueElement)
+        private void DeleteTempFiles(Queue.QueueElement queueElement, DateTime startTime)
         {
-            if (settingsDB.DeleteTempFiles)
+            if (!File.Exists(queueElement.VideoDB.OutputPath)) {
+                queueElement.Status = "Error: No Output detected";
+                return;
+            }
+
+            FileInfo videoOutput = new(queueElement.VideoDB.OutputPath);
+            if (videoOutput.Length <= 50000) {
+                queueElement.Status = "Possible Muxing Error";
+                return;
+            }
+
+            TimeSpan timespent = DateTime.Now - startTime;
+            try {
+                queueElement.Status = "Finished Encoding - Elapsed Time " + timespent.ToString("hh\\:mm\\:ss") + " - avg " + Math.Round(queueElement.FrameCount / timespent.TotalSeconds, 2) + "fps";
+            }
+            catch
             {
-                if (File.Exists(queueElement.VideoDB.OutputPath))
-                {
-                    FileInfo _videoOutput = new(queueElement.VideoDB.OutputPath);
-                    if (_videoOutput.Length >= 50000)
-                    {
-                        try
-                        {
-                            DirectoryInfo tmp = new(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier));
-                            tmp.Delete(true);
-                        }
-                        catch (Exception e)
-                        {
-                            MessageBox.Show(e.Message, "Error Deleting Temp Files", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                    else
-                    {
-                        queueElement.Status = "Potential Muxing Error";
-                    }
-                }
-                else
-                {
-                    queueElement.Status = "Error: No Output detected";
+                queueElement.Status = "Finished Encoding - Elapsed Time " + timespent.ToString("hh\\:mm\\:ss") + " - Error calculating average FPS";
+            }
+
+
+            if (settingsDB.DeleteTempFiles) {
+                try {
+                    DirectoryInfo tmp = new(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier));
+                    tmp.Delete(true);
+                } catch {
+                    queueElement.Status = "Error Deleting Temp Files";
                 }
             }
         }
@@ -1832,7 +1834,7 @@ namespace NotEnoughAV1Encodes
 
                             await Task.Run(() => videoMuxer.Concat(queueElement), _cancelToken);
 
-                            await Task.Run(() => DeleteTempFiles(queueElement), _cancelToken);
+                            await Task.Run(() => DeleteTempFiles(queueElement, startTime), _cancelToken);
                         }
                     }
                     catch (TaskCanceledException) { }
