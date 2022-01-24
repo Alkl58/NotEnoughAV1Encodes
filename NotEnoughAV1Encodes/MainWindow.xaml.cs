@@ -380,6 +380,11 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonStartStop_Click(object sender, RoutedEventArgs e)
         {
+            if (ListBoxQueue.Items.Count == 0)
+            {
+                PreAddToQueue();
+            }
+
             if (ListBoxQueue.Items.Count != 0)
             {
                 if (ProgramState is 0 or 2)
@@ -428,6 +433,11 @@ namespace NotEnoughAV1Encodes
         }
 
         private void ButtonAddToQueue_Click(object sender, RoutedEventArgs e)
+        {
+            PreAddToQueue();
+        }
+
+        private void PreAddToQueue()
         {
             // Generate a random identifier to avoid filesystem conflicts
             const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
