@@ -8,7 +8,7 @@ namespace NotEnoughAV1Encodes.Views
 {
     public partial class FirstStartup : MetroWindow
     {
-        SettingsDB _settingsDB;
+        readonly SettingsDB _settingsDB;
         public FirstStartup(SettingsDB settingsDB)
         {
             InitializeComponent();

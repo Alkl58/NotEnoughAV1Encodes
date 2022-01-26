@@ -6,7 +6,6 @@ using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.IO;
@@ -17,7 +16,6 @@ using ControlzEx.Theming;
 using System.Windows.Media;
 using System.Linq;
 using WPFLocalizeExtension.Engine;
-using System.Globalization;
 using NotEnoughAV1Encodes.resources.lang;
 
 namespace NotEnoughAV1Encodes
@@ -32,8 +30,6 @@ namespace NotEnoughAV1Encodes
         private CancellationTokenSource cancellationTokenSource;
         public Settings PresetSettings = new();
         public static bool Logging { get; set; }
-
-        public ObservableCollection<Queue.QueueElement> QueueList { get; set; } = new();
 
         public MainWindow()
         {

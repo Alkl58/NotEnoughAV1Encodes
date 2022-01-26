@@ -30,7 +30,7 @@ namespace NotEnoughAV1Encodes
             return 0;
         }
 
-        private static ReaderWriterLockSlim readWriteLock = new();
+        private static readonly ReaderWriterLockSlim readWriteLock = new();
         public static void Logger(string logMessage, string logPath)
         {
             // We could use a better logging method with different logging levels

@@ -24,12 +24,12 @@ namespace NotEnoughAV1Encodes.Views
 
         // NEAV1E Update
         private string UpdateVersion = "0";
-        private string CurrentVersion = AssemblyVersion.Remove(AssemblyVersion.Length - 2);
+        private readonly string CurrentVersion = AssemblyVersion.Remove(AssemblyVersion.Length - 2);
 
         // FFmpeg Update
-        public static string FFmpegUpdateVersion;
+        private static string FFmpegUpdateVersion;
 
-        public static string FFmpegCurrentVersion;
+        private static string FFmpegCurrentVersion;
 
         // aomenc Update
         private static string AomencUpdateVersion;
@@ -337,7 +337,7 @@ namespace NotEnoughAV1Encodes.Views
             }
         }
 
-        private DateTime? ParseDate(string input)
+        private static DateTime? ParseDate(string input)
         {
             // Converts string to datetime
             try
@@ -551,7 +551,7 @@ namespace NotEnoughAV1Encodes.Views
             catch { }
         }
 
-        private void ExtractFile(string source, string destination)
+        private static void ExtractFile(string source, string destination)
         {
             // Extracts the downloaded archives with 7zip
             string zPath = Path.Combine(CurrentDir, "Apps", "7zip", "7za.exe");

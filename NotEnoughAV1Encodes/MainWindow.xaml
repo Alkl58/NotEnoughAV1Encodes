@@ -917,7 +917,7 @@
                     <GroupBox Header="{lex:Loc TabItemQueue}" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid>
                             <GroupBox Margin="0,34,0,0">
-                                <ListBox x:Name="ListBoxQueue" ItemsSource="{Binding Path=QueueList}" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" KeyDown="ListBoxQueue_KeyDown">
+                                <ListBox x:Name="ListBoxQueue" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" KeyDown="ListBoxQueue_KeyDown">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem">
                                             <Setter Property="Background" Value="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"></Setter>
