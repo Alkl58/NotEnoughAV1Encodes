@@ -1867,7 +1867,9 @@ namespace NotEnoughAV1Encodes
 
             Shutdown();
         }
+        #endregion
 
+        #region Progressbar
         private static void UpdateProgressBar(Queue.QueueElement queueElement, DateTime startTime)
         {
             TimeSpan timeSpent = DateTime.Now - startTime;
@@ -1886,9 +1888,9 @@ namespace NotEnoughAV1Encodes
             // Progress 1-Pass encoding or 1st Pass of 2-Pass encoding
             queueElement.Progress = Convert.ToDouble(encodedFrames);
             
-            // 2 Pass encoding
             if (queueElement.Passes == 2)
             {
+                // 2 Pass encoding
                 foreach (Queue.ChunkProgress progress in queueElement.ChunkProgress)
                 {
                     try
@@ -1905,29 +1907,30 @@ namespace NotEnoughAV1Encodes
                 string estimatedFPS2ndPass = "";
                 string estimatedTime1stPass = "";
                 string estimatedTime2ndPass = "";
+
                 if (encodedFrames != queueElement.FrameCount)
                 {
-                    estimatedFPS1stPass = "   -  ~" + Math.Round(encodedFrames / timeSpent.TotalSeconds, 2).ToString() + "fps";
+                    estimatedFPS1stPass = "   -  ~" + Math.Round(encodedFrames / timeSpent.TotalSeconds, 2).ToString("0.00") + "fps";
                     estimatedTime1stPass = "   -  ~" + Math.Round(((timeSpent.TotalSeconds / encodedFrames) * (queueElement.FrameCount - encodedFrames)) / 60, MidpointRounding.ToEven) + LocalizedStrings.Instance["QueueMinLeft"];
                 }
 
                 if(encodedFramesSecondPass != queueElement.FrameCount)
                 {
-                    estimatedFPS2ndPass = "   -  ~" + Math.Round(encodedFramesSecondPass / timeSpent.TotalSeconds, 2).ToString() + "fps";
+                    estimatedFPS2ndPass = "   -  ~" + Math.Round(encodedFramesSecondPass / timeSpent.TotalSeconds, 2).ToString("0.00") + "fps";
                     estimatedTime2ndPass = "   -  ~" + Math.Round(((timeSpent.TotalSeconds / encodedFramesSecondPass) * (queueElement.FrameCount - encodedFramesSecondPass)) / 60, MidpointRounding.ToEven) + LocalizedStrings.Instance["QueueMinLeft"];
                 }
                 
-                queueElement.Status = LocalizedStrings.Instance["Queue1stPass"] + " " + ((decimal)encodedFrames / queueElement.FrameCount).ToString("0.00%") + estimatedFPS1stPass + estimatedTime1stPass + " - " + LocalizedStrings.Instance["Queue2ndPass"] + " " + ((decimal)encodedFramesSecondPass / queueElement.FrameCount).ToString("0.00%") + estimatedFPS2ndPass + estimatedTime2ndPass;
+                queueElement.Status = LocalizedStrings.Instance["Queue1stPass"] + " " + ((decimal)encodedFrames / queueElement.FrameCount).ToString("00.00%") + estimatedFPS1stPass + estimatedTime1stPass + " - " + LocalizedStrings.Instance["Queue2ndPass"] + " " + ((decimal)encodedFramesSecondPass / queueElement.FrameCount).ToString("00.00%") + estimatedFPS2ndPass + estimatedTime2ndPass;
             }
             else
             {
-                string estimatedFPS = "   -  ~" + Math.Round(encodedFrames / timeSpent.TotalSeconds, 2).ToString() + "fps";
+                // 1 Pass encoding
+                string estimatedFPS = "   -  ~" + Math.Round(encodedFrames / timeSpent.TotalSeconds, 2).ToString("0.00") + "fps";
                 string estimatedTime = "   -  ~" + Math.Round(((timeSpent.TotalSeconds / encodedFrames) * (queueElement.FrameCount - encodedFrames)) / 60, MidpointRounding.ToEven) + LocalizedStrings.Instance["QueueMinLeft"];
 
-                queueElement.Status = "Encoded: " + ((decimal)encodedFrames / queueElement.FrameCount).ToString("0.00%") + estimatedFPS + estimatedTime;
+                queueElement.Status = "Encoded: " + ((decimal)encodedFrames / queueElement.FrameCount).ToString("00.00%") + estimatedFPS + estimatedTime;
             }
         }
-
         #endregion
     }
 }
