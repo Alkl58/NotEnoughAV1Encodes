@@ -1031,10 +1031,7 @@ namespace NotEnoughAV1Encodes
         }
         #endregion
 
-        #region Encoder Settings
-
-        // ════════════════════════════════════ Video Filters ═════════════════════════════════════
-
+        #region Video Filters
         private string GenerateVideoFilters()
         {
             bool crop = ToggleSwitchFilterCrop.IsOn;
@@ -1131,484 +1128,424 @@ namespace NotEnoughAV1Encodes
             // Auto Scale
             return "scale=trunc(oh*a/2)*2:" + TextBoxFiltersResizeHeight.Text + ":flags=" + ComboBoxResizeAlgorithm.Text;
         }
+        #endregion
 
+        #region Encoder Settings
         private string GenerateEncoderCommand()
         {
-            string _settings = GenerateFFmpegColorSpace() + " " + GenerateFFmpegFramerate() + " ";
-            if (ComboBoxVideoEncoder.SelectedIndex == 0)
-            {
-                return _settings + GenerateAomFFmpegCommand();
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex == 1)
-            {
-                return _settings + GenerateRav1eFFmpegCommand();
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex == 2)
-            {
-                return _settings + GenerateSvtAV1FFmpegCommand();
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex == 3)
-            {
-                return _settings + GenerateVpxVP9Command();
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex == 5)
-            {
-                return _settings + GenerateAomencCommand();
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex == 6)
-            {
-                return _settings + GenerateRav1eCommand();
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex == 7)
-            {
-                return _settings + GenerateSvtAV1Command();
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex == 9)
-            {
-                return _settings + GenerateHEVCFFmpegCommand();
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex == 10)
-            {
-                return _settings + GenerateAVCFFmpegCommand();
-            }
+            string settings = GenerateFFmpegColorSpace() + " " + GenerateFFmpegFramerate() + " ";
 
-            return "";
+            string encoderSetting = ComboBoxVideoEncoder.SelectedIndex switch
+            {
+                0 => GenerateAomFFmpegCommand(),
+                1 => GenerateRav1eFFmpegCommand(),
+                2 => GenerateSvtAV1FFmpegCommand(),
+                3 => GenerateVpxVP9Command(),
+                5 => GenerateAomencCommand(),
+                6 => GenerateRav1eCommand(),
+                7 => GenerateSvtAV1Command(),
+                9 => GenerateHEVCFFmpegCommand(),
+                10 => GenerateAVCFFmpegCommand(),
+                _ => ""
+            };
+
+            return settings + encoderSetting;
         }
 
         private string GenerateAomFFmpegCommand()
         {
-            string _settings = "-c:v libaom-av1";
+            string settings = "-c:v libaom-av1";
 
-            if (ComboBoxQualityMode.SelectedIndex == 0)
+            // Quality / Bitrate Selection
+            string quality = ComboBoxQualityMode.SelectedIndex switch
             {
-                _settings += " -crf " + SliderQuality.Value + " -b:v 0";
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 1)
+                0 => " -crf " + SliderQuality.Value + " -b:v 0",
+                1 => " -crf " + SliderQuality.Value + " -b:v " + TextBoxMaxBitrate.Text + "k",
+                2 => " -b:v " + TextBoxMinBitrate.Text + "k",
+                3 => " -minrate " + TextBoxMinBitrate.Text + "k -b:v " + TextBoxAVGBitrate.Text + "k -maxrate " + TextBoxMaxBitrate.Text + "k",
+                _ => ""
+            };
+
+            // Preset
+            settings += quality + " -cpu-used " + SliderEncoderPreset.Value;
+
+            // Advanced Settings
+            if (ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                _settings += " -crf " + SliderQuality.Value + " -b:v " + TextBoxMaxBitrate.Text + "k";
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 2)
-            {
-                _settings += " -b:v " + TextBoxMinBitrate.Text + "k";
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 3)
-            {
-                _settings += " -minrate " + TextBoxMinBitrate.Text + "k -b:v " + TextBoxAVGBitrate.Text + "k -maxrate " + TextBoxMaxBitrate.Text + "k";
-            }
-
-            _settings += " -cpu-used " + SliderEncoderPreset.Value;
-
-            if (ToggleSwitchAdvancedSettings.IsOn)
-            {
-                _settings += " -threads " + ComboBoxAomencThreads.Text;                                      // Threads
-                _settings += " -tile-columns " + ComboBoxAomencTileColumns.Text;                             // Tile Columns
-                _settings += " -tile-rows " + ComboBoxAomencTileRows.Text;                                   // Tile Rows
-                _settings += " -lag-in-frames " + TextBoxAomencLagInFrames.Text;                             // Lag in Frames
-                _settings += " -aq-mode " + ComboBoxAomencAQMode.SelectedIndex;                              // AQ-Mode
-                _settings += " -tune " + ComboBoxAomencTune.Text;                                            // Tune
-
-                if (TextBoxAomencMaxGOP.Text != "0")
-                {
-                    _settings += " -g " + TextBoxAomencMaxGOP.Text;                                           // Keyframe Interval
-                }
-                if (CheckBoxAomencRowMT.IsChecked == false)
-                {
-                    _settings += " -row-mt 0";                                                                // Row Based Multithreading
-                }
-                if (CheckBoxAomencCDEF.IsChecked == false)
-                {
-                    _settings += " -enable-cdef 0";                                                           // Constrained Directional Enhancement Filter
-                }
-
-                if (CheckBoxAomencARNRMax.IsChecked == true)
-                {
-                    _settings += " -arnr-max-frames " + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
-                    _settings += " -arnr-strength " + ComboBoxAomencARNRStrength.Text;                        // ARNR Strength
-                }
-                if (CheckBoxRealTimeMode.IsOn)
-                {
-                    _settings += " -usage realtime ";                                                         // Real Time Mode
-                }
-
-                _settings += " -aom-params ";
-                _settings += " tune-content=" + ComboBoxAomencTuneContent.Text;                             // Tune-Content
-                _settings += ":sharpness=" + ComboBoxAomencSharpness.Text;                                  // Sharpness (Filter)
-                _settings += ":enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex;      // Key Frame Filtering
-                if (ComboBoxAomencColorPrimaries.SelectedIndex != 0)
-                {
-                    _settings += ":color-primaries=" + ComboBoxAomencColorPrimaries.Text;                   // Color Primaries
-                }
-                if (ComboBoxAomencColorTransfer.SelectedIndex != 0)
-                {
-                    _settings += ":transfer-characteristics=" + ComboBoxAomencColorTransfer.Text;           // Color Transfer
-                }
-                if (ComboBoxAomencColorMatrix.SelectedIndex != 0)
-                {
-                    _settings += ":matrix-coefficients=" + ComboBoxAomencColorMatrix.Text;                  // Color Matrix
-                }
+                settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval();
             }
             else
             {
-                _settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval();
+                settings += " -threads " + ComboBoxAomencThreads.Text +                                      // Threads
+                            " -tile-columns " + ComboBoxAomencTileColumns.Text +                             // Tile Columns
+                            " -tile-rows " + ComboBoxAomencTileRows.Text +                                   // Tile Rows
+                            " -lag-in-frames " + TextBoxAomencLagInFrames.Text +                             // Lag in Frames
+                            " -aq-mode " + ComboBoxAomencAQMode.SelectedIndex +                              // AQ-Mode
+                            " -tune " + ComboBoxAomencTune.Text;                                             // Tune
+
+                if (TextBoxAomencMaxGOP.Text != "0") 
+                    settings += " -g " + TextBoxAomencMaxGOP.Text;                                           // Keyframe Interval
+                if (CheckBoxAomencRowMT.IsChecked == false) 
+                    settings += " -row-mt 0";                                                                // Row Based Multithreading
+                if (CheckBoxAomencCDEF.IsChecked == false) 
+                    settings += " -enable-cdef 0";                                                           // Constrained Directional Enhancement Filter
+                if (CheckBoxRealTimeMode.IsOn) 
+                    settings += " -usage realtime ";                                                         // Real Time Mode
+
+                if (CheckBoxAomencARNRMax.IsChecked == true)
+                {
+                    settings += " -arnr-max-frames " + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
+                    settings += " -arnr-strength " + ComboBoxAomencARNRStrength.Text;                        // ARNR Strength
+                }
+
+                settings += " -aom-params " +
+                            " tune-content=" + ComboBoxAomencTuneContent.Text +                              // Tune-Content
+                            ":sharpness=" + ComboBoxAomencSharpness.Text +                                   // Sharpness (Filter)
+                            ":enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex;        // Key Frame Filtering
+
+                if (ComboBoxAomencColorPrimaries.SelectedIndex != 0)
+                    settings += ":color-primaries=" + ComboBoxAomencColorPrimaries.Text;                     // Color Primaries
+                if (ComboBoxAomencColorTransfer.SelectedIndex != 0)
+                    settings += ":transfer-characteristics=" + ComboBoxAomencColorTransfer.Text;             // Color Transfer
+                if (ComboBoxAomencColorMatrix.SelectedIndex != 0)
+                    settings += ":matrix-coefficients=" + ComboBoxAomencColorMatrix.Text;                    // Color Matrix
             }
 
-            return _settings;
+            return settings;
         }
 
         private string GenerateRav1eFFmpegCommand()
         {
-            string _settings = "-c:v librav1e";
+            string settings = "-c:v librav1e";
 
-            if (ComboBoxQualityMode.SelectedIndex == 0)
+            // Quality / Bitrate Selection
+            string quality = ComboBoxQualityMode.SelectedIndex switch
             {
-                _settings += " -qp " + SliderQuality.Value;
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 2)
-            {
-                _settings += " -b:v " + TextBoxAVGBitrate.Text + "k";
-            }
+                0 => " -qp " + SliderQuality.Value,
+                2 => " -b:v " + TextBoxAVGBitrate.Text + "k",
+                _ => ""
+            };
 
-            _settings += " -speed " + SliderEncoderPreset.Value;
+            // Preset
+            settings += quality + " -speed " + SliderEncoderPreset.Value;
 
-            if (ToggleSwitchAdvancedSettings.IsOn)
+            // Advanced Settings
+            if (ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                _settings += " -tile-columns " + ComboBoxRav1eTileColumns.SelectedIndex;                     // Tile Columns
-                _settings += " -tile-rows " + ComboBoxRav1eTileRows.SelectedIndex;                           // Tile Rows
-                _settings += " -rav1e-params ";
-                _settings += "threads=" + ComboBoxRav1eThreads.SelectedIndex;                                 // Threads
-                _settings += ":rdo-lookahead-frames=" + TextBoxRav1eLookahead.Text;                           // RDO Lookahead
-                _settings += ":tune=" + ComboBoxRav1eTune.Text;                                               // Tune
-                if (TextBoxRav1eMaxGOP.Text != "0")
-                {
-                    _settings += ":keyint=" + TextBoxRav1eMaxGOP.Text;                                        // Keyframe Interval
-                }
-                if (ComboBoxRav1eColorPrimaries.SelectedIndex != 0)
-                {
-                    _settings += ":primaries=" + ComboBoxRav1eColorPrimaries.Text;                            // Color Primaries
-                }
-                if (ComboBoxRav1eColorTransfer.SelectedIndex != 0)
-                {
-                    _settings += ":transfer=" + ComboBoxRav1eColorTransfer.Text;                              // Color Transfer
-                }
-                if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
-                {
-                    _settings += ":matrix=" + ComboBoxRav1eColorMatrix.Text;                                  // Color Matrix
-                }
-                if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
-                {
-                    _settings += ":mastering-display=G(" + TextBoxRav1eMasteringGx.Text + ",";                // Mastering Gx
-                    _settings += TextBoxRav1eMasteringGy.Text + ")B(";                                        // Mastering Gy
-                    _settings += TextBoxRav1eMasteringBx.Text + ",";                                          // Mastering Bx
-                    _settings += TextBoxRav1eMasteringBy.Text + ")R(";                                        // Mastering By
-                    _settings += TextBoxRav1eMasteringRx.Text + ",";                                          // Mastering Rx
-                    _settings += TextBoxRav1eMasteringRy.Text + ")WP(";                                       // Mastering Ry
-                    _settings += TextBoxRav1eMasteringWPx.Text + ",";                                         // Mastering WPx
-                    _settings += TextBoxRav1eMasteringWPy.Text + ")L(";                                       // Mastering WPy
-                    _settings += TextBoxRav1eMasteringLx.Text + ",";                                          // Mastering Lx
-                    _settings += TextBoxRav1eMasteringLy.Text + ")";                                          // Mastering Ly
-                }
-                if (CheckBoxRav1eContentLight.IsChecked == true)
-                {
-                    _settings += ":content-light=" + TextBoxRav1eContentLightCll.Text;                        // Content Light CLL
-                    _settings += "," + TextBoxRav1eContentLightFall.Text;                                     // Content Light FALL
-                }
+                settings += " -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval() + " -rav1e-params threads=4";
             }
             else
             {
-                _settings += " -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval() + " -rav1e-params threads=4";
+                settings += " -tile-columns " + ComboBoxRav1eTileColumns.SelectedIndex +                     // Tile Columns
+                            " -tile-rows " + ComboBoxRav1eTileRows.SelectedIndex;                            // Tile Rows
+
+                settings += " -rav1e-params " +
+                            "threads=" + ComboBoxRav1eThreads.SelectedIndex +                                // Threads
+                            ":rdo-lookahead-frames=" + TextBoxRav1eLookahead.Text +                          // RDO Lookahead
+                            ":tune=" + ComboBoxRav1eTune.Text;                                               // Tune
+
+                if (TextBoxRav1eMaxGOP.Text != "0") 
+                    settings += ":keyint=" + TextBoxRav1eMaxGOP.Text;                                        // Keyframe Interval
+
+                if (ComboBoxRav1eColorPrimaries.SelectedIndex != 0) 
+                    settings += ":primaries=" + ComboBoxRav1eColorPrimaries.Text;                            // Color Primaries
+                if (ComboBoxRav1eColorTransfer.SelectedIndex != 0)
+                    settings += ":transfer=" + ComboBoxRav1eColorTransfer.Text;                              // Color Transfer
+                if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
+                    settings += ":matrix=" + ComboBoxRav1eColorMatrix.Text;                                  // Color Matrix
+
+                if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
+                {
+                    settings += ":mastering-display=" +
+                                // Mastering      Gx                                   Gy
+                                "G(" + TextBoxRav1eMasteringGx.Text + "," + TextBoxRav1eMasteringGy.Text + ")" +
+                                // Mastering      Bx                                   By
+                                "B(" + TextBoxRav1eMasteringBx.Text + "," + TextBoxRav1eMasteringBy.Text + ")" +
+                                // Mastering      Rx                                   Ry
+                                "R(" + TextBoxRav1eMasteringRx.Text + "," + TextBoxRav1eMasteringRy.Text + ")" +
+                                // Mastering      WPx                                  WPy
+                                "WP(" + TextBoxRav1eMasteringWPx.Text + "," + TextBoxRav1eMasteringWPy.Text + ")" +
+                                // Mastering      Lx                                   Ly
+                                "L(" + TextBoxRav1eMasteringLx.Text + "," + TextBoxRav1eMasteringLy.Text + ")";
+                }
+
+                if (CheckBoxRav1eContentLight.IsChecked == true)
+                {
+                    settings += ":content-light=" + TextBoxRav1eContentLightCll.Text +                       // Content Light CLL
+                                "," + TextBoxRav1eContentLightFall.Text;                                     // Content Light FALL
+                }
             }
 
-            return _settings;
+            return settings;
         }
 
         private string GenerateSvtAV1FFmpegCommand()
         {
-            string _settings = "-c:v libsvtav1";
+            string settings = "-c:v libsvtav1";
 
-            if (ComboBoxQualityMode.SelectedIndex == 0)
+            // Quality / Bitrate Selection
+            string quality = ComboBoxQualityMode.SelectedIndex switch
             {
-                _settings += " -rc 0 -qp " + SliderQuality.Value;
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 2)
-            {
-                _settings += " -rc 1 -b:v " + TextBoxAVGBitrate.Text + "k";
-            }
+                0 => " -rc 0 -qp " + SliderQuality.Value,
+                2 => " -rc 1 -b:v " + TextBoxAVGBitrate.Text + "k",
+                _ => ""
+            };
 
-            _settings += " -preset " + SliderEncoderPreset.Value;
+            // Preset
+            settings += quality + " -preset " + SliderEncoderPreset.Value;
 
-            if (ToggleSwitchAdvancedSettings.IsOn)
+            // Advanced Settings
+            if (ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                _settings += " -tile_columns " + ComboBoxSVTAV1TileColumns.Text;                              // Tile Columns
-                _settings += " -tile_rows " + ComboBoxSVTAV1TileRows.Text;                                    // Tile Rows
-                _settings += " -g " + TextBoxSVTAV1MaxGOP.Text;                                               // Keyframe Interval
-                _settings += " -la_depth " + TextBoxSVTAV1Lookahead.Text;                                     // Lookahead
+                settings += " -g " + GenerateKeyFrameInerval();
             }
             else
             {
-                _settings += " -g " + GenerateKeyFrameInerval();
+                settings += " -tile_columns " + ComboBoxSVTAV1TileColumns.Text +                             // Tile Columns
+                            " -tile_rows " + ComboBoxSVTAV1TileRows.Text +                                   // Tile Rows
+                            " -g " + TextBoxSVTAV1MaxGOP.Text +                                              // Keyframe Interval
+                            " -la_depth " + TextBoxSVTAV1Lookahead.Text;                                     // Lookahead
             }
 
-            return _settings;
+            return settings;
         }
 
         private string GenerateVpxVP9Command()
         {
-            string _settings = "-c:v libvpx-vp9";
+            string settings = "-c:v libvpx-vp9";
 
-            if (ComboBoxQualityMode.SelectedIndex == 0)
+            // Quality / Bitrate Selection
+            string quality = ComboBoxQualityMode.SelectedIndex switch
             {
-                _settings += " -crf " + SliderQuality.Value + " -b:v 0";
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 1)
-            {
-                _settings += " -crf " + SliderQuality.Value + " -b:v " + TextBoxMaxBitrate.Text + "k";
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 2)
-            {
-                _settings += " -b:v " + TextBoxMinBitrate.Text + "k";
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 3)
-            {
-                _settings += " -minrate " + TextBoxMinBitrate.Text + "k -b:v " + TextBoxAVGBitrate.Text + "k -maxrate " + TextBoxMaxBitrate.Text + "k";
-            }
+                0 => " -crf " + SliderQuality.Value + " -b:v 0",
+                1 => " -crf " + SliderQuality.Value + " -b:v " + TextBoxMaxBitrate.Text + "k",
+                2 => " -b:v " + TextBoxMinBitrate.Text + "k",
+                3 => " -minrate " + TextBoxMinBitrate.Text + "k -b:v " + TextBoxAVGBitrate.Text + "k -maxrate " + TextBoxMaxBitrate.Text + "k",
+                _ => ""
+            };
 
-            _settings += " -cpu-used " + SliderEncoderPreset.Value;
+            // Preset
+            settings += quality + " -cpu-used " + SliderEncoderPreset.Value;
 
-            if (ToggleSwitchAdvancedSettings.IsOn)
+            // Advanced Settings
+            if (ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                _settings += " -threads " + ComboBoxVP9Threads.Text;                        // Max Threads
-                _settings += " -tile-columns " + ComboBoxVP9TileColumns.SelectedIndex;      // Tile Columns
-                _settings += " -tile-rows " + ComboBoxVP9TileRows.SelectedIndex;            // Tile Rows
-                _settings += " -lag-in-frames " + TextBoxVP9LagInFrames.Text;               // Lag in Frames
-                _settings += " -g " + TextBoxVP9MaxKF.Text;                                 // Max GOP
-                _settings += " -aq-mode " + ComboBoxVP9AQMode.SelectedIndex;                // AQ-Mode
-                _settings += " -tune " + ComboBoxVP9ATune.SelectedIndex;                    // Tune
-                _settings += " -tune-content " + ComboBoxVP9ATuneContent.SelectedIndex;     // Tune-Content
-                if (CheckBoxVP9ARNR.IsChecked == true)
-                {
-                    _settings += " -arnr-maxframes " + ComboBoxAomencVP9Max.Text;           // ARNR Max Frames
-                    _settings += " -arnr-strength " + ComboBoxAomencVP9Strength.Text;       // ARNR Strength
-                    _settings += " -arnr-type " + ComboBoxAomencVP9ARNRType.Text;           // ARNR Type
-                }
+                settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval();
             }
             else
             {
-                _settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval();
+                settings += " -threads " + ComboBoxVP9Threads.Text +                                         // Max Threads
+                            " -tile-columns " + ComboBoxVP9TileColumns.SelectedIndex +                       // Tile Columns
+                            " -tile-rows " + ComboBoxVP9TileRows.SelectedIndex +                             // Tile Rows
+                            " -lag-in-frames " + TextBoxVP9LagInFrames.Text +                                // Lag in Frames
+                            " -g " + TextBoxVP9MaxKF.Text +                                                  // Max GOP
+                            " -aq-mode " + ComboBoxVP9AQMode.SelectedIndex +                                 // AQ-Mode
+                            " -tune " + ComboBoxVP9ATune.SelectedIndex +                                     // Tune
+                            " -tune-content " + ComboBoxVP9ATuneContent.SelectedIndex;                       // Tune-Content
+
+                if (CheckBoxVP9ARNR.IsChecked == true)
+                {
+                    settings += " -arnr-maxframes " + ComboBoxAomencVP9Max.Text +                            // ARNR Max Frames
+                                " -arnr-strength " + ComboBoxAomencVP9Strength.Text +                        // ARNR Strength
+                                " -arnr-type " + ComboBoxAomencVP9ARNRType.Text;                             // ARNR Type
+                }
             }
 
-            return _settings;
+            return settings;
         }
 
         private string GenerateAomencCommand()
         {
-            string _settings = "-f yuv4mpegpipe - | ";
+            string settings = "-f yuv4mpegpipe - | " +
+                              "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "aomenc", "aomenc.exe") + "\" -";
 
-            _settings += "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "aomenc", "aomenc.exe") + "\" -";
+            // Quality / Bitrate Selection
+            string quality = ComboBoxQualityMode.SelectedIndex switch
+            {
+                0 => " --cq-level=" + SliderQuality.Value + " --end-usage=q",
+                1 => " --cq-level=" + SliderQuality.Value + " --target-bitrate=" + TextBoxMaxBitrate.Text + " --end-usage=cq",
+                2 => " --target-bitrate=" + TextBoxMinBitrate.Text + " --end-usage=vbr",
+                _ => ""
+            };
 
-            if (ComboBoxQualityMode.SelectedIndex == 0)
-            {
-                _settings += " --cq-level=" + SliderQuality.Value + " --end-usage=q";
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 1)
-            {
-                _settings += " --cq-level=" + SliderQuality.Value + " --target-bitrate=" + TextBoxMaxBitrate.Text + " --end-usage=cq";
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 2)
-            {
-                _settings += " --target-bitrate=" + TextBoxMinBitrate.Text + " --end-usage=vbr";
-            }
+            // Preset
+            settings += quality + " --cpu-used=" + SliderEncoderPreset.Value;
 
-            _settings += " --cpu-used=" + SliderEncoderPreset.Value;
-
-            if (ToggleSwitchAdvancedSettings.IsOn)
+            // Advanced Settings
+            if (ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                _settings += " --threads=" + ComboBoxAomencThreads.Text;                                      // Threads
-                _settings += " --tile-columns=" + ComboBoxAomencTileColumns.Text;                             // Tile Columns
-                _settings += " --tile-rows=" + ComboBoxAomencTileRows.Text;                                   // Tile Rows
-                _settings += " --lag-in-frames=" + TextBoxAomencLagInFrames.Text;                             // Lag in Frames
-                _settings += " --sharpness=" + ComboBoxAomencSharpness.Text;                                  // Sharpness (Filter)
-                _settings += " --aq-mode=" + ComboBoxAomencAQMode.SelectedIndex;                              // AQ-Mode
-                _settings += " --enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex;      // Key Frame Filtering
-                _settings += " --tune=" + ComboBoxAomencTune.Text;                                            // Tune
-                _settings += " --tune-content=" + ComboBoxAomencTuneContent.Text;                             // Tune-Content
-                if (TextBoxAomencMaxGOP.Text != "0")
-                {
-                    _settings += " --kf-max-dist=" + TextBoxAomencMaxGOP.Text;                                // Keyframe Interval
-                }
-                if (CheckBoxAomencRowMT.IsChecked == false)
-                {
-                    _settings += " --row-mt=0";                                                               // Row Based Multithreading
-                }
-                if (ComboBoxAomencColorPrimaries.SelectedIndex != 0)
-                {
-                    _settings += " --color-primaries=" + ComboBoxAomencColorPrimaries.Text;                   // Color Primaries
-                }
-                if (ComboBoxAomencColorTransfer.SelectedIndex != 0)
-                {
-                    _settings += " --transfer-characteristics=" + ComboBoxAomencColorTransfer.Text;           // Color Transfer
-                }
-                if (ComboBoxAomencColorMatrix.SelectedIndex != 0)
-                {
-                    _settings += " --matrix-coefficients=" + ComboBoxAomencColorMatrix.Text;                  // Color Matrix
-                }
-                if (CheckBoxAomencCDEF.IsChecked == false)
-                {
-                    _settings += " --enable-cdef=0";                                                          // Constrained Directional Enhancement Filter
-                }
-                if (CheckBoxAomencARNRMax.IsChecked == true)
-                {
-                    _settings += " --arnr-maxframes=" + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
-                    _settings += " --arnr-strength=" + ComboBoxAomencARNRStrength.Text;                       // ARNR Strength
-                }
-                if (CheckBoxRealTimeMode.IsOn)
-                {
-                    _settings += " --rt";                                                                     // Real Time Mode
-                }
+                settings += " --threads=4 --tile-columns=2 --tile-rows=1 --kf-max-dist=" + GenerateKeyFrameInerval();
             }
             else
             {
-                _settings += " --threads=4 --tile-columns=2 --tile-rows=1 --kf-max-dist=" + GenerateKeyFrameInerval();
+                settings += " --threads=" + ComboBoxAomencThreads.Text +                                     // Threads
+                            " --tile-columns=" + ComboBoxAomencTileColumns.Text +                            // Tile Columns
+                            " --tile-rows=" + ComboBoxAomencTileRows.Text +                                  // Tile Rows
+                            " --lag-in-frames=" + TextBoxAomencLagInFrames.Text +                            // Lag in Frames
+                            " --sharpness=" + ComboBoxAomencSharpness.Text +                                 // Sharpness (Filter)
+                            " --aq-mode=" + ComboBoxAomencAQMode.SelectedIndex +                             // AQ-Mode
+                            " --enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex +     // Key Frame Filtering
+                            " --tune=" + ComboBoxAomencTune.Text +                                           // Tune
+                            " --tune-content=" + ComboBoxAomencTuneContent.Text;                             // Tune-Content
+
+                if (TextBoxAomencMaxGOP.Text != "0")
+                    settings += " --kf-max-dist=" + TextBoxAomencMaxGOP.Text;                                // Keyframe Interval
+                if (CheckBoxAomencRowMT.IsChecked == false)
+                    settings += " --row-mt=0";                                                               // Row Based Multithreading
+
+                if (ComboBoxAomencColorPrimaries.SelectedIndex != 0)
+                    settings += " --color-primaries=" + ComboBoxAomencColorPrimaries.Text;                   // Color Primaries
+                if (ComboBoxAomencColorTransfer.SelectedIndex != 0)
+                    settings += " --transfer-characteristics=" + ComboBoxAomencColorTransfer.Text;           // Color Transfer
+                if (ComboBoxAomencColorMatrix.SelectedIndex != 0)
+                    settings += " --matrix-coefficients=" + ComboBoxAomencColorMatrix.Text;                  // Color Matrix
+
+                if (CheckBoxAomencCDEF.IsChecked == false)
+                    settings += " --enable-cdef=0";                                                          // Constrained Directional Enhancement Filter
+
+                if (CheckBoxAomencARNRMax.IsChecked == true)
+                {
+                    settings += " --arnr-maxframes=" + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
+                    settings += " --arnr-strength=" + ComboBoxAomencARNRStrength.Text;                       // ARNR Strength
+                }
+
+                if (CheckBoxRealTimeMode.IsOn)
+                    settings += " --rt";                                                                     // Real Time Mode
             }
 
-            return _settings;
+            return settings;
         }
 
         private string GenerateRav1eCommand()
         {
-            string _settings = "-f yuv4mpegpipe - | ";
+            string settings = "-f yuv4mpegpipe - | " +
+                               "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e", "rav1e.exe") + "\" - -y";
 
-            _settings += "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e", "rav1e.exe") + "\" - -y";
-
-            if (ComboBoxQualityMode.SelectedIndex == 0)
+            // Quality / Bitrate Selection
+            string quality = ComboBoxQualityMode.SelectedIndex switch
             {
-                _settings += " --quantizer " + SliderQuality.Value;
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 2)
+                0 => " --quantizer " + SliderQuality.Value,
+                2 => " --bitrate " + TextBoxAVGBitrate.Text,
+                _ => ""
+            };
+
+            // Preset
+            settings += quality + " --speed " + SliderEncoderPreset.Value;
+
+            // Advanced Settings
+            if (ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                _settings += " --bitrate " + TextBoxAVGBitrate.Text;
-            }
-
-            _settings += " --speed " + SliderEncoderPreset.Value;
-
-            if (ToggleSwitchAdvancedSettings.IsOn)
-            {
-                _settings += " --threads " + ComboBoxRav1eThreads.SelectedIndex;                              // Threads
-                _settings += " --tile-cols " + ComboBoxRav1eTileColumns.SelectedIndex;                        // Tile Columns
-                _settings += " --tile-rows " + ComboBoxRav1eTileRows.SelectedIndex;                           // Tile Rows
-                _settings += " --rdo-lookahead-frames " + TextBoxRav1eLookahead.Text;                         // RDO Lookahead
-                _settings += " --tune " + ComboBoxRav1eTune.Text;                                             // Tune
-
-                if (TextBoxRav1eMaxGOP.Text != "0")
-                {
-                    _settings += " --keyint " + TextBoxRav1eMaxGOP.Text;                                      // Keyframe Interval
-                }
-                if (ComboBoxRav1eColorPrimaries.SelectedIndex != 0)
-                {
-                    _settings += " --primaries " + ComboBoxRav1eColorPrimaries.Text;                          // Color Primaries
-                }
-                if (ComboBoxRav1eColorTransfer.SelectedIndex != 0)
-                {
-                    _settings += " --transfer " + ComboBoxRav1eColorTransfer.Text;                            // Color Transfer
-                }
-                if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
-                {
-                    _settings += " --matrix " + ComboBoxRav1eColorMatrix.Text;                                // Color Matrix
-                }
-                if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
-                {
-                    _settings += " --mastering-display G(" + TextBoxRav1eMasteringGx.Text + ",";              // Mastering Gx
-                    _settings += TextBoxRav1eMasteringGy.Text + ")B(";                                        // Mastering Gy
-                    _settings += TextBoxRav1eMasteringBx.Text + ",";                                          // Mastering Bx
-                    _settings += TextBoxRav1eMasteringBy.Text + ")R(";                                        // Mastering By
-                    _settings += TextBoxRav1eMasteringRx.Text + ",";                                          // Mastering Rx
-                    _settings += TextBoxRav1eMasteringRy.Text + ")WP(";                                       // Mastering Ry
-                    _settings += TextBoxRav1eMasteringWPx.Text + ",";                                         // Mastering WPx
-                    _settings += TextBoxRav1eMasteringWPy.Text + ")L(";                                       // Mastering WPy
-                    _settings += TextBoxRav1eMasteringLx.Text + ",";                                          // Mastering Lx
-                    _settings += TextBoxRav1eMasteringLy.Text + ")";                                          // Mastering Ly
-                }
-                if (CheckBoxRav1eContentLight.IsChecked == true)
-                {
-                    _settings += " --content-light " + TextBoxRav1eContentLightCll.Text;                      // Content Light CLL
-                    _settings += "," + TextBoxRav1eContentLightFall.Text;                                     // Content Light FALL
-                }
+                settings += " --threads 4 --tile-cols 2 --tile-rows 1 --keyint " + GenerateKeyFrameInerval();
             }
             else
             {
-                _settings += " --threads 4 --tile-cols 2 --tile-rows 1 --keyint " + GenerateKeyFrameInerval();
+                settings += " --threads " + ComboBoxRav1eThreads.SelectedIndex +                             // Threads
+                            " --tile-cols " + ComboBoxRav1eTileColumns.SelectedIndex +                       // Tile Columns
+                            " --tile-rows " + ComboBoxRav1eTileRows.SelectedIndex +                          // Tile Rows
+                            " --rdo-lookahead-frames " + TextBoxRav1eLookahead.Text +                        // RDO Lookahead
+                            " --tune " + ComboBoxRav1eTune.Text;                                             // Tune
+
+                if (TextBoxRav1eMaxGOP.Text != "0")
+                    settings += " --keyint " + TextBoxRav1eMaxGOP.Text;                                      // Keyframe Interval
+
+                if (ComboBoxRav1eColorPrimaries.SelectedIndex != 0)
+                    settings += " --primaries " + ComboBoxRav1eColorPrimaries.Text;                          // Color Primaries
+                if (ComboBoxRav1eColorTransfer.SelectedIndex != 0)
+                    settings += " --transfer " + ComboBoxRav1eColorTransfer.Text;                            // Color Transfer
+                if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
+                    settings += " --matrix " + ComboBoxRav1eColorMatrix.Text;                                // Color Matrix
+
+                if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
+                {
+                    settings += " --mastering-display " +
+                                // Mastering      Gx                                   Gy
+                                "G(" + TextBoxRav1eMasteringGx.Text + "," + TextBoxRav1eMasteringGy.Text + ")" +
+                                // Mastering      Bx                                   By
+                                "B(" + TextBoxRav1eMasteringBx.Text + "," + TextBoxRav1eMasteringBy.Text + ")" +
+                                // Mastering      Rx                                   Ry
+                                "R(" + TextBoxRav1eMasteringRx.Text + "," + TextBoxRav1eMasteringRy.Text + ")" +
+                                // Mastering      WPx                                  WPy
+                                "WP(" + TextBoxRav1eMasteringWPx.Text + "," + TextBoxRav1eMasteringWPy.Text + ")" +
+                                // Mastering      Lx                                   Ly
+                                "L(" + TextBoxRav1eMasteringLx.Text + "," + TextBoxRav1eMasteringLy.Text + ")";
+                }
+                if (CheckBoxRav1eContentLight.IsChecked == true)
+                {
+                    settings += " --content-light " + TextBoxRav1eContentLightCll.Text +                     // Content Light CLL
+                                "," + TextBoxRav1eContentLightFall.Text;                                     // Content Light FALL
+                }
             }
 
-            return _settings;
+            return settings;
         }
 
         private string GenerateSvtAV1Command()
         {
-            string _settings = "-nostdin -f yuv4mpegpipe - | ";
+            string settings = "-nostdin -f yuv4mpegpipe - | " +
+                              "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1", "SvtAv1EncApp.exe") + "\" -i stdin";
 
-            _settings += "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1", "SvtAv1EncApp.exe") + "\" -i stdin";
-
-            if (ComboBoxQualityMode.SelectedIndex == 0)
+            // Quality / Bitrate Selection
+            string quality = ComboBoxQualityMode.SelectedIndex switch
             {
-                _settings += " --rc 0 --crf " + SliderQuality.Value;
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 2)
-            {
-                _settings += " --rc 1 --tbr " + TextBoxAVGBitrate.Text;
-            }
+                0 => " --rc 0 --crf " + SliderQuality.Value,
+                2 => " --rc 1 --tbr " + TextBoxAVGBitrate.Text,
+                _ => ""
+            };
 
-            _settings += " --preset " + SliderEncoderPreset.Value;
+            // Preset
+            settings += quality +" --preset " + SliderEncoderPreset.Value;
 
-            if (ToggleSwitchAdvancedSettings.IsOn)
+            // Advanced Settings
+            if (ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                _settings += " --tile-columns " + ComboBoxSVTAV1TileColumns.Text;                             // Tile Columns
-                _settings += " --tile-rows " + ComboBoxSVTAV1TileRows.Text;                                   // Tile Rows
-                _settings += " --keyint " + TextBoxSVTAV1MaxGOP.Text;                                         // Keyframe Interval
-                _settings += " --lookahead " + TextBoxSVTAV1Lookahead.Text;                                   // Lookahead
+                settings += " --keyint " + GenerateKeyFrameInerval();
+
             }
             else
             {
-                _settings += " --keyint " + GenerateKeyFrameInerval();
+                settings += " --tile-columns " + ComboBoxSVTAV1TileColumns.Text +                            // Tile Columns
+                            " --tile-rows " + ComboBoxSVTAV1TileRows.Text +                                  // Tile Rows
+                            " --keyint " + TextBoxSVTAV1MaxGOP.Text +                                        // Keyframe Interval
+                            " --lookahead " + TextBoxSVTAV1Lookahead.Text;                                   // Lookahead
             }
 
-            return _settings;
+            return settings;
         }
 
         private string GenerateHEVCFFmpegCommand()
         {
-            string _settings = "-c:v libx265";
+            string settings = "-c:v libx265";
 
-            if (ComboBoxQualityMode.SelectedIndex == 0)
+            // Quality / Bitrate Selection
+            string quality = ComboBoxQualityMode.SelectedIndex switch
             {
-                _settings += " -crf " + SliderQuality.Value;
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 2)
-            {
-                _settings += " -b:v " + TextBoxAVGBitrate.Text + "k";
-            }
+                0 => " -crf " + SliderQuality.Value,
+                2 => " -b:v " + TextBoxAVGBitrate.Text + "k",
+                _ => ""
+            };
 
-            _settings += " -preset ";
-            _settings += GenerateMPEGEncoderSpeed();
+            // Preset
+            settings += quality + " -preset " + GenerateMPEGEncoderSpeed();
 
-            return _settings;
+            return settings;
         }
 
         private string GenerateAVCFFmpegCommand()
         {
-            string _settings = "-c:v libx264";
+            string settings = "-c:v libx264";
 
-            if (ComboBoxQualityMode.SelectedIndex == 0)
+            // Quality / Bitrate Selection
+            string quality = ComboBoxQualityMode.SelectedIndex switch
             {
-                _settings += " -crf " + SliderQuality.Value;
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 2)
-            {
-                _settings += " -b:v " + TextBoxAVGBitrate.Text + "k";
-            }
+                0 => " -crf " + SliderQuality.Value,
+                2 => " -b:v " + TextBoxAVGBitrate.Text + "k",
+                _ => ""
+            };
 
-            _settings += " -preset ";
-            _settings += GenerateMPEGEncoderSpeed();
+            // Preset
+            settings += quality + " -preset " + GenerateMPEGEncoderSpeed();
 
-            return _settings;
+            return settings;
         }
 
         private string GenerateMPEGEncoderSpeed()
