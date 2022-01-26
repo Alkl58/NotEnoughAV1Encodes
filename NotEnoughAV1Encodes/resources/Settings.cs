@@ -3,7 +3,7 @@ using System.IO;
 
 namespace NotEnoughAV1Encodes
 {
-    public class SettingsDB
+    public class Settings
     {
         /// <summary>Sets if Temp Files should be deleted after a successfull encode.</summary>
         public bool DeleteTempFiles { get; set; } = true;

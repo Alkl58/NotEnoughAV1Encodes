@@ -24,11 +24,11 @@ namespace NotEnoughAV1Encodes
     {
         private bool startupLock = true;
         private bool QueueParallel;
-        private SettingsDB settingsDB = new();
+        private Settings settingsDB = new();
         private Video.VideoDB videoDB = new();
         private int ProgramState;
         private CancellationTokenSource cancellationTokenSource;
-        public Settings PresetSettings = new();
+        public VideoSettings PresetSettings = new();
         public static bool Logging { get; set; }
 
         public MainWindow()
@@ -65,7 +65,7 @@ namespace NotEnoughAV1Encodes
             TextBoxWorkerCount.Text = coreCount.ToString();
 
             // Load Settings from JSON
-            try { settingsDB = JsonConvert.DeserializeObject<SettingsDB>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"))); } catch { }
+            try { settingsDB = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"))); } catch { }
 
             LoadSettings();
 
@@ -198,7 +198,7 @@ namespace NotEnoughAV1Encodes
                                 }
 
                                 // Load Preset
-                                PresetSettings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", preset + ".json")));
+                                PresetSettings = JsonConvert.DeserializeObject<VideoSettings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", preset + ".json")));
                                 DataContext = PresetSettings;
 
                                 // Create video object
@@ -606,7 +606,7 @@ namespace NotEnoughAV1Encodes
             try
             {
                 presetLoadLock = true;
-                PresetSettings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", ComboBoxPresets.SelectedItem.ToString() + ".json")));
+                PresetSettings = JsonConvert.DeserializeObject<VideoSettings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", ComboBoxPresets.SelectedItem.ToString() + ".json")));
                 DataContext = PresetSettings;
                 presetLoadLock = false;
             }

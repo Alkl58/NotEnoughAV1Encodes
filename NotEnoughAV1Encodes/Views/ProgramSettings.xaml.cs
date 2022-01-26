@@ -13,9 +13,9 @@ namespace NotEnoughAV1Encodes.Views
 {
     public partial class ProgramSettings : MetroWindow
     {
-        public SettingsDB settingsDBTemp = new();
+        public Settings settingsDBTemp = new();
         
-        public ProgramSettings(SettingsDB settingsDB)
+        public ProgramSettings(Settings settingsDB)
         {
             InitializeComponent();
             ToggleSwitchDeleteTempFiles.IsOn = settingsDB.DeleteTempFiles;

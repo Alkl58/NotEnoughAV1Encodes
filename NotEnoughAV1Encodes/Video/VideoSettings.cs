@@ -1,6 +1,6 @@
 ﻿namespace NotEnoughAV1Encodes
 {
-    public class Settings
+    public class VideoSettings
     {
         public int Encoder { get; set; }
         public int BitDepth { get; set; }

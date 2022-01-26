@@ -24,7 +24,7 @@ namespace NotEnoughAV1Encodes.Video
 
         public List<Subtitle.SubtitleTracks> SubtitleTracks { get; set; }
 
-        public void ParseMediaInfo(Settings settings)
+        public void ParseMediaInfo(VideoSettings settings)
         {
             if (!string.IsNullOrEmpty(InputPath))
             {

@@ -56,7 +56,7 @@ namespace NotEnoughAV1Encodes.Queue
         /// <summary>List of Progress of each Chunk.</summary>
         public List<ChunkProgress> ChunkProgress { get; set; } = new();
         /// <summary>State of UI Settings</summary>
-        public Settings Preset { get; set; } = new();
+        public VideoSettings Preset { get; set; } = new();
         /// <summary>Video DB</summary>
         public Video.VideoDB VideoDB { get; set; } = new();
         /// <summary>Encoding Process</summary>
