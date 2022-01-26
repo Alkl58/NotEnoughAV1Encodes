@@ -656,8 +656,8 @@ namespace NotEnoughAV1Encodes
                     TextBoxMaxBitrate.Visibility = Visibility.Collapsed;
                     TextBoxMinBitrate.Visibility = Visibility.Collapsed;
                     ComboBoxQualityMode.SelectedIndex = 0;
-                    SliderEncoderPreset.Maximum = 8;
-                    SliderEncoderPreset.Value = 6;
+                    SliderEncoderPreset.Maximum = 13;
+                    SliderEncoderPreset.Value = 10;
                     SliderQuality.Maximum = 63;
                     SliderQuality.Value = 40;
                     CheckBoxTwoPassEncoding.IsEnabled = true;
