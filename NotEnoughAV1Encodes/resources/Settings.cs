@@ -11,7 +11,9 @@ namespace NotEnoughAV1Encodes
         public bool ShutdownAfterEncode { get; set; }
         /// <summary>Program Theme e.g. "Dark.Blue"</summary>
         public string Theme { get; set; } = "Light.Blue";
+        /// <summary>Program Base Theme (used by Settings Window)</summary>
         public int BaseTheme { get; set; }
+        /// <summary>Program Accent Theme (used by Settings Window)</summary>
         public int AccentTheme { get; set; }
         /// <summary>Sets Background Image of Program</summary>
         public string BGImage { get; set; }
