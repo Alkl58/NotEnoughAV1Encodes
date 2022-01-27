@@ -281,7 +281,7 @@
     <value>Default:</value>
   </data>
   <data name="LabelDefaultAudioBehavior" xml:space="preserve">
-    <value>Default Audio Behavior:</value>
+    <value>Default Audio Behavior</value>
   </data>
   <data name="LabelDeinterlace" xml:space="preserve">
     <value>Deinterlace:</value>

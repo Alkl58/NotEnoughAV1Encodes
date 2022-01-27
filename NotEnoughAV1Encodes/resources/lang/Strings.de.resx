@@ -278,7 +278,7 @@
     <value>Container:</value>
   </data>
   <data name="LabelDefaultAudioBehavior" xml:space="preserve">
-    <value>Standard Audio Einstellungen:</value>
+    <value>Standard Audio Einstellungen</value>
   </data>
   <data name="LabelDeinterlace" xml:space="preserve">
     <value>Deinterlace:</value>

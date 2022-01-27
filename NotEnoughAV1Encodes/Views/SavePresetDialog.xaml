@@ -10,71 +10,75 @@
         lex:LocalizeDictionary.DesignCulture="en"
         lex:ResxLocalizationProvider.DefaultAssembly="NotEnoughAV1Encodes"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-        Title="Save Preset" Height="360" Width="421" ResizeMode="NoResize" mah:ControlsHelper.ContentCharacterCasing="Normal">
+        Title="Save Preset" Height="365" Width="421" ResizeMode="NoResize" mah:ControlsHelper.ContentCharacterCasing="Normal">
     <Grid>
         <Label x:Name="LabelPresetName" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" HorizontalContentAlignment="Left"/>
         <TextBox x:Name="TextBoxPresetName" HorizontalAlignment="Left" Margin="118,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280"/>
-        <Button x:Name="ButtonSave" Content="{lex:Loc ButtonExit}" HorizontalAlignment="Left" Margin="240,289,0,0" VerticalAlignment="Top" Width="158" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSave_Click" Height="36"/>
+        <Button x:Name="ButtonSave" Content="{lex:Loc ButtonExit}" HorizontalAlignment="Left" Margin="253,288,0,0" VerticalAlignment="Top" Width="158" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSave_Click" Height="36"/>
         <Label x:Name="LabelBatchFileName" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" HorizontalContentAlignment="Left" Margin="10,41,0,0"/>
         <TextBox x:Name="TextBoxBatchFileName" HorizontalAlignment="Left" Margin="118,41,0,0" VerticalAlignment="Top" Width="280" Text="{}{filename} [AV1][1080p]" Height="10"/>
         <Label x:Name="LabelAvailableBatchFilename" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="118,67,0,0" VerticalAlignment="Top" Height="27" Width="280" FontStyle="Italic"/>
         <Label x:Name="LabelAvailableBatchPresetName" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="118,85,0,0" VerticalAlignment="Top" Height="30" Width="280" FontStyle="Italic"/>
-        <Label x:Name="LabelDefaultAudioBehavior" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" HorizontalContentAlignment="Left" Margin="10,120,0,0" Height="28"/>
-        <Label x:Name="LabelCodec" Content="1.0 :" Margin="10,148,0,0" Width="100" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Right"/>
-        <ComboBox x:Name="ComboBoxAudioCodecMono" VerticalAlignment="Top" Margin="118,148,0,0" HorizontalAlignment="Left" Width="104">
-            <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
-            <ComboBoxItem Content="Opus" IsSelected="True" />
-            <ComboBoxItem Content="AC3" />
-            <ComboBoxItem Content="EAC3" />
-            <ComboBoxItem Content="AAC" />
-            <ComboBoxItem Content="MP3" />
-            <ComboBoxItem Content="Copy Audio" />
-        </ComboBox>
-        <Label x:Name="LabelBitrate" Content="{lex:Loc LabelBitrate}" Margin="235,148,0,0" Width="94" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox  x:Name="TextBoxAudioBitrateMono" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" PreviewTextInput="NumberValidationTextBox" Width="70" Margin="328,148,0,0" Text="64">
-            <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
-        </TextBox>
-        <Label x:Name="LabelCodec_Copy" Content="2.0 :" Margin="10,179,0,0" Width="100" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Right"/>
-        <Label x:Name="LabelCodec_Copy1" Content="5.1 :" Margin="10,210,0,0" Width="100" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Right"/>
-        <ComboBox x:Name="ComboBoxAudioCodecStereo" VerticalAlignment="Top" Margin="118,179,0,0" HorizontalAlignment="Left" Width="104">
-            <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
-            <ComboBoxItem Content="Opus" IsSelected="True" />
-            <ComboBoxItem Content="AC3" />
-            <ComboBoxItem Content="EAC3" />
-            <ComboBoxItem Content="AAC" />
-            <ComboBoxItem Content="MP3" />
-            <ComboBoxItem Content="Copy Audio" />
-        </ComboBox>
-        <Label x:Name="LabelBitrate_Copy" Content="{lex:Loc LabelBitrate}" Margin="235,179,0,0" Width="94" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox  x:Name="TextBoxAudioBitrateStereo" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" PreviewTextInput="NumberValidationTextBox" Width="70" Margin="328,179,0,0" Text="128">
-            <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
-        </TextBox>
-        <ComboBox x:Name="ComboBoxAudioCodecSixChannel" VerticalAlignment="Top" Margin="118,210,0,0" HorizontalAlignment="Left" Width="104">
-            <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
-            <ComboBoxItem Content="Opus" IsSelected="True" />
-            <ComboBoxItem Content="AC3" />
-            <ComboBoxItem Content="EAC3" />
-            <ComboBoxItem Content="AAC" />
-            <ComboBoxItem Content="MP3" />
-            <ComboBoxItem Content="Copy Audio" />
-        </ComboBox>
-        <Label x:Name="LabelBitrate_Copy1" Content="{lex:Loc LabelBitrate}" Margin="235,210,0,0" Width="94" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox  x:Name="TextBoxAudioBitrateSixChannel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" PreviewTextInput="NumberValidationTextBox" Width="70" Margin="328,210,0,0" Text="256">
-            <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
-        </TextBox>
-        <ComboBox x:Name="ComboBoxAudioCodecEightChannel" VerticalAlignment="Top" Margin="118,241,0,0" HorizontalAlignment="Left" Width="104">
-            <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
-            <ComboBoxItem Content="Opus" IsSelected="True" />
-            <ComboBoxItem Content="AC3" />
-            <ComboBoxItem Content="EAC3" />
-            <ComboBoxItem Content="AAC" />
-            <ComboBoxItem Content="MP3" />
-            <ComboBoxItem Content="Copy Audio" />
-        </ComboBox>
-        <Label x:Name="LabelBitrate_Copy2" Content="{lex:Loc LabelBitrate}" Margin="235,241,0,0" Width="94" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <TextBox  x:Name="TextBoxAudioBitrateEightChannel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" PreviewTextInput="NumberValidationTextBox" Width="70" Margin="328,241,0,0" Text="450">
-            <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
-        </TextBox>
-        <Label x:Name="LabelCodec_Copy2" Content="7.1 :" Margin="10,241,0,0" Width="100" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Right"/>
+        <GroupBox x:Name="LabelDefaultAudioBehavior" Header="{lex:Loc}" Margin="10,120,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="163" VerticalAlignment="Top">
+            <Grid>
+                <Label x:Name="LabelCodec" Content="1.0 :" Margin="10,2,0,0" Width="87" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Right"/>
+                <ComboBox x:Name="ComboBoxAudioCodecMono" VerticalAlignment="Top" Margin="101,2,0,0" HorizontalAlignment="Left" Width="104">
+                    <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                    <ComboBoxItem Content="Opus" IsSelected="True" />
+                    <ComboBoxItem Content="AC3" />
+                    <ComboBoxItem Content="EAC3" />
+                    <ComboBoxItem Content="AAC" />
+                    <ComboBoxItem Content="MP3" />
+                    <ComboBoxItem Content="Copy Audio" />
+                </ComboBox>
+                <Label x:Name="LabelBitrate" Content="{lex:Loc LabelBitrate}" Margin="218,2,0,0" Width="94" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <TextBox  x:Name="TextBoxAudioBitrateMono" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" PreviewTextInput="NumberValidationTextBox" Width="70" Margin="311,2,0,0" Text="64">
+                    <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                </TextBox>
+                <Label x:Name="LabelCodec_Copy" Content="2.0 :" Margin="10,33,0,0" Width="87" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Right"/>
+                <Label x:Name="LabelCodec_Copy1" Content="5.1 :" Margin="10,64,0,0" Width="87" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Right"/>
+                <ComboBox x:Name="ComboBoxAudioCodecStereo" VerticalAlignment="Top" Margin="101,33,0,0" HorizontalAlignment="Left" Width="104">
+                    <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                    <ComboBoxItem Content="Opus" IsSelected="True" />
+                    <ComboBoxItem Content="AC3" />
+                    <ComboBoxItem Content="EAC3" />
+                    <ComboBoxItem Content="AAC" />
+                    <ComboBoxItem Content="MP3" />
+                    <ComboBoxItem Content="Copy Audio" />
+                </ComboBox>
+                <Label x:Name="LabelBitrate_Copy" Content="{lex:Loc LabelBitrate}" Margin="218,33,0,0" Width="94" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <TextBox  x:Name="TextBoxAudioBitrateStereo" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" PreviewTextInput="NumberValidationTextBox" Width="70" Margin="311,33,0,0" Text="128">
+                    <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                </TextBox>
+                <ComboBox x:Name="ComboBoxAudioCodecSixChannel" VerticalAlignment="Top" Margin="101,64,0,0" HorizontalAlignment="Left" Width="104">
+                    <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                    <ComboBoxItem Content="Opus" IsSelected="True" />
+                    <ComboBoxItem Content="AC3" />
+                    <ComboBoxItem Content="EAC3" />
+                    <ComboBoxItem Content="AAC" />
+                    <ComboBoxItem Content="MP3" />
+                    <ComboBoxItem Content="Copy Audio" />
+                </ComboBox>
+                <Label x:Name="LabelBitrate_Copy1" Content="{lex:Loc LabelBitrate}" Margin="218,64,0,0" Width="94" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <TextBox  x:Name="TextBoxAudioBitrateSixChannel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" PreviewTextInput="NumberValidationTextBox" Width="70" Margin="311,64,0,0" Text="256">
+                    <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                </TextBox>
+                <ComboBox x:Name="ComboBoxAudioCodecEightChannel" VerticalAlignment="Top" Margin="101,94,0,0" HorizontalAlignment="Left" Width="104">
+                    <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                    <ComboBoxItem Content="Opus" IsSelected="True" />
+                    <ComboBoxItem Content="AC3" />
+                    <ComboBoxItem Content="EAC3" />
+                    <ComboBoxItem Content="AAC" />
+                    <ComboBoxItem Content="MP3" />
+                    <ComboBoxItem Content="Copy Audio" />
+                </ComboBox>
+                <Label x:Name="LabelBitrate_Copy2" Content="{lex:Loc LabelBitrate}" Margin="218,94,0,0" Width="94" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <TextBox  x:Name="TextBoxAudioBitrateEightChannel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" PreviewTextInput="NumberValidationTextBox" Width="70" Margin="311,94,0,0" Text="450">
+                    <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                </TextBox>
+                <Label x:Name="LabelCodec_Copy2" Content="7.1 :" Margin="10,94,0,0" Width="87" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Right"/>
+            </Grid>
+        </GroupBox>
+
     </Grid>
 </mah:MetroWindow>

@@ -547,7 +547,7 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Default Audio Behavior: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Default Audio Behavior ähnelt.
         /// </summary>
         public static string LabelDefaultAudioBehavior {
             get {

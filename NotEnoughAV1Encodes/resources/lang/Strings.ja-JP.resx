@@ -281,7 +281,7 @@
     <value>既定:</value>
   </data>
   <data name="LabelDefaultAudioBehavior" xml:space="preserve">
-    <value>音声の既定動作:</value>
+    <value>音声の既定動作</value>
   </data>
   <data name="LabelDeinterlace" xml:space="preserve">
     <value>デインターレース:</value>
