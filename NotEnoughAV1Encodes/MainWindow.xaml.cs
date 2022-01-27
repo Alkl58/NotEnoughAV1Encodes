@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Linq;
 using WPFLocalizeExtension.Engine;
 using NotEnoughAV1Encodes.resources.lang;
+using System.Windows.Shell;
 
 namespace NotEnoughAV1Encodes
 {
@@ -1677,6 +1678,13 @@ namespace NotEnoughAV1Encodes
                 WorkerCountElement = 1;
             }
 
+            // Starts Timer for Taskbar Progress Indicator
+            System.Timers.Timer taskBarTimer = new();
+            Dispatcher.Invoke(() => TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal);
+            taskBarTimer.Elapsed += (sender, e) => { UpdateTaskbarProgress(); };
+            taskBarTimer.Interval = 3000; // every 3s
+            taskBarTimer.Start();
+
             using SemaphoreSlim concurrencySemaphore = new(WorkerCountQueue);
             // Creates a tasks list
             List<Task> tasks = new();
@@ -1802,6 +1810,9 @@ namespace NotEnoughAV1Encodes
             ButtonRemoveSelectedQueueItem.IsEnabled = true;
             ButtonEditSelectedItem.IsEnabled = true;
 
+            taskBarTimer.Stop();
+            Dispatcher.Invoke(() => TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Paused);
+
             Shutdown();
         }
         #endregion
@@ -1867,6 +1878,40 @@ namespace NotEnoughAV1Encodes
 
                 queueElement.Status = "Encoded: " + ((decimal)encodedFrames / queueElement.FrameCount).ToString("00.00%") + estimatedFPS + estimatedTime;
             }
+        }
+
+
+        private void UpdateTaskbarProgress()
+        {
+            double totalFrames = 0;
+            double totalFramesEncoded = 0;
+            System.Windows.Controls.ItemCollection queueList = ListBoxQueue.Items;
+
+            // Calculte Total Framecount
+            try
+            {
+                foreach (Queue.QueueElement queueElement in queueList)
+                {
+                    totalFrames += queueElement.FrameCount;
+                    totalFramesEncoded += queueElement.Progress;
+                    if (queueElement.Passes == 2)
+                    {
+                        // Double Framecount of that queue element for two pass encoding
+                        totalFrames += queueElement.FrameCount;
+                        totalFramesEncoded += queueElement.ProgressSecondPass;
+                    }
+                }
+            }
+            catch { }
+
+            // Dividing by 0 is always great, so we are going to skip it
+            if (totalFrames == 0 || totalFramesEncoded == 0) return;
+
+            try
+            {
+                Dispatcher.Invoke(() => TaskbarItemInfo.ProgressValue = totalFramesEncoded / totalFrames);
+            }
+            catch { }
         }
         #endregion
     }
