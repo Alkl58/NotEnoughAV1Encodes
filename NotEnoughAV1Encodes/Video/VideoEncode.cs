@@ -150,7 +150,7 @@ namespace NotEnoughAV1Encodes.Video
                             chunkProgress.ChunkName = chunk;
                             chunkProgress.Progress = 0;
 
-                            List<Queue.ChunkProgress> tempList = queueElement.ChunkProgress;
+                            List<Queue.ChunkProgress> tempList = queueElement.ChunkProgress.ToList();
                             if (!tempList.Any(n => n.ChunkName == chunk))
                             {
                                 queueElement.ChunkProgress.Add(chunkProgress);
