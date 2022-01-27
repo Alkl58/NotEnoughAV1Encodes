@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -15,6 +16,7 @@ namespace NotEnoughAV1Encodes.Video
         public string MIColorSpace { get; set; }
         public string MIChromaSubsampling { get; set; }
         public string MIBitDepth { get; set; }
+        public string MIDisplayAspectRatio { get; set; }
         public long MIFrameCount { get; set; }
         public bool MIIsVFR { get; set; }
         public int MIWidth { get; set; }
@@ -40,6 +42,7 @@ namespace NotEnoughAV1Encodes.Video
                 try { MIIsVFR = mediaInfo.Get(StreamKind.Video, 0, "FrameRate_Mode") == "VFR"; } catch { MIIsVFR = false; }
                 try { MIWidth = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "Width")); } catch { }
                 try { MIHeight = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "Height")); } catch { }
+                try { MIDisplayAspectRatio = mediaInfo.Get(StreamKind.Video, 0, "DisplayAspectRatio/String"); } catch { }
 
                 int audioCount = mediaInfo.Count_Get(StreamKind.Audio);
                 if (audioCount > 0)

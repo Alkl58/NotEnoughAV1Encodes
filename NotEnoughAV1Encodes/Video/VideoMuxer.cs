@@ -93,6 +93,13 @@ namespace NotEnoughAV1Encodes.Video
                 FFmpegOutput = queueElement.VideoDB.OutputPath;
             }
 
+            string DAR = "";
+            // Set Display Aspect Ratio for external encoders
+            if (queueElement.EncodingMethod is 5 or 6 or 7 && !string.IsNullOrEmpty(queueElement.VideoDB.MIDisplayAspectRatio))
+            {
+                DAR = " -aspect " + queueElement.VideoDB.MIDisplayAspectRatio;
+            }
+
             // Muxing Chunks
             Process processVideo = new();
             ProcessStartInfo startInfo = new()
@@ -101,11 +108,11 @@ namespace NotEnoughAV1Encodes.Video
                 FileName = "cmd.exe",
                 WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
                 RedirectStandardError = true,
-                Arguments = "/C ffmpeg.exe -y -f concat -safe 0 -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "chunks.txt") + "\" -c copy \"" + FFmpegOutput + "\"",
+                Arguments = "/C ffmpeg.exe -y -f concat -safe 0 -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "chunks.txt") + "\"" + DAR + " -c copy \"" + FFmpegOutput + "\"",
                 CreateNoWindow = true
             };
 
-            Global.Logger("DEBUG - VideoMuxer.Concat() => Command: ffmpeg.exe -y -f concat -safe 0 -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "chunks.txt") + "\" -c copy \"" + FFmpegOutput + "\"", queueElement.Output + ".log");
+            Global.Logger("DEBUG - VideoMuxer.Concat() => Command: ffmpeg.exe -y -f concat -safe 0 -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "chunks.txt") + "\"" + DAR + " -c copy \"" + FFmpegOutput + "\"", queueElement.Output + ".log");
 
             processVideo.StartInfo = startInfo;
             processVideo.Start();
