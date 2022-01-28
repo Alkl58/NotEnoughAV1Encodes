@@ -1823,7 +1823,9 @@ namespace NotEnoughAV1Encodes
             ButtonRemoveSelectedQueueItem.IsEnabled = true;
             ButtonEditSelectedItem.IsEnabled = true;
 
+            // Stop TaskbarItem Progressbar
             taskBarTimer.Stop();
+            Dispatcher.Invoke(() => TaskbarItemInfo.ProgressValue = 1.0);
             Dispatcher.Invoke(() => TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Paused);
 
             Shutdown();
