@@ -120,6 +120,7 @@ namespace NotEnoughAV1Encodes
                 ButtonAddToQueue.IsEnabled = true;
                 ButtonRemoveSelectedQueueItem.IsEnabled = true;
                 ButtonEditSelectedItem.IsEnabled = true;
+                SaveQueueStates();
             }
             catch { }
         }
@@ -460,6 +461,24 @@ namespace NotEnoughAV1Encodes
             uid = null;
         }
 
+        private void SaveQueueStates()
+        {
+            // Save / Override Queuefile to save Progress of Chunks
+            System.Windows.Controls.ItemCollection tempList = ListBoxQueue.Items;
+            foreach (Queue.QueueElement queueElement in tempList)
+            {
+                // Remove all unfinished Chunks
+                queueElement.ChunkProgress.RemoveAll(chunk => chunk.Finished != true);
+
+                try
+                {
+                    File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", queueElement.VideoDB.InputFileName + "_" + queueElement.UniqueIdentifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
+                }
+                catch { }
+            }
+
+        }
+
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
         {
             Views.SavePresetDialog savePresetDialog = new(settingsDB.Theme);
@@ -539,7 +558,6 @@ namespace NotEnoughAV1Encodes
                 CheckBoxTwoPassEncoding.IsOn = tmp.Passes == 2;
                 TextBoxChunkLength.Text = tmp.ChunkLength.ToString();
                 TextBoxPySceneDetectThreshold.Text = tmp.PySceneDetectThreshold.ToString();
-
 
                 try
                 {
@@ -1710,15 +1728,11 @@ namespace NotEnoughAV1Encodes
                     try
                     {
                         // Create Output Directory
-                        try
-                        {
-                            if (!Directory.Exists(Path.GetDirectoryName(queueElement.VideoDB.OutputPath)))
-                            {
-                                Directory.CreateDirectory(Path.GetDirectoryName(queueElement.VideoDB.OutputPath));
-                            }
-                        }
-                        catch { }
+                        try {  Directory.CreateDirectory(Path.GetDirectoryName(queueElement.VideoDB.OutputPath)); }  catch { }
+
+                        // Create Temp Directory
                         Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier));
+
                         Global.Logger("==========================================================", queueElement.Output + ".log");
                         Global.Logger("INFO  - Started Async Task - UID: " + queueElement.UniqueIdentifier, queueElement.Output + ".log");
                         Global.Logger("INFO  - Input: " + queueElement.Input, queueElement.Output + ".log");
@@ -1784,7 +1798,7 @@ namespace NotEnoughAV1Encodes
                             // Extract VFR Timestamps
                             await Task.Run(() => queueElement.GetVFRTimeStamps(), _cancelToken);
 
-                            // Starts "a timer" for eta / fps calculation
+                            // Start timer for eta / fps calculation
                             DateTime startTime = DateTime.Now;
                             System.Timers.Timer aTimer = new();
                             aTimer.Elapsed += (sender, e) => { UpdateProgressBar(queueElement, startTime); };
@@ -1794,11 +1808,17 @@ namespace NotEnoughAV1Encodes
                             // Video Encoding
                             await Task.Run(() => videoEncoder.Encode(WorkerCountElement, VideoChunks, queueElement, QueueParallel, settingsDB.PriorityNormal, _cancelToken), _cancelToken);
 
+                            // Stop timer for eta / fps calculation
                             aTimer.Stop();
 
+                            // Video Muxing
                             await Task.Run(() => videoMuxer.Concat(queueElement), _cancelToken);
 
+                            // Temp File Deletion
                             await Task.Run(() => DeleteTempFiles(queueElement, startTime), _cancelToken);
+
+                            // Save Queue States (e.g. Chunk Progress)
+                            SaveQueueStates();
                         }
                     }
                     catch (TaskCanceledException) { }
