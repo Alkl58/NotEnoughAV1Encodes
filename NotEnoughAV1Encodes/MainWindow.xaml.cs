@@ -28,6 +28,7 @@ namespace NotEnoughAV1Encodes
         private Settings settingsDB = new();
         private Video.VideoDB videoDB = new();
         private int ProgramState;
+        private string uid;
         private CancellationTokenSource cancellationTokenSource;
         public VideoSettings PresetSettings = new();
         public static bool Logging { get; set; }
@@ -436,16 +437,27 @@ namespace NotEnoughAV1Encodes
 
         private void PreAddToQueue()
         {
-            // Generate a random identifier to avoid filesystem conflicts
-            const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            StringBuilder identifier = new();
-            Random RNG = new();
-            for (int i = 0; i < 15; i++)
+            // Prevents generating a new identifier, if queue item is being edited
+            if (string.IsNullOrEmpty(uid))
             {
-                identifier.Append(src[RNG.Next(0, src.Length)]);
+                // Generate a random identifier to avoid filesystem conflicts
+                const string src = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                StringBuilder identifier = new();
+                Random RNG = new();
+                for (int i = 0; i < 15; i++)
+                {
+                    identifier.Append(src[RNG.Next(0, src.Length)]);
+                }
+                uid = identifier.ToString();
             }
-            AddToQueue(identifier.ToString(), false);
+
+            // Add Job to Queue
+            AddToQueue(uid, false);
+
             Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 6));
+
+            // Reset Unique Identifier
+            uid = null;
         }
 
         private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
@@ -507,6 +519,7 @@ namespace NotEnoughAV1Encodes
                 PresetSettings = tmp.Preset;
                 DataContext = PresetSettings;
                 videoDB = tmp.VideoDB;
+                uid = tmp.UniqueIdentifier;
 
                 try { ListBoxAudioTracks.Items.Clear(); } catch { }
                 try { ListBoxAudioTracks.ItemsSource = null; } catch { }
