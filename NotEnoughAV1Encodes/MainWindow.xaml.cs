@@ -143,17 +143,7 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonRemoveSelectedQueueItem_Click(object sender, RoutedEventArgs e)
         {
-            if (ProgramState != 0) return;
-            if (ListBoxQueue.SelectedItem != null)
-            {
-                Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
-                ListBoxQueue.Items.Remove(ListBoxQueue.SelectedItem);
-                try
-                {
-                    File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", tmp.VideoDB.InputFileName + "_" + tmp.UniqueIdentifier + ".json"));
-                }
-                catch { }
-            }
+            DeleteQueueItems();
         }
 
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
@@ -532,6 +522,7 @@ namespace NotEnoughAV1Encodes
         private void ButtonEditSelectedItem_Click(object sender, RoutedEventArgs e)
         {
             if (ProgramState != 0) return;
+            if (ListBoxQueue.SelectedItems.Count > 1) return;
             if (ListBoxQueue.SelectedItem != null)
             {
                 Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
@@ -595,16 +586,9 @@ namespace NotEnoughAV1Encodes
 
         private void ListBoxQueue_KeyDown(object sender, KeyEventArgs e)
         {
-            if (ListBoxQueue.SelectedItem == null) return;
             if (e.Key == Key.Delete)
             {
-                Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
-                ListBoxQueue.Items.Remove(ListBoxQueue.SelectedItem);
-                try
-                {
-                    File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", tmp.VideoDB.InputFileName + "_" + tmp.UniqueIdentifier + ".json"));
-                }
-                catch { }
+                DeleteQueueItems();
             }
         }
         #endregion
@@ -888,6 +872,7 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region Small Functions
+
         private void ComboBoxChunkingMethod_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (startupLock) return;
@@ -900,6 +885,7 @@ namespace NotEnoughAV1Encodes
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
+
         private void TextBoxChunkLength_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (startupLock) return;
@@ -912,6 +898,36 @@ namespace NotEnoughAV1Encodes
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
+
+        private void DeleteQueueItems()
+        {
+            if (ListBoxQueue.SelectedItem == null) return;
+            if (ProgramState != 0) return;
+            if (ListBoxQueue.SelectedItems.Count > 1)
+            {
+                List<Queue.QueueElement> items = ListBoxQueue.SelectedItems.OfType<Queue.QueueElement>().ToList();
+                foreach (var item in items)
+                {
+                    ListBoxQueue.Items.Remove(item);
+                    try
+                    {
+                        File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", item.VideoDB.InputFileName + "_" + item.UniqueIdentifier + ".json"));
+                    }
+                    catch { }
+                }
+            }
+            else
+            {
+                Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
+                ListBoxQueue.Items.Remove(ListBoxQueue.SelectedItem);
+                try
+                {
+                    File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", tmp.VideoDB.InputFileName + "_" + tmp.UniqueIdentifier + ".json"));
+                }
+                catch { }
+            }
+        }
+
         private void LoadSettings()
         {
             if (settingsDB.OverrideWorkerCount)
