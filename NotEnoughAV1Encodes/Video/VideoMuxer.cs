@@ -97,7 +97,10 @@ namespace NotEnoughAV1Encodes.Video
             // Set Display Aspect Ratio for external encoders
             if (queueElement.EncodingMethod is 5 or 6 or 7 && !string.IsNullOrEmpty(queueElement.VideoDB.MIDisplayAspectRatio))
             {
-                DAR = " -aspect " + queueElement.VideoDB.MIDisplayAspectRatio;
+                if (queueElement.VideoDB.MIPixelAspectRatio != "1.000")
+                {
+                    DAR = " -aspect " + queueElement.VideoDB.MIDisplayAspectRatio;
+                }
             }
 
             // Muxing Chunks

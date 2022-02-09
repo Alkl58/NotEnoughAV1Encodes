@@ -16,6 +16,7 @@ namespace NotEnoughAV1Encodes.Video
         public string MIChromaSubsampling { get; set; }
         public string MIBitDepth { get; set; }
         public string MIDisplayAspectRatio { get; set; }
+        public string MIPixelAspectRatio { get; set; }
         public long MIFrameCount { get; set; }
         public bool MIIsVFR { get; set; }
         public int MIWidth { get; set; }
@@ -42,6 +43,7 @@ namespace NotEnoughAV1Encodes.Video
                 try { MIWidth = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "Width")); } catch { }
                 try { MIHeight = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "Height")); } catch { }
                 try { MIDisplayAspectRatio = mediaInfo.Get(StreamKind.Video, 0, "DisplayAspectRatio/String"); } catch { }
+                try { MIPixelAspectRatio = mediaInfo.Get(StreamKind.Video, 0, "PixelAspectRatio"); } catch { }
 
                 int audioCount = mediaInfo.Count_Get(StreamKind.Audio);
                 if (audioCount > 0)
