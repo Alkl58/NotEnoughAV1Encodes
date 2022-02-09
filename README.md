@@ -42,6 +42,8 @@ NEAV1E supports the following encoders:
 
 ### 🎉 Special Thanks To
 - [@wcxu21](https://github.com/wcxu21) for Chinese Translations!
+- Nonami for Russian Translations!
+- ieno for Japanese Translations!
 - All other wonderful people reporting Bugs and being so patient!
 
 ---
