@@ -943,6 +943,11 @@
                                                     <Image Source="resources/img/save.png" Height="20" Width="20"></Image>
                                                 </MenuItem.Icon>
                                             </MenuItem>
+                                            <MenuItem x:Name="QueueMenuItemOpenOutputDir" Header="{lex:Loc}" Click="QueueMenuItemOpenOutputDir_Click">
+                                                <MenuItem.Icon>
+                                                    <Image Source="resources/img/folder.png" Height="20" Width="20"></Image>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
                                         </ContextMenu>
                                     </ListBox.ContextMenu>
                                     <ListBox.ItemTemplate>

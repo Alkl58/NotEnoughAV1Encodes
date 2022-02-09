@@ -439,6 +439,9 @@
   <data name="QueueMenuItemEdit" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="QueueMenuItemOpenOutputDir" xml:space="preserve">
+    <value>Open Destination</value>
+  </data>
   <data name="QueueMinLeft" xml:space="preserve">
     <value>min left</value>
   </data>

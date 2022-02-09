@@ -1024,6 +1024,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open Destination ähnelt.
+        /// </summary>
+        public static string QueueMenuItemOpenOutputDir {
+            get {
+                return ResourceManager.GetString("QueueMenuItemOpenOutputDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die min left ähnelt.
         /// </summary>
         public static string QueueMinLeft {

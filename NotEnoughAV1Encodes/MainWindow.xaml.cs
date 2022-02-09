@@ -146,6 +146,24 @@ namespace NotEnoughAV1Encodes
             DeleteQueueItems();
         }
 
+        private void QueueMenuItemOpenOutputDir_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListBoxQueue.SelectedItem == null) return;
+            try
+            {
+                Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
+                string outPath = Path.GetDirectoryName(tmp.Output);
+                ProcessStartInfo startInfo = new()
+                {
+                    Arguments = outPath,
+                    FileName = "explorer.exe"
+                };
+
+                Process.Start(startInfo);
+            }
+            catch { }
+        }
+
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
         {
             Views.OpenSource openSource = new(settingsDB.Theme);
