@@ -61,9 +61,16 @@ namespace NotEnoughAV1Encodes.Video
             
             if (queueElement.SubtitleCommand != null)
             {
-                subsMuxCommand = queueElement.SubtitleCommand + " \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Subtitles", "subs.mkv") + "\"";
-                MuxWithMKVMerge = true;
-                MuxWithFFmpeg = false;
+                if (File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Subtitles", "subs.mkv")))
+                {
+                    subsMuxCommand = queueElement.SubtitleCommand + " \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Subtitles", "subs.mkv") + "\"";
+                    MuxWithMKVMerge = true;
+                    MuxWithFFmpeg = false;
+                }
+                else
+                {
+                    Global.Logger("ERROR - VideoMuxer.Concat() => Could not find subtitles! Skipping...", queueElement.Output + ".log");
+                }
             }
             
             if (queueElement.VFR)
