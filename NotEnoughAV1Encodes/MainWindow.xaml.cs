@@ -917,6 +917,18 @@ namespace NotEnoughAV1Encodes
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
+        private void ComboBoxWorkerCount_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (startupLock) return;
+            settingsDB.WorkerCount = ComboBoxWorkerCount.SelectedIndex;
+            try
+            {
+                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
+                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
         private void DeleteQueueItems()
         {
             if (ListBoxQueue.SelectedItem == null) return;
@@ -957,6 +969,8 @@ namespace NotEnoughAV1Encodes
             {
                 ComboBoxWorkerCount.Visibility = Visibility.Visible;
                 TextBoxWorkerCount.Visibility = Visibility.Hidden;
+                if (settingsDB.WorkerCount != 99999999)
+                    ComboBoxWorkerCount.SelectedIndex = settingsDB.WorkerCount;
             }
 
             ComboBoxChunkingMethod.SelectedIndex = settingsDB.ChunkingMethod;

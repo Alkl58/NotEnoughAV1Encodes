@@ -29,6 +29,8 @@ namespace NotEnoughAV1Encodes
         public CultureInfo CultureInfo { get; set; } = new("en");
         /// <summary>Default Preset to load on startup</summary>
         public string DefaultPreset { get; set; }
+        /// <summary>Default Worker Count</summary>
+        public int WorkerCount { get; set; } = 99999999;
         /// <summary>Default Chunking Method</summary>
         public int ChunkingMethod { get; set; }
         /// <summary>Default Reencode Method</summary>
