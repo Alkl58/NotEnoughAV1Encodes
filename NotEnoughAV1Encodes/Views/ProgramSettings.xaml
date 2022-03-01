@@ -50,9 +50,10 @@
 
             </Grid>
         </GroupBox>
-        <GroupBox Margin="10,10,536,0" Height="249" VerticalAlignment="Top">
+        <GroupBox Margin="10,10,536,0" Height="334" VerticalAlignment="Top">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="55"/>
                     <RowDefinition Height="55"/>
                     <RowDefinition Height="55"/>
                     <RowDefinition Height="55"/>
@@ -62,6 +63,7 @@
                 <mah:ToggleSwitch Grid.Row="1" x:Name="ToggleSwitchShutdown" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top"/>
                 <mah:ToggleSwitch Grid.Row="2" x:Name="ToggleSwitchOverrideWorkerCount" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top"/>
                 <mah:ToggleSwitch Grid.Row="3" x:Name="ToggleSwitchLogging" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top"/>
+                <mah:ToggleSwitch Grid.Row="4" x:Name="ToggleSwitchAutoPauseResume" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top" ToolTip="{lex:Loc ToggleSwitchAutoPauseResumeTooltip}"/>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="GroupBoxBackroundImage" Header="{lex:Loc}" Margin="0,137,10,0" Height="122" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="237">
@@ -88,7 +90,7 @@
                 <Button x:Name="ButtonSelectTempPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="10,0,0,9" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPathReset_Click"/>
             </Grid>
         </GroupBox>
-        <GroupBox Margin="10,264,536,90">
+        <GroupBox Margin="269,264,252,0" Height="80" VerticalAlignment="Top">
             <Grid>
                 <Label x:Name="LabelProcessPriority" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Normal" Height="28" RenderTransformOrigin="0.393,0.581" Width="107"/>
                 <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="117,0,0,0" VerticalAlignment="Center" Width="117" Height="29">

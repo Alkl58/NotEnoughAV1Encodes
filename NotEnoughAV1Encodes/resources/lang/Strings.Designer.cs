@@ -1132,6 +1132,24 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Auto Pause / Resume ähnelt.
+        /// </summary>
+        public static string ToggleSwitchAutoPauseResume {
+            get {
+                return ResourceManager.GetString("ToggleSwitchAutoPauseResume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatically Pauses and Resumes Encoding if System is IDLE for more than 1 minute ähnelt.
+        /// </summary>
+        public static string ToggleSwitchAutoPauseResumeTooltip {
+            get {
+                return ResourceManager.GetString("ToggleSwitchAutoPauseResumeTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete Temp Files ähnelt.
         /// </summary>
         public static string ToggleSwitchDeleteTempFiles {

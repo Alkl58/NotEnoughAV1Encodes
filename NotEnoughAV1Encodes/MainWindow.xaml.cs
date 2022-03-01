@@ -23,11 +23,18 @@ namespace NotEnoughAV1Encodes
 {
     public partial class MainWindow : MetroWindow
     {
+        /// <summary>Prevents Race Conditions on Startup</summary>
         private bool startupLock = true;
+
+        /// <summary>Encoding the Queue in Parallel or not</summary>
         private bool QueueParallel;
+
+        /// <summary>State of the Program [0 = IDLE; 1 = Encoding; 2 = Paused]</summary>
+        private int ProgramState;
+
         private Settings settingsDB = new();
         private Video.VideoDB videoDB = new();
-        private int ProgramState;
+        
         private string uid;
         private CancellationTokenSource cancellationTokenSource;
         public VideoSettings PresetSettings = new();
@@ -1069,6 +1076,54 @@ namespace NotEnoughAV1Encodes
             File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.InputFileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
         }
 
+        private void AutoPauseResume()
+        {
+            TimeSpan idleTime = win32.IdleDetection.GetInputIdleTime();
+            double time = idleTime.TotalSeconds;
+            
+            Debug.WriteLine("AutoPauseResume() => " + time.ToString() + " Seconds");
+            if (ProgramState is 1)
+            {
+                // Pause
+                if (time < 40.0)
+                {
+                    Dispatcher.Invoke(() => ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/resume.png", UriKind.Relative)));
+                    Dispatcher.Invoke(() => LabelStartPauseButton.Content = LocalizedStrings.Instance["Resume"]);
+                    Dispatcher.Invoke(() => Title = "NEAV1E - " + LocalizedStrings.Instance["ToggleSwitchAutoPauseResume"] + " => Paused");
+
+                    // Pause all PIDs
+                    foreach (int pid in Global.LaunchedPIDs)
+                    {
+                        Suspend.SuspendProcessTree(pid);
+                    }
+
+                    ProgramState = 2;
+                }
+            }
+            else if (ProgramState is 2)
+            {
+                Dispatcher.Invoke(() => Title = "NEAV1E - " + LocalizedStrings.Instance["ToggleSwitchAutoPauseResume"] + " => Paused - System IDLE since " + time.ToString() + " seconds");
+                // Resume
+                if (time > 60.0)
+                {
+                    Dispatcher.Invoke(() => ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/pause.png", UriKind.Relative)));
+                    Dispatcher.Invoke(() => LabelStartPauseButton.Content = LocalizedStrings.Instance["Pause"]);
+                    Dispatcher.Invoke(() => Title = "NEAV1E - " + LocalizedStrings.Instance["ToggleSwitchAutoPauseResume"] + " => Encoding");
+
+                    // Resume all PIDs
+                    if (ProgramState is 2)
+                    {
+                        foreach (int pid in Global.LaunchedPIDs)
+                        {
+                            Resume.ResumeProcessTree(pid);
+                        }
+                    }
+
+                    ProgramState = 1;
+                }
+            }
+        }
+
         private void Shutdown()
         {
             if (settingsDB.ShutdownAfterEncode)
@@ -1764,6 +1819,15 @@ namespace NotEnoughAV1Encodes
             taskBarTimer.Interval = 3000; // every 3s
             taskBarTimer.Start();
 
+            // Starts Timer for Auto Pause Resume functionality
+            System.Timers.Timer pauseResumeTimer = new();
+            if (settingsDB.AutoResumePause)
+            {
+                pauseResumeTimer.Elapsed += (sender, e) => { AutoPauseResume(); };
+                pauseResumeTimer.Interval = 20000; // check every 10s
+                pauseResumeTimer.Start();
+            }
+
             using SemaphoreSlim concurrencySemaphore = new(WorkerCountQueue);
             // Creates a tasks list
             List<Task> tasks = new();
@@ -1890,6 +1954,12 @@ namespace NotEnoughAV1Encodes
             ButtonAddToQueue.IsEnabled = true;
             ButtonRemoveSelectedQueueItem.IsEnabled = true;
             ButtonEditSelectedItem.IsEnabled = true;
+
+            // Stop Timer for Auto Pause Resume functionality
+            if (settingsDB.AutoResumePause)
+            {
+                pauseResumeTimer.Stop();
+            }
 
             // Stop TaskbarItem Progressbar
             taskBarTimer.Stop();

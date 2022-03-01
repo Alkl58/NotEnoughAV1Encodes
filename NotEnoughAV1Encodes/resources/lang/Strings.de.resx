@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ButtonClose" xml:space="preserve">
     <value>Schließen</value>
@@ -471,6 +471,12 @@
   </data>
   <data name="ToggleSwitchAdvancedSettings" xml:space="preserve">
     <value>Erweiterte Einstellungen</value>
+  </data>
+  <data name="ToggleSwitchAutoPauseResume" xml:space="preserve">
+    <value>Autom. Pausierung / Fortsetz.</value>
+  </data>
+  <data name="ToggleSwitchAutoPauseResumeTooltip" xml:space="preserve">
+    <value>Automatische Pausierung und Fortsetzung wenn das System mehr als 1 Minute IDLE ist</value>
   </data>
   <data name="ToggleSwitchDeleteTempFiles" xml:space="preserve">
     <value>Temp Dateien löschen</value>

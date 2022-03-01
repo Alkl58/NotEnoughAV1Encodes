@@ -23,6 +23,8 @@ namespace NotEnoughAV1Encodes
         public string TempPath { get; set; } = Path.GetTempPath();
         /// <summary>Toggles Logging functionality</summary>
         public bool Logging { get; set; } = true;
+        /// <summary>Toggles Auto Resume Pause functionality</summary>
+        public bool AutoResumePause { get; set; } = false;
         /// <summary>Toggles Process Priority (false => low)</summary>
         public bool PriorityNormal { get; set; } = true;
         /// <summary>CultureInfo for Language (Default: en-US)</summary>

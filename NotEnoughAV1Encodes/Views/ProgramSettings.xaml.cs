@@ -18,9 +18,10 @@ namespace NotEnoughAV1Encodes.Views
         public ProgramSettings(Settings settingsDB)
         {
             InitializeComponent();
-            ToggleSwitchDeleteTempFiles.IsOn = settingsDB.DeleteTempFiles;
-            ToggleSwitchShutdown.IsOn = settingsDB.ShutdownAfterEncode;
             ToggleSwitchOverrideWorkerCount.IsOn = settingsDB.OverrideWorkerCount;
+            ToggleSwitchDeleteTempFiles.IsOn = settingsDB.DeleteTempFiles;
+            ToggleSwitchAutoPauseResume.IsOn = settingsDB.AutoResumePause;
+            ToggleSwitchShutdown.IsOn = settingsDB.ShutdownAfterEncode;
             ToggleSwitchLogging.IsOn = settingsDB.Logging;
             ComboBoxAccentTheme.SelectedIndex = settingsDB.AccentTheme;
             ComboBoxBaseTheme.SelectedIndex = settingsDB.BaseTheme;
@@ -84,9 +85,10 @@ namespace NotEnoughAV1Encodes.Views
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            settingsDBTemp.DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn;
-            settingsDBTemp.ShutdownAfterEncode = ToggleSwitchShutdown.IsOn;
             settingsDBTemp.OverrideWorkerCount = ToggleSwitchOverrideWorkerCount.IsOn;
+            settingsDBTemp.DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn;
+            settingsDBTemp.AutoResumePause = ToggleSwitchAutoPauseResume.IsOn;
+            settingsDBTemp.ShutdownAfterEncode = ToggleSwitchShutdown.IsOn;
             settingsDBTemp.Logging = ToggleSwitchLogging.IsOn;
             settingsDBTemp.BaseTheme = ComboBoxBaseTheme.SelectedIndex;
             settingsDBTemp.AccentTheme = ComboBoxAccentTheme.SelectedIndex;

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ButtonClose" xml:space="preserve">
     <value>Close</value>
@@ -474,6 +474,12 @@
   </data>
   <data name="ToggleSwitchAdvancedSettings" xml:space="preserve">
     <value>Advanced Settings</value>
+  </data>
+  <data name="ToggleSwitchAutoPauseResume" xml:space="preserve">
+    <value>Auto Pause / Resume</value>
+  </data>
+  <data name="ToggleSwitchAutoPauseResumeTooltip" xml:space="preserve">
+    <value>Automatically Pauses and Resumes Encoding if System is IDLE for more than 1 minute</value>
   </data>
   <data name="ToggleSwitchDeleteTempFiles" xml:space="preserve">
     <value>Delete Temp Files</value>
