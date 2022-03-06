@@ -472,6 +472,9 @@
   <data name="TextBoxDestination" xml:space="preserve">
     <value>No Destination Selected</value>
   </data>
+  <data name="ToggleSwitchActivateSubtitles" xml:space="preserve">
+    <value>Activate Subtitles</value>
+  </data>
   <data name="ToggleSwitchAdvancedSettings" xml:space="preserve">
     <value>Advanced Settings</value>
   </data>

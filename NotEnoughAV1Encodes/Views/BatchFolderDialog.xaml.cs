@@ -11,6 +11,7 @@ namespace NotEnoughAV1Encodes.Views
     {
         public bool Quit { get; set; }
         public bool PresetBitdepth { get; set; }
+        public bool ActivateSubtitles { get; set; } = true;
         public string Preset { get; set; }
         public string Output { get; set; }
         public int Container { get; set; }
@@ -102,6 +103,7 @@ namespace NotEnoughAV1Encodes.Views
                 Preset = ComboBoxPresets.SelectedItem.ToString();
                 Output = TextBoxDestination.Text;
                 PresetBitdepth = ToggleSwitchUsePresetBitDepth.IsOn;
+                ActivateSubtitles = ToggleSwitchActivateSubtitles.IsOn;
                 Quit = true;
                 Close();
             }

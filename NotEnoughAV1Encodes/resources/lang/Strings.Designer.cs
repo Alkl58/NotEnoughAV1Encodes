@@ -1123,6 +1123,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Activate Subtitles ähnelt.
+        /// </summary>
+        public static string ToggleSwitchActivateSubtitles {
+            get {
+                return ResourceManager.GetString("ToggleSwitchActivateSubtitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Advanced Settings ähnelt.
         /// </summary>
         public static string ToggleSwitchAdvancedSettings {

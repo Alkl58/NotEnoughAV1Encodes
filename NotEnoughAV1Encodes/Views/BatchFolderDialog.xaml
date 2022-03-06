@@ -66,5 +66,6 @@
             </Grid>
         </GroupBox>
         <mah:ToggleSwitch x:Name="ToggleSwitchUsePresetBitDepth" Height="62" Header="{lex:Loc}" Margin="10,411,0,0" Width="241" VerticalAlignment="Top"/>
+        <mah:ToggleSwitch x:Name="ToggleSwitchActivateSubtitles" Height="62" Header="{lex:Loc}" Margin="254,409,0,0" Width="241" VerticalAlignment="Top" IsOn="True"/>
     </Grid>
 </mah:MetroWindow>

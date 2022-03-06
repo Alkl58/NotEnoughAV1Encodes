@@ -196,6 +196,7 @@ namespace NotEnoughAV1Encodes
                         string output = batchFolderDialog.Output;
                         int container = batchFolderDialog.Container;
                         bool presetBitdepth = batchFolderDialog.PresetBitdepth;
+                        bool activatesubtitles = batchFolderDialog.ActivateSubtitles;
 
                         string outputContainer = "";
                         if (container == 0) outputContainer = ".mkv";
@@ -261,6 +262,7 @@ namespace NotEnoughAV1Encodes
 
                                 // Skip Subtitles if Container is not MKV to avoid conflicts
                                 bool skipSubs = container != 0;
+                                if (!activatesubtitles) skipSubs = true;
 
                                 AddToQueue(identifier.ToString(), skipSubs);
                             }
@@ -547,43 +549,61 @@ namespace NotEnoughAV1Encodes
         private void ButtonEditSelectedItem_Click(object sender, RoutedEventArgs e)
         {
             if (ProgramState != 0) return;
-            if (ListBoxQueue.SelectedItems.Count > 1) return;
+
             if (ListBoxQueue.SelectedItem != null)
             {
-                Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
-                PresetSettings = tmp.Preset;
-                DataContext = PresetSettings;
-                videoDB = tmp.VideoDB;
-                uid = tmp.UniqueIdentifier;
-
-                try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                try { ListBoxAudioTracks.ItemsSource = null; } catch { }
-                try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-                try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
-
-                ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
-                LabelVideoSource.Content = videoDB.InputPath;
-                LabelVideoDestination.Content = videoDB.OutputPath;
-                LabelVideoLength.Content = videoDB.MIDuration;
-                LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
-                LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
-
-                ComboBoxChunkingMethod.SelectedIndex = tmp.ChunkingMethod;
-                ComboBoxReencodeMethod.SelectedIndex = tmp.ReencodeMethod;
-                CheckBoxTwoPassEncoding.IsOn = tmp.Passes == 2;
-                TextBoxChunkLength.Text = tmp.ChunkLength.ToString();
-                TextBoxPySceneDetectThreshold.Text = tmp.PySceneDetectThreshold.ToString();
-
-                try
+                if (ListBoxQueue.SelectedItems.Count == 1)
                 {
-                    File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", tmp.VideoDB.InputFileName + "_" + tmp.UniqueIdentifier + ".json"));
+                    // Editing one entry
+                    Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
+                    PresetSettings = tmp.Preset;
+                    DataContext = PresetSettings;
+                    videoDB = tmp.VideoDB;
+                    uid = tmp.UniqueIdentifier;
+
+                    try { ListBoxAudioTracks.Items.Clear(); } catch { }
+                    try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+                    try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
+                    try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+
+                    ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                    ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+                    LabelVideoSource.Content = videoDB.InputPath;
+                    LabelVideoDestination.Content = videoDB.OutputPath;
+                    LabelVideoLength.Content = videoDB.MIDuration;
+                    LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
+                    LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
+
+                    ComboBoxChunkingMethod.SelectedIndex = tmp.ChunkingMethod;
+                    ComboBoxReencodeMethod.SelectedIndex = tmp.ReencodeMethod;
+                    CheckBoxTwoPassEncoding.IsOn = tmp.Passes == 2;
+                    TextBoxChunkLength.Text = tmp.ChunkLength.ToString();
+                    TextBoxPySceneDetectThreshold.Text = tmp.PySceneDetectThreshold.ToString();
+
+                    try
+                    {
+                        File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", tmp.VideoDB.InputFileName + "_" + tmp.UniqueIdentifier + ".json"));
+                    }
+                    catch { }
+
+                    ListBoxQueue.Items.Remove(ListBoxQueue.SelectedItem);
+
+                    Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 0));
                 }
-                catch { }
+                else if(ListBoxQueue.SelectedItems.Count > 1)
+                {
+                    return;
 
-                ListBoxQueue.Items.Remove(ListBoxQueue.SelectedItem);
 
-                Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 0));
+                    // Editing multiple entries
+
+                    // Get all Selected Queue Items
+                    List<Queue.QueueElement> items = ListBoxQueue.SelectedItems.OfType<Queue.QueueElement>().ToList();
+
+                    // Open Queue Items Edit Window
+                    Views.EditQueueItems editQueueItems = new(settingsDB.Theme, items);
+                    editQueueItems.ShowDialog();
+                }
             }
         }
 
