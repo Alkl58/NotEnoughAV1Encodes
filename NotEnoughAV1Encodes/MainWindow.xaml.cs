@@ -936,6 +936,18 @@ namespace NotEnoughAV1Encodes
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
+        private void ToggleSwitchQueueParallel_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (startupLock) return;
+            settingsDB.QueueParallel = ToggleSwitchQueueParallel.IsOn;
+            try
+            {
+                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
+                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
         private void DeleteQueueItems()
         {
             if (ListBoxQueue.SelectedItem == null) return;
@@ -984,6 +996,7 @@ namespace NotEnoughAV1Encodes
             ComboBoxReencodeMethod.SelectedIndex = settingsDB.ReencodeMethod;
             TextBoxChunkLength.Text = settingsDB.ChunkLength;
             TextBoxPySceneDetectThreshold.Text = settingsDB.PySceneDetectThreshold;
+            ToggleSwitchQueueParallel.IsOn = settingsDB.QueueParallel;
 
             // Sets Temp Path
             Global.Temp = settingsDB.TempPath;

@@ -996,7 +996,7 @@
                                 </ListBox>
                             </GroupBox>
                             <Label x:Name="LabelEncodeQueueParallel" Content="{lex:Loc}" Margin="0,1,67,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="398"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchQueueParallel" VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,-1,-97,0" Height="30" Content=" "/>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchQueueParallel" VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,-1,-97,0" Height="30" Content=" " Toggled="ToggleSwitchQueueParallel_Toggled"/>
                         </Grid>
                     </GroupBox>
                     <Button x:Name="ButtonRemoveSelectedQueueItem" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonRemoveSelectedQueueItem_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" Width="115"/>

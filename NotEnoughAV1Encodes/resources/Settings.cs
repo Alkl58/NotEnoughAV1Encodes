@@ -41,5 +41,7 @@ namespace NotEnoughAV1Encodes
         public string ChunkLength { get; set; } = "10";
         /// <summary>Default PySceneDetect Threshold</summary>
         public string PySceneDetectThreshold { get; set; } = "30";
+        /// <summary>Toggles Queue Parallel Encoding</summary>
+        public bool QueueParallel { get; set; }
     }
 }
