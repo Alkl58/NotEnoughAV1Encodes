@@ -84,7 +84,7 @@
                             </Grid.ColumnDefinitions>
                             <Label x:Name="LabelWorkerCount" Grid.Column="0" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
                             <ComboBox Grid.Column="1" x:Name="ComboBoxWorkerCount" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left" SelectionChanged="ComboBoxWorkerCount_SelectionChanged"/>
-                            <TextBox Grid.Column="1" Visibility="Hidden" x:Name="TextBoxWorkerCount" PreviewTextInput="NumberValidationTextBox" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <TextBox Grid.Column="1" Visibility="Hidden" x:Name="TextBoxWorkerCount" PreviewTextInput="NumberValidationTextBox" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="TextBoxWorkerCount_TextChanged"/>
                             <Label x:Name="LabelSplittingMethod" Grid.Column="2" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
                             <ComboBox Grid.Column="3" x:Name="ComboBoxChunkingMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left" SelectedIndex="1" SelectionChanged="ComboBoxChunkingMethod_SelectionChanged">
                                 <ComboBoxItem Content="Equal Chunking" IsSelected="True"/>

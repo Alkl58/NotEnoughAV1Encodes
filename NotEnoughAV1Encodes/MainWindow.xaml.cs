@@ -590,20 +590,6 @@ namespace NotEnoughAV1Encodes
 
                     Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 0));
                 }
-                else if(ListBoxQueue.SelectedItems.Count > 1)
-                {
-                    return;
-
-
-                    // Editing multiple entries
-
-                    // Get all Selected Queue Items
-                    List<Queue.QueueElement> items = ListBoxQueue.SelectedItems.OfType<Queue.QueueElement>().ToList();
-
-                    // Open Queue Items Edit Window
-                    Views.EditQueueItems editQueueItems = new(settingsDB.Theme, items);
-                    editQueueItems.ShowDialog();
-                }
             }
         }
 
@@ -947,7 +933,21 @@ namespace NotEnoughAV1Encodes
         private void ComboBoxWorkerCount_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (startupLock) return;
+            if (settingsDB.OverrideWorkerCount) return;
             settingsDB.WorkerCount = ComboBoxWorkerCount.SelectedIndex;
+            try
+            {
+                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
+                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
+        private void TextBoxWorkerCount_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (startupLock) return;
+            if (!settingsDB.OverrideWorkerCount) return;
+            settingsDB.WorkerCount = int.Parse(TextBoxWorkerCount.Text);
             try
             {
                 Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
@@ -1003,6 +1003,8 @@ namespace NotEnoughAV1Encodes
             {
                 ComboBoxWorkerCount.Visibility = Visibility.Hidden;
                 TextBoxWorkerCount.Visibility = Visibility.Visible;
+                if (settingsDB.WorkerCount != 99999999)
+                    TextBoxWorkerCount.Text = settingsDB.WorkerCount.ToString();
             }
             else
             {
