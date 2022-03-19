@@ -50,9 +50,10 @@
 
             </Grid>
         </GroupBox>
-        <GroupBox Margin="10,10,536,0" Height="334" VerticalAlignment="Top">
+        <GroupBox Margin="10,10,536,0" Height="348" VerticalAlignment="Top">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="55"/>
                     <RowDefinition Height="55"/>
                     <RowDefinition Height="55"/>
                     <RowDefinition Height="55"/>
@@ -64,6 +65,7 @@
                 <mah:ToggleSwitch Grid.Row="2" x:Name="ToggleSwitchOverrideWorkerCount" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top"/>
                 <mah:ToggleSwitch Grid.Row="3" x:Name="ToggleSwitchLogging" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top"/>
                 <mah:ToggleSwitch Grid.Row="4" x:Name="ToggleSwitchAutoPauseResume" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top" ToolTip="{lex:Loc ToggleSwitchAutoPauseResumeTooltip}"/>
+                <mah:ToggleSwitch Grid.Row="5" x:Name="ToggleSwitchInputSeeking" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top" ToolTip="Faster PySceneDetect Seeking - chance of frame loss"/>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="GroupBoxBackroundImage" Header="{lex:Loc}" Margin="0,137,10,0" Height="122" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="237">

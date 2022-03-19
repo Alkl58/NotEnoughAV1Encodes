@@ -10,7 +10,7 @@ namespace NotEnoughAV1Encodes.Video
 {
     class VideoEncode
     {
-        public void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement, bool queueParallel, bool normalPriority, CancellationToken token)
+        public void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement, bool queueParallel, bool normalPriority, Settings settings, CancellationToken token)
         {
             Global.Logger("TRACE - VideoEncode.Encode()", queueElement.Output + ".log");
             using SemaphoreSlim concurrencySemaphoreInner = new(_workerCount);
@@ -79,12 +79,19 @@ namespace NotEnoughAV1Encodes.Video
                             if (queueElement.ChunkingMethod == 0 || queueParallel)
                             {
                                 // Input for Chunked Encoding or Parallel Queue Processing
-                                ChunkInput = " \"" + chunk + "\"";
+                                ChunkInput = "-i \"" + chunk + "\"";
                             }
                             else
                             {
                                 // Input for Scenebased Encoding (supports picture based hardsubbing)
-                                ChunkInput = " \"" + queueElement.VideoDB.InputPath + "\" " + ChunkHardsubInput + chunk;
+                                if (settings.UseInputSeeking)
+                                {
+                                    ChunkInput = chunk + " -i \"" + queueElement.VideoDB.InputPath + "\" " + ChunkHardsubInput;
+                                }
+                                else
+                                {
+                                    ChunkInput = "-i \"" + queueElement.VideoDB.InputPath + "\" " + ChunkHardsubInput + chunk;
+                                }
                             }
 
                             // Set Chunk Output
@@ -128,13 +135,13 @@ namespace NotEnoughAV1Encodes.Video
                                 WindowStyle = ProcessWindowStyle.Hidden,
                                 FileName = "cmd.exe",
                                 WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
+                                Arguments = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
                                 RedirectStandardError = true,
                                 RedirectStandardInput = true,
                                 CreateNoWindow = true
                             };
 
-                            string debugCommand = "/C ffmpeg.exe -y -i " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput;
+                            string debugCommand = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput;
                             Global.Logger("INFO  - VideoEncode.Encode() => Command: " + debugCommand, queueElement.Output + ".log");
 
                             processVideo.StartInfo = startInfo;

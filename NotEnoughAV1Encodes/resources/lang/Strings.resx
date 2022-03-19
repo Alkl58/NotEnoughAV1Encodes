@@ -487,6 +487,9 @@
   <data name="ToggleSwitchDeleteTempFiles" xml:space="preserve">
     <value>Delete Temp Files</value>
   </data>
+  <data name="ToggleSwitchInputSeeking" xml:space="preserve">
+    <value>Use Input Seeking</value>
+  </data>
   <data name="ToggleSwitchLogging" xml:space="preserve">
     <value>Logging</value>
   </data>

@@ -1953,7 +1953,7 @@ namespace NotEnoughAV1Encodes
                             aTimer.Start();
 
                             // Video Encoding
-                            await Task.Run(() => videoEncoder.Encode(WorkerCountElement, VideoChunks, queueElement, QueueParallel, settingsDB.PriorityNormal, _cancelToken), _cancelToken);
+                            await Task.Run(() => videoEncoder.Encode(WorkerCountElement, VideoChunks, queueElement, QueueParallel, settingsDB.PriorityNormal, settingsDB, _cancelToken), _cancelToken);
 
                             // Stop timer for eta / fps calculation
                             aTimer.Stop();

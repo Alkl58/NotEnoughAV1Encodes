@@ -21,6 +21,7 @@ namespace NotEnoughAV1Encodes.Views
             ToggleSwitchOverrideWorkerCount.IsOn = settingsDB.OverrideWorkerCount;
             ToggleSwitchDeleteTempFiles.IsOn = settingsDB.DeleteTempFiles;
             ToggleSwitchAutoPauseResume.IsOn = settingsDB.AutoResumePause;
+            ToggleSwitchInputSeeking.IsOn = settingsDB.UseInputSeeking;
             ToggleSwitchShutdown.IsOn = settingsDB.ShutdownAfterEncode;
             ToggleSwitchLogging.IsOn = settingsDB.Logging;
             ComboBoxAccentTheme.SelectedIndex = settingsDB.AccentTheme;
@@ -88,6 +89,7 @@ namespace NotEnoughAV1Encodes.Views
             settingsDBTemp.OverrideWorkerCount = ToggleSwitchOverrideWorkerCount.IsOn;
             settingsDBTemp.DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn;
             settingsDBTemp.AutoResumePause = ToggleSwitchAutoPauseResume.IsOn;
+            settingsDBTemp.UseInputSeeking = ToggleSwitchInputSeeking.IsOn;
             settingsDBTemp.ShutdownAfterEncode = ToggleSwitchShutdown.IsOn;
             settingsDBTemp.Logging = ToggleSwitchLogging.IsOn;
             settingsDBTemp.BaseTheme = ComboBoxBaseTheme.SelectedIndex;

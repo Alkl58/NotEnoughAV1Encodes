@@ -1168,6 +1168,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use Input Seeking ähnelt.
+        /// </summary>
+        public static string ToggleSwitchInputSeeking {
+            get {
+                return ResourceManager.GetString("ToggleSwitchInputSeeking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Logging ähnelt.
         /// </summary>
         public static string ToggleSwitchLogging {
