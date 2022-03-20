@@ -358,6 +358,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die HDR Settings ähnelt.
+        /// </summary>
+        public static string HDRSettings {
+            get {
+                return ResourceManager.GetString("HDRSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Accent Theme: ähnelt.
         /// </summary>
         public static string LabelAccentTheme {

@@ -80,6 +80,12 @@ namespace NotEnoughAV1Encodes.Video
                 MuxWithFFmpeg = false;
             }
 
+            if (! string.IsNullOrEmpty(queueElement.VideoHDRMuxCommand))
+            {
+                MuxWithMKVMerge = true;
+                MuxWithFFmpeg = false;
+            }
+
             Global.Logger("DEBUG - VideoMuxer.Concat() => MuxWithMKVMerge? : " + MuxWithMKVMerge.ToString(), queueElement.Output + ".log");
             Global.Logger("DEBUG - VideoMuxer.Concat() => MuxWithFFmpeg?   : " + MuxWithFFmpeg.ToString(), queueElement.Output + ".log");
             Global.Logger("DEBUG - VideoMuxer.Concat() => AudioCommand?    : " + audioMuxCommand, queueElement.Output + ".log");
@@ -88,14 +94,14 @@ namespace NotEnoughAV1Encodes.Video
 
             MuxFFmpeg(MuxWithFFmpeg, queueElement, audioMuxCommand, audioFFmpegMapping);
 
-            MuxMKVMerge(MuxWithMKVMerge, queueElement, audioMuxCommand, vfrMuxCommand, subsMuxCommand);
+            MuxMKVMerge(MuxWithMKVMerge, queueElement, audioMuxCommand, vfrMuxCommand, subsMuxCommand, queueElement.VideoHDRMuxCommand);
         }
 
         private static void MuxFFmpegChunks(Queue.QueueElement queueElement)
         {
             // Setting Output for FFmpeg
             string FFmpegOutput = Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv");
-            if (queueElement.AudioCommand == null && queueElement.SubtitleCommand == null && queueElement.VFR == false)
+            if (queueElement.AudioCommand == null && queueElement.SubtitleCommand == null && queueElement.VFR == false && string.IsNullOrEmpty(queueElement.VideoHDRMuxCommand))
             {
                 FFmpegOutput = queueElement.VideoDB.OutputPath;
             }
@@ -177,7 +183,7 @@ namespace NotEnoughAV1Encodes.Video
             processVideo.WaitForExit();
         }
 
-        private static void MuxMKVMerge(bool mux, Queue.QueueElement queueElement, string audioMuxCommand, string vfrMuxCommand, string subsMuxCommand)
+        private static void MuxMKVMerge(bool mux, Queue.QueueElement queueElement, string audioMuxCommand, string vfrMuxCommand, string subsMuxCommand, string videoHDRCommand)
         {
             if (!mux) return;
 
@@ -197,7 +203,7 @@ namespace NotEnoughAV1Encodes.Video
                 CreateNoWindow = true,
                 UseShellExecute = false,
                 WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "MKVToolNix"),
-                Arguments = "/C mkvmerge.exe " + webmcmd + " --output \"" + queueElement.VideoDB.OutputPath + "\" --language 0:und --default-track 0:yes \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv") + "\" " + audioMuxCommand + " " + vfrMuxCommand + " " + subsMuxCommand
+                Arguments = "/C mkvmerge.exe " + webmcmd + " --output \"" + queueElement.VideoDB.OutputPath + "\" --language 0:und --default-track 0:yes \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "temp_mux.mkv") + "\" " + videoHDRCommand + audioMuxCommand + " " + vfrMuxCommand + " " + subsMuxCommand
             };
             processMKVMerge.StartInfo = startInfoMKVMerge;
 

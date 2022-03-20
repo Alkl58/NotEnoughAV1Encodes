@@ -25,6 +25,8 @@ namespace NotEnoughAV1Encodes.Queue
         public string Output { get; set; }
         /// <summary>Video Encoding parameters.</summary>
         public string VideoCommand { get; set; }
+        /// <summary>Video HDR Muxing parameters.</summary>
+        public string VideoHDRMuxCommand { get; set; }
         /// <summary>Audio Encoding parameters.</summary>
         public string AudioCommand { get; set; }
         /// <summary>Softsub Command</summary>

@@ -272,7 +272,7 @@ namespace NotEnoughAV1Encodes
                             MessageBox.Show(ex.Message);
                         }
 
-                        Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 6));
+                        Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 7));
                     }
                 }
                 else if(openSource.ProjectFile)
@@ -472,7 +472,7 @@ namespace NotEnoughAV1Encodes
             // Add Job to Queue
             AddToQueue(uid, false);
 
-            Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 6));
+            Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 7));
 
             // Reset Unique Identifier
             uid = null;
@@ -1082,6 +1082,7 @@ namespace NotEnoughAV1Encodes
             queueElement.Input = videoDB.InputPath;
             queueElement.Output = videoDB.OutputPath;
             queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
+            queueElement.VideoHDRMuxCommand = GenerateMKVMergeHDRCommand();
             queueElement.AudioCommand = audioCommandGenerator.Generate(ListBoxAudioTracks.Items);
             queueElement.SubtitleCommand = skipSubs ? null : subCommandGenerator.GenerateSoftsub(ListBoxSubtitleTracks.Items);
             queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(ListBoxSubtitleTracks.Items, identifier);
@@ -1423,27 +1424,6 @@ namespace NotEnoughAV1Encodes
                     settings += ":transfer=" + ComboBoxRav1eColorTransfer.Text;                              // Color Transfer
                 if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
                     settings += ":matrix=" + ComboBoxRav1eColorMatrix.Text;                                  // Color Matrix
-
-                if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
-                {
-                    settings += ":mastering-display=" +
-                                // Mastering      Gx                                   Gy
-                                "G(" + TextBoxRav1eMasteringGx.Text + "," + TextBoxRav1eMasteringGy.Text + ")" +
-                                // Mastering      Bx                                   By
-                                "B(" + TextBoxRav1eMasteringBx.Text + "," + TextBoxRav1eMasteringBy.Text + ")" +
-                                // Mastering      Rx                                   Ry
-                                "R(" + TextBoxRav1eMasteringRx.Text + "," + TextBoxRav1eMasteringRy.Text + ")" +
-                                // Mastering      WPx                                  WPy
-                                "WP(" + TextBoxRav1eMasteringWPx.Text + "," + TextBoxRav1eMasteringWPy.Text + ")" +
-                                // Mastering      Lx                                   Ly
-                                "L(" + TextBoxRav1eMasteringLx.Text + "," + TextBoxRav1eMasteringLy.Text + ")";
-                }
-
-                if (CheckBoxRav1eContentLight.IsChecked == true)
-                {
-                    settings += ":content-light=" + TextBoxRav1eContentLightCll.Text +                       // Content Light CLL
-                                "," + TextBoxRav1eContentLightFall.Text;                                     // Content Light FALL
-                }
             }
 
             return settings;
@@ -1624,26 +1604,6 @@ namespace NotEnoughAV1Encodes
                     settings += " --transfer " + ComboBoxRav1eColorTransfer.Text;                            // Color Transfer
                 if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
                     settings += " --matrix " + ComboBoxRav1eColorMatrix.Text;                                // Color Matrix
-
-                if (CheckBoxRav1eMasteringDisplay.IsChecked == true)
-                {
-                    settings += " --mastering-display " +
-                                // Mastering      Gx                                   Gy
-                                "G(" + TextBoxRav1eMasteringGx.Text + "," + TextBoxRav1eMasteringGy.Text + ")" +
-                                // Mastering      Bx                                   By
-                                "B(" + TextBoxRav1eMasteringBx.Text + "," + TextBoxRav1eMasteringBy.Text + ")" +
-                                // Mastering      Rx                                   Ry
-                                "R(" + TextBoxRav1eMasteringRx.Text + "," + TextBoxRav1eMasteringRy.Text + ")" +
-                                // Mastering      WPx                                  WPy
-                                "WP(" + TextBoxRav1eMasteringWPx.Text + "," + TextBoxRav1eMasteringWPy.Text + ")" +
-                                // Mastering      Lx                                   Ly
-                                "L(" + TextBoxRav1eMasteringLx.Text + "," + TextBoxRav1eMasteringLy.Text + ")";
-                }
-                if (CheckBoxRav1eContentLight.IsChecked == true)
-                {
-                    settings += " --content-light " + TextBoxRav1eContentLightCll.Text +                     // Content Light CLL
-                                "," + TextBoxRav1eContentLightFall.Text;                                     // Content Light FALL
-                }
             }
 
             return settings;
@@ -1796,17 +1756,77 @@ namespace NotEnoughAV1Encodes
 
         private string GenerateFFmpegFramerate()
         {
-            string _settings = "";
+            string settings = "";
 
             if (ComboBoxVideoFrameRate.SelectedIndex != 0)
             {
-                _settings = "-vf fps=" + ComboBoxVideoFrameRate.Text;
-                if (ComboBoxVideoFrameRate.SelectedIndex == 6) { _settings = "-vf fps=24000/1001"; }
-                if (ComboBoxVideoFrameRate.SelectedIndex == 9) { _settings = "-vf fps=30000/1001"; }
-                if (ComboBoxVideoFrameRate.SelectedIndex == 13) { _settings = "-vf fps=60000/1001"; }
+                settings = "-vf fps=" + ComboBoxVideoFrameRate.Text;
+                if (ComboBoxVideoFrameRate.SelectedIndex == 6) { settings = "-vf fps=24000/1001"; }
+                if (ComboBoxVideoFrameRate.SelectedIndex == 9) { settings = "-vf fps=30000/1001"; }
+                if (ComboBoxVideoFrameRate.SelectedIndex == 13) { settings = "-vf fps=60000/1001"; }
             }
 
-            return _settings;
+            return settings;
+        }
+
+        private string GenerateMKVMergeHDRCommand()
+        {
+            string settings = " ";
+            if (CheckBoxVideoHDR.IsChecked == true)
+            {
+                settings = "";
+                if (CheckBoxMKVMergeMasteringDisplay.IsChecked == true)
+                {
+                    // --chromaticity-coordinates TID:red-x,red-y,green-x,green-y,blue-x,blue-y
+                    settings += " --chromaticity-coordinates 0:" +
+                        TextBoxMKVMergeMasteringRx.Text + "," +
+                        TextBoxMKVMergeMasteringRy.Text + "," +
+                        TextBoxMKVMergeMasteringGx.Text + "," +
+                        TextBoxMKVMergeMasteringGy.Text + "," +
+                        TextBoxMKVMergeMasteringBx.Text + "," +
+                        TextBoxMKVMergeMasteringBy.Text;
+                }
+                if (CheckBoxMKVMergeWhiteMasteringDisplay.IsChecked == true)
+                {
+                    // --white-colour-coordinates TID:x,y
+                    settings += " --white-colour-coordinates 0:" +
+                        TextBoxMKVMergeMasteringWPx.Text + "," +
+                        TextBoxMKVMergeMasteringWPy.Text;
+                }
+                if (CheckBoxMKVMergeLuminance.IsChecked == true)
+                {
+                    // --max-luminance TID:float
+                    // --min-luminance TID:float
+                    settings += " --max-luminance 0:" + TextBoxMKVMergeMasteringLMax.Text;
+                    settings += " --min-luminance 0:" + TextBoxMKVMergeMasteringLMin.Text;
+                }
+                if (CheckBoxMKVMergeMaxContentLight.IsChecked == true)
+                {
+                    // --max-content-light TID:n
+                    settings += " --max-content-light 0:" + TextBoxMKVMergeMaxContentLight.Text;
+                }
+                if (CheckBoxMKVMergeMaxFrameLight.IsChecked == true)
+                {
+                    // --max-frame-light TID:n
+                    settings += " --max-frame-light 0:" + TextBoxMKVMergeMaxFrameLight.Text;
+                }
+                if (ComboBoxMKVMergeColorPrimaries.SelectedIndex != 2)
+                {
+                    // --colour-primaries TID:n
+                    settings += " --colour-primaries 0:" + ComboBoxMKVMergeColorPrimaries.SelectedIndex.ToString();
+                }
+                if (ComboBoxMKVMergeColorTransfer.SelectedIndex != 2)
+                {
+                    // --colour-transfer-characteristics TID:n
+                    settings += " --colour-transfer-characteristics 0:" + ComboBoxMKVMergeColorTransfer.SelectedIndex.ToString();
+                }
+                if (ComboBoxMKVMergeColorMatrix.SelectedIndex != 2)
+                {
+                    // --colour-matrix-coefficients TID:n
+                    settings += " --colour-matrix-coefficients 0:" + ComboBoxMKVMergeColorMatrix.SelectedIndex.ToString();
+                }
+            }
+            return settings;
         }
         #endregion
 

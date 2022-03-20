@@ -217,6 +217,9 @@
   <data name="GroupBoxWorkersAndSplitting" xml:space="preserve">
     <value>Workers and Splitting</value>
   </data>
+  <data name="HDRSettings" xml:space="preserve">
+    <value>HDR Settings</value>
+  </data>
   <data name="LabelAccentTheme" xml:space="preserve">
     <value>Accent Theme:</value>
   </data>
