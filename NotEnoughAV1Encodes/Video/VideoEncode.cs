@@ -123,6 +123,11 @@ namespace NotEnoughAV1Encodes.Video
                                 {
                                     if (queueElement.EncodingMethod == 5) { passesSettings = " --passes=2 --pass=1 --fpf="; _NULoutput = " --output=NUL"; }
                                     if (queueElement.EncodingMethod == 7) { passesSettings = " --pass 1 --stats "; _NULoutput = " --output NUL"; }
+                                    if (queueElement.EncodingMethod == 10)
+                                    {
+                                        passesSettings = " -pass 1 -passlogfile ";
+                                        _NULoutput = " -f mp4 NUL";
+                                    }
                                 }
 
                                 ChunkOutput = passesSettings + "\"" +  Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\"" + _NULoutput;
@@ -202,6 +207,12 @@ namespace NotEnoughAV1Encodes.Video
                                     if (queueElement.EncodingMethod == 7) { passesSettings = " --pass 2 --stats " + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" --output "; }
 
                                     ChunkOutput = passesSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf") + "\"";
+
+                                    if (queueElement.EncodingMethod == 10)
+                                    {
+                                        passesSettings = " -pass 2 -passlogfile " + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" ";
+                                        ChunkOutput = passesSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".mp4") + "\"";
+                                    }                 
                                 }
 
                                 Process processVideo2ndPass = new();
@@ -210,13 +221,13 @@ namespace NotEnoughAV1Encodes.Video
                                     WindowStyle = ProcessWindowStyle.Hidden,
                                     FileName = "cmd.exe",
                                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                    Arguments = "/C ffmpeg.exe -y -i " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
+                                    Arguments = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
                                     RedirectStandardError = true,
                                     RedirectStandardInput = true,
                                     CreateNoWindow = true
                                 };
 
-                                string DebugCommand = "/C ffmpeg.exe -y -i " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput;
+                                string DebugCommand = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput;
                                 Global.Logger("INFO  - VideoEncode.Encode() 2nd Pass => Command: " + DebugCommand, queueElement.Output + ".log");
 
                                 processVideo2ndPass.StartInfo = startInfo;

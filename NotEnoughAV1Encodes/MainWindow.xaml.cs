@@ -739,6 +739,13 @@ namespace NotEnoughAV1Encodes
                     CheckBoxRealTimeMode.IsOn = false;
                     CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
                 }
+                if (ComboBoxVideoEncoder.SelectedIndex is 10)
+                {
+                    if (ComboBoxQualityMode.SelectedIndex == 2)
+                    {
+                        CheckBoxTwoPassEncoding.IsEnabled = true;
+                    }
+                }
             }
         }
 
@@ -845,6 +852,14 @@ namespace NotEnoughAV1Encodes
                     TextBoxAVGBitrate.IsEnabled = true;
                     TextBoxMaxBitrate.IsEnabled = true;
                     TextBoxMinBitrate.IsEnabled = true;
+                }
+                if (ComboBoxVideoEncoder.SelectedIndex is 10 && ComboBoxQualityMode.SelectedIndex == 2)
+                {
+                    CheckBoxTwoPassEncoding.IsEnabled = true;
+                }
+                else if(ComboBoxVideoEncoder.SelectedIndex is 10 && ComboBoxQualityMode.SelectedIndex != 2)
+                {
+                    CheckBoxTwoPassEncoding.IsEnabled = false;
                 }
             }
         }
