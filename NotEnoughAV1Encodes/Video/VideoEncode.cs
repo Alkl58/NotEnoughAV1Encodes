@@ -39,6 +39,18 @@ namespace NotEnoughAV1Encodes.Video
                             alreadyEncoded = true;
                         }
 
+                        // Checks if Output really exists
+                        if (alreadyEncoded)
+                        {
+                            // Bad Implementation, however it's KISS
+                            if (File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm")) == false &&
+                                File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf")) == false && 
+                                File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".mp4")) == false )
+                            {
+                                alreadyEncoded = false;
+                            }
+                        }
+
                         // Skip Chunk if already encoded (finished.log)
                         if (!alreadyEncoded)
                         {
@@ -274,7 +286,14 @@ namespace NotEnoughAV1Encodes.Video
                                 // Save Finished Status
                                 foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
                                 {
-                                    progressElement.Finished = true;
+                                    if (File.Exists(ChunkOutput))
+                                    {
+                                        progressElement.Finished = true;
+                                    }
+                                    else
+                                    {
+                                        Global.Logger("FATAL ?! - VideoEncode.Encode() => Exit Code: 0 - This shouldn't have happened at all. Chunk: " + chunk, queueElement.Output + ".log");
+                                    }
                                 }
 
                                 Global.Logger("INFO  - VideoEncode.Encode() => Exit Code: 0  Chunk: " + chunk, queueElement.Output + ".log");
