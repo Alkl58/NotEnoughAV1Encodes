@@ -127,7 +127,13 @@ namespace NotEnoughAV1Encodes
                 ButtonAddToQueue.IsEnabled = true;
                 ButtonRemoveSelectedQueueItem.IsEnabled = true;
                 ButtonEditSelectedItem.IsEnabled = true;
-                SaveQueueStates();
+
+                // To Do: Save Queue States when Cancelling
+                // Problem: Needs VideoChunks List
+                // Possible Implementation:
+                //        - Use VideoChunks Functions from MainStartAsync()
+                //        - Save VideoChunks inside QueueElement
+                //SaveQueueElementState();
             }
             catch { }
         }
@@ -478,21 +484,30 @@ namespace NotEnoughAV1Encodes
             uid = null;
         }
 
-        private void SaveQueueStates()
+        private void SaveQueueElementState(Queue.QueueElement queueElement, List<string> VideoChunks)
         {
             // Save / Override Queuefile to save Progress of Chunks
-            System.Windows.Controls.ItemCollection tempList = ListBoxQueue.Items;
-            foreach (Queue.QueueElement queueElement in tempList)
-            {
-                // Remove all unfinished Chunks
-                queueElement.ChunkProgress.RemoveAll(chunk => chunk.Finished != true);
 
-                try
+            foreach (string chunkT in VideoChunks)
+            {
+                // Get Index
+                int index = VideoChunks.IndexOf(chunkT);
+
+                // Already Encoded Status
+                bool alreadyEncoded = File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_finished.log"));
+
+                // Remove Chunk if not finished
+                if (!alreadyEncoded)
                 {
-                    File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", queueElement.VideoDB.InputFileName + "_" + queueElement.UniqueIdentifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
+                    queueElement.ChunkProgress.RemoveAll(chunk => chunk.ChunkName == chunkT);
                 }
-                catch { }
             }
+
+            try
+            {
+                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", queueElement.VideoDB.InputFileName + "_" + queueElement.UniqueIdentifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
+            }
+            catch { }
 
         }
 
@@ -2000,7 +2015,7 @@ namespace NotEnoughAV1Encodes
                             await Task.Run(() => DeleteTempFiles(queueElement, startTime), _cancelToken);
 
                             // Save Queue States (e.g. Chunk Progress)
-                            SaveQueueStates();
+                            SaveQueueElementState(queueElement, VideoChunks);
                         }
                     }
                     catch (TaskCanceledException) { }

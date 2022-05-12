@@ -28,16 +28,11 @@ namespace NotEnoughAV1Encodes.Video
                     try
                     {
                         int index = VideoChunks.IndexOf(chunk);
-                        bool alreadyEncoded = false;
+
+                        // Already Encoded Status
+                        bool alreadyEncoded = File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_finished.log"));
 
                         Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"));
-
-                        // Read Finished Status
-                        List<Queue.ChunkProgress> tempList = queueElement.ChunkProgress.ToList();
-                        if (tempList.Any(n => n.ChunkName == chunk && n.Finished == true))
-                        {
-                            alreadyEncoded = true;
-                        }
 
                         // Checks if Output really exists
                         if (alreadyEncoded)
@@ -177,11 +172,15 @@ namespace NotEnoughAV1Encodes.Video
                             Global.LaunchedPIDs.Add(_pid);
                             Global.Logger("TRACE - VideoEncode.Encode() => Added PID: " + _pid + "  Chunk: " + chunk, queueElement.Output + ".log");
 
-                            // Create Progress Object if does not exist
+                            
+                            // Create Progress Object
+                            Queue.ChunkProgress chunkProgress = new();
+                            chunkProgress.ChunkName = chunk;
+                            chunkProgress.Progress = 0;
+
+                            List<Queue.ChunkProgress> tempList = queueElement.ChunkProgress.ToList();
                             if (!tempList.Any(n => n.ChunkName == chunk))
                             {
-                                Queue.ChunkProgress chunkProgress = new();
-                                chunkProgress.ChunkName = chunk;
                                 queueElement.ChunkProgress.Add(chunkProgress);
                             }
 
@@ -284,17 +283,8 @@ namespace NotEnoughAV1Encodes.Video
                             if (processVideo.ExitCode == 0 && token.IsCancellationRequested == false)
                             {
                                 // Save Finished Status
-                                foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
-                                {
-                                    if (File.Exists(ChunkOutput))
-                                    {
-                                        progressElement.Finished = true;
-                                    }
-                                    else
-                                    {
-                                        Global.Logger("FATAL ?! - VideoEncode.Encode() => Exit Code: 0 - This shouldn't have happened at all. Chunk: " + chunk, queueElement.Output + ".log");
-                                    }
-                                }
+                                FileStream finishedLog = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_finished.log"));
+                                finishedLog.Close();
 
                                 Global.Logger("INFO  - VideoEncode.Encode() => Exit Code: 0  Chunk: " + chunk, queueElement.Output + ".log");
                             }
