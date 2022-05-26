@@ -30,6 +30,38 @@ namespace NotEnoughAV1Encodes
             return 0;
         }
 
+        public static int GetTotalTimeProcessed(string stderr, Queue.QueueElement queue)
+        {
+            try
+            {
+                if (stderr.Contains("time="))
+                {
+                    // Get Timespan of Video
+                    TimeSpan length = TimeSpan.Parse(queue.VideoDB.MIDuration);
+
+                    // Parse stderr Output of FFmpeg
+                    int Start, End;
+                    Start = stderr.IndexOf("time=", 0) + "time=".Length;
+                    End = stderr.IndexOf("bitrate=", Start);
+                    string ffmpegTime = stderr[Start..End];
+
+                    // Convert FFmpeg time to Timespan
+                    TimeSpan ts = TimeSpan.Parse(ffmpegTime);
+
+                    // Progress in Percent
+                    double prog = Math.Round(ts / length, 2) * 100;
+
+                    // Convert Progress to amount of Frames (roughly)
+                    int frameCount = Convert.ToInt32(prog) * (Convert.ToInt32(queue.VideoDB.MIFrameCount) / 100);
+
+                    return frameCount;
+                }
+            }
+            catch { }
+
+            return 0;
+        }
+
         private static readonly ReaderWriterLockSlim readWriteLock = new();
         public static void Logger(string logMessage, string logPath)
         {

@@ -36,7 +36,7 @@ namespace NotEnoughAV1Encodes.Audio
                 StreamReader sr = processAudio.StandardError;
                 while (!sr.EndOfStream)
                 {
-                    int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
+                    int processedFrames = Global.GetTotalTimeProcessed(sr.ReadLine(), queueElement);
                     if (processedFrames != 0)
                     {
                         queueElement.Progress = Convert.ToDouble(processedFrames);
