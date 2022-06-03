@@ -27,6 +27,7 @@ namespace NotEnoughAV1Encodes.Views
             ComboBoxAccentTheme.SelectedIndex = settingsDB.AccentTheme;
             ComboBoxBaseTheme.SelectedIndex = settingsDB.BaseTheme;
             TextBoxTempPath.Text = settingsDB.TempPath;
+            TextBoxDefaultOutPath.Text = settingsDB.DefaultOutPath;
             settingsDBTemp.BGImage = settingsDB.BGImage;
             ComboBoxProcessPriority.SelectedIndex = settingsDB.PriorityNormal ? 0 : 1;
             string AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -73,6 +74,22 @@ namespace NotEnoughAV1Encodes.Views
             }
         }
 
+        private void ButtonSelectDefaultOutPath_Click(object sender, RoutedEventArgs e)
+        {
+            using var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.SelectedPath = TextBoxTempPath.Text;
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                TextBoxDefaultOutPath.Text = dialog.SelectedPath + "\\";
+            }
+        }
+
+        private void ButtonSelectDefaultOutPathReset_Click(object sender, RoutedEventArgs e)
+        {
+            TextBoxDefaultOutPath.Text = "";
+        }
+
         private void ButtonSelectTempPathReset_Click(object sender, RoutedEventArgs e)
         {
             TextBoxTempPath.Text = Path.GetTempPath();
@@ -96,6 +113,7 @@ namespace NotEnoughAV1Encodes.Views
             settingsDBTemp.AccentTheme = ComboBoxAccentTheme.SelectedIndex;
             settingsDBTemp.Theme = ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text;
             settingsDBTemp.TempPath = TextBoxTempPath.Text;
+            settingsDBTemp.DefaultOutPath = TextBoxDefaultOutPath.Text;
             settingsDBTemp.PriorityNormal = ComboBoxProcessPriority.SelectedIndex == 0;
         }
 

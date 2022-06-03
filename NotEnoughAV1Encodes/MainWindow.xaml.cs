@@ -363,6 +363,16 @@ namespace NotEnoughAV1Encodes
                 }
             }
             LabelVideoFramerate.Content = videoDB.MIFramerate + vfr;
+
+            // Output
+            if (!string.IsNullOrEmpty(settingsDB.DefaultOutPath))
+            {
+                string outPath = Path.Combine(settingsDB.DefaultOutPath, Path.GetFileNameWithoutExtension(videoDB.InputPath) + ".mkv");
+
+                videoDB.OutputPath = outPath;
+                LabelVideoDestination.Content = videoDB.OutputPath;
+                videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
+            }
         }
 
         private void ButtonSetDestination_Click(object sender, RoutedEventArgs e)

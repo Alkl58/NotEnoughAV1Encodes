@@ -10,13 +10,13 @@
         lex:LocalizeDictionary.DesignCulture="en"
         lex:ResxLocalizationProvider.DefaultAssembly="NotEnoughAV1Encodes"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-        Title="{lex:Loc ProgramSettings}" Height="450" Width="800" ResizeMode="NoResize" Closing="MetroWindow_Closing" mah:ControlsHelper.ContentCharacterCasing="Normal">
+        Title="{lex:Loc ProgramSettings}" Height="530" Width="800" ResizeMode="NoResize" Closing="MetroWindow_Closing" mah:ControlsHelper.ContentCharacterCasing="Normal">
     <Grid>
         <Button x:Name="ButtonUpdater" Content="{lex:Loc}" Margin="0,0,152,17" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click"  Height="39" VerticalAlignment="Bottom" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="137" />
         <Button x:Name="ButtonExit" Content="{lex:Loc}" HorizontalAlignment="Right" Margin="0,0,10,17" VerticalAlignment="Bottom" Height="39" Width="137" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonExit_Click"/>
-        <GroupBox x:Name="GroupBoxThemeSettings" Header="{lex:Loc}" Margin="269,137,252,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top">
+        <GroupBox x:Name="GroupBoxThemeSettings" Header="{lex:Loc}" Margin="0,10,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" HorizontalAlignment="Right" Width="237">
             <Grid>
-                <Label x:Name="LabelAccentTheme" Content="{lex:Loc}" Margin="10,10,160,0" FontSize="12" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
+                <Label x:Name="LabelAccentTheme" Content="{lex:Loc}" Margin="10,10,118,0" FontSize="12" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
                 <ComboBox x:Name="ComboBoxAccentTheme" HorizontalAlignment="Left" Margin="114,10,0,0" Width="106" Height="26" VerticalAlignment="Top">
                     <ComboBoxItem Content="Blue" Foreground="#0767B3" IsSelected="True" />
                     <ComboBoxItem Content="Red" Foreground="#EA4333" />
@@ -46,11 +46,11 @@
                     <ComboBoxItem Content="Light" IsSelected="True" />
                     <ComboBoxItem Content="Dark" />
                 </ComboBox>
-                <Label x:Name="LabelBaseTheme" Content="{lex:Loc}" Margin="10,51,160,0" FontSize="12" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
+                <Label x:Name="LabelBaseTheme" Content="{lex:Loc}" Margin="10,51,118,0" FontSize="12" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
 
             </Grid>
         </GroupBox>
-        <GroupBox Margin="10,10,536,0" Height="348" VerticalAlignment="Top">
+        <GroupBox Margin="10,137,0,0" Height="348" VerticalAlignment="Top" HorizontalAlignment="Left" Width="254">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="55"/>
@@ -74,7 +74,7 @@
                 <Button x:Name="ButtonResetBGImage" Content="{lex:Loc}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="150" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonResetBGImage_Click"/>
             </Grid>
         </GroupBox>
-        <GroupBox Margin="0,10,10,0" Height="122" VerticalAlignment="Top" HorizontalAlignment="Right" Width="237">
+        <GroupBox Margin="10,10,0,0" Height="122" VerticalAlignment="Top" HorizontalAlignment="Left" Width="254">
             <Grid>
                 <Label x:Name="LabelTheme" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="0,26,0,0"/>
                 <Label x:Name="LabelIcons" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="0,52,0,0"/>
@@ -84,12 +84,11 @@
                 <Label x:Name="LabelVersion1" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="56,0,0,0"/>
             </Grid>
         </GroupBox>
-        <GroupBox Margin="0,10,252,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" HorizontalAlignment="Right" Width="279">
+        <GroupBox Margin="269,10,252,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" Header="{lex:Loc LabelTempPath}">
             <Grid>
-                <Label x:Name="LabelTempPath" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="0,6,0,0" VerticalAlignment="Top" Width="134"/>
-                <TextBox x:Name="TextBoxTempPath" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="249"/>
-                <Button x:Name="ButtonSelectTempPath" Content="{lex:Loc ButtonSelectBGImage}" HorizontalAlignment="Left" Margin="158,0,0,9" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPath_Click"/>
-                <Button x:Name="ButtonSelectTempPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="10,0,0,9" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPathReset_Click"/>
+                <TextBox x:Name="TextBoxTempPath" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="249" Margin="0,10,0,0"/>
+                <Button x:Name="ButtonSelectTempPath" Content="{lex:Loc ButtonSelectBGImage}" HorizontalAlignment="Left" Margin="158,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPath_Click"/>
+                <Button x:Name="ButtonSelectTempPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPathReset_Click"/>
             </Grid>
         </GroupBox>
         <GroupBox Margin="269,264,252,0" Height="80" VerticalAlignment="Top">
@@ -112,6 +111,13 @@
                     <ComboBoxItem Content="Italiano (Italian)"/>
                 </ComboBox>
 
+            </Grid>
+        </GroupBox>
+        <GroupBox Margin="269,137,252,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" Header="{lex:Loc LabelDefaultOutputLocation}">
+            <Grid>
+                <TextBox x:Name="TextBoxDefaultOutPath" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="249" Margin="0,10,0,0"/>
+                <Button x:Name="ButtonSelectDefaultOutPath" Content="{lex:Loc ButtonSelectBGImage}" HorizontalAlignment="Left" Margin="158,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectDefaultOutPath_Click"/>
+                <Button x:Name="ButtonSelectDefaultOutPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectDefaultOutPathReset_Click"/>
             </Grid>
         </GroupBox>
 

@@ -565,6 +565,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Default Output Location ähnelt.
+        /// </summary>
+        public static string LabelDefaultOutputLocation {
+            get {
+                return ResourceManager.GetString("LabelDefaultOutputLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Deinterlace: ähnelt.
         /// </summary>
         public static string LabelDeinterlace {

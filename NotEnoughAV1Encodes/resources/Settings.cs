@@ -21,6 +21,8 @@ namespace NotEnoughAV1Encodes
         public bool OverrideWorkerCount { get; set; }
         /// <summary>Specifies the Temp Folder used</summary>
         public string TempPath { get; set; } = Path.GetTempPath();
+        /// <summary>Specifies the default Output Folder</summary>
+        public string DefaultOutPath { get; set; } = "";
         /// <summary>Toggles Logging functionality</summary>
         public bool Logging { get; set; } = true;
         /// <summary>Toggles Auto Resume Pause functionality</summary>
