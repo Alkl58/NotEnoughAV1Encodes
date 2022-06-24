@@ -1974,8 +1974,8 @@ namespace NotEnoughAV1Encodes
                             if (queueElement.ChunkingMethod == 0)
                             {
                                 // Equal Chunking
-                                string[] filePaths = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), "*.mkv", SearchOption.TopDirectoryOnly);
-                                foreach (string file in filePaths)
+                                IOrderedEnumerable<string> sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), "*.mkv", SearchOption.TopDirectoryOnly).OrderBy(f => f);
+                                foreach (string file in sortedChunks)
                                 {
                                     VideoChunks.Add(file);
                                     Global.Logger("TRACE - Equal Chunking VideoChunks Add " + file, queueElement.Output + ".log");
