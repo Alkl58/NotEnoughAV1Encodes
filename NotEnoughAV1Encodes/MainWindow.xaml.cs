@@ -1943,7 +1943,7 @@ namespace NotEnoughAV1Encodes
                         Global.Logger("==========================================================", queueElement.Output + ".log");
                         Global.Logger("INFO  - Started Async Task - UID: " + queueElement.UniqueIdentifier, queueElement.Output + ".log");
                         Global.Logger("INFO  - Input: " + queueElement.Input, queueElement.Output + ".log");
-                        Global.Logger("INFO  - Output: " + queueElement.Input, queueElement.Output + ".log");
+                        Global.Logger("INFO  - Output: " + queueElement.Output, queueElement.Output + ".log");
                         Global.Logger("INFO  - Temp Folder: " + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier), queueElement.Output + ".log");
                         Global.Logger("==========================================================", queueElement.Output + ".log");
 
