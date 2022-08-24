@@ -109,6 +109,7 @@
                     <ComboBoxItem Content="Русский (Russian)"/>
                     <ComboBoxItem Content="日本語 (Japanese)"/>
                     <ComboBoxItem Content="Italiano (Italian)"/>
+                    <ComboBoxItem Content="Français (French)"/>
                 </ComboBox>
 
             </Grid>

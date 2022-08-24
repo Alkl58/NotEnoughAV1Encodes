@@ -1,0 +1,508 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ButtonClose" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="ButtonDeletePreset" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="ButtonEditSelectedItem" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>Enregistrer et fermer</value>
+  </data>
+  <data name="ButtonOpenBatchFolder" xml:space="preserve">
+    <value>➔ Traitement Batch</value>
+  </data>
+  <data name="ButtonOpenProjectFile" xml:space="preserve">
+    <value>➔ Ouvrir Projet</value>
+  </data>
+  <data name="ButtonOpenVideoFile" xml:space="preserve">
+    <value>➔ Ouvrir Fichier</value>
+  </data>
+  <data name="ButtonRemoveSelectedQueueItem" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="ButtonResetBGImage" xml:space="preserve">
+    <value>Enlever</value>
+  </data>
+  <data name="ButtonSavePreset" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="ButtonSelectBGImage" xml:space="preserve">
+    <value>Sélectionner</value>
+  </data>
+  <data name="ButtonSetPresetDefault" xml:space="preserve">
+    <value>Enregistrer par défaut</value>
+  </data>
+  <data name="ButtonTestSettings" xml:space="preserve">
+    <value>Tester paramètres</value>
+  </data>
+  <data name="ButtonUpdater" xml:space="preserve">
+    <value>MAJ outils</value>
+  </data>
+  <data name="CheckBoxCustomVideoSettings" xml:space="preserve">
+    <value>Paramètres personnalisés</value>
+  </data>
+  <data name="CheckBoxRealTimeMode" xml:space="preserve">
+    <value>Mode temps réel</value>
+  </data>
+  <data name="CheckBoxTwoPassEncoding" xml:space="preserve">
+    <value>Encodage 2 Passes</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="GroupBoxBackroundImage" xml:space="preserve">
+    <value>Image d'arrière plan</value>
+  </data>
+  <data name="GroupBoxCrop" xml:space="preserve">
+    <value>Recadrer</value>
+  </data>
+  <data name="GroupBoxCurrentSettings" xml:space="preserve">
+    <value>Paramètres actuels</value>
+  </data>
+  <data name="GroupBoxDeinterlace" xml:space="preserve">
+    <value>Désentrelacer</value>
+  </data>
+  <data name="GroupBoxInputOutput" xml:space="preserve">
+    <value>Source / Destination</value>
+  </data>
+  <data name="GroupBoxLanguage" xml:space="preserve">
+    <value>Langue (Language)</value>
+    <comment>Les autres langues doivent uiliser "&lt;Lang&gt; (Language)"</comment>
+  </data>
+  <data name="GroupBoxOptimization" xml:space="preserve">
+    <value>Optimisation</value>
+  </data>
+  <data name="GroupBoxPresets" xml:space="preserve">
+    <value>Réglages</value>
+  </data>
+  <data name="GroupBoxQuality" xml:space="preserve">
+    <value>Qualité</value>
+  </data>
+  <data name="GroupBoxResize" xml:space="preserve">
+    <value>Redimensionner</value>
+  </data>
+  <data name="GroupBoxRotate" xml:space="preserve">
+    <value>Rotation</value>
+  </data>
+  <data name="GroupBoxThemeSettings" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="GroupBoxVideoContainer" xml:space="preserve">
+    <value>Format Video</value>
+  </data>
+  <data name="GroupBoxVideoInformation" xml:space="preserve">
+    <value>Informations Video</value>
+  </data>
+  <data name="GroupBoxWorkersAndSplitting" xml:space="preserve">
+    <value>Processus et découpage</value>
+  </data>
+  <data name="HDRSettings" xml:space="preserve">
+    <value>Paramètres HDR</value>
+  </data>
+  <data name="LabelAccentTheme" xml:space="preserve">
+    <value>Couleur déco</value>
+  </data>
+  <data name="LabelAddToQueue" xml:space="preserve">
+    <value>Ajouter à la file</value>
+  </data>
+  <data name="LabelAvailableBatchFilename" xml:space="preserve">
+    <value>{filename} = Nom du fichier</value>
+  </data>
+  <data name="LabelAvailableBatchPresetName" xml:space="preserve">
+    <value>{presetname} = Nom du Réglage</value>
+  </data>
+  <data name="LabelBaseTheme" xml:space="preserve">
+    <value>Theme de base:</value>
+  </data>
+  <data name="LabelBatchFileName" xml:space="preserve">
+    <value>Nom du Batch:</value>
+  </data>
+  <data name="LabelBitDepth" xml:space="preserve">
+    <value>Couleurs (bits):</value>
+  </data>
+  <data name="LabelBitrate" xml:space="preserve">
+    <value>Bitrate (kbps):</value>
+  </data>
+  <data name="LabelBitrateAvg" xml:space="preserve">
+    <value>Bitrate moyen:</value>
+  </data>
+  <data name="LabelBitrateMax" xml:space="preserve">
+    <value>Bitrate (max):</value>
+  </data>
+  <data name="LabelBitrateMin" xml:space="preserve">
+    <value>Bitrate (min):</value>
+  </data>
+  <data name="LabelBottom" xml:space="preserve">
+    <value>Bas</value>
+  </data>
+  <data name="LabelBuildsProvidedBy" xml:space="preserve">
+    <value>Builds fournis par jeremylee.sh en GPLv3</value>
+  </data>
+  <data name="LabelBurnIn" xml:space="preserve">
+    <value>Incruster:</value>
+  </data>
+  <data name="LabelCancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="LabelChannels" xml:space="preserve">
+    <value>Canaux:</value>
+  </data>
+  <data name="LabelChunkLength" xml:space="preserve">
+    <value>Durée segments (sec.):</value>
+  </data>
+  <data name="LabelCodec" xml:space="preserve">
+    <value>Codec:</value>
+  </data>
+  <data name="LabelColorFormat" xml:space="preserve">
+    <value>Format YUV:</value>
+  </data>
+  <data name="LabelContainer" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="LabelDefaultAudioBehavior" xml:space="preserve">
+    <value>Audio par défaut</value>
+  </data>
+  <data name="LabelDefaultOutputLocation" xml:space="preserve">
+    <value>Emplacement par défaut</value>
+  </data>
+  <data name="LabelDeinterlace" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="LabelDestination" xml:space="preserve">
+    <value>Destination</value>
+  </data>
+  <data name="LabelEncodeQueueParallel" xml:space="preserve">
+    <value>Encoder la file d'attente en parallèle plutôt que segmenter</value>
+  </data>
+  <data name="LabelEncoder" xml:space="preserve">
+    <value>Encodeur</value>
+  </data>
+  <data name="LabelFramerate" xml:space="preserve">
+    <value>img/sec</value>
+  </data>
+  <data name="LabelHeight" xml:space="preserve">
+    <value>Hauteur:</value>
+  </data>
+  <data name="LabelIcons" xml:space="preserve">
+    <value>Icones:</value>
+  </data>
+  <data name="LabelLanguage" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="LabelLeft" xml:space="preserve">
+    <value>Gauche</value>
+  </data>
+  <data name="LabelLength" xml:space="preserve">
+    <value>Durée</value>
+  </data>
+  <data name="LabelMethodOpeningSource" xml:space="preserve">
+    <value>Méthode d'ouverture de la source</value>
+  </data>
+  <data name="LabelNoAudioFound" xml:space="preserve">
+    <value>Aucune piste audio</value>
+  </data>
+  <data name="LabelNoSubtitleFound" xml:space="preserve">
+    <value>Aucun sous-titres</value>
+  </data>
+  <data name="LabelPreset" xml:space="preserve">
+    <value>Réglage:</value>
+  </data>
+  <data name="LabelPresetName" xml:space="preserve">
+    <value>Nom du réglage:</value>
+  </data>
+  <data name="LabelProcessPriority" xml:space="preserve">
+    <value>Priorité CPU:</value>
+  </data>
+  <data name="LabelQualityMode" xml:space="preserve">
+    <value>Mode de qualité:</value>
+  </data>
+  <data name="LabelQuantizer" xml:space="preserve">
+    <value>Réglage:</value>
+  </data>
+  <data name="LabelReencodeMethod" xml:space="preserve">
+    <value>Réencodage:</value>
+  </data>
+  <data name="LabelResolution" xml:space="preserve">
+    <value>Résolution:</value>
+  </data>
+  <data name="LabelRight" xml:space="preserve">
+    <value>Droite</value>
+  </data>
+  <data name="LabelRotate" xml:space="preserve">
+    <value>Rotation (Horaire):</value>
+  </data>
+  <data name="LabelScalingAlgorithm" xml:space="preserve">
+    <value>Algorithme:</value>
+  </data>
+  <data name="LabelSelectPresetForEncoding" xml:space="preserve">
+    <value>Réglage pour l'encodage:</value>
+  </data>
+  <data name="LabelSource" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="LabelSpeed" xml:space="preserve">
+    <value>Vitesse</value>
+  </data>
+  <data name="LabelSplittingMethod" xml:space="preserve">
+    <value>Type de découpage:</value>
+  </data>
+  <data name="LabelStartPauseButton" xml:space="preserve">
+    <value>Démarrer</value>
+  </data>
+  <data name="LabelStatus" xml:space="preserve">
+    <value>Etat:</value>
+  </data>
+  <data name="LabelTempPath" xml:space="preserve">
+    <value>Dossier temp</value>
+  </data>
+  <data name="LabelTheme" xml:space="preserve">
+    <value>Theme:</value>
+  </data>
+  <data name="LabelThreshold" xml:space="preserve">
+    <value>Seuil:</value>
+  </data>
+  <data name="LabelTop" xml:space="preserve">
+    <value>Haut</value>
+  </data>
+  <data name="LabelTrackName" xml:space="preserve">
+    <value>Nom piste:</value>
+  </data>
+  <data name="LabelVersion" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="LabelVideoDestination" xml:space="preserve">
+    <value>Pas de destination</value>
+  </data>
+  <data name="LabelVideoDestination1" xml:space="preserve">
+    <value>Destination:</value>
+  </data>
+  <data name="LabelVideoSource" xml:space="preserve">
+    <value>Pas de source</value>
+  </data>
+  <data name="LabelVideoSource1" xml:space="preserve">
+    <value>Source:</value>
+  </data>
+  <data name="LabelWidth" xml:space="preserve">
+    <value>Largeur:</value>
+  </data>
+  <data name="LabelWorkerCount" xml:space="preserve">
+    <value>Processus:</value>
+  </data>
+  <data name="MessageConstrainedBitrateAomenc" xml:space="preserve">
+    <value>NEAV1E ne prend pas en charge le débit contraint (aomenc)</value>
+  </data>
+  <data name="MessageCreatePresetBeforeBatch" xml:space="preserve">
+    <value>Veuillez créer un réglage avant d'utiliser le batch.</value>
+  </data>
+  <data name="MessageNoInput" xml:space="preserve">
+    <value>Pas de source !</value>
+  </data>
+  <data name="MessageNoOutput" xml:space="preserve">
+    <value>Pas de destination !</value>
+  </data>
+  <data name="MessageQualityModeRav1eSVT" xml:space="preserve">
+    <value>EAV1E ne prend en charge que le mode Qualité Constante ou Bitrate (rav1e / svt-av1)</value>
+  </data>
+  <data name="MessageQueueEmpty" xml:space="preserve">
+    <value>La file d'attente est vide ! \nVeuillez ajouter au moins un job.</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="ProgramSettings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="Queue1stPass" xml:space="preserve">
+    <value>1re Passe:</value>
+  </data>
+  <data name="Queue2ndPass" xml:space="preserve">
+    <value>2e Passe:</value>
+  </data>
+  <data name="QueueMenuItemEdit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="QueueMenuItemOpenOutputDir" xml:space="preserve">
+    <value>Ouvrir dossier de destination</value>
+  </data>
+  <data name="QueueMinLeft" xml:space="preserve">
+    <value>File d'attente min.</value>
+  </data>
+  <data name="Resume" xml:space="preserve">
+    <value>Reprendre</value>
+  </data>
+  <data name="TabItemAdvanced" xml:space="preserve">
+    <value>Avancé</value>
+  </data>
+  <data name="TabItemAudio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="TabItemFilters" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="TabItemQueue" xml:space="preserve">
+    <value>File d'attente</value>
+  </data>
+  <data name="TabItemSubtitles" xml:space="preserve">
+    <value>Sous-titres</value>
+  </data>
+  <data name="TabItemSummary" xml:space="preserve">
+    <value>Résumé</value>
+  </data>
+  <data name="TabItemVideo" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="TextBoxDestination" xml:space="preserve">
+    <value>Pas de destination</value>
+  </data>
+  <data name="ToggleSwitchActivateSubtitles" xml:space="preserve">
+    <value>Activer sous-titres</value>
+  </data>
+  <data name="ToggleSwitchAdvancedSettings" xml:space="preserve">
+    <value>Activer onglet avancé</value>
+  </data>
+  <data name="ToggleSwitchAutoPauseResume" xml:space="preserve">
+    <value>Pause / Reprise auto</value>
+  </data>
+  <data name="ToggleSwitchAutoPauseResumeTooltip" xml:space="preserve">
+    <value>Automatiquement reprendre ou mettre en pause si le système est inutilisé plus de 1mn</value>
+  </data>
+  <data name="ToggleSwitchDeleteTempFiles" xml:space="preserve">
+    <value>Effacer fichiers temp</value>
+  </data>
+  <data name="ToggleSwitchInputSeeking" xml:space="preserve">
+    <value>Détection scène rapide</value>
+  </data>
+  <data name="ToggleSwitchLogging" xml:space="preserve">
+    <value>Journaux</value>
+  </data>
+  <data name="ToggleSwitchOverrideWorkerCount" xml:space="preserve">
+    <value>Autoriser process +</value>
+  </data>
+  <data name="ToggleSwitchShutdown" xml:space="preserve">
+    <value>Eteindre le PC à la fin</value>
+  </data>
+  <data name="ToggleSwitchUsePresetBitDepth" xml:space="preserve">
+    <value>Utiliser couleurs (bits) du réglage?</value>
+  </data>
+</root>
