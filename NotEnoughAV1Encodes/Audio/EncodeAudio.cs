@@ -34,9 +34,13 @@ namespace NotEnoughAV1Encodes.Audio
                 processAudio.Start();
 
                 StreamReader sr = processAudio.StandardError;
+                string stderr = "\n";
                 while (!sr.EndOfStream)
                 {
-                    int processedFrames = Global.GetTotalTimeProcessed(sr.ReadLine(), queueElement);
+                    string line = sr.ReadLine();
+                    if (!line.Contains("time="))
+                        stderr += line + "\n";
+                    int processedFrames = Global.GetTotalTimeProcessed(line, queueElement);
                     if (processedFrames != 0)
                     {
                         queueElement.Progress = Convert.ToDouble(processedFrames);
@@ -57,6 +61,8 @@ namespace NotEnoughAV1Encodes.Audio
                 else
                 {
                     Global.Logger("FATAL - EncodeAudio.Encode() => ExitCode: " + processAudio.ExitCode, queueElement.Output + ".log");
+                    Global.Logger("==========================================================" + stderr, queueElement.Output + ".log");
+                    Global.Logger("==========================================================", queueElement.Output + ".log");
                 }
             }
             else
