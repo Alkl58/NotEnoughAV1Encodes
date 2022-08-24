@@ -11,7 +11,7 @@ namespace NotEnoughAV1Encodes.Video
     class VideoSplitter
     {
         private Queue.QueueElement queueElement = new();
-        public void Split(Queue.QueueElement _queueElement, CancellationToken _token)
+        public void Split(Queue.QueueElement _queueElement, CancellationToken token)
         {
             queueElement = _queueElement;
             Global.Logger("INFO  - VideoSplitter.Split()", queueElement.Output + ".log");
@@ -19,12 +19,12 @@ namespace NotEnoughAV1Encodes.Video
             if (queueElement.ChunkingMethod == 0)
             {
                 // Equal Chunking
-                FFmpegChunking(_token);
+                FFmpegChunking(token);
             }
             else if(queueElement.ChunkingMethod == 1)
             {
                 // PySceneDetect
-                PySceneDetect(_token);
+                PySceneDetect(token);
             }
         }
 
@@ -127,8 +127,7 @@ namespace NotEnoughAV1Encodes.Video
                 Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking() => Path: " + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), queueElement.Output + ".log");
 
                 // Generate Command
-                string ffmpegCommand = "/C ffmpeg.exe";
-                ffmpegCommand += " -y -i " + '\u0022' + queueElement.VideoDB.InputPath + '\u0022';
+                string ffmpegCommand = "/C ffmpeg.exe -y -i \"" + queueElement.VideoDB.InputPath + "\"";
 
                 // Subtitle Input for Hardcoding
                 if(!string.IsNullOrEmpty(queueElement.SubtitleBurnCommand))
@@ -143,24 +142,18 @@ namespace NotEnoughAV1Encodes.Video
                     }
                 }
 
-                ffmpegCommand += " -reset_timestamps 1 -map_metadata -1 -sn -an";
+                // Set Encoder
+                string encoder = queueElement.ReencodeMethod switch
+                {
+                    0 => " -c:v libx264 -preset ultrafast -crf 0",
+                    1 => " -c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -slicecrc 0 -slices 4",
+                    2 => " -c:v utvideo",
+                    3 => " -c:v copy",
+                    _ => " -c:v copy"
+                };
 
-                if (queueElement.ReencodeMethod == 0)
-                {
-                    ffmpegCommand += " -c:v libx264 -preset ultrafast -crf 0";
-                }
-                else if(queueElement.ReencodeMethod == 1)
-                {
-                    ffmpegCommand += " -c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -slicecrc 0 -slices 4";
-                }
-                else if (queueElement.ReencodeMethod == 2)
-                {
-                    ffmpegCommand += " -c:v utvideo";
-                }
-                else if (queueElement.ReencodeMethod == 3)
-                {
-                    ffmpegCommand += " -c:v copy";
-                }
+                ffmpegCommand += " -reset_timestamps 1 -map_metadata -1 -sn -an" + encoder;
+
 
                 if (queueElement.ReencodeMethod != 3)
                 {
@@ -218,9 +211,13 @@ namespace NotEnoughAV1Encodes.Video
                 Global.LaunchedPIDs.Add(tempPID);
 
                 StreamReader sr = chunkingProcess.StandardError;
+                string stderr = "\n";
                 while (!sr.EndOfStream)
                 {
-                    int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
+                    string line = sr.ReadLine();
+                    if (! line.Contains("frame=") && !line.Contains("[segment"))
+                        stderr += line + "\n";
+                    int processedFrames = Global.GetTotalFramesProcessed(line);
                     if (processedFrames != 0)
                     {
                         queueElement.Progress = Convert.ToDouble(processedFrames);
@@ -233,7 +230,6 @@ namespace NotEnoughAV1Encodes.Video
 
                 // Get Exit Code
                 int exit_code = chunkingProcess.ExitCode;
-                
 
                 // Remove PID from Array after Exit
                 Global.LaunchedPIDs.RemoveAll(i => i == tempPID);
@@ -248,6 +244,8 @@ namespace NotEnoughAV1Encodes.Video
                 else
                 {
                     Global.Logger("FATAL - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Exit Code: " + exit_code, queueElement.Output + ".log");
+                    Global.Logger("==========================================================" + stderr, queueElement.Output + ".log");
+                    Global.Logger("==========================================================", queueElement.Output + ".log");
                 }
             }
             else
