@@ -10,117 +10,146 @@
         lex:LocalizeDictionary.DesignCulture="en"
         lex:ResxLocalizationProvider.DefaultAssembly="NotEnoughAV1Encodes"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-        Title="{lex:Loc ProgramSettings}" Height="530" Width="800" ResizeMode="NoResize" Closing="MetroWindow_Closing" mah:ControlsHelper.ContentCharacterCasing="Normal">
+        Title="{lex:Loc ProgramSettings}" Height="452" Width="820" ResizeMode="NoResize" Closing="MetroWindow_Closing" mah:ControlsHelper.ContentCharacterCasing="Normal">
     <Grid>
-        <Button x:Name="ButtonUpdater" Content="{lex:Loc}" Margin="0,0,152,17" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click"  Height="39" VerticalAlignment="Bottom" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="137" />
-        <Button x:Name="ButtonExit" Content="{lex:Loc}" HorizontalAlignment="Right" Margin="0,0,10,17" VerticalAlignment="Bottom" Height="39" Width="137" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonExit_Click"/>
-        <GroupBox x:Name="GroupBoxThemeSettings" Header="{lex:Loc}" Margin="0,10,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" HorizontalAlignment="Right" Width="237">
-            <Grid>
-                <Label x:Name="LabelAccentTheme" Content="{lex:Loc}" Margin="10,10,118,0" FontSize="12" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
-                <ComboBox x:Name="ComboBoxAccentTheme" HorizontalAlignment="Left" Margin="114,10,0,0" Width="106" Height="26" VerticalAlignment="Top">
-                    <ComboBoxItem Content="Blue" Foreground="#0767B3" IsSelected="True" />
-                    <ComboBoxItem Content="Red" Foreground="#EA4333" />
-                    <ComboBoxItem Content="Green" Foreground="#80BA45" />
-                    <ComboBoxItem Content="Purple" Foreground="#837AE5" />
-                    <ComboBoxItem Content="Orange" Foreground="#FB8633" />
-                    <ComboBoxItem Content="Lime"  Foreground="#B6D033" />
-                    <ComboBoxItem Content="Emerald" Foreground="#B6CE59" />
-                    <ComboBoxItem Content="Teal" Foreground="#33BCBA" />
-                    <ComboBoxItem Content="Cyan" Foreground="#49B4E8" />
-                    <ComboBoxItem Content="Cobalt" Foreground="#3373F2" />
-                    <ComboBoxItem Content="Indigo" Foreground="#8833FF" />
-                    <ComboBoxItem Content="Violet" Foreground="#BB33FF" />
-                    <ComboBoxItem Content="Pink" Foreground="#F68ED9" />
-                    <ComboBoxItem Content="Magenta" Foreground="#E0338F" />
-                    <ComboBoxItem Content="Crimson" Foreground="#B53351" />
-                    <ComboBoxItem Content="Amber" Foreground="#F3B53B" />
-                    <ComboBoxItem Content="Yellow" Foreground="#FEE538" />
-                    <ComboBoxItem Content="Brown" Foreground="#9B7B56" />
-                    <ComboBoxItem Content="Olive" Foreground="#8A9F83" />
-                    <ComboBoxItem Content="Steel" Foreground="#83919F" />
-                    <ComboBoxItem Content="Mauve" Foreground="#9180A1" />
-                    <ComboBoxItem Content="Taupe" Foreground="#9F9471" />
-                    <ComboBoxItem Content="Sienna" Foreground="#B37557" />
-                </ComboBox>
-                <ComboBox x:Name="ComboBoxBaseTheme" HorizontalAlignment="Left" Margin="114,51,0,0" Width="106" Height="26" VerticalAlignment="Top">
-                    <ComboBoxItem Content="Light" IsSelected="True" />
-                    <ComboBoxItem Content="Dark" />
-                </ComboBox>
-                <Label x:Name="LabelBaseTheme" Content="{lex:Loc}" Margin="10,51,118,0" FontSize="12" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
+        <Button x:Name="ButtonUpdater" Content="{lex:Loc}" Margin="0,0,152,10" RenderTransformOrigin="0.5,0.474" Click="ButtonUpdater_Click"  Height="39" VerticalAlignment="Bottom" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="137" />
+        <Button x:Name="ButtonExit" Content="{lex:Loc}" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="39" Width="137" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonExit_Click"/>
 
-            </Grid>
-        </GroupBox>
-        <GroupBox Margin="10,137,0,0" Height="348" VerticalAlignment="Top" HorizontalAlignment="Left" Width="254">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="55"/>
-                    <RowDefinition Height="55"/>
-                    <RowDefinition Height="55"/>
-                    <RowDefinition Height="55"/>
-                    <RowDefinition Height="55"/>
-                    <RowDefinition Height="55"/>
-                </Grid.RowDefinitions>
-                <mah:ToggleSwitch Grid.Row="0" x:Name="ToggleSwitchDeleteTempFiles" Header="{lex:Loc}" Height="54" Margin="10,0,0,0" Width="100" VerticalAlignment="Top"/>
-                <mah:ToggleSwitch Grid.Row="1" x:Name="ToggleSwitchShutdown" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top"/>
-                <mah:ToggleSwitch Grid.Row="2" x:Name="ToggleSwitchOverrideWorkerCount" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top"/>
-                <mah:ToggleSwitch Grid.Row="3" x:Name="ToggleSwitchLogging" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top"/>
-                <mah:ToggleSwitch Grid.Row="4" x:Name="ToggleSwitchAutoPauseResume" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top" ToolTip="{lex:Loc ToggleSwitchAutoPauseResumeTooltip}"/>
-                <mah:ToggleSwitch Grid.Row="5" x:Name="ToggleSwitchInputSeeking" Header="{lex:Loc}" Height="53" Margin="10,0,0,0" Width="100" VerticalAlignment="Top" ToolTip="Faster PySceneDetect Seeking - chance of frame loss"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox x:Name="GroupBoxBackroundImage" Header="{lex:Loc}" Margin="0,137,10,0" Height="122" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="237">
-            <Grid>
-                <Button x:Name="ButtonSelectBGImage" Content="{lex:Loc}" HorizontalAlignment="Center" Margin="0,12,0,0" VerticalAlignment="Top" Height="21" Width="150" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectBGImage_Click"/>
-                <Button x:Name="ButtonResetBGImage" Content="{lex:Loc}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="150" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonResetBGImage_Click"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox Margin="10,10,0,0" Height="122" VerticalAlignment="Top" HorizontalAlignment="Left" Width="254">
-            <Grid>
-                <Label x:Name="LabelTheme" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="0,26,0,0"/>
-                <Label x:Name="LabelIcons" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="0,52,0,0"/>
-                <Label x:Name="LabelVersion" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56"/>
-                <TextBlock Margin="61,31,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="156"><Hyperlink NavigateUri="https://mahapps.com/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://mahapps.com/" /></Hyperlink></TextBlock>
-                <TextBlock Margin="61,57,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="156"><Hyperlink NavigateUri="https://icons8.de/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://icons8.de/" /></Hyperlink></TextBlock>
-                <Label x:Name="LabelVersion1" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="56,0,0,0"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox Margin="269,10,252,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" Header="{lex:Loc LabelTempPath}">
-            <Grid>
-                <TextBox x:Name="TextBoxTempPath" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="249" Margin="0,10,0,0"/>
-                <Button x:Name="ButtonSelectTempPath" Content="{lex:Loc ButtonSelectBGImage}" HorizontalAlignment="Left" Margin="158,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPath_Click"/>
-                <Button x:Name="ButtonSelectTempPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPathReset_Click"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox Margin="269,264,252,0" Height="80" VerticalAlignment="Top">
-            <Grid>
-                <Label x:Name="LabelProcessPriority" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Normal" Height="28" RenderTransformOrigin="0.393,0.581" Width="107"/>
-                <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="117,0,0,0" VerticalAlignment="Center" Width="117" Height="29">
-                    <ComboBoxItem Content="Normal" IsSelected="True"/>
-                    <ComboBoxItem Content="Below Normal"/>
-                </ComboBox>
-            </Grid>
-        </GroupBox>
-        <GroupBox x:Name="GroupBoxLanguage" Header="{lex:Loc}" Margin="0,264,10,0" Height="80" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="237">
-            <Grid>
-                <ComboBox x:Name="ComboBoxLanguage" HorizontalAlignment="Center" VerticalAlignment="Center" Width="175" SelectedIndex="0" SelectionChanged="ComboBoxLanguage_SelectionChanged">
-                    <ComboBoxItem Content="English"/>
-                    <ComboBoxItem Content="Deutsch (German)"/>
-                    <ComboBoxItem Content="中国人 (Chinese Simplified)"/>
-                    <ComboBoxItem Content="Русский (Russian)"/>
-                    <ComboBoxItem Content="日本語 (Japanese)"/>
-                    <ComboBoxItem Content="Italiano (Italian)"/>
-                    <ComboBoxItem Content="Français (French)"/>
-                </ComboBox>
+        <mah:MetroTabControl Margin="0,0,0,54">
+            <TabItem Header="{lex:Loc ProgramSettings}">
+                <Grid>
+                    <GroupBox Margin="10,10,0,0" Height="311" VerticalAlignment="Top" HorizontalAlignment="Left" Width="496">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="55"/>
+                                <RowDefinition Height="55"/>
+                                <RowDefinition Height="55"/>
+                                <RowDefinition Height="55"/>
+                                <RowDefinition Height="55"/>
+                            </Grid.RowDefinitions>
+                            <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" Header="{lex:Loc}" Height="54" Width="224" HorizontalAlignment="Center"/>
+                            <mah:ToggleSwitch Grid.Row="1" Grid.Column="0" x:Name="ToggleSwitchShutdown" Header="{lex:Loc}" Height="53" Width="224" HorizontalAlignment="Center"/>
+                            <mah:ToggleSwitch Grid.Row="2" Grid.Column="0" x:Name="ToggleSwitchOverrideWorkerCount" Header="{lex:Loc}" Height="53" Width="224" HorizontalAlignment="Center"/>
+                            <mah:ToggleSwitch Grid.Row="3" Grid.Column="0" x:Name="ToggleSwitchLogging" Header="{lex:Loc}" Height="53" Width="224" HorizontalAlignment="Center"/>
+                            <mah:ToggleSwitch Grid.Row="0" Grid.Column="1" x:Name="ToggleSwitchAutoPauseResume" Header="{lex:Loc}" Height="53" Width="224" ToolTip="{lex:Loc ToggleSwitchAutoPauseResumeTooltip}" HorizontalAlignment="Center"/>
+                            <mah:ToggleSwitch Grid.Row="1" Grid.Column="1" x:Name="ToggleSwitchInputSeeking" Header="{lex:Loc}" Height="53" Width="224" ToolTip="Faster PySceneDetect Seeking - chance of frame loss" HorizontalAlignment="Center"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Margin="511,10,10,0" Height="80" VerticalAlignment="Top">
+                        <Grid>
+                            <Label x:Name="LabelProcessPriority" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Normal" Height="28" RenderTransformOrigin="0.393,0.581" Width="107"/>
+                            <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="117,0,0,0" VerticalAlignment="Center" Width="117" Height="29">
+                                <ComboBoxItem Content="Normal" IsSelected="True"/>
+                                <ComboBoxItem Content="Below Normal"/>
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
 
-            </Grid>
-        </GroupBox>
-        <GroupBox Margin="269,137,252,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" Header="{lex:Loc LabelDefaultOutputLocation}">
-            <Grid>
-                <TextBox x:Name="TextBoxDefaultOutPath" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="249" Margin="0,10,0,0"/>
-                <Button x:Name="ButtonSelectDefaultOutPath" Content="{lex:Loc ButtonSelectBGImage}" HorizontalAlignment="Left" Margin="158,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectDefaultOutPath_Click"/>
-                <Button x:Name="ButtonSelectDefaultOutPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectDefaultOutPathReset_Click"/>
-            </Grid>
-        </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Paths">
+                <Grid>
+                    <GroupBox Margin="10,10,0,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" Header="{lex:Loc LabelTempPath}" HorizontalAlignment="Left" Width="299">
+                        <Grid>
+                            <TextBox x:Name="TextBoxTempPath" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="249" Margin="0,10,0,0"/>
+                            <Button x:Name="ButtonSelectTempPath" Content="{lex:Loc ButtonSelectBGImage}" HorizontalAlignment="Left" Margin="158,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPath_Click"/>
+                            <Button x:Name="ButtonSelectTempPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPathReset_Click"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Margin="314,10,0,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" Header="{lex:Loc LabelDefaultOutputLocation}" HorizontalAlignment="Left" Width="299">
+                        <Grid>
+                            <TextBox x:Name="TextBoxDefaultOutPath" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="249" Margin="0,10,0,0"/>
+                            <Button x:Name="ButtonSelectDefaultOutPath" Content="{lex:Loc ButtonSelectBGImage}" HorizontalAlignment="Left" Margin="158,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectDefaultOutPath_Click"/>
+                            <Button x:Name="ButtonSelectDefaultOutPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectDefaultOutPathReset_Click"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{lex:Loc GroupBoxLanguage}">
+                <Grid>
+                    <GroupBox x:Name="GroupBoxLanguage" Header="{lex:Loc}" Margin="0,10,573,0" Height="80" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="237">
+                        <Grid>
+                            <ComboBox x:Name="ComboBoxLanguage" HorizontalAlignment="Center" VerticalAlignment="Center" Width="175" SelectedIndex="0" SelectionChanged="ComboBoxLanguage_SelectionChanged">
+                                <ComboBoxItem Content="English"/>
+                                <ComboBoxItem Content="Deutsch (German)"/>
+                                <ComboBoxItem Content="中国人 (Chinese Simplified)"/>
+                                <ComboBoxItem Content="Русский (Russian)"/>
+                                <ComboBoxItem Content="日本語 (Japanese)"/>
+                                <ComboBoxItem Content="Italiano (Italian)"/>
+                                <ComboBoxItem Content="Français (French)"/>
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{lex:Loc GroupBoxThemeSettings}">
+                <Grid>
+                    <GroupBox x:Name="GroupBoxThemeSettings" Header="{lex:Loc}" Margin="10,10,0,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" HorizontalAlignment="Left" Width="237">
+                        <Grid>
+                            <Label x:Name="LabelAccentTheme" Content="{lex:Loc}" Margin="10,10,118,0" FontSize="12" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
+                            <ComboBox x:Name="ComboBoxAccentTheme" HorizontalAlignment="Left" Margin="114,10,0,0" Width="106" Height="26" VerticalAlignment="Top">
+                                <ComboBoxItem Content="Blue" Foreground="#0767B3" IsSelected="True" />
+                                <ComboBoxItem Content="Red" Foreground="#EA4333" />
+                                <ComboBoxItem Content="Green" Foreground="#80BA45" />
+                                <ComboBoxItem Content="Purple" Foreground="#837AE5" />
+                                <ComboBoxItem Content="Orange" Foreground="#FB8633" />
+                                <ComboBoxItem Content="Lime"  Foreground="#B6D033" />
+                                <ComboBoxItem Content="Emerald" Foreground="#B6CE59" />
+                                <ComboBoxItem Content="Teal" Foreground="#33BCBA" />
+                                <ComboBoxItem Content="Cyan" Foreground="#49B4E8" />
+                                <ComboBoxItem Content="Cobalt" Foreground="#3373F2" />
+                                <ComboBoxItem Content="Indigo" Foreground="#8833FF" />
+                                <ComboBoxItem Content="Violet" Foreground="#BB33FF" />
+                                <ComboBoxItem Content="Pink" Foreground="#F68ED9" />
+                                <ComboBoxItem Content="Magenta" Foreground="#E0338F" />
+                                <ComboBoxItem Content="Crimson" Foreground="#B53351" />
+                                <ComboBoxItem Content="Amber" Foreground="#F3B53B" />
+                                <ComboBoxItem Content="Yellow" Foreground="#FEE538" />
+                                <ComboBoxItem Content="Brown" Foreground="#9B7B56" />
+                                <ComboBoxItem Content="Olive" Foreground="#8A9F83" />
+                                <ComboBoxItem Content="Steel" Foreground="#83919F" />
+                                <ComboBoxItem Content="Mauve" Foreground="#9180A1" />
+                                <ComboBoxItem Content="Taupe" Foreground="#9F9471" />
+                                <ComboBoxItem Content="Sienna" Foreground="#B37557" />
+                            </ComboBox>
+                            <ComboBox x:Name="ComboBoxBaseTheme" HorizontalAlignment="Left" Margin="114,51,0,0" Width="106" Height="26" VerticalAlignment="Top">
+                                <ComboBoxItem Content="Light" IsSelected="True" />
+                                <ComboBoxItem Content="Dark" />
+                            </ComboBox>
+                            <Label x:Name="LabelBaseTheme" Content="{lex:Loc}" Margin="10,51,118,0" FontSize="12" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
 
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox x:Name="GroupBoxBackroundImage" Header="{lex:Loc}" Margin="252,10,0,0" Height="122" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Left" Width="237">
+                        <Grid>
+                            <Button x:Name="ButtonSelectBGImage" Content="{lex:Loc}" HorizontalAlignment="Center" Margin="0,12,0,0" VerticalAlignment="Top" Height="21" Width="150" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectBGImage_Click"/>
+                            <Button x:Name="ButtonResetBGImage" Content="{lex:Loc}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="150" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonResetBGImage_Click"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="About">
+                <Grid>
+                    <GroupBox Margin="10,10,0,0" Height="128" VerticalAlignment="Top" HorizontalAlignment="Left" Width="254">
+                        <Grid>
+
+                            <Label x:Name="LabelTheme" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="0,47,0,0"/>
+                            <Label x:Name="LabelIcons" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="0,71,0,0"/>
+                            <Label x:Name="LabelVersion" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56"/>
+                            <TextBlock Margin="64,52,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="156"><Hyperlink NavigateUri="https://mahapps.com/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="mahapps.com" /></Hyperlink></TextBlock>
+                            <TextBlock Margin="64,76,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="156"><Hyperlink NavigateUri="https://icons8.de/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="icons8.de" /></Hyperlink></TextBlock>
+                            <Label x:Name="LabelVersion1" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="56,0,0,0"/>
+                            <Label x:Name="LabelTheme_Copy" Content="Source:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="56" Margin="0,24,0,0"/>
+                            <TextBlock Margin="64,29,0,0" FontSize="12" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="156"><Hyperlink NavigateUri="https://github.com/Alkl58/NotEnoughAV1Encodes" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="github.com" /></Hyperlink></TextBlock>
+                        </Grid>
+
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </mah:MetroTabControl>
     </Grid>
 </mah:MetroWindow>
