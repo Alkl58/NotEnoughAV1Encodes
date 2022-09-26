@@ -14,6 +14,7 @@ using System.Windows.Media;
 using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Newtonsoft.Json;
+using NotEnoughAV1Encodes.resources.lang;
 using Octokit;
 
 namespace NotEnoughAV1Encodes.Views
