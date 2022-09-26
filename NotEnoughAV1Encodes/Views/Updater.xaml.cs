@@ -579,7 +579,7 @@ namespace NotEnoughAV1Encodes.Views
             }
             else
             {
-                MessageBox.Show("It looks like 7-zip is not downloaded.\r\rPlease download and extract 7-zip to the following path: \r\r" + Path.Combine(CurrentDir, "Apps", "7zip"), "7-zip not detected!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Strings._7ZipNotDetectedMessage + Path.Combine(CurrentDir, "Apps", "7zip"), Strings._7ZipNotDetectedTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
