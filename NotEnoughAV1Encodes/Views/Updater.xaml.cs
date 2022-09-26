@@ -555,22 +555,31 @@ namespace NotEnoughAV1Encodes.Views
         {
             // Extracts the downloaded archives with 7zip
             string zPath = Path.Combine(CurrentDir, "Apps", "7zip", "7za.exe");
-            // change the path and give yours
-            try
+            
+            // detect if we have 7-zip
+            if (File.Exists(zPath))
             {
-                ProcessStartInfo pro = new()
+                // change the path and give yours
+                try
                 {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    CreateNoWindow = true,
-                    FileName = zPath,
-                    Arguments = "x \"" + source + "\" -aoa -o" + '\u0022' + destination + '\u0022'
-                };
-                Process x = Process.Start(pro);
-                x.WaitForExit();
+                    ProcessStartInfo pro = new()
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true,
+                        FileName = zPath,
+                        Arguments = "x \"" + source + "\" -aoa -o" + '\u0022' + destination + '\u0022'
+                    };
+                    Process x = Process.Start(pro);
+                    x.WaitForExit();
+                }
+                catch (Exception Ex)
+                {
+                    MessageBox.Show(Ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            catch (Exception Ex)
+            else
             {
-                MessageBox.Show(Ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("It looks like 7-zip is not downloaded.\r\rPlease download and extract 7-zip to the following path: \r\r" + Path.Combine(CurrentDir, "Apps", "7zip"), "7-zip not detected!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
