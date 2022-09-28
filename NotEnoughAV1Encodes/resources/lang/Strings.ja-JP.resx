@@ -484,4 +484,14 @@
   <data name="ToggleSwitchUsePresetBitDepth" xml:space="preserve">
     <value>プリセットのビット深度を使いますか？</value>
   </data>
+  <data name="7ZipNotDetectedTitle" xml:space="preserve">
+    <value>7-zip not detected!</value>
+  </data>
+  <data name="7ZipNotDetectedMessage" xml:space="preserve">
+    <value>It looks like 7-zip is not downloaded.
+
+Please download and extract 7-zip to the following path:
+
+</value>
+  </data>
 </root>
