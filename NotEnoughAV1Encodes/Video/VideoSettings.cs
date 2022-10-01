@@ -77,10 +77,19 @@
         public int Rav1eTune { get; set; }
 
         // Advanced SVT-AV1 Settings
+
+        /// <summary>Number of tile columns to use, TileCol == log2(x), default changes per resolution</summary>
         public int SvtAv1TileColumns { get; set; }
+        /// <summary>Number of tile rows to use, TileRow == log2(x), default changes per resolution</summary>
         public int SvtAv1TileRows { get; set; }
+        /// <summary>GOP size (frames), use s suffix for seconds (SvtAv1EncApp only) [-2: ~5 seconds, -1: "infinite" only for CRF, 0: == -1]</summary>
         public string SvtAv1KeyInt { get; set; } = "-1";
+        /// <summary>Number of frames in the future to look ahead, beyond minigop, temporal filtering, and rate control [-1: auto]</summary>
         public string SvtAv1Lookahead { get; set; } = "33";
+        /// <summary>Enable film grain [0: off, 1-50: level of denoising for film grain]</summary>
+        public int SvtAv1FilmGrain { get; set; } = 0;
+        /// <summary>Apply denoising when film grain is ON, default is 1 [0: no denoising, film grain data sent in frame header, 1: level of denoising is set by the film-grain parameter]</summary>
+        public int SvtAv1FilmGrainDenoise { get; set; } = 1;
 
         // Advanced VPX-VP9 Settings
         public int Vp9Threads { get; set; } = 5;

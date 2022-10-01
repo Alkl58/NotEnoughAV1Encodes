@@ -278,7 +278,7 @@
                     <GroupBox Header="{lex:Loc TabItemVideo}" HorizontalAlignment="Left" Margin="10,10,0,0" Width="385" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{lex:Loc LabelEncoder}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="111" />
-                            <ComboBox x:Name="ComboBoxVideoEncoder"  HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectedIndex="{Binding Encoder}" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
+                            <ComboBox x:Name="ComboBoxVideoEncoder" SelectedIndex="{Binding Encoder}" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
                                 <ComboBoxItem Content="aom (AV1 FFmpeg)" IsSelected="True" />
                                 <ComboBoxItem Content="rav1e (AV1 FFmpeg)" />
                                 <ComboBoxItem Content="svt-av1 (AV1 FFmpeg)" />
@@ -587,9 +587,16 @@
                                 <ComboBoxItem Content="6" />
                             </ComboBox>
                             <Label x:Name="LabelSVTAV1MaxGOP"  Content="Max GOP Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="85" />
-                            <TextBox x:Name="TextBoxSVTAV1MaxGOP" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding SvtAv1KeyInt}" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="85"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxSVTAV1MaxGOP" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding SvtAv1KeyInt}" ToolTip="GOP size (frames)" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="85"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                             <Label x:Name="LabelSVTAV1Lookahead"  Content="Lookahead:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="56" Canvas.Top="119" />
-                            <TextBox x:Name="TextBoxSVTAV1Lookahead" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding SvtAv1Lookahead}" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="119"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="TextBoxSVTAV1Lookahead" HorizontalAlignment="Left" Height="29" TextWrapping="Wrap" Text="{Binding SvtAv1Lookahead}" ToolTip="Number of frames in the future to look ahead, beyond minigop, temporal filtering, and rate control" VerticalAlignment="Top" Width="90" Canvas.Left="184" Canvas.Top="119"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label x:Name="LabelSVTAV1FilmGrain"  Content="Film Grain:" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="337" Canvas.Top="17" Width="107" />
+                            <TextBox x:Name="TextBoxSVTAV1FilmGrain" HorizontalAlignment="Left" Height="29" Text="{Binding SvtAv1FilmGrain}" ToolTip="Enable film grain [0: off, 1-50: level of denoising for film grain]" PreviewTextInput="NumberValidationTextBox" VerticalAlignment="Top" Width="90" Canvas.Left="468" Canvas.Top="17"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                            <Label x:Name="LabelSVTAV1FilmGrainDenoise"  Content="Film Grain Denoise:" Canvas.Left="337" Canvas.Top="51" Width="128" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <ComboBox x:Name="TextBoxSVTAV1FilmGrainDenoise" SelectedIndex="{Binding SvtAv1FilmGrainDenoise}" ToolTip="Apply denoising when film grain is ON, default is 1 [0: no denoising, film grain data sent in frame header, 1: level of denoising is set by the film-grain parameter]"  HorizontalAlignment="Center" VerticalAlignment="Top" Width="90" Canvas.Left="468" Canvas.Top="51" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" />
+                            </ComboBox>
                         </Canvas>
                         <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="1025" Margin="5,6,0,0">
                             <Canvas.Style>
