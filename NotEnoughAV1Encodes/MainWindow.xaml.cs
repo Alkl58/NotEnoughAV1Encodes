@@ -1496,7 +1496,8 @@ namespace NotEnoughAV1Encodes
                             " -g " + TextBoxSVTAV1MaxGOP.Text +                                              // Keyframe Interval
                             " -la_depth " + TextBoxSVTAV1Lookahead.Text +                                    // Lookahead
                             " -svtav1-params " +
-                            "film-grain=" + TextBoxSVTAV1FilmGrain.Text +                                    // Film Grain
+                            "aq-mode=" + ComboBoxSVTAV1AQMode.Text +                                         // AQ Mode
+                            ":film-grain=" + TextBoxSVTAV1FilmGrain.Text +                                   // Film Grain
                             ":film-grain-denoise=" + TextBoxSVTAV1FilmGrainDenoise.Text;                     // Film Grain Denoise
             }
 
@@ -1676,12 +1677,13 @@ namespace NotEnoughAV1Encodes
             }
             else
             {
-                settings += " --tile-columns " + ComboBoxSVTAV1TileColumns.Text +                            // Tile Columns
-                            " --tile-rows " + ComboBoxSVTAV1TileRows.Text +                                  // Tile Rows
-                            " --keyint " + TextBoxSVTAV1MaxGOP.Text +                                        // Keyframe Interval
-                            " --lookahead " + TextBoxSVTAV1Lookahead.Text +                                  // Lookahead
-                            " --film-grain " + TextBoxSVTAV1FilmGrain.Text +                                 // Film Grain
-                            " --film-grain-denoise " + TextBoxSVTAV1FilmGrainDenoise.Text;                   // Film Grain Denoise                      
+                settings += " --tile-columns " + ComboBoxSVTAV1TileColumns.Text +                             // Tile Columns
+                            " --tile-rows " + ComboBoxSVTAV1TileRows.Text +                                   // Tile Rows
+                            " --keyint " + TextBoxSVTAV1MaxGOP.Text +                                         // Keyframe Interval
+                            " --lookahead " + TextBoxSVTAV1Lookahead.Text +                                   // Lookahead
+                            " --aq-mode " + ComboBoxSVTAV1AQMode.Text +                                       // AQ Mode
+                            " --film-grain " + TextBoxSVTAV1FilmGrain.Text +                                  // Film Grain
+                            " --film-grain-denoise " +  TextBoxSVTAV1FilmGrainDenoise.Text;                   // Film Grain Denoise                      
             }
 
             return settings;

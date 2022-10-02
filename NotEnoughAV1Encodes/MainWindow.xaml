@@ -597,6 +597,12 @@
                                 <ComboBoxItem Content="0" />
                                 <ComboBoxItem Content="1" />
                             </ComboBox>
+                            <Label x:Name="LabelSVTAV1AQMode"  Content="AQ Mode:" Canvas.Left="337" Canvas.Top="85" Width="128" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                            <ComboBox x:Name="ComboBoxSVTAV1AQMode" SelectedIndex="{Binding SvtAv1AqMode}" ToolTip="Set adaptive QP level [0: off, 1: variance base using AV1 segments, 2: deltaq pred efficiency]" Width="90" Canvas.Left="468" Canvas.Top="85" Height="29" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="2" />
+                            </ComboBox>
                         </Canvas>
                         <Canvas HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="1025" Margin="5,6,0,0">
                             <Canvas.Style>

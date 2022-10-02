@@ -86,6 +86,8 @@
         public string SvtAv1KeyInt { get; set; } = "-1";
         /// <summary>Number of frames in the future to look ahead, beyond minigop, temporal filtering, and rate control [-1: auto]</summary>
         public string SvtAv1Lookahead { get; set; } = "33";
+        /// <summary>Set adaptive QP level [0: off, 1: variance base using AV1 segments, 2: deltaq pred efficiency]</summary>
+        public int SvtAv1AqMode { get; set; } = 2;
         /// <summary>Enable film grain [0: off, 1-50: level of denoising for film grain]</summary>
         public int SvtAv1FilmGrain { get; set; } = 0;
         /// <summary>Apply denoising when film grain is ON, default is 1 [0: no denoising, film grain data sent in frame header, 1: level of denoising is set by the film-grain parameter]</summary>
