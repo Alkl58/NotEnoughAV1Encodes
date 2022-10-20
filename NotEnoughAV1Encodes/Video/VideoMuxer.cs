@@ -191,6 +191,10 @@ namespace NotEnoughAV1Encodes.Video
             if (Path.GetExtension(queueElement.VideoDB.OutputPath).ToLower() == ".webm")
             {
                 webmcmd = " --webm ";
+
+                // Skip Subtitles - theoretically WebM supports WebVTT
+                // however we skip it until a better implementation in NEAV1E exists
+                subsMuxCommand = "";
             }
 
             //Run mkvmerge command
