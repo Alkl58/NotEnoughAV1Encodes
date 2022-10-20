@@ -389,7 +389,8 @@ namespace NotEnoughAV1Encodes
                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
                 try
                 {
-                    if (Path.GetExtension(videoDB.OutputPath).ToLower() == ".mp4")
+                    if (Path.GetExtension(videoDB.OutputPath).ToLower() == ".mp4" || 
+                        Path.GetExtension(videoDB.OutputPath).ToLower() == ".webm")
                     {
                         // Disable Subtitles if Output is MP4
                         foreach (Subtitle.SubtitleTracks subtitleTracks in ListBoxSubtitleTracks.Items)
