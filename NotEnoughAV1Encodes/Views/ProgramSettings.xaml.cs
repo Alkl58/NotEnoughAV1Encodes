@@ -50,6 +50,14 @@ namespace NotEnoughAV1Encodes.Views
                 "fr-FR" => 6,
                 _ => 0,
             };
+
+            ComboBoxDefaultOutContainer.SelectedIndex = settingsDB.DefaultOutContainer switch
+            {
+                ".mkv" => 0,
+                ".webm" => 1,
+                ".mp4" => 2,
+                _ => 0,
+            };
         }
 
         private void ButtonSelectBGImage_Click(object sender, RoutedEventArgs e)
@@ -115,6 +123,7 @@ namespace NotEnoughAV1Encodes.Views
             settingsDBTemp.Theme = ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text;
             settingsDBTemp.TempPath = TextBoxTempPath.Text;
             settingsDBTemp.DefaultOutPath = TextBoxDefaultOutPath.Text;
+            settingsDBTemp.DefaultOutContainer = ComboBoxDefaultOutContainer.Text;
             settingsDBTemp.PriorityNormal = ComboBoxProcessPriority.SelectedIndex == 0;
         }
 

@@ -56,15 +56,20 @@
                     <GroupBox Margin="10,10,0,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" Header="{lex:Loc LabelTempPath}" HorizontalAlignment="Left" Width="299">
                         <Grid>
                             <TextBox x:Name="TextBoxTempPath" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="249" Margin="0,10,0,0"/>
-                            <Button x:Name="ButtonSelectTempPath" Content="{lex:Loc ButtonSelectBGImage}" HorizontalAlignment="Left" Margin="158,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPath_Click"/>
-                            <Button x:Name="ButtonSelectTempPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPathReset_Click"/>
+                            <Button x:Name="ButtonSelectTempPath" Content="{lex:Loc ButtonSelectBGImage}" HorizontalAlignment="Left" Margin="168,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPath_Click"/>
+                            <Button x:Name="ButtonSelectTempPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="20,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectTempPathReset_Click"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Margin="314,10,0,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" Header="{lex:Loc LabelDefaultOutputLocation}" HorizontalAlignment="Left" Width="299">
+                    <GroupBox Margin="314,10,0,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" Header="{lex:Loc LabelDefaultOutputLocation}" HorizontalAlignment="Left" Width="430">
                         <Grid>
-                            <TextBox x:Name="TextBoxDefaultOutPath" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="249" Margin="0,10,0,0"/>
-                            <Button x:Name="ButtonSelectDefaultOutPath" Content="{lex:Loc ButtonSelectBGImage}" HorizontalAlignment="Left" Margin="158,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectDefaultOutPath_Click"/>
-                            <Button x:Name="ButtonSelectDefaultOutPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="10,0,0,6" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectDefaultOutPathReset_Click"/>
+                            <TextBox x:Name="TextBoxDefaultOutPath" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="294" Margin="10,10,0,0"/>
+                            <Button x:Name="ButtonSelectDefaultOutPath" Content="{lex:Loc ButtonSelectBGImage}" HorizontalAlignment="Left" Margin="309,0,0,10" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectDefaultOutPath_Click"/>
+                            <Button x:Name="ButtonSelectDefaultOutPathReset" Content="{lex:Loc ButtonResetBGImage}" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Height="21" Width="101" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonSelectDefaultOutPathReset_Click"/>
+                            <ComboBox x:Name="ComboBoxDefaultOutContainer" HorizontalAlignment="Left" Margin="309,10,0,0" VerticalAlignment="Top" Width="101" SelectedIndex="0">
+                                <ComboBoxItem Content=".mkv"/>
+                                <ComboBoxItem Content=".webm"/>
+                                <ComboBoxItem Content=".mp4"/>
+                            </ComboBox>
                         </Grid>
                     </GroupBox>
                 </Grid>

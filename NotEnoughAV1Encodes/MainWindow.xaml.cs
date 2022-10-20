@@ -367,11 +367,26 @@ namespace NotEnoughAV1Encodes
             // Output
             if (!string.IsNullOrEmpty(settingsDB.DefaultOutPath))
             {
-                string outPath = Path.Combine(settingsDB.DefaultOutPath, Path.GetFileNameWithoutExtension(videoDB.InputPath) + ".mkv");
+                string outPath = Path.Combine(settingsDB.DefaultOutPath, Path.GetFileNameWithoutExtension(videoDB.InputPath) + settingsDB.DefaultOutContainer);
 
                 videoDB.OutputPath = outPath;
                 LabelVideoDestination.Content = videoDB.OutputPath;
                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
+
+                try
+                {
+                    if (Path.GetExtension(videoDB.OutputPath).ToLower() == ".mp4" ||
+                        Path.GetExtension(videoDB.OutputPath).ToLower() == ".webm")
+                    {
+                        // Disable Subtitles if Output is MP4
+                        foreach (Subtitle.SubtitleTracks subtitleTracks in ListBoxSubtitleTracks.Items)
+                        {
+                            subtitleTracks.Active = false;
+                            subtitleTracks.Enabled = false;
+                        }
+                    }
+                }
+                catch { }
             }
         }
 
