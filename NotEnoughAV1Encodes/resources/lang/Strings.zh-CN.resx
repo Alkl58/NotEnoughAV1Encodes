@@ -151,7 +151,7 @@
     <value>选择</value>
   </data>
   <data name="ButtonSetPresetDefault" xml:space="preserve">
-    <value>设为默认</value>
+    <value>设置为默认</value>
   </data>
   <data name="ButtonTestSettings" xml:space="preserve">
     <value>测试设置</value>
@@ -217,6 +217,9 @@
   <data name="GroupBoxWorkersAndSplitting" xml:space="preserve">
     <value>工作和分割</value>
   </data>
+  <data name="HDRSettings" xml:space="preserve">
+    <value>HDR 设置</value>
+  </data>
   <data name="LabelAccentTheme" xml:space="preserve">
     <value>皮肤主题：</value>
   </data>
@@ -280,11 +283,17 @@
   <data name="LabelDefault" xml:space="preserve">
     <value>默认：</value>
   </data>
+  <data name="LabelDefaultAudioBehavior" xml:space="preserve">
+    <value>默认音频行为</value>
+  </data>
+  <data name="LabelDefaultOutputLocation" xml:space="preserve">
+    <value>默认输出位置</value>
+  </data>
   <data name="LabelDeinterlace" xml:space="preserve">
     <value>隔行扫描：</value>
   </data>
   <data name="LabelDestination" xml:space="preserve">
-    <value>目的地</value>
+    <value>保存为</value>
   </data>
   <data name="LabelEncodeQueueParallel" xml:space="preserve">
     <value>编码队列并行而不是分块：</value>
@@ -346,6 +355,9 @@
   <data name="LabelRotate" xml:space="preserve">
     <value>旋转（顺时针）：</value>
   </data>
+  <data name="LabelScalingAlgorithm" xml:space="preserve">
+    <value>算法：</value>
+  </data>
   <data name="LabelSelectPresetForEncoding" xml:space="preserve">
     <value>选择预设进行编码：</value>
   </data>
@@ -383,10 +395,10 @@
     <value>版本：</value>
   </data>
   <data name="LabelVideoDestination" xml:space="preserve">
-    <value>未选择目的地</value>
+    <value>未选择保存目标</value>
   </data>
   <data name="LabelVideoDestination1" xml:space="preserve">
-    <value>目的地：</value>
+    <value>保存为：</value>
   </data>
   <data name="LabelVideoSource" xml:space="preserve">
     <value>未选择来源</value>
@@ -433,6 +445,9 @@
   <data name="QueueMenuItemEdit" xml:space="preserve">
     <value>编辑</value>
   </data>
+  <data name="QueueMenuItemOpenOutputDir" xml:space="preserve">
+    <value>打开目标</value>
+  </data>
   <data name="QueueMinLeft" xml:space="preserve">
     <value>剩余分钟</value>
   </data>
@@ -461,13 +476,25 @@
     <value>视频</value>
   </data>
   <data name="TextBoxDestination" xml:space="preserve">
-    <value>未选择目的地</value>
+    <value>未选择目标</value>
+  </data>
+  <data name="ToggleSwitchActivateSubtitles" xml:space="preserve">
+    <value>激活字幕</value>
   </data>
   <data name="ToggleSwitchAdvancedSettings" xml:space="preserve">
     <value>高级设置</value>
   </data>
+  <data name="ToggleSwitchAutoPauseResume" xml:space="preserve">
+    <value>自动暂停/恢复</value>
+  </data>
+  <data name="ToggleSwitchAutoPauseResumeTooltip" xml:space="preserve">
+    <value>如果系统空闲时间超过 1 分钟，自动暂停并恢复编码</value>
+  </data>
   <data name="ToggleSwitchDeleteTempFiles" xml:space="preserve">
     <value>删除临时文件</value>
+  </data>
+  <data name="ToggleSwitchInputSeeking" xml:space="preserve">
+    <value>使用寻求输入方式</value>
   </data>
   <data name="ToggleSwitchLogging" xml:space="preserve">
     <value>日志</value>
@@ -480,5 +507,15 @@
   </data>
   <data name="ToggleSwitchUsePresetBitDepth" xml:space="preserve">
     <value>使用预设的位深度？</value>
+  </data>
+    <data name="7ZipNotDetectedTitle" xml:space="preserve">
+    <value>未检测到 7-zip!</value>
+  </data>
+  <data name="7ZipNotDetectedMessage" xml:space="preserve">
+    <value>看起来 7-zip 没有下载。
+
+请下载并解压 7-zip 到以下路径：
+
+</value>
   </data>
 </root>
