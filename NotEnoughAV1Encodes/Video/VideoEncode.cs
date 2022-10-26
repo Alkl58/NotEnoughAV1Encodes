@@ -108,14 +108,20 @@ namespace NotEnoughAV1Encodes.Video
 
                                 if (queueElement.EncodingMethod > 4)
                                 {
-                                    if (queueElement.EncodingMethod is 5) { passesSettings = " --passes=1 --output="; }
-                                    if (queueElement.EncodingMethod is 6) { passesSettings = " --output "; }
-                                    if (queueElement.EncodingMethod is 7) { passesSettings = " --passes 1 --output "; }
+                                    if (queueElement.EncodingMethod == (int) Encoder.AOMENC) { passesSettings = " --passes=1 --output="; }
+                                    if (queueElement.EncodingMethod == (int) Encoder.RAV1E) { passesSettings = " --output "; }
+                                    if (queueElement.EncodingMethod == (int) Encoder.SVTAV1) { passesSettings = " --passes 1 --output "; }
                                     ChunkOutput = passesSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf") + "\"";
                                 }
-                                if (queueElement.EncodingMethod is 9 or 10)
+
+                                if (queueElement.EncodingMethod is (int) Encoder.X265 or (int) Encoder.X264)
                                 {
                                     ChunkOutput = "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".mp4") + "\"";
+                                }
+
+                                if (queueElement.EncodingMethod == (int) Encoder.QSVAV1)
+                                {
+                                    ChunkOutput = " -o \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm") + "\"";
                                 }
                             }
                             else if (queueElement.Passes == 2)
@@ -128,18 +134,13 @@ namespace NotEnoughAV1Encodes.Video
                                 }
                                 else if(queueElement.EncodingMethod > 4)
                                 {
-                                    if (queueElement.EncodingMethod == 5) { passesSettings = " --passes=2 --pass=1 --fpf="; _NULoutput = " --output=NUL"; }
-                                    if (queueElement.EncodingMethod == 7) { passesSettings = " --pass 1 --stats "; _NULoutput = " --output NUL"; }
-                                    if (queueElement.EncodingMethod == 10)
-                                    {
-                                        passesSettings = " -pass 1 -passlogfile ";
-                                        _NULoutput = " -f mp4 NUL";
-                                    }
+                                    if (queueElement.EncodingMethod == (int) Encoder.AOMENC) { passesSettings = " --passes=2 --pass=1 --fpf="; _NULoutput = " --output=NUL"; }
+                                    if (queueElement.EncodingMethod == (int) Encoder.SVTAV1) { passesSettings = " --pass 1 --stats "; _NULoutput = " --output NUL"; }
+                                    if (queueElement.EncodingMethod == (int) Encoder.X264) { passesSettings = " -pass 1 -passlogfile "; _NULoutput = " -f mp4 NUL"; }
                                 }
 
                                 ChunkOutput = passesSettings + "\"" +  Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\"" + _NULoutput;
                             }
-
 
                             Process processVideo = new();
                             ProcessStartInfo startInfo = new()
@@ -214,12 +215,12 @@ namespace NotEnoughAV1Encodes.Video
                                 }
                                 else if (queueElement.EncodingMethod > 4)
                                 {
-                                    if (queueElement.EncodingMethod == 5) { passesSettings = " --passes=2 --pass=2 --fpf=" + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" --output="; }
-                                    if (queueElement.EncodingMethod == 7) { passesSettings = " --pass 2 --stats " + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" --output "; }
+                                    if (queueElement.EncodingMethod == (int) Encoder.AOMENC) { passesSettings = " --passes=2 --pass=2 --fpf=" + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" --output="; }
+                                    if (queueElement.EncodingMethod == (int) Encoder.SVTAV1) { passesSettings = " --pass 2 --stats " + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" --output "; }
 
                                     ChunkOutput = passesSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf") + "\"";
 
-                                    if (queueElement.EncodingMethod == 10)
+                                    if (queueElement.EncodingMethod == (int) Encoder.X264)
                                     {
                                         passesSettings = " -pass 2 -passlogfile " + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" ";
                                         ChunkOutput = passesSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".mp4") + "\"";

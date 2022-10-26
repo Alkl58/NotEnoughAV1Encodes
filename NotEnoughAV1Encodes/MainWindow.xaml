@@ -278,7 +278,7 @@
                     <GroupBox Header="{lex:Loc TabItemVideo}" HorizontalAlignment="Left" Margin="10,10,0,0" Width="385" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{lex:Loc LabelEncoder}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="111" />
-                            <ComboBox x:Name="ComboBoxVideoEncoder" SelectedIndex="{Binding Encoder}" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
+                            <ComboBox x:Name="ComboBoxVideoEncoder" SelectedIndex="12" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
                                 <ComboBoxItem Content="aom (AV1 FFmpeg)" IsSelected="True" />
                                 <ComboBoxItem Content="rav1e (AV1 FFmpeg)" />
                                 <ComboBoxItem Content="svt-av1 (AV1 FFmpeg)" />
@@ -290,6 +290,8 @@
                                 <Separator />
                                 <ComboBoxItem Content="x265 (HEVC FFmpeg)" />
                                 <ComboBoxItem Content="x264 (AVC FFmpeg)" />
+                                <Separator />
+                                <ComboBoxItem Content="Quick Sync (AV1 Intel HW)" />
                             </ComboBox>
                             <Label Content="{lex:Loc LabelBitDepth}" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top" Width="111" />
                             <ComboBox x:Name="ComboBoxVideoBitDepth" SelectedIndex="{Binding BitDepth}" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoBitDepth_SelectionChanged">
@@ -346,23 +348,232 @@
                     </GroupBox>
                     <GroupBox x:Name="GroupBoxQuality" Header="{lex:Loc}" Margin="10,237,10,10" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <Slider x:Name="SliderQuality" Margin="131,69,192,0" VerticalAlignment="Top" SmallChange="1" Maximum="63" Value="{Binding Quantizer}" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True"/>
-                            <Label Content="{Binding ElementName=SliderQuality, Path=Value, UpdateSourceTrigger=PropertyChanged}" Margin="0,73,93,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78"/>
-                            <Label x:Name="LabelQualityMode" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="18,12,0,0" VerticalAlignment="Top" Width="108"/>
-                            <ComboBox x:Name="ComboBoxQualityMode" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectedIndex="{Binding QualityMode}" SelectionChanged="ComboBoxQualityMode_SelectionChanged">
-                                <ComboBoxItem Content="Constant Quality"/>
-                                <ComboBoxItem Content="Constrained Quality"/>
-                                <ComboBoxItem Content="Average Bitrate"/>
-                                <ComboBoxItem Content="Constrained Bitrate"/>
-                            </ComboBox>
-                            <Label x:Name="LabelQuantizer" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
-                            <Label x:Name="LabelBitrateMin" Content="{lex:Loc}" Visibility="{Binding ElementName=TextBoxMinBitrate, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMinBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
-                            <Label x:Name="LabelBitrateAvg" Content="{lex:Loc}" IsEnabled="{Binding ElementName=TextBoxAVGBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,173,0,0" VerticalAlignment="Top" Width="105" Height="30"/>
-                            <Label x:Name="LabelBitrateMax" Content="{lex:Loc}" Visibility="{Binding ElementName=TextBoxMaxBitrate, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMaxBitrate, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,206,0,0" VerticalAlignment="Top" Width="105" Height="30"/>
-                            <TextBox x:Name="TextBoxMinBitrate" PreviewTextInput="NumberValidationTextBox" Margin="131,142,0,0" Text="{Binding MinBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
-                            <TextBox x:Name="TextBoxAVGBitrate" PreviewTextInput="NumberValidationTextBox" Margin="131,175,0,0" Text="{Binding AvgBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
-                            <TextBox x:Name="TextBoxMaxBitrate" PreviewTextInput="NumberValidationTextBox" Margin="131,208,0,0" Text="{Binding MaxBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
-
+                            <!-- AOM FFmpeg -->
+                            <Canvas HorizontalAlignment="Right" Width="1055">
+                                <Canvas.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="0">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Canvas.Style>
+                                <Slider x:Name="SliderQualityAOMFFMPEG" Value="{Binding AOMFFMPEGQuantizer}" VerticalAlignment="Top" SmallChange="1" Maximum="63" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True" Canvas.Left="131" Canvas.Top="69" Width="520"/>
+                                <Label Content="{Binding ElementName=SliderQualityAOMFFMPEG, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
+                                <Label x:Name="LabelQualityMode" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="18,12,0,0" VerticalAlignment="Top" Width="108"/>
+                                <ComboBox x:Name="ComboBoxQualityMode" SelectedIndex="{Binding AOMFFMPEGQualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityMode_SelectionChanged">
+                                    <ComboBoxItem Content="Constant Quality"/>
+                                    <ComboBoxItem Content="Constrained Quality"/>
+                                    <ComboBoxItem Content="Average Bitrate"/>
+                                    <ComboBoxItem Content="Constrained Bitrate"/>
+                                </ComboBox>
+                                <Label x:Name="LabelQuantizer" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <Label x:Name="LabelBitrateMin" Content="{lex:Loc}" Visibility="{Binding ElementName=TextBoxMinBitrateAOMFFMPEG, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMinBitrateAOMFFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <Label x:Name="LabelBitrateAvg" Content="{lex:Loc}" IsEnabled="{Binding ElementName=TextBoxAVGBitrateAOMFFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,173,0,0" VerticalAlignment="Top" Width="105" Height="30"/>
+                                <Label x:Name="LabelBitrateMax" Content="{lex:Loc}" Visibility="{Binding ElementName=TextBoxMaxBitrateAOMFFMPEG, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMaxBitrateAOMFFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,206,0,0" VerticalAlignment="Top" Width="105" Height="30"/>
+                                <TextBox x:Name="TextBoxMinBitrateAOMFFMPEG" PreviewTextInput="NumberValidationTextBox" Margin="131,142,0,0" Text="{Binding AOMFFMPEGMinBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
+                                <TextBox x:Name="TextBoxAVGBitrateAOMFFMPEG" PreviewTextInput="NumberValidationTextBox" Margin="131,175,0,0" Text="{Binding AOMFFMPEGAvgBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
+                                <TextBox x:Name="TextBoxMaxBitrateAOMFFMPEG" PreviewTextInput="NumberValidationTextBox" Margin="131,208,0,0" Text="{Binding AOMFFMPEGMaxBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
+                            </Canvas>
+                            <!-- RAV1E FFmpeg -->
+                            <Canvas HorizontalAlignment="Right" Width="1055">
+                                <Canvas.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="1">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Canvas.Style>
+                                <Slider x:Name="SliderQualityRAV1EFFMPEG" Value="{Binding RAV1EFFMPEGQuantizer}" VerticalAlignment="Top" SmallChange="1" Maximum="255" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True" Canvas.Left="131" Canvas.Top="69" Width="520"/>
+                                <Label Content="{Binding ElementName=SliderQualityRAV1EFFMPEG, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
+                                <Label Content="{lex:Loc LabelQualityMode}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Height="28" Canvas.Left="18" Canvas.Top="12"/>
+                                <ComboBox x:Name="ComboBoxQualityModeRAV1EFFMPEG" SelectedIndex="{Binding RAV1EFFMPEGQualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityModeRAV1EFFMPEG_SelectionChanged">
+                                    <ComboBoxItem Content="Constant Quality"/>
+                                    <ComboBoxItem Content="Bitrate"/>
+                                </ComboBox>
+                                <Label Content="{lex:Loc LabelQuantizer}" IsEnabled="{Binding ElementName=SliderQualityRAV1EFFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <Label Content="{lex:Loc LabelBitrateAvg}" IsEnabled="{Binding ElementName=TextBoxBitrateRAV1EFFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Height="30" Canvas.Left="21" Canvas.Top="125"/>
+                                <TextBox x:Name="TextBoxBitrateRAV1EFFMPEG" Text="{Binding RAV1EFFMPEGBitrate}" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="127"/>
+                            </Canvas>
+                            <!-- SVTAV1 FFmpeg -->
+                            <Canvas HorizontalAlignment="Right" Width="1055">
+                                <Canvas.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="2">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Canvas.Style>
+                                <Slider x:Name="SliderQualitySVTAV1FFMPEG" Value="{Binding SVTAV1FFMPEGQuantizer}" VerticalAlignment="Top" SmallChange="1" Maximum="63" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True" Canvas.Left="131" Canvas.Top="69" Width="520"/>
+                                <Label Content="{Binding ElementName=SliderQualitySVTAV1FFMPEG, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
+                                <Label Content="{lex:Loc LabelQualityMode}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Height="28" Canvas.Left="18" Canvas.Top="12"/>
+                                <ComboBox x:Name="ComboBoxQualityModeSVTAV1FFMPEG" SelectedIndex="{Binding SVTAV1FFMPEGQualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityModeSVTAV1FFMPEG_SelectionChanged">
+                                    <ComboBoxItem Content="Constant Quality"/>
+                                    <ComboBoxItem Content="Bitrate"/>
+                                </ComboBox>
+                                <Label Content="{lex:Loc LabelQuantizer}" IsEnabled="{Binding ElementName=SliderQualitySVTAV1FFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <Label Content="{lex:Loc LabelBitrateAvg}" IsEnabled="{Binding ElementName=TextBoxBitrateSVTAV1FFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Height="30" Canvas.Left="21" Canvas.Top="125"/>
+                                <TextBox x:Name="TextBoxBitrateSVTAV1FFMPEG" Text="{Binding SVTAV1FFMPEGBitrate}" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="127"/>
+                            </Canvas>
+                            <!-- VP9 FFmpeg -->
+                            <Canvas HorizontalAlignment="Right" Width="1055">
+                                <Canvas.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="3">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Canvas.Style>
+                                <Slider x:Name="SliderQualityVP9FFMPEG" Value="{Binding VP9FFMPEGQuantizer}" VerticalAlignment="Top" SmallChange="1" Maximum="63" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True" Canvas.Left="131" Canvas.Top="69" Width="520"/>
+                                <Label Content="{Binding ElementName=SliderQualityVP9FFMPEG, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
+                                <Label Content="{lex:Loc LabelQualityMode}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Height="28" Canvas.Left="18" Canvas.Top="12"/>
+                                <ComboBox x:Name="ComboBoxQualityModeVP9FFMPEG" SelectedIndex="{Binding VP9FFMPEGQualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityModeVP9FFMPEG_SelectionChanged">
+                                    <ComboBoxItem Content="Constant Quality"/>
+                                    <ComboBoxItem Content="Constrained Quality"/>
+                                    <ComboBoxItem Content="Average Bitrate"/>
+                                    <ComboBoxItem Content="Constrained Bitrate"/>
+                                </ComboBox>
+                                <Label Content="{lex:Loc LabelQuantizer}" IsEnabled="{Binding ElementName=SliderQualityVP9FFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <Label Content="{lex:Loc LabelBitrateMin}" Visibility="{Binding ElementName=TextBoxMinBitrateVP9FFMPEG, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMinBitrateVP9FFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <Label Content="{lex:Loc LabelBitrateAvg}" IsEnabled="{Binding ElementName=TextBoxAVGBitrateVP9FFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,173,0,0" VerticalAlignment="Top" Width="105" Height="30"/>
+                                <Label Content="{lex:Loc LabelBitrateMax}" Visibility="{Binding ElementName=TextBoxMaxBitrateVP9FFMPEG, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMaxBitrateVP9FFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,206,0,0" VerticalAlignment="Top" Width="105" Height="30"/>
+                                <TextBox x:Name="TextBoxMinBitrateVP9FFMPEG" PreviewTextInput="NumberValidationTextBox" Margin="131,142,0,0" Text="{Binding VP9FFMPEGMinBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
+                                <TextBox x:Name="TextBoxAVGBitrateVP9FFMPEG" PreviewTextInput="NumberValidationTextBox" Margin="131,175,0,0" Text="{Binding VP9FFMPEGAvgBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
+                                <TextBox x:Name="TextBoxMaxBitrateVP9FFMPEG" PreviewTextInput="NumberValidationTextBox" Margin="131,208,0,0" Text="{Binding VP9FFMPEGMaxBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
+                            </Canvas>
+                            <!-- aomenc -->
+                            <Canvas HorizontalAlignment="Right" Width="1055">
+                                <Canvas.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="5">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Canvas.Style>
+                                <Slider x:Name="SliderQualityAOMENC" Value="{Binding AOMENCQuantizer}" VerticalAlignment="Top" SmallChange="1" Maximum="63" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True" Canvas.Left="131" Canvas.Top="69" Width="520"/>
+                                <Label Content="{Binding ElementName=SliderQualityAOMENC, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
+                                <Label Content="{lex:Loc LabelQualityMode}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Height="28" Canvas.Left="18" Canvas.Top="12"/>
+                                <ComboBox x:Name="ComboBoxQualityModeAOMENC" SelectedIndex="{Binding AOMENCQualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityModeAOMENC_SelectionChanged">
+                                    <ComboBoxItem Content="Constant Quality"/>
+                                    <ComboBoxItem Content="Constrained Quality"/>
+                                    <ComboBoxItem Content="Variable Bitrate"/>
+                                    <ComboBoxItem Content="Constant Bitrate"/>
+                                </ComboBox>
+                                <Label Content="{lex:Loc LabelQuantizer}" IsEnabled="{Binding ElementName=SliderQualityAOMENC, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <Label Content="Bitrate:" Visibility="{Binding ElementName=TextBoxBitrateAOMENC, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxBitrateAOMENC, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <TextBox x:Name="TextBoxBitrateAOMENC" PreviewTextInput="NumberValidationTextBox" Margin="131,142,0,0" Text="{Binding AOMENCBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
+                            </Canvas>
+                            <!-- rav1e -->
+                            <Canvas HorizontalAlignment="Right" Width="1055">
+                                <Canvas.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="6">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Canvas.Style>
+                                <Slider x:Name="SliderQualityRAV1E" Value="{Binding RAV1EQuantizer}" VerticalAlignment="Top" SmallChange="1" Maximum="255" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True" Canvas.Left="131" Canvas.Top="69" Width="520"/>
+                                <Label Content="{Binding ElementName=SliderQualityRAV1E, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
+                                <Label Content="{lex:Loc LabelQualityMode}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Height="28" Canvas.Left="18" Canvas.Top="12"/>
+                                <ComboBox x:Name="ComboBoxQualityModeRAV1E" SelectedIndex="{Binding RAV1EQualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityModeRAV1E_SelectionChanged">
+                                    <ComboBoxItem Content="Constant Quality"/>
+                                    <ComboBoxItem Content="Bitrate"/>
+                                </ComboBox>
+                                <Label Content="{lex:Loc LabelQuantizer}" IsEnabled="{Binding ElementName=SliderQualityRAV1E, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <Label Content="{lex:Loc LabelBitrateAvg}" IsEnabled="{Binding ElementName=TextBoxBitrateRAV1E, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Height="30" Canvas.Left="21" Canvas.Top="125"/>
+                                <TextBox x:Name="TextBoxBitrateRAV1E" Text="{Binding RAV1EBitrate}" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="127"/>
+                            </Canvas>
+                            <!-- svt-av1 -->
+                            <Canvas HorizontalAlignment="Right" Width="1055">
+                                <Canvas.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="7">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Canvas.Style>
+                                <Slider x:Name="SliderQualitySVTAV1" Value="{Binding SVTAV1Quantizer}" VerticalAlignment="Top" SmallChange="1" Maximum="63" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True" Canvas.Left="131" Canvas.Top="69" Width="520"/>
+                                <Label Content="{Binding ElementName=SliderQualitySVTAV1, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
+                                <Label Content="{lex:Loc LabelQualityMode}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Height="28" Canvas.Left="18" Canvas.Top="12"/>
+                                <ComboBox x:Name="ComboBoxQualityModeSVTAV1" SelectedIndex="{Binding SVTAV1QualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityModeSVTAV1_SelectionChanged">
+                                    <ComboBoxItem Content="Constant Quality"/>
+                                    <ComboBoxItem Content="Bitrate"/>
+                                </ComboBox>
+                                <Label Content="{lex:Loc LabelQuantizer}" IsEnabled="{Binding ElementName=SliderQualitySVTAV1, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <Label Content="{lex:Loc LabelBitrateAvg}" IsEnabled="{Binding ElementName=TextBoxBitrateSVTAV1, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Height="30" Canvas.Left="21" Canvas.Top="125"/>
+                                <TextBox x:Name="TextBoxBitrateSVTAV1" Text="{Binding SVTAV1Bitrate}" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="127"/>
+                            </Canvas>
+                            <!-- x264 / x265 -->
+                            <Canvas HorizontalAlignment="Right" Width="1055">
+                                <Canvas.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="9">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="10">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Canvas.Style>
+                                <Slider x:Name="SliderQualityX26x" Value="{Binding X26xQuantizer}" VerticalAlignment="Top" SmallChange="1" Maximum="51" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True" Canvas.Left="131" Canvas.Top="69" Width="520"/>
+                                <Label Content="{Binding ElementName=SliderQualityX26x, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
+                                <Label Content="{lex:Loc LabelQualityMode}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Height="28" Canvas.Left="18" Canvas.Top="12"/>
+                                <ComboBox x:Name="ComboBoxQualityModeX26x" SelectedIndex="{Binding X26xQualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityModeX26x_SelectionChanged">
+                                    <ComboBoxItem Content="CRF - Constant Rate Factor"/>
+                                    <ComboBoxItem Content="Bitrate"/>
+                                </ComboBox>
+                                <Label Content="{lex:Loc LabelQuantizer}" IsEnabled="{Binding ElementName=SliderQualityX26x, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <Label Content="{lex:Loc LabelBitrateAvg}" IsEnabled="{Binding ElementName=TextBoxBitrateX26x, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Height="30" Canvas.Left="21" Canvas.Top="125"/>
+                                <TextBox x:Name="TextBoxBitrateX26x" Text="{Binding X26xBitrate}" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="127"/>
+                            </Canvas>
+                            <!-- QuickSync AV1 -->
+                            <Canvas HorizontalAlignment="Right" Width="1055">
+                                <Canvas.Style>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxVideoEncoder}" Value="12">
+                                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Canvas.Style>
+                                <Slider x:Name="SliderQualityQSVAV1" Value="{Binding QSVAV1Quantizer}" VerticalAlignment="Top" SmallChange="1" Maximum="63" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True" Canvas.Left="131" Canvas.Top="69" Width="520"/>
+                                <Label Content="{Binding ElementName=SliderQualityQSVAV1, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
+                                <Label Content="{lex:Loc LabelQualityMode}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Height="28" Canvas.Left="18" Canvas.Top="12"/>
+                                <ComboBox x:Name="ComboBoxQualityModeQSVAV1" SelectedIndex="{Binding QSVAV1QualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityModeQSVAV1_SelectionChanged">
+                                    <ComboBoxItem Content="CQP - Constant QP"/>
+                                    <ComboBoxItem Content="ICQ - Intelligent Constant Quality"/>
+                                    <ComboBoxItem Content="VBR - Variable Bitrate"/>
+                                    <ComboBoxItem Content="CBR - Constant Bitrate"/>
+                                </ComboBox>
+                                <Label Content="{lex:Loc LabelQuantizer}" IsEnabled="{Binding ElementName=SliderQualityQSVAV1, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
+                                <Label Content="{lex:Loc LabelBitrateAvg}" IsEnabled="{Binding ElementName=TextBoxBitrateQSVAV1, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Height="30" Canvas.Left="21" Canvas.Top="125"/>
+                                <TextBox x:Name="TextBoxBitrateQSVAV1" Text="{Binding QSVAV1Bitrate}" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="127"/>
+                            </Canvas>
                         </Grid>
                     </GroupBox>
                 </Grid>

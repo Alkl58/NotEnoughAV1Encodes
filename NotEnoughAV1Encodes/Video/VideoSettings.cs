@@ -18,6 +18,55 @@
         public string CustomSettings { get; set; }
         public string PresetBatchName { get; set; } = "{filename}";
 
+        // Video Quality Settings AOM FFMPEG
+        public int AOMFFMPEGQualityMode { get; set; }
+        public int AOMFFMPEGQuantizer { get; set; } = 25;
+        public string AOMFFMPEGMinBitrate { get; set; } = "500";
+        public string AOMFFMPEGMaxBitrate { get; set; } = "1500";
+        public string AOMFFMPEGAvgBitrate { get; set; } = "1000";
+
+        // Video Quality Settings RAV1E FFMPEG
+        public int RAV1EFFMPEGQualityMode { get; set; }
+        public int RAV1EFFMPEGQuantizer { get; set; } = 80;
+        public string RAV1EFFMPEGBitrate { get; set; } = "1500";
+
+        // Video Quality Settings SVT-AV1 FFMPEG
+        public int SVTAV1FFMPEGQualityMode { get; set; }
+        public int SVTAV1FFMPEGQuantizer { get; set; } = 40;
+        public string SVTAV1FFMPEGBitrate { get; set; } = "1500";
+
+        // Video Quality Settings VP9 FFMPEG
+        public int VP9FFMPEGQualityMode { get; set; }
+        public int VP9FFMPEGQuantizer { get; set; } = 25;
+        public string VP9FFMPEGMinBitrate { get; set; } = "1000";
+        public string VP9FFMPEGMaxBitrate { get; set; } = "2000";
+        public string VP9FFMPEGAvgBitrate { get; set; } = "1500";
+
+        // Video Quality Settings Aomenc
+        public int AOMENCQualityMode { get; set; }
+        public int AOMENCQuantizer { get; set; } = 25;
+        public string AOMENCBitrate { get; set; } = "1500";
+
+        // Video Quality Settings Rav1e
+        public int RAV1EQualityMode { get; set; }
+        public int RAV1EQuantizer { get; set; } = 80;
+        public string RAV1EBitrate { get; set; } = "1500";
+
+        // Video Quality Settings SVT-AV1
+        public int SVTAV1QualityMode { get; set; }
+        public int SVTAV1Quantizer { get; set; } = 40;
+        public string SVTAV1Bitrate { get; set; } = "1500";
+
+        // Video Quality Settings x265 x264
+        public int X26xQualityMode { get; set; }
+        public int X26xQuantizer { get; set; } = 18;
+        public string X26xBitrate { get; set; } = "3500";
+
+        // Video Quality Settings QSV AV1
+        public int QSVAV1QualityMode { get; set; }
+        public int QSVAV1Quantizer { get; set; } = 24;
+        public string QSVAV1Bitrate { get; set; } = "2000";
+
         // Audio
         public int AudioCodecMono { get; set; } = 0;
         public int AudioBitrateMono { get; set; } = 64;
