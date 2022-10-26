@@ -60,6 +60,7 @@ namespace NotEnoughAV1Encodes.Audio
                 }
                 else
                 {
+                    queueElement.Error = true;
                     Global.Logger("FATAL - EncodeAudio.Encode() => ExitCode: " + processAudio.ExitCode, queueElement.Output + ".log");
                     Global.Logger("==========================================================" + stderr, queueElement.Output + ".log");
                     Global.Logger("==========================================================", queueElement.Output + ".log");

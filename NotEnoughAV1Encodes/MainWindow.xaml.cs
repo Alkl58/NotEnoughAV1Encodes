@@ -2084,6 +2084,23 @@ namespace NotEnoughAV1Encodes
             Dispatcher.Invoke(() => TaskbarItemInfo.ProgressValue = 1.0);
             Dispatcher.Invoke(() => TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Paused);
 
+            // Remove Tasks from Queue if enabled in settings
+            if (settingsDB.AutoClearQueue)
+            {
+                List<Queue.QueueElement> queueItems = new();
+                foreach(Queue.QueueElement queueElement in ListBoxQueue.Items)
+                {
+                    if (queueElement == null) continue;
+                    // Skip Item if there was some error during encoding / muxing
+                    if (queueElement.Error == true) continue;
+                    queueItems.Add(queueElement);
+                }
+                foreach(Queue.QueueElement queueElement in queueItems)
+                {
+                    ListBoxQueue.Items.Remove(queueElement);
+                }
+            }
+
             Shutdown();
         }
         #endregion

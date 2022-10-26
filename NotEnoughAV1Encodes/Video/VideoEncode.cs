@@ -290,6 +290,7 @@ namespace NotEnoughAV1Encodes.Video
                             }
                             else
                             {
+                                queueElement.Error = true;
                                 Global.Logger("FATAL - VideoEncode.Encode() => Exit Code: " + processVideo.ExitCode + "  Chunk: " + chunk, queueElement.Output + ".log");
                             }
                         }

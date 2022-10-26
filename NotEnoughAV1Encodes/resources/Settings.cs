@@ -27,6 +27,8 @@ namespace NotEnoughAV1Encodes
         public string DefaultOutContainer { get; set; } = ".mkv";
         /// <summary>Toggles Logging functionality</summary>
         public bool Logging { get; set; } = true;
+        /// <summary>Toggles wether or not to clear the queue automatically</summary>
+        public bool AutoClearQueue { get; set; } = true;
         /// <summary>Toggles Auto Resume Pause functionality</summary>
         public bool AutoResumePause { get; set; } = false;
         /// <summary>Toggles Process Priority (false => low)</summary>

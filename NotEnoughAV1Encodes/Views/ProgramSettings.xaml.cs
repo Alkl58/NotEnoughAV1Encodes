@@ -24,6 +24,7 @@ namespace NotEnoughAV1Encodes.Views
             ToggleSwitchInputSeeking.IsOn = settingsDB.UseInputSeeking;
             ToggleSwitchShutdown.IsOn = settingsDB.ShutdownAfterEncode;
             ToggleSwitchLogging.IsOn = settingsDB.Logging;
+            ToggleSwitchClearQueue.IsOn = settingsDB.AutoClearQueue;
             ComboBoxAccentTheme.SelectedIndex = settingsDB.AccentTheme;
             ComboBoxBaseTheme.SelectedIndex = settingsDB.BaseTheme;
             TextBoxTempPath.Text = settingsDB.TempPath;
@@ -118,6 +119,7 @@ namespace NotEnoughAV1Encodes.Views
             settingsDBTemp.UseInputSeeking = ToggleSwitchInputSeeking.IsOn;
             settingsDBTemp.ShutdownAfterEncode = ToggleSwitchShutdown.IsOn;
             settingsDBTemp.Logging = ToggleSwitchLogging.IsOn;
+            settingsDBTemp.AutoClearQueue = ToggleSwitchClearQueue.IsOn;
             settingsDBTemp.BaseTheme = ComboBoxBaseTheme.SelectedIndex;
             settingsDBTemp.AccentTheme = ComboBoxAccentTheme.SelectedIndex;
             settingsDBTemp.Theme = ComboBoxBaseTheme.Text + "." + ComboBoxAccentTheme.Text;

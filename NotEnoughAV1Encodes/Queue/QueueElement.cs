@@ -51,6 +51,8 @@ namespace NotEnoughAV1Encodes.Queue
         public bool TwoProgressbars { get => Passes > 1; }
         /// <summary>If Video should be handled as VFR.</summary>
         public bool VFR { get; set; }
+        /// <summary>If true, then there was some Error during the process.</summary>
+        public bool Error { get; set; }
         /// <summary>PySceneDetect Threshold (after Decimal).</summary>
         public float PySceneDetectThreshold { get; set; }
         /// <summary>Framecount of Source Video.</summary>

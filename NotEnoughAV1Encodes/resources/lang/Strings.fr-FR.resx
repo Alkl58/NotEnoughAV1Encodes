@@ -496,6 +496,9 @@
   <data name="ToggleSwitchLogging" xml:space="preserve">
     <value>Journaux</value>
   </data>
+  <data name="ToggleSwitchClearQueue" xml:space="preserve">
+    <value>Vider automatiquement la file d'attente</value>
+  </data>
   <data name="ToggleSwitchOverrideWorkerCount" xml:space="preserve">
     <value>Autoriser process +</value>
   </data>
