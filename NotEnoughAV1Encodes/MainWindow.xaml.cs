@@ -935,6 +935,14 @@ namespace NotEnoughAV1Encodes
                 SliderQualityX26x.IsEnabled = false;
                 TextBoxBitrateX26x.IsEnabled = true;
             }
+            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.X264 && ComboBoxQualityModeX26x.SelectedIndex == 1)
+            {
+                CheckBoxTwoPassEncoding.IsEnabled = true;
+            }
+            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.X264 && ComboBoxQualityModeX26x.SelectedIndex != 1)
+            {
+                CheckBoxTwoPassEncoding.IsEnabled = false;
+            }
         }
 
         private void ComboBoxQualityModeQSVAV1_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -963,7 +971,12 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxTwoPassEncoding_Checked(object sender, RoutedEventArgs e)
         {
-            if (ComboBoxVideoEncoder.SelectedIndex is 2 or 7 && ComboBoxQualityMode.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
+            if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoder.SVTAV1 && ComboBoxQualityModeSVTAV1.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
+            {
+                CheckBoxTwoPassEncoding.IsOn = false;
+            }
+
+            if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoder.SVTAV1FFMPEG && ComboBoxQualityModeSVTAV1FFMPEG.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
             {
                 CheckBoxTwoPassEncoding.IsOn = false;
             }

@@ -93,6 +93,22 @@
         public int FilterRotateIndex { get; set; }
         public int FilterDeinterlaceIndex { get; set; }
 
+        // HDR
+        public string MasteringGx { get; set; }
+        public string MasteringGy { get; set; }
+        public string MasteringBx { get; set; }
+        public string MasteringBy { get; set; }
+        public string MasteringRx { get; set; }
+        public string MasteringRy { get; set; }
+        public string MasteringWPx { get; set; }
+        public string MasteringWPy { get; set; }
+        public bool HDR { get; set; }
+        public bool MasteringDisplay { get; set; }
+        public bool WhiteMasteringDisplay { get; set; }
+        public bool MaxContentLight { get; set; }
+        public bool Luminance { get; set; }
+        public bool MaxFrameLight { get; set; }
+
         // Advanced Aomenc Settings
         public bool AomencRTMode { get; set; }
         public int AomencThreads { get; set; } = 3;
