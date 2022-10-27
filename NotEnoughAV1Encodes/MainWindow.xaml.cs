@@ -392,9 +392,17 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonSetDestination_Click(object sender, RoutedEventArgs e)
         {
+            string fileName = "";
+
+            if (!string.IsNullOrEmpty(videoDB.InputPath))
+            {
+                fileName = videoDB.InputFileName;
+            }
+
             SaveFileDialog saveVideoFileDialog = new()
             {
-                Filter = "MKV Video|*.mkv|WebM Video|*.webm|MP4 Video|*.mp4"
+                Filter = "MKV Video|*.mkv|WebM Video|*.webm|MP4 Video|*.mp4",
+                FileName = fileName
             };
 
             if (saveVideoFileDialog.ShowDialog() == true)
