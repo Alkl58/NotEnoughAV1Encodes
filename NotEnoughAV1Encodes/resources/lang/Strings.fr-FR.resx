@@ -527,6 +527,9 @@ Please download and extract 7-zip to the following path:
   <data name="FinishedEncoding" xml:space="preserve">
     <value>Encodage terminé - Temps écoulé</value>
   </data>
+  <data name="MessageSameInputOutput" xml:space="preserve">
+    <value>Les chemins d'entrée et de sortie des fichiers sont les mêmes!</value>
+  </data>
   <data name="MuxingErrorDetected" xml:space="preserve">
     <value>Erreur de multiplexage possible</value>
   </data>

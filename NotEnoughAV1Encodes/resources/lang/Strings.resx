@@ -536,4 +536,7 @@ Please download and extract 7-zip to the following path:
   <data name="FinishedEncoding" xml:space="preserve">
     <value>Finished Encoding - Elapsed Time</value>
   </data>
+  <data name="MessageSameInputOutput" xml:space="preserve">
+    <value>Input and Output Path are the same!</value>
+  </data>
 </root>

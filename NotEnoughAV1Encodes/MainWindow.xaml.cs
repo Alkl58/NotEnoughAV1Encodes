@@ -1257,6 +1257,13 @@ namespace NotEnoughAV1Encodes
                 return;
             }
 
+            if (videoDB.InputPath == videoDB.OutputPath)
+            {
+                // Throw Error
+                MessageBox.Show(LocalizedStrings.Instance["MessageSameInputOutput"], LocalizedStrings.Instance["Error"], MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             Queue.QueueElement queueElement = new();
             Audio.CommandGenerator audioCommandGenerator = new();
             Subtitle.CommandGenerator subCommandGenerator = new();
