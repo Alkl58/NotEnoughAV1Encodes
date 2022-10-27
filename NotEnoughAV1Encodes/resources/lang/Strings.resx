@@ -521,4 +521,19 @@ Please download and extract 7-zip to the following path:
 
 </value>
   </data>
+  <data name="ErrorsDetected" xml:space="preserve">
+    <value>Error(s) detected. Please check log file! Temp Files have not been deleted!</value>
+  </data>
+  <data name="OutputErrorDetected" xml:space="preserve">
+    <value>Error: No Output detected</value>
+  </data>
+  <data name="MuxingErrorDetected" xml:space="preserve">
+    <value>Possible Muxing Error</value>
+  </data>
+  <data name="DeleteErrorDetected" xml:space="preserve">
+    <value>Error Deleting Temp Files</value>
+  </data>
+  <data name="FinishedEncoding" xml:space="preserve">
+    <value>Finished Encoding - Elapsed Time</value>
+  </data>
 </root>

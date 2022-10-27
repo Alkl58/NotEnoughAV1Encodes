@@ -244,6 +244,7 @@ namespace NotEnoughAV1Encodes.Video
                 else
                 {
                     queueElement.Error = true;
+                    queueElement.ErrorCount += 1;
                     Global.Logger("FATAL - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Exit Code: " + exit_code, queueElement.Output + ".log");
                     Global.Logger("==========================================================" + stderr, queueElement.Output + ".log");
                     Global.Logger("==========================================================", queueElement.Output + ".log");

@@ -518,4 +518,19 @@ Please download and extract 7-zip to the following path:
 
 </value>
   </data>
+  <data name="DeleteErrorDetected" xml:space="preserve">
+    <value>Erreur de suppression des fichiers temporaires</value>
+  </data>
+  <data name="ErrorsDetected" xml:space="preserve">
+    <value>Erreur(s) détectée(s). Veuillez vérifier le fichier journal ! Les fichiers temporaires n'ont pas été supprimés!</value>
+  </data>
+  <data name="FinishedEncoding" xml:space="preserve">
+    <value>Encodage terminé - Temps écoulé</value>
+  </data>
+  <data name="MuxingErrorDetected" xml:space="preserve">
+    <value>Erreur de multiplexage possible</value>
+  </data>
+  <data name="OutputErrorDetected" xml:space="preserve">
+    <value>Erreur : Aucune sortie de fichier détectée</value>
+  </data>
 </root>

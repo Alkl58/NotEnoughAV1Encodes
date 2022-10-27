@@ -53,6 +53,8 @@ namespace NotEnoughAV1Encodes.Queue
         public bool VFR { get; set; }
         /// <summary>If true, then there was some Error during the process.</summary>
         public bool Error { get; set; }
+        /// <summary>Amount of Errors</summary>
+        public int ErrorCount { get; set; } = 0;
         /// <summary>PySceneDetect Threshold (after Decimal).</summary>
         public float PySceneDetectThreshold { get; set; }
         /// <summary>Framecount of Source Video.</summary>

@@ -218,6 +218,7 @@ namespace NotEnoughAV1Encodes.Video
             if (processMKVMerge.ExitCode != 0)
             {
                 queueElement.Error = true;
+                queueElement.ErrorCount += 1;
                 Global.Logger("FATAL - VideoMuxer.Concat() => Exit Code: " + processMKVMerge.ExitCode, queueElement.Output + ".log");
                 Global.Logger("FATAL - VideoMuxer.Concat() => STDOUT: " + _output, queueElement.Output + ".log");
             }

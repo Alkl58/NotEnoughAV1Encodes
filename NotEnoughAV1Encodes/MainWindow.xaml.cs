@@ -1353,33 +1353,39 @@ namespace NotEnoughAV1Encodes
 
         private void DeleteTempFiles(Queue.QueueElement queueElement, DateTime startTime)
         {
+            string errorText = "";
+            if (queueElement.Error)
+            {
+                errorText = " - " + queueElement.ErrorCount.ToString() + " " + LocalizedStrings.Instance["ErrorsDetected"];
+            }
+
             if (!File.Exists(queueElement.VideoDB.OutputPath)) {
-                queueElement.Status = "Error: No Output detected";
+                queueElement.Status = LocalizedStrings.Instance["OutputErrorDetected"] + errorText;
                 return;
             }
 
             FileInfo videoOutput = new(queueElement.VideoDB.OutputPath);
             if (videoOutput.Length <= 50000) {
-                queueElement.Status = "Possible Muxing Error";
+                queueElement.Status = LocalizedStrings.Instance["MuxingErrorDetected"] + errorText;
                 return;
             }
 
             TimeSpan timespent = DateTime.Now - startTime;
             try {
-                queueElement.Status = "Finished Encoding - Elapsed Time " + timespent.ToString("hh\\:mm\\:ss") + " - avg " + Math.Round(queueElement.FrameCount / timespent.TotalSeconds, 2) + "fps";
+                queueElement.Status = LocalizedStrings.Instance["FinishedEncoding"] + " " + timespent.ToString("hh\\:mm\\:ss") + " - avg " + Math.Round(queueElement.FrameCount / timespent.TotalSeconds, 2) + "fps" + errorText;
             }
             catch
             {
-                queueElement.Status = "Finished Encoding - Elapsed Time " + timespent.ToString("hh\\:mm\\:ss") + " - Error calculating average FPS";
+                queueElement.Status = LocalizedStrings.Instance["FinishedEncoding"] + " " + timespent.ToString("hh\\:mm\\:ss") + " - Error calculating average FPS" + errorText;
             }
 
 
-            if (settingsDB.DeleteTempFiles) {
+            if (settingsDB.DeleteTempFiles && queueElement.Error == false) {
                 try {
                     DirectoryInfo tmp = new(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier));
                     tmp.Delete(true);
                 } catch {
-                    queueElement.Status = "Error Deleting Temp Files";
+                    queueElement.Status = LocalizedStrings.Instance["DeleteErrorDetected"] + errorText;
                 }
             }
         }
