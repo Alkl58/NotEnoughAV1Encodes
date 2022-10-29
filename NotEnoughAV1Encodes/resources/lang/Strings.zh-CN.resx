@@ -499,6 +499,9 @@
   <data name="ToggleSwitchLogging" xml:space="preserve">
     <value>日志</value>
   </data>
+    <data name="ToggleSwitchClearQueue" xml:space="preserve">
+    <value>自动清除队列</value>
+  </data>
   <data name="ToggleSwitchOverrideWorkerCount" xml:space="preserve">
     <value>覆盖工作数量</value>
   </data>
@@ -517,5 +520,23 @@
 请下载并解压 7-zip 到以下路径：
 
 </value>
+  </data>
+  <data name="ErrorsDetected" xml:space="preserve">
+    <value>检测到错误。请检查日志文件! 临时文件没有被删除!</value>
+  </data>
+  <data name="OutputErrorDetected" xml:space="preserve">
+    <value>错误：没有检测到输出</value>
+  </data>
+  <data name="MuxingErrorDetected" xml:space="preserve">
+    <value>可能多路传输错误</value>
+  </data>
+  <data name="DeleteErrorDetected" xml:space="preserve">
+    <value>删除临时文件错误</value>
+  </data>
+  <data name="FinishedEncoding" xml:space="preserve">
+    <value>编码完成 - 使用时间</value>
+  </data>
+  <data name="MessageSameInputOutput" xml:space="preserve">
+    <value>输入和输出路径是一样的!</value>
   </data>
 </root>
