@@ -3,7 +3,6 @@
     public class VideoSettings
     {
         public int Encoder { get; set; }
-        public int BitDepth { get; set; }
         public int ColorFormat { get; set; }
         public int FrameRate { get; set; }
         public int SpeedPreset { get; set; } = 5;
@@ -17,6 +16,12 @@
         public bool CustomSettingsActive { get; set; }
         public string CustomSettings { get; set; }
         public string PresetBatchName { get; set; } = "{filename}";
+
+        // Video Bit-Depth
+        /// <summary>Bit-Depth Setting for Encoders</summary>
+        public int BitDepth { get; set; }
+        /// <summary>Bit-Depth Setting for Encoders who go only up to 10bit</summary>
+        public int BitDepthLimited { get; set; }
 
         // Video Quality Settings AOM FFMPEG
         public int AOMFFMPEGQualityMode { get; set; }

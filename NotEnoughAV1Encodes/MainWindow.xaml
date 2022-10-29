@@ -294,10 +294,14 @@
                                 <ComboBoxItem Content="Quick Sync (AV1 Intel HW)" />
                             </ComboBox>
                             <Label Content="{lex:Loc LabelBitDepth}" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top" Width="111" />
-                            <ComboBox x:Name="ComboBoxVideoBitDepth" SelectedIndex="{Binding BitDepth}" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoBitDepth_SelectionChanged">
+                            <ComboBox x:Name="ComboBoxVideoBitDepth" SelectedIndex="{Binding BitDepth}" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center">
                                 <ComboBoxItem Content="8" IsSelected="True" />
                                 <ComboBoxItem Content="10" />
                                 <ComboBoxItem Content="12" />
+                            </ComboBox>
+                            <ComboBox x:Name="ComboBoxVideoBitDepthLimited" SelectedIndex="{Binding BitDepthLimited}" Visibility="Collapsed" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="8" IsSelected="True" />
+                                <ComboBoxItem Content="10" />
                             </ComboBox>
                             <Label Content="{lex:Loc LabelColorFormat}" HorizontalAlignment="Left" Margin="19,95,0,0" VerticalAlignment="Top" Height="30" Width="111" />
                             <ComboBox x:Name="ComboBoxColorFormat" SelectedIndex="{Binding ColorFormat}" HorizontalAlignment="Left" Margin="135,93,0,0" VerticalAlignment="Top" Width="70" Height="30">

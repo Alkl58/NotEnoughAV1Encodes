@@ -726,6 +726,8 @@ namespace NotEnoughAV1Encodes
                 }
                 SliderEncoderPreset.Value = 4;
                 CheckBoxTwoPassEncoding.IsEnabled = true;
+                ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
+                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
             }
             else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.RAV1EFFMPEG or (int) Video.Encoder.RAV1E)
             {
@@ -737,6 +739,8 @@ namespace NotEnoughAV1Encodes
                 CheckBoxTwoPassEncoding.IsEnabled = false;
                 CheckBoxRealTimeMode.IsOn = false;
                 CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
+                ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
+                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
             }
             else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.SVTAV1FFMPEG or (int) Video.Encoder.SVTAV1)
             {
@@ -748,6 +752,8 @@ namespace NotEnoughAV1Encodes
                 CheckBoxTwoPassEncoding.IsOn = false;
                 CheckBoxRealTimeMode.IsOn = false;
                 CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
+                ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
+                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
             }
             else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.VPXVP9FFMPEG)
             {
@@ -757,6 +763,8 @@ namespace NotEnoughAV1Encodes
                 CheckBoxTwoPassEncoding.IsEnabled = true;
                 CheckBoxRealTimeMode.IsOn = false;
                 CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
+                ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
+                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
             }
             else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.X265 or (int) Video.Encoder.X264)
             {
@@ -767,6 +775,8 @@ namespace NotEnoughAV1Encodes
                 CheckBoxTwoPassEncoding.IsOn = false;
                 CheckBoxRealTimeMode.IsOn = false;
                 CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
+                ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
+                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
             }
             else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.QSVAV1)
             {
@@ -777,6 +787,8 @@ namespace NotEnoughAV1Encodes
                 CheckBoxTwoPassEncoding.IsOn = false;
                 CheckBoxRealTimeMode.IsOn = false;
                 CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
+                ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
+                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
             }
             if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.X264)
             {
@@ -784,6 +796,9 @@ namespace NotEnoughAV1Encodes
                 {
                     CheckBoxTwoPassEncoding.IsEnabled = true;
                 }
+
+                ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
+                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
             }
         }
 
@@ -1037,14 +1052,6 @@ namespace NotEnoughAV1Encodes
             if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.QSVAV1)
             {
                 LabelSpeedValue.Content = GenerateQuickSyncEncoderSpeed();
-            }
-        }
-
-        private void ComboBoxVideoBitDepth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if ((ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoder.X264 || ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoder.QSVAV1) && ComboBoxVideoBitDepth.SelectedIndex == 2)
-            {
-                ComboBoxVideoBitDepth.SelectedIndex = 1;
             }
         }
 
@@ -1912,6 +1919,14 @@ namespace NotEnoughAV1Encodes
             // Preset
             settings += quality + " --quality " + GenerateQuickSyncEncoderSpeed();
 
+            // Bit-Depth
+            settings += " --output-depth ";
+            settings += ComboBoxVideoBitDepthLimited.SelectedIndex switch
+            {
+                0 => "8",
+                1 => "10",
+                _ => "8"
+            };
 
             return settings;
         }
@@ -1983,28 +1998,41 @@ namespace NotEnoughAV1Encodes
 
         private string GenerateFFmpegColorSpace()
         {
-            string _settings = "-pix_fmt yuv4";
+            string settings = "-pix_fmt yuv4";
+
             if (ComboBoxColorFormat.SelectedIndex == 0)
             {
-                _settings += "20p";
+                settings += "20p";
             }
             else if (ComboBoxColorFormat.SelectedIndex == 1)
             {
-                _settings += "22p";
+                settings += "22p";
             }
             else if (ComboBoxColorFormat.SelectedIndex == 2)
             {
-                _settings += "44p";
+                settings += "44p";
             }
-            if (ComboBoxVideoBitDepth.SelectedIndex == 1)
+
+            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.QSVAV1 or (int) Video.Encoder.X264)
             {
-                _settings += "10le -strict -1";
+                if (ComboBoxVideoBitDepthLimited.SelectedIndex == 1)
+                {
+                    settings += "10le -strict -1";
+                }
             }
-            else if (ComboBoxVideoBitDepth.SelectedIndex == 2)
+            else
             {
-                _settings += "12le -strict -1";
+                if (ComboBoxVideoBitDepth.SelectedIndex == 1)
+                {
+                    settings += "10le -strict -1";
+                }
+                else if (ComboBoxVideoBitDepth.SelectedIndex == 2)
+                {
+                    settings += "12le -strict -1";
+                }
             }
-            return _settings;
+
+            return settings;
         }
 
         private string GenerateFFmpegFramerate()
