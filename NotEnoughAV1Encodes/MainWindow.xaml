@@ -353,7 +353,7 @@
                     <GroupBox x:Name="GroupBoxQuality" Header="{lex:Loc}" Margin="10,237,10,10" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <!-- AOM FFmpeg -->
-                            <Canvas HorizontalAlignment="Right" Width="1055">
+                            <Canvas HorizontalAlignment="Left" Width="1055">
                                 <Canvas.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed" />
@@ -382,7 +382,7 @@
                                 <TextBox x:Name="TextBoxMaxBitrateAOMFFMPEG" PreviewTextInput="NumberValidationTextBox" Margin="131,208,0,0" Text="{Binding AOMFFMPEGMaxBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
                             </Canvas>
                             <!-- RAV1E FFmpeg -->
-                            <Canvas HorizontalAlignment="Right" Width="1055">
+                            <Canvas HorizontalAlignment="Left" Width="1055">
                                 <Canvas.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed" />
@@ -405,7 +405,7 @@
                                 <TextBox x:Name="TextBoxBitrateRAV1EFFMPEG" Text="{Binding RAV1EFFMPEGBitrate}" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="127"/>
                             </Canvas>
                             <!-- SVTAV1 FFmpeg -->
-                            <Canvas HorizontalAlignment="Right" Width="1055">
+                            <Canvas HorizontalAlignment="Left" Width="1055">
                                 <Canvas.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed" />
@@ -428,7 +428,7 @@
                                 <TextBox x:Name="TextBoxBitrateSVTAV1FFMPEG" Text="{Binding SVTAV1FFMPEGBitrate}" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="127"/>
                             </Canvas>
                             <!-- VP9 FFmpeg -->
-                            <Canvas HorizontalAlignment="Right" Width="1055">
+                            <Canvas HorizontalAlignment="Left" Width="1055">
                                 <Canvas.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed" />
@@ -457,7 +457,7 @@
                                 <TextBox x:Name="TextBoxMaxBitrateVP9FFMPEG" PreviewTextInput="NumberValidationTextBox" Margin="131,208,0,0" Text="{Binding VP9FFMPEGMaxBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
                             </Canvas>
                             <!-- aomenc -->
-                            <Canvas HorizontalAlignment="Right" Width="1055">
+                            <Canvas HorizontalAlignment="Left" Width="1055">
                                 <Canvas.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed" />
@@ -482,7 +482,7 @@
                                 <TextBox x:Name="TextBoxBitrateAOMENC" PreviewTextInput="NumberValidationTextBox" Margin="131,142,0,0" Text="{Binding AOMENCBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
                             </Canvas>
                             <!-- rav1e -->
-                            <Canvas HorizontalAlignment="Right" Width="1055">
+                            <Canvas HorizontalAlignment="Left" Width="1055">
                                 <Canvas.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed" />
@@ -505,7 +505,7 @@
                                 <TextBox x:Name="TextBoxBitrateRAV1E" Text="{Binding RAV1EBitrate}" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="127"/>
                             </Canvas>
                             <!-- svt-av1 -->
-                            <Canvas HorizontalAlignment="Right" Width="1055">
+                            <Canvas HorizontalAlignment="Left" Width="1055">
                                 <Canvas.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed" />
@@ -528,7 +528,7 @@
                                 <TextBox x:Name="TextBoxBitrateSVTAV1" Text="{Binding SVTAV1Bitrate}" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="127"/>
                             </Canvas>
                             <!-- x264 / x265 -->
-                            <Canvas HorizontalAlignment="Right" Width="1055">
+                            <Canvas HorizontalAlignment="Left" Width="1055">
                                 <Canvas.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed" />
@@ -554,7 +554,7 @@
                                 <TextBox x:Name="TextBoxBitrateX26x" Text="{Binding X26xBitrate}" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="127"/>
                             </Canvas>
                             <!-- QuickSync AV1 -->
-                            <Canvas HorizontalAlignment="Right" Width="1055">
+                            <Canvas HorizontalAlignment="Left" Width="1055">
                                 <Canvas.Style>
                                     <Style>
                                         <Setter Property="UIElement.Visibility" Value="Collapsed" />
