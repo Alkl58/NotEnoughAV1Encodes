@@ -44,8 +44,8 @@
                         <Grid Height="66" VerticalAlignment="Center" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label x:Name="LabelVideoSource1" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="75" />
                             <Label x:Name="LabelVideoDestination1" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold" />
-                            <Label x:Name="LabelVideoSource" Height="29" Margin="105,1,8,0" Content="{lex:Loc}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" MinWidth="50" />
-                            <Label x:Name="LabelVideoDestination" Height="29" Margin="105,30,8,0" Content="{lex:Loc}" VerticalAlignment="Top" FontStyle="Italic" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" />
+                            <TextBlock x:Name="LabelVideoSource" Height="24" Margin="105,6,8,0" Text="{lex:Loc}" VerticalAlignment="Top" FontStyle="Italic" Background="{x:Null}" MinWidth="50" />
+                            <TextBlock x:Name="LabelVideoDestination" Height="24" Margin="105,35,8,0" Text="{lex:Loc}" VerticalAlignment="Top" FontStyle="Italic" Background="{x:Null}" />
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="GroupBoxVideoInformation" Header="{lex:Loc}" Height="72" Margin="10,115,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" mah:ControlsHelper.ContentCharacterCasing="Normal">

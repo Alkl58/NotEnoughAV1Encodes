@@ -301,8 +301,8 @@ namespace NotEnoughAV1Encodes
 
                         ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
                         ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
-                        LabelVideoSource.Content = videoDB.InputPath;
-                        LabelVideoDestination.Content = videoDB.OutputPath;
+                        LabelVideoSource.Text = videoDB.InputPath;
+                        LabelVideoDestination.Text = videoDB.OutputPath;
                         LabelVideoLength.Content = videoDB.MIDuration;
                         LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
                         LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
@@ -331,7 +331,7 @@ namespace NotEnoughAV1Encodes
             videoDB = new();
             videoDB.InputPath = path;
             videoDB.ParseMediaInfo(PresetSettings);
-            LabelVideoDestination.Content = LocalizedStrings.Instance["LabelVideoDestination"];
+            LabelVideoDestination.Text = LocalizedStrings.Instance["LabelVideoDestination"];
 
             try { ListBoxAudioTracks.Items.Clear(); } catch { }
             try { ListBoxAudioTracks.ItemsSource = null; } catch { }
@@ -340,7 +340,7 @@ namespace NotEnoughAV1Encodes
 
             ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
             ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
-            LabelVideoSource.Content = videoDB.InputPath;
+            LabelVideoSource.Text = videoDB.InputPath;
             LabelVideoLength.Content = videoDB.MIDuration;
             LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
             LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
@@ -369,8 +369,13 @@ namespace NotEnoughAV1Encodes
             {
                 string outPath = Path.Combine(settingsDB.DefaultOutPath, Path.GetFileNameWithoutExtension(videoDB.InputPath) + settingsDB.DefaultOutContainer);
 
+                if (videoDB.InputPath == outPath)
+                {
+                    outPath = Path.Combine(settingsDB.DefaultOutPath, Path.GetFileNameWithoutExtension(videoDB.InputPath) + "_av1" + settingsDB.DefaultOutContainer);
+                }
+
                 videoDB.OutputPath = outPath;
-                LabelVideoDestination.Content = videoDB.OutputPath;
+                LabelVideoDestination.Text = videoDB.OutputPath;
                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
 
                 try
@@ -408,7 +413,7 @@ namespace NotEnoughAV1Encodes
             if (saveVideoFileDialog.ShowDialog() == true)
             {
                 videoDB.OutputPath = saveVideoFileDialog.FileName;
-                LabelVideoDestination.Content = videoDB.OutputPath;
+                LabelVideoDestination.Text = videoDB.OutputPath;
                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
                 try
                 {
@@ -617,8 +622,8 @@ namespace NotEnoughAV1Encodes
 
                     ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
                     ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
-                    LabelVideoSource.Content = videoDB.InputPath;
-                    LabelVideoDestination.Content = videoDB.OutputPath;
+                    LabelVideoSource.Text = videoDB.InputPath;
+                    LabelVideoDestination.Text = videoDB.OutputPath;
                     LabelVideoLength.Content = videoDB.MIDuration;
                     LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
                     LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
