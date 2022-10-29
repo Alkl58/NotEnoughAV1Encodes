@@ -56,6 +56,15 @@ namespace NotEnoughAV1Encodes
             }
 
             LocalizeDictionary.Instance.Culture = settingsDB.CultureInfo;
+
+            var exists = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
+
+            if (exists)
+            {
+                MessageBox.Show(LocalizedStrings.Instance["MessageAlreadyRunning"], "", MessageBoxButton.OK, MessageBoxImage.Stop);
+                Process.GetCurrentProcess().Kill();
+                return;
+            }
         }
 
         #region Startup

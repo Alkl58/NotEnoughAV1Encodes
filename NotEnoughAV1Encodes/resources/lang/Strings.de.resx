@@ -536,4 +536,7 @@ Please download and extract 7-zip to the following path:
   <data name="OutputErrorDetected" xml:space="preserve">
     <value>Fehler: Keine Ausgabedatei erkannt</value>
   </data>
+  <data name="MessageAlreadyRunning" xml:space="preserve">
+    <value>Es wird bereits eine Instanz der Anwendung ausgeführt.</value>
+  </data>
 </root>
