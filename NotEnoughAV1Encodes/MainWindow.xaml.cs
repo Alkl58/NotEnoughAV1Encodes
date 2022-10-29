@@ -1942,6 +1942,17 @@ namespace NotEnoughAV1Encodes
                 _ => "8"
             };
 
+            // Output Colorspace
+            settings += " --output-csp ";
+            settings += ComboBoxColorFormat.SelectedIndex switch
+            {
+                0 => "i420",
+                1 => "i422",
+                2 => "i444",
+                _ => "i420"
+            };
+
+
             return settings;
         }
 
