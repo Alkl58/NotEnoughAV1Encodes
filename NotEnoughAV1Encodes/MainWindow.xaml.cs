@@ -2373,6 +2373,11 @@ namespace NotEnoughAV1Encodes
                 foreach(Queue.QueueElement queueElement in queueItems)
                 {
                     ListBoxQueue.Items.Remove(queueElement);
+                    try
+                    {
+                        File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", queueElement.VideoDB.InputFileName + "_" + queueElement.UniqueIdentifier + ".json"));
+                    }
+                    catch { }
                 }
             }
 
