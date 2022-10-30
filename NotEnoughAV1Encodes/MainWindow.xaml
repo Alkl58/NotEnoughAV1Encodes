@@ -1103,6 +1103,15 @@
                                 <Label x:Name="LabelNoAudioFound" Content="{lex:Loc}" HorizontalContentAlignment="Center" FontSize="20" />
                             </Grid>
                         </ListBoxItem>
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="AudioTracksImport" Header="{lex:Loc}" Click="AudioTracksImport_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="resources/img/folder.png" Height="20" Width="20"></Image>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Background" Value="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"></Setter>

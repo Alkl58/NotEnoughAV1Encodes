@@ -16,13 +16,20 @@ namespace NotEnoughAV1Encodes.Audio
 
                 Global.Logger("INFO  - EncodeAudio.Encode() => Command: " + queueElement.AudioCommand, queueElement.Output + ".log");
 
+                string externalInput = "";
+                foreach (AudioTracks audioTrack in queueElement.VideoDB.AudioTracks)
+                {
+                    if (!audioTrack.External) continue;
+                    externalInput += " -i \"" + audioTrack.ExternalPath + "\"";
+                }
+
                 Process processAudio = new();
                 ProcessStartInfo startInfo = new()
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                    Arguments = "/C ffmpeg.exe -i \"" + queueElement.VideoDB.InputPath + "\" -vn -sn -map_metadata -1 " + queueElement.AudioCommand + " \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "audio.mkv") + "\"",
+                    Arguments = "/C ffmpeg.exe -i \"" + queueElement.VideoDB.InputPath + "\" " + externalInput + " -vn -sn -map_metadata -1 " + queueElement.AudioCommand + " \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "audio.mkv") + "\"",
                     RedirectStandardError = true,
                     RedirectStandardInput = true,
                     CreateNoWindow = true

@@ -542,4 +542,7 @@ Please download and extract 7-zip to the following path:
   <data name="MessageAlreadyRunning" xml:space="preserve">
     <value>An instance of the application is already running.</value>
   </data>
+  <data name="AudioTracksImport" xml:space="preserve">
+    <value>Import</value>
+  </data>
 </root>

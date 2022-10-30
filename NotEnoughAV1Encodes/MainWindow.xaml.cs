@@ -685,6 +685,38 @@ namespace NotEnoughAV1Encodes
                 DeleteQueueItems();
             }
         }
+
+        private void AudioTracksImport_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openAudioFilesDialog = new()
+            {
+                Filter = "Audio Files|*.mp3;*.aac;*.flac;*.m4a;*.ogg;*.opus;*.wav;*.wma|All Files|*.*",
+                Multiselect = true
+            };
+
+            bool? result = openAudioFilesDialog.ShowDialog();
+            if (result == true)
+            {
+                List<Audio.AudioTracks> AudioTracks = new();
+                if (ListBoxAudioTracks.ItemsSource != null)
+                {
+                    AudioTracks = (List<Audio.AudioTracks>) ListBoxAudioTracks.ItemsSource;
+                }
+                foreach (string file in openAudioFilesDialog.FileNames)
+                {
+                    Debug.WriteLine(file);
+                    AudioTracks.Add(videoDB.ParseMediaInfoAudio(file, PresetSettings));
+                }
+
+                try { ListBoxAudioTracks.Items.Clear(); } catch { }
+                try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+                try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
+                try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+
+                videoDB.AudioTracks = AudioTracks;
+                ListBoxAudioTracks.ItemsSource = AudioTracks;
+            }
+        }
         #endregion
 
         #region UI Functions

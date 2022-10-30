@@ -166,5 +166,82 @@ namespace NotEnoughAV1Encodes.Video
                 InputFileName = Path.GetFileName(InputPath);
             }
         }
+
+        public Audio.AudioTracks ParseMediaInfoAudio(string inputPath, VideoSettings settings)
+        {
+            Audio.AudioTracks audioTrack = new();
+
+            audioTrack.External = true;
+            audioTrack.ExternalPath = inputPath;
+
+            MediaInfo mediaInfo = new();
+            mediaInfo.Open(inputPath);
+
+            try
+            {
+                int i = 0;
+
+                bool pcm = false;
+                try { pcm = mediaInfo.Get(StreamKind.Audio, i, "Format") == "PCM" && mediaInfo.Get(StreamKind.Audio, i, "MuxingMode") == "Blu-ray"; } catch { }
+
+                string name = Path.GetFileNameWithoutExtension(inputPath);
+
+                int channels = 1;
+                try { channels = int.Parse(mediaInfo.Get(StreamKind.Audio, i, "Channels")); } catch { }
+
+                int bitrate = 128;
+                int codec = 0;
+                switch (channels)
+                {
+                    case 1:
+                        channels = 0;
+                        bitrate = settings.AudioBitrateMono;
+                        codec = settings.AudioCodecMono;
+                        break;
+                    case 2:
+                        channels = 1;
+                        bitrate = settings.AudioBitrateStereo;
+                        codec = settings.AudioCodecStereo;
+                        break;
+                    case 6:
+                        channels = 2;
+                        bitrate = settings.AudioBitrateSixChannel;
+                        codec = settings.AudioCodecSixChannel;
+                        break;
+                    case 8:
+                        channels = 3;
+                        bitrate = settings.AudioBitrateEightChannel;
+                        codec = settings.AudioCodecEightChannel;
+                        break;
+                    default:
+                        break;
+                }
+
+                string lang = "und";
+                try
+                {
+                    lang = mediaInfo.Get(StreamKind.Audio, i, "Language/String3");
+                    if (!resources.MediaLanguages.Languages.ContainsValue(lang))
+                    {
+                        lang = "und";
+                    }
+                    lang = resources.MediaLanguages.Languages.FirstOrDefault(x => x.Value == lang).Key;
+                }
+                catch { }
+
+                audioTrack.Active = true;
+                audioTrack.Index = i;
+                audioTrack.Codec = codec;
+                audioTrack.Bitrate = bitrate.ToString();
+                audioTrack.Languages = resources.MediaLanguages.LanguageKeys;
+                audioTrack.Language = lang;
+                audioTrack.CustomName = name;
+                audioTrack.Channels = channels;
+                audioTrack.PCM = pcm;
+            }
+            catch { }
+
+            return audioTrack;
+        }
     }
 }

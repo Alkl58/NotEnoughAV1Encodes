@@ -13,5 +13,7 @@ namespace NotEnoughAV1Encodes.Audio
         public List<string> Languages { get; set; }
         public string CustomName { get; set; }
         public bool PCM { get; set; }
+        public bool External { get; set; }
+        public string ExternalPath { get; set; }
     }
 }

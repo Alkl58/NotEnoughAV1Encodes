@@ -6,6 +6,7 @@
         {
             string audioCommand = "";
             int endIndex = 0;
+            int externalIndex = 0;
             bool copyaudio = false;
             bool noaudio = true;
 
@@ -14,7 +15,12 @@
                 // Skip Audio Track if not active
                 if(track.Active == false) continue;
 
-                audioCommand += MultipleTrackCommandGenerator(int.Parse(track.Bitrate), track.Index, endIndex, track.Codec, track.Channels, track.Language, track.CustomName, track.PCM);
+                if (track.External)
+                {
+                    externalIndex += 1;
+                }
+
+                audioCommand += MultipleTrackCommandGenerator(int.Parse(track.Bitrate), track.Index, endIndex, track.Codec, track.Channels, track.Language, track.CustomName, track.PCM, track.External, externalIndex);
                 endIndex += 1;
 
                 if (track.Codec == 5)
@@ -48,26 +54,33 @@
             return audioCodeSwitch;
         }
 
-        private string MultipleTrackCommandGenerator(int _activeTrackBitrate, int _mapIndex, int _endIndex, int _activTrackCodec, int _channelLayout, string _language, string _trackName, bool _pcmBluray)
+        private string MultipleTrackCommandGenerator(int activeTrackBitrate, int mapIndex, int endIndex, int activTrackCodec, int channelLayout, string language, string trackName, bool pcmBluray, bool external, int externalIndex)
         {
             string audioCodecCommand;
+
             // Audio Mapping
-            audioCodecCommand = " -map 0:a:" + _mapIndex + " -c:a:" + _endIndex;
-            // Codec
-            audioCodecCommand += SwitchCodec(_activTrackCodec, _pcmBluray);
-            // Bitrate
-            if (_activTrackCodec != 5)
+            audioCodecCommand = " -map 0:a:" + mapIndex + " -c:a:" + endIndex;
+
+            if (external)
             {
-                audioCodecCommand += " -b:a:" + _endIndex + " " + _activeTrackBitrate + "k";
+                audioCodecCommand = " -map " + externalIndex + ":a:" + mapIndex + " -c:a:" + endIndex;
+            }
+
+            // Codec
+            audioCodecCommand += SwitchCodec(activTrackCodec, pcmBluray);
+            // Bitrate
+            if (activTrackCodec != 5)
+            {
+                audioCodecCommand += " -b:a:" + endIndex + " " + activeTrackBitrate + "k";
             }
             // Channel Layout
-            audioCodecCommand += " -ac:a:" + _endIndex + " " + SetChannelLayout(_channelLayout);
+            audioCodecCommand += " -ac:a:" + endIndex + " " + SetChannelLayout(channelLayout);
             // Metadata
-            audioCodecCommand += " -metadata:s:a:" + _endIndex + " language=" + resources.MediaLanguages.Languages[_language];
+            audioCodecCommand += " -metadata:s:a:" + endIndex + " language=" + resources.MediaLanguages.Languages[language];
             // Title
-            if (_activTrackCodec != 5)
+            if (activTrackCodec != 5)
             {
-                audioCodecCommand += " -metadata:s:a:" + _endIndex + " title=" + '\u0022' + _trackName + '\u0022';
+                audioCodecCommand += " -metadata:s:a:" + endIndex + " title=" + '\u0022' + trackName + '\u0022';
             }
             return audioCodecCommand;
         }
