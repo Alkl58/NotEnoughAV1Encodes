@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -466,14 +466,26 @@
   <data name="TextBoxDestination" xml:space="preserve">
     <value>出力先が選択されていません</value>
   </data>
+  <data name="ToggleSwitchActivateSubtitles" xml:space="preserve">
+    <value>字幕を有効にする</value>
+  </data>
   <data name="ToggleSwitchAdvancedSettings" xml:space="preserve">
     <value>高度な設定</value>
+  </data>
+  <data name="ToggleSwitchAutoPauseResume" xml:space="preserve">
+    <value>自動的な停止/再開</value>
+  </data>
+  <data name="ToggleSwitchClearQueue" xml:space="preserve">
+    <value>自動的にキューをクリア</value>
   </data>
   <data name="ToggleSwitchDeleteTempFiles" xml:space="preserve">
     <value>一時ファイルを削除</value>
   </data>
+  <data name="ToggleSwitchInputSeeking" xml:space="preserve">
+    <value>Input Seeking を使用</value>
+  </data>
   <data name="ToggleSwitchLogging" xml:space="preserve">
-    <value>ログ</value>
+    <value>ログを出力</value>
   </data>
   <data name="ToggleSwitchOverrideWorkerCount" xml:space="preserve">
     <value>処理単位数を優先</value>
