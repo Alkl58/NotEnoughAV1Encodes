@@ -108,7 +108,7 @@ namespace NotEnoughAV1Encodes.Video
 
             string DAR = "";
             // Set Display Aspect Ratio for external encoders
-            if (queueElement.EncodingMethod is (int) Encoder.AOMENC or (int) Encoder.RAV1E or (int) Encoder.SVTAV1 && !string.IsNullOrEmpty(queueElement.VideoDB.MIDisplayAspectRatio))
+            if (queueElement.EncodingMethod is (int) Encoder.AOMENC or (int) Encoder.RAV1E or (int) Encoder.SVTAV1 or (int) Encoder.QSVAV1 or (int) Encoder.NVENCAV1 && !string.IsNullOrEmpty(queueElement.VideoDB.MIDisplayAspectRatio))
             {
                 if (queueElement.VideoDB.MIPixelAspectRatio != "1.000")
                 {
@@ -235,7 +235,7 @@ namespace NotEnoughAV1Encodes.Video
             IOrderedEnumerable<string> sortedChunks = null;
 
             // FFmpeg AOM, Rav1e, SVT-AV1, VPX-VP9
-            if (queueElement.EncodingMethod is (int) Encoder.AOMFFMPEG or (int) Encoder.RAV1EFFMPEG or (int) Encoder.SVTAV1FFMPEG or (int) Encoder.VPXVP9FFMPEG or (int) Encoder.QSVAV1)
+            if (queueElement.EncodingMethod is (int) Encoder.AOMFFMPEG or (int) Encoder.RAV1EFFMPEG or (int) Encoder.SVTAV1FFMPEG or (int) Encoder.VPXVP9FFMPEG or (int) Encoder.QSVAV1 or (int) Encoder.NVENCAV1)
             {
                 Global.Logger("DEBUG - VideoMuxer.Concat() => Reading Chunk Directory by *.webm files", queueElement.Output + ".log");
                 sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.webm").OrderBy(f => f);

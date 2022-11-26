@@ -11,6 +11,7 @@
         SVTAV1 = 7,
         X265 = 9,
         X264 = 10,
-        QSVAV1 = 12
+        QSVAV1 = 12,
+        NVENCAV1 = 13
     }
 }

@@ -119,7 +119,7 @@ namespace NotEnoughAV1Encodes.Video
                                     ChunkOutput = "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".mp4") + "\"";
                                 }
 
-                                if (queueElement.EncodingMethod == (int) Encoder.QSVAV1)
+                                if (queueElement.EncodingMethod is (int) Encoder.QSVAV1 or (int) Encoder.NVENCAV1)
                                 {
                                     ChunkOutput = " -o \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm") + "\"";
                                 }

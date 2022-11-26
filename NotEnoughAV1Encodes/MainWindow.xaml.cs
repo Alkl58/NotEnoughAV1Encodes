@@ -836,6 +836,18 @@ namespace NotEnoughAV1Encodes
                 ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
                 ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
             }
+            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.NVENCAV1)
+            {
+                // av1 hardware (nvenc rtx 4000)
+                SliderEncoderPreset.Maximum = 2;
+                SliderEncoderPreset.Value = 1;
+                CheckBoxTwoPassEncoding.IsEnabled = false;
+                CheckBoxTwoPassEncoding.IsOn = false;
+                CheckBoxRealTimeMode.IsOn = false;
+                CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
+                ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
+                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
+            }
             if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.X264)
             {
                 if (ComboBoxQualityMode.SelectedIndex == 2)
@@ -1038,6 +1050,25 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void ComboBoxQualityModeNVENCAV1_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (ComboBoxQualityModeNVENCAV1.SelectedIndex == 0)
+            {
+                SliderQualityNVENCAV1.IsEnabled = true;
+                TextBoxBitrateNVENCAV1.IsEnabled = false;
+            }
+            else if (ComboBoxQualityModeNVENCAV1.SelectedIndex == 1)
+            {
+                SliderQualityNVENCAV1.IsEnabled = false;
+                TextBoxBitrateNVENCAV1.IsEnabled = true;
+            }
+            else if (ComboBoxQualityModeNVENCAV1.SelectedIndex == 2)
+            {
+                SliderQualityNVENCAV1.IsEnabled = false;
+                TextBoxBitrateNVENCAV1.IsEnabled = true;
+            }
+        }
+
         private void CheckBoxTwoPassEncoding_Checked(object sender, RoutedEventArgs e)
         {
             if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoder.SVTAV1 && ComboBoxQualityModeSVTAV1.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
@@ -1098,6 +1129,12 @@ namespace NotEnoughAV1Encodes
             if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.QSVAV1)
             {
                 LabelSpeedValue.Content = GenerateQuickSyncEncoderSpeed();
+            }
+
+            // av1 hardware (nvenc rtx 4000)
+            if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoder.NVENCAV1)
+            {
+                LabelSpeedValue.Content = GenerateNVENCEncoderSpeed();
             }
         }
 
@@ -1575,6 +1612,7 @@ namespace NotEnoughAV1Encodes
                 9 => GenerateHEVCFFmpegCommand(),
                 10 => GenerateAVCFFmpegCommand(),
                 12 => GenerateQuickSyncCommand(),
+                13 => GenerateNVENCCommand(),
                 _ => ""
             };
 
@@ -1947,7 +1985,7 @@ namespace NotEnoughAV1Encodes
         private string GenerateQuickSyncCommand()
         {
             string settings = "-f yuv4mpegpipe - | " +
-                  "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "qsvenc", "QSVEncC64.exe") + "\" --y4m -i -";
+                    "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "qsvenc", "QSVEncC64.exe") + "\" --y4m -i -";
 
             // Codec
             settings += " --codec av1";
@@ -1988,6 +2026,38 @@ namespace NotEnoughAV1Encodes
             return settings;
         }
 
+        private string GenerateNVENCCommand()
+        {
+            string settings = "-f yuv4mpegpipe - | " +
+                    "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "nvenc", "NVEncC64.exe") + "\" --y4m -i -";
+
+            // Codec
+            settings += " --codec av1";
+
+            // Quality / Bitrate Selection
+            string quality = ComboBoxQualityModeQSVAV1.SelectedIndex switch
+            {
+                0 => " --cqp " + SliderQualityQSVAV1.Value,
+                1 => " --vbr " + TextBoxBitrateQSVAV1.Text,
+                2 => " --cbr " + TextBoxBitrateQSVAV1.Text,
+                _ => ""
+            };
+
+            // Preset
+            settings += quality + " --quality " + GenerateNVENCEncoderSpeed();
+
+            // Bit-Depth
+            settings += " --output-depth ";
+            settings += ComboBoxVideoBitDepthLimited.SelectedIndex switch
+            {
+                0 => "8",
+                1 => "10",
+                _ => "8"
+            };
+
+            return settings;
+        }
+
         private string GenerateMPEGEncoderSpeed()
         {
             return SliderEncoderPreset.Value switch
@@ -2018,6 +2088,17 @@ namespace NotEnoughAV1Encodes
                 5 => "faster",
                 6 => "fastest",
                 _ => "balanced",
+            };
+        }
+
+        private string GenerateNVENCEncoderSpeed()
+        {
+            return SliderEncoderPreset.Value switch
+            {
+                0 => "quality",
+                1 => "default",
+                2 => "performance",
+                _ => "default"
             };
         }
 

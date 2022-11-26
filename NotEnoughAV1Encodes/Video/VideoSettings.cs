@@ -72,6 +72,11 @@
         public int QSVAV1Quantizer { get; set; } = 24;
         public string QSVAV1Bitrate { get; set; } = "2000";
 
+        // Video Quality Settings NVENC AV1
+        public int NVENCAV1QualityMode { get; set; }
+        public int NVENCAV1Quantizer { get; set; } = 24;
+        public string NVENCAV1Bitrate { get; set; } = "2000";
+
         // Audio
         public int AudioCodecMono { get; set; } = 0;
         public int AudioBitrateMono { get; set; } = 64;
