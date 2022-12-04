@@ -656,6 +656,21 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void ButtonClearQueue_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProgramState != 0) return;
+            List<Queue.QueueElement> items = ListBoxQueue.Items.OfType<Queue.QueueElement>().ToList();
+            foreach (var item in items)
+            {
+                ListBoxQueue.Items.Remove(item);
+                try
+                {
+                    File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", item.VideoDB.InputFileName + "_" + item.UniqueIdentifier + ".json"));
+                }
+                catch { }
+            }
+        }
+
         private void QueueMenuItemSave_Click(object sender, RoutedEventArgs e)
         {
             if (ListBoxQueue.SelectedItem != null)

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ButtonClose" xml:space="preserve">
     <value>关闭</value>
@@ -499,7 +499,7 @@
   <data name="ToggleSwitchLogging" xml:space="preserve">
     <value>日志</value>
   </data>
-    <data name="ToggleSwitchClearQueue" xml:space="preserve">
+  <data name="ToggleSwitchClearQueue" xml:space="preserve">
     <value>自动清除队列</value>
   </data>
   <data name="ToggleSwitchOverrideWorkerCount" xml:space="preserve">
@@ -511,7 +511,7 @@
   <data name="ToggleSwitchUsePresetBitDepth" xml:space="preserve">
     <value>使用预设的位深度？</value>
   </data>
-    <data name="7ZipNotDetectedTitle" xml:space="preserve">
+  <data name="7ZipNotDetectedTitle" xml:space="preserve">
     <value>未检测到 7-zip!</value>
   </data>
   <data name="7ZipNotDetectedMessage" xml:space="preserve">
@@ -538,5 +538,8 @@
   </data>
   <data name="MessageSameInputOutput" xml:space="preserve">
     <value>输入和输出路径是一样的!</value>
+  </data>
+  <data name="ButtonClearQueue" xml:space="preserve">
+    <value>清除队列</value>
   </data>
 </root>

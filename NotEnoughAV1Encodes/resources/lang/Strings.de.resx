@@ -539,4 +539,7 @@ Please download and extract 7-zip to the following path:
   <data name="MessageAlreadyRunning" xml:space="preserve">
     <value>Es wird bereits eine Instanz der Anwendung ausgeführt.</value>
   </data>
+  <data name="ButtonClearQueue" xml:space="preserve">
+    <value>Warteschlange leeren</value>
+  </data>
 </root>

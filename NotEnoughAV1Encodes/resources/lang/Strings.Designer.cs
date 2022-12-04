@@ -92,6 +92,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Clear Queue ähnelt.
+        /// </summary>
+        public static string ButtonClearQueue {
+            get {
+                return ResourceManager.GetString("ButtonClearQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
         /// </summary>
         public static string ButtonClose {

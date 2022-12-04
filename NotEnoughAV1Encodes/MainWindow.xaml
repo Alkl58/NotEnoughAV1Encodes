@@ -1324,6 +1324,7 @@
                     </GroupBox>
                     <Button x:Name="ButtonRemoveSelectedQueueItem" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonRemoveSelectedQueueItem_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" Width="115"/>
                     <Button x:Name="ButtonEditSelectedItem" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="130,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Background="{Binding Background, ElementName=ListBoxAudioTracks, UpdateSourceTrigger=PropertyChanged}" Click="ButtonEditSelectedItem_Click" Width="115"/>
+                    <Button x:Name="ButtonClearQueue" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="250,32,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Background="{Binding Background, ElementName=ListBoxAudioTracks, UpdateSourceTrigger=PropertyChanged}" Click="ButtonClearQueue_Click"  Width="115"/>
                 </Grid>
             </TabItem>
         </mah:MetroTabControl>
