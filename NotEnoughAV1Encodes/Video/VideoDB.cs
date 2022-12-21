@@ -42,7 +42,7 @@ namespace NotEnoughAV1Encodes.Video
                 try { MIIsVFR = mediaInfo.Get(StreamKind.Video, 0, "FrameRate_Mode") == "VFR"; } catch { MIIsVFR = false; }
                 try { MIWidth = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "Width")); } catch { }
                 try { MIHeight = int.Parse(mediaInfo.Get(StreamKind.Video, 0, "Height")); } catch { }
-                try { MIDisplayAspectRatio = mediaInfo.Get(StreamKind.Video, 0, "DisplayAspectRatio/String"); } catch { }
+                try { MIDisplayAspectRatio = mediaInfo.Get(StreamKind.Video, 0, "DisplayAspectRatio/String").Replace(":1", ""); } catch { }
                 try { MIPixelAspectRatio = mediaInfo.Get(StreamKind.Video, 0, "PixelAspectRatio"); } catch { }
 
                 int audioCount = mediaInfo.Count_Get(StreamKind.Audio);
