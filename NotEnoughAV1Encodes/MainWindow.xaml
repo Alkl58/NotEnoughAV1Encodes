@@ -10,7 +10,7 @@
         lex:LocalizeDictionary.DesignCulture="en"
         lex:ResxLocalizationProvider.DefaultAssembly="NotEnoughAV1Encodes"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-        Title="NEAV1E" Height="650" Width="1085" Icon="/resources/img/neav1e.ico" AllowDrop="True" DragDrop.Drop="MetroWindow_Drop" MinWidth="780" MinHeight="550">
+        Title="NEAV1E" Height="650" Width="1085" Icon="/resources/img/neav1e.ico" AllowDrop="True" DragDrop.Drop="MetroWindow_Drop" MinWidth="780" MinHeight="550" Closing="MetroWindow_Closing">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="b2v" />
     </Window.Resources>

@@ -67,6 +67,18 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (ProgramState == 0) return;
+
+            // Ask User if ProgramState is not IDLE (0)
+            MessageBoxResult result = MessageBox.Show(LocalizedStrings.Instance["CloseQuestion"], "", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+        }
+
         #region Startup
         private void Initialize()
         {

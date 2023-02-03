@@ -542,4 +542,7 @@ Please download and extract 7-zip to the following path:
   <data name="ButtonClearQueue" xml:space="preserve">
     <value>Warteschlange leeren</value>
   </data>
+  <data name="CloseQuestion" xml:space="preserve">
+    <value>Programm befindet sich nicht im IDLE! Sind Sie sicher, dass Sie das Programm beenden wollen?</value>
+  </data>
 </root>

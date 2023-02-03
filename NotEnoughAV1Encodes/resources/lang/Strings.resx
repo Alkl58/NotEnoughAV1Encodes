@@ -548,4 +548,7 @@ Please download and extract 7-zip to the following path:
   <data name="ButtonClearQueue" xml:space="preserve">
     <value>Clear Queue</value>
   </data>
+  <data name="CloseQuestion" xml:space="preserve">
+    <value>Program state is not IDLE! Are you sure you want to exit?</value>
+  </data>
 </root>

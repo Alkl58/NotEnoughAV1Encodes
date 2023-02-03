@@ -542,4 +542,7 @@ Please download and extract 7-zip to the following path:
   <data name="ButtonClearQueue" xml:space="preserve">
     <value>Effacer la file d'attente</value>
   </data>
+  <data name="CloseQuestion" xml:space="preserve">
+    <value>Le programme n'est pas dans l'IDLE ! Êtes-vous sûr de vouloir quitter le programme?</value>
+  </data>
 </root>

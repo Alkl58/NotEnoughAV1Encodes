@@ -254,6 +254,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Program state is not IDLE! Are you sure you want to exit? ähnelt.
+        /// </summary>
+        public static string CloseQuestion {
+            get {
+                return ResourceManager.GetString("CloseQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Error Deleting Temp Files ähnelt.
         /// </summary>
         public static string DeleteErrorDetected {
