@@ -1651,14 +1651,20 @@ namespace NotEnoughAV1Encodes
 
         private string VideoFiltersResize()
         {
-            // Sets the values for scaling the video
-            if (TextBoxFiltersResizeWidth.Text != "0")
+            // Auto Set Width
+            if (TextBoxFiltersResizeWidth.Text == "0")
             {
-                // Custom Scale
-                return "scale=" + TextBoxFiltersResizeWidth.Text + ":" + TextBoxFiltersResizeHeight.Text + ":flags=" + ComboBoxResizeAlgorithm.Text;
+                return "scale=trunc(oh*a/2)*2:" + TextBoxFiltersResizeHeight.Text + ":flags=" + ComboBoxResizeAlgorithm.Text;
             }
-            // Auto Scale
-            return "scale=trunc(oh*a/2)*2:" + TextBoxFiltersResizeHeight.Text + ":flags=" + ComboBoxResizeAlgorithm.Text;
+
+            // Auto Set Height
+            if (TextBoxFiltersResizeHeight.Text == "0")
+            {
+                return "scale=" + TextBoxFiltersResizeWidth.Text + ":trunc(ow/a/2)*2:flags=" + ComboBoxResizeAlgorithm.Text;
+            }
+
+            return "scale=" + TextBoxFiltersResizeWidth.Text + ":" + TextBoxFiltersResizeHeight.Text + ":flags=" + ComboBoxResizeAlgorithm.Text;
+
         }
         #endregion
 
