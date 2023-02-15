@@ -150,6 +150,7 @@ namespace NotEnoughAV1Encodes
                 ButtonAddToQueue.IsEnabled = true;
                 ButtonRemoveSelectedQueueItem.IsEnabled = true;
                 ButtonEditSelectedItem.IsEnabled = true;
+                ButtonClearQueue.IsEnabled = true;
                 ComboBoxSortQueueBy.IsEnabled = true;
 
                 // To Do: Save Queue States when Cancelling
@@ -483,6 +484,7 @@ namespace NotEnoughAV1Encodes
                         ButtonAddToQueue.IsEnabled = false;
                         ButtonRemoveSelectedQueueItem.IsEnabled = false;
                         ButtonEditSelectedItem.IsEnabled = false;
+                        ButtonClearQueue.IsEnabled = false;
                         ComboBoxSortQueueBy.IsEnabled = false;
 
                         PreStart();
@@ -2570,6 +2572,7 @@ namespace NotEnoughAV1Encodes
             ButtonAddToQueue.IsEnabled = true;
             ButtonRemoveSelectedQueueItem.IsEnabled = true;
             ButtonEditSelectedItem.IsEnabled = true;
+            ButtonClearQueue.IsEnabled = true;
             ComboBoxSortQueueBy.IsEnabled = true;
 
             // Stop Timer for Auto Pause Resume functionality
