@@ -1181,6 +1181,60 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sort by Framecount (asc) ähnelt.
+        /// </summary>
+        public static string SortByFramecountAsc {
+            get {
+                return ResourceManager.GetString("SortByFramecountAsc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sort by Framecount (desc) ähnelt.
+        /// </summary>
+        public static string SortByFramecountDesc {
+            get {
+                return ResourceManager.GetString("SortByFramecountDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sort by Newest ähnelt.
+        /// </summary>
+        public static string SortByNewest {
+            get {
+                return ResourceManager.GetString("SortByNewest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sort by Oldest ähnelt.
+        /// </summary>
+        public static string SortByOldest {
+            get {
+                return ResourceManager.GetString("SortByOldest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sort by Out Name (asc) ähnelt.
+        /// </summary>
+        public static string SortByOutNameAsc {
+            get {
+                return ResourceManager.GetString("SortByOutNameAsc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sort by Out Name (desc) ähnelt.
+        /// </summary>
+        public static string SortByOutNameDesc {
+            get {
+                return ResourceManager.GetString("SortByOutNameDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Advanced ähnelt.
         /// </summary>
         public static string TabItemAdvanced {

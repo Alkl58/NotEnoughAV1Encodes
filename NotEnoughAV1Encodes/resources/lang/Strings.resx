@@ -551,4 +551,22 @@ Please download and extract 7-zip to the following path:
   <data name="CloseQuestion" xml:space="preserve">
     <value>Program state is not IDLE! Are you sure you want to exit?</value>
   </data>
+  <data name="SortByFramecountAsc" xml:space="preserve">
+    <value>Sort by Framecount (asc)</value>
+  </data>
+  <data name="SortByFramecountDesc" xml:space="preserve">
+    <value>Sort by Framecount (desc)</value>
+  </data>
+  <data name="SortByNewest" xml:space="preserve">
+    <value>Sort by Newest</value>
+  </data>
+  <data name="SortByOldest" xml:space="preserve">
+    <value>Sort by Oldest</value>
+  </data>
+  <data name="SortByOutNameAsc" xml:space="preserve">
+    <value>Sort by Out Name (asc)</value>
+  </data>
+  <data name="SortByOutNameDesc" xml:space="preserve">
+    <value>Sort by Out Name (desc)</value>
+  </data>
 </root>

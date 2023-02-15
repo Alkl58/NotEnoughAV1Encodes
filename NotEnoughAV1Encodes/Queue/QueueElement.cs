@@ -59,6 +59,8 @@ namespace NotEnoughAV1Encodes.Queue
         public float PySceneDetectThreshold { get; set; }
         /// <summary>Framecount of Source Video.</summary>
         public long FrameCount { get; set; }
+        /// <summary>Date Added to Queue.</summary>
+        public DateTime DateAdded { get; set; } = DateTime.Now;
         /// <summary>List of Progress of each Chunk.</summary>
         public List<ChunkProgress> ChunkProgress { get; set; } = new();
         /// <summary>State of UI Settings</summary>

@@ -545,4 +545,22 @@ Please download and extract 7-zip to the following path:
   <data name="CloseQuestion" xml:space="preserve">
     <value>Programm befindet sich nicht im IDLE! Sind Sie sicher, dass Sie das Programm beenden wollen?</value>
   </data>
+  <data name="SortByFramecountAsc" xml:space="preserve">
+    <value>Sortieren nach Framecount (aufsteigend)</value>
+  </data>
+  <data name="SortByFramecountDesc" xml:space="preserve">
+    <value>Sortieren nach Framecount (absteigend)</value>
+  </data>
+  <data name="SortByNewest" xml:space="preserve">
+    <value>Sortieren nach Neuestem</value>
+  </data>
+  <data name="SortByOldest" xml:space="preserve">
+    <value>Sortieren nach Älteste</value>
+  </data>
+  <data name="SortByOutNameAsc" xml:space="preserve">
+    <value>Sortieren nach Ausgabe Name (aufsteigend)</value>
+  </data>
+  <data name="SortByOutNameDesc" xml:space="preserve">
+    <value>Sortieren nach Ausgabe Name (absteigend)</value>
+  </data>
 </root>

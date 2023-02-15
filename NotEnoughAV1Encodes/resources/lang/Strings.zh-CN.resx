@@ -542,4 +542,22 @@
   <data name="ButtonClearQueue" xml:space="preserve">
     <value>清除队列</value>
   </data>
+  <data name="SortByFramecountAsc" xml:space="preserve">
+    <value>按帧数排序（升）</value>
+  </data>
+  <data name="SortByFramecountDesc" xml:space="preserve">
+    <value>按帧数排序（降）。</value>
+  </data>
+  <data name="SortByNewest" xml:space="preserve">
+    <value>按最新情况排序</value>
+  </data>
+  <data name="SortByOldest" xml:space="preserve">
+    <value>按最古老的排序</value>
+  </data>
+  <data name="SortByOutNameAsc" xml:space="preserve">
+    <value>按姓名排序（升）。</value>
+  </data>
+  <data name="SortByOutNameDesc" xml:space="preserve">
+    <value>按名称排序（降）。</value>
+  </data>
 </root>

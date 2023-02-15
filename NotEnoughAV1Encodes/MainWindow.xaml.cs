@@ -114,6 +114,8 @@ namespace NotEnoughAV1Encodes
 
             try { ComboBoxPresets.SelectedItem = settingsDB.DefaultPreset; } catch { }
             startupLock = false;
+
+            try { ComboBoxSortQueueBy.SelectedIndex = settingsDB.SortQueueBy; } catch { }
         }
 
         private void LoadPresets()
@@ -148,6 +150,7 @@ namespace NotEnoughAV1Encodes
                 ButtonAddToQueue.IsEnabled = true;
                 ButtonRemoveSelectedQueueItem.IsEnabled = true;
                 ButtonEditSelectedItem.IsEnabled = true;
+                ComboBoxSortQueueBy.IsEnabled = true;
 
                 // To Do: Save Queue States when Cancelling
                 // Problem: Needs VideoChunks List
@@ -480,6 +483,7 @@ namespace NotEnoughAV1Encodes
                         ButtonAddToQueue.IsEnabled = false;
                         ButtonRemoveSelectedQueueItem.IsEnabled = false;
                         ButtonEditSelectedItem.IsEnabled = false;
+                        ComboBoxSortQueueBy.IsEnabled = false;
 
                         PreStart();
                     }
@@ -1248,9 +1252,69 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
+
+        bool lockQueue = false;
+        private void ComboBoxSortQueueBy_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (startupLock) return;
+            if (lockQueue) return;
+            if (ProgramState != 0) return;
+            settingsDB.SortQueueBy = ComboBoxSortQueueBy.SelectedIndex;
+            try
+            {
+                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
+                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+
+            SortQueue();
+        }
         #endregion
 
         #region Small Functions
+        private void SortQueue()
+        {
+            try
+            {
+                // Sort Queue
+                List<Queue.QueueElement> queueElements = ListBoxQueue.Items.OfType<Queue.QueueElement>().ToList();
+
+                switch (settingsDB.SortQueueBy)
+                {
+                    case 0:
+                        queueElements = queueElements.OrderBy(queueElements => queueElements.DateAdded).ToList();
+                        break;
+                    case 1:
+                        queueElements = queueElements.OrderByDescending(queueElements => queueElements.DateAdded).ToList();
+                        break;
+                    case 2:
+                        queueElements = queueElements.OrderBy(queueElements => queueElements.VideoDB.MIFrameCount).ToList();
+                        break;
+                    case 3:
+                        queueElements = queueElements.OrderByDescending(queueElements => queueElements.VideoDB.MIFrameCount).ToList();
+                        break;
+                    case 4:
+                        queueElements = queueElements.OrderBy(queueElements => queueElements.VideoDB.OutputFileName).ToList();
+                        break;
+                    case 5:
+                        queueElements = queueElements.OrderByDescending(queueElements => queueElements.VideoDB.OutputFileName).ToList();
+                        break;
+                    default:
+                        queueElements = queueElements.OrderByDescending(queueElements => queueElements.DateAdded).ToList();
+                        break;
+                }
+
+                ListBoxQueue.Items.Clear();
+                foreach (var queueElement in queueElements)
+                {
+                    ListBoxQueue.Items.Add(queueElement);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
         private void ComboBoxChunkingMethod_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
@@ -1408,6 +1472,7 @@ namespace NotEnoughAV1Encodes
 
         private void AddToQueue(string identifier, bool skipSubs)
         {
+            lockQueue = true;
             if (string.IsNullOrEmpty(videoDB.InputPath))
             {
                 // Throw Error
@@ -1465,6 +1530,10 @@ namespace NotEnoughAV1Encodes
 
             // Save as JSON
             File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Queue", videoDB.InputFileName + "_" + identifier + ".json"), JsonConvert.SerializeObject(queueElement, Formatting.Indented));
+
+            lockQueue = false;
+
+            SortQueue();
         }
 
         private void AutoPauseResume()
@@ -2501,6 +2570,7 @@ namespace NotEnoughAV1Encodes
             ButtonAddToQueue.IsEnabled = true;
             ButtonRemoveSelectedQueueItem.IsEnabled = true;
             ButtonEditSelectedItem.IsEnabled = true;
+            ComboBoxSortQueueBy.IsEnabled = true;
 
             // Stop Timer for Auto Pause Resume functionality
             if (settingsDB.AutoResumePause)

@@ -500,4 +500,22 @@ Please download and extract 7-zip to the following path:
   <data name="ButtonClearQueue" xml:space="preserve">
     <value>Azzeramento della coda</value>
   </data>
+  <data name="SortByFramecountAsc" xml:space="preserve">
+    <value>Ordina per numero di fotogrammi (asc)</value>
+  </data>
+  <data name="SortByFramecountDesc" xml:space="preserve">
+    <value>Ordina per numero di fotogrammi (desc)</value>
+  </data>
+  <data name="SortByNewest" xml:space="preserve">
+    <value>Ordina per Più recente</value>
+  </data>
+  <data name="SortByOldest" xml:space="preserve">
+    <value>Ordina per il più vecchio</value>
+  </data>
+  <data name="SortByOutNameAsc" xml:space="preserve">
+    <value>Ordinamento per nome dell'uscita (asc)</value>
+  </data>
+  <data name="SortByOutNameDesc" xml:space="preserve">
+    <value>Ordinamento per nome dell'uscita (discendente)</value>
+  </data>
 </root>

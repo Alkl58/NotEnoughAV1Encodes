@@ -509,4 +509,22 @@ Please download and extract 7-zip to the following path:
   <data name="ButtonClearQueue" xml:space="preserve">
     <value>キューをクリアする</value>
   </data>
+  <data name="SortByFramecountAsc" xml:space="preserve">
+    <value>フレーム数でソート（昇順）</value>
+  </data>
+  <data name="SortByFramecountDesc" xml:space="preserve">
+    <value>フレーム数でソート（降順）</value>
+  </data>
+  <data name="SortByNewest" xml:space="preserve">
+    <value>新しい順</value>
+  </data>
+  <data name="SortByOldest" xml:space="preserve">
+    <value>古い順</value>
+  </data>
+  <data name="SortByOutNameAsc" xml:space="preserve">
+    <value>アウトネーム（昇順）で並び替え</value>
+  </data>
+  <data name="SortByOutNameDesc" xml:space="preserve">
+    <value>アウトネームで並び替え（降順）</value>
+  </data>
 </root>

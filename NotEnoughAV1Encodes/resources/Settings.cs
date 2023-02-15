@@ -51,5 +51,7 @@ namespace NotEnoughAV1Encodes
         public bool QueueParallel { get; set; }
         /// <summary>Toggles Input Seeking</summary>
         public bool UseInputSeeking { get; set; }
+        /// <summary>Sort Queue By...</summary>
+        public int SortQueueBy { get; set; }
     }
 }

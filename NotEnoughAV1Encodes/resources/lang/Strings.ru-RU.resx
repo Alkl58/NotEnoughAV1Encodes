@@ -493,4 +493,22 @@ Please download and extract 7-zip to the following path:
   <data name="ButtonClearQueue" xml:space="preserve">
     <value>Очистить очередь</value>
   </data>
+  <data name="SortByFramecountAsc" xml:space="preserve">
+    <value>Сортировать по количеству кадров (по возрастанию)</value>
+  </data>
+  <data name="SortByFramecountDesc" xml:space="preserve">
+    <value>Сортировать по количеству кадров (по убыванию)</value>
+  </data>
+  <data name="SortByNewest" xml:space="preserve">
+    <value>Сортировать по новизне</value>
+  </data>
+  <data name="SortByOldest" xml:space="preserve">
+    <value>Сортировать по старшинству</value>
+  </data>
+  <data name="SortByOutNameAsc" xml:space="preserve">
+    <value>Сортировать по названию выхода (по возрастанию)</value>
+  </data>
+  <data name="SortByOutNameDesc" xml:space="preserve">
+    <value>Сортировать по названию (по убыванию)</value>
+  </data>
 </root>
