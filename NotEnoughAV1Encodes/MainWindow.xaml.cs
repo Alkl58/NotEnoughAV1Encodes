@@ -778,6 +778,46 @@ namespace NotEnoughAV1Encodes
                 PresetSettings = JsonConvert.DeserializeObject<VideoSettings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", ComboBoxPresets.SelectedItem.ToString() + ".json")));
                 DataContext = PresetSettings;
                 presetLoadLock = false;
+
+                ApplyPresetAudioToCurrentVideo();
+            }
+            catch { }
+        }
+
+        private void ApplyPresetAudioToCurrentVideo()
+        {
+            try
+            {
+                videoDB.AudioTracks = (List<Audio.AudioTracks>)ListBoxAudioTracks.ItemsSource;
+                try { ListBoxAudioTracks.Items.Clear(); } catch { }
+                try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+
+                foreach (Audio.AudioTracks audioTrack in videoDB.AudioTracks)
+                {
+                    switch (audioTrack.Channels)
+                    {
+                        case 0:
+                            audioTrack.Bitrate = PresetSettings.AudioBitrateMono.ToString();
+                            audioTrack.Codec = PresetSettings.AudioCodecMono;
+                            break;
+                        case 1:
+                            audioTrack.Bitrate = PresetSettings.AudioBitrateStereo.ToString();
+                            audioTrack.Codec = PresetSettings.AudioCodecStereo;
+                            break;
+                        case 2:
+                            audioTrack.Bitrate = PresetSettings.AudioBitrateSixChannel.ToString();
+                            audioTrack.Codec = PresetSettings.AudioCodecSixChannel;
+                            break;
+                        case 3:
+                            audioTrack.Bitrate = PresetSettings.AudioBitrateEightChannel.ToString();
+                            audioTrack.Codec = PresetSettings.AudioCodecEightChannel;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
             }
             catch { }
         }
