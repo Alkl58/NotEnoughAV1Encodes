@@ -794,6 +794,7 @@ namespace NotEnoughAV1Encodes
         {
             try
             {
+                if (ListBoxAudioTracks.ItemsSource == null) return;
                 videoDB.AudioTracks = (List<Audio.AudioTracks>)ListBoxAudioTracks.ItemsSource;
                 try { ListBoxAudioTracks.Items.Clear(); } catch { }
                 try { ListBoxAudioTracks.ItemsSource = null; } catch { }
