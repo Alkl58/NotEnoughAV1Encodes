@@ -1214,7 +1214,7 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxCustomVideoSettings_Toggled(object sender, RoutedEventArgs e)
         {
-            if (CheckBoxCustomVideoSettings.IsOn && presetLoadLock == false)
+            if (CheckBoxCustomVideoSettings.IsOn && presetLoadLock == false && IsLoaded)
             {
                 TextBoxCustomVideoSettings.Text = GenerateEncoderCommand();
             }
