@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,6 +47,30 @@ namespace NotEnoughAV1Encodes.Video
                             }
                         }
 
+                        if (alreadyEncoded)
+                        {
+                            // Add Queue Progress Element to ChunkProgress List of already encoded chunks
+                            try
+                            {
+                                int progress = int.Parse(File.ReadLines(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_finished.log")).First());
+                                Queue.ChunkProgress chunkProgress = new();
+                                chunkProgress.ChunkName = chunk;
+                                chunkProgress.Progress = progress;
+                                if(queueElement.Passes == 2)
+                                {
+                                    chunkProgress.ProgressSecondPass = progress;
+                                }
+
+                                List<Queue.ChunkProgress> tempList = queueElement.ChunkProgress.ToList();
+                                if (!tempList.Any(n => n.ChunkName == chunk))
+                                {
+                                    queueElement.ChunkProgress.Add(chunkProgress);
+                                }
+
+                            }
+                            catch { }
+                        }
+
                         // Skip Chunk if already encoded (finished.log)
                         if (!alreadyEncoded)
                         {
@@ -54,6 +79,7 @@ namespace NotEnoughAV1Encodes.Video
                             string ChunkOutput = "";
                             string passesSettings = "";
                             string ffmpegFilter = "";
+                            int finalProgress = 0;
 
                             // Apply filter if the video has not been processed before
                             if (queueElement.ChunkingMethod == 1 || (queueElement.ChunkingMethod == 0 && queueElement.ReencodeMethod == 3))
@@ -195,6 +221,7 @@ namespace NotEnoughAV1Encodes.Video
                                     foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
                                     {
                                         progressElement.Progress = processedFrames;
+                                        finalProgress = processedFrames;
                                     }
                                 }
                             }
@@ -285,6 +312,8 @@ namespace NotEnoughAV1Encodes.Video
                             {
                                 // Save Finished Status
                                 FileStream finishedLog = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_finished.log"));
+                                var charBuffer = Encoding.UTF8.GetBytes(finalProgress.ToString());
+                                finishedLog.Write(charBuffer,0,charBuffer.Length);
                                 finishedLog.Close();
 
                                 Global.Logger("INFO  - VideoEncode.Encode() => Exit Code: 0  Chunk: " + chunk, queueElement.Output + ".log");
