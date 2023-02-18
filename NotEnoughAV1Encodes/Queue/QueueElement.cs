@@ -61,6 +61,8 @@ namespace NotEnoughAV1Encodes.Queue
         public long FrameCount { get; set; }
         /// <summary>Date Added to Queue.</summary>
         public DateTime DateAdded { get; set; } = DateTime.Now;
+        /// <summary>Amount of already encoded time.</summary>
+        public TimeSpan TimeEncoded { get; set; } = TimeSpan.Zero;
         /// <summary>List of Progress of each Chunk.</summary>
         public List<ChunkProgress> ChunkProgress { get; set; } = new();
         /// <summary>State of UI Settings</summary>
