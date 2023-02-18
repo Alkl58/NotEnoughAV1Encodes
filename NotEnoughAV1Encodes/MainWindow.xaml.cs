@@ -2596,6 +2596,12 @@ namespace NotEnoughAV1Encodes
                     if (queueElement == null) continue;
                     // Skip Item if there was some error during encoding / muxing
                     if (queueElement.Error == true) continue;
+                    // Check if Outfile exists
+                    if (!File.Exists(queueElement.VideoDB.OutputPath)) continue;
+                    // Check Outfilesize
+                    FileInfo videoOutput = new(queueElement.VideoDB.OutputPath);
+                    if (videoOutput.Length <= 50000) continue;
+
                     queueItems.Add(queueElement);
                 }
                 foreach(Queue.QueueElement queueElement in queueItems)
