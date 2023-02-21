@@ -95,7 +95,21 @@ namespace NotEnoughAV1Encodes
             TextBoxWorkerCount.Text = coreCount.ToString();
 
             // Load Settings from JSON
-            try { settingsDB = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"))); } catch { }
+            try 
+            {
+                settingsDB = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json")));
+
+                if (settingsDB == null)
+                {
+                    settingsDB = new();
+                    MessageBox.Show("Program Settings File under %appdata%\\NEAV1E\\settings.json corrupted.\nProgram Settings has been reset.\nPresets are not affected.","That shouldn't have happened!");
+                    try
+                    {
+                        File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
+                    }
+                    catch (Exception ex) { MessageBox.Show(ex.Message); }
+                }
+            } catch { }
 
             LoadSettings();
 
