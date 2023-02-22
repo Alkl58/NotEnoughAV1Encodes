@@ -1,4 +1,5 @@
-﻿using ControlzEx.Theming;
+﻿using ControlzEx.Standard;
+using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,8 @@ namespace NotEnoughAV1Encodes.Views
         public bool Quit { get; set; }
         public bool PresetBitdepth { get; set; }
         public bool ActivateSubtitles { get; set; } = true;
+        public bool MirrorFolderStructure { get; set; }
+        public string Input { get; set; }
         public string Preset { get; set; }
         public string Output { get; set; }
         public int Container { get; set; }
@@ -24,6 +27,8 @@ namespace NotEnoughAV1Encodes.Views
         {
             InitializeComponent();
             try { ThemeManager.Current.ChangeTheme(this, theme); } catch { }
+
+            Input = folderPath;
 
             SearchOption searchOption = SearchOption.TopDirectoryOnly;
             if (subfolders)
@@ -111,6 +116,7 @@ namespace NotEnoughAV1Encodes.Views
                 Output = TextBoxDestination.Text;
                 PresetBitdepth = ToggleSwitchUsePresetBitDepth.IsOn;
                 ActivateSubtitles = ToggleSwitchActivateSubtitles.IsOn;
+                MirrorFolderStructure = ToggleSwitchMirrorFolderStructure.IsOn;
                 Quit = true;
                 Close();
             }

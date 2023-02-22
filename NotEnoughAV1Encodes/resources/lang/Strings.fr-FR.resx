@@ -566,4 +566,7 @@ Please download and extract 7-zip to the following path:
   <data name="ToggleSwitchBatchSubFolders" xml:space="preserve">
     <value>Inclure les sous-dossiers en batch</value>
   </data>
+  <data name="ToggleSwitchMirrorFolderStructure" xml:space="preserve">
+    <value>Copier la structure des dossiers</value>
+  </data>
 </root>

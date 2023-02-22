@@ -10,7 +10,7 @@
         lex:LocalizeDictionary.DesignCulture="en"
         lex:ResxLocalizationProvider.DefaultAssembly="NotEnoughAV1Encodes"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-        Title="NEAV1E" Height="500" Width="800" ResizeMode="NoResize">
+        Title="NEAV1E" Height="550" Width="800" ResizeMode="NoResize">
     <Grid>
         <GroupBox Header="{lex:Loc LabelSource}" Margin="10,10,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="236" VerticalAlignment="Top">
             <Grid>
@@ -67,5 +67,6 @@
         </GroupBox>
         <mah:ToggleSwitch x:Name="ToggleSwitchUsePresetBitDepth" Height="62" Header="{lex:Loc}" Margin="10,411,0,0" Width="241" VerticalAlignment="Top"/>
         <mah:ToggleSwitch x:Name="ToggleSwitchActivateSubtitles" Height="62" Header="{lex:Loc}" Margin="254,409,0,0" Width="241" VerticalAlignment="Top" IsOn="True"/>
+        <mah:ToggleSwitch x:Name="ToggleSwitchMirrorFolderStructure" Height="62" Header="{lex:Loc}" Margin="10,466,0,0" Width="241" VerticalAlignment="Top"/>
     </Grid>
 </mah:MetroWindow>

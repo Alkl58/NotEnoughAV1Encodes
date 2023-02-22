@@ -237,11 +237,13 @@ namespace NotEnoughAV1Encodes
                     if (batchFolderDialog.Quit)
                     {
                         List<string> files =  batchFolderDialog.Files;
+                        string inputPath = batchFolderDialog.Input;
                         string preset = batchFolderDialog.Preset;
                         string output = batchFolderDialog.Output;
                         int container = batchFolderDialog.Container;
                         bool presetBitdepth = batchFolderDialog.PresetBitdepth;
                         bool activatesubtitles = batchFolderDialog.ActivateSubtitles;
+                        bool mirrorFolderStructure = batchFolderDialog.MirrorFolderStructure;
 
                         string outputContainer = "";
                         if (container == 0) outputContainer = ".mkv";
@@ -273,7 +275,14 @@ namespace NotEnoughAV1Encodes
                                 string outname = PresetSettings.PresetBatchName;
                                 outname = outname.Replace("{filename}", Path.GetFileNameWithoutExtension(file));
                                 outname = outname.Replace("{presetname}", preset);
+
                                 videoDB.OutputPath = Path.Combine(output, outname + outputContainer);
+                                if (mirrorFolderStructure)
+                                {
+                                    string relativePath = Path.GetRelativePath(inputPath, Path.GetDirectoryName(file));
+                                    videoDB.OutputPath = Path.Combine(output, relativePath, outname + outputContainer);
+                                }
+
                                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
                                 videoDB.ParseMediaInfo(PresetSettings);
 

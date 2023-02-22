@@ -563,4 +563,7 @@
   <data name="ToggleSwitchBatchSubFolders" xml:space="preserve">
     <value>在批处理模式中包括子文件夹</value>
   </data>
+  <data name="ToggleSwitchMirrorFolderStructure" xml:space="preserve">
+    <value>复制文件夹结构</value>
+  </data>
 </root>

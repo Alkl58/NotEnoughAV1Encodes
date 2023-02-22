@@ -1388,6 +1388,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mirror Folder Structure ähnelt.
+        /// </summary>
+        public static string ToggleSwitchMirrorFolderStructure {
+            get {
+                return ResourceManager.GetString("ToggleSwitchMirrorFolderStructure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Override Worker Count ähnelt.
         /// </summary>
         public static string ToggleSwitchOverrideWorkerCount {
