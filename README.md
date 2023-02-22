@@ -21,24 +21,17 @@ A tool to make encoding faster and easier for AV1 encoders.
 
 #### Testing Builds: [AppVeyor](https://ci.appveyor.com/project/Alkl/notenoughav1encodes/branch/master/artifacts)
 
-## 🐧 Linux (Wine)
-NEAV1E is written in .NET Core, which is in theory compatible with other platforms.
-
-However as the WPF UI Framework is used, it is not compatible with the native .NET Core Version of Linux.
-
-It is possible to run NEAV1E with the Wine compatibility layer (Wine is not an Emulator!).
-
-The following YouTube Video demonstrates that: [Run WPF Applications on Linux (Manjaro)](https://www.youtube.com/watch?v=u1PWRYLuiNQ)
-
-
 ## 📽 Encoders
 
 NEAV1E supports the following encoders:
 
+- Intel Quicksync AV1 (Intel ARC)
+- NVIDIA NVENC AV1 (RTX 40 Series)
 - aomenc / libaom
 - rav1e / librav1e
 - svt-av1 / libsvt-av1
 - libvpx-vp9
+- libx265 / libx264
 
 ### 🎉 Special Thanks To
 - [@wcxu21](https://github.com/wcxu21) for Chinese Translations!
