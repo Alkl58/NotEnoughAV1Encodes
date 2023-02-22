@@ -53,7 +53,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Paths">
+            <TabItem Header="{lex:Loc Paths}">
                 <Grid>
                     <GroupBox Margin="10,10,0,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="122" VerticalAlignment="Top" Header="{lex:Loc LabelTempPath}" HorizontalAlignment="Left" Width="299">
                         <Grid>
@@ -139,7 +139,7 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="About">
+            <TabItem Header="{lex:Loc About}">
                 <Grid>
                     <GroupBox Margin="10,10,0,0" Height="128" VerticalAlignment="Top" HorizontalAlignment="Left" Width="254">
                         <Grid>

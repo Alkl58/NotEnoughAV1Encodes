@@ -83,6 +83,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die About ähnelt.
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Import ähnelt.
         /// </summary>
         public static string AudioTracksImport {
@@ -1105,6 +1114,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         public static string OutputErrorDetected {
             get {
                 return ResourceManager.GetString("OutputErrorDetected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Paths ähnelt.
+        /// </summary>
+        public static string Paths {
+            get {
+                return ResourceManager.GetString("Paths", resourceCulture);
             }
         }
         

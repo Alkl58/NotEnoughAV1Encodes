@@ -575,4 +575,10 @@ Please download and extract 7-zip to the following path:
   <data name="ToggleSwitchMirrorFolderStructure" xml:space="preserve">
     <value>Mirror Folder Structure</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Paths" xml:space="preserve">
+    <value>Paths</value>
+  </data>
 </root>

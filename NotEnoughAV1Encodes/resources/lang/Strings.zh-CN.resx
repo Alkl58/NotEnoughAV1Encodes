@@ -566,4 +566,10 @@
   <data name="ToggleSwitchMirrorFolderStructure" xml:space="preserve">
     <value>复制文件夹结构</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="Paths" xml:space="preserve">
+    <value>路径</value>
+  </data>
 </root>

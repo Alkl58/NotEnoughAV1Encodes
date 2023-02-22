@@ -517,4 +517,10 @@ Please download and extract 7-zip to the following path:
   <data name="ToggleSwitchMirrorFolderStructure" xml:space="preserve">
     <value>Копирование структуры папок</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>О сайте</value>
+  </data>
+  <data name="Paths" xml:space="preserve">
+    <value>Пути</value>
+  </data>
 </root>
