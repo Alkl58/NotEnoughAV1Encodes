@@ -232,7 +232,7 @@ namespace NotEnoughAV1Encodes
                     }
 
                     // Batch Folder Input
-                    Views.BatchFolderDialog batchFolderDialog = new(settingsDB.Theme, openSource.Path);
+                    Views.BatchFolderDialog batchFolderDialog = new(settingsDB.Theme, openSource.Path, settingsDB.SubfolderBatch);
                     batchFolderDialog.ShowDialog();
                     if (batchFolderDialog.Quit)
                     {

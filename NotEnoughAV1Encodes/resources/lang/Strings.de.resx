@@ -563,4 +563,7 @@ Please download and extract 7-zip to the following path:
   <data name="SortByOutNameDesc" xml:space="preserve">
     <value>Sortieren nach Ausgabe Name (absteigend)</value>
   </data>
+  <data name="ToggleSwitchBatchSubFolders" xml:space="preserve">
+    <value>Unterordner im Batch einbeziehen</value>
+  </data>
 </root>

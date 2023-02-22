@@ -569,4 +569,7 @@ Please download and extract 7-zip to the following path:
   <data name="SortByOutNameDesc" xml:space="preserve">
     <value>Sort by Out Name (desc)</value>
   </data>
+  <data name="ToggleSwitchBatchSubFolders" xml:space="preserve">
+    <value>Include Subfolders in Batch Mode</value>
+  </data>
 </root>

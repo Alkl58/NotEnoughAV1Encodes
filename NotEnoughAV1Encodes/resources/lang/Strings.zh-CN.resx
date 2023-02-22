@@ -560,4 +560,7 @@
   <data name="SortByOutNameDesc" xml:space="preserve">
     <value>按名称排序（降）。</value>
   </data>
+  <data name="ToggleSwitchBatchSubFolders" xml:space="preserve">
+    <value>在批处理模式中包括子文件夹</value>
+  </data>
 </root>

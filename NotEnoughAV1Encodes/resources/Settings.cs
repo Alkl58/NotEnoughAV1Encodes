@@ -53,5 +53,7 @@ namespace NotEnoughAV1Encodes
         public bool UseInputSeeking { get; set; }
         /// <summary>Sort Queue By...</summary>
         public int SortQueueBy { get; set; }
+        /// <summary>Include Subfolders when opening a Batch Folder</summary>
+        public bool SubfolderBatch { get; set; }
     }
 }

@@ -511,4 +511,7 @@ Please download and extract 7-zip to the following path:
   <data name="SortByOutNameDesc" xml:space="preserve">
     <value>Сортировать по названию (по убыванию)</value>
   </data>
+  <data name="ToggleSwitchBatchSubFolders" xml:space="preserve">
+    <value>Включение вложенных папок в пакетном режиме</value>
+  </data>
 </root>

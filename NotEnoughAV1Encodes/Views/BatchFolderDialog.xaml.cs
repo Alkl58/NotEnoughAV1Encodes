@@ -20,13 +20,19 @@ namespace NotEnoughAV1Encodes.Views
 
         private bool OutputSelected = false;
 
-        public BatchFolderDialog(string theme, string folderPath)
+        public BatchFolderDialog(string theme, string folderPath, bool subfolders)
         {
             InitializeComponent();
             try { ThemeManager.Current.ChangeTheme(this, theme); } catch { }
 
+            SearchOption searchOption = SearchOption.TopDirectoryOnly;
+            if (subfolders)
+            {
+                searchOption = SearchOption.AllDirectories;
+            }
+
             // "Video Files|*.mp4;*.mkv;*.webm;*.flv;*.avi;*.mov;*.wmv;
-            var files = Directory.EnumerateFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly)
+            var files = Directory.EnumerateFiles(folderPath, "*.*", searchOption)
                         .Where(s => s.ToLower().EndsWith(".mp4")  || 
                                     s.ToLower().EndsWith(".mkv")  || 
                                     s.ToLower().EndsWith(".webm") || 

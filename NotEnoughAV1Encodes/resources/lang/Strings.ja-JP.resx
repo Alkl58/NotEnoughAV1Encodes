@@ -527,4 +527,7 @@ Please download and extract 7-zip to the following path:
   <data name="SortByOutNameDesc" xml:space="preserve">
     <value>アウトネームで並び替え（降順）</value>
   </data>
+  <data name="ToggleSwitchBatchSubFolders" xml:space="preserve">
+    <value>サブフォルダを一括で取り込む</value>
+  </data>
 </root>

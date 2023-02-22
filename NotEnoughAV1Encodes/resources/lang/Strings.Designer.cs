@@ -1343,6 +1343,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Include Subfolders in Batch Mode ähnelt.
+        /// </summary>
+        public static string ToggleSwitchBatchSubFolders {
+            get {
+                return ResourceManager.GetString("ToggleSwitchBatchSubFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Auto Clear Queue ähnelt.
         /// </summary>
         public static string ToggleSwitchClearQueue {
