@@ -366,21 +366,22 @@
                                     </Style>
                                 </Canvas.Style>
                                 <Slider x:Name="SliderQualityAOMFFMPEG" Value="{Binding AOMFFMPEGQuantizer}" VerticalAlignment="Top" SmallChange="1" Maximum="63" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True" Canvas.Left="131" Canvas.Top="69" Width="520"/>
-                                <Label Content="{Binding ElementName=SliderQualityAOMFFMPEG, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
+                                <Label x:Name="LabelQuantizerPreview" Content="{Binding ElementName=SliderQualityAOMFFMPEG, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
                                 <Label x:Name="LabelQualityMode" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="18,12,0,0" VerticalAlignment="Top" Width="108"/>
                                 <ComboBox x:Name="ComboBoxQualityMode" SelectedIndex="{Binding AOMFFMPEGQualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityMode_SelectionChanged">
                                     <ComboBoxItem Content="Constant Quality"/>
                                     <ComboBoxItem Content="Constrained Quality"/>
                                     <ComboBoxItem Content="Average Bitrate"/>
                                     <ComboBoxItem Content="Constrained Bitrate"/>
+                                    <ComboBoxItem Content="Target VMAF"/>
                                 </ComboBox>
                                 <Label x:Name="LabelQuantizer" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
-                                <Label x:Name="LabelBitrateMin" Content="{lex:Loc}" Visibility="{Binding ElementName=TextBoxMinBitrateAOMFFMPEG, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMinBitrateAOMFFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,140,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
-                                <Label x:Name="LabelBitrateAvg" Content="{lex:Loc}" IsEnabled="{Binding ElementName=TextBoxAVGBitrateAOMFFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,173,0,0" VerticalAlignment="Top" Width="105" Height="30"/>
-                                <Label x:Name="LabelBitrateMax" Content="{lex:Loc}" Visibility="{Binding ElementName=TextBoxMaxBitrateAOMFFMPEG, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=TextBoxMaxBitrateAOMFFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="21,206,0,0" VerticalAlignment="Top" Width="105" Height="30"/>
-                                <TextBox x:Name="TextBoxMinBitrateAOMFFMPEG" PreviewTextInput="NumberValidationTextBox" Margin="131,142,0,0" Text="{Binding AOMFFMPEGMinBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
-                                <TextBox x:Name="TextBoxAVGBitrateAOMFFMPEG" PreviewTextInput="NumberValidationTextBox" Margin="131,175,0,0" Text="{Binding AOMFFMPEGAvgBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
-                                <TextBox x:Name="TextBoxMaxBitrateAOMFFMPEG" PreviewTextInput="NumberValidationTextBox" Margin="131,208,0,0" Text="{Binding AOMFFMPEGMaxBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="False" HorizontalAlignment="Left" Width="120"/>
+                                <Label x:Name="LabelBitrateMin" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="106" Height="30" Canvas.Left="21" Canvas.Top="46"/>
+                                <Label x:Name="LabelBitrateAvg" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Height="30" Canvas.Left="21" Canvas.Top="79"/>
+                                <Label x:Name="LabelBitrateMax" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Height="30" Canvas.Left="21" Canvas.Top="112"/>
+                                <TextBox x:Name="TextBoxMinBitrateAOMFFMPEG" PreviewTextInput="NumberValidationTextBox" Text="{Binding AOMFFMPEGMinBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="48"/>
+                                <TextBox x:Name="TextBoxAVGBitrateAOMFFMPEG" PreviewTextInput="NumberValidationTextBox" Text="{Binding AOMFFMPEGAvgBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="81"/>
+                                <TextBox x:Name="TextBoxMaxBitrateAOMFFMPEG" PreviewTextInput="NumberValidationTextBox" Text="{Binding AOMFFMPEGMaxBitrate}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="120" Canvas.Left="131" Canvas.Top="114"/>
                             </Canvas>
                             <!-- RAV1E FFmpeg -->
                             <Canvas HorizontalAlignment="Left" Width="1055">

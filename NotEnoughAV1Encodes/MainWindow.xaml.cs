@@ -959,33 +959,54 @@ namespace NotEnoughAV1Encodes
 
         private void ComboBoxQualityMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            // Hide all
+            LabelQuantizer.Visibility = Visibility.Collapsed;
+            SliderQualityAOMFFMPEG.Visibility = Visibility.Collapsed;
+            LabelQuantizerPreview.Visibility = Visibility.Collapsed;
+            LabelBitrateMin.Visibility = Visibility.Collapsed;
+            TextBoxMinBitrateAOMFFMPEG.Visibility = Visibility.Collapsed;
+            LabelBitrateAvg.Visibility = Visibility.Collapsed;
+            TextBoxAVGBitrateAOMFFMPEG.Visibility = Visibility.Collapsed;
+            LabelBitrateMax.Visibility = Visibility.Collapsed;
+            TextBoxMaxBitrateAOMFFMPEG.Visibility = Visibility.Collapsed;
+            PresetSettings.TargetVMAF = false;
+
             if (ComboBoxQualityMode.SelectedIndex == 0)
             {
-                SliderQualityAOMFFMPEG.IsEnabled = true;
-                TextBoxAVGBitrateAOMFFMPEG.IsEnabled = false;
-                TextBoxMaxBitrateAOMFFMPEG.IsEnabled = false;
-                TextBoxMinBitrateAOMFFMPEG.IsEnabled = false;
+                // Constant Quality
+                LabelQuantizer.Visibility = Visibility.Visible;
+                SliderQualityAOMFFMPEG.Visibility = Visibility.Visible;
+                LabelQuantizerPreview.Visibility = Visibility.Visible;
             }
             else if (ComboBoxQualityMode.SelectedIndex == 1)
             {
-                SliderQualityAOMFFMPEG.IsEnabled = true;
-                TextBoxAVGBitrateAOMFFMPEG.IsEnabled = false;
-                TextBoxMaxBitrateAOMFFMPEG.IsEnabled = true;
-                TextBoxMinBitrateAOMFFMPEG.IsEnabled = false;
+                // Constrained Quality
+                TextBoxMaxBitrateAOMFFMPEG.Visibility = Visibility.Visible;
+                LabelBitrateMax.Visibility = Visibility.Visible;
+                LabelQuantizer.Visibility = Visibility.Visible;
+                SliderQualityAOMFFMPEG.Visibility = Visibility.Visible;
+                LabelQuantizerPreview.Visibility = Visibility.Visible;
             }
             else if (ComboBoxQualityMode.SelectedIndex == 2)
             {
-                SliderQualityAOMFFMPEG.IsEnabled = false;
-                TextBoxAVGBitrateAOMFFMPEG.IsEnabled = true;
-                TextBoxMaxBitrateAOMFFMPEG.IsEnabled = false;
-                TextBoxMinBitrateAOMFFMPEG.IsEnabled = false;
+                // Average Bitrate
+                LabelBitrateAvg.Visibility = Visibility.Visible;
+                TextBoxAVGBitrateAOMFFMPEG.Visibility = Visibility.Visible;
             }
             else if (ComboBoxQualityMode.SelectedIndex == 3)
             {
-                SliderQualityAOMFFMPEG.IsEnabled = false;
-                TextBoxAVGBitrateAOMFFMPEG.IsEnabled = true;
-                TextBoxMaxBitrateAOMFFMPEG.IsEnabled = true;
-                TextBoxMinBitrateAOMFFMPEG.IsEnabled = true;
+                // Constrained Bitrate
+                LabelBitrateMin.Visibility = Visibility.Visible;
+                TextBoxMinBitrateAOMFFMPEG.Visibility = Visibility.Visible;
+                LabelBitrateAvg.Visibility = Visibility.Visible;
+                TextBoxAVGBitrateAOMFFMPEG.Visibility = Visibility.Visible;
+                LabelBitrateMax.Visibility = Visibility.Visible;
+                TextBoxMaxBitrateAOMFFMPEG.Visibility = Visibility.Visible;
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 4) 
+            {
+                // Target VMAF
+                PresetSettings.TargetVMAF = true;
             }
         }
 
@@ -1798,6 +1819,7 @@ namespace NotEnoughAV1Encodes
                 1 => " -crf " + SliderQualityAOMFFMPEG.Value + " -b:v " + TextBoxMaxBitrateAOMFFMPEG.Text + "k",
                 2 => " -b:v " + TextBoxMinBitrateAOMFFMPEG.Text + "k",
                 3 => " -minrate " + TextBoxMinBitrateAOMFFMPEG.Text + "k -b:v " + TextBoxAVGBitrateAOMFFMPEG.Text + "k -maxrate " + TextBoxMaxBitrateAOMFFMPEG.Text + "k",
+                4 => " -crf {q_vmaf} -b:v 0",
                 _ => ""
             };
 

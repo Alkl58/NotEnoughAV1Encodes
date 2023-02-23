@@ -27,6 +27,8 @@ namespace NotEnoughAV1Encodes.Queue
         public string VideoCommand { get; set; }
         /// <summary>Video HDR Muxing parameters.</summary>
         public string VideoHDRMuxCommand { get; set; }
+        /// <summary>Target VMAF Chunk List.</summary>
+        public List<ChunkVMAF> ChunkVMAF { get; set; } = new();
         /// <summary>Audio Encoding parameters.</summary>
         public string AudioCommand { get; set; }
         /// <summary>Softsub Command</summary>

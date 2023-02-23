@@ -168,19 +168,29 @@ namespace NotEnoughAV1Encodes.Video
                                 ChunkOutput = passesSettings + "\"" +  Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\"" + _NULoutput;
                             }
 
+                            string videoCommand = queueElement.VideoCommand;
+
+                            // Target VMAF
+                            if (queueElement.Preset.TargetVMAF && queueElement.EncodingMethod is (int) Encoder.AOMFFMPEG)
+                            {
+                                VMAF vmaf = new();
+                                string calculatedQ = vmaf.Probe(queueElement, chunk, index, ffmpegFilter, settings, token);
+                                videoCommand = videoCommand.Replace("{q_vmaf}", calculatedQ);
+                            }
+
                             Process processVideo = new();
                             ProcessStartInfo startInfo = new()
                             {
                                 WindowStyle = ProcessWindowStyle.Hidden,
                                 FileName = "cmd.exe",
                                 WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                Arguments = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
+                                Arguments = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + videoCommand + " " + ChunkOutput,
                                 RedirectStandardError = true,
                                 RedirectStandardInput = true,
                                 CreateNoWindow = true
                             };
 
-                            string debugCommand = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput;
+                            string debugCommand = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + videoCommand + " " + ChunkOutput;
                             Global.Logger("INFO  - VideoEncode.Encode() => Command: " + debugCommand, queueElement.Output + ".log");
 
                             processVideo.StartInfo = startInfo;
@@ -260,13 +270,13 @@ namespace NotEnoughAV1Encodes.Video
                                     WindowStyle = ProcessWindowStyle.Hidden,
                                     FileName = "cmd.exe",
                                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
-                                    Arguments = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput,
+                                    Arguments = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + videoCommand + " " + ChunkOutput,
                                     RedirectStandardError = true,
                                     RedirectStandardInput = true,
                                     CreateNoWindow = true
                                 };
 
-                                string DebugCommand = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + queueElement.VideoCommand + " " + ChunkOutput;
+                                string DebugCommand = "/C ffmpeg.exe -y " + ChunkInput + " " + ffmpegFilter + " -an -sn -map_metadata -1 " + videoCommand + " " + ChunkOutput;
                                 Global.Logger("INFO  - VideoEncode.Encode() 2nd Pass => Command: " + DebugCommand, queueElement.Output + ".log");
 
                                 processVideo2ndPass.StartInfo = startInfo;
