@@ -119,7 +119,9 @@ namespace NotEnoughAV1Encodes.Video
                                 // Input for Scenebased Encoding (supports picture based hardsubbing)
                                 if (settings.UseInputSeeking)
                                 {
-                                    ChunkInput = chunk + " -i \"" + queueElement.VideoDB.InputPath + "\" " + ChunkHardsubInput;
+                                    string ss = chunk.Split("-t")[0];
+                                    string to = "-t " + chunk.Split("-t")[1] + " ";
+                                    ChunkInput = ss + " -i \"" + queueElement.VideoDB.InputPath + "\" " + to + ChunkHardsubInput;
                                 }
                                 else
                                 {
