@@ -29,6 +29,7 @@
     <None Remove="resources\img\start.png" />
     <None Remove="resources\img\stop.png" />
     <None Remove="resources\img\video.png" />
+    <None Remove="resources\img\videoplaceholder.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +51,7 @@
     <Resource Include="resources\img\start.png" />
     <Resource Include="resources\img\stop.png" />
     <Resource Include="resources\img\video.png" />
+    <Resource Include="resources\img\videoplaceholder.jpg" />
   </ItemGroup>
 
   <ItemGroup>
