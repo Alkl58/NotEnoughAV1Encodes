@@ -162,6 +162,11 @@ namespace NotEnoughAV1Encodes
             CreateCropPreviewsOnLoad();
         }
 
+        private void ButtonCropAutoDetect_Click(object sender, RoutedEventArgs e)
+        {
+            AutoCropDetect();
+        }
+
         private void ButtonCropPreviewForward_Click(object sender, RoutedEventArgs e)
         {
             if (videoDB.InputPath == null) return;
@@ -1375,6 +1380,75 @@ namespace NotEnoughAV1Encodes
                 ImageCropPreview.Source = bmi;
             }
             catch { }
+        }
+
+        private async void AutoCropDetect()
+        {
+            if (videoDB.InputPath == null) return;
+
+            List<string> cropList = new();
+
+            string time = videoDB.MIDuration;
+            
+            int seconds = Convert.ToInt32(Math.Floor(TimeSpan.Parse(time).TotalSeconds / 4));
+
+            // Use the current frame as start point of detection
+            int index = int.Parse(LabelCropPreview.Content.ToString().Split("/")[0]);
+
+            string command = "/C ffmpeg.exe -ss " + (index * seconds).ToString() + " -i \"" + videoDB.InputPath + "\" -vf cropdetect=24:16:0 -t 5  -f null -";
+
+            Process ffmpegProcess = new();
+            ProcessStartInfo startInfo = new()
+            {
+                FileName = "cmd.exe",
+                WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
+                WindowStyle = ProcessWindowStyle.Hidden,
+                Arguments = command,
+                RedirectStandardError = true,
+                RedirectStandardInput = true,
+                CreateNoWindow = true
+            };
+
+            ffmpegProcess.StartInfo = startInfo;
+            ffmpegProcess.Start();
+
+            string lastLine;
+            while (! ffmpegProcess.StandardError.EndOfStream)
+            {
+                lastLine = ffmpegProcess.StandardError.ReadLine();
+                if (lastLine.Contains("crop="))
+                {
+                    cropList.Add(lastLine.Split("crop=")[1]);
+                }
+            }
+
+            ffmpegProcess.WaitForExit();
+
+            // Get most occuring value
+            string crop = cropList.Where(c => !string.IsNullOrEmpty(c)).GroupBy(a => a).OrderByDescending(b => b.Key[1].ToString()).First().Key;
+
+            try
+            {
+                // Translate Output to crop values
+                int cropTop = int.Parse(crop.Split(":")[3]);
+                TextBoxFiltersCropTop.Text = cropTop.ToString();
+
+                int cropLeft = int.Parse(crop.Split(":")[2]);
+                TextBoxFiltersCropLeft.Text = cropLeft.ToString();
+
+                int cropBottom = videoDB.MIHeight - cropTop - int.Parse(crop.Split(":")[1]);
+                TextBoxFiltersCropBottom.Text = cropBottom.ToString();
+
+                int cropRight = videoDB.MIWidth - cropLeft - int.Parse(crop.Split(":")[0]);
+                TextBoxFiltersCropRight.Text = cropRight.ToString();
+
+                string cropNew = "-vf " + VideoFiltersCrop();
+                await Task.Run(() => CreateCropPreviews(cropNew));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void CreateCropPreviews(string crop)

@@ -572,4 +572,7 @@
   <data name="Paths" xml:space="preserve">
     <value>路径</value>
   </data>
+  <data name="ButtonCropAutoDetect" xml:space="preserve">
+    <value>自动检测</value>
+  </data>
 </root>

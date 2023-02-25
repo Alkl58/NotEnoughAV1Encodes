@@ -530,4 +530,7 @@ Please download and extract 7-zip to the following path:
   <data name="Paths" xml:space="preserve">
     <value>Percorsi</value>
   </data>
+  <data name="ButtonCropAutoDetect" xml:space="preserve">
+    <value>Rilevamento automatico</value>
+  </data>
 </root>

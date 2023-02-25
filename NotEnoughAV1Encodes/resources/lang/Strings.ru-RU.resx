@@ -523,4 +523,7 @@ Please download and extract 7-zip to the following path:
   <data name="Paths" xml:space="preserve">
     <value>Пути</value>
   </data>
+  <data name="ButtonCropAutoDetect" xml:space="preserve">
+    <value>автоматическое обнаружение</value>
+  </data>
 </root>
