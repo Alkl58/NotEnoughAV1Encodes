@@ -18,6 +18,7 @@ namespace NotEnoughAV1Encodes.Views
         public ProgramSettings(Settings settingsDB)
         {
             InitializeComponent();
+            settingsDBTemp = settingsDB;
             ToggleSwitchOverrideWorkerCount.IsOn = settingsDB.OverrideWorkerCount;
             ToggleSwitchDeleteTempFiles.IsOn = settingsDB.DeleteTempFiles;
             ToggleSwitchAutoPauseResume.IsOn = settingsDB.AutoResumePause;
