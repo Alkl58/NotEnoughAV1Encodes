@@ -2441,7 +2441,7 @@ namespace NotEnoughAV1Encodes
             };
 
             // Preset
-            settings += quality + " --quality " + GenerateNVENCEncoderSpeed();
+            settings += quality + " --preset " + GenerateNVENCEncoderSpeed();
 
             // Bit-Depth
             settings += " --output-depth ";

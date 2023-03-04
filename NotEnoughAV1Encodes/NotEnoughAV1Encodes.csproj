@@ -6,7 +6,7 @@
     <UseWPF>true</UseWPF>
 	<UseWindowsForms>true</UseWindowsForms>
 	<ApplicationIcon>resources\img\neav1e.ico</ApplicationIcon>
-    <Version>2.1.2</Version>
+    <Version>2.1.3</Version>
     <Authors>Alkl58</Authors>
   </PropertyGroup>
 
