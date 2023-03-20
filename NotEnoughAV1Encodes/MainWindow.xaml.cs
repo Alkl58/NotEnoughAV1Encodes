@@ -2540,7 +2540,7 @@ namespace NotEnoughAV1Encodes
                         {
                             await Task.Run(() => videoSplitter.Split(queueElement, _cancelToken), _cancelToken);
 
-                            if (queueElement.ChunkingMethod == 0)
+                            if (queueElement.ChunkingMethod == 0 || queueElement.Preset.TargetVMAF)
                             {
                                 // Equal Chunking
                                 IOrderedEnumerable<string> sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), "*.mkv", SearchOption.TopDirectoryOnly).OrderBy(f => f);

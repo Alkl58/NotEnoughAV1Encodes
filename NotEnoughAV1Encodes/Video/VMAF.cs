@@ -19,7 +19,7 @@ namespace NotEnoughAV1Encodes.Video
             string ffmpegCommand = "/C ffmpeg.exe";
 
             // Input
-            ffmpegCommand += " " + source;
+            ffmpegCommand += source;
             ffmpegCommand += " -i \"" + distorted + "\"";
 
             // VMAF Filter
@@ -60,7 +60,7 @@ namespace NotEnoughAV1Encodes.Video
             while (!processVideo.StandardError.EndOfStream)
             {
                 lastLine = processVideo.StandardError.ReadLine();
-                Global.Logger(lastLine, queueElement.Output + ".log");
+                //Global.Logger(lastLine, queueElement.Output + ".log");
                 if (lastLine.Contains("VMAF score:"))
                 {
                     string split = "VMAF score:";
@@ -93,13 +93,10 @@ namespace NotEnoughAV1Encodes.Video
             // Create Folder where VMAF Probe Encodes are saved
             Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "VMAF"));
 
-            Global.Logger("INFO  - VMAF.EncodeAndCalculate() => Chunk: " + chunk + " -  Q: " + quality, queueElement.Output + ".log");
-
             string ChunkOutput = "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "VMAF", index.ToString("D6") + "_vmaf_probe_q" + quality + ".mp4") + "\"";
             string videoCommand = " -c:v libaom-av1 -crf " + quality + " -b:v 0 -cpu-used 6 -threads 4 -tile-columns 2 -tile-rows 1 ";
-            string ChunkInput = "";
 
-            ChunkInput = chunk + " -i \"" + queueElement.VideoDB.InputPath + "\" ";
+            string ChunkInput = " -i \"" + chunk + "_vmaf_reference.mp4\"";
 
             if (queueElement.Preset.TargetVMAFUserEncoderSettings)
             {
@@ -195,6 +192,20 @@ namespace NotEnoughAV1Encodes.Video
             vmafValues.Add(vmaf);
             Global.Logger("INFO  - VMAF.Probe() => Chunk: " + chunk + " - Probe Q: " + queueElement.Preset.TargetVMAFMinQ.ToString() + " => VMAF: " + vmaf.ToString(), queueElement.Output + ".log");
 
+            double diff = Math.Abs(queueElement.Preset.TargetVMAFScore - vmaf);
+            if (vmaf < queueElement.Preset.TargetVMAFScore || diff < 1.0)
+            {
+                // Skip everything, the calculated vmaf score is less than the target vmaf score, can't go below the TargetVMAFMinQ (Highest Quality)
+                // or diff is already less than 1
+                chunkVMAF.CalculatedQuantizer = queueElement.Preset.TargetVMAFMinQ.ToString();
+                chunkVMAF.VMAFValues = vmafValues;
+                chunkVMAF.QValues = qValues;
+
+                queueElement.ChunkVMAF.Add(chunkVMAF);
+
+                return chunkVMAF.CalculatedQuantizer;
+            }
+
             qValues.Add(queueElement.Preset.TargetVMAFMaxQ);
             vmaf = EncodeAndCalculate(queueElement, chunk, index, ffmpegFilter, queueElement.Preset.TargetVMAFMaxQ.ToString(), settings, token);
             vmafValues.Add(vmaf);
@@ -205,13 +216,46 @@ namespace NotEnoughAV1Encodes.Video
             double interpolatedQ = InterpolateVMAF(qValues.ToArray(), vmafValues.ToArray(), queueElement.Preset.TargetVMAFScore);
             Global.Logger("INFO  - VMAF.Probe() => Chunk: " + chunk + " - Interpolated Q: " + interpolatedQ.ToString() + " for VMAF: " + queueElement.Preset.TargetVMAFScore.ToString(), queueElement.Output + ".log");
 
+            // already outside of the given min max q values
+            if (interpolatedQ < queueElement.Preset.TargetVMAFMinQ)
+            {
+                chunkVMAF.CalculatedQuantizer = queueElement.Preset.TargetVMAFMinQ.ToString();
+                chunkVMAF.VMAFValues = vmafValues;
+                chunkVMAF.QValues = qValues;
+
+                queueElement.ChunkVMAF.Add(chunkVMAF);
+
+                return chunkVMAF.CalculatedQuantizer;
+            }
+
+            if (interpolatedQ > queueElement.Preset.TargetVMAFMaxQ)
+            {
+                chunkVMAF.CalculatedQuantizer = queueElement.Preset.TargetVMAFMaxQ.ToString();
+                chunkVMAF.VMAFValues = vmafValues;
+                chunkVMAF.QValues = qValues;
+
+                queueElement.ChunkVMAF.Add(chunkVMAF);
+
+                return chunkVMAF.CalculatedQuantizer;
+            }
+
             // Do the encodes / calculations as often as specified in the settings
             for (int i = 2; i < queueElement.Preset.TargetVMAFProbes; i++)
             {
                 qValues.Add(interpolatedQ);
-                vmafValues.Add(EncodeAndCalculate(queueElement, chunk, index, ffmpegFilter, Convert.ToInt32(Math.Round(interpolatedQ)).ToString(), settings, token));
+                double vmafTmp = EncodeAndCalculate(queueElement, chunk, index, ffmpegFilter, Convert.ToInt32(Math.Round(interpolatedQ)).ToString(), settings, token);
+                vmafValues.Add(vmafTmp);
 
                 interpolatedQ = InterpolateVMAF(qValues.ToArray(), vmafValues.ToArray(), queueElement.Preset.TargetVMAFScore);
+                Global.Logger("INFO  - VMAF.Probe() => Chunk: " + chunk + " - Interpolated Q: " + interpolatedQ.ToString() + " for VMAF: " + queueElement.Preset.TargetVMAFScore.ToString(), queueElement.Output + ".log");
+
+                // Skip remaining probes if the target vmaf value is less than 1 apart from current vmaf value
+                diff = Math.Abs(queueElement.Preset.TargetVMAFScore - vmafTmp);
+                if (diff < 1.0 || interpolatedQ < queueElement.Preset.TargetVMAFMinQ)
+                {
+                    Global.Logger("INFO  - VMAF.Probe() => Chunk: " + chunk + " - SKIP - Interpolated Q: " + interpolatedQ.ToString() + " VMAF Diff: " + diff.ToString(), queueElement.Output + ".log");
+                    break;
+                }
             }
 
             chunkVMAF.CalculatedQuantizer = Convert.ToInt32(Math.Round(interpolatedQ)).ToString();
