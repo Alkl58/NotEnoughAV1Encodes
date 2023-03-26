@@ -222,9 +222,18 @@ namespace NotEnoughAV1Encodes.Video
             foreach (string seek in ffmpegArgs)
             {
                 string ss = seek.Split("-t")[0];
+                double to = Convert.ToDouble(seek.Split("-t")[1]);
+                string seekto = to.ToString();
+
+                // Only use TargetVMAFProbeLength when the chunk is longer than that value
+                if (to > queueElement.Preset.TargetVMAFProbeLength)
+                {
+                    seekto = queueElement.Preset.TargetVMAFProbeLength.ToString();
+                }
+                
                 // Generate Command
-                string ffmpegCommand = "/C ffmpeg.exe -y " + ss + " -i \"" + queueElement.VideoDB.InputPath + "\" -t 1 -c:v libx264 -preset ultrafast -crf 0" +
-                                       " -reset_timestamps 1 -map_metadata -1 -sn -an \"" +
+                string ffmpegCommand = "/C ffmpeg.exe -y " + ss + " -i \"" + queueElement.VideoDB.InputPath + "\" -t " + seekto +
+                                       " -c:v libx264 -preset ultrafast -crf 0 -reset_timestamps 1 -map_metadata -1 -sn -an \"" +
                                        Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks", "split" + counter_temp.ToString("D6") + ".mkv_vmaf_reference.mp4") + "\"";
 
                 // Start Splitting

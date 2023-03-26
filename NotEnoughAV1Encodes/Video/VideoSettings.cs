@@ -189,12 +189,14 @@
         /// <summary>Target VMAF Use user Encoder Settings (false uses hardcoded settings)</summary>
         public bool TargetVMAFUserEncoderSettings { get; set; }
         /// <summary>Target VMAF Score.</summary>
-        public double TargetVMAFScore { get; set; } = 97.0;
+        public double TargetVMAFScore { get; set; } = 95.0;
         /// <summary>Target VMAF Tries.</summary>
         public int TargetVMAFProbes { get; set; } = 4;
         /// <summary>Target VMAF Minimum Q (Highest Quality).</summary>
-        public int TargetVMAFMinQ { get; set; } = 20;
+        public int TargetVMAFMinQ { get; set; } = 15;
         /// <summary>Target VMAF Maximum Q (Lowest Quality).</summary>
         public int TargetVMAFMaxQ { get; set; } = 40;
+        /// <summary>Target VMAF Proble Video Length (in seconds).</summary>
+        public int TargetVMAFProbeLength { get; set; } = 1;
     }
 }

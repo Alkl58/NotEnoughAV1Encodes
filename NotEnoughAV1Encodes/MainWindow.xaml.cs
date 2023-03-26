@@ -969,6 +969,21 @@ namespace NotEnoughAV1Encodes
             TextBoxAVGBitrateAOMFFMPEG.Visibility = Visibility.Collapsed;
             LabelBitrateMax.Visibility = Visibility.Collapsed;
             TextBoxMaxBitrateAOMFFMPEG.Visibility = Visibility.Collapsed;
+            LabelTargetVMAF.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFPreview.Visibility = Visibility.Collapsed;
+            SliderTargetVMAF.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFProbes.Visibility = Visibility.Collapsed;
+            SliderTargetVMAFProbes.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFProbesPreview.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFMinQ.Visibility = Visibility.Collapsed;
+            SliderTargetVMAFMinQ.Visibility= Visibility.Collapsed;
+            LabelTargetVMAFMinQPreview.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFMaxQ.Visibility = Visibility.Collapsed;
+            SliderTargetVMAFMaxQ.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFMaxQPreview.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFMaxProbeLength.Visibility = Visibility.Collapsed;
+            SliderTargetVMAFMaxProbeLength.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFMaxProbeLengthPreview.Visibility = Visibility.Collapsed;
             PresetSettings.TargetVMAF = false;
 
             if (ComboBoxQualityMode.SelectedIndex == 0)
@@ -1007,6 +1022,39 @@ namespace NotEnoughAV1Encodes
             {
                 // Target VMAF
                 PresetSettings.TargetVMAF = true;
+                LabelTargetVMAF.Visibility = Visibility.Visible;
+                LabelTargetVMAFPreview.Visibility = Visibility.Visible;
+                SliderTargetVMAF.Visibility = Visibility.Visible;
+                LabelTargetVMAFProbes.Visibility = Visibility.Visible;
+                SliderTargetVMAFProbes.Visibility = Visibility.Visible;
+                LabelTargetVMAFProbesPreview.Visibility = Visibility.Visible;
+                LabelTargetVMAFMinQ.Visibility = Visibility.Visible;
+                SliderTargetVMAFMinQ.Visibility = Visibility.Visible;
+                LabelTargetVMAFMinQPreview.Visibility = Visibility.Visible;
+                LabelTargetVMAFMaxQ.Visibility = Visibility.Visible;
+                SliderTargetVMAFMaxQ.Visibility = Visibility.Visible;
+                LabelTargetVMAFMaxQPreview.Visibility = Visibility.Visible;
+                LabelTargetVMAFMaxProbeLength.Visibility = Visibility.Visible;
+                SliderTargetVMAFMaxProbeLength.Visibility = Visibility.Visible;
+                LabelTargetVMAFMaxProbeLengthPreview.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void SliderTargetVMAFMinQ_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (SliderTargetVMAF == null) return;
+            if (SliderTargetVMAFMinQ.Value > SliderTargetVMAFMaxQ.Value)
+            {
+                SliderTargetVMAFMaxQ.Value = SliderTargetVMAFMinQ.Value;
+            }
+        }
+
+        private void SliderTargetVMAFMaxQ_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (SliderTargetVMAF == null) return;
+            if (SliderTargetVMAFMinQ.Value > SliderTargetVMAFMaxQ.Value)
+            {
+                SliderTargetVMAFMinQ.Value = SliderTargetVMAFMaxQ.Value;
             }
         }
 
