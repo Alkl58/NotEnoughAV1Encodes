@@ -566,4 +566,7 @@ Please download and extract 7-zip to the following path:
   <data name="SliderTargetVMAFProbesToolTip" xml:space="preserve">
     <value>目標品質に近づけるための試行回数の最大値。ロジックは、必要以上の試行回数を使用しないようにします。最低2回の試行が必要で、この2回の試行には、以下から最大Qと最小Qが使用されます。</value>
   </data>
+  <data name="ButtonCropAutoDetect" xml:space="preserve">
+    <value>オートディテクト</value>
+  </data>
 </root>

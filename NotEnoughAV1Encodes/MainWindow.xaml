@@ -210,19 +210,20 @@
             </TabItem>
             <TabItem x:Name="TabItemFilters" Header="{lex:Loc}">
                 <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                    <GroupBox x:Name="GroupBoxCrop" Header="{lex:Loc}" HorizontalAlignment="Left" Height="203" Margin="14,107,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxCrop" Header="{lex:Loc}" Margin="293,10,167,128" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterCrop}">
-                            <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="49,75,0,0" TextWrapping="Wrap" Text="{Binding FilterCropLeft}" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-                            <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="160,75,0,0" TextWrapping="Wrap" Text="{Binding FilterCropRight}" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-                            <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="105,43,0,0" TextWrapping="Wrap" Text="{Binding FilterCropTop}" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-                            <TextBox x:Name="TextBoxFiltersCropBottom" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="105,107,0,0" TextWrapping="Wrap" Text="{Binding FilterCropBottom}" VerticalAlignment="Top" Width="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-                            <Label x:Name="LabelBottom" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="105,133,0,0" VerticalAlignment="Top" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-                            <Label x:Name="LabelTop" Content="{lex:Loc}" HorizontalAlignment="Center" Margin="105,17,104,125" VerticalAlignment="Center" Width="55" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-                            <Label x:Name="LabelLeft" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="-3,75,0,0" VerticalAlignment="Top" Height="26" Width="52" HorizontalContentAlignment="Right" />
-                            <Label x:Name="LabelRight" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="215,75,-5,0" VerticalAlignment="Top" Height="28" Width="54" />
+                            <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" Height="26" Margin="4,0,0,0" TextWrapping="Wrap" Text="{Binding FilterCropLeft}" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="ToggleSwitchFilterCrop_Toggled" HorizontalAlignment="Left" Width="56" MinWidth="56" />
+                            <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" Height="26" Margin="0,0,7,0" TextWrapping="Wrap" Text="{Binding FilterCropRight}" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="ToggleSwitchFilterCrop_Toggled" HorizontalAlignment="Right" Width="56" MinWidth="56"/>
+                            <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" Height="26" Margin="0,10,0,0" TextWrapping="Wrap" Text="{Binding FilterCropTop}" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="ToggleSwitchFilterCrop_Toggled"  Width="56" MinWidth="56" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="TextBoxFiltersCropBottom" PreviewTextInput="NumberValidationTextBox" Margin="0,0,0,10" TextWrapping="Wrap" Text="{Binding FilterCropBottom}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="ToggleSwitchFilterCrop_Toggled"  Width="56" MinWidth="56" HorizontalAlignment="Center" Height="26" VerticalAlignment="Bottom"/>
+                            <Image x:Name="ImageCropPreview" Margin="67,44,68,48" Source="/resources/img/videoplaceholder.jpg"/>
+                            <Label x:Name="LabelCropPreview" Content="1/4" Margin="0,11,84,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" RenderTransformOrigin="0.775,0.579" HorizontalAlignment="Right" Width="40"/>
+                            <Button x:Name="ButtonCropPreviewForward"  Content="&gt;" Margin="0,10,68,0" VerticalAlignment="Top" Click="ButtonCropPreviewForward_Click" HorizontalAlignment="Right" Width="22"/>
+                            <Button x:Name="ButtonCropPreviewBackward"  Content="&lt;" Margin="0,10,118,0" VerticalAlignment="Top" Click="ButtonCropPreviewBackward_Click" HorizontalAlignment="Right" Width="22"/>
+                            <Button x:Name="ButtonCropAutoDetect" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="67,10,0,0" VerticalAlignment="Top" Width="120" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonCropAutoDetect_Click"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="GroupBoxResize" Header="{lex:Loc}" HorizontalAlignment="Left" Height="203" Margin="293,107,0,0" VerticalAlignment="Top" Width="285" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxResize" Header="{lex:Loc}" HorizontalAlignment="Left" Height="203" Margin="14,204,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterResize}">
                             <Label x:Name="LabelWidth" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="28" Width="56" HorizontalContentAlignment="Right" />
                             <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="85,10,0,0" TextWrapping="Wrap" Text="{Binding FilterResizeWidth}" VerticalAlignment="Top" Width="169" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="If set to 0 it will automatically set the corresponding width to the height." />
@@ -256,7 +257,7 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="GroupBoxDeinterlace" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="293,10,0,0" VerticalAlignment="Top" Width="285" mah:ControlsHelper.ContentCharacterCasing="Normal">
+                    <GroupBox x:Name="GroupBoxDeinterlace" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="14,107,0,0" VerticalAlignment="Top" Width="274" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterDeinterlace}">
                             <Label x:Name="LabelDeinterlace" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Height="28" />
                             <ComboBox x:Name="ComboBoxFiltersDeinterlace" HorizontalAlignment="Left" Margin="85,20,0,0" VerticalAlignment="Top" Width="169" Height="29" VerticalContentAlignment="Center" SelectedIndex="{Binding FilterDeinterlaceIndex}">
@@ -267,10 +268,10 @@
                             </ComboBox>
                         </Grid>
                     </GroupBox>
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" IsOn="{Binding FilterCrop}" Header="" Height="61" Margin="202,82,0,0" VerticalAlignment="Top" Width="100" />
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" IsOn="{Binding FilterResize}" Header="" Height="62" Margin="492,82,0,0" VerticalAlignment="Top" Width="100" />
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" IsOn="{Binding FilterCrop}" Header="" Height="61" Margin="0,-16,101,0" VerticalAlignment="Top" Width="100" Toggled="ToggleSwitchFilterCrop_Toggled" HorizontalAlignment="Right" />
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" IsOn="{Binding FilterResize}" Header="" Height="62" Margin="202,179,0,0" VerticalAlignment="Top" Width="100" />
                     <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" IsOn="{Binding FilterRotate}" Header="" Height="100" Margin="202,-15,0,0" VerticalAlignment="Top" Width="159" />
-                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" IsOn="{Binding FilterDeinterlace}" Header="" Height="100" Margin="492,-15,0,0" VerticalAlignment="Top" Width="100" />
+                    <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" IsOn="{Binding FilterDeinterlace}" Header="" Height="100" Margin="202,81,0,0" VerticalAlignment="Top" Width="132" />
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabItemVideo" Header="{lex:Loc}">

@@ -557,4 +557,7 @@ Please download and extract 7-zip to the following path:
   <data name="SliderTargetVMAFProbesToolTip" xml:space="preserve">
     <value>Numero massimo di tentativi per approssimare la qualità target. La logica cercherà di evitare di utilizzare più tentativi del necessario. È necessario un minimo di 2 tentativi; questi 2 tentativi utilizzano Q max e Q min dal basso.</value>
   </data>
+  <data name="ButtonCropAutoDetect" xml:space="preserve">
+    <value>Rilevamento automatico</value>
+  </data>
 </root>

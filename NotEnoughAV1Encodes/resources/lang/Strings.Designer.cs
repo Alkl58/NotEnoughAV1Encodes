@@ -119,6 +119,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Auto Detect ähnelt.
+        /// </summary>
+        public static string ButtonCropAutoDetect {
+            get {
+                return ResourceManager.GetString("ButtonCropAutoDetect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete ähnelt.
         /// </summary>
         public static string ButtonDeletePreset {

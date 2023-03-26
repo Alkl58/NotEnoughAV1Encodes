@@ -6,7 +6,7 @@
     <UseWPF>true</UseWPF>
 	<UseWindowsForms>true</UseWindowsForms>
 	<ApplicationIcon>resources\img\neav1e.ico</ApplicationIcon>
-    <Version>2.1.2</Version>
+    <Version>2.1.3</Version>
     <Authors>Alkl58</Authors>
   </PropertyGroup>
 
@@ -29,6 +29,7 @@
     <None Remove="resources\img\start.png" />
     <None Remove="resources\img\stop.png" />
     <None Remove="resources\img\video.png" />
+    <None Remove="resources\img\videoplaceholder.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +52,7 @@
     <Resource Include="resources\img\start.png" />
     <Resource Include="resources\img\stop.png" />
     <Resource Include="resources\img\video.png" />
+    <Resource Include="resources\img\videoplaceholder.jpg" />
   </ItemGroup>
 
   <ItemGroup>

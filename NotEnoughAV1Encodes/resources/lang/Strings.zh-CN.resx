@@ -251,7 +251,7 @@
     <value>比特率(最大)：</value>
   </data>
   <data name="LabelBitrateMin" xml:space="preserve">
-    <value>比特率(分钟)：</value>
+    <value>比特率(最小)：</value>
   </data>
   <data name="LabelBottom" xml:space="preserve">
     <value>底部</value>
@@ -410,7 +410,7 @@
     <value>宽度：</value>
   </data>
   <data name="LabelWorkerCount" xml:space="preserve">
-    <value>工作数量：</value>
+    <value>工作线程数量：</value>
   </data>
   <data name="MessageConstrainedBitrateAomenc" xml:space="preserve">
     <value>NEAV1E 目前不支持受限比特率 (aomenc)</value>
@@ -503,10 +503,10 @@
     <value>自动清除队列</value>
   </data>
   <data name="ToggleSwitchOverrideWorkerCount" xml:space="preserve">
-    <value>覆盖工作数量</value>
+    <value>覆盖工作线程数量</value>
   </data>
   <data name="ToggleSwitchShutdown" xml:space="preserve">
-    <value>编码后关机</value>
+    <value>编码完成后关机</value>
   </data>
   <data name="ToggleSwitchUsePresetBitDepth" xml:space="preserve">
     <value>使用预设的位深度？</value>
@@ -549,13 +549,13 @@
     <value>按帧数排序（降）。</value>
   </data>
   <data name="SortByNewest" xml:space="preserve">
-    <value>按最新情况排序</value>
+    <value>按最新排序</value>
   </data>
   <data name="SortByOldest" xml:space="preserve">
-    <value>按最古老的排序</value>
+    <value>按最旧排序</value>
   </data>
   <data name="SortByOutNameAsc" xml:space="preserve">
-    <value>按姓名排序（升）。</value>
+    <value>按名称排序（升）。</value>
   </data>
   <data name="SortByOutNameDesc" xml:space="preserve">
     <value>按名称排序（降）。</value>
@@ -598,5 +598,8 @@
   </data>
   <data name="SliderTargetVMAFProbesToolTip" xml:space="preserve">
     <value>接近目标质量的最大尝试量。该逻辑将尽量避免使用超过必要的尝试。至少需要2次，这2次尝试是使用下面的最大Q和最小Q。</value>
+  </data>
+  <data name="ButtonCropAutoDetect" xml:space="preserve">
+    <value>自动检测</value>
   </data>
 </root>

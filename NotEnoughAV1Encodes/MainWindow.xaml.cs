@@ -69,6 +69,9 @@ namespace NotEnoughAV1Encodes
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            // Cleanup Crop Preview Images
+            DeleteCropPreviews();
+
             if (ProgramState == 0) return;
 
             // Ask User if ProgramState is not IDLE (0)
@@ -152,6 +155,37 @@ namespace NotEnoughAV1Encodes
         {
             Views.TestCustomSettings testCustomSettings = new(settingsDB.Theme, ComboBoxVideoEncoder.SelectedIndex, CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand());
             testCustomSettings.ShowDialog();
+        }
+
+        private void ToggleSwitchFilterCrop_Toggled(object sender, RoutedEventArgs e)
+        {
+            CreateCropPreviewsOnLoad();
+        }
+
+        private void ButtonCropAutoDetect_Click(object sender, RoutedEventArgs e)
+        {
+            AutoCropDetect();
+        }
+
+        private void ButtonCropPreviewForward_Click(object sender, RoutedEventArgs e)
+        {
+            if (videoDB.InputPath == null) return;
+            int index = int.Parse(LabelCropPreview.Content.ToString().Split("/")[0]) + 1;
+            if (index > 4)
+                index = 1;
+            LabelCropPreview.Content = index.ToString() + "/4";
+
+            LoadCropPreview(index);
+        }
+        private void ButtonCropPreviewBackward_Click(object sender, RoutedEventArgs e)
+        {
+            if (videoDB.InputPath == null) return;
+            int index = int.Parse(LabelCropPreview.Content.ToString().Split("/")[0]) - 1;
+            if (index < 1)
+                index = 4;
+            LabelCropPreview.Content = index.ToString() + "/4";
+
+            LoadCropPreview(index);
         }
 
         private void ButtonCancelEncode_Click(object sender, RoutedEventArgs e)
@@ -441,6 +475,9 @@ namespace NotEnoughAV1Encodes
                 }
                 catch { }
             }
+
+            DeleteCropPreviews();
+            CreateCropPreviewsOnLoad();
         }
 
         private void ButtonSetDestination_Click(object sender, RoutedEventArgs e)
@@ -1367,6 +1404,167 @@ namespace NotEnoughAV1Encodes
         #endregion
 
         #region Small Functions
+
+        private void DeleteCropPreviews()
+        {
+            for (int i = 1; i < 5; i++)
+            {
+                string image = Path.Combine(Global.Temp, "NEAV1E", "crop_preview_" + i.ToString() + ".bmp");
+                if (File.Exists(image))
+                {
+                    try
+                    {
+                        File.Delete(image);
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        private async void CreateCropPreviewsOnLoad()
+        {
+            if (!IsLoaded) return;
+
+            if (videoDB.InputPath == null) return;
+
+            if (!ToggleSwitchFilterCrop.IsOn)
+            {
+                ImageCropPreview.Source = new BitmapImage(new Uri("pack://application:,,,/NotEnoughAV1Encodes;component/resources/img/videoplaceholder.jpg")); ;
+                return;
+            }
+
+            string crop = "-vf " + VideoFiltersCrop();
+
+            await Task.Run(() => CreateCropPreviews(crop));
+
+            try
+            {
+                int index = int.Parse(LabelCropPreview.Content.ToString().Split("/")[0]);
+
+                MemoryStream memStream = new(File.ReadAllBytes(Path.Combine(Global.Temp, "NEAV1E", "crop_preview_" + index.ToString() + ".bmp")));
+                BitmapImage bmi = new();
+                bmi.BeginInit();
+                bmi.StreamSource = memStream;
+                bmi.EndInit();
+                ImageCropPreview.Source = bmi;
+            }
+            catch { }
+        }
+
+        private async void AutoCropDetect()
+        {
+            if (videoDB.InputPath == null) return;
+
+            List<string> cropList = new();
+
+            string time = videoDB.MIDuration;
+            
+            int seconds = Convert.ToInt32(Math.Floor(TimeSpan.Parse(time).TotalSeconds / 4));
+
+            // Use the current frame as start point of detection
+            int index = int.Parse(LabelCropPreview.Content.ToString().Split("/")[0]);
+
+            string command = "/C ffmpeg.exe -ss " + (index * seconds).ToString() + " -i \"" + videoDB.InputPath + "\" -vf cropdetect=24:16:0 -t 5  -f null -";
+
+            Process ffmpegProcess = new();
+            ProcessStartInfo startInfo = new()
+            {
+                FileName = "cmd.exe",
+                WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
+                WindowStyle = ProcessWindowStyle.Hidden,
+                Arguments = command,
+                RedirectStandardError = true,
+                RedirectStandardInput = true,
+                CreateNoWindow = true
+            };
+
+            ffmpegProcess.StartInfo = startInfo;
+            ffmpegProcess.Start();
+
+            string lastLine;
+            while (! ffmpegProcess.StandardError.EndOfStream)
+            {
+                lastLine = ffmpegProcess.StandardError.ReadLine();
+                if (lastLine.Contains("crop="))
+                {
+                    cropList.Add(lastLine.Split("crop=")[1]);
+                }
+            }
+
+            ffmpegProcess.WaitForExit();
+
+            // Get most occuring value
+            string crop = cropList.Where(c => !string.IsNullOrEmpty(c)).GroupBy(a => a).OrderByDescending(b => b.Key[1].ToString()).First().Key;
+
+            try
+            {
+                // Translate Output to crop values
+                int cropTop = int.Parse(crop.Split(":")[3]);
+                TextBoxFiltersCropTop.Text = cropTop.ToString();
+
+                int cropLeft = int.Parse(crop.Split(":")[2]);
+                TextBoxFiltersCropLeft.Text = cropLeft.ToString();
+
+                int cropBottom = videoDB.MIHeight - cropTop - int.Parse(crop.Split(":")[1]);
+                TextBoxFiltersCropBottom.Text = cropBottom.ToString();
+
+                int cropRight = videoDB.MIWidth - cropLeft - int.Parse(crop.Split(":")[0]);
+                TextBoxFiltersCropRight.Text = cropRight.ToString();
+
+                string cropNew = "-vf " + VideoFiltersCrop();
+                await Task.Run(() => CreateCropPreviews(cropNew));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void CreateCropPreviews(string crop)
+        {
+            Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E"));
+
+            string time = videoDB.MIDuration;
+            int seconds = Convert.ToInt32(Math.Floor(TimeSpan.Parse(time).TotalSeconds / 4));
+
+            for (int i = 1; i < 5; i++)
+            {
+                // Extract Frames
+                string command = "/C ffmpeg.exe -y -ss " + (i * seconds).ToString() + " -i \"" + videoDB.InputPath + "\" -vframes 1 " + crop + " \"" + Path.Combine(Global.Temp, "NEAV1E", "crop_preview_" + i.ToString() + ".bmp") + "\"";
+
+                Process ffmpegProcess = new();
+                ProcessStartInfo startInfo = new()
+                {
+                    UseShellExecute = true,
+                    FileName = "cmd.exe",
+                    WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    Arguments = command
+                };
+
+                ffmpegProcess.StartInfo = startInfo;
+                ffmpegProcess.Start();
+                ffmpegProcess.WaitForExit();
+            }
+        }
+
+        private void LoadCropPreview(int index)
+        {
+            string input = Path.Combine(Global.Temp, "NEAV1E", "crop_preview_" + index.ToString() + ".bmp");
+            if (! File.Exists(input)) return;
+
+            try
+            {
+                MemoryStream memStream = new(File.ReadAllBytes(input));
+                BitmapImage bmi = new();
+                bmi.BeginInit();
+                bmi.StreamSource = memStream;
+                bmi.EndInit();
+                ImageCropPreview.Source = bmi;
+            }
+            catch { }
+        }
+
         private void SortQueue()
         {
             try
@@ -1734,11 +1932,12 @@ namespace NotEnoughAV1Encodes
             bool rotate = ToggleSwitchFilterRotate.IsOn;
             bool resize = ToggleSwitchFilterResize.IsOn;
             bool deinterlace = ToggleSwitchFilterDeinterlace.IsOn;
+            bool fps = ComboBoxVideoFrameRate.SelectedIndex != 0;
             bool _oneFilter = false;
 
             string FilterCommand = "";
 
-            if (crop || rotate || resize || deinterlace)
+            if (crop || rotate || resize || deinterlace || fps)
             {
                 FilterCommand = " -vf ";
                 if (resize)
@@ -1763,17 +1962,47 @@ namespace NotEnoughAV1Encodes
                 {
                     if (_oneFilter) { FilterCommand += ","; }
                     FilterCommand += VideoFiltersDeinterlace();
+                    _oneFilter = true;
+                }
+                if (fps)
+                {
+                    if (_oneFilter) { FilterCommand += ","; }
+                    FilterCommand += GenerateFFmpegFramerate();
                 }
             }
 
+
             return FilterCommand;
+        }
+
+        private string GenerateFFmpegFramerate()
+        {
+            string settings = "";
+
+            settings = "fps=" + ComboBoxVideoFrameRate.Text;
+            if (ComboBoxVideoFrameRate.SelectedIndex == 6) { settings = "fps=24000/1001"; }
+            if (ComboBoxVideoFrameRate.SelectedIndex == 9) { settings = "fps=30000/1001"; }
+            if (ComboBoxVideoFrameRate.SelectedIndex == 13) { settings = "fps=60000/1001"; }
+
+            return settings;
         }
 
         private string VideoFiltersCrop()
         {
             // Sets the values for cropping the video
-            string widthNew = (int.Parse(TextBoxFiltersCropRight.Text) + int.Parse(TextBoxFiltersCropLeft.Text)).ToString();
-            string heightNew = (int.Parse(TextBoxFiltersCropTop.Text) + int.Parse(TextBoxFiltersCropBottom.Text)).ToString();
+            string widthNew = "";
+            string heightNew = "";
+            try
+            {
+                widthNew = (int.Parse(TextBoxFiltersCropRight.Text) + int.Parse(TextBoxFiltersCropLeft.Text)).ToString();
+                heightNew = (int.Parse(TextBoxFiltersCropTop.Text) + int.Parse(TextBoxFiltersCropBottom.Text)).ToString();
+            }
+            catch
+            {
+                widthNew = "0";
+                heightNew = "0";
+            }
+
             return "crop=iw-" + widthNew + ":ih-" + heightNew + ":" + TextBoxFiltersCropLeft.Text + ":" + TextBoxFiltersCropTop.Text;
         }
 
@@ -1835,7 +2064,7 @@ namespace NotEnoughAV1Encodes
         #region Encoder Settings
         private string GenerateEncoderCommand()
         {
-            string settings = GenerateFFmpegColorSpace() + " " + GenerateFFmpegFramerate() + " ";
+            string settings = GenerateFFmpegColorSpace() + " ";
 
             string encoderSetting = ComboBoxVideoEncoder.SelectedIndex switch
             {
@@ -2282,7 +2511,7 @@ namespace NotEnoughAV1Encodes
             };
 
             // Preset
-            settings += quality + " --quality " + GenerateNVENCEncoderSpeed();
+            settings += quality + " --preset " + GenerateNVENCEncoderSpeed();
 
             // Bit-Depth
             settings += " --output-depth ";
@@ -2406,21 +2635,6 @@ namespace NotEnoughAV1Encodes
                 {
                     settings += "12le -strict -1";
                 }
-            }
-
-            return settings;
-        }
-
-        private string GenerateFFmpegFramerate()
-        {
-            string settings = "";
-
-            if (ComboBoxVideoFrameRate.SelectedIndex != 0)
-            {
-                settings = "-vf fps=" + ComboBoxVideoFrameRate.Text;
-                if (ComboBoxVideoFrameRate.SelectedIndex == 6) { settings = "-vf fps=24000/1001"; }
-                if (ComboBoxVideoFrameRate.SelectedIndex == 9) { settings = "-vf fps=30000/1001"; }
-                if (ComboBoxVideoFrameRate.SelectedIndex == 13) { settings = "-vf fps=60000/1001"; }
             }
 
             return settings;

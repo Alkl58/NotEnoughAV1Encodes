@@ -550,4 +550,7 @@ Please download and extract 7-zip to the following path:
   <data name="SliderTargetVMAFProbesToolTip" xml:space="preserve">
     <value>Максимальное количество попыток для приближения к целевому качеству. Логика будет стараться избегать использования большего количества попыток, чем необходимо. Требуется минимум 2, эти 2 попытки используют Max Q и Min Q снизу.</value>
   </data>
+  <data name="ButtonCropAutoDetect" xml:space="preserve">
+    <value>автоматическое обнаружение</value>
+  </data>
 </root>
