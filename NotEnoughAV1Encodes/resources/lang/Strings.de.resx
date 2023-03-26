@@ -575,4 +575,31 @@ Please download and extract 7-zip to the following path:
   <data name="Paths" xml:space="preserve">
     <value>Pfade</value>
   </data>
+  <data name="LabelTargetVMAF" xml:space="preserve">
+    <value>VMAF:</value>
+  </data>
+  <data name="LabelTargetVMAFMaxProbeLength" xml:space="preserve">
+    <value>Probe Länge (s):</value>
+  </data>
+  <data name="LabelTargetVMAFMaxQ" xml:space="preserve">
+    <value>Max Q:</value>
+  </data>
+  <data name="LabelTargetVMAFMinQ" xml:space="preserve">
+    <value>Min Q:</value>
+  </data>
+  <data name="LabelTargetVMAFProbes" xml:space="preserve">
+    <value>Proben:</value>
+  </data>
+  <data name="SliderTargetVMAFMaxProbeLengthToolTip" xml:space="preserve">
+    <value>Maximale Sondenlänge in Sekunden. Wird ignoriert, wenn der Chunk selbst kürzer ist.</value>
+  </data>
+  <data name="SliderTargetVMAFMaxQToolTip" xml:space="preserve">
+    <value>Legt die niedrigstmögliche Qualität fest.</value>
+  </data>
+  <data name="SliderTargetVMAFMinQToolTip" xml:space="preserve">
+    <value>Stellt die bestmögliche Qualität ein.</value>
+  </data>
+  <data name="SliderTargetVMAFProbesToolTip" xml:space="preserve">
+    <value>Maximale Anzahl von Versuchen zur Annäherung an die Zielqualität. Die Logik versucht, mehr Versuche als nötig zu vermeiden. Ein Minimum von 2 Versuchen ist erforderlich, diese 2 Versuche verwenden Max Q und Min Q von unten.</value>
+  </data>
 </root>

@@ -523,4 +523,31 @@ Please download and extract 7-zip to the following path:
   <data name="Paths" xml:space="preserve">
     <value>Пути</value>
   </data>
+  <data name="LabelTargetVMAF" xml:space="preserve">
+    <value>VMAF:</value>
+  </data>
+  <data name="LabelTargetVMAFMaxProbeLength" xml:space="preserve">
+    <value>Длина зонда (s):</value>
+  </data>
+  <data name="LabelTargetVMAFMaxQ" xml:space="preserve">
+    <value>Макс Q:</value>
+  </data>
+  <data name="LabelTargetVMAFMinQ" xml:space="preserve">
+    <value>Минь Q:</value>
+  </data>
+  <data name="LabelTargetVMAFProbes" xml:space="preserve">
+    <value>Зонды:</value>
+  </data>
+  <data name="SliderTargetVMAFMaxProbeLengthToolTip" xml:space="preserve">
+    <value>Максимальная длина зонда в секундах. Будет игнорироваться, если сам чанк короче.</value>
+  </data>
+  <data name="SliderTargetVMAFMaxQToolTip" xml:space="preserve">
+    <value>Устанавливает минимально возможное качество.</value>
+  </data>
+  <data name="SliderTargetVMAFMinQToolTip" xml:space="preserve">
+    <value>Устанавливает наилучшее возможное качество.</value>
+  </data>
+  <data name="SliderTargetVMAFProbesToolTip" xml:space="preserve">
+    <value>Максимальное количество попыток для приближения к целевому качеству. Логика будет стараться избегать использования большего количества попыток, чем необходимо. Требуется минимум 2, эти 2 попытки используют Max Q и Min Q снизу.</value>
+  </data>
 </root>
