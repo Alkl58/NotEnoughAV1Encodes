@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic.FileIO;
+using Microsoft.VisualBasic.FileIO;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -70,7 +71,7 @@ namespace NotEnoughAV1Encodes.Video
 
                 if (!_token.IsCancellationRequested)
                 {
-                    PySceneDetectParse();
+                    PySceneDetectParse(_token);
                 }
                 else
                 {
@@ -83,7 +84,7 @@ namespace NotEnoughAV1Encodes.Video
             }
         }
 
-        private void PySceneDetectParse()
+        private void PySceneDetectParse(CancellationToken token)
         {
             List<string> FFmpegArgs = new();
 
@@ -145,76 +146,37 @@ namespace NotEnoughAV1Encodes.Video
                     sw.Close();
                 }
             }
+
+            PySceneTargetVMAFChunking(FFmpegArgs, token);
         }
 
-        private void FFmpegChunking(CancellationToken _token)
+        private void PySceneTargetVMAFChunking(List<string> ffmpegArgs, CancellationToken token)
         {
-            Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking()", queueElement.Output + ".log");
-            // Skips Splitting of already existent
-            if (!File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splitted.log")))
+            // To avoid getting incorrect vmaf values due to ffmpeg seeking issue,
+            // we have to split the video into chunks
+
+            if (!queueElement.Preset.TargetVMAF) return;
+
+            if (File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splitted.log")))
             {
-                // Create Chunks Folder
-                Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"));
-                Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking() => Path: " + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), queueElement.Output + ".log");
+                Global.Logger("WARN - VideoSplitter.Split() => PySceneTargetVMAFChunking() => Skipped Splitting - Resuming?", queueElement.Output + ".log");
+                return;
+            }
 
+            // Create Chunks Folder
+            Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"));
+            Global.Logger("DEBUG - VideoSplitter.Split() => PySceneTargetVMAFChunking() => Path: " + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), queueElement.Output + ".log");
+
+            int counter = 0;
+            int amount = ffmpegArgs.Count() * 2;
+            foreach (string seek in ffmpegArgs)
+            {
+                string ss = seek.Split("-t")[0];
+                string to = seek.Split(ss)[1];
                 // Generate Command
-                string ffmpegCommand = "/C ffmpeg.exe -y -i \"" + queueElement.VideoDB.InputPath + "\"";
-
-                // Subtitle Input for Hardcoding
-                if(!string.IsNullOrEmpty(queueElement.SubtitleBurnCommand))
-                {
-                    // Filter not compatible with filter_complex
-                    if (string.IsNullOrEmpty(queueElement.FilterCommand))
-                    {
-                        if (queueElement.SubtitleBurnCommand.Contains("-filter_complex"))
-                        {
-                            ffmpegCommand += " -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Subtitles", "subs.mkv") + "\"";
-                        }
-                    }
-                }
-
-                // Set Encoder
-                string encoder = queueElement.ReencodeMethod switch
-                {
-                    0 => " -c:v libx264 -preset ultrafast -crf 0",
-                    1 => " -c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -slicecrc 0 -slices 4",
-                    2 => " -c:v utvideo",
-                    3 => " -c:v copy",
-                    _ => " -c:v copy"
-                };
-
-                ffmpegCommand += " -reset_timestamps 1 -map_metadata -1 -sn -an" + encoder;
-
-
-                if (queueElement.ReencodeMethod != 3)
-                {
-                    ffmpegCommand += " -sc_threshold 0 -g " + queueElement.ChunkLength.ToString();
-                    ffmpegCommand += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + queueElement.ChunkLength.ToString() + ")" + '\u0022';
-                    ffmpegCommand += queueElement.FilterCommand;
-                    if (queueElement.SubtitleBurnCommand != null)
-                    {
-                        if (string.IsNullOrEmpty(queueElement.FilterCommand))
-                        {
-                            ffmpegCommand += queueElement.SubtitleBurnCommand;
-                        }
-                        else
-                        {
-                            // Don't want to mix filter_complex with vf
-                            if (!queueElement.SubtitleBurnCommand.Contains("-filter_complex"))
-                            {
-                                // Prevents using "-vf" two times
-                                ffmpegCommand += queueElement.SubtitleBurnCommand.Remove(0, 5);
-                            }
-                        }
-
-                    }
-
-                }
-
-                ffmpegCommand += " -segment_time " + queueElement.ChunkLength.ToString() + " -f segment \"";
-                ffmpegCommand += Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks", "split%6d.mkv") + "\"";
-
-                Global.Logger("INFO  - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Command: " + ffmpegCommand, queueElement.Output + ".log");
+                string ffmpegCommand = "/C ffmpeg.exe -y " + ss + " -i \"" + queueElement.VideoDB.InputPath + "\" " + to + " -c:v libx264 -preset ultrafast -crf 0" +
+                                       " -reset_timestamps 1 -map_metadata -1 -sn -an \"" + 
+                                       Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks", "split" + counter.ToString("D6") + ".mkv") + "\"";
 
                 // Start Splitting
                 Process chunkingProcess = new();
@@ -222,15 +184,15 @@ namespace NotEnoughAV1Encodes.Video
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    RedirectStandardInput = true,
-                    RedirectStandardError = true,
+                    RedirectStandardInput = false,
+                    RedirectStandardError = false,
                     CreateNoWindow = true,
                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
                     Arguments = ffmpegCommand
                 };
                 chunkingProcess.StartInfo = startInfo;
 
-                _token.Register(() => { try { chunkingProcess.StandardInput.Write("q"); } catch { } });
+                token.Register(() => { try { chunkingProcess.StandardInput.Write("q"); } catch { } });
 
                 // Start Process
                 chunkingProcess.Start();
@@ -241,20 +203,7 @@ namespace NotEnoughAV1Encodes.Video
                 // Add Process ID to Array, inorder to keep track / kill the instances
                 Global.LaunchedPIDs.Add(tempPID);
 
-                StreamReader sr = chunkingProcess.StandardError;
-                string stderr = "\n";
-                while (!sr.EndOfStream)
-                {
-                    string line = sr.ReadLine();
-                    if (! line.Contains("frame=") && !line.Contains("[segment"))
-                        stderr += line + "\n";
-                    int processedFrames = Global.GetTotalFramesProcessed(line);
-                    if (processedFrames != 0)
-                    {
-                        queueElement.Progress = Convert.ToDouble(processedFrames);
-                        queueElement.Status = "Splitting - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
-                    }
-                }
+                queueElement.Status = "Splitting - Chunk " + counter.ToString() + "/" + amount.ToString();
 
                 // Wait for Exit
                 chunkingProcess.WaitForExit();
@@ -265,25 +214,206 @@ namespace NotEnoughAV1Encodes.Video
                 // Remove PID from Array after Exit
                 Global.LaunchedPIDs.RemoveAll(i => i == tempPID);
 
-                // Write Save Point
-                if (chunkingProcess.ExitCode == 0 && _token.IsCancellationRequested == false)
+                counter++;
+            }
+
+            // We repeat the process for max 1s long chunks for later VMAF calculation
+            int counter_temp = 0;
+            foreach (string seek in ffmpegArgs)
+            {
+                string ss = seek.Split("-t")[0];
+                double to = Convert.ToDouble(seek.Split("-t")[1]);
+                string seekto = to.ToString();
+
+                // Only use TargetVMAFProbeLength when the chunk is longer than that value
+                if (to > queueElement.Preset.TargetVMAFProbeLength)
                 {
-                    FileStream _finishedLog = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splitted.log"));
-                    _finishedLog.Close();
-                    Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Exit Code: " + exit_code, queueElement.Output + ".log");
+                    seekto = queueElement.Preset.TargetVMAFProbeLength.ToString();
                 }
-                else
+                
+                // Generate Command
+                string ffmpegCommand = "/C ffmpeg.exe -y " + ss + " -i \"" + queueElement.VideoDB.InputPath + "\" -t " + seekto +
+                                       " -c:v libx264 -preset ultrafast -crf 0 -reset_timestamps 1 -map_metadata -1 -sn -an \"" +
+                                       Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks", "split" + counter_temp.ToString("D6") + ".mkv_vmaf_reference.mp4") + "\"";
+
+                // Start Splitting
+                Process chunkingProcess = new();
+                ProcessStartInfo startInfo = new()
                 {
-                    queueElement.Error = true;
-                    queueElement.ErrorCount += 1;
-                    Global.Logger("FATAL - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Exit Code: " + exit_code, queueElement.Output + ".log");
-                    Global.Logger("==========================================================" + stderr, queueElement.Output + ".log");
-                    Global.Logger("==========================================================", queueElement.Output + ".log");
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    RedirectStandardInput = false,
+                    RedirectStandardError = false,
+                    CreateNoWindow = true,
+                    WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
+                    Arguments = ffmpegCommand
+                };
+                chunkingProcess.StartInfo = startInfo;
+
+                token.Register(() => { try { chunkingProcess.StandardInput.Write("q"); } catch { } });
+
+                // Start Process
+                chunkingProcess.Start();
+
+                // Get launched Process ID
+                int tempPID = chunkingProcess.Id;
+
+                // Add Process ID to Array, inorder to keep track / kill the instances
+                Global.LaunchedPIDs.Add(tempPID);
+
+                queueElement.Status = "Splitting - Chunk " + counter.ToString() + "/" + amount.ToString();
+
+                // Wait for Exit
+                chunkingProcess.WaitForExit();
+
+                // Get Exit Code
+                int exit_code = chunkingProcess.ExitCode;
+
+                // Remove PID from Array after Exit
+                Global.LaunchedPIDs.RemoveAll(i => i == tempPID);
+
+                counter++;
+                counter_temp++;
+            }
+
+        }
+
+        private void FFmpegChunking(CancellationToken _token)
+        {
+            Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking()", queueElement.Output + ".log");
+            // Skips Splitting of already existent
+            if (File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splitted.log")))
+            {
+                Global.Logger("WARN - VideoSplitter.Split() => FFmpegChunking() => Skipped Splitting - Resuming?", queueElement.Output + ".log");
+                return;
+            }
+
+            // Create Chunks Folder
+            Directory.CreateDirectory(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"));
+            Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking() => Path: " + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), queueElement.Output + ".log");
+
+            // Generate Command
+            string ffmpegCommand = "/C ffmpeg.exe -y -i \"" + queueElement.VideoDB.InputPath + "\"";
+
+            // Subtitle Input for Hardcoding
+            if (!string.IsNullOrEmpty(queueElement.SubtitleBurnCommand))
+            {
+                // Filter not compatible with filter_complex
+                if (string.IsNullOrEmpty(queueElement.FilterCommand))
+                {
+                    if (queueElement.SubtitleBurnCommand.Contains("-filter_complex"))
+                    {
+                        ffmpegCommand += " -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Subtitles", "subs.mkv") + "\"";
+                    }
                 }
+            }
+
+            // Set Encoder
+            string encoder = queueElement.ReencodeMethod switch
+            {
+                0 => " -c:v libx264 -preset ultrafast -crf 0",
+                1 => " -c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -slicecrc 0 -slices 4",
+                2 => " -c:v utvideo",
+                3 => " -c:v copy",
+                _ => " -c:v copy"
+            };
+
+            ffmpegCommand += " -reset_timestamps 1 -map_metadata -1 -sn -an" + encoder;
+
+
+            if (queueElement.ReencodeMethod != 3)
+            {
+                ffmpegCommand += " -sc_threshold 0 -g " + queueElement.ChunkLength.ToString();
+                ffmpegCommand += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + queueElement.ChunkLength.ToString() + ")" + '\u0022';
+                ffmpegCommand += queueElement.FilterCommand;
+                if (queueElement.SubtitleBurnCommand != null)
+                {
+                    if (string.IsNullOrEmpty(queueElement.FilterCommand))
+                    {
+                        ffmpegCommand += queueElement.SubtitleBurnCommand;
+                    }
+                    else
+                    {
+                        // Don't want to mix filter_complex with vf
+                        if (!queueElement.SubtitleBurnCommand.Contains("-filter_complex"))
+                        {
+                            // Prevents using "-vf" two times
+                            ffmpegCommand += queueElement.SubtitleBurnCommand.Remove(0, 5);
+                        }
+                    }
+
+                }
+
+            }
+
+            ffmpegCommand += " -segment_time " + queueElement.ChunkLength.ToString() + " -f segment \"";
+            ffmpegCommand += Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks", "split%6d.mkv") + "\"";
+
+            Global.Logger("INFO  - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Command: " + ffmpegCommand, queueElement.Output + ".log");
+
+            // Start Splitting
+            Process chunkingProcess = new();
+            ProcessStartInfo startInfo = new()
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                RedirectStandardInput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"),
+                Arguments = ffmpegCommand
+            };
+            chunkingProcess.StartInfo = startInfo;
+
+            _token.Register(() => { try { chunkingProcess.StandardInput.Write("q"); } catch { } });
+
+            // Start Process
+            chunkingProcess.Start();
+
+            // Get launched Process ID
+            int tempPID = chunkingProcess.Id;
+
+            // Add Process ID to Array, inorder to keep track / kill the instances
+            Global.LaunchedPIDs.Add(tempPID);
+
+            StreamReader sr = chunkingProcess.StandardError;
+            string stderr = "\n";
+            while (!sr.EndOfStream)
+            {
+                string line = sr.ReadLine();
+                if (!line.Contains("frame=") && !line.Contains("[segment"))
+                    stderr += line + "\n";
+                int processedFrames = Global.GetTotalFramesProcessed(line);
+                if (processedFrames != 0)
+                {
+                    queueElement.Progress = Convert.ToDouble(processedFrames);
+                    queueElement.Status = "Splitting - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
+                }
+            }
+
+            // Wait for Exit
+            chunkingProcess.WaitForExit();
+
+            // Get Exit Code
+            int exit_code = chunkingProcess.ExitCode;
+
+            // Remove PID from Array after Exit
+            Global.LaunchedPIDs.RemoveAll(i => i == tempPID);
+
+            // Write Save Point
+            if (chunkingProcess.ExitCode == 0 && _token.IsCancellationRequested == false)
+            {
+                FileStream _finishedLog = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splitted.log"));
+                _finishedLog.Close();
+                Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Exit Code: " + exit_code, queueElement.Output + ".log");
             }
             else
             {
-                Global.Logger("WARN - VideoSplitter.Split() => FFmpegChunking() => Skipped Splitting - Resuming?", queueElement.Output + ".log");
+                queueElement.Error = true;
+                queueElement.ErrorCount += 1;
+                Global.Logger("FATAL - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Exit Code: " + exit_code, queueElement.Output + ".log");
+                Global.Logger("==========================================================" + stderr, queueElement.Output + ".log");
+                Global.Logger("==========================================================", queueElement.Output + ".log");
             }
         }
 

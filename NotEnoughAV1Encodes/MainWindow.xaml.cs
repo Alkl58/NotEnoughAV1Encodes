@@ -996,33 +996,102 @@ namespace NotEnoughAV1Encodes
 
         private void ComboBoxQualityMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            // Hide all
+            LabelQuantizer.Visibility = Visibility.Collapsed;
+            SliderQualityAOMFFMPEG.Visibility = Visibility.Collapsed;
+            LabelQuantizerPreview.Visibility = Visibility.Collapsed;
+            LabelBitrateMin.Visibility = Visibility.Collapsed;
+            TextBoxMinBitrateAOMFFMPEG.Visibility = Visibility.Collapsed;
+            LabelBitrateAvg.Visibility = Visibility.Collapsed;
+            TextBoxAVGBitrateAOMFFMPEG.Visibility = Visibility.Collapsed;
+            LabelBitrateMax.Visibility = Visibility.Collapsed;
+            TextBoxMaxBitrateAOMFFMPEG.Visibility = Visibility.Collapsed;
+            LabelTargetVMAF.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFPreview.Visibility = Visibility.Collapsed;
+            SliderTargetVMAF.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFProbes.Visibility = Visibility.Collapsed;
+            SliderTargetVMAFProbes.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFProbesPreview.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFMinQ.Visibility = Visibility.Collapsed;
+            SliderTargetVMAFMinQ.Visibility= Visibility.Collapsed;
+            LabelTargetVMAFMinQPreview.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFMaxQ.Visibility = Visibility.Collapsed;
+            SliderTargetVMAFMaxQ.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFMaxQPreview.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFMaxProbeLength.Visibility = Visibility.Collapsed;
+            SliderTargetVMAFMaxProbeLength.Visibility = Visibility.Collapsed;
+            LabelTargetVMAFMaxProbeLengthPreview.Visibility = Visibility.Collapsed;
+            PresetSettings.TargetVMAF = false;
+
             if (ComboBoxQualityMode.SelectedIndex == 0)
             {
-                SliderQualityAOMFFMPEG.IsEnabled = true;
-                TextBoxAVGBitrateAOMFFMPEG.IsEnabled = false;
-                TextBoxMaxBitrateAOMFFMPEG.IsEnabled = false;
-                TextBoxMinBitrateAOMFFMPEG.IsEnabled = false;
+                // Constant Quality
+                LabelQuantizer.Visibility = Visibility.Visible;
+                SliderQualityAOMFFMPEG.Visibility = Visibility.Visible;
+                LabelQuantizerPreview.Visibility = Visibility.Visible;
             }
             else if (ComboBoxQualityMode.SelectedIndex == 1)
             {
-                SliderQualityAOMFFMPEG.IsEnabled = true;
-                TextBoxAVGBitrateAOMFFMPEG.IsEnabled = false;
-                TextBoxMaxBitrateAOMFFMPEG.IsEnabled = true;
-                TextBoxMinBitrateAOMFFMPEG.IsEnabled = false;
+                // Constrained Quality
+                TextBoxMaxBitrateAOMFFMPEG.Visibility = Visibility.Visible;
+                LabelBitrateMax.Visibility = Visibility.Visible;
+                LabelQuantizer.Visibility = Visibility.Visible;
+                SliderQualityAOMFFMPEG.Visibility = Visibility.Visible;
+                LabelQuantizerPreview.Visibility = Visibility.Visible;
             }
             else if (ComboBoxQualityMode.SelectedIndex == 2)
             {
-                SliderQualityAOMFFMPEG.IsEnabled = false;
-                TextBoxAVGBitrateAOMFFMPEG.IsEnabled = true;
-                TextBoxMaxBitrateAOMFFMPEG.IsEnabled = false;
-                TextBoxMinBitrateAOMFFMPEG.IsEnabled = false;
+                // Average Bitrate
+                LabelBitrateAvg.Visibility = Visibility.Visible;
+                TextBoxAVGBitrateAOMFFMPEG.Visibility = Visibility.Visible;
             }
             else if (ComboBoxQualityMode.SelectedIndex == 3)
             {
-                SliderQualityAOMFFMPEG.IsEnabled = false;
-                TextBoxAVGBitrateAOMFFMPEG.IsEnabled = true;
-                TextBoxMaxBitrateAOMFFMPEG.IsEnabled = true;
-                TextBoxMinBitrateAOMFFMPEG.IsEnabled = true;
+                // Constrained Bitrate
+                LabelBitrateMin.Visibility = Visibility.Visible;
+                TextBoxMinBitrateAOMFFMPEG.Visibility = Visibility.Visible;
+                LabelBitrateAvg.Visibility = Visibility.Visible;
+                TextBoxAVGBitrateAOMFFMPEG.Visibility = Visibility.Visible;
+                LabelBitrateMax.Visibility = Visibility.Visible;
+                TextBoxMaxBitrateAOMFFMPEG.Visibility = Visibility.Visible;
+            }
+            else if (ComboBoxQualityMode.SelectedIndex == 4) 
+            {
+                // Target VMAF
+                PresetSettings.TargetVMAF = true;
+                LabelTargetVMAF.Visibility = Visibility.Visible;
+                LabelTargetVMAFPreview.Visibility = Visibility.Visible;
+                SliderTargetVMAF.Visibility = Visibility.Visible;
+                LabelTargetVMAFProbes.Visibility = Visibility.Visible;
+                SliderTargetVMAFProbes.Visibility = Visibility.Visible;
+                LabelTargetVMAFProbesPreview.Visibility = Visibility.Visible;
+                LabelTargetVMAFMinQ.Visibility = Visibility.Visible;
+                SliderTargetVMAFMinQ.Visibility = Visibility.Visible;
+                LabelTargetVMAFMinQPreview.Visibility = Visibility.Visible;
+                LabelTargetVMAFMaxQ.Visibility = Visibility.Visible;
+                SliderTargetVMAFMaxQ.Visibility = Visibility.Visible;
+                LabelTargetVMAFMaxQPreview.Visibility = Visibility.Visible;
+                LabelTargetVMAFMaxProbeLength.Visibility = Visibility.Visible;
+                SliderTargetVMAFMaxProbeLength.Visibility = Visibility.Visible;
+                LabelTargetVMAFMaxProbeLengthPreview.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void SliderTargetVMAFMinQ_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (SliderTargetVMAF == null) return;
+            if (SliderTargetVMAFMinQ.Value > SliderTargetVMAFMaxQ.Value)
+            {
+                SliderTargetVMAFMaxQ.Value = SliderTargetVMAFMinQ.Value;
+            }
+        }
+
+        private void SliderTargetVMAFMaxQ_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (SliderTargetVMAF == null) return;
+            if (SliderTargetVMAFMinQ.Value > SliderTargetVMAFMaxQ.Value)
+            {
+                SliderTargetVMAFMinQ.Value = SliderTargetVMAFMaxQ.Value;
             }
         }
 
@@ -2027,6 +2096,7 @@ namespace NotEnoughAV1Encodes
                 1 => " -crf " + SliderQualityAOMFFMPEG.Value + " -b:v " + TextBoxMaxBitrateAOMFFMPEG.Text + "k",
                 2 => " -b:v " + TextBoxMinBitrateAOMFFMPEG.Text + "k",
                 3 => " -minrate " + TextBoxMinBitrateAOMFFMPEG.Text + "k -b:v " + TextBoxAVGBitrateAOMFFMPEG.Text + "k -maxrate " + TextBoxMaxBitrateAOMFFMPEG.Text + "k",
+                4 => " -crf {q_vmaf} -b:v 0",
                 _ => ""
             };
 
@@ -2732,7 +2802,7 @@ namespace NotEnoughAV1Encodes
                         {
                             await Task.Run(() => videoSplitter.Split(queueElement, _cancelToken), _cancelToken);
 
-                            if (queueElement.ChunkingMethod == 0)
+                            if (queueElement.ChunkingMethod == 0 || queueElement.Preset.TargetVMAF)
                             {
                                 // Equal Chunking
                                 IOrderedEnumerable<string> sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), "*.mkv", SearchOption.TopDirectoryOnly).OrderBy(f => f);

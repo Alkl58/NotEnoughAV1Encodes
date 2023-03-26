@@ -929,6 +929,51 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die VMAF: ähnelt.
+        /// </summary>
+        public static string LabelTargetVMAF {
+            get {
+                return ResourceManager.GetString("LabelTargetVMAF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Probe Length (s): ähnelt.
+        /// </summary>
+        public static string LabelTargetVMAFMaxProbeLength {
+            get {
+                return ResourceManager.GetString("LabelTargetVMAFMaxProbeLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Max Q: ähnelt.
+        /// </summary>
+        public static string LabelTargetVMAFMaxQ {
+            get {
+                return ResourceManager.GetString("LabelTargetVMAFMaxQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Min Q: ähnelt.
+        /// </summary>
+        public static string LabelTargetVMAFMinQ {
+            get {
+                return ResourceManager.GetString("LabelTargetVMAFMinQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Probes: ähnelt.
+        /// </summary>
+        public static string LabelTargetVMAFProbes {
+            get {
+                return ResourceManager.GetString("LabelTargetVMAFProbes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Temp Path ähnelt.
         /// </summary>
         public static string LabelTempPath {
@@ -1204,6 +1249,42 @@ namespace NotEnoughAV1Encodes.resources.lang {
         public static string Resume {
             get {
                 return ResourceManager.GetString("Resume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Max probe length in seconds. Will be ignored if the chunk itself is shorter. ähnelt.
+        /// </summary>
+        public static string SliderTargetVMAFMaxProbeLengthToolTip {
+            get {
+                return ResourceManager.GetString("SliderTargetVMAFMaxProbeLengthToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sets the lowest possible quality. ähnelt.
+        /// </summary>
+        public static string SliderTargetVMAFMaxQToolTip {
+            get {
+                return ResourceManager.GetString("SliderTargetVMAFMaxQToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sets the best possible quality. ähnelt.
+        /// </summary>
+        public static string SliderTargetVMAFMinQToolTip {
+            get {
+                return ResourceManager.GetString("SliderTargetVMAFMinQToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Max amount of tries to approximate the target quality. The logic will try to avoid using more tries than necessary. A minimum of 2 is required, those 2 tries are using Max Q and Min Q from below. ähnelt.
+        /// </summary>
+        public static string SliderTargetVMAFProbesToolTip {
+            get {
+                return ResourceManager.GetString("SliderTargetVMAFProbesToolTip", resourceCulture);
             }
         }
         

@@ -530,6 +530,33 @@ Please download and extract 7-zip to the following path:
   <data name="Paths" xml:space="preserve">
     <value>Percorsi</value>
   </data>
+  <data name="LabelTargetVMAF" xml:space="preserve">
+    <value>VMAF:</value>
+  </data>
+  <data name="LabelTargetVMAFMaxProbeLength" xml:space="preserve">
+    <value>Probe Lunghezza (s):</value>
+  </data>
+  <data name="LabelTargetVMAFMaxQ" xml:space="preserve">
+    <value>Max Q:</value>
+  </data>
+  <data name="LabelTargetVMAFMinQ" xml:space="preserve">
+    <value>Min Q:</value>
+  </data>
+  <data name="LabelTargetVMAFProbes" xml:space="preserve">
+    <value>Sonde:</value>
+  </data>
+  <data name="SliderTargetVMAFMaxProbeLengthToolTip" xml:space="preserve">
+    <value>Lunghezza massima della sonda in secondi. Verrà ignorata se il chunk stesso è più breve.</value>
+  </data>
+  <data name="SliderTargetVMAFMaxQToolTip" xml:space="preserve">
+    <value>Imposta la qualità più bassa possibile.</value>
+  </data>
+  <data name="SliderTargetVMAFMinQToolTip" xml:space="preserve">
+    <value>Imposta la migliore qualità possibile.</value>
+  </data>
+  <data name="SliderTargetVMAFProbesToolTip" xml:space="preserve">
+    <value>Numero massimo di tentativi per approssimare la qualità target. La logica cercherà di evitare di utilizzare più tentativi del necessario. È necessario un minimo di 2 tentativi; questi 2 tentativi utilizzano Q max e Q min dal basso.</value>
+  </data>
   <data name="ButtonCropAutoDetect" xml:space="preserve">
     <value>Rilevamento automatico</value>
   </data>

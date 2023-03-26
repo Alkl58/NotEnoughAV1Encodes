@@ -572,6 +572,33 @@
   <data name="Paths" xml:space="preserve">
     <value>路径</value>
   </data>
+  <data name="LabelTargetVMAF" xml:space="preserve">
+    <value>VMAF:</value>
+  </data>
+  <data name="LabelTargetVMAFMaxProbeLength" xml:space="preserve">
+    <value>探头长度（s）:</value>
+  </data>
+  <data name="LabelTargetVMAFMaxQ" xml:space="preserve">
+    <value>马克斯-Q:</value>
+  </data>
+  <data name="LabelTargetVMAFMinQ" xml:space="preserve">
+    <value>敏Q:</value>
+  </data>
+  <data name="LabelTargetVMAFProbes" xml:space="preserve">
+    <value>探头:</value>
+  </data>
+  <data name="SliderTargetVMAFMaxProbeLengthToolTip" xml:space="preserve">
+    <value>最大探测长度（秒）。如果数据块本身更短，则会被忽略。</value>
+  </data>
+  <data name="SliderTargetVMAFMaxQToolTip" xml:space="preserve">
+    <value>设置尽可能低的质量。</value>
+  </data>
+  <data name="SliderTargetVMAFMinQToolTip" xml:space="preserve">
+    <value>设置尽可能好的质量。</value>
+  </data>
+  <data name="SliderTargetVMAFProbesToolTip" xml:space="preserve">
+    <value>接近目标质量的最大尝试量。该逻辑将尽量避免使用超过必要的尝试。至少需要2次，这2次尝试是使用下面的最大Q和最小Q。</value>
+  </data>
   <data name="ButtonCropAutoDetect" xml:space="preserve">
     <value>自动检测</value>
   </data>

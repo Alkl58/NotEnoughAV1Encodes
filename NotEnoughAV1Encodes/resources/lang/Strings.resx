@@ -581,6 +581,33 @@ Please download and extract 7-zip to the following path:
   <data name="Paths" xml:space="preserve">
     <value>Paths</value>
   </data>
+  <data name="LabelTargetVMAF" xml:space="preserve">
+    <value>VMAF:</value>
+  </data>
+  <data name="LabelTargetVMAFProbes" xml:space="preserve">
+    <value>Probes:</value>
+  </data>
+  <data name="LabelTargetVMAFMaxProbeLength" xml:space="preserve">
+    <value>Probe Length (s):</value>
+  </data>
+  <data name="LabelTargetVMAFMaxQ" xml:space="preserve">
+    <value>Max Q:</value>
+  </data>
+  <data name="LabelTargetVMAFMinQ" xml:space="preserve">
+    <value>Min Q:</value>
+  </data>
+  <data name="SliderTargetVMAFMaxProbeLengthToolTip" xml:space="preserve">
+    <value>Max probe length in seconds. Will be ignored if the chunk itself is shorter.</value>
+  </data>
+  <data name="SliderTargetVMAFMaxQToolTip" xml:space="preserve">
+    <value>Sets the lowest possible quality.</value>
+  </data>
+  <data name="SliderTargetVMAFMinQToolTip" xml:space="preserve">
+    <value>Sets the best possible quality.</value>
+  </data>
+  <data name="SliderTargetVMAFProbesToolTip" xml:space="preserve">
+    <value>Max amount of tries to approximate the target quality. The logic will try to avoid using more tries than necessary. A minimum of 2 is required, those 2 tries are using Max Q and Min Q from below.</value>
+  </data>
   <data name="ButtonCropAutoDetect" xml:space="preserve">
     <value>Auto Detect</value>
   </data>
