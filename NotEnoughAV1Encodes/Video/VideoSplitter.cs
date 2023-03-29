@@ -338,7 +338,7 @@ namespace NotEnoughAV1Encodes.Video
                         if (!queueElement.SubtitleBurnCommand.Contains("-filter_complex"))
                         {
                             // Prevents using "-vf" two times
-                            ffmpegCommand += queueElement.SubtitleBurnCommand.Remove(0, 5);
+                            ffmpegCommand += "," + queueElement.SubtitleBurnCommand.Remove(0, 5);
                         }
                     }
 
