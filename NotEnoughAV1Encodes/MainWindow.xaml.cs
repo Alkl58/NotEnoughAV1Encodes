@@ -2792,7 +2792,7 @@ namespace NotEnoughAV1Encodes
                         List<string> VideoChunks = new();
 
                         // Chunking
-                        if (QueueParallel)
+                        if (QueueParallel || queueElement.ChunkingMethod == 2)
                         {
                             VideoChunks.Add(queueElement.VideoDB.InputPath);
                             Global.Logger("WARN  - Queue is being processed in Parallel", queueElement.Output + ".log");

@@ -109,7 +109,7 @@ namespace NotEnoughAV1Encodes.Video
                             }
 
                             // Set Chunk Input
-                            if (queueElement.ChunkingMethod == 0 || queueParallel || queueElement.Preset.TargetVMAF)
+                            if (queueElement.ChunkingMethod == 0 || queueElement.ChunkingMethod == 2 || queueParallel || queueElement.Preset.TargetVMAF)
                             {
                                 // Input for Chunked Encoding or Parallel Queue Processing
                                 ChunkInput = "-i \"" + chunk + "\"";

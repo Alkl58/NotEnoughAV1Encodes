@@ -89,6 +89,7 @@
                             <ComboBox Grid.Column="3" x:Name="ComboBoxChunkingMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left" SelectedIndex="1" SelectionChanged="ComboBoxChunkingMethod_SelectionChanged">
                                 <ComboBoxItem Content="Equal Chunking" IsSelected="True"/>
                                 <ComboBoxItem Content="PySceneDetect"/>
+                                <ComboBoxItem Content="Disable"/>
                             </ComboBox>
                             <Label x:Name="LabelReencodeMethod" Grid.Column="4" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
                                 <Label.Style>
