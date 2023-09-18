@@ -1933,40 +1933,39 @@ namespace NotEnoughAV1Encodes
             bool resize = ToggleSwitchFilterResize.IsOn;
             bool deinterlace = ToggleSwitchFilterDeinterlace.IsOn;
             bool fps = ComboBoxVideoFrameRate.SelectedIndex != 0;
-            bool _oneFilter = false;
+            bool oneFilter = false;
 
             string FilterCommand = "";
 
             if (crop || rotate || resize || deinterlace || fps)
             {
                 FilterCommand = " -vf ";
-                if (resize)
-                {
-                    // Has to be last, due to scaling algorithm
-                    FilterCommand += VideoFiltersResize();
-                    _oneFilter = true;
-                }
                 if (crop)
                 {
-                    if (_oneFilter) { FilterCommand += ","; }
                     FilterCommand += VideoFiltersCrop();
-                    _oneFilter = true;
+                    oneFilter = true;
+                }
+                if (resize)
+                {
+                    if (oneFilter) { FilterCommand += ","; }
+                    FilterCommand += VideoFiltersResize();
+                    oneFilter = true;
                 }
                 if (rotate)
                 {
-                    if (_oneFilter) { FilterCommand += ","; }
+                    if (oneFilter) { FilterCommand += ","; }
                     FilterCommand += VideoFiltersRotate();
-                    _oneFilter = true;
+                    oneFilter = true;
                 }
                 if (deinterlace)
                 {
-                    if (_oneFilter) { FilterCommand += ","; }
+                    if (oneFilter) { FilterCommand += ","; }
                     FilterCommand += VideoFiltersDeinterlace();
-                    _oneFilter = true;
+                    oneFilter = true;
                 }
                 if (fps)
                 {
-                    if (_oneFilter) { FilterCommand += ","; }
+                    if (oneFilter) { FilterCommand += ","; }
                     FilterCommand += GenerateFFmpegFramerate();
                 }
             }
