@@ -23,7 +23,7 @@ namespace NotEnoughAV1Encodes.Video
                 Global.Logger("INFO  - VideoEncode.Encode() => Chunk: " + chunk, queueElement.Output + ".log");
                 try { concurrencySemaphoreInner.Wait(token); }
                 catch (OperationCanceledException) { }
-                
+
                 Task taskInner = Task.Run(() =>
                 {
                     try
@@ -40,7 +40,7 @@ namespace NotEnoughAV1Encodes.Video
                         {
                             // Bad Implementation, however it's KISS
                             if (File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".webm")) == false &&
-                                File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf")) == false && 
+                                File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".ivf")) == false &&
                                 File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".mp4")) == false )
                             {
                                 alreadyEncoded = false;
@@ -82,13 +82,13 @@ namespace NotEnoughAV1Encodes.Video
                             int finalProgress = 0;
 
                             // Apply filter if the video has not been processed before
-                            if (queueElement.ChunkingMethod == 1 || (queueElement.ChunkingMethod == 0 && queueElement.ReencodeMethod == 3))
+                            if (queueElement.ChunkingMethod == 1 || queueElement.ChunkingMethod == 2 || (queueElement.ChunkingMethod == 0 && queueElement.ReencodeMethod == 3))
                             {
                                 ffmpegFilter = queueElement.FilterCommand;
                             }
 
                             // Subtitle Hardsubbing is only possible with Scenebased Encoding at this stage
-                            if (queueElement.ChunkingMethod == 1 && queueElement.SubtitleBurnCommand != null)
+                            if ((queueElement.ChunkingMethod == 1 || queueElement.ChunkingMethod == 2) && queueElement.SubtitleBurnCommand != null)
                             {
                                 // Only allow Picture Based Burn in, if no other Filter is being used
                                 if (string.IsNullOrEmpty(queueElement.FilterCommand))
@@ -211,7 +211,7 @@ namespace NotEnoughAV1Encodes.Video
                             Global.LaunchedPIDs.Add(_pid);
                             Global.Logger("TRACE - VideoEncode.Encode() => Added PID: " + _pid + "  Chunk: " + chunk, queueElement.Output + ".log");
 
-                            
+
                             // Create Progress Object
                             Queue.ChunkProgress chunkProgress = new();
                             chunkProgress.ChunkName = chunk;
@@ -263,7 +263,7 @@ namespace NotEnoughAV1Encodes.Video
                                     {
                                         passesSettings = " -pass 2 -passlogfile " + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + "_stats.log") + "\" ";
                                         ChunkOutput = passesSettings + "\"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video", index.ToString("D6") + ".mp4") + "\"";
-                                    }                 
+                                    }
                                 }
 
                                 Process processVideo2ndPass = new();
