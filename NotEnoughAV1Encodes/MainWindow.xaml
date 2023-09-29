@@ -1143,50 +1143,7 @@
                 <Frame x:Name="AudioTabFrame"></Frame>
             </TabItem>
             <TabItem x:Name="TabItemSubtitles" Header="{lex:Loc}">
-                <Grid>
-                    <ListBox x:Name="ListBoxSubtitleTracks" HorizontalContentAlignment="Stretch" Margin="10">
-                        <ListBoxItem Background="{Binding ElementName=ListBoxSubtitleTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <Grid>
-                                <Label x:Name="LabelNoSubtitleFound" Content="{lex:Loc}" HorizontalContentAlignment="Center" FontSize="20" />
-                            </Grid>
-                        </ListBoxItem>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Background" Value="{Binding ElementName=ListBoxSubtitleTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"></Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,2">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition MinWidth="50" />
-                                        <ColumnDefinition Width="140" />
-                                        <ColumnDefinition MinWidth="70" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition MinWidth="90" />
-                                        <ColumnDefinition Width="20" />
-                                        <ColumnDefinition MinWidth="40" Width="*" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition MinWidth="95" Width="*" />
-                                        <ColumnDefinition Width="150" />
-                                    </Grid.ColumnDefinitions>
-                                    <mah:ToggleSwitch Grid.Column="0" x:Name="ToggleOnOff" IsOn="{Binding Active}" IsEnabled="{Binding Enabled}" />
-                                    <Label Grid.Column="1" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{Binding Index}" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
-                                    <Label Grid.Column="2" Content="{lex:Loc LabelTrackName}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="3" x:Name="TextBoxSubtitleTrackName" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" TextWrapping="Wrap" VerticalContentAlignment="Center" VerticalAlignment="Center" Text="{Binding CustomName}" />
-                                    <Label Grid.Column="4" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelLanguage}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
-                                    <ComboBox Grid.Column="5" x:Name="ComboBoxTrackLanguage" VerticalAlignment="Center" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}"/>
-                                    <Label x:Name="LabelDefault" Grid.Column="6" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelDefault}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
-                                    <CheckBox Grid.Column="7" x:Name="CheckBoxDefault" IsChecked="{Binding Default}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    <Label x:Name="LabelBurnIn" Grid.Column="8" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelBurnIn}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
-                                    <CheckBox Grid.Column="9" x:Name="CheckBoxBurnIn" IsChecked="{Binding BurnIn}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
+                <Frame x:Name="SubtitleTabFrame"></Frame>
             </TabItem>
             <TabItem x:Name="TabItemQueue" Header="{lex:Loc}">
                 <Grid>

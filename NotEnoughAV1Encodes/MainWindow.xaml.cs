@@ -41,6 +41,7 @@ namespace NotEnoughAV1Encodes
         public static bool Logging { get; set; }
 
         private readonly Views.Tabs.Audio audioTab = new();
+        private readonly Views.Tabs.Subtitles subtitlesTab = new();
 
         public MainWindow()
         {
@@ -49,7 +50,10 @@ namespace NotEnoughAV1Encodes
             DataContext = PresetSettings;
 
             AudioTabFrame.Content = audioTab;
+            SubtitleTabFrame.Content = subtitlesTab;
+
             audioTab.ThemeUpdate(settingsDB.Theme);
+            subtitlesTab.ThemeUpdate(settingsDB.Theme);
 
             if (!File.Exists(Path.Combine(Global.AppData, "NEAV1E", "settings.json")))
             {
@@ -223,6 +227,7 @@ namespace NotEnoughAV1Encodes
             settingsDB = programSettings.settingsDBTemp;
 
             audioTab.ThemeUpdate(settingsDB.Theme);
+            subtitlesTab.ThemeUpdate(settingsDB.Theme);
 
             LoadSettings();
 
@@ -329,11 +334,11 @@ namespace NotEnoughAV1Encodes
 
                                 try { audioTab.ListBoxAudioTracks.Items.Clear(); } catch { }
                                 try { audioTab.ListBoxAudioTracks.ItemsSource = null; } catch { }
-                                try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-                                try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+                                try { subtitlesTab.ListBoxSubtitleTracks.Items.Clear(); } catch { }
+                                try { subtitlesTab.ListBoxSubtitleTracks.ItemsSource = null; } catch { }
 
                                 audioTab.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                                ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+                                subtitlesTab.ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
 
                                 // Automatically toggle VFR Support, if source is MKV
                                 if (videoDB.MIIsVFR && Path.GetExtension(videoDB.InputPath) is ".mkv" or ".MKV")
@@ -385,11 +390,11 @@ namespace NotEnoughAV1Encodes
 
                         try { audioTab.ListBoxAudioTracks.Items.Clear(); } catch { }
                         try { audioTab.ListBoxAudioTracks.ItemsSource = null; } catch { }
-                        try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-                        try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+                        try { subtitlesTab.ListBoxSubtitleTracks.Items.Clear(); } catch { }
+                        try { subtitlesTab.ListBoxSubtitleTracks.ItemsSource = null; } catch { }
 
                         audioTab.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                        ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+                        subtitlesTab.ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
                         LabelVideoSource.Text = videoDB.InputPath;
                         LabelVideoDestination.Text = videoDB.OutputPath;
                         LabelVideoLength.Content = videoDB.MIDuration;
@@ -424,11 +429,11 @@ namespace NotEnoughAV1Encodes
 
             try { audioTab.ListBoxAudioTracks.Items.Clear(); } catch { }
             try { audioTab.ListBoxAudioTracks.ItemsSource = null; } catch { }
-            try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-            try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+            try { subtitlesTab.ListBoxSubtitleTracks.Items.Clear(); } catch { }
+            try { subtitlesTab.ListBoxSubtitleTracks.ItemsSource = null; } catch { }
 
             audioTab.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-            ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+            subtitlesTab.ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
             LabelVideoSource.Text = videoDB.InputPath;
             LabelVideoLength.Content = videoDB.MIDuration;
             LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
@@ -473,7 +478,7 @@ namespace NotEnoughAV1Encodes
                         Path.GetExtension(videoDB.OutputPath).ToLower() == ".webm")
                     {
                         // Disable Subtitles if Output is MP4
-                        foreach (Subtitle.SubtitleTracks subtitleTracks in ListBoxSubtitleTracks.Items)
+                        foreach (Subtitle.SubtitleTracks subtitleTracks in subtitlesTab.ListBoxSubtitleTracks.Items)
                         {
                             subtitleTracks.Active = false;
                             subtitleTracks.Enabled = false;
@@ -513,7 +518,7 @@ namespace NotEnoughAV1Encodes
                         Path.GetExtension(videoDB.OutputPath).ToLower() == ".webm")
                     {
                         // Disable Subtitles if Output is MP4
-                        foreach (Subtitle.SubtitleTracks subtitleTracks in ListBoxSubtitleTracks.Items)
+                        foreach (Subtitle.SubtitleTracks subtitleTracks in subtitlesTab.ListBoxSubtitleTracks.Items)
                         {
                             subtitleTracks.Active = false;
                             subtitleTracks.Enabled = false;
@@ -521,7 +526,7 @@ namespace NotEnoughAV1Encodes
                     }
                     else
                     {
-                        foreach (Subtitle.SubtitleTracks subtitleTracks in ListBoxSubtitleTracks.Items)
+                        foreach (Subtitle.SubtitleTracks subtitleTracks in subtitlesTab.ListBoxSubtitleTracks.Items)
                         {
                             subtitleTracks.Enabled = true;
                         }
@@ -711,11 +716,11 @@ namespace NotEnoughAV1Encodes
 
                     try { audioTab.ListBoxAudioTracks.Items.Clear(); } catch { }
                     try { audioTab.ListBoxAudioTracks.ItemsSource = null; } catch { }
-                    try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-                    try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+                    try { subtitlesTab.ListBoxSubtitleTracks.Items.Clear(); } catch { }
+                    try { subtitlesTab.ListBoxSubtitleTracks.ItemsSource = null; } catch { }
 
                     audioTab.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                    ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+                    subtitlesTab.ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
                     LabelVideoSource.Text = videoDB.InputPath;
                     LabelVideoDestination.Text = videoDB.OutputPath;
                     LabelVideoLength.Content = videoDB.MIDuration;
@@ -1730,7 +1735,7 @@ namespace NotEnoughAV1Encodes
 
                     TabControl.Background = bg;
                     audioTab.ListBoxAudioTracks.Background = fg;
-                    ListBoxSubtitleTracks.Background = fg;
+                    subtitlesTab.ListBoxSubtitleTracks.Background = fg;
                 }
                 else
                 {
@@ -1774,8 +1779,8 @@ namespace NotEnoughAV1Encodes
             queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
             queueElement.VideoHDRMuxCommand = GenerateMKVMergeHDRCommand();
             queueElement.AudioCommand = audioCommandGenerator.Generate(audioTab.ListBoxAudioTracks.Items);
-            queueElement.SubtitleCommand = skipSubs ? null : subCommandGenerator.GenerateSoftsub(ListBoxSubtitleTracks.Items);
-            queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(ListBoxSubtitleTracks.Items, identifier);
+            queueElement.SubtitleCommand = skipSubs ? null : subCommandGenerator.GenerateSoftsub(subtitlesTab.ListBoxSubtitleTracks.Items);
+            queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(subtitlesTab.ListBoxSubtitleTracks.Items, identifier);
             queueElement.FilterCommand = GenerateVideoFilters();
             queueElement.FrameCount = videoDB.MIFrameCount;
             queueElement.EncodingMethod = ComboBoxVideoEncoder.SelectedIndex;
