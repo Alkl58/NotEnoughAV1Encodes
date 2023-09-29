@@ -1,0 +1,86 @@
+﻿<Page x:Class="NotEnoughAV1Encodes.Views.Tabs.Audio"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NotEnoughAV1Encodes.Views.Tabs"
+      xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+      xmlns:lex="http://wpflocalizeextension.codeplex.com"
+      mc:Ignorable="d" 
+      lex:LocalizeDictionary.DesignCulture="en"
+      lex:ResxLocalizationProvider.DefaultAssembly="NotEnoughAV1Encodes"
+      lex:ResxLocalizationProvider.DefaultDictionary="Strings"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Audio">
+
+    <Grid>
+        <ListBox ItemsSource="{Binding AudioTracks}" x:Name="ListBoxAudioTracks" HorizontalContentAlignment="Stretch" Margin="10">
+            <ListBoxItem Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                <Grid>
+                    <Label x:Name="LabelNoAudioFound" Content="{lex:Loc}" HorizontalContentAlignment="Center" FontSize="20" />
+                </Grid>
+            </ListBoxItem>
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="AudioTracksImport" Header="{lex:Loc}" Click="AudioTracksImport_Click">
+                        <MenuItem.Icon>
+                            <Image Source="../resources/img/folder.png" Height="20" Width="20"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Background" Value="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"></Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="0,2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition MinWidth="50" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition MinWidth="60" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition MinWidth="90" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition MinWidth="70" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition MinWidth="95" Width="*" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
+                        <mah:ToggleSwitch Grid.Column="0" x:Name="ToggleOnOff" IsOn="{Binding Active}"></mah:ToggleSwitch>
+                        <Label Grid.Column="1" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{Binding Index}" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
+                        <Label x:Name="LabelCodec" Grid.Column="2" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelCodec}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                        <ComboBox Grid.Column="3" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" x:Name="ComboBoxAudioCodec" VerticalAlignment="Center" SelectedIndex="{Binding Codec}">
+                            <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
+                            <ComboBoxItem Content="Opus" />
+                            <ComboBoxItem Content="AC3" />
+                            <ComboBoxItem Content="EAC3" />
+                            <ComboBoxItem Content="AAC" />
+                            <ComboBoxItem Content="MP3" />
+                            <ComboBoxItem Content="Copy Audio" />
+                        </ComboBox>
+                        <Label x:Name="LabelChannels" Grid.Column="4" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelChannels}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                        <ComboBox Grid.Column="5" x:Name="ComboBoxChannels" VerticalAlignment="Center" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" SelectedIndex="{Binding Channels}">
+                            <ComboBoxItem Content="1 (Mono)" Tag="1" />
+                            <ComboBoxItem Content="2.0 (Stereo)" Tag="2" />
+                            <ComboBoxItem Content="5.1" Tag="6" />
+                            <ComboBoxItem Content="7.1" Tag="8" />
+                        </ComboBox>
+                        <Label x:Name="LabelBitrate" Grid.Column="6" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelBitrate}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                        <TextBox Grid.Column="7"  x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="{Binding Bitrate}" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" PreviewTextInput="NumberValidationTextBox" Width="80">
+                            <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
+                        </TextBox>
+                        <Label x:Name="LabelLanguage" Grid.Column="8" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelLanguage}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                        <ComboBox Grid.Column="9" x:Name="ComboBoxTrackLanguage" VerticalAlignment="Center" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}"/>
+                        <Label x:Name="LabelTrackName" Grid.Column="10" Content="{lex:Loc LabelTrackName}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="11" x:Name="TextBoxAudioTrackName" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" TextWrapping="Wrap" VerticalContentAlignment="Center" VerticalAlignment="Center" Text="{Binding CustomName}" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Page>

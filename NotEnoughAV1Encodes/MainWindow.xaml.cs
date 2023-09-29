@@ -33,18 +33,23 @@ namespace NotEnoughAV1Encodes
         private int ProgramState;
 
         private Settings settingsDB = new();
-        private Video.VideoDB videoDB = new();
+        public static Video.VideoDB videoDB = new();
         
         private string uid;
         private CancellationTokenSource cancellationTokenSource;
-        public VideoSettings PresetSettings = new();
+        public static VideoSettings PresetSettings = new();
         public static bool Logging { get; set; }
+
+        private readonly Views.Tabs.Audio audioTab = new();
 
         public MainWindow()
         {
             InitializeComponent();
             Initialize();
             DataContext = PresetSettings;
+
+            AudioTabFrame.Content = audioTab;
+            audioTab.ThemeUpdate(settingsDB.Theme);
 
             if (!File.Exists(Path.Combine(Global.AppData, "NEAV1E", "settings.json")))
             {
@@ -217,6 +222,8 @@ namespace NotEnoughAV1Encodes
             programSettings.ShowDialog();
             settingsDB = programSettings.settingsDBTemp;
 
+            audioTab.ThemeUpdate(settingsDB.Theme);
+
             LoadSettings();
 
             try
@@ -320,12 +327,12 @@ namespace NotEnoughAV1Encodes
                                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
                                 videoDB.ParseMediaInfo(PresetSettings);
 
-                                try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                                try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+                                try { audioTab.ListBoxAudioTracks.Items.Clear(); } catch { }
+                                try { audioTab.ListBoxAudioTracks.ItemsSource = null; } catch { }
                                 try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
                                 try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
 
-                                ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                                audioTab.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
                                 ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
 
                                 // Automatically toggle VFR Support, if source is MKV
@@ -376,12 +383,12 @@ namespace NotEnoughAV1Encodes
                         DataContext = PresetSettings;
                         videoDB = queueElement.VideoDB;
 
-                        try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                        try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+                        try { audioTab.ListBoxAudioTracks.Items.Clear(); } catch { }
+                        try { audioTab.ListBoxAudioTracks.ItemsSource = null; } catch { }
                         try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
                         try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
 
-                        ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                        audioTab.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
                         ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
                         LabelVideoSource.Text = videoDB.InputPath;
                         LabelVideoDestination.Text = videoDB.OutputPath;
@@ -415,12 +422,12 @@ namespace NotEnoughAV1Encodes
             videoDB.ParseMediaInfo(PresetSettings);
             LabelVideoDestination.Text = LocalizedStrings.Instance["LabelVideoDestination"];
 
-            try { ListBoxAudioTracks.Items.Clear(); } catch { }
-            try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+            try { audioTab.ListBoxAudioTracks.Items.Clear(); } catch { }
+            try { audioTab.ListBoxAudioTracks.ItemsSource = null; } catch { }
             try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
             try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
 
-            ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+            audioTab.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
             ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
             LabelVideoSource.Text = videoDB.InputPath;
             LabelVideoLength.Content = videoDB.MIDuration;
@@ -702,12 +709,12 @@ namespace NotEnoughAV1Encodes
                     videoDB = tmp.VideoDB;
                     uid = tmp.UniqueIdentifier;
 
-                    try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                    try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+                    try { audioTab.ListBoxAudioTracks.Items.Clear(); } catch { }
+                    try { audioTab.ListBoxAudioTracks.ItemsSource = null; } catch { }
                     try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
                     try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
 
-                    ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                    audioTab.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
                     ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
                     LabelVideoSource.Text = videoDB.InputPath;
                     LabelVideoDestination.Text = videoDB.OutputPath;
@@ -779,37 +786,7 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void AudioTracksImport_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openAudioFilesDialog = new()
-            {
-                Filter = "Audio Files|*.mp3;*.aac;*.flac;*.m4a;*.ogg;*.opus;*.wav;*.wma|All Files|*.*",
-                Multiselect = true
-            };
 
-            bool? result = openAudioFilesDialog.ShowDialog();
-            if (result == true)
-            {
-                List<Audio.AudioTracks> AudioTracks = new();
-                if (ListBoxAudioTracks.ItemsSource != null)
-                {
-                    AudioTracks = (List<Audio.AudioTracks>) ListBoxAudioTracks.ItemsSource;
-                }
-                foreach (string file in openAudioFilesDialog.FileNames)
-                {
-                    Debug.WriteLine(file);
-                    AudioTracks.Add(videoDB.ParseMediaInfoAudio(file, PresetSettings));
-                }
-
-                try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                try { ListBoxAudioTracks.ItemsSource = null; } catch { }
-                try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-                try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
-
-                videoDB.AudioTracks = AudioTracks;
-                ListBoxAudioTracks.ItemsSource = AudioTracks;
-            }
-        }
         #endregion
 
         #region UI Functions
@@ -854,10 +831,10 @@ namespace NotEnoughAV1Encodes
         {
             try
             {
-                if (ListBoxAudioTracks.ItemsSource == null) return;
-                videoDB.AudioTracks = (List<Audio.AudioTracks>)ListBoxAudioTracks.ItemsSource;
-                try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+                if (audioTab.ListBoxAudioTracks.ItemsSource == null) return;
+                videoDB.AudioTracks = (List<Audio.AudioTracks>)audioTab.ListBoxAudioTracks.ItemsSource;
+                try { audioTab.ListBoxAudioTracks.Items.Clear(); } catch { }
+                try { audioTab.ListBoxAudioTracks.ItemsSource = null; } catch { }
 
                 foreach (Audio.AudioTracks audioTrack in videoDB.AudioTracks)
                 {
@@ -884,7 +861,7 @@ namespace NotEnoughAV1Encodes
                     }
                 }
 
-                ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                audioTab.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
             }
             catch { }
         }
@@ -1752,7 +1729,7 @@ namespace NotEnoughAV1Encodes
                     }
 
                     TabControl.Background = bg;
-                    ListBoxAudioTracks.Background = fg;
+                    audioTab.ListBoxAudioTracks.Background = fg;
                     ListBoxSubtitleTracks.Background = fg;
                 }
                 else
@@ -1796,7 +1773,7 @@ namespace NotEnoughAV1Encodes
             queueElement.Output = videoDB.OutputPath;
             queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
             queueElement.VideoHDRMuxCommand = GenerateMKVMergeHDRCommand();
-            queueElement.AudioCommand = audioCommandGenerator.Generate(ListBoxAudioTracks.Items);
+            queueElement.AudioCommand = audioCommandGenerator.Generate(audioTab.ListBoxAudioTracks.Items);
             queueElement.SubtitleCommand = skipSubs ? null : subCommandGenerator.GenerateSoftsub(ListBoxSubtitleTracks.Items);
             queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(ListBoxSubtitleTracks.Items, identifier);
             queueElement.FilterCommand = GenerateVideoFilters();
