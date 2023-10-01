@@ -199,6 +199,27 @@ namespace NotEnoughAV1Encodes.Video
 
                             token.Register(() => { try { processVideo.StandardInput.Write("q"); } catch { } });
 
+                            // We want to use the event handler, this might / might not fix some blocking issues resulting in lost frames
+                            // https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.process.outputdatareceived?view=netframework-4.7.2
+                            // https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.process.errordatareceived?view=netframework-4.7.2
+                            // Read stderr to get progress
+                            processVideo.ErrorDataReceived += (s, e) =>
+                            {
+                                if (! string.IsNullOrEmpty(e.Data))
+                                {
+
+                                    int processedFrames = Global.GetTotalFramesProcessed(e.Data);
+                                    if (processedFrames != 0)
+                                    {
+                                        foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
+                                        {
+                                            progressElement.Progress = processedFrames;
+                                            finalProgress = processedFrames;
+                                        }
+                                    }
+                                }
+                            };
+
                             processVideo.Start();
 
                             // Set Proccess Priority
@@ -211,7 +232,6 @@ namespace NotEnoughAV1Encodes.Video
                             Global.LaunchedPIDs.Add(_pid);
                             Global.Logger("TRACE - VideoEncode.Encode() => Added PID: " + _pid + "  Chunk: " + chunk, queueElement.Output + ".log");
 
-
                             // Create Progress Object
                             Queue.ChunkProgress chunkProgress = new();
                             chunkProgress.ChunkName = chunk;
@@ -223,20 +243,7 @@ namespace NotEnoughAV1Encodes.Video
                                 queueElement.ChunkProgress.Add(chunkProgress);
                             }
 
-                            StreamReader sr = processVideo.StandardError;
-
-                            while (!sr.EndOfStream)
-                            {
-                                int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
-                                if (processedFrames != 0)
-                                {
-                                    foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
-                                    {
-                                        progressElement.Progress = processedFrames;
-                                        finalProgress = processedFrames;
-                                    }
-                                }
-                            }
+                            processVideo.BeginErrorReadLine();
 
                             processVideo.WaitForExit();
 
@@ -285,6 +292,22 @@ namespace NotEnoughAV1Encodes.Video
 
                                 token.Register(() => { try { processVideo2ndPass.StandardInput.Write("q"); } catch { } });
 
+                                // Read stderr to get progress
+                                processVideo2ndPass.ErrorDataReceived += (s, e) =>
+                                {
+                                    if (!string.IsNullOrEmpty(e.Data))
+                                    {
+                                        int processedFrames = Global.GetTotalFramesProcessed(e.Data);
+                                        if (processedFrames != 0)
+                                        {
+                                            foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
+                                            {
+                                                progressElement.ProgressSecondPass = processedFrames;
+                                            }
+                                        }
+                                    }
+                                };
+
                                 processVideo2ndPass.Start();
 
                                 // Set Proccess Priority
@@ -297,19 +320,7 @@ namespace NotEnoughAV1Encodes.Video
                                 Global.LaunchedPIDs.Add(_pid);
                                 Global.Logger("TRACE - VideoEncode.Encode() 2nd Pass => Added PID: " + _pid + "  Chunk: " + chunk, queueElement.Output + ".log");
 
-                                sr = processVideo2ndPass.StandardError;
-
-                                while (!sr.EndOfStream)
-                                {
-                                    int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
-                                    if (processedFrames != 0)
-                                    {
-                                        foreach (Queue.ChunkProgress progressElement in queueElement.ChunkProgress.Where(p => p.ChunkName == chunk))
-                                        {
-                                            progressElement.ProgressSecondPass = processedFrames;
-                                        }
-                                    }
-                                }
+                                processVideo2ndPass.BeginErrorReadLine();
 
                                 processVideo2ndPass.WaitForExit();
 

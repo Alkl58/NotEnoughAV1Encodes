@@ -53,24 +53,26 @@ namespace NotEnoughAV1Encodes.Video
             };
             pySceneDetect.StartInfo = startInfo;
 
+            // Read stderr to get progress
+            pySceneDetect.ErrorDataReceived += (s, e) =>
+            {
+                if (!string.IsNullOrEmpty(e.Data))
+                {
+                    try
+                    {
+                        queueElement.Status = "Splitting - " + e.Data;
+                    }
+                    catch { }
+                }
+            };
+
             pySceneDetect.Start();
 
             _token.Register(() => { KillProcessAndChildren(pySceneDetect.Id); });
 
-            StreamReader sr = pySceneDetect.StandardError;
-
-            while (!sr.EndOfStream)
-            {
-                try
-                {
-                    queueElement.Status = "Splitting - " + sr.ReadLine();
-                }
-                catch { }
-            }
+            pySceneDetect.BeginErrorReadLine();
 
             pySceneDetect.WaitForExit();
-
-            sr.Close();
 
             if (!_token.IsCancellationRequested)
             {

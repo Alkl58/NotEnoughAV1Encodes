@@ -38,22 +38,27 @@ namespace NotEnoughAV1Encodes.Audio
 
                 _token.Register(() => { try { processAudio.StandardInput.Write("q"); } catch { } });
 
+                string stderr = "\n";
+                // Read stderr to get progress
+                processAudio.ErrorDataReceived += (s, e) =>
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                    {
+                        string line = e.Data;
+                        if (!line.Contains("time="))
+                            stderr += line + "\n";
+                        int processedFrames = Global.GetTotalTimeProcessed(line, queueElement);
+                        if (processedFrames != 0)
+                        {
+                            queueElement.Progress = Convert.ToDouble(processedFrames);
+                            queueElement.Status = "Encoding Audio - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
+                        }
+                    }
+                };
+
                 processAudio.Start();
 
-                StreamReader sr = processAudio.StandardError;
-                string stderr = "\n";
-                while (!sr.EndOfStream)
-                {
-                    string line = sr.ReadLine();
-                    if (!line.Contains("time="))
-                        stderr += line + "\n";
-                    int processedFrames = Global.GetTotalTimeProcessed(line, queueElement);
-                    if (processedFrames != 0)
-                    {
-                        queueElement.Progress = Convert.ToDouble(processedFrames);
-                        queueElement.Status = "Encoding Audio - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
-                    }
-                }
+                processAudio.BeginErrorReadLine();
 
                 processAudio.WaitForExit();
 

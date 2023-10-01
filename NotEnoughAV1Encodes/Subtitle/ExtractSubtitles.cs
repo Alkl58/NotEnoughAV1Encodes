@@ -30,18 +30,23 @@ namespace NotEnoughAV1Encodes.Subtitle
 
                 _token.Register(() => { try { processSubtitles.StandardInput.Write("q"); } catch { } });
 
+                // Read stderr to get progress
+                processSubtitles.ErrorDataReceived += (s, e) =>
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                    {
+                        int processedFrames = Global.GetTotalFramesProcessed(e.Data);
+                        if (processedFrames != 0)
+                        {
+                            queueElement.Progress = Convert.ToDouble(processedFrames);
+                            queueElement.Status = "Extracting Subtitles - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
+                        }
+                    }
+                };
+
                 processSubtitles.Start();
 
-                StreamReader sr = processSubtitles.StandardError;
-                while (!sr.EndOfStream)
-                {
-                    int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
-                    if (processedFrames != 0)
-                    {
-                        queueElement.Progress = Convert.ToDouble(processedFrames);
-                        queueElement.Status = "Extracting Subtitles - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
-                    }
-                }
+                processSubtitles.BeginErrorReadLine();
 
                 processSubtitles.WaitForExit();
 

@@ -131,18 +131,24 @@ namespace NotEnoughAV1Encodes.Video
             Global.Logger("DEBUG - VideoMuxer.Concat() => Command: ffmpeg.exe -y -f concat -safe 0 -i \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "chunks.txt") + "\"" + DAR + " -c copy \"" + FFmpegOutput + "\"", queueElement.Output + ".log");
 
             processVideo.StartInfo = startInfo;
+
+            // Read stderr to get progress
+            processVideo.ErrorDataReceived += (s, e) =>
+            {
+                if (!string.IsNullOrEmpty(e.Data))
+                {
+                    int processedFrames = Global.GetTotalFramesProcessed(e.Data);
+                    if (processedFrames != 0)
+                    {
+                        queueElement.Progress = Convert.ToDouble(processedFrames);
+                        queueElement.Status = "Muxing Chunks - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
+                    }
+                }
+            };
+
             processVideo.Start();
 
-            StreamReader sr = processVideo.StandardError;
-            while (!sr.EndOfStream)
-            {
-                int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
-                if (processedFrames != 0)
-                {
-                    queueElement.Progress = Convert.ToDouble(processedFrames);
-                    queueElement.Status = "Muxing Chunks - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
-                }
-            }
+            processVideo.BeginErrorReadLine();
 
             processVideo.WaitForExit();
         }
@@ -167,18 +173,24 @@ namespace NotEnoughAV1Encodes.Video
             Global.Logger("DEBUG - VideoMuxer.Concat() => Command: " + ffmpegCommand, queueElement.Output + ".log");
 
             processVideo.StartInfo = startInfo;
+
+            // Read stderr to get progress
+            processVideo.ErrorDataReceived += (s, e) =>
+            {
+                if (!string.IsNullOrEmpty(e.Data))
+                {
+                    int processedFrames = Global.GetTotalFramesProcessed(e.Data);
+                    if (processedFrames != 0)
+                    {
+                        queueElement.Progress = Convert.ToDouble(processedFrames);
+                        queueElement.Status = "Muxing Video - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
+                    }
+                }
+            };
+
             processVideo.Start();
 
-            StreamReader sr = processVideo.StandardError;
-            while (!sr.EndOfStream)
-            {
-                int processedFrames = Global.GetTotalFramesProcessed(sr.ReadLine());
-                if (processedFrames != 0)
-                {
-                    queueElement.Progress = Convert.ToDouble(processedFrames);
-                    queueElement.Status = "Muxing Video - " + ((decimal)queueElement.Progress / queueElement.FrameCount).ToString("0.00%");
-                }
-            }
+            processVideo.BeginErrorReadLine();
 
             processVideo.WaitForExit();
         }
