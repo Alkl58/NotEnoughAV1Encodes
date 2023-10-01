@@ -1,5 +1,5 @@
 using Microsoft.VisualBasic.FileIO;
-using Newtonsoft.Json.Linq;
+using NotEnoughAV1Encodes.Queue;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,83 +12,81 @@ namespace NotEnoughAV1Encodes.Video
 {
     class VideoSplitter
     {
-        private Queue.QueueElement queueElement = new();
-        public void Split(Queue.QueueElement _queueElement, CancellationToken token)
+        public void Split(QueueElement queueElement, CancellationToken _token)
         {
-            queueElement = _queueElement;
             Global.Logger("INFO  - VideoSplitter.Split()", queueElement.Output + ".log");
 
-            if (queueElement.ChunkingMethod == 0)
+            switch (queueElement.ChunkingMethod)
             {
-                // Equal Chunking
-                FFmpegChunking(token);
-            }
-            else if(queueElement.ChunkingMethod == 1)
-            {
-                // PySceneDetect
-                PySceneDetect(token);
+                case 0:
+                    FFmpegChunking(queueElement, _token);
+                    break;
+                case 1:
+                    PySceneDetect(queueElement, _token);
+                    break;
+                default:
+                    break;
             }
         }
 
-        private void PySceneDetect(CancellationToken _token)
+        private void PySceneDetect(QueueElement queueElement, CancellationToken _token)
         {
             Global.Logger("DEBUG - VideoSplitter.Split() => PySceneDetect()", queueElement.Output + ".log");
             // Skip Scene Detect if the file already exist
-            if (!File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splits.txt")))
+            if (File.Exists(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "splits.txt")))
             {
-                // Detects the Scenes with PySceneDetect
-                Process pySceneDetect = new();
-                ProcessStartInfo startInfo = new()
+                Global.Logger("WARN  - VideoSplitter.Split() => PySceneDetect() => File already exist - Resuming?", queueElement.Output + ".log");
+                return;
+            }
+
+            // Detects the Scenes with PySceneDetect
+            Process pySceneDetect = new();
+            ProcessStartInfo startInfo = new()
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardError = true,
+                FileName = "cmd.exe",
+                WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "pyscenedetect"),
+                Arguments = "/C scenedetect -i \"" + queueElement.VideoDB.InputPath + "\" -o \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier) + '\u0022' + " detect-content -t " + queueElement.PySceneDetectThreshold.ToString() + " list-scenes"
+            };
+            pySceneDetect.StartInfo = startInfo;
+
+            pySceneDetect.Start();
+
+            _token.Register(() => { KillProcessAndChildren(pySceneDetect.Id); });
+
+            StreamReader sr = pySceneDetect.StandardError;
+
+            while (!sr.EndOfStream)
+            {
+                try
                 {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    RedirectStandardError = true,
-                    FileName = "cmd.exe",
-                    WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "pyscenedetect"),
-                    Arguments = "/C scenedetect -i \"" + queueElement.VideoDB.InputPath + "\" -o \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier) + '\u0022' + " detect-content -t " + queueElement.PySceneDetectThreshold.ToString() + " list-scenes"
-                };
-                pySceneDetect.StartInfo = startInfo;
-
-                pySceneDetect.Start();
-
-                _token.Register(() => { KillProcessAndChildren(pySceneDetect.Id); });
-
-                StreamReader sr = pySceneDetect.StandardError;
-
-                while (!sr.EndOfStream)
-                {
-                    try
-                    {
-                        queueElement.Status = "Splitting - " + sr.ReadLine();
-                    }
-                    catch { }
+                    queueElement.Status = "Splitting - " + sr.ReadLine();
                 }
+                catch { }
+            }
 
-                pySceneDetect.WaitForExit();
+            pySceneDetect.WaitForExit();
 
-                sr.Close();
+            sr.Close();
 
-                if (!_token.IsCancellationRequested)
-                {
-                    PySceneDetectParse(_token);
-                }
-                else
-                {
-                    Global.Logger("FATAL - Cancellation Requested - Currently in VideoSplitter.Split() => PySceneDetect()", queueElement.Output + ".log");
-                }
+            if (!_token.IsCancellationRequested)
+            {
+                PySceneDetectParse(queueElement, _token);
             }
             else
             {
-                Global.Logger("WARN  - VideoSplitter.Split() => PySceneDetect() => File already exist - Resuming?", queueElement.Output + ".log");
+                Global.Logger("FATAL - Cancellation Requested - Currently in VideoSplitter.Split() => PySceneDetect()", queueElement.Output + ".log");
             }
         }
 
-        private void PySceneDetectParse(CancellationToken token)
+        private void PySceneDetectParse(QueueElement queueElement, CancellationToken _token)
         {
             List<string> FFmpegArgs = new();
 
-            using (TextFieldParser parser = new TextFieldParser(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, Path.GetFileNameWithoutExtension(queueElement.VideoDB.InputPath) + "-Scenes.csv")))
+            using (TextFieldParser parser = new(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, Path.GetFileNameWithoutExtension(queueElement.VideoDB.InputPath) + "-Scenes.csv")))
             {
                 parser.TextFieldType = FieldType.Delimited;
                 parser.SetDelimiters(",");
@@ -147,10 +145,10 @@ namespace NotEnoughAV1Encodes.Video
                 }
             }
 
-            PySceneTargetVMAFChunking(FFmpegArgs, token);
+            PySceneTargetVMAFChunking(FFmpegArgs, queueElement, _token);
         }
 
-        private void PySceneTargetVMAFChunking(List<string> ffmpegArgs, CancellationToken token)
+        private void PySceneTargetVMAFChunking(List<string> ffmpegArgs, QueueElement queueElement, CancellationToken _token)
         {
             // To avoid getting incorrect vmaf values due to ffmpeg seeking issue,
             // we have to split the video into chunks
@@ -192,7 +190,7 @@ namespace NotEnoughAV1Encodes.Video
                 };
                 chunkingProcess.StartInfo = startInfo;
 
-                token.Register(() => { try { chunkingProcess.StandardInput.Write("q"); } catch { } });
+                _token.Register(() => { try { chunkingProcess.StandardInput.Write("q"); } catch { } });
 
                 // Start Process
                 chunkingProcess.Start();
@@ -250,7 +248,7 @@ namespace NotEnoughAV1Encodes.Video
                 };
                 chunkingProcess.StartInfo = startInfo;
 
-                token.Register(() => { try { chunkingProcess.StandardInput.Write("q"); } catch { } });
+                _token.Register(() => { try { chunkingProcess.StandardInput.Write("q"); } catch { } });
 
                 // Start Process
                 chunkingProcess.Start();
@@ -278,7 +276,7 @@ namespace NotEnoughAV1Encodes.Video
 
         }
 
-        private void FFmpegChunking(CancellationToken _token)
+        private void FFmpegChunking(QueueElement queueElement, CancellationToken _token)
         {
             Global.Logger("DEBUG - VideoSplitter.Split() => FFmpegChunking()", queueElement.Output + ".log");
             // Skips Splitting of already existent
@@ -419,20 +417,16 @@ namespace NotEnoughAV1Encodes.Video
 
         private static void KillProcessAndChildren(int pid)
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher
-              ("Select * From Win32_Process Where ParentProcessID=" + pid);
+            ManagementObjectSearcher searcher = new("Select * From Win32_Process Where ParentProcessID=" + pid);
             ManagementObjectCollection moc = searcher.Get();
             foreach (ManagementObject mo in moc)
             {
                 KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"]));
             }
-            try
-            {
+            try {
                 Process proc = Process.GetProcessById(pid);
                 proc.Kill();
-            }
-            catch (ArgumentException)
-            {
+            } catch (ArgumentException) {
                 // Process already exited.
             }
         }
