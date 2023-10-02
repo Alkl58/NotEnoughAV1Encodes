@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace NotEnoughAV1Encodes.Audio
 {
-    class EncodeAudio
+    class AudioEncode
     {
         public void Encode(QueueElement queueElement, CancellationToken _token)
         {
