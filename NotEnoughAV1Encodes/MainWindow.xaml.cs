@@ -1472,7 +1472,7 @@ namespace NotEnoughAV1Encodes
             // Use the current frame as start point of detection
             int index = int.Parse(LabelCropPreview.Content.ToString().Split("/")[0]);
 
-            string command = "/C ffmpeg.exe -ss " + (index * seconds).ToString() + " -i \"" + videoDB.InputPath + "\" -vf cropdetect=24:16:0 -t 5  -f null -";
+            string command = "/C ffmpeg.exe -ss " + (index * seconds).ToString() + " -i \"" + videoDB.InputPath + "\" -vf cropdetect=24:2:0 -t 5  -f null -";
 
             Process ffmpegProcess = new();
             ProcessStartInfo startInfo = new()
@@ -1997,8 +1997,8 @@ namespace NotEnoughAV1Encodes
         private string VideoFiltersCrop()
         {
             // Sets the values for cropping the video
-            string widthNew = "";
-            string heightNew = "";
+            string widthNew;
+            string heightNew;
             try
             {
                 widthNew = (int.Parse(TextBoxFiltersCropRight.Text) + int.Parse(TextBoxFiltersCropLeft.Text)).ToString();
