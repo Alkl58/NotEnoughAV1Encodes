@@ -123,7 +123,15 @@ namespace NotEnoughAV1Encodes
 
                 foreach (string file in filePaths)
                 {
-                    ListBoxQueue.Items.Add(JsonConvert.DeserializeObject<Queue.QueueElement>(File.ReadAllText(file)));
+                    try
+                    {
+                        var deserialized = JsonConvert.DeserializeObject<Queue.QueueElement>(File.ReadAllText(file));
+                        ListBoxQueue.Items.Add(deserialized);
+                    }
+                    catch (Exception ex) 
+                    {
+                        MessageBox.Show("Queue File " + file + " is corrupted. \n\nMessage from JSON parser: \n" + ex.Message + "\n\nPlease report this at Github!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
 
