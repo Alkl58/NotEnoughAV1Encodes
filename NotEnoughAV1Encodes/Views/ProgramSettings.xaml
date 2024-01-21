@@ -18,7 +18,8 @@
         <mah:MetroTabControl Margin="0,0,0,54">
             <TabItem Header="{lex:Loc ProgramSettings}">
                 <Grid>
-                    <GroupBox Margin="10,10,0,0" Height="311" VerticalAlignment="Top" HorizontalAlignment="Left" Width="496">
+
+                    <GroupBox Margin="10,10,0,22" HorizontalAlignment="Left" Width="496">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -41,16 +42,26 @@
                             <mah:ToggleSwitch Grid.Row="2" Grid.Column="1" x:Name="ToggleSwitchBatchSubFolders" Header="{lex:Loc}" Height="53" Width="224" HorizontalAlignment="Center"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Margin="511,10,10,0" Height="80" VerticalAlignment="Top">
+                    <GroupBox Margin="511,10,10,0" Height="123" VerticalAlignment="Top">
                         <Grid>
-                            <Label x:Name="LabelProcessPriority" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Normal" Height="28" RenderTransformOrigin="0.393,0.581" Width="107"/>
-                            <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="117,0,0,0" VerticalAlignment="Center" Width="117" Height="29">
+                            <Label x:Name="LabelProcessPriority" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="5,11,0,0" VerticalAlignment="Top" FontWeight="Normal" Height="28" RenderTransformOrigin="0.393,0.581" Width="134"/>
+                            <ComboBox x:Name="ComboBoxProcessPriority" HorizontalAlignment="Left" Margin="144,10,0,0" VerticalAlignment="Top" Width="118" Height="29">
                                 <ComboBoxItem Content="Normal" IsSelected="True"/>
                                 <ComboBoxItem Content="Below Normal"/>
                             </ComboBox>
+
+                            <Label x:Name="GroupBoxLanguage" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="5,58,0,0" VerticalAlignment="Top" FontWeight="Normal" Height="28" RenderTransformOrigin="0.451,0.513" Width="134"/>
+                            <ComboBox x:Name="ComboBoxLanguage" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118" SelectedIndex="0" SelectionChanged="ComboBoxLanguage_SelectionChanged" Margin="144,59,0,0">
+                                <ComboBoxItem Content="English"/>
+                                <ComboBoxItem Content="Deutsch (German)"/>
+                                <ComboBoxItem Content="中国人 (Chinese Simplified)"/>
+                                <ComboBoxItem Content="Русский (Russian)"/>
+                                <ComboBoxItem Content="日本語 (Japanese)"/>
+                                <ComboBoxItem Content="Italiano (Italian)"/>
+                                <ComboBoxItem Content="Français (French)"/>
+                            </ComboBox>
                         </Grid>
                     </GroupBox>
-
                 </Grid>
             </TabItem>
             <TabItem Header="{lex:Loc Paths}">
@@ -71,23 +82,6 @@
                                 <ComboBoxItem Content=".mkv"/>
                                 <ComboBoxItem Content=".webm"/>
                                 <ComboBoxItem Content=".mp4"/>
-                            </ComboBox>
-                        </Grid>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
-            <TabItem Header="{lex:Loc GroupBoxLanguage}">
-                <Grid>
-                    <GroupBox x:Name="GroupBoxLanguage" Header="{lex:Loc}" Margin="0,10,573,0" Height="80" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="237">
-                        <Grid>
-                            <ComboBox x:Name="ComboBoxLanguage" HorizontalAlignment="Center" VerticalAlignment="Center" Width="175" SelectedIndex="0" SelectionChanged="ComboBoxLanguage_SelectionChanged">
-                                <ComboBoxItem Content="English"/>
-                                <ComboBoxItem Content="Deutsch (German)"/>
-                                <ComboBoxItem Content="中国人 (Chinese Simplified)"/>
-                                <ComboBoxItem Content="Русский (Russian)"/>
-                                <ComboBoxItem Content="日本語 (Japanese)"/>
-                                <ComboBoxItem Content="Italiano (Italian)"/>
-                                <ComboBoxItem Content="Français (French)"/>
                             </ComboBox>
                         </Grid>
                     </GroupBox>

@@ -187,7 +187,7 @@
     <value>输入/输出</value>
   </data>
   <data name="GroupBoxLanguage" xml:space="preserve">
-    <value>语言 (Language)</value>
+    <value>语言 (Language):</value>
     <comment>Other Languages MUST use "&lt;Lang&gt; (Language)"</comment>
   </data>
   <data name="GroupBoxOptimization" xml:space="preserve">

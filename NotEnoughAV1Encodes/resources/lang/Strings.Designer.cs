@@ -362,7 +362,7 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Language ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Language: ähnelt.
         /// </summary>
         public static string GroupBoxLanguage {
             get {

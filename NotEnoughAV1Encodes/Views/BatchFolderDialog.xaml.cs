@@ -1,5 +1,4 @@
-﻿using ControlzEx.Standard;
-using ControlzEx.Theming;
+﻿using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using System.Collections.Generic;
 using System.IO;

@@ -187,7 +187,7 @@
     <value>Source / Destination</value>
   </data>
   <data name="GroupBoxLanguage" xml:space="preserve">
-    <value>Langue (Language)</value>
+    <value>Langue (Language):</value>
     <comment>Les autres langues doivent uiliser "&lt;Lang&gt; (Language)"</comment>
   </data>
   <data name="GroupBoxOptimization" xml:space="preserve">
