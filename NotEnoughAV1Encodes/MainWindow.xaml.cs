@@ -196,14 +196,14 @@ namespace NotEnoughAV1Encodes
             LoadCropPreview(index);
         }
 
-        private void ButtonCancelEncode_Click(object sender, RoutedEventArgs e)
+        private void ButtonCancelEncode_Click(object sender, EventArgs e)
         {
             if (cancellationTokenSource == null) return;
             try
             {
                 cancellationTokenSource.Cancel();
-                ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
-                ButtonAddToQueue.IsEnabled = true;
+                TopButtonsControl.ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
+                TopButtonsControl.ButtonAddToQueue.IsEnabled = true;
                 ButtonRemoveSelectedQueueItem.IsEnabled = true;
                 ButtonEditSelectedItem.IsEnabled = true;
                 ButtonClearQueue.IsEnabled = true;
@@ -219,7 +219,7 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
 
-        private void ButtonProgramSettings_Click(object sender, RoutedEventArgs e)
+        private void ButtonProgramSettings_Click(object sender, EventArgs e)
         {
             Views.ProgramSettings programSettings = new(settingsDB);
             programSettings.ShowDialog();
@@ -258,7 +258,7 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
 
-        private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)
+        private void ButtonOpenSource_Click(object sender, EventArgs e)
         {
             Views.OpenSource openSource = new(settingsDB.Theme);
             openSource.ShowDialog();
@@ -488,7 +488,7 @@ namespace NotEnoughAV1Encodes
             CreateCropPreviewsOnLoad();
         }
 
-        private void ButtonSetDestination_Click(object sender, RoutedEventArgs e)
+        private void ButtonSetDestination_Click(object sender, EventArgs e)
         {
             string fileName = "";
 
@@ -532,7 +532,7 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void ButtonStartStop_Click(object sender, RoutedEventArgs e)
+        private void ButtonStartStop_Click(object sender, EventArgs e)
         {
             if (ListBoxQueue.Items.Count == 0)
             {
@@ -543,13 +543,13 @@ namespace NotEnoughAV1Encodes
             {
                 if (ProgramState is 0 or 2)
                 {
-                    ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/pause.png", UriKind.Relative));
-                    LabelStartPauseButton.Content = LocalizedStrings.Instance["Pause"];
+                    TopButtonsControl.ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/pause.png", UriKind.Relative));
+                    TopButtonsControl.LabelStartPauseButton.Content = LocalizedStrings.Instance["Pause"];
 
                     // Main Start
                     if (ProgramState is 0)
                     {
-                        ButtonAddToQueue.IsEnabled = false;
+                        TopButtonsControl.ButtonAddToQueue.IsEnabled = false;
                         ButtonRemoveSelectedQueueItem.IsEnabled = false;
                         ButtonEditSelectedItem.IsEnabled = false;
                         ButtonClearQueue.IsEnabled = false;
@@ -572,8 +572,8 @@ namespace NotEnoughAV1Encodes
                 else if (ProgramState is 1)
                 {
                     ProgramState = 2;
-                    ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/resume.png", UriKind.Relative));
-                    LabelStartPauseButton.Content = LocalizedStrings.Instance["Resume"];
+                    TopButtonsControl.ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/resume.png", UriKind.Relative));
+                    TopButtonsControl.LabelStartPauseButton.Content = LocalizedStrings.Instance["Resume"];
 
                     // Pause all PIDs
                     foreach (int pid in Global.LaunchedPIDs)
@@ -588,7 +588,7 @@ namespace NotEnoughAV1Encodes
             }
         }
 
-        private void ButtonAddToQueue_Click(object sender, RoutedEventArgs e)
+        private void ButtonAddToQueue_Click(object sender, EventArgs e)
         {
             PreAddToQueue();
         }
@@ -1848,8 +1848,8 @@ namespace NotEnoughAV1Encodes
                 // Pause
                 if (time < 40.0)
                 {
-                    Dispatcher.Invoke(() => ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/resume.png", UriKind.Relative)));
-                    Dispatcher.Invoke(() => LabelStartPauseButton.Content = LocalizedStrings.Instance["Resume"]);
+                    Dispatcher.Invoke(() => TopButtonsControl.ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/resume.png", UriKind.Relative)));
+                    Dispatcher.Invoke(() => TopButtonsControl.LabelStartPauseButton.Content = LocalizedStrings.Instance["Resume"]);
                     Dispatcher.Invoke(() => Title = "NEAV1E - " + LocalizedStrings.Instance["ToggleSwitchAutoPauseResume"] + " => Paused");
 
                     // Pause all PIDs
@@ -1867,8 +1867,8 @@ namespace NotEnoughAV1Encodes
                 // Resume
                 if (time > 60.0)
                 {
-                    Dispatcher.Invoke(() => ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/pause.png", UriKind.Relative)));
-                    Dispatcher.Invoke(() => LabelStartPauseButton.Content = LocalizedStrings.Instance["Pause"]);
+                    Dispatcher.Invoke(() => TopButtonsControl.ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/pause.png", UriKind.Relative)));
+                    Dispatcher.Invoke(() => TopButtonsControl.LabelStartPauseButton.Content = LocalizedStrings.Instance["Pause"]);
                     Dispatcher.Invoke(() => Title = "NEAV1E - " + LocalizedStrings.Instance["ToggleSwitchAutoPauseResume"] + " => Encoding");
 
                     // Resume all PIDs
@@ -2882,9 +2882,9 @@ namespace NotEnoughAV1Encodes
             catch (OperationCanceledException) { }
 
             ProgramState = 0;
-            ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
-            LabelStartPauseButton.Content = LocalizedStrings.Instance["LabelStartPauseButton"];
-            ButtonAddToQueue.IsEnabled = true;
+            TopButtonsControl.ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
+            TopButtonsControl.LabelStartPauseButton.Content = LocalizedStrings.Instance["LabelStartPauseButton"];
+            TopButtonsControl.ButtonAddToQueue.IsEnabled = true;
             ButtonRemoveSelectedQueueItem.IsEnabled = true;
             ButtonEditSelectedItem.IsEnabled = true;
             ButtonClearQueue.IsEnabled = true;
@@ -3036,5 +3036,6 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
         #endregion
+
     }
 }
