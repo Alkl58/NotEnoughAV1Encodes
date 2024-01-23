@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -9,8 +7,6 @@ namespace NotEnoughAV1Encodes.Controls
 {
     public partial class MainWindowTopButtons : UserControl
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         // Button Event Handlers
         public event EventHandler OpenSource;
         public event EventHandler SetDestination;

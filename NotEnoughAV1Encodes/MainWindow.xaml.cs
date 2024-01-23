@@ -57,7 +57,7 @@ namespace NotEnoughAV1Encodes
 
             LocalizeDictionary.Instance.Culture = settingsDB.CultureInfo;
 
-            var exists = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
+            var exists = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Length > 1;
 
             if (exists)
             {
@@ -165,33 +165,33 @@ namespace NotEnoughAV1Encodes
             testCustomSettings.ShowDialog();
         }
 
-        private void ToggleSwitchFilterCrop_Toggled(object sender, RoutedEventArgs e)
+        private void ToggleSwitchFilterCrop_Toggled(object sender, EventArgs e)
         {
             CreateCropPreviewsOnLoad();
         }
 
-        private void ButtonCropAutoDetect_Click(object sender, RoutedEventArgs e)
+        private void ButtonCropAutoDetect_Click(object sender, EventArgs e)
         {
             AutoCropDetect();
         }
 
-        private void ButtonCropPreviewForward_Click(object sender, RoutedEventArgs e)
+        private void ButtonCropPreviewForward_Click(object sender, EventArgs e)
         {
             if (videoDB.InputPath == null) return;
-            int index = int.Parse(LabelCropPreview.Content.ToString().Split("/")[0]) + 1;
+            int index = int.Parse(FiltersTabControl.LabelCropPreview.Content.ToString().Split("/")[0]) + 1;
             if (index > 4)
                 index = 1;
-            LabelCropPreview.Content = index.ToString() + "/4";
+            FiltersTabControl.LabelCropPreview.Content = index.ToString() + "/4";
 
             LoadCropPreview(index);
         }
-        private void ButtonCropPreviewBackward_Click(object sender, RoutedEventArgs e)
+        private void ButtonCropPreviewBackward_Click(object sender, EventArgs e)
         {
             if (videoDB.InputPath == null) return;
-            int index = int.Parse(LabelCropPreview.Content.ToString().Split("/")[0]) - 1;
+            int index = int.Parse(FiltersTabControl.LabelCropPreview.Content.ToString().Split("/")[0]) - 1;
             if (index < 1)
                 index = 4;
-            LabelCropPreview.Content = index.ToString() + "/4";
+            FiltersTabControl.LabelCropPreview.Content = index.ToString() + "/4";
 
             LoadCropPreview(index);
         }
@@ -1435,9 +1435,9 @@ namespace NotEnoughAV1Encodes
 
             if (videoDB.InputPath == null) return;
 
-            if (!ToggleSwitchFilterCrop.IsOn)
+            if (!FiltersTabControl.ToggleSwitchFilterCrop.IsOn)
             {
-                ImageCropPreview.Source = new BitmapImage(new Uri("pack://application:,,,/NotEnoughAV1Encodes;component/resources/img/videoplaceholder.jpg")); ;
+                FiltersTabControl.ImageCropPreview.Source = new BitmapImage(new Uri("pack://application:,,,/NotEnoughAV1Encodes;component/resources/img/videoplaceholder.jpg")); ;
                 return;
             }
 
@@ -1447,14 +1447,14 @@ namespace NotEnoughAV1Encodes
 
             try
             {
-                int index = int.Parse(LabelCropPreview.Content.ToString().Split("/")[0]);
+                int index = int.Parse(FiltersTabControl.LabelCropPreview.Content.ToString().Split("/")[0]);
 
                 MemoryStream memStream = new(File.ReadAllBytes(Path.Combine(Global.Temp, "NEAV1E", "crop_preview_" + index.ToString() + ".bmp")));
                 BitmapImage bmi = new();
                 bmi.BeginInit();
                 bmi.StreamSource = memStream;
                 bmi.EndInit();
-                ImageCropPreview.Source = bmi;
+                FiltersTabControl.ImageCropPreview.Source = bmi;
             }
             catch { }
         }
@@ -1470,7 +1470,7 @@ namespace NotEnoughAV1Encodes
             int seconds = Convert.ToInt32(Math.Floor(TimeSpan.Parse(time).TotalSeconds / 4));
 
             // Use the current frame as start point of detection
-            int index = int.Parse(LabelCropPreview.Content.ToString().Split("/")[0]);
+            int index = int.Parse(FiltersTabControl.LabelCropPreview.Content.ToString().Split("/")[0]);
 
             string command = "/C ffmpeg.exe -ss " + (index * seconds).ToString() + " -i \"" + videoDB.InputPath + "\" -vf cropdetect=24:2:0 -t 5  -f null -";
 
@@ -1508,16 +1508,21 @@ namespace NotEnoughAV1Encodes
             {
                 // Translate Output to crop values
                 int cropTop = int.Parse(crop.Split(":")[3]);
-                TextBoxFiltersCropTop.Text = cropTop.ToString();
+                FiltersTabControl.TextBoxFiltersCropTop.Text = cropTop.ToString();
+                PresetSettings.FilterCropTop = cropTop.ToString();
 
                 int cropLeft = int.Parse(crop.Split(":")[2]);
-                TextBoxFiltersCropLeft.Text = cropLeft.ToString();
+                FiltersTabControl.TextBoxFiltersCropLeft.Text = cropLeft.ToString();
+                PresetSettings.FilterCropLeft = cropLeft.ToString();
 
                 int cropBottom = videoDB.MIHeight - cropTop - int.Parse(crop.Split(":")[1]);
-                TextBoxFiltersCropBottom.Text = cropBottom.ToString();
+                FiltersTabControl.TextBoxFiltersCropBottom.Text = cropBottom.ToString();
+                PresetSettings.FilterCropBottom = cropBottom.ToString();
 
                 int cropRight = videoDB.MIWidth - cropLeft - int.Parse(crop.Split(":")[0]);
-                TextBoxFiltersCropRight.Text = cropRight.ToString();
+                FiltersTabControl.TextBoxFiltersCropRight.Text = cropRight.ToString();
+                PresetSettings.FilterCropRight = cropRight.ToString();
+
 
                 string cropNew = "-vf " + VideoFiltersCrop();
                 await Task.Run(() => CreateCropPreviews(cropNew));
@@ -1568,7 +1573,7 @@ namespace NotEnoughAV1Encodes
                 bmi.BeginInit();
                 bmi.StreamSource = memStream;
                 bmi.EndInit();
-                ImageCropPreview.Source = bmi;
+                FiltersTabControl.ImageCropPreview.Source = bmi;
             }
             catch { }
         }
@@ -1755,7 +1760,7 @@ namespace NotEnoughAV1Encodes
                     if (settingsDB.BaseTheme == 1)
                     {
                         // Dark
-                        bg = new(Color.FromArgb(150, 20, 20, 20));
+                        bg = new(Color.FromArgb(100, 20, 20, 20));
                         fg = new(Color.FromArgb(180, 20, 20, 20));
                     }
 
@@ -1819,7 +1824,7 @@ namespace NotEnoughAV1Encodes
             queueElement.Preset = PresetSettings;
             queueElement.VideoDB = videoDB;
 
-            if (ToggleSwitchFilterDeinterlace.IsOn && ComboBoxFiltersDeinterlace.SelectedIndex is 1 or 2)
+            if (FiltersTabControl.ToggleSwitchFilterDeinterlace.IsOn && FiltersTabControl.ComboBoxFiltersDeinterlace.SelectedIndex is 1 or 2)
             {
                 queueElement.FrameCount += queueElement.FrameCount;
             }
@@ -1936,10 +1941,10 @@ namespace NotEnoughAV1Encodes
         #region Video Filters
         private string GenerateVideoFilters()
         {
-            bool crop = ToggleSwitchFilterCrop.IsOn;
-            bool rotate = ToggleSwitchFilterRotate.IsOn;
-            bool resize = ToggleSwitchFilterResize.IsOn;
-            bool deinterlace = ToggleSwitchFilterDeinterlace.IsOn;
+            bool crop = FiltersTabControl.ToggleSwitchFilterCrop.IsOn;
+            bool rotate = FiltersTabControl.ToggleSwitchFilterRotate.IsOn;
+            bool resize = FiltersTabControl.ToggleSwitchFilterResize.IsOn;
+            bool deinterlace = FiltersTabControl.ToggleSwitchFilterDeinterlace.IsOn;
             bool fps = ComboBoxVideoFrameRate.SelectedIndex != 0;
             bool oneFilter = false;
 
@@ -2001,8 +2006,8 @@ namespace NotEnoughAV1Encodes
             string heightNew;
             try
             {
-                widthNew = (int.Parse(TextBoxFiltersCropRight.Text) + int.Parse(TextBoxFiltersCropLeft.Text)).ToString();
-                heightNew = (int.Parse(TextBoxFiltersCropTop.Text) + int.Parse(TextBoxFiltersCropBottom.Text)).ToString();
+                widthNew = (int.Parse(FiltersTabControl.TextBoxFiltersCropRight.Text) + int.Parse(FiltersTabControl.TextBoxFiltersCropLeft.Text)).ToString();
+                heightNew = (int.Parse(FiltersTabControl.TextBoxFiltersCropTop.Text) + int.Parse(FiltersTabControl.TextBoxFiltersCropBottom.Text)).ToString();
             }
             catch
             {
@@ -2010,21 +2015,21 @@ namespace NotEnoughAV1Encodes
                 heightNew = "0";
             }
 
-            return "crop=iw-" + widthNew + ":ih-" + heightNew + ":" + TextBoxFiltersCropLeft.Text + ":" + TextBoxFiltersCropTop.Text;
+            return "crop=iw-" + widthNew + ":ih-" + heightNew + ":" + FiltersTabControl.TextBoxFiltersCropLeft.Text + ":" + FiltersTabControl.TextBoxFiltersCropTop.Text;
         }
 
         private string VideoFiltersRotate()
         {
             // Sets the values for rotating the video
-            if (ComboBoxFiltersRotate.SelectedIndex == 1) return "transpose=1";
-            else if (ComboBoxFiltersRotate.SelectedIndex == 2) return "transpose=2,transpose=2";
-            else if (ComboBoxFiltersRotate.SelectedIndex == 3) return "transpose=2";
+            if (FiltersTabControl.ComboBoxFiltersRotate.SelectedIndex == 1) return "transpose=1";
+            else if (FiltersTabControl.ComboBoxFiltersRotate.SelectedIndex == 2) return "transpose=2,transpose=2";
+            else if (FiltersTabControl.ComboBoxFiltersRotate.SelectedIndex == 3) return "transpose=2";
             else return ""; // If user selected no ratation but still has it enabled
         }
 
         private string VideoFiltersDeinterlace()
         {
-            int filterIndex = ComboBoxFiltersDeinterlace.SelectedIndex;
+            int filterIndex = FiltersTabControl.ComboBoxFiltersDeinterlace.SelectedIndex;
             string filter = "";
 
             if (filterIndex == 0)
@@ -2052,18 +2057,18 @@ namespace NotEnoughAV1Encodes
         private string VideoFiltersResize()
         {
             // Auto Set Width
-            if (TextBoxFiltersResizeWidth.Text == "0")
+            if (FiltersTabControl.TextBoxFiltersResizeWidth.Text == "0")
             {
-                return "scale=trunc(oh*a/2)*2:" + TextBoxFiltersResizeHeight.Text + ":flags=" + ComboBoxResizeAlgorithm.Text;
+                return "scale=trunc(oh*a/2)*2:" + FiltersTabControl.TextBoxFiltersResizeHeight.Text + ":flags=" + FiltersTabControl.ComboBoxResizeAlgorithm.Text;
             }
 
             // Auto Set Height
-            if (TextBoxFiltersResizeHeight.Text == "0")
+            if (FiltersTabControl.TextBoxFiltersResizeHeight.Text == "0")
             {
-                return "scale=" + TextBoxFiltersResizeWidth.Text + ":trunc(ow/a/2)*2:flags=" + ComboBoxResizeAlgorithm.Text;
+                return "scale=" + FiltersTabControl.TextBoxFiltersResizeWidth.Text + ":trunc(ow/a/2)*2:flags=" + FiltersTabControl.ComboBoxResizeAlgorithm.Text;
             }
 
-            return "scale=" + TextBoxFiltersResizeWidth.Text + ":" + TextBoxFiltersResizeHeight.Text + ":flags=" + ComboBoxResizeAlgorithm.Text;
+            return "scale=" + FiltersTabControl.TextBoxFiltersResizeWidth.Text + ":" + FiltersTabControl.TextBoxFiltersResizeHeight.Text + ":flags=" + FiltersTabControl.ComboBoxResizeAlgorithm.Text;
 
         }
         #endregion

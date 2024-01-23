@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="NotEnoughAV1Encodes.Controls.FiltersTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NotEnoughAV1Encodes.Controls"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1085">
+    <Grid>
+        <GroupBox x:Name="GroupBoxCrop" Header="{lex:Loc}" Margin="293,10,10,105" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterCrop}">
+                <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" Height="26" Margin="4,0,0,0" TextWrapping="Wrap" Text="{Binding FilterCropLeft, Mode=TwoWay}" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="ToggleSwitchFilterCrop_Toggled" HorizontalAlignment="Left" Width="56" MinWidth="56" />
+                <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" Height="26" Margin="0,0,7,0" TextWrapping="Wrap" Text="{Binding FilterCropRight, Mode=TwoWay}" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="ToggleSwitchFilterCrop_Toggled" HorizontalAlignment="Right" Width="56" MinWidth="56"/>
+                <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" Height="26" Margin="0,10,0,0" TextWrapping="Wrap" Text="{Binding FilterCropTop, Mode=TwoWay}" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="ToggleSwitchFilterCrop_Toggled"  Width="56" MinWidth="56" HorizontalAlignment="Center"/>
+                <TextBox x:Name="TextBoxFiltersCropBottom" PreviewTextInput="NumberValidationTextBox" Margin="0,0,0,10" TextWrapping="Wrap" Text="{Binding FilterCropBottom, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="ToggleSwitchFilterCrop_Toggled"  Width="56" MinWidth="56" HorizontalAlignment="Center" Height="26" VerticalAlignment="Bottom"/>
+                <Image x:Name="ImageCropPreview" Margin="67,44,68,48" Source="/resources/img/videoplaceholder.jpg"/>
+                <Label x:Name="LabelCropPreview" Content="1/4" Margin="0,11,84,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" RenderTransformOrigin="0.775,0.579" HorizontalAlignment="Right" Width="40"/>
+                <Button x:Name="ButtonCropPreviewForward"  Content="&gt;" Margin="0,10,68,0" VerticalAlignment="Top" Click="ButtonCropPreviewForward_Click" HorizontalAlignment="Right" Width="22"/>
+                <Button x:Name="ButtonCropPreviewBackward"  Content="&lt;" Margin="0,10,118,0" VerticalAlignment="Top" Click="ButtonCropPreviewBackward_Click" HorizontalAlignment="Right" Width="22"/>
+                <Button x:Name="ButtonCropAutoDetect" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="67,10,0,0" VerticalAlignment="Top" Width="120" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonCropAutoDetect_Click"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="GroupBoxResize" Header="{lex:Loc}" HorizontalAlignment="Left" Height="203" Margin="10,204,0,0" VerticalAlignment="Top" Width="278" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterResize}">
+                <Label x:Name="LabelWidth" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="28" Width="56" HorizontalContentAlignment="Right" />
+                <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="85,10,0,0" TextWrapping="Wrap" Text="{Binding FilterResizeWidth, Mode=TwoWay}" VerticalAlignment="Top" Width="169" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="If set to 0 it will automatically set the corresponding width to the height." />
+                <Label x:Name="LabelHeight" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="27,62,0,0" VerticalAlignment="Top" Height="28" Width="53" HorizontalContentAlignment="Right" />
+                <TextBox x:Name="TextBoxFiltersResizeHeight" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="85,62,0,0" TextWrapping="Wrap" Text="{Binding FilterResizeHeight, Mode=TwoWay}" VerticalAlignment="Top" Width="169" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                <Label Content="0 = Auto" HorizontalAlignment="Left" Margin="200,31,0,0" VerticalAlignment="Top" FontStyle="Italic" RenderTransformOrigin="0.504,0.51" Width="60" />
+                <Label x:Name="LabelScalingAlgorithm" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,113,0,0" VerticalAlignment="Top" Height="28" Width="70" HorizontalContentAlignment="Right" />
+                <ComboBox x:Name="ComboBoxResizeAlgorithm" HorizontalAlignment="Left" Margin="85,114,0,0" VerticalAlignment="Top" Width="169" SelectedIndex="{Binding FilterResizeAlgorithm, Mode=TwoWay}">
+                    <ComboBoxItem Content="fast_bilinear"/>
+                    <ComboBoxItem Content="bilinear"/>
+                    <ComboBoxItem Content="bicubic" IsSelected="True"/>
+                    <ComboBoxItem Content="experimental"/>
+                    <ComboBoxItem Content="neighbor"/>
+                    <ComboBoxItem Content="area"/>
+                    <ComboBoxItem Content="bicublin"/>
+                    <ComboBoxItem Content="gauss"/>
+                    <ComboBoxItem Content="sinc"/>
+                    <ComboBoxItem Content="lanczos"/>
+                    <ComboBoxItem Content="spline"/>
+                </ComboBox>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="GroupBoxRotate" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="10,10,0,0" VerticalAlignment="Top" Width="278" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterRotate}">
+                <Label x:Name="LabelRotate" Content="{lex:Loc}" HorizontalAlignment="Right" Margin="0,20,129,0" VerticalAlignment="Top" Height="28" HorizontalContentAlignment="Right" Width="146" />
+                <ComboBox x:Name="ComboBoxFiltersRotate" HorizontalAlignment="Left" Margin="151,18,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center" SelectedIndex="{Binding FilterRotateIndex, Mode=TwoWay}">
+                    <ComboBoxItem Content="0°" />
+                    <ComboBoxItem Content="90°" />
+                    <ComboBoxItem Content="180°" />
+                    <ComboBoxItem Content="270°" />
+                </ComboBox>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="GroupBoxDeinterlace" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="10,107,0,0" VerticalAlignment="Top" Width="278" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterDeinterlace}">
+                <Label x:Name="LabelDeinterlace" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Height="28" />
+                <ComboBox x:Name="ComboBoxFiltersDeinterlace" HorizontalAlignment="Left" Margin="85,20,0,0" VerticalAlignment="Top" Width="169" Height="29" VerticalContentAlignment="Center" SelectedIndex="{Binding FilterDeinterlaceIndex, Mode=TwoWay}">
+                    <ComboBoxItem Content="bwdif" IsSelected="True" />
+                    <ComboBoxItem Content="estdif" />
+                    <ComboBoxItem Content="nnedi" />
+                    <ComboBoxItem Content="yadif" />
+                </ComboBox>
+            </Grid>
+        </GroupBox>
+        <mah:ToggleSwitch x:Name="ToggleSwitchFilterCrop" IsOn="{Binding FilterCrop, Mode=TwoWay}" Header="" Height="61" Margin="0,-15,-55,0" VerticalAlignment="Top" Width="100" Toggled="ToggleSwitchFilterCrop_Toggled" HorizontalAlignment="Right" />
+        <mah:ToggleSwitch x:Name="ToggleSwitchFilterResize" IsOn="{Binding FilterResize, Mode=TwoWay}" Header="" Height="62" Margin="202,179,0,0" VerticalAlignment="Top" Width="100" />
+        <mah:ToggleSwitch x:Name="ToggleSwitchFilterRotate" IsOn="{Binding FilterRotate, Mode=TwoWay}" Header="" Height="100" Margin="202,-15,0,0" VerticalAlignment="Top" Width="159" />
+        <mah:ToggleSwitch x:Name="ToggleSwitchFilterDeinterlace" IsOn="{Binding FilterDeinterlace, Mode=TwoWay}" Header="" Height="100" Margin="202,81,0,0" VerticalAlignment="Top" Width="132" />
+    </Grid>
+</UserControl>
