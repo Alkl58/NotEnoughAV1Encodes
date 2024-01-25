@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,6 +20,10 @@ namespace NotEnoughAV1Encodes.Views
 {
     public partial class Updater : MetroWindow
     {
+        private static readonly string FFMPEG_LAST_BUILD_VERSION_URL = "https://www.gyan.dev/ffmpeg/builds/last-build-update";
+        private static readonly string FFMPEG_LAST_BUILD_DOWNLOAD_URL = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z";
+
+
         private static readonly string AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         // NEAV1E Update
@@ -68,6 +71,7 @@ namespace NotEnoughAV1Encodes.Views
         private async void ParseEverything()
         {
             ParseNEAV1EGithub();
+            await ParseFFMPEGVersion();
             await ParseJeremyleeJSONAsync();
             await GetOnlineMKVToolnixVersion();
             GetLocalMKVToolnixVersion();
@@ -138,10 +142,6 @@ namespace NotEnoughAV1Encodes.Views
                 string jsonWeb = await response.Content.ReadAsStringAsync();
                 dynamic json = JsonConvert.DeserializeObject(jsonWeb);
 
-                string ffmpegVersion = json.files["ffmpeg.exe"].datetime;
-                FFmpegUpdateVersion = ffmpegVersion.Replace("-", ".").Remove(ffmpegVersion.Length - 6);
-                LabelUpdateFFmpegVersion.Content = FFmpegUpdateVersion;
-
                 string aomencVersion = json.files["aomenc.exe"].datetime;
                 AomencUpdateVersion = aomencVersion.Replace("-", ".").Remove(aomencVersion.Length - 6);
                 LabelUpdateAomencVersion.Content = AomencUpdateVersion;
@@ -153,6 +153,20 @@ namespace NotEnoughAV1Encodes.Views
                 string svtav1Version = json.files["SvtAv1EncApp.exe"].datetime;
                 SVTAV1UpdateVersion = svtav1Version.Replace("-", ".").Remove(svtav1Version.Length - 6);
                 LabelUpdateSVTAV1Version.Content = SVTAV1UpdateVersion;
+            }
+            catch { }
+        }
+
+        private async Task ParseFFMPEGVersion()
+        {
+            try
+            {
+                HttpClient client = new();
+                HttpResponseMessage response = await client.GetAsync(FFMPEG_LAST_BUILD_VERSION_URL);
+                string ffmpegVersion = await response.Content.ReadAsStringAsync();
+
+                FFmpegUpdateVersion = ffmpegVersion.Replace("-", ".");
+                LabelUpdateFFmpegVersion.Content = FFmpegUpdateVersion;
             }
             catch { }
         }
@@ -367,32 +381,65 @@ namespace NotEnoughAV1Encodes.Views
             ToggleAllButtons(false);
 
             // Creates the ffmpeg folder if not existent
-            if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "FFmpeg")))
+            if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg")))
             {
-                Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "FFmpeg"));
+                Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "ffmpeg"));
             }
 
-            // Downloads ffmpeg
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/ffmpeg.7z", Path.Combine(CurrentDir, "Apps", "ffmpeg.7z")));
+            string rootFolder = Path.Combine(CurrentDir, "Apps", "ffmpeg", "_extracted");
 
-            if (File.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z")))
+            try
             {
-                // Extracts ffmpeg
-                ExtractFile(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "FFmpeg"));
+                // Downloads ffmpeg
+                await Task.Run(() => DownloadBin(FFMPEG_LAST_BUILD_DOWNLOAD_URL, Path.Combine(CurrentDir, "Apps", "ffmpeg.7z")));
 
-                if (File.Exists(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.exe")))
+                // Should never happen
+                if (! File.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z")))
                 {
-                    if (File.Exists(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.exe")))
-                    {
-                        File.Delete(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.txt"));
-                    }
-
-                    File.WriteAllText(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.txt"), FFmpegUpdateVersion);
-
-                    File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z"));
-
-                    CompareLocalVersion();
+                    return;
                 }
+
+                // Extract downloaded 7z file
+                ExtractFile(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z"), rootFolder);
+
+                // Extracted folder has a subfolder which is unknown to us, so we get the first subfolder
+                string ffmpegBin = Path.Combine(Directory.GetDirectories(rootFolder).First(), "bin", "ffmpeg.exe");
+
+                // Should never happen
+                if (! File.Exists(ffmpegBin))
+                {
+                    return;
+                }
+
+                // Delete old files
+                string oldFFmpegBin = Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.exe");
+                if (File.Exists(oldFFmpegBin))
+                {
+                    File.Delete(oldFFmpegBin);
+                }
+
+                string oldFFmpegBinVersionFile = Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.txt");
+                if (File.Exists(oldFFmpegBinVersionFile))
+                {
+                    File.Delete(oldFFmpegBinVersionFile);
+                }
+
+                // Move new file
+                File.Move(ffmpegBin, oldFFmpegBin);
+
+                // Update version file
+                File.WriteAllText(oldFFmpegBinVersionFile, FFmpegUpdateVersion);
+
+                // Cleanup
+                File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z"));
+                Directory.Delete(rootFolder, true);
+
+                CompareLocalVersion();
+            }
+            catch (Exception ex)
+            {
+                LabelProgressBar.Content = ex.Message;
+                return;
             }
 
             ToggleAllButtons(true);
