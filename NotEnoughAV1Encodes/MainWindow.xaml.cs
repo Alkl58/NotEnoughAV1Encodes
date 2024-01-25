@@ -2211,8 +2211,8 @@ namespace NotEnoughAV1Encodes
             // Quality / Bitrate Selection
             string quality = ComboBoxQualityModeSVTAV1FFMPEG.SelectedIndex switch
             {
-                0 => " -rc 0 -qp " + SliderQualitySVTAV1FFMPEG.Value,
-                1 => " -rc 1 -b:v " + TextBoxBitrateSVTAV1FFMPEG.Text + "k",
+                0 => " -crf " + SliderQualitySVTAV1FFMPEG.Value,
+                1 => " -b:v " + TextBoxBitrateSVTAV1FFMPEG.Text + "k",
                 _ => ""
             };
 

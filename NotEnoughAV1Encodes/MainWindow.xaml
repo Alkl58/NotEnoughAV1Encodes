@@ -381,7 +381,7 @@
                                 <Label Content="{Binding ElementName=SliderQualitySVTAV1FFMPEG, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
                                 <Label Content="{lex:Loc LabelQualityMode}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Height="28" Canvas.Left="18" Canvas.Top="12"/>
                                 <ComboBox x:Name="ComboBoxQualityModeSVTAV1FFMPEG" SelectedIndex="{Binding SVTAV1FFMPEGQualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityModeSVTAV1FFMPEG_SelectionChanged">
-                                    <ComboBoxItem Content="Constant Quality"/>
+                                    <ComboBoxItem Content="CRF - Constant Rate Factor"/>
                                     <ComboBoxItem Content="Bitrate"/>
                                 </ComboBox>
                                 <Label Content="{lex:Loc LabelQuantizer}" IsEnabled="{Binding ElementName=SliderQualitySVTAV1FFMPEG, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="20,73,0,0" VerticalAlignment="Top" Width="106" Height="30"/>
