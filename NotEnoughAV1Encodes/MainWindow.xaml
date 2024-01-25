@@ -221,7 +221,7 @@
                     <GroupBox Header="{lex:Loc TabItemVideo}" HorizontalAlignment="Left" Margin="10,10,0,0" Width="385" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
                             <Label Content="{lex:Loc LabelEncoder}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="111" />
-                            <ComboBox x:Name="ComboBoxVideoEncoder" SelectedIndex="14" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
+                            <ComboBox x:Name="ComboBoxVideoEncoder" SelectedIndex="{Binding Encoder}" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
                                 <ComboBoxItem Content="aom (AV1 FFmpeg)" IsSelected="True" />
                                 <ComboBoxItem Content="rav1e (AV1 FFmpeg)" />
                                 <ComboBoxItem Content="svt-av1 (AV1 FFmpeg)" />
@@ -555,7 +555,7 @@
                                 <Slider x:Name="SliderQualityNVENCAV1" Value="{Binding NVENCAV1Quantizer}" VerticalAlignment="Top" SmallChange="1" Maximum="63" TickPlacement="BottomRight" Height="34" IsSnapToTickEnabled="True" Canvas.Left="131" Canvas.Top="69" Width="520"/>
                                 <Label Content="{Binding ElementName=SliderQualityNVENCAV1, Path=Value, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="78" Canvas.Left="664" Canvas.Top="75"/>
                                 <Label Content="{lex:Loc LabelQualityMode}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Height="28" Canvas.Left="18" Canvas.Top="12"/>
-                                <ComboBox x:Name="ComboBoxQualityModeNVENCAV1" SelectedIndex="{Binding QSVAV1QualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityModeNVENCAV1_SelectionChanged">
+                                <ComboBox x:Name="ComboBoxQualityModeNVENCAV1" SelectedIndex="{Binding NVENCAV1QualityMode}" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Width="140" Height="30" SelectionChanged="ComboBoxQualityModeNVENCAV1_SelectionChanged">
                                     <ComboBoxItem Content="CQP - Constant QP"/>
                                     <ComboBoxItem Content="VBR - Variable Bitrate"/>
                                     <ComboBoxItem Content="CBR - Constant Bitrate"/>
