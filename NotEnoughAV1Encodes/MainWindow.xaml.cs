@@ -18,6 +18,7 @@ using System.Linq;
 using WPFLocalizeExtension.Engine;
 using NotEnoughAV1Encodes.resources.lang;
 using System.Windows.Shell;
+using NotEnoughAV1Encodes.Encoders;
 
 namespace NotEnoughAV1Encodes
 {
@@ -901,6 +902,10 @@ namespace NotEnoughAV1Encodes
         {
             if (SliderEncoderPreset == null) return;
 
+            ComboBoxColorFormat.IsEnabled = true;
+            ComboBoxVideoBitDepth.IsEnabled = true;
+            CheckBoxVideoHDR.IsEnabled = true;
+
             if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.AOMFFMPEG or (int) Video.Encoder.AOMENC)
             {
                 //aom ffmpeg
@@ -989,6 +994,28 @@ namespace NotEnoughAV1Encodes
                 CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
                 ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
                 ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
+            }
+            else if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoder.AMFAV1)
+            {
+                // av1 hardware (amd)
+                SliderEncoderPreset.Maximum = 3;
+                SliderEncoderPreset.Value = 3;
+                CheckBoxTwoPassEncoding.IsEnabled = false;
+                CheckBoxTwoPassEncoding.IsOn = false;
+                CheckBoxRealTimeMode.IsOn = false;
+                CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
+                ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
+                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
+
+                ComboBoxColorFormat.SelectedIndex = 0;
+                ComboBoxColorFormat.IsEnabled = false;
+                ComboBoxVideoBitDepth.SelectedIndex = 0;
+                ComboBoxVideoBitDepth.IsEnabled = false;
+                ComboBoxVideoBitDepthLimited.IsEnabled = false;
+                ComboBoxVideoBitDepthLimited.SelectedIndex = 0;
+                CheckBoxVideoHDR.IsChecked = false;
+                CheckBoxVideoHDR.IsEnabled = false;
+
             }
             if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.X264)
             {
@@ -1280,6 +1307,44 @@ namespace NotEnoughAV1Encodes
             }
         }
 
+        private void ComboBoxQualityModeAMFAV1_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            SliderQualityAMFAV1.IsEnabled = false;
+            TextBoxBitrateAMFAV1.IsEnabled = false;
+
+            if (ComboBoxQualityModeAMFAV1.SelectedIndex == 0)
+            {
+                // CQP - Constant Quantization
+                // => QP Slider
+                SliderQualityAMFAV1.IsEnabled = true;
+            }
+            else if (ComboBoxQualityModeAMFAV1.SelectedIndex == 1)
+            {
+                // CBR - Constant Bitrate
+                // => Bitrate Box
+                TextBoxBitrateAMFAV1.IsEnabled = true;
+            }
+            else if (ComboBoxQualityModeAMFAV1.SelectedIndex == 2)
+            {
+                // HQCBR - High Quality Constant Bitrate
+                // => Bitrate Box
+                TextBoxBitrateAMFAV1.IsEnabled = true;
+            }
+            else if (ComboBoxQualityModeAMFAV1.SelectedIndex == 3)
+            {
+                // QVBR - Quality Variable Bitrate
+                // => Bitrate Box + QP Slider
+                SliderQualityAMFAV1.IsEnabled = true;
+                TextBoxBitrateAMFAV1.IsEnabled = true;
+            }
+            else if (ComboBoxQualityModeAMFAV1.SelectedIndex == 4)
+            {
+                // HQVBR - High Quality Variable Bitrate
+                // => Bitrate Box
+                TextBoxBitrateAMFAV1.IsEnabled = true;
+            }
+        }
+
         private void CheckBoxTwoPassEncoding_Checked(object sender, RoutedEventArgs e)
         {
             if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoder.SVTAV1 && ComboBoxQualityModeSVTAV1.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
@@ -1346,6 +1411,12 @@ namespace NotEnoughAV1Encodes
             if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoder.NVENCAV1)
             {
                 LabelSpeedValue.Content = GenerateNVENCEncoderSpeed();
+            }
+
+            // av1 hardware (AMD AMF)
+            if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoder.AMFAV1)
+            {
+                LabelSpeedValue.Content = AMFAV1.GetSpeed(SliderEncoderPreset.Value);
             }
         }
 
@@ -2091,6 +2162,7 @@ namespace NotEnoughAV1Encodes
                 10 => GenerateAVCFFmpegCommand(),
                 12 => GenerateQuickSyncCommand(),
                 13 => GenerateNVENCCommand(),
+                14 => AMFAV1.GetCommand((int) SliderEncoderPreset.Value, ComboBoxQualityModeAMFAV1.SelectedIndex, TextBoxBitrateAMFAV1.Text, (int) SliderQualityAMFAV1.Value),
                 _ => ""
             };
 
@@ -3041,6 +3113,5 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
         #endregion
-
     }
 }

@@ -77,6 +77,11 @@
         public int NVENCAV1Quantizer { get; set; } = 24;
         public string NVENCAV1Bitrate { get; set; } = "2000";
 
+        // Video Quality Settings AMF AV1
+        public int AMFAV1QualityMode { get; set; }
+        public int AMFAV1Quantizer { get; set; } = 24;
+        public string AMFAV1Bitrate { get; set; } = "2000";
+
         // Audio
         public int AudioCodecMono { get; set; } = 0;
         public int AudioBitrateMono { get; set; } = 64;
