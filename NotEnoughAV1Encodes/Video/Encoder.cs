@@ -1,6 +1,6 @@
 ﻿namespace NotEnoughAV1Encodes.Video
 {
-    public enum Encoder
+    public enum Encoders
     {
         AOMFFMPEG = 0,
         RAV1EFFMPEG = 1,

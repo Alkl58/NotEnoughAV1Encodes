@@ -906,7 +906,7 @@ namespace NotEnoughAV1Encodes
             ComboBoxVideoBitDepth.IsEnabled = true;
             CheckBoxVideoHDR.IsEnabled = true;
 
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.AOMFFMPEG or (int) Video.Encoder.AOMENC)
+            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.AOMFFMPEG or (int) Video.Encoders.AOMENC)
             {
                 //aom ffmpeg
                 if (ComboBoxVideoEncoder.SelectedIndex == 0)
@@ -922,7 +922,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
                 ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
             }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.RAV1EFFMPEG or (int) Video.Encoder.RAV1E)
+            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.RAV1EFFMPEG or (int) Video.Encoders.RAV1E)
             {
                 //rav1e ffmpeg
                 ComboBoxQualityMode.SelectedIndex = 0;
@@ -935,7 +935,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
                 ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
             }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.SVTAV1FFMPEG or (int) Video.Encoder.SVTAV1)
+            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.SVTAV1FFMPEG or (int) Video.Encoders.SVTAV1)
             {
                 //svt-av1 ffmpeg
                 ComboBoxQualityMode.SelectedIndex = 0;
@@ -948,7 +948,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
                 ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
             }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.VPXVP9FFMPEG)
+            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.VPXVP9FFMPEG)
             {
                 //vpx-vp9 ffmpeg
                 SliderEncoderPreset.Maximum = 8;
@@ -959,7 +959,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
                 ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
             }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.X265 or (int) Video.Encoder.X264)
+            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.X265 or (int) Video.Encoders.X264)
             {
                 //libx265 libx264 ffmpeg
                 SliderEncoderPreset.Maximum = 9;
@@ -971,7 +971,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
                 ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
             }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.QSVAV1)
+            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.QSVAV1)
             {
                 // av1 hardware (intel arc)
                 SliderEncoderPreset.Maximum = 6;
@@ -983,7 +983,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
                 ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
             }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.NVENCAV1)
+            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.NVENCAV1)
             {
                 // av1 hardware (nvenc rtx 4000)
                 SliderEncoderPreset.Maximum = 2;
@@ -995,7 +995,7 @@ namespace NotEnoughAV1Encodes
                 ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
                 ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
             }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoder.AMFAV1)
+            else if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoders.AMFAV1)
             {
                 // av1 hardware (amd)
                 SliderEncoderPreset.Maximum = 3;
@@ -1017,7 +1017,7 @@ namespace NotEnoughAV1Encodes
                 CheckBoxVideoHDR.IsEnabled = false;
 
             }
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.X264)
+            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.X264)
             {
                 if (ComboBoxQualityMode.SelectedIndex == 2)
                 {
@@ -1254,11 +1254,11 @@ namespace NotEnoughAV1Encodes
                 SliderQualityX26x.IsEnabled = false;
                 TextBoxBitrateX26x.IsEnabled = true;
             }
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.X264 && ComboBoxQualityModeX26x.SelectedIndex == 1)
+            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.X264 && ComboBoxQualityModeX26x.SelectedIndex == 1)
             {
                 CheckBoxTwoPassEncoding.IsEnabled = true;
             }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.X264 && ComboBoxQualityModeX26x.SelectedIndex != 1)
+            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.X264 && ComboBoxQualityModeX26x.SelectedIndex != 1)
             {
                 CheckBoxTwoPassEncoding.IsEnabled = false;
             }
@@ -1347,12 +1347,12 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxTwoPassEncoding_Checked(object sender, RoutedEventArgs e)
         {
-            if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoder.SVTAV1 && ComboBoxQualityModeSVTAV1.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
+            if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoders.SVTAV1 && ComboBoxQualityModeSVTAV1.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
             {
                 CheckBoxTwoPassEncoding.IsOn = false;
             }
 
-            if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoder.SVTAV1FFMPEG && ComboBoxQualityModeSVTAV1FFMPEG.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
+            if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoders.SVTAV1FFMPEG && ComboBoxQualityModeSVTAV1FFMPEG.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
             {
                 CheckBoxTwoPassEncoding.IsOn = false;
             }
@@ -1377,7 +1377,7 @@ namespace NotEnoughAV1Encodes
             // Shows / Hides Real Time Mode CheckBox
             if (CheckBoxRealTimeMode != null && ComboBoxVideoEncoder != null)
             {
-                if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoder.AOMFFMPEG || ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoder.AOMENC)
+                if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoders.AOMFFMPEG || ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoders.AOMENC)
                 {
                     if (SliderEncoderPreset.Value >= 5)
                     {
@@ -1396,25 +1396,25 @@ namespace NotEnoughAV1Encodes
             }
 
             // x264 / x265
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.X265 or (int) Video.Encoder.X264)
+            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.X265 or (int) Video.Encoders.X264)
             {
                 LabelSpeedValue.Content = GenerateMPEGEncoderSpeed();
             }
 
             // av1 hardware (Intel Arc)
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.QSVAV1)
+            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.QSVAV1)
             {
                 LabelSpeedValue.Content = GenerateQuickSyncEncoderSpeed();
             }
 
             // av1 hardware (nvenc rtx 4000)
-            if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoder.NVENCAV1)
+            if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoders.NVENCAV1)
             {
                 LabelSpeedValue.Content = GenerateNVENCEncoderSpeed();
             }
 
             // av1 hardware (AMD AMF)
-            if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoder.AMFAV1)
+            if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoders.AMFAV1)
             {
                 LabelSpeedValue.Content = AMFAV1.GetSpeed(SliderEncoderPreset.Value);
             }
@@ -2151,465 +2151,25 @@ namespace NotEnoughAV1Encodes
 
             string encoderSetting = ComboBoxVideoEncoder.SelectedIndex switch
             {
-                0 => GenerateAomFFmpegCommand(),
-                1 => GenerateRav1eFFmpegCommand(),
-                2 => GenerateSvtAV1FFmpegCommand(),
-                3 => GenerateVpxVP9Command(),
-                5 => GenerateAomencCommand(),
-                6 => GenerateRav1eCommand(),
-                7 => GenerateSvtAV1Command(),
-                9 => GenerateHEVCFFmpegCommand(),
-                10 => GenerateAVCFFmpegCommand(),
-                12 => GenerateQuickSyncCommand(),
-                13 => GenerateNVENCCommand(),
-                14 => AMFAV1.GetCommand((int) SliderEncoderPreset.Value, ComboBoxQualityModeAMFAV1.SelectedIndex, TextBoxBitrateAMFAV1.Text, (int) SliderQualityAMFAV1.Value),
+                0 => new AOMAV1FFmpeg().GetCommand(),
+                1 => new Rav1eFFmpeg().GetCommand(),
+                2 => new SvtAV1FFmpeg().GetCommand(),
+                3 => new VpxVP9FFmpeg().GetCommand(),
+                5 => new Aomenc().GetCommand(),
+                6 => new Rav1eFFmpeg().GetCommand(),
+                7 => new SvtAV1().GetCommand(),
+                9 => new HEVCFFmpeg().GetCommand(),
+                10 => new AVCFFmpeg().GetCommand(),
+                12 => new QSVEnc().GetCommand(),
+                13 => new NVEnc().GetCommand(),
+                14 => new AMFAV1().GetCommand(),
                 _ => ""
             };
 
             return settings + encoderSetting;
         }
 
-        private string GenerateAomFFmpegCommand()
-        {
-            string settings = "-c:v libaom-av1";
-
-            // Quality / Bitrate Selection
-            string quality = ComboBoxQualityMode.SelectedIndex switch
-            {
-                0 => " -crf " + SliderQualityAOMFFMPEG.Value + " -b:v 0",
-                1 => " -crf " + SliderQualityAOMFFMPEG.Value + " -b:v " + TextBoxMaxBitrateAOMFFMPEG.Text + "k",
-                2 => " -b:v " + TextBoxMinBitrateAOMFFMPEG.Text + "k",
-                3 => " -minrate " + TextBoxMinBitrateAOMFFMPEG.Text + "k -b:v " + TextBoxAVGBitrateAOMFFMPEG.Text + "k -maxrate " + TextBoxMaxBitrateAOMFFMPEG.Text + "k",
-                4 => " -crf {q_vmaf} -b:v 0",
-                _ => ""
-            };
-
-            // Preset
-            settings += quality + " -cpu-used " + SliderEncoderPreset.Value;
-
-            // Advanced Settings
-            if (ToggleSwitchAdvancedSettings.IsOn == false)
-            {
-                settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval();
-            }
-            else
-            {
-                settings += " -threads " + ComboBoxAomencThreads.Text +                                      // Threads
-                            " -tile-columns " + ComboBoxAomencTileColumns.Text +                             // Tile Columns
-                            " -tile-rows " + ComboBoxAomencTileRows.Text +                                   // Tile Rows
-                            " -lag-in-frames " + TextBoxAomencLagInFrames.Text +                             // Lag in Frames
-                            " -aq-mode " + ComboBoxAomencAQMode.SelectedIndex +                              // AQ-Mode
-                            " -tune " + ComboBoxAomencTune.Text;                                             // Tune
-
-                if (TextBoxAomencMaxGOP.Text != "0") 
-                    settings += " -g " + TextBoxAomencMaxGOP.Text;                                           // Keyframe Interval
-                if (CheckBoxAomencRowMT.IsChecked == false) 
-                    settings += " -row-mt 0";                                                                // Row Based Multithreading
-                if (CheckBoxAomencCDEF.IsChecked == false) 
-                    settings += " -enable-cdef 0";                                                           // Constrained Directional Enhancement Filter
-                if (CheckBoxRealTimeMode.IsOn) 
-                    settings += " -usage realtime ";                                                         // Real Time Mode
-
-                if (CheckBoxAomencARNRMax.IsChecked == true)
-                {
-                    settings += " -arnr-max-frames " + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
-                    settings += " -arnr-strength " + ComboBoxAomencARNRStrength.Text;                        // ARNR Strength
-                }
-
-                settings += " -aom-params " +
-                            "tune-content=" + ComboBoxAomencTuneContent.Text +                               // Tune-Content
-                            ":sharpness=" + ComboBoxAomencSharpness.Text +                                   // Sharpness (Filter)
-                            ":enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex;        // Key Frame Filtering
-
-                if (ComboBoxAomencColorPrimaries.SelectedIndex != 0)
-                    settings += ":color-primaries=" + ComboBoxAomencColorPrimaries.Text;                     // Color Primaries
-                if (ComboBoxAomencColorTransfer.SelectedIndex != 0)
-                    settings += ":transfer-characteristics=" + ComboBoxAomencColorTransfer.Text;             // Color Transfer
-                if (ComboBoxAomencColorMatrix.SelectedIndex != 0)
-                    settings += ":matrix-coefficients=" + ComboBoxAomencColorMatrix.Text;                    // Color Matrix
-            }
-
-            return settings;
-        }
-
-        private string GenerateRav1eFFmpegCommand()
-        {
-            string settings = "-c:v librav1e";
-
-            // Quality / Bitrate Selection
-            string quality = ComboBoxQualityModeRAV1EFFMPEG.SelectedIndex switch
-            {
-                0 => " -qp " + SliderQualityRAV1EFFMPEG.Value,
-                1 => " -b:v " + TextBoxBitrateRAV1EFFMPEG.Text + "k",
-                _ => ""
-            };
-
-            // Preset
-            settings += quality + " -speed " + SliderEncoderPreset.Value;
-
-            // Advanced Settings
-            if (ToggleSwitchAdvancedSettings.IsOn == false)
-            {
-                settings += " -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval() + " -rav1e-params threads=4";
-            }
-            else
-            {
-                settings += " -tile-columns " + ComboBoxRav1eTileColumns.SelectedIndex +                     // Tile Columns
-                            " -tile-rows " + ComboBoxRav1eTileRows.SelectedIndex;                            // Tile Rows
-
-                settings += " -rav1e-params " +
-                            "threads=" + ComboBoxRav1eThreads.SelectedIndex +                                // Threads
-                            ":rdo-lookahead-frames=" + TextBoxRav1eLookahead.Text +                          // RDO Lookahead
-                            ":tune=" + ComboBoxRav1eTune.Text;                                               // Tune
-
-                if (TextBoxRav1eMaxGOP.Text != "0") 
-                    settings += ":keyint=" + TextBoxRav1eMaxGOP.Text;                                        // Keyframe Interval
-
-                if (ComboBoxRav1eColorPrimaries.SelectedIndex != 0) 
-                    settings += ":primaries=" + ComboBoxRav1eColorPrimaries.Text;                            // Color Primaries
-                if (ComboBoxRav1eColorTransfer.SelectedIndex != 0)
-                    settings += ":transfer=" + ComboBoxRav1eColorTransfer.Text;                              // Color Transfer
-                if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
-                    settings += ":matrix=" + ComboBoxRav1eColorMatrix.Text;                                  // Color Matrix
-            }
-
-            return settings;
-        }
-
-        private string GenerateSvtAV1FFmpegCommand()
-        {
-            string settings = "-c:v libsvtav1";
-
-            // Quality / Bitrate Selection
-            string quality = ComboBoxQualityModeSVTAV1FFMPEG.SelectedIndex switch
-            {
-                0 => " -crf " + SliderQualitySVTAV1FFMPEG.Value,
-                1 => " -b:v " + TextBoxBitrateSVTAV1FFMPEG.Text + "k",
-                _ => ""
-            };
-
-            // Preset
-            settings += quality + " -preset " + SliderEncoderPreset.Value;
-
-            // Advanced Settings
-            if (ToggleSwitchAdvancedSettings.IsOn == false)
-            {
-                settings += " -g " + GenerateKeyFrameInerval();
-            }
-            else
-            {
-                settings += " -tile_columns " + ComboBoxSVTAV1TileColumns.Text +                             // Tile Columns
-                            " -tile_rows " + ComboBoxSVTAV1TileRows.Text +                                   // Tile Rows
-                            " -g " + TextBoxSVTAV1MaxGOP.Text +                                              // Keyframe Interval
-                            " -la_depth " + TextBoxSVTAV1Lookahead.Text +                                    // Lookahead
-                            " -svtav1-params " +
-                            "aq-mode=" + ComboBoxSVTAV1AQMode.Text +                                         // AQ Mode
-                            ":film-grain=" + TextBoxSVTAV1FilmGrain.Text +                                   // Film Grain
-                            ":film-grain-denoise=" + TextBoxSVTAV1FilmGrainDenoise.Text;                     // Film Grain Denoise
-            }
-
-            return settings;
-        }
-
-        private string GenerateVpxVP9Command()
-        {
-            string settings = "-c:v libvpx-vp9";
-
-            // Quality / Bitrate Selection
-            string quality = ComboBoxQualityModeVP9FFMPEG.SelectedIndex switch
-            {
-                0 => " -crf " + SliderQualityVP9FFMPEG.Value + " -b:v 0",
-                1 => " -crf " + SliderQualityVP9FFMPEG.Value + " -b:v " + TextBoxMaxBitrateVP9FFMPEG.Text + "k",
-                2 => " -b:v " + TextBoxAVGBitrateVP9FFMPEG.Text + "k",
-                3 => " -minrate " + TextBoxMinBitrateVP9FFMPEG.Text + "k -b:v " + TextBoxAVGBitrateVP9FFMPEG.Text + "k -maxrate " + TextBoxMaxBitrateVP9FFMPEG.Text + "k",
-                _ => ""
-            };
-
-            // Preset
-            settings += quality + " -cpu-used " + SliderEncoderPreset.Value;
-
-            // Advanced Settings
-            if (ToggleSwitchAdvancedSettings.IsOn == false)
-            {
-                settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + GenerateKeyFrameInerval();
-            }
-            else
-            {
-                settings += " -threads " + ComboBoxVP9Threads.Text +                                         // Max Threads
-                            " -tile-columns " + ComboBoxVP9TileColumns.SelectedIndex +                       // Tile Columns
-                            " -tile-rows " + ComboBoxVP9TileRows.SelectedIndex +                             // Tile Rows
-                            " -lag-in-frames " + TextBoxVP9LagInFrames.Text +                                // Lag in Frames
-                            " -g " + TextBoxVP9MaxKF.Text +                                                  // Max GOP
-                            " -aq-mode " + ComboBoxVP9AQMode.SelectedIndex +                                 // AQ-Mode
-                            " -tune " + ComboBoxVP9ATune.SelectedIndex +                                     // Tune
-                            " -tune-content " + ComboBoxVP9ATuneContent.SelectedIndex;                       // Tune-Content
-
-                if (CheckBoxVP9ARNR.IsChecked == true)
-                {
-                    settings += " -arnr-maxframes " + ComboBoxAomencVP9Max.Text +                            // ARNR Max Frames
-                                " -arnr-strength " + ComboBoxAomencVP9Strength.Text +                        // ARNR Strength
-                                " -arnr-type " + ComboBoxAomencVP9ARNRType.Text;                             // ARNR Type
-                }
-            }
-
-            return settings;
-        }
-
-        private string GenerateAomencCommand()
-        {
-            string settings = "-f yuv4mpegpipe - | " +
-                              "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "aomenc", "aomenc.exe") + "\" -";
-
-            // Quality / Bitrate Selection
-            string quality = ComboBoxQualityModeAOMENC.SelectedIndex switch
-            {
-                0 => " --cq-level=" + SliderQualityAOMENC.Value + " --end-usage=q",
-                1 => " --cq-level=" + SliderQualityAOMENC.Value + " --target-bitrate=" + TextBoxBitrateAOMENC.Text + " --end-usage=cq",
-                2 => " --target-bitrate=" + TextBoxBitrateAOMENC.Text + " --end-usage=vbr",
-                3 => " --target-bitrate=" + TextBoxBitrateAOMENC.Text + " --end-usage=cbr",
-                _ => ""
-            };
-
-            // Preset
-            settings += quality + " --cpu-used=" + SliderEncoderPreset.Value;
-
-            // Advanced Settings
-            if (ToggleSwitchAdvancedSettings.IsOn == false)
-            {
-                settings += " --threads=4 --tile-columns=2 --tile-rows=1 --kf-max-dist=" + GenerateKeyFrameInerval();
-            }
-            else
-            {
-                settings += " --threads=" + ComboBoxAomencThreads.Text +                                     // Threads
-                            " --tile-columns=" + ComboBoxAomencTileColumns.Text +                            // Tile Columns
-                            " --tile-rows=" + ComboBoxAomencTileRows.Text +                                  // Tile Rows
-                            " --lag-in-frames=" + TextBoxAomencLagInFrames.Text +                            // Lag in Frames
-                            " --sharpness=" + ComboBoxAomencSharpness.Text +                                 // Sharpness (Filter)
-                            " --aq-mode=" + ComboBoxAomencAQMode.SelectedIndex +                             // AQ-Mode
-                            " --enable-keyframe-filtering=" + ComboBoxAomencKeyFiltering.SelectedIndex +     // Key Frame Filtering
-                            " --tune=" + ComboBoxAomencTune.Text +                                           // Tune
-                            " --tune-content=" + ComboBoxAomencTuneContent.Text;                             // Tune-Content
-
-                if (TextBoxAomencMaxGOP.Text != "0")
-                    settings += " --kf-max-dist=" + TextBoxAomencMaxGOP.Text;                                // Keyframe Interval
-                if (CheckBoxAomencRowMT.IsChecked == false)
-                    settings += " --row-mt=0";                                                               // Row Based Multithreading
-
-                if (ComboBoxAomencColorPrimaries.SelectedIndex != 0)
-                    settings += " --color-primaries=" + ComboBoxAomencColorPrimaries.Text;                   // Color Primaries
-                if (ComboBoxAomencColorTransfer.SelectedIndex != 0)
-                    settings += " --transfer-characteristics=" + ComboBoxAomencColorTransfer.Text;           // Color Transfer
-                if (ComboBoxAomencColorMatrix.SelectedIndex != 0)
-                    settings += " --matrix-coefficients=" + ComboBoxAomencColorMatrix.Text;                  // Color Matrix
-
-                if (CheckBoxAomencCDEF.IsChecked == false)
-                    settings += " --enable-cdef=0";                                                          // Constrained Directional Enhancement Filter
-
-                if (CheckBoxAomencARNRMax.IsChecked == true)
-                {
-                    settings += " --arnr-maxframes=" + ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
-                    settings += " --arnr-strength=" + ComboBoxAomencARNRStrength.Text;                       // ARNR Strength
-                }
-
-                if (CheckBoxRealTimeMode.IsOn)
-                    settings += " --rt";                                                                     // Real Time Mode
-            }
-
-            return settings;
-        }
-
-        private string GenerateRav1eCommand()
-        {
-            string settings = "-f yuv4mpegpipe - | " +
-                               "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e", "rav1e.exe") + "\" - -y";
-
-            // Quality / Bitrate Selection
-            string quality = ComboBoxQualityModeRAV1E.SelectedIndex switch
-            {
-                0 => " --quantizer " + SliderQualityRAV1E.Value,
-                1 => " --bitrate " + TextBoxBitrateRAV1E.Text,
-                _ => ""
-            };
-
-            // Preset
-            settings += quality + " --speed " + SliderEncoderPreset.Value;
-
-            // Advanced Settings
-            if (ToggleSwitchAdvancedSettings.IsOn == false)
-            {
-                settings += " --threads 4 --tile-cols 2 --tile-rows 1 --keyint " + GenerateKeyFrameInerval();
-            }
-            else
-            {
-                settings += " --threads " + ComboBoxRav1eThreads.SelectedIndex +                             // Threads
-                            " --tile-cols " + ComboBoxRav1eTileColumns.SelectedIndex +                       // Tile Columns
-                            " --tile-rows " + ComboBoxRav1eTileRows.SelectedIndex +                          // Tile Rows
-                            " --rdo-lookahead-frames " + TextBoxRav1eLookahead.Text +                        // RDO Lookahead
-                            " --tune " + ComboBoxRav1eTune.Text;                                             // Tune
-
-                if (TextBoxRav1eMaxGOP.Text != "0")
-                    settings += " --keyint " + TextBoxRav1eMaxGOP.Text;                                      // Keyframe Interval
-
-                if (ComboBoxRav1eColorPrimaries.SelectedIndex != 0)
-                    settings += " --primaries " + ComboBoxRav1eColorPrimaries.Text;                          // Color Primaries
-                if (ComboBoxRav1eColorTransfer.SelectedIndex != 0)
-                    settings += " --transfer " + ComboBoxRav1eColorTransfer.Text;                            // Color Transfer
-                if (ComboBoxRav1eColorMatrix.SelectedIndex != 0)
-                    settings += " --matrix " + ComboBoxRav1eColorMatrix.Text;                                // Color Matrix
-            }
-
-            return settings;
-        }
-
-        private string GenerateSvtAV1Command()
-        {
-            string settings = "-nostdin -f yuv4mpegpipe - | " +
-                              "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1", "SvtAv1EncApp.exe") + "\" -i stdin";
-
-            // Quality / Bitrate Selection
-            string quality = ComboBoxQualityModeSVTAV1.SelectedIndex switch
-            {
-                0 => " --rc 0 --crf " + SliderQualitySVTAV1.Value,
-                1 => " --rc 1 --tbr " + TextBoxBitrateSVTAV1.Text,
-                _ => ""
-            };
-
-            // Preset
-            settings += quality +" --preset " + SliderEncoderPreset.Value;
-
-            // Advanced Settings
-            if (ToggleSwitchAdvancedSettings.IsOn == false)
-            {
-                settings += " --keyint " + GenerateKeyFrameInerval();
-
-            }
-            else
-            {
-                settings += " --tile-columns " + ComboBoxSVTAV1TileColumns.Text +                             // Tile Columns
-                            " --tile-rows " + ComboBoxSVTAV1TileRows.Text +                                   // Tile Rows
-                            " --keyint " + TextBoxSVTAV1MaxGOP.Text +                                         // Keyframe Interval
-                            " --lookahead " + TextBoxSVTAV1Lookahead.Text +                                   // Lookahead
-                            " --aq-mode " + ComboBoxSVTAV1AQMode.Text +                                       // AQ Mode
-                            " --film-grain " + TextBoxSVTAV1FilmGrain.Text +                                  // Film Grain
-                            " --film-grain-denoise " +  TextBoxSVTAV1FilmGrainDenoise.Text;                   // Film Grain Denoise                      
-            }
-
-            return settings;
-        }
-
-        private string GenerateHEVCFFmpegCommand()
-        {
-            string settings = "-c:v libx265";
-
-            // Quality / Bitrate Selection
-            string quality = ComboBoxQualityModeX26x.SelectedIndex switch
-            {
-                0 => " -crf " + SliderQualityX26x.Value,
-                1 => " -b:v " + TextBoxBitrateX26x.Text + "k",
-                _ => ""
-            };
-
-            // Preset
-            settings += quality + " -preset " + GenerateMPEGEncoderSpeed();
-
-            return settings;
-        }
-
-        private string GenerateAVCFFmpegCommand()
-        {
-            string settings = "-c:v libx264";
-
-            // Quality / Bitrate Selection
-            string quality = ComboBoxQualityModeX26x.SelectedIndex switch
-            {
-                0 => " -crf " + SliderQualityX26x.Value,
-                1 => " -b:v " + TextBoxBitrateX26x.Text + "k",
-                _ => ""
-            };
-
-            // Preset
-            settings += quality + " -preset " + GenerateMPEGEncoderSpeed();
-
-            return settings;
-        }
-
-        private string GenerateQuickSyncCommand()
-        {
-            string settings = "-f yuv4mpegpipe - | " +
-                    "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "qsvenc", "QSVEncC64.exe") + "\" --y4m -i -";
-
-            // Codec
-            settings += " --codec av1";
-
-            // Quality / Bitrate Selection
-            string quality = ComboBoxQualityModeQSVAV1.SelectedIndex switch
-            {
-                0 => " --cqp " + SliderQualityQSVAV1.Value,
-                1 => " --icq " + SliderQualityQSVAV1.Value,
-                2 => " --vbr " + TextBoxBitrateQSVAV1.Text,
-                3 => " --cbr " + TextBoxBitrateQSVAV1.Text,
-                _ => ""
-            };
-
-            // Preset
-            settings += quality + " --quality " + GenerateQuickSyncEncoderSpeed();
-
-            // Bit-Depth
-            settings += " --output-depth ";
-            settings += ComboBoxVideoBitDepthLimited.SelectedIndex switch
-            {
-                0 => "8",
-                1 => "10",
-                _ => "8"
-            };
-
-            // Output Colorspace
-            settings += " --output-csp ";
-            settings += ComboBoxColorFormat.SelectedIndex switch
-            {
-                0 => "i420",
-                1 => "i422",
-                2 => "i444",
-                _ => "i420"
-            };
-
-
-            return settings;
-        }
-
-        private string GenerateNVENCCommand()
-        {
-            string settings = "-f yuv4mpegpipe - | " +
-                    "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "nvenc", "NVEncC64.exe") + "\" --y4m -i -";
-
-            // Codec
-            settings += " --codec av1";
-
-            // Quality / Bitrate Selection
-            string quality = ComboBoxQualityModeQSVAV1.SelectedIndex switch
-            {
-                0 => " --cqp " + SliderQualityQSVAV1.Value,
-                1 => " --vbr " + TextBoxBitrateQSVAV1.Text,
-                2 => " --cbr " + TextBoxBitrateQSVAV1.Text,
-                _ => ""
-            };
-
-            // Preset
-            settings += quality + " --preset " + GenerateNVENCEncoderSpeed();
-
-            // Bit-Depth
-            settings += " --output-depth ";
-            settings += ComboBoxVideoBitDepthLimited.SelectedIndex switch
-            {
-                0 => "8",
-                1 => "10",
-                _ => "8"
-            };
-
-            return settings;
-        }
-
-        private string GenerateMPEGEncoderSpeed()
+        public string GenerateMPEGEncoderSpeed()
         {
             return SliderEncoderPreset.Value switch
             {
@@ -2627,7 +2187,7 @@ namespace NotEnoughAV1Encodes
             };
         }
 
-        private string GenerateQuickSyncEncoderSpeed()
+        public string GenerateQuickSyncEncoderSpeed()
         {
             return SliderEncoderPreset.Value switch
             {
@@ -2642,7 +2202,7 @@ namespace NotEnoughAV1Encodes
             };
         }
 
-        private string GenerateNVENCEncoderSpeed()
+        public string GenerateNVENCEncoderSpeed()
         {
             return SliderEncoderPreset.Value switch
             {
@@ -2653,7 +2213,7 @@ namespace NotEnoughAV1Encodes
             };
         }
 
-        private string GenerateKeyFrameInerval()
+        public string GenerateKeyFrameInerval()
         {
             int seconds = 10;
 
@@ -2702,7 +2262,7 @@ namespace NotEnoughAV1Encodes
                 settings += "44p";
             }
 
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoder.QSVAV1 or (int) Video.Encoder.X264)
+            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.QSVAV1 or (int) Video.Encoders.X264)
             {
                 if (ComboBoxVideoBitDepthLimited.SelectedIndex == 1)
                 {

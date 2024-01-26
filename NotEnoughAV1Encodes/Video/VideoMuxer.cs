@@ -108,7 +108,7 @@ namespace NotEnoughAV1Encodes.Video
 
             string DAR = "";
             // Set Display Aspect Ratio for external encoders
-            if (queueElement.EncodingMethod is (int) Encoder.AOMENC or (int) Encoder.RAV1E or (int) Encoder.SVTAV1 or (int) Encoder.QSVAV1 or (int) Encoder.NVENCAV1 && !string.IsNullOrEmpty(queueElement.VideoDB.MIDisplayAspectRatio))
+            if (queueElement.EncodingMethod is (int) Encoders.AOMENC or (int) Encoders.RAV1E or (int) Encoders.SVTAV1 or (int) Encoders.QSVAV1 or (int) Encoders.NVENCAV1 && !string.IsNullOrEmpty(queueElement.VideoDB.MIDisplayAspectRatio))
             {
                 if (queueElement.VideoDB.MIPixelAspectRatio != "1.000")
                 {
@@ -235,21 +235,21 @@ namespace NotEnoughAV1Encodes.Video
             IOrderedEnumerable<string> sortedChunks = null;
 
             // FFmpeg AOM, Rav1e, SVT-AV1, VPX-VP9
-            if (queueElement.EncodingMethod is (int) Encoder.AOMFFMPEG or (int) Encoder.RAV1EFFMPEG or (int) Encoder.SVTAV1FFMPEG or (int) Encoder.VPXVP9FFMPEG or (int) Encoder.QSVAV1 or (int) Encoder.NVENCAV1 or (int) Encoder.AMFAV1)
+            if (queueElement.EncodingMethod is (int) Encoders.AOMFFMPEG or (int) Encoders.RAV1EFFMPEG or (int) Encoders.SVTAV1FFMPEG or (int) Encoders.VPXVP9FFMPEG or (int) Encoders.QSVAV1 or (int) Encoders.NVENCAV1 or (int) Encoders.AMFAV1)
             {
                 Global.Logger("DEBUG - VideoMuxer.Concat() => Reading Chunk Directory by *.webm files", queueElement.Output + ".log");
                 sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.webm").OrderBy(f => f);
             }
             
             // Aomenc, Rav1e, SVT-AV1 (External)
-            if (queueElement.EncodingMethod is (int) Encoder.AOMENC or (int) Encoder.RAV1E or (int) Encoder.SVTAV1)
+            if (queueElement.EncodingMethod is (int) Encoders.AOMENC or (int) Encoders.RAV1E or (int) Encoders.SVTAV1)
             {
                 Global.Logger("DEBUG - VideoMuxer.Concat() => Reading Chunk Directory by *.ivf files", queueElement.Output + ".log");
                 sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.ivf").OrderBy(f => f);
             }
             
             // x265, x264
-            if (queueElement.EncodingMethod is (int) Encoder.X265 or (int) Encoder.X264)
+            if (queueElement.EncodingMethod is (int) Encoders.X265 or (int) Encoders.X264)
             {
                 Global.Logger("DEBUG - VideoMuxer.Concat() => Reading Chunk Directory by *.mp4 files", queueElement.Output + ".log");
                 sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Video"), "*.mp4").OrderBy(f => f);

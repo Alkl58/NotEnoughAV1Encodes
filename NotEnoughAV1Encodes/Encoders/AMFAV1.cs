@@ -1,6 +1,8 @@
-﻿namespace NotEnoughAV1Encodes.Encoders
+﻿using System.Windows;
+
+namespace NotEnoughAV1Encodes.Encoders
 {
-    internal class AMFAV1
+    internal class AMFAV1 : IEncoder
     {
         /*
          * The implementation is pretty questionable
@@ -13,8 +15,11 @@
          *  
          *  It's unclear which arguments should be mixed with which.
          */
-        public static string GetCommand(int quality, int rc, string bitrate, int qp)
+        public string GetCommand()
         {
+            // Get MainWindow instance to access UI elements
+            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+
             string command = "-c:v av1_amf";
 
             // Speed
@@ -24,7 +29,7 @@
             //      quality         30           E..V.......
             //      high_quality    0            E..V.......
             command += " -quality ";
-            command += quality switch
+            command += mainWindow.SliderEncoderPreset.Value switch
             {
                 0 => "high_quality",
                 1 => "quality",
@@ -44,13 +49,13 @@
             //      hqvbr           5            E..V....... High Quality Variable Bitrate
             //      hqcbr           6            E..V....... High Quality Constant Bitrate
             command += " -rc ";
-            command += rc switch
+            command += mainWindow.ComboBoxQualityModeAMFAV1.SelectedIndex switch
             {
-                0 => "cqp -qp " + qp,
-                1 => "cbr -b:v " + bitrate + "k",
-                2 => "hqcbr -b:v " + bitrate + "k",
-                3 => "qvbr -b:v " + bitrate + "k  -qvbr_quality_level " + qp,
-                4 => "hqvbr -b:v " + bitrate + "k",
+                0 => "cqp -qp " + mainWindow.SliderQualityAMFAV1.Value,
+                1 => "cbr -b:v " + mainWindow.TextBoxBitrateAMFAV1.Text + "k",
+                2 => "hqcbr -b:v " + mainWindow.TextBoxBitrateAMFAV1.Text + "k",
+                3 => "qvbr -b:v " + mainWindow.TextBoxBitrateAMFAV1.Text + "k  -qvbr_quality_level " + mainWindow.SliderQualityAMFAV1.Value,
+                4 => "hqvbr -b:v " + mainWindow.TextBoxBitrateAMFAV1.Text + "k",
                 _ => ""
             };
 
