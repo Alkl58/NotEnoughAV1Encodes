@@ -149,7 +149,7 @@ namespace NotEnoughAV1Encodes
         #region Buttons
         private void ButtonTestSettings_Click(object sender, RoutedEventArgs e)
         {
-            Views.TestCustomSettings testCustomSettings = new(settingsDB.Theme, ComboBoxVideoEncoder.SelectedIndex, CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand());
+            Views.TestCustomSettings testCustomSettings = new(settingsDB.Theme, VideoTabVideoPartialControl.ComboBoxVideoEncoder.SelectedIndex, CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand());
             testCustomSettings.ShowDialog();
         }
 
@@ -307,21 +307,21 @@ namespace NotEnoughAV1Encodes
                                 // Automatically toggle VFR Support, if source is MKV
                                 if (videoDB.MIIsVFR && Path.GetExtension(videoDB.InputPath) is ".mkv" or ".MKV")
                                 {
-                                    CheckBoxVideoVFR.IsEnabled = true;
-                                    CheckBoxVideoVFR.IsChecked = true;
+                                    VideoTabVideoPartialControl.CheckBoxVideoVFR.IsEnabled = true;
+                                    VideoTabVideoPartialControl.CheckBoxVideoVFR.IsChecked = true;
                                 }
                                 else
                                 {
-                                    CheckBoxVideoVFR.IsChecked = false;
-                                    CheckBoxVideoVFR.IsEnabled = false;
+                                    VideoTabVideoPartialControl.CheckBoxVideoVFR.IsChecked = false;
+                                    VideoTabVideoPartialControl.CheckBoxVideoVFR.IsEnabled = false;
                                 }
 
                                 // Uses Bit-Depth of Video
                                 if (!presetBitdepth)
                                 {
-                                    if (videoDB.MIBitDepth == "8") ComboBoxVideoBitDepth.SelectedIndex = 0;
-                                    if (videoDB.MIBitDepth == "10") ComboBoxVideoBitDepth.SelectedIndex = 1;
-                                    if (videoDB.MIBitDepth == "12") ComboBoxVideoBitDepth.SelectedIndex = 2;
+                                    if (videoDB.MIBitDepth == "8") VideoTabVideoPartialControl.ComboBoxVideoBitDepth.SelectedIndex = 0;
+                                    if (videoDB.MIBitDepth == "10") VideoTabVideoPartialControl.ComboBoxVideoBitDepth.SelectedIndex = 1;
+                                    if (videoDB.MIBitDepth == "12") VideoTabVideoPartialControl.ComboBoxVideoBitDepth.SelectedIndex = 2;
                                 }
 
                                 // Skip Subtitles if Container is not MKV to avoid conflicts
@@ -367,7 +367,7 @@ namespace NotEnoughAV1Encodes
 
                         SummaryTabControl.ComboBoxChunkingMethod.SelectedIndex = queueElement.ChunkingMethod;
                         SummaryTabControl.ComboBoxReencodeMethod.SelectedIndex = queueElement.ReencodeMethod;
-                        CheckBoxTwoPassEncoding.IsOn = queueElement.Passes == 2;
+                        VideoTabVideoOptimizationControl.CheckBoxTwoPassEncoding.IsOn = queueElement.Passes == 2;
                         SummaryTabControl.TextBoxChunkLength.Text = queueElement.ChunkLength.ToString();
                         SummaryTabControl.TextBoxPySceneDetectThreshold.Text = queueElement.PySceneDetectThreshold.ToString();
                     }
@@ -410,16 +410,16 @@ namespace NotEnoughAV1Encodes
                 vfr = " (VFR)";
                 if (Path.GetExtension(videoDB.InputPath) is ".mkv" or ".MKV")
                 {
-                    CheckBoxVideoVFR.IsEnabled = true;
-                    CheckBoxVideoVFR.IsChecked = true;
+                    VideoTabVideoPartialControl.CheckBoxVideoVFR.IsEnabled = true;
+                    VideoTabVideoPartialControl.CheckBoxVideoVFR.IsChecked = true;
                 }
                 else
                 {
                     // VFR Video only currently supported in .mkv container
                     // Reasoning is, that splitting a VFR MP4 Video to MKV Chunks will result in ffmpeg making it CFR
                     // Additionally Copying the MP4 Video to a MKV Video will result in the same behavior, leading to incorrect extracted timestamps
-                    CheckBoxVideoVFR.IsChecked = false;
-                    CheckBoxVideoVFR.IsEnabled = false;
+                    VideoTabVideoPartialControl.CheckBoxVideoVFR.IsChecked = false;
+                    VideoTabVideoPartialControl.CheckBoxVideoVFR.IsEnabled = false;
                 }
             }
             SummaryTabControl.LabelVideoFramerate.Content = videoDB.MIFramerate + vfr;
@@ -636,599 +636,6 @@ namespace NotEnoughAV1Encodes
             if (counter > 1)
             {
                 MessageBox.Show("Please use Batch Input (Drag & Drop multiple Files is not supported)");
-            }
-        }
-
-
-        private void ComboBoxVideoEncoder_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (SliderEncoderPreset == null) return;
-
-            ComboBoxColorFormat.IsEnabled = true;
-            ComboBoxVideoBitDepth.IsEnabled = true;
-            CheckBoxVideoHDR.IsEnabled = true;
-
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.AOMFFMPEG or (int) Video.Encoders.AOMENC)
-            {
-                //aom ffmpeg
-                if (ComboBoxVideoEncoder.SelectedIndex == 0)
-                {
-                    SliderEncoderPreset.Maximum = 8;
-                }
-                else
-                {
-                    SliderEncoderPreset.Maximum = 9;
-                }
-                SliderEncoderPreset.Value = 4;
-                CheckBoxTwoPassEncoding.IsEnabled = true;
-                ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
-                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.RAV1EFFMPEG or (int) Video.Encoders.RAV1E)
-            {
-                //rav1e ffmpeg
-                ComboBoxQualityMode.SelectedIndex = 0;
-                SliderEncoderPreset.Maximum = 10;
-                SliderEncoderPreset.Value = 5;
-                CheckBoxTwoPassEncoding.IsOn = false;
-                CheckBoxTwoPassEncoding.IsEnabled = false;
-                CheckBoxRealTimeMode.IsOn = false;
-                CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
-                ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
-                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.SVTAV1FFMPEG or (int) Video.Encoders.SVTAV1)
-            {
-                //svt-av1 ffmpeg
-                ComboBoxQualityMode.SelectedIndex = 0;
-                SliderEncoderPreset.Maximum = 13;
-                SliderEncoderPreset.Value = 10;
-                CheckBoxTwoPassEncoding.IsEnabled = true;
-                CheckBoxTwoPassEncoding.IsOn = false;
-                CheckBoxRealTimeMode.IsOn = false;
-                CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
-                ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
-                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.VPXVP9FFMPEG)
-            {
-                //vpx-vp9 ffmpeg
-                SliderEncoderPreset.Maximum = 8;
-                SliderEncoderPreset.Value = 4;
-                CheckBoxTwoPassEncoding.IsEnabled = true;
-                CheckBoxRealTimeMode.IsOn = false;
-                CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
-                ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
-                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.X265 or (int) Video.Encoders.X264)
-            {
-                //libx265 libx264 ffmpeg
-                SliderEncoderPreset.Maximum = 9;
-                SliderEncoderPreset.Value = 4;
-                CheckBoxTwoPassEncoding.IsEnabled = false;
-                CheckBoxTwoPassEncoding.IsOn = false;
-                CheckBoxRealTimeMode.IsOn = false;
-                CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
-                ComboBoxVideoBitDepth.Visibility = Visibility.Visible;
-                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Collapsed;
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.QSVAV1)
-            {
-                // av1 hardware (intel arc)
-                SliderEncoderPreset.Maximum = 6;
-                SliderEncoderPreset.Value = 3;
-                CheckBoxTwoPassEncoding.IsEnabled = false;
-                CheckBoxTwoPassEncoding.IsOn = false;
-                CheckBoxRealTimeMode.IsOn = false;
-                CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
-                ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
-                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.NVENCAV1)
-            {
-                // av1 hardware (nvenc rtx 4000)
-                SliderEncoderPreset.Maximum = 2;
-                SliderEncoderPreset.Value = 1;
-                CheckBoxTwoPassEncoding.IsEnabled = false;
-                CheckBoxTwoPassEncoding.IsOn = false;
-                CheckBoxRealTimeMode.IsOn = false;
-                CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
-                ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
-                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoders.AMFAV1)
-            {
-                // av1 hardware (amd)
-                SliderEncoderPreset.Maximum = 3;
-                SliderEncoderPreset.Value = 3;
-                CheckBoxTwoPassEncoding.IsEnabled = false;
-                CheckBoxTwoPassEncoding.IsOn = false;
-                CheckBoxRealTimeMode.IsOn = false;
-                CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
-                ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
-                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
-
-                ComboBoxColorFormat.SelectedIndex = 0;
-                ComboBoxColorFormat.IsEnabled = false;
-                ComboBoxVideoBitDepth.SelectedIndex = 0;
-                ComboBoxVideoBitDepth.IsEnabled = false;
-                ComboBoxVideoBitDepthLimited.IsEnabled = false;
-                ComboBoxVideoBitDepthLimited.SelectedIndex = 0;
-                CheckBoxVideoHDR.IsChecked = false;
-                CheckBoxVideoHDR.IsEnabled = false;
-
-            }
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.X264)
-            {
-                if (ComboBoxQualityMode.SelectedIndex == 2)
-                {
-                    CheckBoxTwoPassEncoding.IsEnabled = true;
-                }
-
-                ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
-                ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
-            }
-
-            SummaryTabControl.LabelEncoder.Content = ComboBoxVideoEncoder.SelectedIndex switch
-            {
-                (int) Video.Encoders.AOMFFMPEG      => "aom-av1 (ffmpeg)",
-                (int) Video.Encoders.RAV1EFFMPEG    => "rav1e (ffmpeg)",
-                (int) Video.Encoders.SVTAV1FFMPEG   => "svt-av1 (ffmpeg)",
-                (int) Video.Encoders.VPXVP9FFMPEG   => "vpx-vp9 (ffmpeg)",
-                (int) Video.Encoders.AOMENC         => "aomenc (AV1)",
-                (int) Video.Encoders.RAV1E          => "rav1e (AV1)",
-                (int) Video.Encoders.SVTAV1         => "svt-av1 (AV1)",
-                (int) Video.Encoders.X265           => "x265 (HEVC)",
-                (int) Video.Encoders.X264           => "x264 (AVC)",
-                (int) Video.Encoders.QSVAV1         => "QuickSync (AV1)",
-                (int) Video.Encoders.NVENCAV1       => "NVENC (AV1)",
-                (int) Video.Encoders.AMFAV1         => "AMF (AV1)",
-                _ => ""
-            };
-        }
-
-        private void ComboBoxColorFormat_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            SummaryTabControl.LabelColorFormatOutput.Content = ComboBoxColorFormat.SelectedIndex switch
-            {
-                0 => "4:2:0",
-                1 => "4:2:2",
-                2 => "4:4:4",
-                _ => ""
-            };
-        }
-
-        private void ComboBoxVideoBitDepth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            SummaryTabControl.LabelBitDepth.Content = ComboBoxVideoBitDepth.SelectedIndex switch
-            {
-                0 => "8",
-                1 => "10",
-                2 => "12",
-                _ => ""
-            };
-        }
-
-        private void ComboBoxVideoFrameRate_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            SummaryTabControl.LabelFramerateOutput.Content = ComboBoxVideoFrameRate.SelectedIndex switch
-            {
-                0 => "Same as Source",
-                1 => "5",
-                2 => "10",
-                3 => "12",
-                4 => "15",
-                5 => "20",
-                6 => "23.976",
-                7 => "24",
-                8 => "25",
-                9 => "29.97",
-                10 => "30",
-                11 => "48",
-                12 => "50",
-                13 => "59.94",
-                14 => "60",
-                15 => "72",
-                16 => "75",
-                17 => "90",
-                18 => "100",
-                19 => "120",
-                20 => "144",
-                21 => "240",
-                22 => "360",
-                _ => ""
-            };
-        }
-
-        private void ComboBoxQualityMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            // Hide all
-            LabelQuantizer.Visibility = Visibility.Collapsed;
-            SliderQualityAOMFFMPEG.Visibility = Visibility.Collapsed;
-            LabelQuantizerPreview.Visibility = Visibility.Collapsed;
-            LabelBitrateMin.Visibility = Visibility.Collapsed;
-            TextBoxMinBitrateAOMFFMPEG.Visibility = Visibility.Collapsed;
-            LabelBitrateAvg.Visibility = Visibility.Collapsed;
-            TextBoxAVGBitrateAOMFFMPEG.Visibility = Visibility.Collapsed;
-            LabelBitrateMax.Visibility = Visibility.Collapsed;
-            TextBoxMaxBitrateAOMFFMPEG.Visibility = Visibility.Collapsed;
-            LabelTargetVMAF.Visibility = Visibility.Collapsed;
-            LabelTargetVMAFPreview.Visibility = Visibility.Collapsed;
-            SliderTargetVMAF.Visibility = Visibility.Collapsed;
-            LabelTargetVMAFProbes.Visibility = Visibility.Collapsed;
-            SliderTargetVMAFProbes.Visibility = Visibility.Collapsed;
-            LabelTargetVMAFProbesPreview.Visibility = Visibility.Collapsed;
-            LabelTargetVMAFMinQ.Visibility = Visibility.Collapsed;
-            SliderTargetVMAFMinQ.Visibility= Visibility.Collapsed;
-            LabelTargetVMAFMinQPreview.Visibility = Visibility.Collapsed;
-            LabelTargetVMAFMaxQ.Visibility = Visibility.Collapsed;
-            SliderTargetVMAFMaxQ.Visibility = Visibility.Collapsed;
-            LabelTargetVMAFMaxQPreview.Visibility = Visibility.Collapsed;
-            LabelTargetVMAFMaxProbeLength.Visibility = Visibility.Collapsed;
-            SliderTargetVMAFMaxProbeLength.Visibility = Visibility.Collapsed;
-            LabelTargetVMAFMaxProbeLengthPreview.Visibility = Visibility.Collapsed;
-            PresetSettings.TargetVMAF = false;
-
-            if (ComboBoxQualityMode.SelectedIndex == 0)
-            {
-                // Constant Quality
-                LabelQuantizer.Visibility = Visibility.Visible;
-                SliderQualityAOMFFMPEG.Visibility = Visibility.Visible;
-                LabelQuantizerPreview.Visibility = Visibility.Visible;
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 1)
-            {
-                // Constrained Quality
-                TextBoxMaxBitrateAOMFFMPEG.Visibility = Visibility.Visible;
-                LabelBitrateMax.Visibility = Visibility.Visible;
-                LabelQuantizer.Visibility = Visibility.Visible;
-                SliderQualityAOMFFMPEG.Visibility = Visibility.Visible;
-                LabelQuantizerPreview.Visibility = Visibility.Visible;
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 2)
-            {
-                // Average Bitrate
-                LabelBitrateAvg.Visibility = Visibility.Visible;
-                TextBoxAVGBitrateAOMFFMPEG.Visibility = Visibility.Visible;
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 3)
-            {
-                // Constrained Bitrate
-                LabelBitrateMin.Visibility = Visibility.Visible;
-                TextBoxMinBitrateAOMFFMPEG.Visibility = Visibility.Visible;
-                LabelBitrateAvg.Visibility = Visibility.Visible;
-                TextBoxAVGBitrateAOMFFMPEG.Visibility = Visibility.Visible;
-                LabelBitrateMax.Visibility = Visibility.Visible;
-                TextBoxMaxBitrateAOMFFMPEG.Visibility = Visibility.Visible;
-            }
-            else if (ComboBoxQualityMode.SelectedIndex == 4) 
-            {
-                // Target VMAF
-                PresetSettings.TargetVMAF = true;
-                LabelTargetVMAF.Visibility = Visibility.Visible;
-                LabelTargetVMAFPreview.Visibility = Visibility.Visible;
-                SliderTargetVMAF.Visibility = Visibility.Visible;
-                LabelTargetVMAFProbes.Visibility = Visibility.Visible;
-                SliderTargetVMAFProbes.Visibility = Visibility.Visible;
-                LabelTargetVMAFProbesPreview.Visibility = Visibility.Visible;
-                LabelTargetVMAFMinQ.Visibility = Visibility.Visible;
-                SliderTargetVMAFMinQ.Visibility = Visibility.Visible;
-                LabelTargetVMAFMinQPreview.Visibility = Visibility.Visible;
-                LabelTargetVMAFMaxQ.Visibility = Visibility.Visible;
-                SliderTargetVMAFMaxQ.Visibility = Visibility.Visible;
-                LabelTargetVMAFMaxQPreview.Visibility = Visibility.Visible;
-                LabelTargetVMAFMaxProbeLength.Visibility = Visibility.Visible;
-                SliderTargetVMAFMaxProbeLength.Visibility = Visibility.Visible;
-                LabelTargetVMAFMaxProbeLengthPreview.Visibility = Visibility.Visible;
-            }
-        }
-
-        private void SliderTargetVMAFMinQ_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (SliderTargetVMAF == null) return;
-            if (SliderTargetVMAFMinQ.Value > SliderTargetVMAFMaxQ.Value)
-            {
-                SliderTargetVMAFMaxQ.Value = SliderTargetVMAFMinQ.Value;
-            }
-        }
-
-        private void SliderTargetVMAFMaxQ_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (SliderTargetVMAF == null) return;
-            if (SliderTargetVMAFMinQ.Value > SliderTargetVMAFMaxQ.Value)
-            {
-                SliderTargetVMAFMinQ.Value = SliderTargetVMAFMaxQ.Value;
-            }
-        }
-
-        private void ComboBoxQualityModeRAV1EFFMPEG_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ComboBoxQualityModeRAV1EFFMPEG.SelectedIndex == 0)
-            {
-                SliderQualityRAV1EFFMPEG.IsEnabled = true;
-                TextBoxBitrateRAV1EFFMPEG.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeRAV1EFFMPEG.SelectedIndex == 1)
-            {
-                SliderQualityRAV1EFFMPEG.IsEnabled = false;
-                TextBoxBitrateRAV1EFFMPEG.IsEnabled = true;
-            }
-        }
-
-        private void ComboBoxQualityModeSVTAV1FFMPEG_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ComboBoxQualityModeSVTAV1FFMPEG.SelectedIndex == 0)
-            {
-                SliderQualitySVTAV1FFMPEG.IsEnabled = true;
-                TextBoxBitrateSVTAV1FFMPEG.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeSVTAV1FFMPEG.SelectedIndex == 1)
-            {
-                SliderQualitySVTAV1FFMPEG.IsEnabled = false;
-                TextBoxBitrateSVTAV1FFMPEG.IsEnabled = true;
-            }
-        }
-
-        private void ComboBoxQualityModeVP9FFMPEG_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ComboBoxQualityModeVP9FFMPEG.SelectedIndex == 0)
-            {
-                SliderQualityVP9FFMPEG.IsEnabled = true;
-                TextBoxAVGBitrateVP9FFMPEG.IsEnabled = false;
-                TextBoxMaxBitrateVP9FFMPEG.IsEnabled = false;
-                TextBoxMinBitrateVP9FFMPEG.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeVP9FFMPEG.SelectedIndex == 1)
-            {
-                SliderQualityVP9FFMPEG.IsEnabled = true;
-                TextBoxAVGBitrateVP9FFMPEG.IsEnabled = false;
-                TextBoxMaxBitrateVP9FFMPEG.IsEnabled = true;
-                TextBoxMinBitrateVP9FFMPEG.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeVP9FFMPEG.SelectedIndex == 2)
-            {
-                SliderQualityVP9FFMPEG.IsEnabled = false;
-                TextBoxAVGBitrateVP9FFMPEG.IsEnabled = true;
-                TextBoxMaxBitrateVP9FFMPEG.IsEnabled = false;
-                TextBoxMinBitrateVP9FFMPEG.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeVP9FFMPEG.SelectedIndex == 3)
-            {
-                SliderQualityVP9FFMPEG.IsEnabled = false;
-                TextBoxAVGBitrateVP9FFMPEG.IsEnabled = true;
-                TextBoxMaxBitrateVP9FFMPEG.IsEnabled = true;
-                TextBoxMinBitrateVP9FFMPEG.IsEnabled = true;
-            }
-        }
-
-        private void ComboBoxQualityModeAOMENC_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ComboBoxQualityModeAOMENC.SelectedIndex == 0)
-            {
-                SliderQualityAOMENC.IsEnabled = true;
-                TextBoxBitrateAOMENC.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeAOMENC.SelectedIndex == 1)
-            {
-                SliderQualityAOMENC.IsEnabled = true;
-                TextBoxBitrateAOMENC.IsEnabled = true;
-            }
-            else if (ComboBoxQualityModeAOMENC.SelectedIndex == 2)
-            {
-                SliderQualityAOMENC.IsEnabled = false;
-                TextBoxBitrateAOMENC.IsEnabled = true;
-            }
-            else if (ComboBoxQualityModeAOMENC.SelectedIndex == 3)
-            {
-                SliderQualityAOMENC.IsEnabled = false;
-                TextBoxBitrateAOMENC.IsEnabled = true;
-            }
-        }
-
-        private void ComboBoxQualityModeRAV1E_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ComboBoxQualityModeRAV1E.SelectedIndex == 0)
-            {
-                SliderQualityRAV1E.IsEnabled = true;
-                TextBoxBitrateRAV1E.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeRAV1E.SelectedIndex == 1)
-            {
-                SliderQualityRAV1E.IsEnabled = false;
-                TextBoxBitrateRAV1E.IsEnabled = true;
-            }
-        }
-
-        private void ComboBoxQualityModeSVTAV1_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ComboBoxQualityModeSVTAV1.SelectedIndex == 0)
-            {
-                SliderQualitySVTAV1.IsEnabled = true;
-                TextBoxBitrateSVTAV1.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeSVTAV1.SelectedIndex == 1)
-            {
-                SliderQualitySVTAV1.IsEnabled = false;
-                TextBoxBitrateSVTAV1.IsEnabled = true;
-            }
-        }
-
-        private void ComboBoxQualityModeX26x_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ComboBoxQualityModeX26x.SelectedIndex == 0)
-            {
-                SliderQualityX26x.IsEnabled = true;
-                TextBoxBitrateX26x.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeX26x.SelectedIndex == 1)
-            {
-                SliderQualityX26x.IsEnabled = false;
-                TextBoxBitrateX26x.IsEnabled = true;
-            }
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.X264 && ComboBoxQualityModeX26x.SelectedIndex == 1)
-            {
-                CheckBoxTwoPassEncoding.IsEnabled = true;
-            }
-            else if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.X264 && ComboBoxQualityModeX26x.SelectedIndex != 1)
-            {
-                CheckBoxTwoPassEncoding.IsEnabled = false;
-            }
-        }
-
-        private void ComboBoxQualityModeQSVAV1_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ComboBoxQualityModeQSVAV1.SelectedIndex == 0)
-            {
-                SliderQualityQSVAV1.IsEnabled = true;
-                TextBoxBitrateQSVAV1.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeQSVAV1.SelectedIndex == 1)
-            {
-                SliderQualityQSVAV1.IsEnabled = true;
-                TextBoxBitrateQSVAV1.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeQSVAV1.SelectedIndex == 2)
-            {
-                SliderQualityQSVAV1.IsEnabled = false;
-                TextBoxBitrateQSVAV1.IsEnabled = true;
-            }
-            else if (ComboBoxQualityModeQSVAV1.SelectedIndex == 3)
-            {
-                SliderQualityQSVAV1.IsEnabled = false;
-                TextBoxBitrateQSVAV1.IsEnabled = true;
-            }
-        }
-
-        private void ComboBoxQualityModeNVENCAV1_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ComboBoxQualityModeNVENCAV1.SelectedIndex == 0)
-            {
-                SliderQualityNVENCAV1.IsEnabled = true;
-                TextBoxBitrateNVENCAV1.IsEnabled = false;
-            }
-            else if (ComboBoxQualityModeNVENCAV1.SelectedIndex == 1)
-            {
-                SliderQualityNVENCAV1.IsEnabled = false;
-                TextBoxBitrateNVENCAV1.IsEnabled = true;
-            }
-            else if (ComboBoxQualityModeNVENCAV1.SelectedIndex == 2)
-            {
-                SliderQualityNVENCAV1.IsEnabled = false;
-                TextBoxBitrateNVENCAV1.IsEnabled = true;
-            }
-        }
-
-        private void ComboBoxQualityModeAMFAV1_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            SliderQualityAMFAV1.IsEnabled = false;
-            TextBoxBitrateAMFAV1.IsEnabled = false;
-
-            if (ComboBoxQualityModeAMFAV1.SelectedIndex == 0)
-            {
-                // CQP - Constant Quantization
-                // => QP Slider
-                SliderQualityAMFAV1.IsEnabled = true;
-            }
-            else if (ComboBoxQualityModeAMFAV1.SelectedIndex == 1)
-            {
-                // CBR - Constant Bitrate
-                // => Bitrate Box
-                TextBoxBitrateAMFAV1.IsEnabled = true;
-            }
-            else if (ComboBoxQualityModeAMFAV1.SelectedIndex == 2)
-            {
-                // HQCBR - High Quality Constant Bitrate
-                // => Bitrate Box
-                TextBoxBitrateAMFAV1.IsEnabled = true;
-            }
-            else if (ComboBoxQualityModeAMFAV1.SelectedIndex == 3)
-            {
-                // QVBR - Quality Variable Bitrate
-                // => Bitrate Box + QP Slider
-                SliderQualityAMFAV1.IsEnabled = true;
-                TextBoxBitrateAMFAV1.IsEnabled = true;
-            }
-            else if (ComboBoxQualityModeAMFAV1.SelectedIndex == 4)
-            {
-                // HQVBR - High Quality Variable Bitrate
-                // => Bitrate Box
-                TextBoxBitrateAMFAV1.IsEnabled = true;
-            }
-        }
-
-        private void CheckBoxTwoPassEncoding_Checked(object sender, RoutedEventArgs e)
-        {
-            if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoders.SVTAV1 && ComboBoxQualityModeSVTAV1.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
-            {
-                CheckBoxTwoPassEncoding.IsOn = false;
-            }
-
-            if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoders.SVTAV1FFMPEG && ComboBoxQualityModeSVTAV1FFMPEG.SelectedIndex == 0 && CheckBoxTwoPassEncoding.IsOn)
-            {
-                CheckBoxTwoPassEncoding.IsOn = false;
-            }
-
-            if (CheckBoxRealTimeMode.IsOn && CheckBoxTwoPassEncoding.IsOn)
-            {
-                CheckBoxTwoPassEncoding.IsOn = false;
-            }
-        }
-
-        private void CheckBoxRealTimeMode_Toggled(object sender, RoutedEventArgs e)
-        {
-            // Reverts to 1 Pass encoding if Real Time Mode is activated
-            if (CheckBoxRealTimeMode.IsOn && CheckBoxTwoPassEncoding.IsOn)
-            {
-                CheckBoxTwoPassEncoding.IsOn = false;
-            }
-        }
-
-        private void SliderEncoderPreset_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            // Shows / Hides Real Time Mode CheckBox
-            if (CheckBoxRealTimeMode != null && ComboBoxVideoEncoder != null)
-            {
-                if (ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoders.AOMFFMPEG || ComboBoxVideoEncoder.SelectedIndex == (int) Video.Encoders.AOMENC)
-                {
-                    if (SliderEncoderPreset.Value >= 5)
-                    {
-                        CheckBoxRealTimeMode.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        CheckBoxRealTimeMode.IsOn = false;
-                        CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
-                    }
-                }
-                else
-                {
-                    CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
-                }
-            }
-
-            // x264 / x265
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.X265 or (int) Video.Encoders.X264)
-            {
-                LabelSpeedValue.Content = GenerateMPEGEncoderSpeed();
-            }
-
-            // av1 hardware (Intel Arc)
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.QSVAV1)
-            {
-                LabelSpeedValue.Content = GenerateQuickSyncEncoderSpeed();
-            }
-
-            // av1 hardware (nvenc rtx 4000)
-            if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoders.NVENCAV1)
-            {
-                LabelSpeedValue.Content = GenerateNVENCEncoderSpeed();
-            }
-
-            // av1 hardware (AMD AMF)
-            if (ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoders.AMFAV1)
-            {
-                LabelSpeedValue.Content = AMFAV1.GetSpeed(SliderEncoderPreset.Value);
             }
         }
 
@@ -1544,13 +951,13 @@ namespace NotEnoughAV1Encodes
             queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(SubtitlesTabControl.ListBoxSubtitleTracks.Items, identifier);
             queueElement.FilterCommand = GenerateVideoFilters();
             queueElement.FrameCount = videoDB.MIFrameCount;
-            queueElement.EncodingMethod = ComboBoxVideoEncoder.SelectedIndex;
+            queueElement.EncodingMethod = VideoTabVideoPartialControl.ComboBoxVideoEncoder.SelectedIndex;
             queueElement.ChunkingMethod = SummaryTabControl.ComboBoxChunkingMethod.SelectedIndex;
             queueElement.ReencodeMethod = SummaryTabControl.ComboBoxReencodeMethod.SelectedIndex;
-            queueElement.Passes = CheckBoxTwoPassEncoding.IsOn ? 2 : 1;
+            queueElement.Passes = VideoTabVideoOptimizationControl.CheckBoxTwoPassEncoding.IsOn ? 2 : 1;
             queueElement.ChunkLength = int.Parse(SummaryTabControl.TextBoxChunkLength.Text);
             queueElement.PySceneDetectThreshold = float.Parse(SummaryTabControl.TextBoxPySceneDetectThreshold.Text);
-            queueElement.VFR = CheckBoxVideoVFR.IsChecked == true;
+            queueElement.VFR = VideoTabVideoPartialControl.CheckBoxVideoVFR.IsChecked == true;
             queueElement.Preset = PresetSettings;
             queueElement.VideoDB = videoDB;
 
@@ -1675,7 +1082,7 @@ namespace NotEnoughAV1Encodes
             bool rotate = FiltersTabControl.ToggleSwitchFilterRotate.IsOn;
             bool resize = FiltersTabControl.ToggleSwitchFilterResize.IsOn;
             bool deinterlace = FiltersTabControl.ToggleSwitchFilterDeinterlace.IsOn;
-            bool fps = ComboBoxVideoFrameRate.SelectedIndex != 0;
+            bool fps = VideoTabVideoPartialControl.ComboBoxVideoFrameRate.SelectedIndex != 0;
             bool oneFilter = false;
 
             string FilterCommand = "";
@@ -1709,22 +1116,12 @@ namespace NotEnoughAV1Encodes
                 if (fps)
                 {
                     if (oneFilter) { FilterCommand += ","; }
-                    FilterCommand += GenerateFFmpegFramerate();
+                    FilterCommand += VideoTabVideoPartialControl.GenerateFFmpegFramerate();
                 }
             }
 
 
             return FilterCommand;
-        }
-
-        private string GenerateFFmpegFramerate()
-        {
-            string settings = "fps=" + ComboBoxVideoFrameRate.Text;
-            if (ComboBoxVideoFrameRate.SelectedIndex == 6) { settings = "fps=24000/1001"; }
-            if (ComboBoxVideoFrameRate.SelectedIndex == 9) { settings = "fps=30000/1001"; }
-            if (ComboBoxVideoFrameRate.SelectedIndex == 13) { settings = "fps=60000/1001"; }
-
-            return settings;
         }
 
         private string VideoFiltersCrop()
@@ -1804,9 +1201,9 @@ namespace NotEnoughAV1Encodes
         #region Encoder Settings
         private string GenerateEncoderCommand()
         {
-            string settings = GenerateFFmpegColorSpace() + " ";
+            string settings = VideoTabVideoPartialControl.GenerateFFmpegColorSpace() + " ";
 
-            string encoderSetting = ComboBoxVideoEncoder.SelectedIndex switch
+            string encoderSetting = VideoTabVideoPartialControl.ComboBoxVideoEncoder.SelectedIndex switch
             {
                 0 => new AOMAV1FFmpeg().GetCommand(),
                 1 => new Rav1eFFmpeg().GetCommand(),
@@ -1828,7 +1225,7 @@ namespace NotEnoughAV1Encodes
 
         public string GenerateMPEGEncoderSpeed()
         {
-            return SliderEncoderPreset.Value switch
+            return VideoTabVideoOptimizationControl.SliderEncoderPreset.Value switch
             {
                 0 => "placebo",
                 1 => "veryslow",
@@ -1846,7 +1243,7 @@ namespace NotEnoughAV1Encodes
 
         public string GenerateQuickSyncEncoderSpeed()
         {
-            return SliderEncoderPreset.Value switch
+            return VideoTabVideoOptimizationControl.SliderEncoderPreset.Value switch
             {
                 0 => "best",
                 1 => "higher",
@@ -1861,84 +1258,13 @@ namespace NotEnoughAV1Encodes
 
         public string GenerateNVENCEncoderSpeed()
         {
-            return SliderEncoderPreset.Value switch
+            return VideoTabVideoOptimizationControl.SliderEncoderPreset.Value switch
             {
                 0 => "quality",
                 1 => "default",
                 2 => "performance",
                 _ => "default"
             };
-        }
-
-        public string GenerateKeyFrameInerval()
-        {
-            int seconds = 10;
-
-            // Custom Framerate
-            if (ComboBoxVideoFrameRate.SelectedIndex != 0)
-            {
-                try
-                {
-                    string selectedFramerate = ComboBoxVideoFrameRate.Text;
-                    if (ComboBoxVideoFrameRate.SelectedIndex == 6) { selectedFramerate = "24"; }
-                    if (ComboBoxVideoFrameRate.SelectedIndex == 9) { selectedFramerate = "30"; }
-                    if (ComboBoxVideoFrameRate.SelectedIndex == 13) { selectedFramerate = "60"; }
-                    int frames = int.Parse(selectedFramerate) * seconds;
-                    return frames.ToString();
-                } catch { }
-            }
-
-            // Framerate of Video if it's not VFR and MediaInfo Detected it
-            if (!videoDB.MIIsVFR && !string.IsNullOrEmpty(videoDB.MIFramerate))
-            {  
-                try
-                {
-                    int framerate = int.Parse(videoDB.MIFramerate);
-                    int frames = framerate * seconds;
-                    return frames.ToString();
-                } catch { }
-            }
-
-            return "240";
-        }
-
-        private string GenerateFFmpegColorSpace()
-        {
-            string settings = "-pix_fmt yuv4";
-
-            if (ComboBoxColorFormat.SelectedIndex == 0)
-            {
-                settings += "20p";
-            }
-            else if (ComboBoxColorFormat.SelectedIndex == 1)
-            {
-                settings += "22p";
-            }
-            else if (ComboBoxColorFormat.SelectedIndex == 2)
-            {
-                settings += "44p";
-            }
-
-            if (ComboBoxVideoEncoder.SelectedIndex is (int) Video.Encoders.QSVAV1 or (int) Video.Encoders.X264)
-            {
-                if (ComboBoxVideoBitDepthLimited.SelectedIndex == 1)
-                {
-                    settings += "10le -strict -1";
-                }
-            }
-            else
-            {
-                if (ComboBoxVideoBitDepth.SelectedIndex == 1)
-                {
-                    settings += "10le -strict -1";
-                }
-                else if (ComboBoxVideoBitDepth.SelectedIndex == 2)
-                {
-                    settings += "12le -strict -1";
-                }
-            }
-
-            return settings;
         }
         #endregion
 

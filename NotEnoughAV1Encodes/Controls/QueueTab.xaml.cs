@@ -220,7 +220,7 @@ namespace NotEnoughAV1Encodes.Controls
 
                     mainWindow.SummaryTabControl.ComboBoxChunkingMethod.SelectedIndex = tmp.ChunkingMethod;
                     mainWindow.SummaryTabControl.ComboBoxReencodeMethod.SelectedIndex = tmp.ReencodeMethod;
-                    mainWindow.CheckBoxTwoPassEncoding.IsOn = tmp.Passes == 2;
+                    mainWindow.VideoTabVideoOptimizationControl.CheckBoxTwoPassEncoding.IsOn = tmp.Passes == 2;
                     mainWindow.SummaryTabControl.TextBoxChunkLength.Text = tmp.ChunkLength.ToString();
                     mainWindow.SummaryTabControl.TextBoxPySceneDetectThreshold.Text = tmp.PySceneDetectThreshold.ToString();
 

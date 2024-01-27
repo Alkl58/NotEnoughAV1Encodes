@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="NotEnoughAV1Encodes.Controls.Partials.VideoTabVideo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="420">
+    <Grid>
+        <GroupBox Header="{lex:Loc TabItemVideo}" HorizontalAlignment="Left" Margin="10,10,0,0" Width="385" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid Background="{Binding BackgroundColor}">
+                <Label Content="{lex:Loc LabelEncoder}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="111" />
+                <ComboBox x:Name="ComboBoxVideoEncoder" SelectedIndex="{Binding Encoder}" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
+                    <ComboBoxItem Content="aom (AV1 FFmpeg)" IsSelected="True" />
+                    <ComboBoxItem Content="rav1e (AV1 FFmpeg)" />
+                    <ComboBoxItem Content="svt-av1 (AV1 FFmpeg)" />
+                    <ComboBoxItem Content="vpx-vp9 (VP9 FFmpeg)" />
+                    <Separator />
+                    <ComboBoxItem Content="aomenc (AV1)" />
+                    <ComboBoxItem Content="rav1e (AV1)" />
+                    <ComboBoxItem Content="svt-av1 (AV1)" />
+                    <Separator />
+                    <ComboBoxItem Content="x265 (HEVC FFmpeg)" />
+                    <ComboBoxItem Content="x264 (AVC FFmpeg)" />
+                    <Separator />
+                    <ComboBoxItem Content="QuickSync (AV1 Intel HW)" />
+                    <ComboBoxItem Content="NVENC (AV1 NVIDIA HW)" />
+                    <ComboBoxItem Content="AMF (AV1 AMD HW)" />
+                </ComboBox>
+                <Label Content="{lex:Loc LabelBitDepth}" HorizontalAlignment="Left" Margin="19,54,0,0" VerticalAlignment="Top" Width="111" />
+                <ComboBox x:Name="ComboBoxVideoBitDepth" SelectedIndex="{Binding BitDepth}" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoBitDepth_SelectionChanged">
+                    <ComboBoxItem Content="8" IsSelected="True" />
+                    <ComboBoxItem Content="10" />
+                    <ComboBoxItem Content="12" />
+                </ComboBox>
+                <ComboBox x:Name="ComboBoxVideoBitDepthLimited" SelectedIndex="{Binding BitDepthLimited}" Visibility="Collapsed" HorizontalAlignment="Left" Margin="135,52,0,0" VerticalAlignment="Top" Width="70" Height="30" VerticalContentAlignment="Center">
+                    <ComboBoxItem Content="8" IsSelected="True" />
+                    <ComboBoxItem Content="10" />
+                </ComboBox>
+                <Label Content="{lex:Loc LabelColorFormat}" HorizontalAlignment="Left" Margin="19,95,0,0" VerticalAlignment="Top" Height="30" Width="111" />
+                <ComboBox x:Name="ComboBoxColorFormat" SelectedIndex="{Binding ColorFormat}" HorizontalAlignment="Left" Margin="135,93,0,0" VerticalAlignment="Top" Width="70" Height="30" SelectionChanged="ComboBoxColorFormat_SelectionChanged">
+                    <ComboBoxItem Content="4:2:0" IsSelected="True" />
+                    <ComboBoxItem Content="4:2:2" />
+                    <ComboBoxItem Content="4:4:4" />
+                </ComboBox>
+                <Label Content="{lex:Loc LabelFramerate}" HorizontalAlignment="Left" Margin="19,137,0,0" VerticalAlignment="Top" Height="30" Width="111" />
+                <ComboBox x:Name="ComboBoxVideoFrameRate" SelectedIndex="{Binding FrameRate}" HorizontalAlignment="Left" Margin="135,135,0,0" VerticalAlignment="Top" Height="30" Width="140" SelectionChanged="ComboBoxVideoFrameRate_SelectionChanged">
+                    <ComboBoxItem Content="Same as Source" IsSelected="True"/>
+                    <ComboBoxItem Content="5"/>
+                    <ComboBoxItem Content="10"/>
+                    <ComboBoxItem Content="12"/>
+                    <ComboBoxItem Content="15"/>
+                    <ComboBoxItem Content="20"/>
+                    <ComboBoxItem Content="23.976"/>
+                    <ComboBoxItem Content="24"/>
+                    <ComboBoxItem Content="25"/>
+                    <ComboBoxItem Content="29.97"/>
+                    <ComboBoxItem Content="30"/>
+                    <ComboBoxItem Content="48"/>
+                    <ComboBoxItem Content="50"/>
+                    <ComboBoxItem Content="59.94"/>
+                    <ComboBoxItem Content="60"/>
+                    <ComboBoxItem Content="72"/>
+                    <ComboBoxItem Content="75"/>
+                    <ComboBoxItem Content="90"/>
+                    <ComboBoxItem Content="100"/>
+                    <ComboBoxItem Content="120"/>
+                    <ComboBoxItem Content="144"/>
+                    <ComboBoxItem Content="240"/>
+                    <ComboBoxItem Content="360"/>
+                </ComboBox>
+                <CheckBox x:Name="CheckBoxVideoVFR" Content="VFR" HorizontalAlignment="Left" Margin="296,141,0,0" VerticalAlignment="Top"/>
+                <CheckBox x:Name="CheckBoxVideoHDR" Content="HDR" IsChecked="{Binding HDR}" HorizontalAlignment="Left" Margin="296,101,0,0" VerticalAlignment="Top"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

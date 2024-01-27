@@ -169,11 +169,11 @@
                 <Label Grid.Column="0" Content="{lex:Loc LabelEncoder}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
                 <Label x:Name="LabelEncoder" Content="aom-av1 (ffmpeg)" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="150" />
                 <Label Grid.Column="2" Content="{lex:Loc LabelColorFormat}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
-                <Label x:Name="LabelColorFormatOutput" Content="{Binding ColorFormatValue}" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
+                <Label x:Name="LabelColorFormatOutput" Content="4:2:0" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
                 <Label Grid.Column="4" Content="{lex:Loc LabelFramerate}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Width="90" />
-                <Label x:Name="LabelFramerateOutput" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Label x:Name="LabelFramerateOutput" Content="Same as Source" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <Label Grid.Column="6" Content="{lex:Loc LabelBitDepth}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" />
-                <Label x:Name="LabelBitDepth" Grid.Column="7" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
+                <Label x:Name="LabelBitDepth" Content="8" Grid.Column="7" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" />
             </Grid>
         </GroupBox>
     </Grid>

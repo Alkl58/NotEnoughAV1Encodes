@@ -17,11 +17,11 @@ namespace NotEnoughAV1Encodes.Encoders
             settings += " --codec av1";
 
             // Quality / Bitrate Selection
-            string quality = mainWindow.ComboBoxQualityModeQSVAV1.SelectedIndex switch
+            string quality = mainWindow.VideoTabVideoQualityControl.ComboBoxQualityModeQSVAV1.SelectedIndex switch
             {
-                0 => " --cqp " + mainWindow.SliderQualityQSVAV1.Value,
-                1 => " --vbr " + mainWindow.TextBoxBitrateQSVAV1.Text,
-                2 => " --cbr " + mainWindow.TextBoxBitrateQSVAV1.Text,
+                0 => " --cqp " + mainWindow.VideoTabVideoQualityControl.SliderQualityQSVAV1.Value,
+                1 => " --vbr " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateQSVAV1.Text,
+                2 => " --cbr " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateQSVAV1.Text,
                 _ => ""
             };
 
@@ -30,7 +30,7 @@ namespace NotEnoughAV1Encodes.Encoders
 
             // Bit-Depth
             settings += " --output-depth ";
-            settings += mainWindow.ComboBoxVideoBitDepthLimited.SelectedIndex switch
+            settings += mainWindow.VideoTabVideoPartialControl.ComboBoxVideoBitDepthLimited.SelectedIndex switch
             {
                 0 => "8",
                 1 => "10",

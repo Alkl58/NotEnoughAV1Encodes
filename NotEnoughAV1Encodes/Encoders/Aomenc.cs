@@ -14,22 +14,22 @@ namespace NotEnoughAV1Encodes.Encoders
                               "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "aomenc", "aomenc.exe") + "\" -";
 
             // Quality / Bitrate Selection
-            string quality = mainWindow.ComboBoxQualityModeAOMENC.SelectedIndex switch
+            string quality = mainWindow.VideoTabVideoQualityControl.ComboBoxQualityModeAOMENC.SelectedIndex switch
             {
-                0 => " --cq-level=" + mainWindow.SliderQualityAOMENC.Value + " --end-usage=q",
-                1 => " --cq-level=" + mainWindow.SliderQualityAOMENC.Value + " --target-bitrate=" + mainWindow.TextBoxBitrateAOMENC.Text + " --end-usage=cq",
-                2 => " --target-bitrate=" + mainWindow.TextBoxBitrateAOMENC.Text + " --end-usage=vbr",
-                3 => " --target-bitrate=" + mainWindow.TextBoxBitrateAOMENC.Text + " --end-usage=cbr",
+                0 => " --cq-level=" + mainWindow.VideoTabVideoQualityControl.SliderQualityAOMENC.Value + " --end-usage=q",
+                1 => " --cq-level=" + mainWindow.VideoTabVideoQualityControl.SliderQualityAOMENC.Value + " --target-bitrate=" + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateAOMENC.Text + " --end-usage=cq",
+                2 => " --target-bitrate=" + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateAOMENC.Text + " --end-usage=vbr",
+                3 => " --target-bitrate=" + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateAOMENC.Text + " --end-usage=cbr",
                 _ => ""
             };
 
             // Preset
-            settings += quality + " --cpu-used=" + mainWindow.SliderEncoderPreset.Value;
+            settings += quality + " --cpu-used=" + mainWindow.VideoTabVideoOptimizationControl.SliderEncoderPreset.Value;
 
             // Advanced Settings
-            if (mainWindow.ToggleSwitchAdvancedSettings.IsOn == false)
+            if (mainWindow.VideoTabVideoOptimizationControl.ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                settings += " --threads=4 --tile-columns=2 --tile-rows=1 --kf-max-dist=" + mainWindow.GenerateKeyFrameInerval();
+                settings += " --threads=4 --tile-columns=2 --tile-rows=1 --kf-max-dist=" + mainWindow.VideoTabVideoPartialControl.GenerateKeyFrameInerval();
             }
             else
             {
@@ -64,7 +64,7 @@ namespace NotEnoughAV1Encodes.Encoders
                     settings += " --arnr-strength=" + mainWindow.ComboBoxAomencARNRStrength.Text;                       // ARNR Strength
                 }
 
-                if (mainWindow.CheckBoxRealTimeMode.IsOn)
+                if (mainWindow.VideoTabVideoOptimizationControl.CheckBoxRealTimeMode.IsOn)
                     settings += " --rt";                                                                     // Real Time Mode
             }
 

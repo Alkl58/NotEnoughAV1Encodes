@@ -12,20 +12,20 @@ namespace NotEnoughAV1Encodes.Encoders
             string settings = "-c:v librav1e";
 
             // Quality / Bitrate Selection
-            string quality = mainWindow.ComboBoxQualityModeRAV1EFFMPEG.SelectedIndex switch
+            string quality = mainWindow.VideoTabVideoQualityControl.ComboBoxQualityModeRAV1EFFMPEG.SelectedIndex switch
             {
-                0 => " -qp " + mainWindow.SliderQualityRAV1EFFMPEG.Value,
-                1 => " -b:v " + mainWindow.TextBoxBitrateRAV1EFFMPEG.Text + "k",
+                0 => " -qp " + mainWindow.VideoTabVideoQualityControl.SliderQualityRAV1EFFMPEG.Value,
+                1 => " -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateRAV1EFFMPEG.Text + "k",
                 _ => ""
             };
 
             // Preset
-            settings += quality + " -speed " + mainWindow.SliderEncoderPreset.Value;
+            settings += quality + " -speed " + mainWindow.VideoTabVideoOptimizationControl.SliderEncoderPreset.Value;
 
             // Advanced Settings
-            if (mainWindow.ToggleSwitchAdvancedSettings.IsOn == false)
+            if (mainWindow.VideoTabVideoOptimizationControl.ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                settings += " -tile-columns 2 -tile-rows 1 -g " + mainWindow.GenerateKeyFrameInerval() + " -rav1e-params threads=4";
+                settings += " -tile-columns 2 -tile-rows 1 -g " + mainWindow.VideoTabVideoPartialControl.GenerateKeyFrameInerval() + " -rav1e-params threads=4";
             }
             else
             {

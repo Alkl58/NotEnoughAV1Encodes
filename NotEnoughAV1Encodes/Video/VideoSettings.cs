@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
 
 namespace NotEnoughAV1Encodes
@@ -7,7 +8,15 @@ namespace NotEnoughAV1Encodes
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public int Encoder { get; set; }
+        private int _encoder;
+        public int Encoder {
+            get { return _encoder; } 
+            set {
+                _encoder = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int ColorFormat { get; set; }
         public int FrameRate { get; set; }
         public int SpeedPreset { get; set; } = 5;
@@ -17,7 +26,17 @@ namespace NotEnoughAV1Encodes
         public string MinBitrate { get; set; } = "500";
         public string MaxBitrate { get; set; } = "1500";
         public string AvgBitrate { get; set; } = "1000";
-        public bool AdvancedSettings { get; set; }
+
+        private bool _advancedSettings;
+        public bool AdvancedSettings { 
+            get { return _advancedSettings; }
+            set 
+            { 
+                _advancedSettings = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool CustomSettingsActive { get; set; }
         public string CustomSettings { get; set; }
         public string PresetBatchName { get; set; } = "{filename}";
@@ -122,7 +141,16 @@ namespace NotEnoughAV1Encodes
         public string MasteringRy { get; set; }
         public string MasteringWPx { get; set; }
         public string MasteringWPy { get; set; }
-        public bool HDR { get; set; }
+
+        private bool _hdr;
+        public bool HDR { 
+            get { return _hdr; }
+            set
+            {
+                _hdr = value;
+                OnPropertyChanged();
+            }
+        }
         public bool MasteringDisplay { get; set; }
         public bool WhiteMasteringDisplay { get; set; }
         public bool MaxContentLight { get; set; }
@@ -214,16 +242,16 @@ namespace NotEnoughAV1Encodes
         public SolidColorBrush BackgroundColor 
         {  
             get => _backgroundColor;
-            set { _backgroundColor = value; NotifyPropertyChanged("BackgroundColor"); }
+            set 
+            { 
+                _backgroundColor = value; 
+                OnPropertyChanged(); 
+            }
         }
 
-        private void NotifyPropertyChanged(string property)
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-                PropertyChanged(this, new PropertyChangedEventArgs("DisplayMember"));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

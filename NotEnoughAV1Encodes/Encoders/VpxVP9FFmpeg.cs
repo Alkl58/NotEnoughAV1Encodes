@@ -12,22 +12,22 @@ namespace NotEnoughAV1Encodes.Encoders
             string settings = "-c:v libvpx-vp9";
 
             // Quality / Bitrate Selection
-            string quality = mainWindow.ComboBoxQualityModeVP9FFMPEG.SelectedIndex switch
+            string quality = mainWindow.VideoTabVideoQualityControl.ComboBoxQualityModeVP9FFMPEG.SelectedIndex switch
             {
-                0 => " -crf " + mainWindow.SliderQualityVP9FFMPEG.Value + " -b:v 0",
-                1 => " -crf " + mainWindow.SliderQualityVP9FFMPEG.Value + " -b:v " + mainWindow.TextBoxMaxBitrateVP9FFMPEG.Text + "k",
-                2 => " -b:v " + mainWindow.TextBoxAVGBitrateVP9FFMPEG.Text + "k",
-                3 => " -minrate " + mainWindow.TextBoxMinBitrateVP9FFMPEG.Text + "k -b:v " + mainWindow.TextBoxAVGBitrateVP9FFMPEG.Text + "k -maxrate " + mainWindow.TextBoxMaxBitrateVP9FFMPEG.Text + "k",
+                0 => " -crf " + mainWindow.VideoTabVideoQualityControl.SliderQualityVP9FFMPEG.Value + " -b:v 0",
+                1 => " -crf " + mainWindow.VideoTabVideoQualityControl.SliderQualityVP9FFMPEG.Value + " -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxMaxBitrateVP9FFMPEG.Text + "k",
+                2 => " -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxAVGBitrateVP9FFMPEG.Text + "k",
+                3 => " -minrate " + mainWindow.VideoTabVideoQualityControl.TextBoxMinBitrateVP9FFMPEG.Text + "k -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxAVGBitrateVP9FFMPEG.Text + "k -maxrate " + mainWindow.VideoTabVideoQualityControl.TextBoxMaxBitrateVP9FFMPEG.Text + "k",
                 _ => ""
             };
 
             // Preset
-            settings += quality + " -cpu-used " + mainWindow.SliderEncoderPreset.Value;
+            settings += quality + " -cpu-used " + mainWindow.VideoTabVideoOptimizationControl.SliderEncoderPreset.Value;
 
             // Advanced Settings
-            if (mainWindow.ToggleSwitchAdvancedSettings.IsOn == false)
+            if (mainWindow.VideoTabVideoOptimizationControl.ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + mainWindow.GenerateKeyFrameInerval();
+                settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + mainWindow.VideoTabVideoPartialControl.GenerateKeyFrameInerval();
             }
             else
             {

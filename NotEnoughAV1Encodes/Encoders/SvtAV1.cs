@@ -14,20 +14,20 @@ namespace NotEnoughAV1Encodes.Encoders
                               "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1", "SvtAv1EncApp.exe") + "\" -i stdin";
 
             // Quality / Bitrate Selection
-            string quality = mainWindow.ComboBoxQualityModeSVTAV1.SelectedIndex switch
+            string quality = mainWindow.VideoTabVideoQualityControl.ComboBoxQualityModeSVTAV1.SelectedIndex switch
             {
-                0 => " --rc 0 --crf " + mainWindow.SliderQualitySVTAV1.Value,
-                1 => " --rc 1 --tbr " + mainWindow.TextBoxBitrateSVTAV1.Text,
+                0 => " --rc 0 --crf " + mainWindow.VideoTabVideoQualityControl.SliderQualitySVTAV1.Value,
+                1 => " --rc 1 --tbr " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateSVTAV1.Text,
                 _ => ""
             };
 
             // Preset
-            settings += quality + " --preset " + mainWindow.SliderEncoderPreset.Value;
+            settings += quality + " --preset " + mainWindow.VideoTabVideoOptimizationControl.SliderEncoderPreset.Value;
 
             // Advanced Settings
-            if (mainWindow.ToggleSwitchAdvancedSettings.IsOn == false)
+            if (mainWindow.VideoTabVideoOptimizationControl.ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                settings += " --keyint " + mainWindow.GenerateKeyFrameInerval();
+                settings += " --keyint " + mainWindow.VideoTabVideoPartialControl.GenerateKeyFrameInerval();
 
             }
             else

@@ -12,10 +12,10 @@ namespace NotEnoughAV1Encodes.Encoders
             string settings = "-c:v libx264";
 
             // Quality / Bitrate Selection
-            string quality = mainWindow.ComboBoxQualityModeX26x.SelectedIndex switch
+            string quality = mainWindow.VideoTabVideoQualityControl.ComboBoxQualityModeX26x.SelectedIndex switch
             {
-                0 => " -crf " + mainWindow.SliderQualityX26x.Value,
-                1 => " -b:v " + mainWindow.TextBoxBitrateX26x.Text + "k",
+                0 => " -crf " + mainWindow.VideoTabVideoQualityControl.SliderQualityX26x.Value,
+                1 => " -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateX26x.Text + "k",
                 _ => ""
             };
 

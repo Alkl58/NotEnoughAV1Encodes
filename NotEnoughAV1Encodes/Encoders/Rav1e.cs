@@ -14,20 +14,20 @@ namespace NotEnoughAV1Encodes.Encoders
                                "\"" + Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e", "rav1e.exe") + "\" - -y";
 
             // Quality / Bitrate Selection
-            string quality = mainWindow.ComboBoxQualityModeRAV1E.SelectedIndex switch
+            string quality = mainWindow.VideoTabVideoQualityControl.ComboBoxQualityModeRAV1E.SelectedIndex switch
             {
-                0 => " --quantizer " + mainWindow.SliderQualityRAV1E.Value,
-                1 => " --bitrate " + mainWindow.TextBoxBitrateRAV1E.Text,
+                0 => " --quantizer " + mainWindow.VideoTabVideoQualityControl.SliderQualityRAV1E.Value,
+                1 => " --bitrate " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateRAV1E.Text,
                 _ => ""
             };
 
             // Preset
-            settings += quality + " --speed " + mainWindow.SliderEncoderPreset.Value;
+            settings += quality + " --speed " + mainWindow.VideoTabVideoOptimizationControl.SliderEncoderPreset.Value;
 
             // Advanced Settings
-            if (mainWindow.ToggleSwitchAdvancedSettings.IsOn == false)
+            if (mainWindow.VideoTabVideoOptimizationControl.ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                settings += " --threads 4 --tile-cols 2 --tile-rows 1 --keyint " + mainWindow.GenerateKeyFrameInerval();
+                settings += " --threads 4 --tile-cols 2 --tile-rows 1 --keyint " + mainWindow.VideoTabVideoPartialControl.GenerateKeyFrameInerval();
             }
             else
             {

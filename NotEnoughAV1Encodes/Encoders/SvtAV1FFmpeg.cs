@@ -12,20 +12,20 @@ namespace NotEnoughAV1Encodes.Encoders
             string settings = "-c:v libsvtav1";
 
             // Quality / Bitrate Selection
-            string quality = mainWindow.ComboBoxQualityModeSVTAV1FFMPEG.SelectedIndex switch
+            string quality = mainWindow.VideoTabVideoQualityControl.ComboBoxQualityModeSVTAV1FFMPEG.SelectedIndex switch
             {
-                0 => " -crf " + mainWindow.SliderQualitySVTAV1FFMPEG.Value,
-                1 => " -b:v " + mainWindow.TextBoxBitrateSVTAV1FFMPEG.Text + "k",
+                0 => " -crf " + mainWindow.VideoTabVideoQualityControl.SliderQualitySVTAV1FFMPEG.Value,
+                1 => " -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateSVTAV1FFMPEG.Text + "k",
                 _ => ""
             };
 
             // Preset
-            settings += quality + " -preset " + mainWindow.SliderEncoderPreset.Value;
+            settings += quality + " -preset " + mainWindow.VideoTabVideoOptimizationControl.SliderEncoderPreset.Value;
 
             // Advanced Settings
-            if (mainWindow.ToggleSwitchAdvancedSettings.IsOn == false)
+            if (mainWindow.VideoTabVideoOptimizationControl.ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                settings += " -g " + mainWindow.GenerateKeyFrameInerval();
+                settings += " -g " + mainWindow.VideoTabVideoPartialControl.GenerateKeyFrameInerval();
             }
             else
             {

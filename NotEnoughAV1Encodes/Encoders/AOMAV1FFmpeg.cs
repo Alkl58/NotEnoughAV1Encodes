@@ -12,23 +12,23 @@ namespace NotEnoughAV1Encodes.Encoders
             string settings = "-c:v libaom-av1";
 
             // Quality / Bitrate Selection
-            string quality = mainWindow.ComboBoxQualityMode.SelectedIndex switch
+            string quality = mainWindow.VideoTabVideoQualityControl.ComboBoxQualityMode.SelectedIndex switch
             {
-                0 => " -crf " + mainWindow.SliderQualityAOMFFMPEG.Value + " -b:v 0",
-                1 => " -crf " + mainWindow.SliderQualityAOMFFMPEG.Value + " -b:v " + mainWindow.TextBoxMaxBitrateAOMFFMPEG.Text + "k",
-                2 => " -b:v " + mainWindow.TextBoxMinBitrateAOMFFMPEG.Text + "k",
-                3 => " -minrate " + mainWindow.TextBoxMinBitrateAOMFFMPEG.Text + "k -b:v " + mainWindow.TextBoxAVGBitrateAOMFFMPEG.Text + "k -maxrate " + mainWindow.TextBoxMaxBitrateAOMFFMPEG.Text + "k",
+                0 => " -crf " + mainWindow.VideoTabVideoQualityControl.SliderQualityAOMFFMPEG.Value + " -b:v 0",
+                1 => " -crf " + mainWindow.VideoTabVideoQualityControl.SliderQualityAOMFFMPEG.Value + " -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxMaxBitrateAOMFFMPEG.Text + "k",
+                2 => " -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxMinBitrateAOMFFMPEG.Text + "k",
+                3 => " -minrate " + mainWindow.VideoTabVideoQualityControl.TextBoxMinBitrateAOMFFMPEG.Text + "k -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxAVGBitrateAOMFFMPEG.Text + "k -maxrate " + mainWindow.VideoTabVideoQualityControl.TextBoxMaxBitrateAOMFFMPEG.Text + "k",
                 4 => " -crf {q_vmaf} -b:v 0",
                 _ => ""
             };
 
             // Preset
-            settings += quality + " -cpu-used " + mainWindow.SliderEncoderPreset.Value;
+            settings += quality + " -cpu-used " + mainWindow.VideoTabVideoOptimizationControl.SliderEncoderPreset.Value;
 
             // Advanced Settings
-            if (mainWindow.ToggleSwitchAdvancedSettings.IsOn == false)
+            if (mainWindow.VideoTabVideoOptimizationControl.ToggleSwitchAdvancedSettings.IsOn == false)
             {
-                settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + mainWindow.GenerateKeyFrameInerval();
+                settings += " -threads 4 -tile-columns 2 -tile-rows 1 -g " + mainWindow.VideoTabVideoPartialControl.GenerateKeyFrameInerval();
             }
             else
             {
@@ -45,7 +45,7 @@ namespace NotEnoughAV1Encodes.Encoders
                     settings += " -row-mt 0";                                                                           // Row Based Multithreading
                 if (mainWindow.CheckBoxAomencCDEF.IsChecked == false)
                     settings += " -enable-cdef 0";                                                                      // Constrained Directional Enhancement Filter
-                if (mainWindow.CheckBoxRealTimeMode.IsOn)
+                if (mainWindow.VideoTabVideoOptimizationControl.CheckBoxRealTimeMode.IsOn)
                     settings += " -usage realtime ";                                                                    // Real Time Mode
 
                 if (mainWindow.CheckBoxAomencARNRMax.IsChecked == true)

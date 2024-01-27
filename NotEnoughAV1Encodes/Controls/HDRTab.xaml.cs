@@ -17,7 +17,7 @@ namespace NotEnoughAV1Encodes.Controls
             // Get MainWindow instance to access UI elements
             MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
 
-            if (mainWindow.CheckBoxVideoHDR.IsChecked == true)
+            if (mainWindow.VideoTabVideoPartialControl.CheckBoxVideoHDR.IsChecked == true)
             {
                 settings = "";
                 if (CheckBoxMKVMergeMasteringDisplay.IsChecked == true)

@@ -29,7 +29,7 @@ namespace NotEnoughAV1Encodes.Encoders
             //      quality         30           E..V.......
             //      high_quality    0            E..V.......
             command += " -quality ";
-            command += mainWindow.SliderEncoderPreset.Value switch
+            command += mainWindow.VideoTabVideoOptimizationControl.SliderEncoderPreset.Value switch
             {
                 0 => "high_quality",
                 1 => "quality",
@@ -49,13 +49,13 @@ namespace NotEnoughAV1Encodes.Encoders
             //      hqvbr           5            E..V....... High Quality Variable Bitrate
             //      hqcbr           6            E..V....... High Quality Constant Bitrate
             command += " -rc ";
-            command += mainWindow.ComboBoxQualityModeAMFAV1.SelectedIndex switch
+            command += mainWindow.VideoTabVideoQualityControl.ComboBoxQualityModeAMFAV1.SelectedIndex switch
             {
-                0 => "cqp -qp " + mainWindow.SliderQualityAMFAV1.Value,
-                1 => "cbr -b:v " + mainWindow.TextBoxBitrateAMFAV1.Text + "k",
-                2 => "hqcbr -b:v " + mainWindow.TextBoxBitrateAMFAV1.Text + "k",
-                3 => "qvbr -b:v " + mainWindow.TextBoxBitrateAMFAV1.Text + "k  -qvbr_quality_level " + mainWindow.SliderQualityAMFAV1.Value,
-                4 => "hqvbr -b:v " + mainWindow.TextBoxBitrateAMFAV1.Text + "k",
+                0 => "cqp -qp " + mainWindow.VideoTabVideoQualityControl.SliderQualityAMFAV1.Value,
+                1 => "cbr -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateAMFAV1.Text + "k",
+                2 => "hqcbr -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateAMFAV1.Text + "k",
+                3 => "qvbr -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateAMFAV1.Text + "k  -qvbr_quality_level " + mainWindow.VideoTabVideoQualityControl.SliderQualityAMFAV1.Value,
+                4 => "hqvbr -b:v " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateAMFAV1.Text + "k",
                 _ => ""
             };
 

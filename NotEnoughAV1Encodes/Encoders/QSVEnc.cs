@@ -17,12 +17,12 @@ namespace NotEnoughAV1Encodes.Encoders
             settings += " --codec av1";
 
             // Quality / Bitrate Selection
-            string quality = mainWindow.ComboBoxQualityModeQSVAV1.SelectedIndex switch
+            string quality = mainWindow.VideoTabVideoQualityControl.ComboBoxQualityModeQSVAV1.SelectedIndex switch
             {
-                0 => " --cqp " + mainWindow.SliderQualityQSVAV1.Value,
-                1 => " --icq " + mainWindow.SliderQualityQSVAV1.Value,
-                2 => " --vbr " + mainWindow.TextBoxBitrateQSVAV1.Text,
-                3 => " --cbr " + mainWindow.TextBoxBitrateQSVAV1.Text,
+                0 => " --cqp " + mainWindow.VideoTabVideoQualityControl.SliderQualityQSVAV1.Value,
+                1 => " --icq " + mainWindow.VideoTabVideoQualityControl.SliderQualityQSVAV1.Value,
+                2 => " --vbr " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateQSVAV1.Text,
+                3 => " --cbr " + mainWindow.VideoTabVideoQualityControl.TextBoxBitrateQSVAV1.Text,
                 _ => ""
             };
 
@@ -31,7 +31,7 @@ namespace NotEnoughAV1Encodes.Encoders
 
             // Bit-Depth
             settings += " --output-depth ";
-            settings += mainWindow.ComboBoxVideoBitDepthLimited.SelectedIndex switch
+            settings += mainWindow.VideoTabVideoPartialControl.ComboBoxVideoBitDepthLimited.SelectedIndex switch
             {
                 0 => "8",
                 1 => "10",
@@ -40,7 +40,7 @@ namespace NotEnoughAV1Encodes.Encoders
 
             // Output Colorspace
             settings += " --output-csp ";
-            settings += mainWindow.ComboBoxColorFormat.SelectedIndex switch
+            settings += mainWindow.VideoTabVideoPartialControl.ComboBoxColorFormat.SelectedIndex switch
             {
                 0 => "i420",
                 1 => "i422",

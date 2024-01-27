@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="NotEnoughAV1Encodes.Controls.Partials.VideoTabOptimization"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="450">
+    <Grid>
+        <GroupBox x:Name="GroupBoxOptimization" Header="{lex:Loc}" Margin="0,10,10,0" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="410">
+            <Grid Background="{Binding BackgroundColor}">
+                <Label x:Name="LabelSpeed" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="68"/>
+                <Slider x:Name="SliderEncoderPreset" HorizontalAlignment="Left" Margin="104,16,0,0" VerticalAlignment="Top" Width="227" Maximum="8" SmallChange="1" Value="{Binding SpeedPreset}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" ValueChanged="SliderEncoderPreset_ValueChanged"/>
+                <mah:ToggleSwitch x:Name="CheckBoxTwoPassEncoding" Content="{lex:Loc}" IsOn="{Binding TwoPassEncoding}" Margin="19,66,0,0" VerticalAlignment="Top" Toggled="CheckBoxTwoPassEncoding_Toggled"/>
+                <Label x:Name="LabelSpeedValue" Content="{Binding ElementName=SliderEncoderPreset, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="337,16,0,0" VerticalAlignment="Top"/>
+                <mah:ToggleSwitch x:Name="ToggleSwitchAdvancedSettings" Content="{lex:Loc}" IsOn="{Binding AdvancedSettings}" Height="36" Margin="19,129,0,0" VerticalAlignment="Top" Width="224"/>
+                <mah:ToggleSwitch x:Name="CheckBoxRealTimeMode" Content="{lex:Loc}" IsOn="{Binding AomencRTMode}" Margin="196,66,0,0" VerticalAlignment="Top" Toggled="CheckBoxRealTimeMode_Toggled" Width="169"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>
