@@ -25,18 +25,19 @@ namespace NotEnoughAV1Encodes
     public partial class MainWindow : MetroWindow
     {
         /// <summary>Prevents Race Conditions on Startup</summary>
-        private bool startupLock = true;
+        public static bool startupLock = true;
+        public static bool lockQueue = false;
 
         /// <summary>Encoding the Queue in Parallel or not</summary>
         private bool QueueParallel;
 
         /// <summary>State of the Program [0 = IDLE; 1 = Encoding; 2 = Paused]</summary>
-        private int ProgramState;
+        public static int ProgramState;
 
-        private Settings settingsDB = new();
-        private Video.VideoDB videoDB = new();
-        
-        private string uid;
+        public Settings settingsDB = new();
+        public Video.VideoDB videoDB = new();
+
+        public string uid;
         private CancellationTokenSource cancellationTokenSource;
         public VideoSettings PresetSettings = new();
         public static bool Logging { get; set; }
@@ -127,7 +128,7 @@ namespace NotEnoughAV1Encodes
                     try
                     {
                         var deserialized = JsonConvert.DeserializeObject<Queue.QueueElement>(File.ReadAllText(file));
-                        ListBoxQueue.Items.Add(deserialized);
+                        QueueTabControl.ListBoxQueue.Items.Add(deserialized);
                     }
                     catch (Exception ex) 
                     {
@@ -141,7 +142,7 @@ namespace NotEnoughAV1Encodes
             try { ComboBoxPresets.SelectedItem = settingsDB.DefaultPreset; } catch { }
             startupLock = false;
 
-            try { ComboBoxSortQueueBy.SelectedIndex = settingsDB.SortQueueBy; } catch { }
+            try { QueueTabControl.ComboBoxSortQueueBy.SelectedIndex = settingsDB.SortQueueBy; } catch { }
         }
 
         private void LoadPresets()
@@ -205,10 +206,10 @@ namespace NotEnoughAV1Encodes
                 cancellationTokenSource.Cancel();
                 TopButtonsControl.ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
                 TopButtonsControl.ButtonAddToQueue.IsEnabled = true;
-                ButtonRemoveSelectedQueueItem.IsEnabled = true;
-                ButtonEditSelectedItem.IsEnabled = true;
-                ButtonClearQueue.IsEnabled = true;
-                ComboBoxSortQueueBy.IsEnabled = true;
+                QueueTabControl.ButtonRemoveSelectedQueueItem.IsEnabled = true;
+                QueueTabControl.ButtonEditSelectedItem.IsEnabled = true;
+                QueueTabControl.ButtonClearQueue.IsEnabled = true;
+                QueueTabControl.ComboBoxSortQueueBy.IsEnabled = true;
 
                 // To Do: Save Queue States when Cancelling
                 // Problem: Needs VideoChunks List
@@ -236,28 +237,6 @@ namespace NotEnoughAV1Encodes
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
-        private void ButtonRemoveSelectedQueueItem_Click(object sender, RoutedEventArgs e)
-        {
-            DeleteQueueItems();
-        }
-
-        private void QueueMenuItemOpenOutputDir_Click(object sender, RoutedEventArgs e)
-        {
-            if (ListBoxQueue.SelectedItem == null) return;
-            try
-            {
-                Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
-                string outPath = Path.GetDirectoryName(tmp.Output);
-                ProcessStartInfo startInfo = new()
-                {
-                    Arguments = outPath,
-                    FileName = "explorer.exe"
-                };
-
-                Process.Start(startInfo);
-            }
-            catch { }
-        }
 
         private void ButtonOpenSource_Click(object sender, EventArgs e)
         {
@@ -311,8 +290,10 @@ namespace NotEnoughAV1Encodes
                                 DataContext = PresetSettings;
 
                                 // Create video object
-                                videoDB = new();
-                                videoDB.InputPath = file;
+                                videoDB = new()
+                                {
+                                    InputPath = file
+                                };
 
                                 // Output Video
                                 string outname = PresetSettings.PresetBatchName;
@@ -329,13 +310,13 @@ namespace NotEnoughAV1Encodes
                                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
                                 videoDB.ParseMediaInfo(PresetSettings);
 
-                                try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                                try { ListBoxAudioTracks.ItemsSource = null; } catch { }
-                                try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-                                try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+                                try { AudioTabControl.ListBoxAudioTracks.Items.Clear(); } catch { }
+                                try { AudioTabControl.ListBoxAudioTracks.ItemsSource = null; } catch { }
+                                try { SubtitlesTabControl.ListBoxSubtitleTracks.Items.Clear(); } catch { }
+                                try { SubtitlesTabControl.ListBoxSubtitleTracks.ItemsSource = null; } catch { }
 
-                                ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                                ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+                                AudioTabControl.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                                SubtitlesTabControl.ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
 
                                 // Automatically toggle VFR Support, if source is MKV
                                 if (videoDB.MIIsVFR && Path.GetExtension(videoDB.InputPath) is ".mkv" or ".MKV")
@@ -385,13 +366,13 @@ namespace NotEnoughAV1Encodes
                         DataContext = PresetSettings;
                         videoDB = queueElement.VideoDB;
 
-                        try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                        try { ListBoxAudioTracks.ItemsSource = null; } catch { }
-                        try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-                        try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+                        try { AudioTabControl.ListBoxAudioTracks.Items.Clear(); } catch { }
+                        try { AudioTabControl.ListBoxAudioTracks.ItemsSource = null; } catch { }
+                        try { SubtitlesTabControl.ListBoxSubtitleTracks.Items.Clear(); } catch { }
+                        try { SubtitlesTabControl.ListBoxSubtitleTracks.ItemsSource = null; } catch { }
 
-                        ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                        ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+                        AudioTabControl.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                        SubtitlesTabControl.ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
                         LabelVideoSource.Text = videoDB.InputPath;
                         LabelVideoDestination.Text = videoDB.OutputPath;
                         LabelVideoLength.Content = videoDB.MIDuration;
@@ -419,18 +400,20 @@ namespace NotEnoughAV1Encodes
         private void SingleFileInput(string path)
         {
             // Single File Input
-            videoDB = new();
-            videoDB.InputPath = path;
+            videoDB = new()
+            {
+                InputPath = path
+            };
             videoDB.ParseMediaInfo(PresetSettings);
             LabelVideoDestination.Text = LocalizedStrings.Instance["LabelVideoDestination"];
 
-            try { ListBoxAudioTracks.Items.Clear(); } catch { }
-            try { ListBoxAudioTracks.ItemsSource = null; } catch { }
-            try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-            try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
+            try { AudioTabControl.ListBoxAudioTracks.Items.Clear(); } catch { }
+            try { AudioTabControl.ListBoxAudioTracks.ItemsSource = null; } catch { }
+            try { SubtitlesTabControl.ListBoxSubtitleTracks.Items.Clear(); } catch { }
+            try { SubtitlesTabControl.ListBoxSubtitleTracks.ItemsSource = null; } catch { }
 
-            ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-            ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
+            AudioTabControl.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+            SubtitlesTabControl.ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
             LabelVideoSource.Text = videoDB.InputPath;
             LabelVideoLength.Content = videoDB.MIDuration;
             LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
@@ -475,7 +458,7 @@ namespace NotEnoughAV1Encodes
                         Path.GetExtension(videoDB.OutputPath).ToLower() == ".webm")
                     {
                         // Disable Subtitles if Output is MP4
-                        foreach (Subtitle.SubtitleTracks subtitleTracks in ListBoxSubtitleTracks.Items)
+                        foreach (Subtitle.SubtitleTracks subtitleTracks in SubtitlesTabControl.ListBoxSubtitleTracks.Items)
                         {
                             subtitleTracks.Active = false;
                             subtitleTracks.Enabled = false;
@@ -515,7 +498,7 @@ namespace NotEnoughAV1Encodes
                         Path.GetExtension(videoDB.OutputPath).ToLower() == ".webm")
                     {
                         // Disable Subtitles if Output is MP4
-                        foreach (Subtitle.SubtitleTracks subtitleTracks in ListBoxSubtitleTracks.Items)
+                        foreach (Subtitle.SubtitleTracks subtitleTracks in SubtitlesTabControl.ListBoxSubtitleTracks.Items)
                         {
                             subtitleTracks.Active = false;
                             subtitleTracks.Enabled = false;
@@ -523,7 +506,7 @@ namespace NotEnoughAV1Encodes
                     }
                     else
                     {
-                        foreach (Subtitle.SubtitleTracks subtitleTracks in ListBoxSubtitleTracks.Items)
+                        foreach (Subtitle.SubtitleTracks subtitleTracks in SubtitlesTabControl.ListBoxSubtitleTracks.Items)
                         {
                             subtitleTracks.Enabled = true;
                         }
@@ -535,12 +518,12 @@ namespace NotEnoughAV1Encodes
 
         private void ButtonStartStop_Click(object sender, EventArgs e)
         {
-            if (ListBoxQueue.Items.Count == 0)
+            if (QueueTabControl.ListBoxQueue.Items.Count == 0)
             {
                 PreAddToQueue();
             }
 
-            if (ListBoxQueue.Items.Count != 0)
+            if (QueueTabControl.ListBoxQueue.Items.Count != 0)
             {
                 if (ProgramState is 0 or 2)
                 {
@@ -551,10 +534,10 @@ namespace NotEnoughAV1Encodes
                     if (ProgramState is 0)
                     {
                         TopButtonsControl.ButtonAddToQueue.IsEnabled = false;
-                        ButtonRemoveSelectedQueueItem.IsEnabled = false;
-                        ButtonEditSelectedItem.IsEnabled = false;
-                        ButtonClearQueue.IsEnabled = false;
-                        ComboBoxSortQueueBy.IsEnabled = false;
+                        QueueTabControl.ButtonRemoveSelectedQueueItem.IsEnabled = false;
+                        QueueTabControl.ButtonEditSelectedItem.IsEnabled = false;
+                        QueueTabControl.ButtonClearQueue.IsEnabled = false;
+                        QueueTabControl.ComboBoxSortQueueBy.IsEnabled = false;
 
                         PreStart();
                     }
@@ -619,7 +602,7 @@ namespace NotEnoughAV1Encodes
             uid = null;
         }
 
-        private void SaveQueueElementState(Queue.QueueElement queueElement, List<string> VideoChunks)
+        private static void SaveQueueElementState(Queue.QueueElement queueElement, List<string> VideoChunks)
         {
             // Save / Override Queuefile to save Progress of Chunks
 
@@ -695,130 +678,6 @@ namespace NotEnoughAV1Encodes
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
-
-        private void ButtonEditSelectedItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (ProgramState != 0) return;
-
-            if (ListBoxQueue.SelectedItem != null)
-            {
-                if (ListBoxQueue.SelectedItems.Count == 1)
-                {
-                    // Editing one entry
-                    Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
-                    PresetSettings = tmp.Preset;
-                    DataContext = PresetSettings;
-                    videoDB = tmp.VideoDB;
-                    uid = tmp.UniqueIdentifier;
-
-                    try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                    try { ListBoxAudioTracks.ItemsSource = null; } catch { }
-                    try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-                    try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
-
-                    ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-                    ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
-                    LabelVideoSource.Text = videoDB.InputPath;
-                    LabelVideoDestination.Text = videoDB.OutputPath;
-                    LabelVideoLength.Content = videoDB.MIDuration;
-                    LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
-                    LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
-
-                    ComboBoxChunkingMethod.SelectedIndex = tmp.ChunkingMethod;
-                    ComboBoxReencodeMethod.SelectedIndex = tmp.ReencodeMethod;
-                    CheckBoxTwoPassEncoding.IsOn = tmp.Passes == 2;
-                    TextBoxChunkLength.Text = tmp.ChunkLength.ToString();
-                    TextBoxPySceneDetectThreshold.Text = tmp.PySceneDetectThreshold.ToString();
-
-                    try
-                    {
-                        File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", tmp.VideoDB.InputFileName + "_" + tmp.UniqueIdentifier + ".json"));
-                    }
-                    catch { }
-
-                    ListBoxQueue.Items.Remove(ListBoxQueue.SelectedItem);
-
-                    Dispatcher.BeginInvoke((Action)(() => TabControl.SelectedIndex = 0));
-                }
-            }
-        }
-
-        private void ButtonClearQueue_Click(object sender, RoutedEventArgs e)
-        {
-            if (ProgramState != 0) return;
-            List<Queue.QueueElement> items = ListBoxQueue.Items.OfType<Queue.QueueElement>().ToList();
-            foreach (var item in items)
-            {
-                ListBoxQueue.Items.Remove(item);
-                try
-                {
-                    File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", item.VideoDB.InputFileName + "_" + item.UniqueIdentifier + ".json"));
-                }
-                catch { }
-            }
-        }
-
-        private void QueueMenuItemSave_Click(object sender, RoutedEventArgs e)
-        {
-            if (ListBoxQueue.SelectedItem != null)
-            {
-                try
-                {
-                    Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
-                    SaveFileDialog saveVideoFileDialog = new();
-                    saveVideoFileDialog.AddExtension = true;
-                    saveVideoFileDialog.Filter = "JSON File|*.json";
-                    if (saveVideoFileDialog.ShowDialog() == true)
-                    {
-                        File.WriteAllText(saveVideoFileDialog.FileName, JsonConvert.SerializeObject(tmp, Formatting.Indented));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-        }
-
-        private void ListBoxQueue_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete)
-            {
-                DeleteQueueItems();
-            }
-        }
-
-        private void AudioTracksImport_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openAudioFilesDialog = new()
-            {
-                Filter = "Audio Files|*.mp3;*.aac;*.flac;*.m4a;*.ogg;*.opus;*.wav;*.wma|All Files|*.*",
-                Multiselect = true
-            };
-
-            bool? result = openAudioFilesDialog.ShowDialog();
-            if (result == true)
-            {
-                List<Audio.AudioTracks> AudioTracks = new();
-                if (ListBoxAudioTracks.ItemsSource != null)
-                {
-                    AudioTracks = (List<Audio.AudioTracks>) ListBoxAudioTracks.ItemsSource;
-                }
-                foreach (string file in openAudioFilesDialog.FileNames)
-                {
-                    Debug.WriteLine(file);
-                    AudioTracks.Add(videoDB.ParseMediaInfoAudio(file, PresetSettings));
-                }
-
-                try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                try { ListBoxAudioTracks.ItemsSource = null; } catch { }
-                try { ListBoxSubtitleTracks.Items.Clear(); } catch { }
-                try { ListBoxSubtitleTracks.ItemsSource = null; } catch { }
-
-                videoDB.AudioTracks = AudioTracks;
-                ListBoxAudioTracks.ItemsSource = AudioTracks;
-            }
-        }
         #endregion
 
         #region UI Functions
@@ -863,10 +722,10 @@ namespace NotEnoughAV1Encodes
         {
             try
             {
-                if (ListBoxAudioTracks.ItemsSource == null) return;
-                videoDB.AudioTracks = (List<Audio.AudioTracks>)ListBoxAudioTracks.ItemsSource;
-                try { ListBoxAudioTracks.Items.Clear(); } catch { }
-                try { ListBoxAudioTracks.ItemsSource = null; } catch { }
+                if (AudioTabControl.ListBoxAudioTracks.ItemsSource == null) return;
+                videoDB.AudioTracks = (List<Audio.AudioTracks>)AudioTabControl.ListBoxAudioTracks.ItemsSource;
+                try { AudioTabControl.ListBoxAudioTracks.Items.Clear(); } catch { }
+                try { AudioTabControl.ListBoxAudioTracks.ItemsSource = null; } catch { }
 
                 foreach (Audio.AudioTracks audioTrack in videoDB.AudioTracks)
                 {
@@ -893,7 +752,7 @@ namespace NotEnoughAV1Encodes
                     }
                 }
 
-                ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
+                AudioTabControl.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
             }
             catch { }
         }
@@ -1463,28 +1322,11 @@ namespace NotEnoughAV1Encodes
                 }
             }
         }
-
-        bool lockQueue = false;
-        private void ComboBoxSortQueueBy_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (startupLock) return;
-            if (lockQueue) return;
-            if (ProgramState != 0) return;
-            settingsDB.SortQueueBy = ComboBoxSortQueueBy.SelectedIndex;
-            try
-            {
-                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
-                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-
-            SortQueue();
-        }
         #endregion
 
         #region Small Functions
 
-        private void DeleteCropPreviews()
+        private static void DeleteCropPreviews()
         {
             for (int i = 1; i < 5; i++)
             {
@@ -1649,50 +1491,6 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
 
-        private void SortQueue()
-        {
-            try
-            {
-                // Sort Queue
-                List<Queue.QueueElement> queueElements = ListBoxQueue.Items.OfType<Queue.QueueElement>().ToList();
-
-                switch (settingsDB.SortQueueBy)
-                {
-                    case 0:
-                        queueElements = queueElements.OrderBy(queueElements => queueElements.DateAdded).ToList();
-                        break;
-                    case 1:
-                        queueElements = queueElements.OrderByDescending(queueElements => queueElements.DateAdded).ToList();
-                        break;
-                    case 2:
-                        queueElements = queueElements.OrderBy(queueElements => queueElements.VideoDB.MIFrameCount).ToList();
-                        break;
-                    case 3:
-                        queueElements = queueElements.OrderByDescending(queueElements => queueElements.VideoDB.MIFrameCount).ToList();
-                        break;
-                    case 4:
-                        queueElements = queueElements.OrderBy(queueElements => queueElements.VideoDB.OutputFileName).ToList();
-                        break;
-                    case 5:
-                        queueElements = queueElements.OrderByDescending(queueElements => queueElements.VideoDB.OutputFileName).ToList();
-                        break;
-                    default:
-                        queueElements = queueElements.OrderByDescending(queueElements => queueElements.DateAdded).ToList();
-                        break;
-                }
-
-                ListBoxQueue.Items.Clear();
-                foreach (var queueElement in queueElements)
-                {
-                    ListBoxQueue.Items.Add(queueElement);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
         private void ComboBoxChunkingMethod_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (startupLock) return;
@@ -1745,47 +1543,6 @@ namespace NotEnoughAV1Encodes
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
-        private void ToggleSwitchQueueParallel_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (startupLock) return;
-            settingsDB.QueueParallel = ToggleSwitchQueueParallel.IsOn;
-            try
-            {
-                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
-                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-        }
-
-        private void DeleteQueueItems()
-        {
-            if (ListBoxQueue.SelectedItem == null) return;
-            if (ProgramState != 0) return;
-            if (ListBoxQueue.SelectedItems.Count > 1)
-            {
-                List<Queue.QueueElement> items = ListBoxQueue.SelectedItems.OfType<Queue.QueueElement>().ToList();
-                foreach (var item in items)
-                {
-                    ListBoxQueue.Items.Remove(item);
-                    try
-                    {
-                        File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", item.VideoDB.InputFileName + "_" + item.UniqueIdentifier + ".json"));
-                    }
-                    catch { }
-                }
-            }
-            else
-            {
-                Queue.QueueElement tmp = (Queue.QueueElement)ListBoxQueue.SelectedItem;
-                ListBoxQueue.Items.Remove(ListBoxQueue.SelectedItem);
-                try
-                {
-                    File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", tmp.VideoDB.InputFileName + "_" + tmp.UniqueIdentifier + ".json"));
-                }
-                catch { }
-            }
-        }
-
         private void LoadSettings()
         {
             if (settingsDB.OverrideWorkerCount)
@@ -1807,7 +1564,7 @@ namespace NotEnoughAV1Encodes
             ComboBoxReencodeMethod.SelectedIndex = settingsDB.ReencodeMethod;
             TextBoxChunkLength.Text = settingsDB.ChunkLength;
             TextBoxPySceneDetectThreshold.Text = settingsDB.PySceneDetectThreshold;
-            ToggleSwitchQueueParallel.IsOn = settingsDB.QueueParallel;
+            QueueTabControl.ToggleSwitchQueueParallel.IsOn = settingsDB.QueueParallel;
 
             // Sets Temp Path
             Global.Temp = settingsDB.TempPath;
@@ -1836,8 +1593,9 @@ namespace NotEnoughAV1Encodes
                     }
 
                     TabControl.Background = bg;
-                    ListBoxAudioTracks.Background = fg;
-                    ListBoxSubtitleTracks.Background = fg;
+                    AudioTabControl.ListBoxAudioTracks.Background = fg;
+                    PresetSettings.BackgroundColor = fg;
+                    SubtitlesTabControl.ListBoxSubtitleTracks.Background = fg;
                 }
                 else
                 {
@@ -1880,9 +1638,9 @@ namespace NotEnoughAV1Encodes
             queueElement.Output = videoDB.OutputPath;
             queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
             queueElement.VideoHDRMuxCommand = GenerateMKVMergeHDRCommand();
-            queueElement.AudioCommand = audioCommandGenerator.Generate(ListBoxAudioTracks.Items);
-            queueElement.SubtitleCommand = skipSubs ? null : subCommandGenerator.GenerateSoftsub(ListBoxSubtitleTracks.Items);
-            queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(ListBoxSubtitleTracks.Items, identifier);
+            queueElement.AudioCommand = audioCommandGenerator.Generate(AudioTabControl.ListBoxAudioTracks.Items);
+            queueElement.SubtitleCommand = skipSubs ? null : subCommandGenerator.GenerateSoftsub(SubtitlesTabControl.ListBoxSubtitleTracks.Items);
+            queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(SubtitlesTabControl.ListBoxSubtitleTracks.Items, identifier);
             queueElement.FilterCommand = GenerateVideoFilters();
             queueElement.FrameCount = videoDB.MIFrameCount;
             queueElement.EncodingMethod = ComboBoxVideoEncoder.SelectedIndex;
@@ -1901,7 +1659,7 @@ namespace NotEnoughAV1Encodes
             }
 
             // Add to Queue
-            ListBoxQueue.Items.Add(queueElement);
+            QueueTabControl.ListBoxQueue.Items.Add(queueElement);
 
             Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E", "Queue"));
 
@@ -1910,7 +1668,7 @@ namespace NotEnoughAV1Encodes
 
             lockQueue = false;
 
-            SortQueue();
+            QueueTabControl.SortQueue();
         }
 
         private void AutoPauseResume()
@@ -2060,9 +1818,7 @@ namespace NotEnoughAV1Encodes
 
         private string GenerateFFmpegFramerate()
         {
-            string settings = "";
-
-            settings = "fps=" + ComboBoxVideoFrameRate.Text;
+            string settings = "fps=" + ComboBoxVideoFrameRate.Text;
             if (ComboBoxVideoFrameRate.SelectedIndex == 6) { settings = "fps=24000/1001"; }
             if (ComboBoxVideoFrameRate.SelectedIndex == 9) { settings = "fps=30000/1001"; }
             if (ComboBoxVideoFrameRate.SelectedIndex == 13) { settings = "fps=60000/1001"; }
@@ -2363,7 +2119,7 @@ namespace NotEnoughAV1Encodes
 
         private async Task MainStartAsync(CancellationToken _cancelToken)
         {
-            QueueParallel = ToggleSwitchQueueParallel.IsOn;
+            QueueParallel = QueueTabControl.ToggleSwitchQueueParallel.IsOn;
             // Sets amount of Workers
             int WorkerCountQueue = 1;
             int WorkerCountElement = int.Parse(ComboBoxWorkerCount.Text);
@@ -2402,7 +2158,7 @@ namespace NotEnoughAV1Encodes
             // Creates a tasks list
             List<Task> tasks = new();
 
-            foreach (Queue.QueueElement queueElement in ListBoxQueue.Items)
+            foreach (Queue.QueueElement queueElement in QueueTabControl.ListBoxQueue.Items)
             {
                 await concurrencySemaphore.WaitAsync(_cancelToken);
                 Task task = Task.Run(async () =>
@@ -2522,10 +2278,10 @@ namespace NotEnoughAV1Encodes
             TopButtonsControl.ImageStartStop.Source = new BitmapImage(new Uri(@"/NotEnoughAV1Encodes;component/resources/img/start.png", UriKind.Relative));
             TopButtonsControl.LabelStartPauseButton.Content = LocalizedStrings.Instance["LabelStartPauseButton"];
             TopButtonsControl.ButtonAddToQueue.IsEnabled = true;
-            ButtonRemoveSelectedQueueItem.IsEnabled = true;
-            ButtonEditSelectedItem.IsEnabled = true;
-            ButtonClearQueue.IsEnabled = true;
-            ComboBoxSortQueueBy.IsEnabled = true;
+            QueueTabControl.ButtonRemoveSelectedQueueItem.IsEnabled = true;
+            QueueTabControl.ButtonEditSelectedItem.IsEnabled = true;
+            QueueTabControl.ButtonClearQueue.IsEnabled = true;
+            QueueTabControl.ComboBoxSortQueueBy.IsEnabled = true;
 
             // Stop Timer for Auto Pause Resume functionality
             if (settingsDB.AutoResumePause)
@@ -2542,7 +2298,7 @@ namespace NotEnoughAV1Encodes
             if (settingsDB.AutoClearQueue)
             {
                 List<Queue.QueueElement> queueItems = new();
-                foreach(Queue.QueueElement queueElement in ListBoxQueue.Items)
+                foreach(Queue.QueueElement queueElement in QueueTabControl.ListBoxQueue.Items)
                 {
                     if (queueElement == null) continue;
                     // Skip Item if there was some error during encoding / muxing
@@ -2557,7 +2313,7 @@ namespace NotEnoughAV1Encodes
                 }
                 foreach(Queue.QueueElement queueElement in queueItems)
                 {
-                    ListBoxQueue.Items.Remove(queueElement);
+                    QueueTabControl.ListBoxQueue.Items.Remove(queueElement);
                     try
                     {
                         File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Queue", queueElement.VideoDB.InputFileName + "_" + queueElement.UniqueIdentifier + ".json"));
@@ -2644,7 +2400,7 @@ namespace NotEnoughAV1Encodes
         {
             double totalFrames = 0;
             double totalFramesEncoded = 0;
-            System.Windows.Controls.ItemCollection queueList = ListBoxQueue.Items;
+            System.Windows.Controls.ItemCollection queueList = QueueTabControl.ListBoxQueue.Items;
 
             // Calculte Total Framecount
             try

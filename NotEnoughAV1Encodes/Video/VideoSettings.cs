@@ -1,7 +1,12 @@
-﻿namespace NotEnoughAV1Encodes
+﻿using System.ComponentModel;
+using System.Windows.Media;
+
+namespace NotEnoughAV1Encodes
 {
-    public class VideoSettings
+    public class VideoSettings : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public int Encoder { get; set; }
         public int ColorFormat { get; set; }
         public int FrameRate { get; set; }
@@ -203,5 +208,22 @@
         public int TargetVMAFMaxQ { get; set; } = 40;
         /// <summary>Target VMAF Proble Video Length (in seconds).</summary>
         public int TargetVMAFProbeLength { get; set; } = 1;
+
+        // UI
+        private SolidColorBrush _backgroundColor;
+        public SolidColorBrush BackgroundColor 
+        {  
+            get => _backgroundColor;
+            set { _backgroundColor = value; NotifyPropertyChanged("BackgroundColor"); }
+        }
+
+        private void NotifyPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+                PropertyChanged(this, new PropertyChangedEventArgs("DisplayMember"));
+            }
+        }
     }
 }

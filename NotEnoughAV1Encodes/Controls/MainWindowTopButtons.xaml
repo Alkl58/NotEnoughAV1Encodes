@@ -7,36 +7,36 @@
              mc:Ignorable="d" 
              d:DesignHeight="65" d:DesignWidth="1085">
     <Grid>
-        <Button x:Name="ButtonOpenSource" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Background="{Binding Path=Background}" Click="ButtonOpenSource_Click">
+        <Button x:Name="ButtonOpenSource" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Background="{Binding BackgroundColor}" Click="ButtonOpenSource_Click">
             <Canvas Height="30" Width="114">
                 <Image Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/video.png"/>
                 <Label x:Name="LabelSource" Content="{lex:Loc}" Canvas.Left="38" Width="76" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonSetDestination" HorizontalAlignment="Left" Margin="145,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Background="{Binding Path=Background}" Click="ButtonSetDestination_Click">
+        <Button x:Name="ButtonSetDestination" HorizontalAlignment="Left" Margin="145,10,0,0" VerticalAlignment="Top" Width="130" Height="45" Background="{Binding BackgroundColor}" Click="ButtonSetDestination_Click">
             <Canvas Height="30" Width="120">
                 <Image Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/save.png"/>
                 <Label x:Name="LabelDestination" Content="{lex:Loc}" Canvas.Left="32" Width="88" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonAddToQueue" Margin="280,10,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="180" Background="{Binding Path=Background}" Click="ButtonAddToQueue_Click">
+        <Button x:Name="ButtonAddToQueue" Margin="280,10,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="180" Background="{Binding BackgroundColor}" Click="ButtonAddToQueue_Click">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop2" Height="44" Canvas.Left="-23" Canvas.Top="-7" Width="44" Source="/resources/img/queue.png"/>
                 <Label x:Name="LabelAddToQueue" Content="{lex:Loc}" Canvas.Left="26" Width="122" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonStartStop" Margin="0,10,189,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Right" Width="118" Background="{Binding Path=Background}" Click="ButtonStartStop_Click">
+        <Button x:Name="ButtonStartStop" Margin="0,10,189,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Right" Width="118" Background="{Binding BackgroundColor}" Click="ButtonStartStop_Click">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/start.png"/>
                 <Label x:Name="LabelStartPauseButton" Content="{lex:Loc}" Canvas.Left="32" Width="78" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonProgramSettings" Margin="0,10,10,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Right" Width="45" Background="{Binding Path=Background}" Click="ButtonProgramSettings_Click">
+        <Button x:Name="ButtonProgramSettings" Margin="0,10,10,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Right" Width="45" Background="{Binding BackgroundColor}" Click="ButtonProgramSettings_Click">
             <Canvas Height="30" Width="120">
                 <Image x:Name="ImageStartStop1" Height="44" Canvas.Left="-6" Canvas.Top="-7" Width="45" Source="/resources/img/settings.png"/>
             </Canvas>
         </Button>
-        <Button x:Name="ButtonCancelEncode" Margin="0,10,60,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Right" Width="124" Background="{Binding Path=Background}" Click="ButtonCancelEncode_Click">
+        <Button x:Name="ButtonCancelEncode" Margin="0,10,60,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Right" Width="124" Background="{Binding BackgroundColor}" Click="ButtonCancelEncode_Click">
             <Canvas Height="30" Width="102">
                 <Label x:Name="LabelCancel" Content="{lex:Loc}" Canvas.Left="30" Width="81" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="14"/>
                 <Image Height="44" Canvas.Left="-10" Canvas.Top="-7" Width="44" Source="/resources/img/stop.png"/>

@@ -29,13 +29,13 @@
             OpenSettings="ButtonProgramSettings_Click"
             Start="ButtonStartStop_Click"
             Cancel="ButtonCancelEncode_Click"
-            Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"/>
+        />
 
         <mah:MetroTabControl x:Name="TabControl" Margin="0,60,0,0" >
             <TabItem x:Name="TabItemSummary" Header="{lex:Loc}">
                 <Grid>
                     <GroupBox x:Name="GroupBoxInputOutput" Header="{lex:Loc}" Height="100" Margin="10,10,10,0" VerticalAlignment="Top" MinWidth="80" mah:ControlsHelper.ContentCharacterCasing="Normal">
-                        <Grid Height="66" VerticalAlignment="Center" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid Height="66" VerticalAlignment="Center" Background="{Binding BackgroundColor}">
                             <Label x:Name="LabelVideoSource1" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="75" />
                             <Label x:Name="LabelVideoDestination1" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FontWeight="Bold" />
                             <TextBlock x:Name="LabelVideoSource" Height="24" Margin="105,6,8,0" Text="{lex:Loc}" VerticalAlignment="Top" FontStyle="Italic" Background="{x:Null}" MinWidth="50" />
@@ -43,7 +43,7 @@
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="GroupBoxVideoInformation" Header="{lex:Loc}" Height="72" Margin="10,115,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" mah:ControlsHelper.ContentCharacterCasing="Normal">
-                        <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid Background="{Binding BackgroundColor}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60" />
                                 <ColumnDefinition MinWidth="80" />
@@ -65,7 +65,7 @@
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="GroupBoxWorkersAndSplitting" Header="{lex:Loc}" Margin="10,340,10,0" Height="76" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
-                        <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid Background="{Binding BackgroundColor}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition MinWidth="100" MaxWidth="120"/>
                                 <ColumnDefinition MinWidth="100"/>
@@ -166,7 +166,7 @@
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="GroupBoxPresets" Header="{lex:Loc}" Margin="10,264,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="71" VerticalAlignment="Top">
-                        <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid Background="{Binding BackgroundColor}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120"/>
                                 <ColumnDefinition MinWidth="100" MaxWidth="160"/>
@@ -180,7 +180,7 @@
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="GroupBoxCurrentSettings" Header="{lex:Loc}" Margin="10,192,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="67" VerticalAlignment="Top">
-                        <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid Background="{Binding BackgroundColor}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60" />
                                 <ColumnDefinition MinWidth="80" />
@@ -219,7 +219,7 @@
             <TabItem x:Name="TabItemVideo" Header="{lex:Loc}">
                 <Grid>
                     <GroupBox Header="{lex:Loc TabItemVideo}" HorizontalAlignment="Left" Margin="10,10,0,0" Width="385" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
-                        <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid Background="{Binding BackgroundColor}">
                             <Label Content="{lex:Loc LabelEncoder}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="111" />
                             <ComboBox x:Name="ComboBoxVideoEncoder" SelectedIndex="{Binding Encoder}" HorizontalAlignment="Left" Margin="135,14,0,0" VerticalAlignment="Top" Width="140" Height="28" VerticalContentAlignment="Center" SelectionChanged="ComboBoxVideoEncoder_SelectionChanged">
                                 <ComboBoxItem Content="aom (AV1 FFmpeg)" IsSelected="True" />
@@ -285,7 +285,7 @@
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="GroupBoxOptimization" Header="{lex:Loc}" Margin="0,10,10,0" Height="210" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" HorizontalAlignment="Right" Width="410">
-                        <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid Background="{Binding BackgroundColor}">
                             <Label x:Name="LabelSpeed" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="19,15,0,0" VerticalAlignment="Top" Width="68"/>
                             <Slider x:Name="SliderEncoderPreset" HorizontalAlignment="Left" Margin="104,16,0,0" VerticalAlignment="Top" Width="227" Maximum="8" SmallChange="1" Value="{Binding SpeedPreset}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" ValueChanged="SliderEncoderPreset_ValueChanged"/>
                             <mah:ToggleSwitch x:Name="CheckBoxTwoPassEncoding" Content="{lex:Loc}" IsOn="{Binding TwoPassEncoding}" Margin="19,66,0,0" VerticalAlignment="Top" Toggled="CheckBoxTwoPassEncoding_Checked"/>
@@ -296,7 +296,7 @@
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="GroupBoxQuality" Header="{lex:Loc}" Margin="10,237,10,10" mah:ControlsHelper.ContentCharacterCasing="Normal">
-                        <Grid Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
+                        <Grid Background="{Binding BackgroundColor}">
                             <!-- AOM FFmpeg -->
                             <Canvas HorizontalAlignment="Left" Width="1055">
                                 <Canvas.Style>
@@ -1102,226 +1102,32 @@
                                 <ComboBoxItem Content="screen" />
                             </ComboBox>
                         </Canvas>
-                        <TextBox x:Name="TextBoxCustomVideoSettings" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsOn, ElementName=CheckBoxCustomVideoSettings}" Text="{Binding CustomSettings}"  Margin="10,313,10,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged" />
+                        <TextBox x:Name="TextBoxCustomVideoSettings" Background="{Binding BackgroundColor}" IsEnabled="{Binding IsOn, ElementName=CheckBoxCustomVideoSettings}" Text="{Binding CustomSettings}"  Margin="10,313,10,10" TextWrapping="Wrap" TextChanged="TextBoxCustomVideoSettings_TextChanged" />
                         <mah:ToggleSwitch x:Name="CheckBoxCustomVideoSettings" Content="{lex:Loc}" Margin="10,281,0,0" VerticalAlignment="Top" Toggled="CheckBoxCustomVideoSettings_Toggled" IsOn="{Binding CustomSettingsActive}" Width="290" />
                         <Button x:Name="ButtonTestSettings" Content="{lex:Loc}" HorizontalAlignment="Right" Margin="0,277,10,0" VerticalAlignment="Top" Height="32" Width="131" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonTestSettings_Click"/>
                     </Grid>
                 </GroupBox>
             </TabItem>
             <TabItem x:Name="TabItemAudio" Header="{lex:Loc}">
-                <Grid>
-                    <ListBox x:Name="ListBoxAudioTracks" HorizontalContentAlignment="Stretch" Margin="10">
-                        <ListBoxItem Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <Grid>
-                                <Label x:Name="LabelNoAudioFound" Content="{lex:Loc}" HorizontalContentAlignment="Center" FontSize="20" />
-                            </Grid>
-                        </ListBoxItem>
-                        <ListBox.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem x:Name="AudioTracksImport" Header="{lex:Loc}" Click="AudioTracksImport_Click">
-                                    <MenuItem.Icon>
-                                        <Image Source="resources/img/folder.png" Height="20" Width="20"></Image>
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                            </ContextMenu>
-                        </ListBox.ContextMenu>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Background" Value="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"></Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,2">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition MinWidth="50" />
-                                        <ColumnDefinition Width="80" />
-                                        <ColumnDefinition MinWidth="60" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition MinWidth="90" />
-                                        <ColumnDefinition Width="80" />
-                                        <ColumnDefinition MinWidth="70" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition MinWidth="95" Width="*" />
-                                        <ColumnDefinition Width="150" />
-                                    </Grid.ColumnDefinitions>
-                                    <mah:ToggleSwitch Grid.Column="0" x:Name="ToggleOnOff" IsOn="{Binding Active}"></mah:ToggleSwitch>
-                                    <Label Grid.Column="1" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{Binding Index}" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
-                                    <Label x:Name="LabelCodec" Grid.Column="2" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelCodec}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
-                                    <ComboBox Grid.Column="3" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" x:Name="ComboBoxAudioCodec" VerticalAlignment="Center" SelectedIndex="{Binding Codec}">
-                                        <ComboBox.ToolTip>Sets the Audio Encoder. Recommended: Opus</ComboBox.ToolTip>
-                                        <ComboBoxItem Content="Opus" />
-                                        <ComboBoxItem Content="AC3" />
-                                        <ComboBoxItem Content="EAC3" />
-                                        <ComboBoxItem Content="AAC" />
-                                        <ComboBoxItem Content="MP3" />
-                                        <ComboBoxItem Content="Copy Audio" />
-                                    </ComboBox>
-                                    <Label x:Name="LabelChannels" Grid.Column="4" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelChannels}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
-                                    <ComboBox Grid.Column="5" x:Name="ComboBoxChannels" VerticalAlignment="Center" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" SelectedIndex="{Binding Channels}">
-                                        <ComboBoxItem Content="1 (Mono)" Tag="1" />
-                                        <ComboBoxItem Content="2.0 (Stereo)" Tag="2" />
-                                        <ComboBoxItem Content="5.1" Tag="6" />
-                                        <ComboBoxItem Content="7.1" Tag="8" />
-                                    </ComboBox>
-                                    <Label x:Name="LabelBitrate" Grid.Column="6" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelBitrate}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
-                                    <TextBox Grid.Column="7"  x:Name="TextBoxAudioBitrate" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="{Binding Bitrate}" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" PreviewTextInput="NumberValidationTextBox" Width="80">
-                                        <TextBox.ToolTip>Sets the audio bitrate. Recommended for Opus: 96 - 128 for Stereo</TextBox.ToolTip>
-                                    </TextBox>
-                                    <Label x:Name="LabelLanguage" Grid.Column="8" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelLanguage}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
-                                    <ComboBox Grid.Column="9" x:Name="ComboBoxTrackLanguage" VerticalAlignment="Center" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}"/>
-                                    <Label x:Name="LabelTrackName" Grid.Column="10" Content="{lex:Loc LabelTrackName}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="11" x:Name="TextBoxAudioTrackName" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" TextWrapping="Wrap" VerticalContentAlignment="Center" VerticalAlignment="Center" Text="{Binding CustomName}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
+
+                <neav1eControls:AudioTab 
+                    x:Name="AudioTabControl"
+                />
+
             </TabItem>
             <TabItem x:Name="TabItemSubtitles" Header="{lex:Loc}">
-                <Grid>
-                    <ListBox x:Name="ListBoxSubtitleTracks" HorizontalContentAlignment="Stretch" Margin="10">
-                        <ListBoxItem Background="{Binding ElementName=ListBoxSubtitleTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}">
-                            <Grid>
-                                <Label x:Name="LabelNoSubtitleFound" Content="{lex:Loc}" HorizontalContentAlignment="Center" FontSize="20" />
-                            </Grid>
-                        </ListBoxItem>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Background" Value="{Binding ElementName=ListBoxSubtitleTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"></Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,2">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition MinWidth="50" />
-                                        <ColumnDefinition Width="140" />
-                                        <ColumnDefinition MinWidth="70" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition MinWidth="90" />
-                                        <ColumnDefinition Width="20" />
-                                        <ColumnDefinition MinWidth="40" Width="*" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition MinWidth="95" Width="*" />
-                                        <ColumnDefinition Width="150" />
-                                    </Grid.ColumnDefinitions>
-                                    <mah:ToggleSwitch Grid.Column="0" x:Name="ToggleOnOff" IsOn="{Binding Active}" IsEnabled="{Binding Enabled}" />
-                                    <Label Grid.Column="1" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{Binding Index}" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
-                                    <Label Grid.Column="2" Content="{lex:Loc LabelTrackName}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="3" x:Name="TextBoxSubtitleTrackName" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" TextWrapping="Wrap" VerticalContentAlignment="Center" VerticalAlignment="Center" Text="{Binding CustomName}" />
-                                    <Label Grid.Column="4" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelLanguage}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
-                                    <ComboBox Grid.Column="5" x:Name="ComboBoxTrackLanguage" VerticalAlignment="Center" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}"/>
-                                    <Label x:Name="LabelDefault" Grid.Column="6" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelDefault}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
-                                    <CheckBox Grid.Column="7" x:Name="CheckBoxDefault" IsChecked="{Binding Default}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    <Label x:Name="LabelBurnIn" Grid.Column="8" IsEnabled="{Binding IsOn, ElementName=ToggleOnOff}" Content="{lex:Loc LabelBurnIn}" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
-                                    <CheckBox Grid.Column="9" x:Name="CheckBoxBurnIn" IsChecked="{Binding BurnIn}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
+
+                <neav1eControls:SubtitlesTab 
+                    x:Name="SubtitlesTabControl"
+                />
+
             </TabItem>
             <TabItem x:Name="TabItemQueue" Header="{lex:Loc}">
-                <Grid>
-                    <GroupBox Header="{lex:Loc TabItemQueue}" mah:ControlsHelper.ContentCharacterCasing="Normal">
-                        <Grid>
-                            <GroupBox Margin="0,34,0,0">
-                                <ListBox x:Name="ListBoxQueue" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" KeyDown="ListBoxQueue_KeyDown" SelectionMode="Multiple">
-                                    <ListBox.ItemContainerStyle>
-                                        <Style TargetType="ListBoxItem">
-                                            <Setter Property="Background" Value="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}"></Setter>
-                                        </Style>
-                                    </ListBox.ItemContainerStyle>
-                                    <ListBox.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem x:Name="QueueMenuItemDelete" Header="{lex:Loc ButtonDeletePreset}" Click="ButtonRemoveSelectedQueueItem_Click">
-                                                <MenuItem.Icon>
-                                                    <Image Source="resources/img/stop.png" Height="20" Width="20"></Image>
-                                                </MenuItem.Icon>
-                                            </MenuItem>
-                                            <MenuItem x:Name="QueueMenuItemEdit" Header="{lex:Loc}" Click="ButtonEditSelectedItem_Click">
-                                                <MenuItem.Icon>
-                                                    <Image Source="resources/img/settings.png" Height="20" Width="20"></Image>
-                                                </MenuItem.Icon>
-                                            </MenuItem>
-                                            <MenuItem x:Name="QueueMenuItemSave" Header="{lex:Loc ButtonSavePreset}" Click="QueueMenuItemSave_Click">
-                                                <MenuItem.Icon>
-                                                    <Image Source="resources/img/save.png" Height="20" Width="20"></Image>
-                                                </MenuItem.Icon>
-                                            </MenuItem>
-                                            <MenuItem x:Name="QueueMenuItemOpenOutputDir" Header="{lex:Loc}" Click="QueueMenuItemOpenOutputDir_Click">
-                                                <MenuItem.Icon>
-                                                    <Image Source="resources/img/folder.png" Height="20" Width="20"></Image>
-                                                </MenuItem.Icon>
-                                            </MenuItem>
-                                        </ContextMenu>
-                                    </ListBox.ContextMenu>
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="25"/>
-                                                    <RowDefinition Height="25"/>
-                                                    <RowDefinition Height="25"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid Grid.Row="0">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="60" />
-                                                        <ColumnDefinition MinWidth="80" />
-                                                        <ColumnDefinition Width="90" />
-                                                        <ColumnDefinition MinWidth="50"/>
-                                                        <ColumnDefinition Width="90" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <Label Grid.Column="0" Content="{lex:Loc LabelVideoSource1}" FontWeight="Bold"></Label>
-                                                    <Label Grid.Column="1" Content="{Binding VideoDB.InputFileName}" ToolTip="{Binding Input}"></Label>
-                                                    <Label Grid.Column="2" Content="{lex:Loc LabelVideoDestination1}" FontWeight="Bold"></Label>
-                                                    <Label Grid.Column="3" Content="{Binding VideoDB.OutputFileName}" ToolTip="{Binding Output}"></Label>
-                                                </Grid>
-                                                <Grid Grid.Row="1">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="60"/>
-                                                        <ColumnDefinition MinWidth="100"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Label x:Name="LabelStatus" Grid.Column="0" Content="{lex:Loc LabelStatus}" FontWeight="Bold"></Label>
-                                                    <Label Grid.Column="1" Content="{Binding Status}"></Label>
-                                                </Grid>
-                                                <Grid Grid.Row="2">
-                                                    <ProgressBar Value="{Binding Progress}" Maximum="{Binding FrameCount}"/>
-                                                </Grid>
-                                                <Grid Grid.Row="2" Visibility="{Binding TwoProgressbars, Converter={StaticResource b2v}}">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition/>
-                                                        <ColumnDefinition/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <ProgressBar Grid.Column="0" Value="{Binding Progress}" Maximum="{Binding FrameCount}"/>
-                                                    <ProgressBar Grid.Column="1" Value="{Binding ProgressSecondPass}" Maximum="{Binding FrameCount}"/>
-                                                </Grid>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </GroupBox>
-                            <Label x:Name="LabelEncodeQueueParallel" Content="{lex:Loc}" Margin="0,1,67,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="398"/>
-                            <mah:ToggleSwitch x:Name="ToggleSwitchQueueParallel" VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,-1,-97,0" Height="30" Content=" " Toggled="ToggleSwitchQueueParallel_Toggled"/>
-                            <ComboBox x:Name="ComboBoxSortQueueBy" HorizontalAlignment="Left" Margin="366,3,0,0" VerticalAlignment="Top" Width="161" SelectionChanged="ComboBoxSortQueueBy_SelectionChanged">
-                                <ComboBoxItem Content="{lex:Loc SortByOldest}" IsSelected="True"/>
-                                <ComboBoxItem Content="{lex:Loc SortByNewest}"/>
-                                <ComboBoxItem Content="{lex:Loc SortByFramecountAsc}"/>
-                                <ComboBoxItem Content="{lex:Loc SortByFramecountDesc}"/>
-                                <ComboBoxItem Content="{lex:Loc SortByOutNameAsc}"/>
-                                <ComboBoxItem Content="{lex:Loc SortByOutNameDesc}"/>
-                            </ComboBox>
-                        </Grid>
-                    </GroupBox>
-                    <Button x:Name="ButtonRemoveSelectedQueueItem" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonRemoveSelectedQueueItem_Click" Background="{Binding ElementName=ListBoxAudioTracks, Path=Background, UpdateSourceTrigger=PropertyChanged}" Width="115"/>
-                    <Button x:Name="ButtonEditSelectedItem" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="130,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Background="{Binding Background, ElementName=ListBoxAudioTracks, UpdateSourceTrigger=PropertyChanged}" Click="ButtonEditSelectedItem_Click" Width="115"/>
-                    <Button x:Name="ButtonClearQueue" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="250,32,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Background="{Binding Background, ElementName=ListBoxAudioTracks, UpdateSourceTrigger=PropertyChanged}" Click="ButtonClearQueue_Click"  Width="115"/>
-                </Grid>
+
+                <neav1eControls:QueueTab 
+                    x:Name="QueueTabControl"
+                />
+
             </TabItem>
         </mah:MetroTabControl>
 

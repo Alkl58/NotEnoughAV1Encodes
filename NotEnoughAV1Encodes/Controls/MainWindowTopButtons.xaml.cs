@@ -15,13 +15,9 @@ namespace NotEnoughAV1Encodes.Controls
         public event EventHandler Start;
         public event EventHandler Cancel;
 
-        // Background for Buttons
-        public new SolidColorBrush Background { get; set; } 
-
         public MainWindowTopButtons()
         {
             InitializeComponent();
-            DataContext = this;
         }
 
         private void ButtonOpenSource_Click(object sender, RoutedEventArgs e)

@@ -10,7 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="1085">
     <Grid>
         <GroupBox x:Name="GroupBoxCrop" Header="{lex:Loc}" Margin="293,10,10,105" mah:ControlsHelper.ContentCharacterCasing="Normal">
-            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterCrop}">
+            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterCrop}" Background="{Binding BackgroundColor}">
                 <TextBox x:Name="TextBoxFiltersCropLeft" PreviewTextInput="NumberValidationTextBox" Height="26" Margin="4,0,0,0" TextWrapping="Wrap" Text="{Binding FilterCropLeft, Mode=TwoWay}" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="ToggleSwitchFilterCrop_Toggled" HorizontalAlignment="Left" Width="56" MinWidth="56" />
                 <TextBox x:Name="TextBoxFiltersCropRight" PreviewTextInput="NumberValidationTextBox" Height="26" Margin="0,0,7,0" TextWrapping="Wrap" Text="{Binding FilterCropRight, Mode=TwoWay}" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="ToggleSwitchFilterCrop_Toggled" HorizontalAlignment="Right" Width="56" MinWidth="56"/>
                 <TextBox x:Name="TextBoxFiltersCropTop" PreviewTextInput="NumberValidationTextBox" Height="26" Margin="0,10,0,0" TextWrapping="Wrap" Text="{Binding FilterCropTop, Mode=TwoWay}" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="ToggleSwitchFilterCrop_Toggled"  Width="56" MinWidth="56" HorizontalAlignment="Center"/>
@@ -23,7 +23,7 @@
             </Grid>
         </GroupBox>
         <GroupBox x:Name="GroupBoxResize" Header="{lex:Loc}" HorizontalAlignment="Left" Height="203" Margin="10,204,0,0" VerticalAlignment="Top" Width="278" mah:ControlsHelper.ContentCharacterCasing="Normal">
-            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterResize}">
+            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterResize}" Background="{Binding BackgroundColor}">
                 <Label x:Name="LabelWidth" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="28" Width="56" HorizontalContentAlignment="Right" />
                 <TextBox x:Name="TextBoxFiltersResizeWidth" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="28" Margin="85,10,0,0" TextWrapping="Wrap" Text="{Binding FilterResizeWidth, Mode=TwoWay}" VerticalAlignment="Top" Width="169" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="If set to 0 it will automatically set the corresponding width to the height." />
                 <Label x:Name="LabelHeight" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="27,62,0,0" VerticalAlignment="Top" Height="28" Width="53" HorizontalContentAlignment="Right" />
@@ -46,7 +46,7 @@
             </Grid>
         </GroupBox>
         <GroupBox x:Name="GroupBoxRotate" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="10,10,0,0" VerticalAlignment="Top" Width="278" mah:ControlsHelper.ContentCharacterCasing="Normal">
-            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterRotate}">
+            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterRotate}" Background="{Binding BackgroundColor}">
                 <Label x:Name="LabelRotate" Content="{lex:Loc}" HorizontalAlignment="Right" Margin="0,20,129,0" VerticalAlignment="Top" Height="28" HorizontalContentAlignment="Right" Width="146" />
                 <ComboBox x:Name="ComboBoxFiltersRotate" HorizontalAlignment="Left" Margin="151,18,0,0" VerticalAlignment="Top" Width="65" Height="29" VerticalContentAlignment="Center" SelectedIndex="{Binding FilterRotateIndex, Mode=TwoWay}">
                     <ComboBoxItem Content="0°" />
@@ -57,7 +57,7 @@
             </Grid>
         </GroupBox>
         <GroupBox x:Name="GroupBoxDeinterlace" Header="{lex:Loc}" HorizontalAlignment="Left" Height="92" Margin="10,107,0,0" VerticalAlignment="Top" Width="278" mah:ControlsHelper.ContentCharacterCasing="Normal">
-            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterDeinterlace}">
+            <Grid IsEnabled="{Binding IsOn, ElementName=ToggleSwitchFilterDeinterlace}" Background="{Binding BackgroundColor}">
                 <Label x:Name="LabelDeinterlace" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Height="28" />
                 <ComboBox x:Name="ComboBoxFiltersDeinterlace" HorizontalAlignment="Left" Margin="85,20,0,0" VerticalAlignment="Top" Width="169" Height="29" VerticalContentAlignment="Center" SelectedIndex="{Binding FilterDeinterlaceIndex, Mode=TwoWay}">
                     <ComboBoxItem Content="bwdif" IsSelected="True" />

@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="NotEnoughAV1Encodes.Controls.QueueTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NotEnoughAV1Encodes.Controls"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1085">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="b2v" />
+    </UserControl.Resources>
+    <Grid>
+        <GroupBox Header="{lex:Loc TabItemQueue}" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid>
+                <GroupBox Margin="0,34,0,0">
+                    <ListBox x:Name="ListBoxQueue" Background="{Binding BackgroundColor}" KeyDown="ListBoxQueue_KeyDown" SelectionMode="Multiple">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Background" Value="{Binding BackgroundColor}"></Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="QueueMenuItemDelete" Header="{lex:Loc ButtonDeletePreset}" Click="ButtonRemoveSelectedQueueItem_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="/resources/img/stop.png" Height="20" Width="20"></Image>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem x:Name="QueueMenuItemEdit" Header="{lex:Loc}" Click="ButtonEditSelectedItem_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="/resources/img/settings.png" Height="20" Width="20"></Image>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem x:Name="QueueMenuItemSave" Header="{lex:Loc ButtonSavePreset}" Click="QueueMenuItemSave_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="/resources/img/save.png" Height="20" Width="20"></Image>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem x:Name="QueueMenuItemOpenOutputDir" Header="{lex:Loc}" Click="QueueMenuItemOpenOutputDir_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="/resources/img/folder.png" Height="20" Width="20"></Image>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60" />
+                                            <ColumnDefinition MinWidth="80" />
+                                            <ColumnDefinition Width="90" />
+                                            <ColumnDefinition MinWidth="50"/>
+                                            <ColumnDefinition Width="90" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{lex:Loc LabelVideoSource1}" FontWeight="Bold"></Label>
+                                        <Label Grid.Column="1" Content="{Binding VideoDB.InputFileName}" ToolTip="{Binding Input}"></Label>
+                                        <Label Grid.Column="2" Content="{lex:Loc LabelVideoDestination1}" FontWeight="Bold"></Label>
+                                        <Label Grid.Column="3" Content="{Binding VideoDB.OutputFileName}" ToolTip="{Binding Output}"></Label>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60"/>
+                                            <ColumnDefinition MinWidth="100"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label x:Name="LabelStatus" Grid.Column="0" Content="{lex:Loc LabelStatus}" FontWeight="Bold"></Label>
+                                        <Label Grid.Column="1" Content="{Binding Status}"></Label>
+                                    </Grid>
+                                    <Grid Grid.Row="2">
+                                        <ProgressBar Value="{Binding Progress}" Maximum="{Binding FrameCount}"/>
+                                    </Grid>
+                                    <Grid Grid.Row="2" Visibility="{Binding TwoProgressbars, Converter={StaticResource b2v}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <ProgressBar Grid.Column="0" Value="{Binding Progress}" Maximum="{Binding FrameCount}"/>
+                                        <ProgressBar Grid.Column="1" Value="{Binding ProgressSecondPass}" Maximum="{Binding FrameCount}"/>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </GroupBox>
+                <Label x:Name="LabelEncodeQueueParallel" Content="{lex:Loc}" Margin="0,1,67,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="398"/>
+                <mah:ToggleSwitch x:Name="ToggleSwitchQueueParallel" VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,-1,-97,0" Height="30" Content=" " Toggled="ToggleSwitchQueueParallel_Toggled"/>
+                <ComboBox x:Name="ComboBoxSortQueueBy" HorizontalAlignment="Left" Margin="366,3,0,0" VerticalAlignment="Top" Width="161" SelectionChanged="ComboBoxSortQueueBy_SelectionChanged">
+                    <ComboBoxItem Content="{lex:Loc SortByOldest}" IsSelected="True"/>
+                    <ComboBoxItem Content="{lex:Loc SortByNewest}"/>
+                    <ComboBoxItem Content="{lex:Loc SortByFramecountAsc}"/>
+                    <ComboBoxItem Content="{lex:Loc SortByFramecountDesc}"/>
+                    <ComboBoxItem Content="{lex:Loc SortByOutNameAsc}"/>
+                    <ComboBoxItem Content="{lex:Loc SortByOutNameDesc}"/>
+                </ComboBox>
+            </Grid>
+        </GroupBox>
+        <Button x:Name="ButtonRemoveSelectedQueueItem" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Click="ButtonRemoveSelectedQueueItem_Click" Background="{Binding BackgroundColor}" Width="115"/>
+        <Button x:Name="ButtonEditSelectedItem" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="130,31,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Background="{Binding BackgroundColor}" Click="ButtonEditSelectedItem_Click" Width="115"/>
+        <Button x:Name="ButtonClearQueue" Content="{lex:Loc}" HorizontalAlignment="Left" Margin="250,32,0,0" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal" Background="{Binding BackgroundColor}" Click="ButtonClearQueue_Click"  Width="115"/>
+    </Grid>
+</UserControl>
