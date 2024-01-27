@@ -212,17 +212,17 @@ namespace NotEnoughAV1Encodes.Controls
 
                     mainWindow.AudioTabControl.ListBoxAudioTracks.ItemsSource = mainWindow.videoDB.AudioTracks;
                     mainWindow.SubtitlesTabControl.ListBoxSubtitleTracks.ItemsSource = mainWindow.videoDB.SubtitleTracks;
-                    mainWindow.LabelVideoSource.Text = mainWindow.videoDB.InputPath;
-                    mainWindow.LabelVideoDestination.Text = mainWindow.videoDB.OutputPath;
-                    mainWindow.LabelVideoLength.Content = mainWindow.videoDB.MIDuration;
-                    mainWindow.LabelVideoResolution.Content = mainWindow.videoDB.MIWidth + "x" + mainWindow.videoDB.MIHeight;
-                    mainWindow.LabelVideoColorFomat.Content = mainWindow.videoDB.MIChromaSubsampling;
+                    mainWindow.SummaryTabControl.LabelVideoSource.Text = mainWindow.videoDB.InputPath;
+                    mainWindow.SummaryTabControl.LabelVideoDestination.Text = mainWindow.videoDB.OutputPath;
+                    mainWindow.SummaryTabControl.LabelVideoLength.Content = mainWindow.videoDB.MIDuration;
+                    mainWindow.SummaryTabControl.LabelVideoResolution.Content = mainWindow.videoDB.MIWidth + "x" + mainWindow.videoDB.MIHeight;
+                    mainWindow.SummaryTabControl.LabelVideoColorFomat.Content = mainWindow.videoDB.MIChromaSubsampling;
 
-                    mainWindow.ComboBoxChunkingMethod.SelectedIndex = tmp.ChunkingMethod;
-                    mainWindow.ComboBoxReencodeMethod.SelectedIndex = tmp.ReencodeMethod;
+                    mainWindow.SummaryTabControl.ComboBoxChunkingMethod.SelectedIndex = tmp.ChunkingMethod;
+                    mainWindow.SummaryTabControl.ComboBoxReencodeMethod.SelectedIndex = tmp.ReencodeMethod;
                     mainWindow.CheckBoxTwoPassEncoding.IsOn = tmp.Passes == 2;
-                    mainWindow.TextBoxChunkLength.Text = tmp.ChunkLength.ToString();
-                    mainWindow.TextBoxPySceneDetectThreshold.Text = tmp.PySceneDetectThreshold.ToString();
+                    mainWindow.SummaryTabControl.TextBoxChunkLength.Text = tmp.ChunkLength.ToString();
+                    mainWindow.SummaryTabControl.TextBoxPySceneDetectThreshold.Text = tmp.PySceneDetectThreshold.ToString();
 
                     try
                     {

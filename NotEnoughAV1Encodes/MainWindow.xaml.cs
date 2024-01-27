@@ -95,9 +95,9 @@ namespace NotEnoughAV1Encodes
             {
                 coreCount += int.Parse(item["NumberOfCores"].ToString());
             }
-            for (int i = 1; i <= coreCount; i++) { ComboBoxWorkerCount.Items.Add(i); }
-            ComboBoxWorkerCount.SelectedItem = Convert.ToInt32(coreCount * 75 / 100);
-            TextBoxWorkerCount.Text = coreCount.ToString();
+            for (int i = 1; i <= coreCount; i++) { SummaryTabControl.ComboBoxWorkerCount.Items.Add(i); }
+            SummaryTabControl.ComboBoxWorkerCount.SelectedItem = Convert.ToInt32(coreCount * 75 / 100);
+            SummaryTabControl.TextBoxWorkerCount.Text = coreCount.ToString();
 
             // Load Settings from JSON
             try 
@@ -137,26 +137,12 @@ namespace NotEnoughAV1Encodes
                 }
             }
 
-            LoadPresets();
+            SummaryTabControl.LoadPresets();
 
-            try { ComboBoxPresets.SelectedItem = settingsDB.DefaultPreset; } catch { }
+            try { SummaryTabControl.ComboBoxPresets.SelectedItem = settingsDB.DefaultPreset; } catch { }
             startupLock = false;
 
             try { QueueTabControl.ComboBoxSortQueueBy.SelectedIndex = settingsDB.SortQueueBy; } catch { }
-        }
-
-        private void LoadPresets()
-        {
-            // Load Presets
-            if (Directory.Exists(Path.Combine(Global.AppData, "NEAV1E", "Presets")))
-            {
-                string[] filePaths = Directory.GetFiles(Path.Combine(Global.AppData, "NEAV1E", "Presets"), "*.json", SearchOption.TopDirectoryOnly);
-
-                foreach (string file in filePaths)
-                {
-                    ComboBoxPresets.Items.Add(Path.GetFileNameWithoutExtension(file));
-                }
-            }
         }
         #endregion
 
@@ -247,7 +233,7 @@ namespace NotEnoughAV1Encodes
                 if (openSource.BatchFolder)
                 {
                     // Check if Presets exist
-                    if(ComboBoxPresets.Items.Count == 0)
+                    if(SummaryTabControl.ComboBoxPresets.Items.Count == 0)
                     {
                         MessageBox.Show(LocalizedStrings.Instance["MessageCreatePresetBeforeBatch"]);
                         return;
@@ -373,17 +359,17 @@ namespace NotEnoughAV1Encodes
 
                         AudioTabControl.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
                         SubtitlesTabControl.ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
-                        LabelVideoSource.Text = videoDB.InputPath;
-                        LabelVideoDestination.Text = videoDB.OutputPath;
-                        LabelVideoLength.Content = videoDB.MIDuration;
-                        LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
-                        LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
+                        SummaryTabControl.LabelVideoSource.Text = videoDB.InputPath;
+                        SummaryTabControl.LabelVideoDestination.Text = videoDB.OutputPath;
+                        SummaryTabControl.LabelVideoLength.Content = videoDB.MIDuration;
+                        SummaryTabControl.LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
+                        SummaryTabControl.LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
 
-                        ComboBoxChunkingMethod.SelectedIndex = queueElement.ChunkingMethod;
-                        ComboBoxReencodeMethod.SelectedIndex = queueElement.ReencodeMethod;
+                        SummaryTabControl.ComboBoxChunkingMethod.SelectedIndex = queueElement.ChunkingMethod;
+                        SummaryTabControl.ComboBoxReencodeMethod.SelectedIndex = queueElement.ReencodeMethod;
                         CheckBoxTwoPassEncoding.IsOn = queueElement.Passes == 2;
-                        TextBoxChunkLength.Text = queueElement.ChunkLength.ToString();
-                        TextBoxPySceneDetectThreshold.Text = queueElement.PySceneDetectThreshold.ToString();
+                        SummaryTabControl.TextBoxChunkLength.Text = queueElement.ChunkLength.ToString();
+                        SummaryTabControl.TextBoxPySceneDetectThreshold.Text = queueElement.PySceneDetectThreshold.ToString();
                     }
                     catch(Exception ex)
                     {
@@ -405,7 +391,7 @@ namespace NotEnoughAV1Encodes
                 InputPath = path
             };
             videoDB.ParseMediaInfo(PresetSettings);
-            LabelVideoDestination.Text = LocalizedStrings.Instance["LabelVideoDestination"];
+            SummaryTabControl.LabelVideoDestination.Text = LocalizedStrings.Instance["LabelVideoDestination"];
 
             try { AudioTabControl.ListBoxAudioTracks.Items.Clear(); } catch { }
             try { AudioTabControl.ListBoxAudioTracks.ItemsSource = null; } catch { }
@@ -414,10 +400,10 @@ namespace NotEnoughAV1Encodes
 
             AudioTabControl.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
             SubtitlesTabControl.ListBoxSubtitleTracks.ItemsSource = videoDB.SubtitleTracks;
-            LabelVideoSource.Text = videoDB.InputPath;
-            LabelVideoLength.Content = videoDB.MIDuration;
-            LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
-            LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
+            SummaryTabControl.LabelVideoSource.Text = videoDB.InputPath;
+            SummaryTabControl.LabelVideoLength.Content = videoDB.MIDuration;
+            SummaryTabControl.LabelVideoResolution.Content = videoDB.MIWidth + "x" + videoDB.MIHeight;
+            SummaryTabControl.LabelVideoColorFomat.Content = videoDB.MIChromaSubsampling;
             string vfr = "";
             if (videoDB.MIIsVFR)
             {
@@ -436,7 +422,7 @@ namespace NotEnoughAV1Encodes
                     CheckBoxVideoVFR.IsEnabled = false;
                 }
             }
-            LabelVideoFramerate.Content = videoDB.MIFramerate + vfr;
+            SummaryTabControl.LabelVideoFramerate.Content = videoDB.MIFramerate + vfr;
 
             // Output
             if (!string.IsNullOrEmpty(settingsDB.DefaultOutPath))
@@ -449,7 +435,7 @@ namespace NotEnoughAV1Encodes
                 }
 
                 videoDB.OutputPath = outPath;
-                LabelVideoDestination.Text = videoDB.OutputPath;
+                SummaryTabControl.LabelVideoDestination.Text = videoDB.OutputPath;
                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
 
                 try
@@ -490,7 +476,7 @@ namespace NotEnoughAV1Encodes
             if (saveVideoFileDialog.ShowDialog() == true)
             {
                 videoDB.OutputPath = saveVideoFileDialog.FileName;
-                LabelVideoDestination.Text = videoDB.OutputPath;
+                SummaryTabControl.LabelVideoDestination.Text = videoDB.OutputPath;
                 videoDB.OutputFileName = Path.GetFileName(videoDB.OutputPath);
                 try
                 {
@@ -628,56 +614,6 @@ namespace NotEnoughAV1Encodes
             catch { }
 
         }
-
-        private void ButtonSavePreset_Click(object sender, RoutedEventArgs e)
-        {
-            Views.SavePresetDialog savePresetDialog = new(settingsDB.Theme);
-            savePresetDialog.ShowDialog();
-            if (savePresetDialog.Quit)
-            {
-                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E", "Presets"));
-                PresetSettings.PresetBatchName = savePresetDialog.PresetBatchName;
-                PresetSettings.AudioCodecMono = savePresetDialog.AudioCodecMono;
-                PresetSettings.AudioCodecStereo = savePresetDialog.AudioCodecStereo;
-                PresetSettings.AudioCodecSixChannel = savePresetDialog.AudioCodecSixChannel;
-                PresetSettings.AudioCodecEightChannel = savePresetDialog.AudioCodecEightChannel;
-                PresetSettings.AudioBitrateMono = savePresetDialog.AudioBitrateMono;
-                PresetSettings.AudioBitrateStereo = savePresetDialog.AudioBitrateStereo;
-                PresetSettings.AudioBitrateSixChannel = savePresetDialog.AudioBitrateSixChannel;
-                PresetSettings.AudioBitrateEightChannel = savePresetDialog.AudioBitrateEightChannel;
-                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", savePresetDialog.PresetName + ".json"), JsonConvert.SerializeObject(PresetSettings, Formatting.Indented));
-                ComboBoxPresets.Items.Clear();
-                LoadPresets();
-            }
-        }
-
-        private void ButtonDeletePreset_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                File.Delete(Path.Combine(Global.AppData, "NEAV1E", "Presets", ComboBoxPresets.Text + ".json"));
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-
-            try
-            {
-                ComboBoxPresets.Items.Clear();
-                LoadPresets();
-            }
-            catch { }
-
-        }
-
-        private void ButtonSetPresetDefault_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                settingsDB.DefaultPreset = ComboBoxPresets.Text;
-                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
-                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-        }
         #endregion
 
         #region UI Functions
@@ -702,60 +638,7 @@ namespace NotEnoughAV1Encodes
                 MessageBox.Show("Please use Batch Input (Drag & Drop multiple Files is not supported)");
             }
         }
-        private bool presetLoadLock = false;
-        private void ComboBoxPresets_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ComboBoxPresets.SelectedItem == null) return;
-            try
-            {
-                presetLoadLock = true;
-                PresetSettings = JsonConvert.DeserializeObject<VideoSettings>(File.ReadAllText(Path.Combine(Global.AppData, "NEAV1E", "Presets", ComboBoxPresets.SelectedItem.ToString() + ".json")));
-                DataContext = PresetSettings;
-                presetLoadLock = false;
 
-                ApplyPresetAudioToCurrentVideo();
-            }
-            catch { }
-        }
-
-        private void ApplyPresetAudioToCurrentVideo()
-        {
-            try
-            {
-                if (AudioTabControl.ListBoxAudioTracks.ItemsSource == null) return;
-                videoDB.AudioTracks = (List<Audio.AudioTracks>)AudioTabControl.ListBoxAudioTracks.ItemsSource;
-                try { AudioTabControl.ListBoxAudioTracks.Items.Clear(); } catch { }
-                try { AudioTabControl.ListBoxAudioTracks.ItemsSource = null; } catch { }
-
-                foreach (Audio.AudioTracks audioTrack in videoDB.AudioTracks)
-                {
-                    switch (audioTrack.Channels)
-                    {
-                        case 0:
-                            audioTrack.Bitrate = PresetSettings.AudioBitrateMono.ToString();
-                            audioTrack.Codec = PresetSettings.AudioCodecMono;
-                            break;
-                        case 1:
-                            audioTrack.Bitrate = PresetSettings.AudioBitrateStereo.ToString();
-                            audioTrack.Codec = PresetSettings.AudioCodecStereo;
-                            break;
-                        case 2:
-                            audioTrack.Bitrate = PresetSettings.AudioBitrateSixChannel.ToString();
-                            audioTrack.Codec = PresetSettings.AudioCodecSixChannel;
-                            break;
-                        case 3:
-                            audioTrack.Bitrate = PresetSettings.AudioBitrateEightChannel.ToString();
-                            audioTrack.Codec = PresetSettings.AudioCodecEightChannel;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                AudioTabControl.ListBoxAudioTracks.ItemsSource = videoDB.AudioTracks;
-            }
-            catch { }
-        }
 
         private void ComboBoxVideoEncoder_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
@@ -886,6 +769,76 @@ namespace NotEnoughAV1Encodes
                 ComboBoxVideoBitDepth.Visibility = Visibility.Collapsed;
                 ComboBoxVideoBitDepthLimited.Visibility = Visibility.Visible;
             }
+
+            SummaryTabControl.LabelEncoder.Content = ComboBoxVideoEncoder.SelectedIndex switch
+            {
+                (int) Video.Encoders.AOMFFMPEG      => "aom-av1 (ffmpeg)",
+                (int) Video.Encoders.RAV1EFFMPEG    => "rav1e (ffmpeg)",
+                (int) Video.Encoders.SVTAV1FFMPEG   => "svt-av1 (ffmpeg)",
+                (int) Video.Encoders.VPXVP9FFMPEG   => "vpx-vp9 (ffmpeg)",
+                (int) Video.Encoders.AOMENC         => "aomenc (AV1)",
+                (int) Video.Encoders.RAV1E          => "rav1e (AV1)",
+                (int) Video.Encoders.SVTAV1         => "svt-av1 (AV1)",
+                (int) Video.Encoders.X265           => "x265 (HEVC)",
+                (int) Video.Encoders.X264           => "x264 (AVC)",
+                (int) Video.Encoders.QSVAV1         => "QuickSync (AV1)",
+                (int) Video.Encoders.NVENCAV1       => "NVENC (AV1)",
+                (int) Video.Encoders.AMFAV1         => "AMF (AV1)",
+                _ => ""
+            };
+        }
+
+        private void ComboBoxColorFormat_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            SummaryTabControl.LabelColorFormatOutput.Content = ComboBoxColorFormat.SelectedIndex switch
+            {
+                0 => "4:2:0",
+                1 => "4:2:2",
+                2 => "4:4:4",
+                _ => ""
+            };
+        }
+
+        private void ComboBoxVideoBitDepth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            SummaryTabControl.LabelBitDepth.Content = ComboBoxVideoBitDepth.SelectedIndex switch
+            {
+                0 => "8",
+                1 => "10",
+                2 => "12",
+                _ => ""
+            };
+        }
+
+        private void ComboBoxVideoFrameRate_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            SummaryTabControl.LabelFramerateOutput.Content = ComboBoxVideoFrameRate.SelectedIndex switch
+            {
+                0 => "Same as Source",
+                1 => "5",
+                2 => "10",
+                3 => "12",
+                4 => "15",
+                5 => "20",
+                6 => "23.976",
+                7 => "24",
+                8 => "25",
+                9 => "29.97",
+                10 => "30",
+                11 => "48",
+                12 => "50",
+                13 => "59.94",
+                14 => "60",
+                15 => "72",
+                16 => "75",
+                17 => "90",
+                18 => "100",
+                19 => "120",
+                20 => "144",
+                21 => "240",
+                22 => "360",
+                _ => ""
+            };
         }
 
         private void ComboBoxQualityMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -1281,7 +1234,7 @@ namespace NotEnoughAV1Encodes
 
         private void CheckBoxCustomVideoSettings_Toggled(object sender, RoutedEventArgs e)
         {
-            if (CheckBoxCustomVideoSettings.IsOn && presetLoadLock == false && IsLoaded)
+            if (CheckBoxCustomVideoSettings.IsOn && SummaryTabControl.presetLoadLock == false && IsLoaded)
             {
                 TextBoxCustomVideoSettings.Text = GenerateEncoderCommand();
             }
@@ -1491,79 +1444,27 @@ namespace NotEnoughAV1Encodes
             catch { }
         }
 
-        private void ComboBoxChunkingMethod_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (startupLock) return;
-            settingsDB.ChunkingMethod = ComboBoxChunkingMethod.SelectedIndex;
-            settingsDB.ReencodeMethod = ComboBoxReencodeMethod.SelectedIndex;
-            try
-            {
-                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
-                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-        }
-
-        private void TextBoxChunkLength_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            if (startupLock) return;
-            settingsDB.ChunkLength = TextBoxChunkLength.Text;
-            settingsDB.PySceneDetectThreshold = TextBoxPySceneDetectThreshold.Text;
-            try
-            {
-                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
-                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-        }
-
-        private void ComboBoxWorkerCount_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (startupLock) return;
-            if (settingsDB.OverrideWorkerCount) return;
-            settingsDB.WorkerCount = ComboBoxWorkerCount.SelectedIndex;
-            try
-            {
-                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
-                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-        }
-
-        private void TextBoxWorkerCount_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            if (startupLock) return;
-            if (!settingsDB.OverrideWorkerCount) return;
-            settingsDB.WorkerCount = int.Parse(TextBoxWorkerCount.Text);
-            try
-            {
-                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
-                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(settingsDB, Formatting.Indented));
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-        }
-
         private void LoadSettings()
         {
             if (settingsDB.OverrideWorkerCount)
             {
-                ComboBoxWorkerCount.Visibility = Visibility.Hidden;
-                TextBoxWorkerCount.Visibility = Visibility.Visible;
+                SummaryTabControl.ComboBoxWorkerCount.Visibility = Visibility.Hidden;
+                SummaryTabControl.TextBoxWorkerCount.Visibility = Visibility.Visible;
                 if (settingsDB.WorkerCount != 99999999)
-                    TextBoxWorkerCount.Text = settingsDB.WorkerCount.ToString();
+                    SummaryTabControl.TextBoxWorkerCount.Text = settingsDB.WorkerCount.ToString();
             }
             else
             {
-                ComboBoxWorkerCount.Visibility = Visibility.Visible;
-                TextBoxWorkerCount.Visibility = Visibility.Hidden;
+                SummaryTabControl.ComboBoxWorkerCount.Visibility = Visibility.Visible;
+                SummaryTabControl.TextBoxWorkerCount.Visibility = Visibility.Hidden;
                 if (settingsDB.WorkerCount != 99999999)
-                    ComboBoxWorkerCount.SelectedIndex = settingsDB.WorkerCount;
+                    SummaryTabControl.ComboBoxWorkerCount.SelectedIndex = settingsDB.WorkerCount;
             }
 
-            ComboBoxChunkingMethod.SelectedIndex = settingsDB.ChunkingMethod;
-            ComboBoxReencodeMethod.SelectedIndex = settingsDB.ReencodeMethod;
-            TextBoxChunkLength.Text = settingsDB.ChunkLength;
-            TextBoxPySceneDetectThreshold.Text = settingsDB.PySceneDetectThreshold;
+            SummaryTabControl.ComboBoxChunkingMethod.SelectedIndex = settingsDB.ChunkingMethod;
+            SummaryTabControl.ComboBoxReencodeMethod.SelectedIndex = settingsDB.ReencodeMethod;
+            SummaryTabControl.TextBoxChunkLength.Text = settingsDB.ChunkLength;
+            SummaryTabControl.TextBoxPySceneDetectThreshold.Text = settingsDB.PySceneDetectThreshold;
             QueueTabControl.ToggleSwitchQueueParallel.IsOn = settingsDB.QueueParallel;
 
             // Sets Temp Path
@@ -1637,18 +1538,18 @@ namespace NotEnoughAV1Encodes
             queueElement.Input = videoDB.InputPath;
             queueElement.Output = videoDB.OutputPath;
             queueElement.VideoCommand = CheckBoxCustomVideoSettings.IsOn ? TextBoxCustomVideoSettings.Text : GenerateEncoderCommand();
-            queueElement.VideoHDRMuxCommand = GenerateMKVMergeHDRCommand();
+            queueElement.VideoHDRMuxCommand = HDRTabControl.GenerateMKVMergeHDRCommand();
             queueElement.AudioCommand = audioCommandGenerator.Generate(AudioTabControl.ListBoxAudioTracks.Items);
             queueElement.SubtitleCommand = skipSubs ? null : subCommandGenerator.GenerateSoftsub(SubtitlesTabControl.ListBoxSubtitleTracks.Items);
             queueElement.SubtitleBurnCommand = subCommandGenerator.GenerateHardsub(SubtitlesTabControl.ListBoxSubtitleTracks.Items, identifier);
             queueElement.FilterCommand = GenerateVideoFilters();
             queueElement.FrameCount = videoDB.MIFrameCount;
             queueElement.EncodingMethod = ComboBoxVideoEncoder.SelectedIndex;
-            queueElement.ChunkingMethod = ComboBoxChunkingMethod.SelectedIndex;
-            queueElement.ReencodeMethod = ComboBoxReencodeMethod.SelectedIndex;
+            queueElement.ChunkingMethod = SummaryTabControl.ComboBoxChunkingMethod.SelectedIndex;
+            queueElement.ReencodeMethod = SummaryTabControl.ComboBoxReencodeMethod.SelectedIndex;
             queueElement.Passes = CheckBoxTwoPassEncoding.IsOn ? 2 : 1;
-            queueElement.ChunkLength = int.Parse(TextBoxChunkLength.Text);
-            queueElement.PySceneDetectThreshold = float.Parse(TextBoxPySceneDetectThreshold.Text);
+            queueElement.ChunkLength = int.Parse(SummaryTabControl.TextBoxChunkLength.Text);
+            queueElement.PySceneDetectThreshold = float.Parse(SummaryTabControl.TextBoxPySceneDetectThreshold.Text);
             queueElement.VFR = CheckBoxVideoVFR.IsChecked == true;
             queueElement.Preset = PresetSettings;
             queueElement.VideoDB = videoDB;
@@ -2039,66 +1940,6 @@ namespace NotEnoughAV1Encodes
 
             return settings;
         }
-
-        private string GenerateMKVMergeHDRCommand()
-        {
-            string settings = " ";
-            if (CheckBoxVideoHDR.IsChecked == true)
-            {
-                settings = "";
-                if (CheckBoxMKVMergeMasteringDisplay.IsChecked == true)
-                {
-                    // --chromaticity-coordinates TID:red-x,red-y,green-x,green-y,blue-x,blue-y
-                    settings += " --chromaticity-coordinates 0:" +
-                        TextBoxMKVMergeMasteringRx.Text + "," +
-                        TextBoxMKVMergeMasteringRy.Text + "," +
-                        TextBoxMKVMergeMasteringGx.Text + "," +
-                        TextBoxMKVMergeMasteringGy.Text + "," +
-                        TextBoxMKVMergeMasteringBx.Text + "," +
-                        TextBoxMKVMergeMasteringBy.Text;
-                }
-                if (CheckBoxMKVMergeWhiteMasteringDisplay.IsChecked == true)
-                {
-                    // --white-colour-coordinates TID:x,y
-                    settings += " --white-colour-coordinates 0:" +
-                        TextBoxMKVMergeMasteringWPx.Text + "," +
-                        TextBoxMKVMergeMasteringWPy.Text;
-                }
-                if (CheckBoxMKVMergeLuminance.IsChecked == true)
-                {
-                    // --max-luminance TID:float
-                    // --min-luminance TID:float
-                    settings += " --max-luminance 0:" + TextBoxMKVMergeMasteringLMax.Text;
-                    settings += " --min-luminance 0:" + TextBoxMKVMergeMasteringLMin.Text;
-                }
-                if (CheckBoxMKVMergeMaxContentLight.IsChecked == true)
-                {
-                    // --max-content-light TID:n
-                    settings += " --max-content-light 0:" + TextBoxMKVMergeMaxContentLight.Text;
-                }
-                if (CheckBoxMKVMergeMaxFrameLight.IsChecked == true)
-                {
-                    // --max-frame-light TID:n
-                    settings += " --max-frame-light 0:" + TextBoxMKVMergeMaxFrameLight.Text;
-                }
-                if (ComboBoxMKVMergeColorPrimaries.SelectedIndex != 2)
-                {
-                    // --colour-primaries TID:n
-                    settings += " --colour-primaries 0:" + ComboBoxMKVMergeColorPrimaries.SelectedIndex.ToString();
-                }
-                if (ComboBoxMKVMergeColorTransfer.SelectedIndex != 2)
-                {
-                    // --colour-transfer-characteristics TID:n
-                    settings += " --colour-transfer-characteristics 0:" + ComboBoxMKVMergeColorTransfer.SelectedIndex.ToString();
-                }
-                if (ComboBoxMKVMergeColorMatrix.SelectedIndex != 2)
-                {
-                    // --colour-matrix-coefficients TID:n
-                    settings += " --colour-matrix-coefficients 0:" + ComboBoxMKVMergeColorMatrix.SelectedIndex.ToString();
-                }
-            }
-            return settings;
-        }
         #endregion
 
         #region Main Entry
@@ -2122,11 +1963,11 @@ namespace NotEnoughAV1Encodes
             QueueParallel = QueueTabControl.ToggleSwitchQueueParallel.IsOn;
             // Sets amount of Workers
             int WorkerCountQueue = 1;
-            int WorkerCountElement = int.Parse(ComboBoxWorkerCount.Text);
+            int WorkerCountElement = int.Parse(SummaryTabControl.ComboBoxWorkerCount.Text);
 
             if (settingsDB.OverrideWorkerCount)
             {
-                WorkerCountElement = int.Parse(TextBoxWorkerCount.Text);
+                WorkerCountElement = int.Parse(SummaryTabControl.TextBoxWorkerCount.Text);
             }
 
             // If user wants to encode the queue in parallel,

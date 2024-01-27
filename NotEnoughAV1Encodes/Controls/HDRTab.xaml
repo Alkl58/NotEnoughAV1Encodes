@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="NotEnoughAV1Encodes.Controls.HDRTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NotEnoughAV1Encodes.Controls"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1085">
+    <Grid>
+        <GroupBox Header="{lex:Loc HDRSettings}" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid Background="{Binding BackgroundColor}">
+                <Label x:Name="LabelAomencColorPrimaries_Copy" Content="Color Primaries:" Margin="17,61,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="93" />
+                <ComboBox x:Name="ComboBoxMKVMergeColorPrimaries" SelectedIndex="2" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448" Margin="160,61,0,0" Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="160">
+                    <ComboBoxItem Content="0: reserved" IsEnabled="False" />
+                    <ComboBoxItem Content="1: ITU-R BT.709" />
+                    <ComboBoxItem Content="2: unspecified" IsSelected="True" />
+                    <ComboBoxItem Content="3: reserved" IsEnabled="False" />
+                    <ComboBoxItem Content="4: ITU-R BT.470M" />
+                    <ComboBoxItem Content="5: ITU-R BT.470BG" />
+                    <ComboBoxItem Content="6: SMPTE 170M" />
+                    <ComboBoxItem Content="7: SMPTE 240M" />
+                    <ComboBoxItem Content="8: FILM" />
+                    <ComboBoxItem Content="9: ITU-R BT.2020" />
+                    <ComboBoxItem Content="10: SMPTE ST 428-1" />
+                </ComboBox>
+                <Label x:Name="LabelAomencColorTransfer_Copy" Content="Color Transfer:" Margin="17,95,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="86" />
+                <ComboBox x:Name="ComboBoxMKVMergeColorTransfer" SelectedIndex="2" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448" Margin="160,95,0,0" Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="160">
+                    <ComboBoxItem Content="0: reserved" IsEnabled="False"/>
+                    <ComboBoxItem Content="1: ITU-R BT.709" />
+                    <ComboBoxItem Content="2: unspecified" IsSelected="True"/>
+                    <ComboBoxItem Content="3: reserved" IsEnabled="False"/>
+                    <ComboBoxItem Content="4: gamma 2.2 curve" />
+                    <ComboBoxItem Content="5: gamma 2.8 curve" />
+                    <ComboBoxItem Content="6: SMPTE 170M" />
+                    <ComboBoxItem Content="7: SMPTE 240M" />
+                    <ComboBoxItem Content="8: linear" />
+                    <ComboBoxItem Content="9: log" />
+                    <ComboBoxItem Content="10: log sqrt" />
+                    <ComboBoxItem Content="11: IEC 61966-2-4" />
+                    <ComboBoxItem Content="12: ITU-R BT.1361 extended colour gamut" />
+                    <ComboBoxItem Content="13: IEC 61966-2-1" />
+                    <ComboBoxItem Content="14: ITU-R BT.2020 10 bit" />
+                    <ComboBoxItem Content="15: ITU-R BT.2020 12 bit" />
+                    <ComboBoxItem Content="16: SMPTE ST 2084" />
+                    <ComboBoxItem Content="17: SMPTE ST 428-1" />
+                    <ComboBoxItem Content="18: ARIB STD-B67 (HLG)" />
+                </ComboBox>
+                <Label x:Name="LabelAomencColorMatrix_Copy" Content="Color Matrix:" Margin="17,129,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="78" />
+                <ComboBox x:Name="ComboBoxMKVMergeColorMatrix" SelectedIndex="2" VerticalContentAlignment="Center" RenderTransformOrigin="0.722,0.448" Margin="160,129,0,0" Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="160">
+                    <ComboBoxItem Content="0: GBR" />
+                    <ComboBoxItem Content="1: BT709" />
+                    <ComboBoxItem Content="2: unspecified" IsSelected="True"/>
+                    <ComboBoxItem Content="3: reserved" IsEnabled="False"/>
+                    <ComboBoxItem Content="4: FCC" />
+                    <ComboBoxItem Content="5: BT470BG" />
+                    <ComboBoxItem Content="6: SMPTE 170M" />
+                    <ComboBoxItem Content="7: SMPTE 240M" />
+                    <ComboBoxItem Content="8: YCOCG" />
+                    <ComboBoxItem Content="9: BT2020 non-constant luminance" />
+                    <ComboBoxItem Content="10: BT2020 constant luminance" />
+                </ComboBox>
+                <CheckBox x:Name="CheckBoxMKVMergeMasteringDisplay" IsChecked="{Binding MasteringDisplay}" Content="Chromaticity Coordinates" Margin="338,20,0,0" ToolTip="Sets the red/green/blue chromaticity coordinates as defined by CIE 1931. " Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="163" />
+                <Label x:Name="LabelRav1eMasteringG_Copy" Content="G" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMasteringDisplay}"  Foreground="#FF13DC09" Margin="338,64,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="18" />
+                <TextBox x:Name="TextBoxMKVMergeMasteringGx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMasteringDisplay}" TextWrapping="Wrap" Text="{Binding MasteringGx}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="363,62,0,0" ToolTip="Sets the red/green/blue chromaticity coordinates as defined by CIE 1931. " Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
+                <TextBox x:Name="TextBoxMKVMergeMasteringGy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMasteringDisplay}" TextWrapping="Wrap" Text="{Binding MasteringGy}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="427,62,0,0" ToolTip="Sets the red/green/blue chromaticity coordinates as defined by CIE 1931. " Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
+                <Label x:Name="LabelMKVMergeMasteringB_Copy" Content="B"  IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMasteringDisplay}"  Foreground="#FF0986DC" Margin="338,96,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="20" />
+                <TextBox x:Name="TextBoxMKVMergeMasteringBx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMasteringDisplay}" TextWrapping="Wrap" Text="{Binding MasteringBx}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="363,96,0,0" ToolTip="Sets the red/green/blue chromaticity coordinates as defined by CIE 1931. " Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
+                <TextBox x:Name="TextBoxMKVMergeMasteringBy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMasteringDisplay}" TextWrapping="Wrap" Text="{Binding MasteringBy}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="427,96,0,0" ToolTip="Sets the red/green/blue chromaticity coordinates as defined by CIE 1931. " Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
+                <Label x:Name="LabelMKVMergeMasteringR" Content="R" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMasteringDisplay}"  Foreground="#FFDC0909" Margin="338,129,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="20" />
+                <TextBox x:Name="TextBoxMKVMergeMasteringRx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMasteringDisplay}" TextWrapping="Wrap" Text="{Binding MasteringRx}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="363,129,0,0" ToolTip="Sets the red/green/blue chromaticity coordinates as defined by CIE 1931. " Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
+                <TextBox x:Name="TextBoxMKVMergeMasteringRy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMasteringDisplay}" TextWrapping="Wrap" Text="{Binding MasteringRy}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="427,129,0,0" ToolTip="Sets the red/green/blue chromaticity coordinates as defined by CIE 1931. " Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
+                <TextBox x:Name="TextBoxMKVMergeMasteringWPx" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeWhiteMasteringDisplay}" TextWrapping="Wrap" Text="{Binding MasteringWPx}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="534,63,0,0" ToolTip="Sets the white colour chromaticity coordinates as defined by CIE 1931." Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
+                <TextBox x:Name="TextBoxMKVMergeMasteringWPy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeWhiteMasteringDisplay}" TextWrapping="Wrap" Text="{Binding MasteringWPy}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="598,63,0,0" ToolTip="Sets the white colour chromaticity coordinates as defined by CIE 1931." Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
+                <Label x:Name="LabelMKVMergeMasteringWP_Copy6" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMasteringDisplay}" Content="|        x       |"  Foreground="#FFABADB3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="357,36,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="72" />
+                <Label x:Name="LabelMKVMergeMasteringWP_Copy7" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMasteringDisplay}"  Content="|       y        |"  Foreground="#FFABADB3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="421,36,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="72" />
+                <TextBox x:Name="TextBoxMKVMergeMasteringLMin" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeLuminance}" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="741,63,0,0" ToolTip="Sets the minimum luminance in candelas per square meter (cd/m²). The value should be less than 999.9999." Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
+                <TextBox x:Name="TextBoxMKVMergeMasteringLMax" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeLuminance}" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="805,63,0,0" ToolTip="Sets the maximum luminance in candelas per square meter (cd/m²). The value should be less than 9999.99. " Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
+                <CheckBox x:Name="CheckBoxMKVMergeMaxContentLight" IsChecked="{Binding MaxContentLight}" Content="Max Content Light" Margin="510,102,0,0" ToolTip="Sets the maximum brightness of a single pixel (Maximum Content Light Level) in candelas per square meter (cd/m²). The value of n should be a non-negtive integer. " Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="148" />
+                <TextBox x:Name="TextBoxMKVMergeMaxContentLight" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMaxContentLight}" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="534,129,0,0" ToolTip="Sets the maximum brightness of a single pixel (Maximum Content Light Level) in candelas per square meter (cd/m²). The value of n should be a non-negtive integer. " Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="124" />
+                <TextBox x:Name="TextBoxMKVMergeMaxFrameLight" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeMaxFrameLight}" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="741,129,0,0" ToolTip="Sets the maximum brightness of a single full frame (Maximum Frame-Average Light Level) in candelas per square meter (cd/m²). The value of n should be a non-negtive integer. " Height="29" VerticalAlignment="Top" HorizontalAlignment="Left" Width="124" />
+                <CheckBox x:Name="CheckBoxMKVMergeWhiteMasteringDisplay" IsChecked="{Binding WhiteMasteringDisplay}" Content="White Chromaticity Coordinates" Margin="510,20,0,0" ToolTip="Sets the white colour chromaticity coordinates as defined by CIE 1931." Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="201" />
+                <Label x:Name="LabelMKVMergeMasteringWP_Copy" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeWhiteMasteringDisplay}" Content="|        x       |"  Foreground="#FFABADB3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="528,36,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="72" />
+                <Label x:Name="LabelMKVMergeMasteringWP_Copy1" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeWhiteMasteringDisplay}"  Content="|       y        |"  Foreground="#FFABADB3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="592,36,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="72" />
+                <CheckBox x:Name="CheckBoxMKVMergeLuminance" IsChecked="{Binding Luminance}" Content="Luminance" Margin="716,20,0,0" ToolTip="Sets the luminance in candelas per square meter (cd/m²)." Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" />
+                <Label x:Name="LabelMKVMergeMasteringWP_Copy2" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeLuminance}" Content="|     min     |"  Foreground="#FFABADB3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="735,36,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="72" />
+                <Label x:Name="LabelMKVMergeMasteringWP_Copy3" IsEnabled="{Binding IsChecked, ElementName=CheckBoxMKVMergeLuminance}"  Content="|     max     |"  Foreground="#FFABADB3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="799,36,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="72" />
+                <CheckBox x:Name="CheckBoxMKVMergeMaxFrameLight" IsChecked="{Binding MaxFrameLight}" Content="Max Frame Light" Margin="716,102,0,0" ToolTip="Sets the maximum brightness of a single full frame (Maximum Frame-Average Light Level) in candelas per square meter (cd/m²). The value of n should be a non-negtive integer. " Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="148" />
+
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>
