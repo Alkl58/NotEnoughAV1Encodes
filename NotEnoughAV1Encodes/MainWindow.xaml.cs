@@ -2,14 +2,12 @@
 using System.Windows;
 using MahApps.Metro.Controls;
 using System.Windows.Media.Imaging;
-using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Diagnostics;
 using ControlzEx.Theming;

@@ -6,7 +6,7 @@
     <UseWPF>true</UseWPF>
 	<UseWindowsForms>true</UseWindowsForms>
 	<ApplicationIcon>resources\img\neav1e.ico</ApplicationIcon>
-    <Version>2.1.5</Version>
+    <Version>2.1.6</Version>
     <Authors>Alkl58</Authors>
   </PropertyGroup>
 
@@ -36,8 +36,8 @@
     <PackageReference Include="MahApps.Metro" Version="3.0.0-alpha0476" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Octokit" Version="7.1.0" />
-    <PackageReference Include="System.Management" Version="7.0.2" />
+    <PackageReference Include="Octokit" Version="9.1.1" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
     <PackageReference Include="WPFLocalizeExtension" Version="3.10.0" />
   </ItemGroup>
 

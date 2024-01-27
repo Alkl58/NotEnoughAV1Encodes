@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,54 +15,116 @@ using System.Windows.Media;
 using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NotEnoughAV1Encodes.resources.lang;
 using Octokit;
 
 namespace NotEnoughAV1Encodes.Views
 {
-    public partial class Updater : MetroWindow
+    public partial class Updater : MetroWindow, INotifyPropertyChanged
     {
         private static readonly string FFMPEG_LAST_BUILD_VERSION_URL = "https://www.gyan.dev/ffmpeg/builds/last-build-update";
         private static readonly string FFMPEG_LAST_BUILD_DOWNLOAD_URL = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z";
+        private static readonly string ASSEMBLY_VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        private static readonly string CURRENT_DIR = Directory.GetCurrentDirectory();
 
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        private static readonly string AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        private string ffmpegUpdateVersion;
+        private string ffmpegCurrentVersion;
+        private string aomencUpdateVersion;
+        private string aomencCurrentVersion;
+        private string rav1eUpdateVersion;
+        private string rav1eCurrentVersion;
+        private string svtav1UpdateVersion;
+        private string svtav1CurrentVersion;
+        private string qsvenccUpdateVersion;
+        private string qsvenccCurrentVersion;
+        private string mkvtoolnixUpdateVersion;
+        private string mkvtoolnixCurrentVersion;
 
-        // NEAV1E Update
+        private string QSVReleaseAPIGithub;
+
         private string UpdateVersion = "0";
-        private readonly string CurrentVersion = AssemblyVersion.Remove(AssemblyVersion.Length - 2);
+        private readonly string CurrentVersion = ASSEMBLY_VERSION.Remove(ASSEMBLY_VERSION.Length - 2);
 
-        // FFmpeg Update
-        private static string FFmpegUpdateVersion;
+        public string FFmpegUpdateVersion 
+        { 
+            get { return ffmpegUpdateVersion; }
+            set  {  ffmpegUpdateVersion = value;  OnPropertyChanged(); }
+        }
 
-        private static string FFmpegCurrentVersion;
+        public string FFmpegCurrentVersion 
+        { 
+            get { return ffmpegCurrentVersion; } 
+            set {  ffmpegCurrentVersion = value; OnPropertyChanged(); }
+        }
 
-        // aomenc Update
-        private static string AomencUpdateVersion;
+        public string AomencUpdateVersion
+        {
+            get { return aomencUpdateVersion; }
+            set { aomencUpdateVersion = value; OnPropertyChanged(); }
+        }
 
-        private static string AomencCurrentVersion;
+        public string AomencCurrentVersion
+        {
+            get { return aomencCurrentVersion; }
+            set { aomencCurrentVersion = value; OnPropertyChanged(); }
+        }
 
-        // rav1e Update
-        private static string Rav1eUpdateVersion;
+        public string Rav1eUpdateVersion 
+        {
+            get { return rav1eUpdateVersion; }
+            set { rav1eUpdateVersion = value; OnPropertyChanged(); }
+        }
 
-        private static string Rav1eCurrentVersion;
+        public string Rav1eCurrentVersion 
+        { 
+            get { return rav1eCurrentVersion; }
+            set { rav1eCurrentVersion = value; OnPropertyChanged(); }
+        }
 
-        // SVT-AV1 Update
-        private static string SVTAV1UpdateVersion;
+        public string SVTAV1UpdateVersion 
+        { 
+            get { return svtav1UpdateVersion; }
+            set { svtav1UpdateVersion = value; OnPropertyChanged(); }
+        }
 
-        private static string SVTAV1CurrentVersion;
+        public string SVTAV1CurrentVersion 
+        { 
+            get { return svtav1CurrentVersion; }
+            set { svtav1CurrentVersion = value; OnPropertyChanged(); }
+        }
 
-        // MKVToolnix Update
-        private static string MKVToolnixUpdateVersion;
+        public string QSVEncCUpdateVersion 
+        { 
+            get { return qsvenccUpdateVersion; }
+            set { qsvenccUpdateVersion = value; OnPropertyChanged(); }
+        }
 
-        private static string MKVToolnixCurrentVersion;
+        public string QSVEncCCurrentVersion 
+        { 
+            get { return qsvenccCurrentVersion; }
+            set { qsvenccCurrentVersion = value; OnPropertyChanged(); }
+        }
 
-        // Current Directory
-        private static readonly string CurrentDir = Directory.GetCurrentDirectory();
+        public string MKVToolnixUpdateVersion 
+        { 
+            get { return mkvtoolnixUpdateVersion; }
+            set {  mkvtoolnixUpdateVersion = value; OnPropertyChanged(); }
+        }
+
+        public string MKVToolnixCurrentVersion 
+        { 
+            get { return mkvtoolnixCurrentVersion; }
+            set { mkvtoolnixCurrentVersion = value; OnPropertyChanged(); }
+        }
+
 
         public Updater(string baseTheme, string accentTheme)
         {
             InitializeComponent();
+            DataContext = this;
             LabelCurrentProgramVersion.Content = CurrentVersion;
             ThemeManager.Current.ChangeTheme(this, baseTheme + "." + accentTheme);
             LabelProgressBar.Content = "Downloading Version Lists...";
@@ -71,10 +135,12 @@ namespace NotEnoughAV1Encodes.Views
         private async void ParseEverything()
         {
             ParseNEAV1EGithub();
+            ParseQSVEncCGithub();
             await ParseFFMPEGVersion();
             await ParseJeremyleeJSONAsync();
             await GetOnlineMKVToolnixVersion();
             GetLocalMKVToolnixVersion();
+            GetLocalQSVEncCVersion();
             CompareLocalVersion();
             LabelProgressBar.Content = "";
             ProgressBar.IsIndeterminate = false;
@@ -87,6 +153,7 @@ namespace NotEnoughAV1Encodes.Views
             ButtonUpdateAomenc.IsEnabled = _toggle;
             ButtonUpdateRav1e.IsEnabled = _toggle;
             ButtonUpdateSVTAV1.IsEnabled = _toggle;
+            ButtonUpdateQSVEnc.IsEnabled = _toggle;
         }
 
         private void ParseNEAV1EGithub()
@@ -128,6 +195,21 @@ namespace NotEnoughAV1Encodes.Views
             catch { }
         }
 
+        private void ParseQSVEncCGithub()
+        {
+            try
+            {
+                //Parses the latest neav1e release date directly from Github
+                GitHubClient client = new(new ProductHeaderValue("QSVEnc"));
+                IReadOnlyList<Release> releases = client.Repository.Release.GetAll("rigaya", "QSVEnc").Result;
+                Release latest = releases[0];
+
+                QSVEncCUpdateVersion = latest.TagName;
+                QSVReleaseAPIGithub = latest.AssetsUrl;
+            }
+            catch { }
+        }
+
         private static string GetNumbers(string input)
         {
             return new string(input.Where(c => char.IsDigit(c)).ToArray());
@@ -144,15 +226,12 @@ namespace NotEnoughAV1Encodes.Views
 
                 string aomencVersion = json.files["aomenc.exe"].datetime;
                 AomencUpdateVersion = aomencVersion.Replace("-", ".").Remove(aomencVersion.Length - 6);
-                LabelUpdateAomencVersion.Content = AomencUpdateVersion;
 
                 string rav1eVersion = json.files["rav1e.exe"].datetime;
                 Rav1eUpdateVersion = rav1eVersion.Replace("-", ".").Remove(rav1eVersion.Length - 6);
-                LabelUpdateRav1eVersion.Content = Rav1eUpdateVersion;
 
                 string svtav1Version = json.files["SvtAv1EncApp.exe"].datetime;
                 SVTAV1UpdateVersion = svtav1Version.Replace("-", ".").Remove(svtav1Version.Length - 6);
-                LabelUpdateSVTAV1Version.Content = SVTAV1UpdateVersion;
             }
             catch { }
         }
@@ -164,9 +243,7 @@ namespace NotEnoughAV1Encodes.Views
                 HttpClient client = new();
                 HttpResponseMessage response = await client.GetAsync(FFMPEG_LAST_BUILD_VERSION_URL);
                 string ffmpegVersion = await response.Content.ReadAsStringAsync();
-
                 FFmpegUpdateVersion = ffmpegVersion.Replace("-", ".");
-                LabelUpdateFFmpegVersion.Content = FFmpegUpdateVersion;
             }
             catch { }
         }
@@ -175,14 +252,26 @@ namespace NotEnoughAV1Encodes.Views
         {
             try
             {
-                var versionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(CurrentDir, "Apps", "mkvtoolnix", "mkvmerge.exe"));
+                var versionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(CURRENT_DIR, "Apps", "mkvtoolnix", "mkvmerge.exe"));
                 if (versionInfo != null)
                 {
                     string version = versionInfo.FileVersion;
-                    LabelCurrentMKVToolnixVersion.Content = version;
                     MKVToolnixCurrentVersion = version;
                 }
             } catch { }
+        }
+
+        private void GetLocalQSVEncCVersion()
+        {
+            try
+            {
+                var versionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(CURRENT_DIR, "Apps", "qsvenc", "QSVEncC64.exe"));
+                if (versionInfo != null)
+                {
+                    QSVEncCCurrentVersion = versionInfo.FileVersion;
+                }
+            }
+            catch { }
         }
 
         private async Task GetOnlineMKVToolnixVersion()
@@ -211,7 +300,6 @@ namespace NotEnoughAV1Encodes.Views
                     //Remove First 10 Characters
                     version = version[10..];
                     version = version.Split()[0];
-                    LabelUpdateMKVToolnixVersion.Content = version;
                     MKVToolnixUpdateVersion = version;
                 }
             }
@@ -221,10 +309,10 @@ namespace NotEnoughAV1Encodes.Views
         private void CompareLocalVersion()
         {
             // ffmpeg
-            if (File.Exists(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.txt")))
+            if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "ffmpeg", "ffmpeg.txt")))
             {
-                FFmpegCurrentVersion = File.ReadAllText(Path.Combine(CurrentDir, "Apps", "FFmpeg", "ffmpeg.txt"));
-                LabelCurrentFFmpegVersion.Content = FFmpegCurrentVersion;
+                FFmpegCurrentVersion = File.ReadAllText(Path.Combine(CURRENT_DIR, "Apps", "FFmpeg", "ffmpeg.txt"));
+                //LabelCurrentFFmpegVersion.Content = FFmpegCurrentVersion;
                 if (ParseDate(FFmpegCurrentVersion) < ParseDate(FFmpegUpdateVersion))
                 {
                     // Update Version is newer
@@ -247,9 +335,9 @@ namespace NotEnoughAV1Encodes.Views
             else { LabelCurrentFFmpegVersion.Content = "unknown"; LabelCurrentFFmpegVersion.Foreground = Brushes.Red; }
 
             // aomenc
-            if (File.Exists(Path.Combine(CurrentDir, "Apps", "aomenc", "aomenc.txt")))
+            if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "aomenc", "aomenc.txt")))
             {
-                AomencCurrentVersion = File.ReadAllText(Path.Combine(CurrentDir, "Apps", "aomenc", "aomenc.txt"));
+                AomencCurrentVersion = File.ReadAllText(Path.Combine(CURRENT_DIR, "Apps", "aomenc", "aomenc.txt"));
                 LabelCurrentAomencVersion.Content = AomencCurrentVersion;
                 if (ParseDate(AomencCurrentVersion) < ParseDate(AomencUpdateVersion))
                 {
@@ -273,9 +361,9 @@ namespace NotEnoughAV1Encodes.Views
             else { LabelCurrentAomencVersion.Content = "unknown"; LabelCurrentAomencVersion.Foreground = Brushes.Red; }
 
             // rav1e
-            if (File.Exists(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.txt")))
+            if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "rav1e", "rav1e.txt")))
             {
-                Rav1eCurrentVersion = File.ReadAllText(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.txt"));
+                Rav1eCurrentVersion = File.ReadAllText(Path.Combine(CURRENT_DIR, "Apps", "rav1e", "rav1e.txt"));
                 LabelCurrentRav1eVersion.Content = Rav1eCurrentVersion;
                 if (ParseDate(Rav1eCurrentVersion) < ParseDate(Rav1eUpdateVersion))
                 {
@@ -299,9 +387,9 @@ namespace NotEnoughAV1Encodes.Views
             else { LabelCurrentRav1eVersion.Content = "unknown"; LabelCurrentRav1eVersion.Foreground = Brushes.Red; }
 
             // svt-av1
-            if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt")))
+            if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "svt-av1", "svt-av1.txt")))
             {
-                SVTAV1CurrentVersion = File.ReadAllText(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt"));
+                SVTAV1CurrentVersion = File.ReadAllText(Path.Combine(CURRENT_DIR, "Apps", "svt-av1", "svt-av1.txt"));
                 LabelCurrentSVTAV1Version.Content = SVTAV1CurrentVersion;
                 if (ParseDate(SVTAV1CurrentVersion) < ParseDate(SVTAV1UpdateVersion))
                 {
@@ -350,6 +438,33 @@ namespace NotEnoughAV1Encodes.Views
                 }
                 catch { }
             }
+
+            // QSVEnc
+            if (QSVEncCCurrentVersion != null && QSVEncCUpdateVersion != null)
+            {
+                try
+                {
+                    double update = double.Parse(QSVEncCUpdateVersion);
+                    double current = double.Parse(QSVEncCCurrentVersion);
+                    // Simple Version Comparison Logic
+                    if (current.Equals(update))
+                    {
+                        LabelCurrentQSVEncCVersion.Foreground = Brushes.Green;
+                        LabelUpdateQSVEncCVersion.Foreground = Brushes.Green;
+                    }
+                    else if (current.IsGreaterThan(update))
+                    {
+                        LabelCurrentQSVEncCVersion.Foreground = Brushes.Green;
+                        LabelUpdateQSVEncCVersion.Foreground = Brushes.Red;
+                    }
+                    else if (update.IsGreaterThan(current))
+                    {
+                        LabelCurrentQSVEncCVersion.Foreground = Brushes.Red;
+                        LabelUpdateQSVEncCVersion.Foreground = Brushes.Green;
+                    }
+                }
+                catch { }
+            }
         }
 
         private static DateTime? ParseDate(string input)
@@ -357,8 +472,7 @@ namespace NotEnoughAV1Encodes.Views
             // Converts string to datetime
             try
             {
-                DateTime myDate = DateTime.ParseExact(input, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
-                return myDate;
+                return DateTime.ParseExact(input, "yyyy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
             }
             catch
             {
@@ -381,26 +495,26 @@ namespace NotEnoughAV1Encodes.Views
             ToggleAllButtons(false);
 
             // Creates the ffmpeg folder if not existent
-            if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg")))
+            if (!Directory.Exists(Path.Combine(CURRENT_DIR, "Apps", "ffmpeg")))
             {
-                Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "ffmpeg"));
+                Directory.CreateDirectory(Path.Combine(CURRENT_DIR, "Apps", "ffmpeg"));
             }
 
-            string rootFolder = Path.Combine(CurrentDir, "Apps", "ffmpeg", "_extracted");
+            string rootFolder = Path.Combine(CURRENT_DIR, "Apps", "ffmpeg", "_extracted");
 
             try
             {
                 // Downloads ffmpeg
-                await Task.Run(() => DownloadBin(FFMPEG_LAST_BUILD_DOWNLOAD_URL, Path.Combine(CurrentDir, "Apps", "ffmpeg.7z")));
+                await Task.Run(() => DownloadBin(FFMPEG_LAST_BUILD_DOWNLOAD_URL, Path.Combine(CURRENT_DIR, "Apps", "ffmpeg.7z")));
 
                 // Should never happen
-                if (! File.Exists(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z")))
+                if (! File.Exists(Path.Combine(CURRENT_DIR, "Apps", "ffmpeg.7z")))
                 {
                     return;
                 }
 
                 // Extract downloaded 7z file
-                ExtractFile(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z"), rootFolder);
+                ExtractFile(Path.Combine(CURRENT_DIR, "Apps", "ffmpeg.7z"), rootFolder);
 
                 // Extracted folder has a subfolder which is unknown to us, so we get the first subfolder
                 string ffmpegBin = Path.Combine(Directory.GetDirectories(rootFolder).First(), "bin", "ffmpeg.exe");
@@ -412,13 +526,13 @@ namespace NotEnoughAV1Encodes.Views
                 }
 
                 // Delete old files
-                string oldFFmpegBin = Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.exe");
+                string oldFFmpegBin = Path.Combine(CURRENT_DIR, "Apps", "ffmpeg", "ffmpeg.exe");
                 if (File.Exists(oldFFmpegBin))
                 {
                     File.Delete(oldFFmpegBin);
                 }
 
-                string oldFFmpegBinVersionFile = Path.Combine(CurrentDir, "Apps", "ffmpeg", "ffmpeg.txt");
+                string oldFFmpegBinVersionFile = Path.Combine(CURRENT_DIR, "Apps", "ffmpeg", "ffmpeg.txt");
                 if (File.Exists(oldFFmpegBinVersionFile))
                 {
                     File.Delete(oldFFmpegBinVersionFile);
@@ -431,7 +545,7 @@ namespace NotEnoughAV1Encodes.Views
                 File.WriteAllText(oldFFmpegBinVersionFile, FFmpegUpdateVersion);
 
                 // Cleanup
-                File.Delete(Path.Combine(CurrentDir, "Apps", "ffmpeg.7z"));
+                File.Delete(Path.Combine(CURRENT_DIR, "Apps", "ffmpeg.7z"));
                 Directory.Delete(rootFolder, true);
 
                 CompareLocalVersion();
@@ -452,34 +566,34 @@ namespace NotEnoughAV1Encodes.Views
             ToggleAllButtons(false);
 
             // Creates the aomenc folder if not existent
-            if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "aomenc")))
-                Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "aomenc"));
+            if (!Directory.Exists(Path.Combine(CURRENT_DIR, "Apps", "aomenc")))
+                Directory.CreateDirectory(Path.Combine(CURRENT_DIR, "Apps", "aomenc"));
             // Downloads aomenc
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/aom.7z", Path.Combine(CurrentDir, "Apps", "aom.7z")));
-            if (File.Exists(Path.Combine(CurrentDir, "Apps", "aom.7z")))
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/aom.7z", Path.Combine(CURRENT_DIR, "Apps", "aom.7z")));
+            if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "aom.7z")))
             {
                 // Extracts aomenc
-                ExtractFile(Path.Combine(CurrentDir, "Apps", "aom.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "aomenc"));
+                ExtractFile(Path.Combine(CURRENT_DIR, "Apps", "aom.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "aomenc"));
                 // Writes the version to file
-                if (File.Exists(Path.Combine(CurrentDir, "Apps", "aomenc", "aomenc.exe")))
+                if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "aomenc", "aomenc.exe")))
                 {
                     // Deletes aomdec
-                    if (File.Exists(Path.Combine(CurrentDir, "Apps", "aomenc", "aomdec.exe")))
+                    if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "aomenc", "aomdec.exe")))
                     {
-                        File.Delete(Path.Combine(CurrentDir, "Apps", "aomenc", "aomdec.exe"));
+                        File.Delete(Path.Combine(CURRENT_DIR, "Apps", "aomenc", "aomdec.exe"));
                     }
                     // Deletes txt file
-                    if (File.Exists(Path.Combine(CurrentDir, "Apps", "aomenc", "aomenc.txt")))
+                    if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "aomenc", "aomenc.txt")))
                     {
-                        File.Delete(Path.Combine(CurrentDir, "Apps", "aomenc", "aomenc.txt"));
+                        File.Delete(Path.Combine(CURRENT_DIR, "Apps", "aomenc", "aomenc.txt"));
                     }
 
-                    File.WriteAllText(Path.Combine(CurrentDir, "Apps", "aomenc", "aomenc.txt"), AomencUpdateVersion);
+                    File.WriteAllText(Path.Combine(CURRENT_DIR, "Apps", "aomenc", "aomenc.txt"), AomencUpdateVersion);
                 }
                 // Deletes downloaded archive
-                if (File.Exists(Path.Combine(CurrentDir, "Apps", "aom.7z")))
+                if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "aom.7z")))
                 {
-                    File.Delete(Path.Combine(CurrentDir, "Apps", "aom.7z"));
+                    File.Delete(Path.Combine(CURRENT_DIR, "Apps", "aom.7z"));
                 }
 
                 CompareLocalVersion();
@@ -495,23 +609,23 @@ namespace NotEnoughAV1Encodes.Views
             ToggleAllButtons(false);
 
             // Creates the rav1e folder if not existent
-            if (!Directory.Exists(Path.Combine(CurrentDir, "Apps", "rav1e")))
-                Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "rav1e"));
+            if (!Directory.Exists(Path.Combine(CURRENT_DIR, "Apps", "rav1e")))
+                Directory.CreateDirectory(Path.Combine(CURRENT_DIR, "Apps", "rav1e"));
             // Downloads rav1e
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/rav1e.7z", Path.Combine(CurrentDir, "Apps", "rav1e.7z")));
-            if (File.Exists(Path.Combine(CurrentDir, "Apps", "rav1e.7z")))
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/rav1e.7z", Path.Combine(CURRENT_DIR, "Apps", "rav1e.7z")));
+            if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "rav1e.7z")))
             {
                 // Extracts rav1e
-                ExtractFile(Path.Combine(CurrentDir, "Apps", "rav1e.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e"));
+                ExtractFile(Path.Combine(CURRENT_DIR, "Apps", "rav1e.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "rav1e"));
                 // Writes the version to file
-                if (File.Exists(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.exe")))
+                if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "rav1e", "rav1e.exe")))
                 {
-                    File.WriteAllText(Path.Combine(CurrentDir, "Apps", "rav1e", "rav1e.txt"), Rav1eUpdateVersion);
+                    File.WriteAllText(Path.Combine(CURRENT_DIR, "Apps", "rav1e", "rav1e.txt"), Rav1eUpdateVersion);
                 }
                 // Deletes downloaded archive
-                if (File.Exists(Path.Combine(CurrentDir, "Apps", "rav1e.7z")))
+                if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "rav1e.7z")))
                 {
-                    File.Delete(Path.Combine(CurrentDir, "Apps", "rav1e.7z"));
+                    File.Delete(Path.Combine(CURRENT_DIR, "Apps", "rav1e.7z"));
                 }
 
                 CompareLocalVersion();
@@ -527,34 +641,34 @@ namespace NotEnoughAV1Encodes.Views
             ToggleAllButtons(false);
 
             // Creates the svt-av1 folder if not existent
-            Directory.CreateDirectory(Path.Combine(CurrentDir, "Apps", "svt-av1"));
+            Directory.CreateDirectory(Path.Combine(CURRENT_DIR, "Apps", "svt-av1"));
 
             // Downloads rav1e
-            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/svt-av1.7z", Path.Combine(CurrentDir, "Apps", "svt-av1.7z")));
-            if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1.7z")))
+            await Task.Run(() => DownloadBin("https://jeremylee.sh/bins/svt-av1.7z", Path.Combine(CURRENT_DIR, "Apps", "svt-av1.7z")));
+            if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "svt-av1.7z")))
             {
                 // Extracts rav1e
-                ExtractFile(Path.Combine(CurrentDir, "Apps", "svt-av1.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1"));
+                ExtractFile(Path.Combine(CURRENT_DIR, "Apps", "svt-av1.7z"), Path.Combine(Directory.GetCurrentDirectory(), "Apps", "svt-av1"));
                 // Writes the version to file
-                if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1", "SvtAv1EncApp.exe")))
+                if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "svt-av1", "SvtAv1EncApp.exe")))
                 {
                     // Deletes SVT-AV1 Decoder
-                    if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1", "SvtAv1EncApp.exe")))
+                    if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "svt-av1", "SvtAv1EncApp.exe")))
                     {
-                        File.Delete(Path.Combine(CurrentDir, "Apps", "svt-av1", "SvtAv1DecApp.exe"));
+                        File.Delete(Path.Combine(CURRENT_DIR, "Apps", "svt-av1", "SvtAv1DecApp.exe"));
                     }
                     // Deletes txt file
-                    if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt")))
+                    if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "svt-av1", "svt-av1.txt")))
                     {
-                        File.Delete(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt"));
+                        File.Delete(Path.Combine(CURRENT_DIR, "Apps", "svt-av1", "svt-av1.txt"));
                     }
 
-                    File.WriteAllText(Path.Combine(CurrentDir, "Apps", "svt-av1", "svt-av1.txt"), SVTAV1UpdateVersion);
+                    File.WriteAllText(Path.Combine(CURRENT_DIR, "Apps", "svt-av1", "svt-av1.txt"), SVTAV1UpdateVersion);
                 }
                 // Deletes downloaded archive
-                if (File.Exists(Path.Combine(CurrentDir, "Apps", "svt-av1.7z")))
+                if (File.Exists(Path.Combine(CURRENT_DIR, "Apps", "svt-av1.7z")))
                 {
-                    File.Delete(Path.Combine(CurrentDir, "Apps", "svt-av1.7z"));
+                    File.Delete(Path.Combine(CURRENT_DIR, "Apps", "svt-av1.7z"));
                 }
 
                 CompareLocalVersion();
@@ -573,6 +687,88 @@ namespace NotEnoughAV1Encodes.Views
                 UseShellExecute = true
             };
             Process.Start(psi);
+        }
+
+        private async void ButtonUpdateQSVEnc_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleAllButtons(false);
+
+            // Creates the ffmpeg folder if not existent
+            if (!Directory.Exists(Path.Combine(CURRENT_DIR, "Apps", "qsvenc")))
+            {
+                Directory.CreateDirectory(Path.Combine(CURRENT_DIR, "Apps", "qsvenc"));
+            }
+
+            if (string.IsNullOrEmpty(QSVReleaseAPIGithub))
+            {
+                LabelProgressBar.Content = "Error: API URL was Null or Empty";
+                return;
+            }
+
+            string downloadUrl = "";
+            try
+            {
+                // Parse API
+                HttpClient client = new();
+                client.DefaultRequestHeaders.Add("User-Agent", "NotEnoughAV1Encodes");
+                HttpResponseMessage response = await client.GetAsync(QSVReleaseAPIGithub);
+                string jsonContent = await response.Content.ReadAsStringAsync();
+                JArray releasesArray = JArray.Parse(jsonContent);
+                downloadUrl = FindQSVDownloadUrl(releasesArray);
+            }
+            catch (Exception ex) { LabelProgressBar.Content = ex.Message; }
+
+            if (string.IsNullOrEmpty(downloadUrl))
+            {
+                LabelProgressBar.Content = "Could not find download url!";
+                return;
+            }
+
+            try
+            {
+                // Downloads qsvenc
+                await Task.Run(() => DownloadBin(downloadUrl, Path.Combine(CURRENT_DIR, "Apps", "qsvenc.7z")));
+
+                // Should never happen
+                if (!File.Exists(Path.Combine(CURRENT_DIR, "Apps", "qsvenc.7z")))
+                {
+                    LabelProgressBar.Content = "Downloaded file not found!";
+                    return;
+                }
+
+                Directory.Delete(Path.Combine(CURRENT_DIR, "Apps", "qsvenc"), true);
+                Directory.CreateDirectory(Path.Combine(CURRENT_DIR, "Apps", "qsvenc"));
+
+                // Extract downloaded 7z file
+                ExtractFile(Path.Combine(CURRENT_DIR, "Apps", "qsvenc.7z"), Path.Combine(CURRENT_DIR, "Apps", "qsvenc"));
+
+                // Cleanup
+                File.Delete(Path.Combine(CURRENT_DIR, "Apps", "qsvenc.7z"));
+
+                GetLocalQSVEncCVersion();
+                CompareLocalVersion();
+            }
+            catch { }
+
+            ToggleAllButtons(true);
+        }
+
+        private static string FindQSVDownloadUrl(JArray releasesArray)
+        {
+            foreach (var release in releasesArray)
+            {
+                JToken browserDownloadUrl = release["browser_download_url"];
+                if (browserDownloadUrl != null && browserDownloadUrl.Type == JTokenType.String)
+                {
+                    string url = browserDownloadUrl.Value<string>();
+                    if (url.Contains("x64"))
+                    {
+                        return url;
+                    }
+                }
+            }
+
+            return null;
         }
 
         private async Task DownloadBin(string DownloadURL, string PathToFile)
@@ -602,7 +798,7 @@ namespace NotEnoughAV1Encodes.Views
         private static void ExtractFile(string source, string destination)
         {
             // Extracts the downloaded archives with 7zip
-            string zPath = Path.Combine(CurrentDir, "Apps", "7zip", "7za.exe");
+            string zPath = Path.Combine(CURRENT_DIR, "Apps", "7zip", "7za.exe");
             
             // detect if we have 7-zip
             if (File.Exists(zPath))
@@ -627,8 +823,13 @@ namespace NotEnoughAV1Encodes.Views
             }
             else
             {
-                MessageBox.Show(Strings._7ZipNotDetectedMessage + Path.Combine(CurrentDir, "Apps", "7zip"), Strings._7ZipNotDetectedTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Strings._7ZipNotDetectedMessage + Path.Combine(CURRENT_DIR, "Apps", "7zip"), Strings._7ZipNotDetectedTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
