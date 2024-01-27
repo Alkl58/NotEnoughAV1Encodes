@@ -29,14 +29,14 @@ namespace NotEnoughAV1Encodes.Encoders
             }
             else
             {
-                settings += " -tile_columns " + mainWindow.ComboBoxSVTAV1TileColumns.Text +                             // Tile Columns
-                            " -tile_rows " + mainWindow.ComboBoxSVTAV1TileRows.Text +                                   // Tile Rows
-                            " -g " + mainWindow.TextBoxSVTAV1MaxGOP.Text +                                              // Keyframe Interval
-                            " -la_depth " + mainWindow.TextBoxSVTAV1Lookahead.Text +                                    // Lookahead
+                settings += " -tile_columns " + mainWindow.AdvancedTabControl.ComboBoxSVTAV1TileColumns.Text +                             // Tile Columns
+                            " -tile_rows " + mainWindow.AdvancedTabControl.ComboBoxSVTAV1TileRows.Text +                                   // Tile Rows
+                            " -g " + mainWindow.AdvancedTabControl.TextBoxSVTAV1MaxGOP.Text +                                              // Keyframe Interval
+                            " -la_depth " + mainWindow.AdvancedTabControl.TextBoxSVTAV1Lookahead.Text +                                    // Lookahead
                             " -svtav1-params " +
-                            "aq-mode=" + mainWindow.ComboBoxSVTAV1AQMode.Text +                                         // AQ Mode
-                            ":film-grain=" + mainWindow.TextBoxSVTAV1FilmGrain.Text +                                   // Film Grain
-                            ":film-grain-denoise=" + mainWindow.TextBoxSVTAV1FilmGrainDenoise.Text;                     // Film Grain Denoise
+                            "aq-mode=" + mainWindow.AdvancedTabControl.ComboBoxSVTAV1AQMode.Text +                                         // AQ Mode
+                            ":film-grain=" + mainWindow.AdvancedTabControl.TextBoxSVTAV1FilmGrain.Text +                                   // Film Grain
+                            ":film-grain-denoise=" + mainWindow.AdvancedTabControl.TextBoxSVTAV1FilmGrainDenoise.Text;                     // Film Grain Denoise
             }
 
             return settings;

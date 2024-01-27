@@ -31,21 +31,21 @@ namespace NotEnoughAV1Encodes.Encoders
             }
             else
             {
-                settings += " --threads " + mainWindow.ComboBoxRav1eThreads.SelectedIndex +                             // Threads
-                            " --tile-cols " + mainWindow.ComboBoxRav1eTileColumns.SelectedIndex +                       // Tile Columns
-                            " --tile-rows " + mainWindow.ComboBoxRav1eTileRows.SelectedIndex +                          // Tile Rows
-                            " --rdo-lookahead-frames " + mainWindow.TextBoxRav1eLookahead.Text +                        // RDO Lookahead
-                            " --tune " + mainWindow.ComboBoxRav1eTune.Text;                                             // Tune
+                settings += " --threads " + mainWindow.AdvancedTabControl.ComboBoxRav1eThreads.SelectedIndex +                             // Threads
+                            " --tile-cols " + mainWindow.AdvancedTabControl.ComboBoxRav1eTileColumns.SelectedIndex +                       // Tile Columns
+                            " --tile-rows " + mainWindow.AdvancedTabControl.ComboBoxRav1eTileRows.SelectedIndex +                          // Tile Rows
+                            " --rdo-lookahead-frames " + mainWindow.AdvancedTabControl.TextBoxRav1eLookahead.Text +                        // RDO Lookahead
+                            " --tune " + mainWindow.AdvancedTabControl.ComboBoxRav1eTune.Text;                                             // Tune
 
-                if (mainWindow.TextBoxRav1eMaxGOP.Text != "0")
-                    settings += " --keyint " + mainWindow.TextBoxRav1eMaxGOP.Text;                                      // Keyframe Interval
+                if (mainWindow.AdvancedTabControl.TextBoxRav1eMaxGOP.Text != "0")
+                    settings += " --keyint " + mainWindow.AdvancedTabControl.TextBoxRav1eMaxGOP.Text;                                      // Keyframe Interval
 
-                if (mainWindow.ComboBoxRav1eColorPrimaries.SelectedIndex != 0)
-                    settings += " --primaries " + mainWindow.ComboBoxRav1eColorPrimaries.Text;                          // Color Primaries
-                if (mainWindow.ComboBoxRav1eColorTransfer.SelectedIndex != 0)
-                    settings += " --transfer " + mainWindow.ComboBoxRav1eColorTransfer.Text;                            // Color Transfer
-                if (mainWindow.ComboBoxRav1eColorMatrix.SelectedIndex != 0)
-                    settings += " --matrix " + mainWindow.ComboBoxRav1eColorMatrix.Text;                                // Color Matrix
+                if (mainWindow.AdvancedTabControl.ComboBoxRav1eColorPrimaries.SelectedIndex != 0)
+                    settings += " --primaries " + mainWindow.AdvancedTabControl.ComboBoxRav1eColorPrimaries.Text;                          // Color Primaries
+                if (mainWindow.AdvancedTabControl.ComboBoxRav1eColorTransfer.SelectedIndex != 0)
+                    settings += " --transfer " + mainWindow.AdvancedTabControl.ComboBoxRav1eColorTransfer.Text;                            // Color Transfer
+                if (mainWindow.AdvancedTabControl.ComboBoxRav1eColorMatrix.SelectedIndex != 0)
+                    settings += " --matrix " + mainWindow.AdvancedTabControl.ComboBoxRav1eColorMatrix.Text;                                // Color Matrix
             }
 
             return settings;

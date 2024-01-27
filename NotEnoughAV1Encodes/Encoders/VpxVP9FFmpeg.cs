@@ -31,20 +31,20 @@ namespace NotEnoughAV1Encodes.Encoders
             }
             else
             {
-                settings += " -threads " + mainWindow.ComboBoxVP9Threads.Text +                                         // Max Threads
-                            " -tile-columns " + mainWindow.ComboBoxVP9TileColumns.SelectedIndex +                       // Tile Columns
-                            " -tile-rows " + mainWindow.ComboBoxVP9TileRows.SelectedIndex +                             // Tile Rows
-                            " -lag-in-frames " + mainWindow.TextBoxVP9LagInFrames.Text +                                // Lag in Frames
-                            " -g " + mainWindow.TextBoxVP9MaxKF.Text +                                                  // Max GOP
-                            " -aq-mode " + mainWindow.ComboBoxVP9AQMode.SelectedIndex +                                 // AQ-Mode
-                            " -tune " + mainWindow.ComboBoxVP9ATune.SelectedIndex +                                     // Tune
-                            " -tune-content " + mainWindow.ComboBoxVP9ATuneContent.SelectedIndex;                       // Tune-Content
+                settings += " -threads " + mainWindow.AdvancedTabControl.ComboBoxVP9Threads.Text +                                         // Max Threads
+                            " -tile-columns " + mainWindow.AdvancedTabControl.ComboBoxVP9TileColumns.SelectedIndex +                       // Tile Columns
+                            " -tile-rows " + mainWindow.AdvancedTabControl.ComboBoxVP9TileRows.SelectedIndex +                             // Tile Rows
+                            " -lag-in-frames " + mainWindow.AdvancedTabControl.TextBoxVP9LagInFrames.Text +                                // Lag in Frames
+                            " -g " + mainWindow.AdvancedTabControl.TextBoxVP9MaxKF.Text +                                                  // Max GOP
+                            " -aq-mode " + mainWindow.AdvancedTabControl.ComboBoxVP9AQMode.SelectedIndex +                                 // AQ-Mode
+                            " -tune " + mainWindow.AdvancedTabControl.ComboBoxVP9ATune.SelectedIndex +                                     // Tune
+                            " -tune-content " + mainWindow.AdvancedTabControl.ComboBoxVP9ATuneContent.SelectedIndex;                       // Tune-Content
 
-                if (mainWindow.CheckBoxVP9ARNR.IsChecked == true)
+                if (mainWindow.AdvancedTabControl.CheckBoxVP9ARNR.IsChecked == true)
                 {
-                    settings += " -arnr-maxframes " + mainWindow.ComboBoxAomencVP9Max.Text +                            // ARNR Max Frames
-                                " -arnr-strength " + mainWindow.ComboBoxAomencVP9Strength.Text +                        // ARNR Strength
-                                " -arnr-type " + mainWindow.ComboBoxAomencVP9ARNRType.Text;                             // ARNR Type
+                    settings += " -arnr-maxframes " + mainWindow.AdvancedTabControl.ComboBoxAomencVP9Max.Text +                            // ARNR Max Frames
+                                " -arnr-strength " + mainWindow.AdvancedTabControl.ComboBoxAomencVP9Strength.Text +                        // ARNR Strength
+                                " -arnr-type " + mainWindow.AdvancedTabControl.ComboBoxAomencVP9ARNRType.Text;                             // ARNR Type
                 }
             }
 

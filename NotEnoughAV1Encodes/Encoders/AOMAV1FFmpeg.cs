@@ -32,39 +32,39 @@ namespace NotEnoughAV1Encodes.Encoders
             }
             else
             {
-                settings += " -threads " + mainWindow.ComboBoxAomencThreads.Text +                                      // Threads
-                            " -tile-columns " + mainWindow.ComboBoxAomencTileColumns.Text +                             // Tile Columns
-                            " -tile-rows " + mainWindow.ComboBoxAomencTileRows.Text +                                   // Tile Rows
-                            " -lag-in-frames " + mainWindow.TextBoxAomencLagInFrames.Text +                             // Lag in Frames
-                            " -aq-mode " + mainWindow.ComboBoxAomencAQMode.SelectedIndex +                              // AQ-Mode
-                            " -tune " + mainWindow.ComboBoxAomencTune.Text;                                             // Tune
+                settings += " -threads " + mainWindow.AdvancedTabControl.ComboBoxAomencThreads.Text +                                      // Threads
+                            " -tile-columns " + mainWindow.AdvancedTabControl.ComboBoxAomencTileColumns.Text +                             // Tile Columns
+                            " -tile-rows " + mainWindow.AdvancedTabControl.ComboBoxAomencTileRows.Text +                                   // Tile Rows
+                            " -lag-in-frames " + mainWindow.AdvancedTabControl.TextBoxAomencLagInFrames.Text +                             // Lag in Frames
+                            " -aq-mode " + mainWindow.AdvancedTabControl.ComboBoxAomencAQMode.SelectedIndex +                              // AQ-Mode
+                            " -tune " + mainWindow.AdvancedTabControl.ComboBoxAomencTune.Text;                                             // Tune
 
-                if (mainWindow.TextBoxAomencMaxGOP.Text != "0")
-                    settings += " -g " + mainWindow.TextBoxAomencMaxGOP.Text;                                           // Keyframe Interval
-                if (mainWindow.CheckBoxAomencRowMT.IsChecked == false)
-                    settings += " -row-mt 0";                                                                           // Row Based Multithreading
-                if (mainWindow.CheckBoxAomencCDEF.IsChecked == false)
-                    settings += " -enable-cdef 0";                                                                      // Constrained Directional Enhancement Filter
+                if (mainWindow.AdvancedTabControl.TextBoxAomencMaxGOP.Text != "0")
+                    settings += " -g " + mainWindow.AdvancedTabControl.TextBoxAomencMaxGOP.Text;                                           // Keyframe Interval
+                if (mainWindow.AdvancedTabControl.CheckBoxAomencRowMT.IsChecked == false)
+                    settings += " -row-mt 0";                                                                                              // Row Based Multithreading
+                if (mainWindow.AdvancedTabControl.CheckBoxAomencCDEF.IsChecked == false)
+                    settings += " -enable-cdef 0";                                                                                         // Constrained Directional Enhancement Filter
                 if (mainWindow.VideoTabVideoOptimizationControl.CheckBoxRealTimeMode.IsOn)
-                    settings += " -usage realtime ";                                                                    // Real Time Mode
+                    settings += " -usage realtime ";                                                                                       // Real Time Mode
 
-                if (mainWindow.CheckBoxAomencARNRMax.IsChecked == true)
+                if (mainWindow.AdvancedTabControl.CheckBoxAomencARNRMax.IsChecked == true)
                 {
-                    settings += " -arnr-max-frames " + mainWindow.ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
-                    settings += " -arnr-strength " + mainWindow.ComboBoxAomencARNRStrength.Text;                        // ARNR Strength
+                    settings += " -arnr-max-frames " + mainWindow.AdvancedTabControl.ComboBoxAomencARNRMax.Text;                           // ARNR Maxframes
+                    settings += " -arnr-strength " + mainWindow.AdvancedTabControl.ComboBoxAomencARNRStrength.Text;                        // ARNR Strength
                 }
 
                 settings += " -aom-params " +
-                            "tune-content=" + mainWindow.ComboBoxAomencTuneContent.Text +                               // Tune-Content
-                            ":sharpness=" + mainWindow.ComboBoxAomencSharpness.Text +                                   // Sharpness (Filter)
-                            ":enable-keyframe-filtering=" + mainWindow.ComboBoxAomencKeyFiltering.SelectedIndex;        // Key Frame Filtering
+                            "tune-content=" + mainWindow.AdvancedTabControl.ComboBoxAomencTuneContent.Text +                               // Tune-Content
+                            ":sharpness=" + mainWindow.AdvancedTabControl.ComboBoxAomencSharpness.Text +                                   // Sharpness (Filter)
+                            ":enable-keyframe-filtering=" + mainWindow.AdvancedTabControl.ComboBoxAomencKeyFiltering.SelectedIndex;        // Key Frame Filtering
 
-                if (mainWindow.ComboBoxAomencColorPrimaries.SelectedIndex != 0)
-                    settings += ":color-primaries=" + mainWindow.ComboBoxAomencColorPrimaries.Text;                     // Color Primaries
-                if (mainWindow.ComboBoxAomencColorTransfer.SelectedIndex != 0)
-                    settings += ":transfer-characteristics=" + mainWindow.ComboBoxAomencColorTransfer.Text;             // Color Transfer
-                if (mainWindow.ComboBoxAomencColorMatrix.SelectedIndex != 0)
-                    settings += ":matrix-coefficients=" + mainWindow.ComboBoxAomencColorMatrix.Text;                    // Color Matrix
+                if (mainWindow.AdvancedTabControl.ComboBoxAomencColorPrimaries.SelectedIndex != 0)
+                    settings += ":color-primaries=" + mainWindow.AdvancedTabControl.ComboBoxAomencColorPrimaries.Text;                     // Color Primaries
+                if (mainWindow.AdvancedTabControl.ComboBoxAomencColorTransfer.SelectedIndex != 0)
+                    settings += ":transfer-characteristics=" + mainWindow.AdvancedTabControl.ComboBoxAomencColorTransfer.Text;             // Color Transfer
+                if (mainWindow.AdvancedTabControl.ComboBoxAomencColorMatrix.SelectedIndex != 0)
+                    settings += ":matrix-coefficients=" + mainWindow.AdvancedTabControl.ComboBoxAomencColorMatrix.Text;                    // Color Matrix
             }
 
             return settings;
