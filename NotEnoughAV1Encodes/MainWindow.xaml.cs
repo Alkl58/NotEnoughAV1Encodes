@@ -444,6 +444,10 @@ namespace NotEnoughAV1Encodes
                 await MainStartAsync(cancellationTokenSource.Token);
             }
             catch (OperationCanceledException) { }
+            catch (Exception ex)
+            {
+                MessageBox.Show("This should not have happened. Exception: " + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
             // Dispose Cancellation Source after Main Function finished
             cancellationTokenSource.Dispose();
