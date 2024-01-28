@@ -50,7 +50,8 @@ namespace NotEnoughAV1Encodes.Subtitle
 
                 if (processSubtitles.ExitCode == 0 && _token.IsCancellationRequested == false)
                 {
-                    File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Subtitles", "exit.log"));
+                    var logFile = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Subtitles", "exit.log"));
+                    logFile.Close();
                     Global.Logger("DEBUG - ExtractSubtitles.Extract() => ExitCode: " + processSubtitles.ExitCode, queueElement.Output + ".log");
                 }
                 else

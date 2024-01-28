@@ -62,7 +62,8 @@ namespace NotEnoughAV1Encodes.Audio
 
                 if (processAudio.ExitCode == 0 && _token.IsCancellationRequested == false)
                 {
-                    File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "exit.log"));
+                    var logFile = File.Create(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Audio", "exit.log"));
+                    logFile.Close();
                     Global.Logger("DEBUG - EncodeAudio.Encode() => ExitCode: " + processAudio.ExitCode, queueElement.Output + ".log");
                 }
                 else
