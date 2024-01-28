@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "NotEnoughAV1Encodes"
-#define MyAppVersion "2.0.1"
+#define MyAppVersion "2.1.6"
 #define MyAppPublisher "Alkl58"
 #define MyAppURL "https://github.com/Alkl58/NotEnoughAV1Encodes"
 #define MyAppExeName "NotEnoughAV1Encodes.exe"
@@ -20,15 +20,16 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={userappdata}\{#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile=C:\Users\VM\Desktop\LICENSE.txt
+LicenseFile=C:\Users\user\source\repos\Alkl58\NotEnoughAV1Encodes\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputDir=C:\Users\VM\Desktop\out
-OutputBaseFilename=neav1e-fullsetup-2.0.1
-SetupIconFile=C:\Users\VM\Desktop\neav1e.ico
+OutputDir=C:\Users\user\Desktop\out
+OutputBaseFilename=neav1e-fullsetup-{#MyAppVersion}
+SetupIconFile=C:\Users\user\source\repos\Alkl58\NotEnoughAV1Encodes\NotEnoughAV1Encodes\resources\img\neav1e.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+UninstallDisplayIcon={app}\NotEnoughAV1Encodes.exe
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -37,8 +38,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\VM\Desktop\NEAV1E\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\VM\Desktop\NEAV1E\inno\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\user\Desktop\Build\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\user\Desktop\Build\inno\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -48,3 +49,22 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
+
+
+[UninstallRun]
+[CustomMessages]
+english.DeleteSettings=Delete all NEAV1E confíg files?
+
+[Code]
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  case CurUninstallStep of
+    usUninstall:
+      begin
+        if MsgBox(ExpandConstant('{cm:DeleteSettings}'), mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES then
+          begin
+             DelTree(ExpandConstant('{userappdata}\NEAV1E'), True, True, True);
+          end
+      end;
+  end;
+end; 
