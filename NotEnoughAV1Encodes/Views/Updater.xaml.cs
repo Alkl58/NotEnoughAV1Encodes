@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NotEnoughAV1Encodes.resources.lang;
 using Octokit;
+using HtmlAgilityPack;
 
 namespace NotEnoughAV1Encodes.Views
 {
@@ -25,6 +26,8 @@ namespace NotEnoughAV1Encodes.Views
     {
         private static readonly string FFMPEG_LAST_BUILD_VERSION_URL = "https://www.gyan.dev/ffmpeg/builds/last-build-update";
         private static readonly string FFMPEG_LAST_BUILD_DOWNLOAD_URL = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z";
+        private static readonly string MKVTOOLNIX_DOWNLOADS_WEBPAGE = "https://mkvtoolnix.download/downloads.html";
+        private static readonly string MKVTOOLNIX_ROOT_URL = "https://mkvtoolnix.download";
         private static readonly string ASSEMBLY_VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private static readonly string CURRENT_DIR = Directory.GetCurrentDirectory();
 
@@ -44,6 +47,7 @@ namespace NotEnoughAV1Encodes.Views
         private string mkvtoolnixCurrentVersion;
 
         private string QSVReleaseAPIGithub;
+        private string MKVToolnixDownloadURL;
 
         private string UpdateVersion = "0";
         private readonly string CurrentVersion = ASSEMBLY_VERSION.Remove(ASSEMBLY_VERSION.Length - 2);
@@ -138,7 +142,7 @@ namespace NotEnoughAV1Encodes.Views
             ParseQSVEncCGithub();
             await ParseFFMPEGVersion();
             await ParseJeremyleeJSONAsync();
-            await GetOnlineMKVToolnixVersion();
+            ParseMKVToolnixWebsite();
             GetLocalMKVToolnixVersion();
             GetLocalQSVEncCVersion();
             CompareLocalVersion();
@@ -248,6 +252,39 @@ namespace NotEnoughAV1Encodes.Views
             catch { }
         }
 
+        private void ParseMKVToolnixWebsite()
+        {
+            try
+            {
+                HttpClient client = new();
+                string html = client.GetStringAsync(MKVTOOLNIX_DOWNLOADS_WEBPAGE).Result;
+
+                HtmlDocument doc = new();
+                doc.LoadHtml(html);
+
+                // XPath to select the <tr> with "Portable (64-bit)"
+                string xpath = "//tr[td='Portable (64-bit)']";
+
+                HtmlNode portableRow = doc.DocumentNode.SelectSingleNode(xpath);
+
+                if (portableRow != null)
+                {
+                    // Get the href value from the <a> tag within the selected <tr>
+                    HtmlNode hrefNode = portableRow.SelectSingleNode("td/a[@href]");
+
+                    if (hrefNode != null)
+                    {
+                        string hrefValue = hrefNode.GetAttributeValue("href", "");
+                        MKVToolnixDownloadURL = MKVTOOLNIX_ROOT_URL + "/" + hrefValue;
+
+                        var split = hrefValue.Split('/');
+                        MKVToolnixUpdateVersion = split[2];
+                    }
+                }
+            }
+            catch { }
+        }
+
         private void GetLocalMKVToolnixVersion()
         {
             try
@@ -269,38 +306,6 @@ namespace NotEnoughAV1Encodes.Views
                 if (versionInfo != null)
                 {
                     QSVEncCCurrentVersion = versionInfo.FileVersion;
-                }
-            }
-            catch { }
-        }
-
-        private async Task GetOnlineMKVToolnixVersion()
-        {
-            try
-            {
-                HttpClient client = new();
-                // Download Release Notes
-                HttpResponseMessage response = await client.GetAsync("https://mkvtoolnix.download/doc/NEWS.md");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    // Split by Line
-                    string[] lines = content.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-                    string version = "";
-                    // Iterate over Lines
-                    foreach (string line in lines)
-                    {
-                        if (line.Contains("# Version"))
-                        {
-                            version = line;
-                            break;
-                        }
-                    }
-                    //Remove First 10 Characters
-                    version = version[10..];
-                    version = version.Split()[0];
-                    MKVToolnixUpdateVersion = version;
                 }
             }
             catch { }
@@ -679,16 +684,6 @@ namespace NotEnoughAV1Encodes.Views
             LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Finished updating SVT-AV1");
         }
 
-        private void ButtonUpdateMKVToolnix_Click(object sender, RoutedEventArgs e)
-        {
-            ProcessStartInfo psi = new()
-            {
-                FileName = "https://www.fosshub.com/MKVToolNix.html",
-                UseShellExecute = true
-            };
-            Process.Start(psi);
-        }
-
         private async void ButtonUpdateQSVEnc_Click(object sender, RoutedEventArgs e)
         {
             ToggleAllButtons(false);
@@ -751,6 +746,53 @@ namespace NotEnoughAV1Encodes.Views
             catch { }
 
             ToggleAllButtons(true);
+
+            LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Finished updating QSVEncC");
+        }
+
+        private async void ButtonUpdateMKVToolnix_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleAllButtons(false);
+
+            if (string.IsNullOrEmpty(MKVToolnixDownloadURL))
+            {
+                LabelProgressBar.Content = "Error: Download URL was Null or Empty";
+                return;
+            }
+
+            try
+            {
+                // Downloads qsvenc
+                await Task.Run(() => DownloadBin(MKVToolnixDownloadURL, Path.Combine(CURRENT_DIR, "Apps", "mkvtoolnix.7z")));
+
+                // Should never happen
+                if (!File.Exists(Path.Combine(CURRENT_DIR, "Apps", "mkvtoolnix.7z")))
+                {
+                    LabelProgressBar.Content = "Downloaded file not found!";
+                    return;
+                }
+
+                if (Directory.Exists(Path.Combine(CURRENT_DIR, "Apps", "mkvtoolnix")))
+                {
+                    Directory.Delete(Path.Combine(CURRENT_DIR, "Apps", "mkvtoolnix"), true);
+                }
+                
+                Directory.CreateDirectory(Path.Combine(CURRENT_DIR, "Apps", "mkvtoolnix"));
+
+                // Extract downloaded 7z file
+                ExtractFile(Path.Combine(CURRENT_DIR, "Apps", "mkvtoolnix.7z"), Path.Combine(CURRENT_DIR, "Apps"));
+
+                // Cleanup
+                File.Delete(Path.Combine(CURRENT_DIR, "Apps", "mkvtoolnix.7z"));
+
+                GetLocalMKVToolnixVersion();
+                CompareLocalVersion();
+            }
+            catch { }
+
+            ToggleAllButtons(true);
+
+            LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Finished updating MKVToolNix");
         }
 
         private static string FindQSVDownloadUrl(JArray releasesArray)
