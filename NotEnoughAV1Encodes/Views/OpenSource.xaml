@@ -10,7 +10,7 @@
         lex:LocalizeDictionary.DesignCulture="en"
         lex:ResxLocalizationProvider.DefaultAssembly="NotEnoughAV1Encodes"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-        Title="NEAV1E" Height="200" Width="330" ResizeMode="NoResize" Topmost="True">
+        Title="NEAV1E" Height="205" Width="330" ResizeMode="NoResize" Topmost="True">
     <Grid>
         <Label x:Name="LabelMethodOpeningSource" Content="{lex:Loc}" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="310" Height="31" FontSize="14" FontWeight="Normal"/>
         <Button x:Name="ButtonOpenVideoFile" Content="{lex:Loc}" HorizontalAlignment="Center" Margin="0,46,0,0" VerticalAlignment="Top" Width="310" Height="35" HorizontalContentAlignment="Left" FontSize="14" FontWeight="Normal" Click="ButtonOpenVideoFile_Click" mah:ControlsHelper.ContentCharacterCasing="Normal"/>
