@@ -315,6 +315,8 @@ namespace NotEnoughAV1Encodes.Controls.Partials
                 (int)Video.Encoders.AMFAV1 => "AMF (AV1)",
                 _ => ""
             };
+
+            mainWindow.VideoTabVideoOptimizationControl.UpdateSpeedLabel();
         }
     }
 }

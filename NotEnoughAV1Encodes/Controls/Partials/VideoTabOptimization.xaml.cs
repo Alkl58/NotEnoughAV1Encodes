@@ -13,6 +13,11 @@ namespace NotEnoughAV1Encodes.Controls.Partials
 
         private void SliderEncoderPreset_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            UpdateSpeedLabel();
+        }
+
+        public void UpdateSpeedLabel()
+        {
             if (MainWindow.startupLock) return;
 
             // Get MainWindow instance to access UI elements
@@ -38,6 +43,8 @@ namespace NotEnoughAV1Encodes.Controls.Partials
                     CheckBoxRealTimeMode.Visibility = Visibility.Collapsed;
                 }
             }
+
+            LabelSpeedValue.Content = SliderEncoderPreset.Value;
 
             // x264 / x265
             if (mainWindow.VideoTabVideoPartialControl.ComboBoxVideoEncoder.SelectedIndex is (int)Video.Encoders.X265 or (int)Video.Encoders.X264)
