@@ -44,6 +44,7 @@ namespace NotEnoughAV1Encodes.Views
                                     s.ToLower().EndsWith(".avi")  ||
                                     s.ToLower().EndsWith(".mov")  ||
                                     s.ToLower().EndsWith(".wmv")  ||
+                                    s.ToLower().EndsWith(".mpg")  ||
                                     s.ToLower().EndsWith(".ts"));
 
             foreach (var file in files)
