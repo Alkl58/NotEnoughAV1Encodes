@@ -29,12 +29,13 @@ namespace NotEnoughAV1Encodes.Encoders
             }
             else
             {
-                settings += " -tile_columns " + mainWindow.AdvancedTabControl.ComboBoxSVTAV1TileColumns.Text +                             // Tile Columns
-                            " -tile_rows " + mainWindow.AdvancedTabControl.ComboBoxSVTAV1TileRows.Text +                                   // Tile Rows
+                settings += 
                             " -g " + mainWindow.AdvancedTabControl.TextBoxSVTAV1MaxGOP.Text +                                              // Keyframe Interval
-                            " -la_depth " + mainWindow.AdvancedTabControl.TextBoxSVTAV1Lookahead.Text +                                    // Lookahead
                             " -svtav1-params " +
                             "aq-mode=" + mainWindow.AdvancedTabControl.ComboBoxSVTAV1AQMode.Text +                                         // AQ Mode
+                            ":tile-columns=" + mainWindow.AdvancedTabControl.ComboBoxSVTAV1TileColumns.Text +                              // Tile Columns
+                            ":tile-rows=" + mainWindow.AdvancedTabControl.ComboBoxSVTAV1TileRows.Text +                                    // Tile Rows
+                            ":lookahead=" + mainWindow.AdvancedTabControl.TextBoxSVTAV1Lookahead.Text +                                    // Lookahead
                             ":film-grain=" + mainWindow.AdvancedTabControl.TextBoxSVTAV1FilmGrain.Text +                                   // Film Grain
                             ":film-grain-denoise=" + mainWindow.AdvancedTabControl.TextBoxSVTAV1FilmGrainDenoise.Text;                     // Film Grain Denoise
             }
