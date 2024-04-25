@@ -371,8 +371,11 @@ namespace NotEnoughAV1Encodes.Controls
                 queueElement.FrameCount += queueElement.FrameCount;
             }
 
+            // We want to loose all object references, only took 3 hours to figure this out
+            var queueClone = Queue.QueueElement.DeepCopy(queueElement);
+
             // Add to Queue
-            mainWindow.QueueTabControl.ListBoxQueue.Items.Add(queueElement);
+            mainWindow.QueueTabControl.ListBoxQueue.Items.Add(queueClone);
 
             Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E", "Queue"));
 

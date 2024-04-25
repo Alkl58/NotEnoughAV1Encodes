@@ -190,5 +190,12 @@ namespace NotEnoughAV1Encodes.Queue
             }
             return "0";
         }
+
+        public static QueueElement DeepCopy(QueueElement queueElement)
+        {
+            // Cursed
+            var serialized = JsonConvert.SerializeObject(queueElement);
+            return JsonConvert.DeserializeObject<QueueElement>(serialized);
+        }
     }
 }
