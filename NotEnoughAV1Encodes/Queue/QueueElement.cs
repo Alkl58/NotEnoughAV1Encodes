@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -42,12 +42,6 @@ namespace NotEnoughAV1Encodes.Queue
         public string UniqueIdentifier { get; set; }
         /// <summary>Encoding Method; 0=aom ffmpeg, 1=rav1e ffmpeg, 2=svt-av1 ffmpeg ...</summary>
         public int EncodingMethod { get; set; }
-        /// <summary>Chunking Method; 0=Equal Chunking, 2=PySceneDetect.</summary>
-        public int ChunkingMethod { get; set; }
-        /// <summary>Re-Encoding Method (only for Equal Chunking).</summary>
-        public int ReencodeMethod { get; set; }
-        /// <summary>Chunk Length (only for Equal Chunking).</summary>
-        public int ChunkLength { get; set; }
         /// <summary>Amount of Encoding Passes.</summary>
         public int Passes { get; set; }
         /// <summary>If two progressbars should be displayed for two pass encoding.</summary>
@@ -58,8 +52,6 @@ namespace NotEnoughAV1Encodes.Queue
         public bool Error { get; set; }
         /// <summary>Amount of Errors</summary>
         public int ErrorCount { get; set; } = 0;
-        /// <summary>PySceneDetect Threshold (after Decimal).</summary>
-        public float PySceneDetectThreshold { get; set; }
         /// <summary>Framecount of Source Video.</summary>
         public long FrameCount { get; set; }
         /// <summary>Date Added to Queue.</summary>

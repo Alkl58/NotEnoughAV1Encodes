@@ -171,22 +171,6 @@ namespace NotEnoughAV1Encodes.Controls
             }
         }
 
-        private void ToggleSwitchQueueParallel_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (MainWindow.startupLock) return;
-
-            // Get MainWindow instance to access UI elements
-            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-
-            mainWindow.settingsDB.QueueParallel = ToggleSwitchQueueParallel.IsOn;
-            try
-            {
-                Directory.CreateDirectory(Path.Combine(Global.AppData, "NEAV1E"));
-                File.WriteAllText(Path.Combine(Global.AppData, "NEAV1E", "settings.json"), JsonConvert.SerializeObject(mainWindow.settingsDB, Formatting.Indented));
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-        }
-
         private void ButtonEditSelectedItem_Click(object sender, RoutedEventArgs e)
         {
             if (MainWindow.ProgramState != 0) return;
@@ -217,12 +201,7 @@ namespace NotEnoughAV1Encodes.Controls
                     mainWindow.SummaryTabControl.LabelVideoLength.Content = mainWindow.videoDB.MIDuration;
                     mainWindow.SummaryTabControl.LabelVideoResolution.Content = mainWindow.videoDB.MIWidth + "x" + mainWindow.videoDB.MIHeight;
                     mainWindow.SummaryTabControl.LabelVideoColorFomat.Content = mainWindow.videoDB.MIChromaSubsampling;
-
-                    mainWindow.SummaryTabControl.ComboBoxChunkingMethod.SelectedIndex = tmp.ChunkingMethod;
-                    mainWindow.SummaryTabControl.ComboBoxReencodeMethod.SelectedIndex = tmp.ReencodeMethod;
                     mainWindow.VideoTabVideoOptimizationControl.CheckBoxTwoPassEncoding.IsOn = tmp.Passes == 2;
-                    mainWindow.SummaryTabControl.TextBoxChunkLength.Text = tmp.ChunkLength.ToString();
-                    mainWindow.SummaryTabControl.TextBoxPySceneDetectThreshold.Text = tmp.PySceneDetectThreshold.ToString();
 
                     try
                     {

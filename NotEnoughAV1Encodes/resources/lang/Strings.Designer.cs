@@ -371,6 +371,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
+        /// </summary>
+        public static string GroupBoxModeDescription {
+            get {
+                return ResourceManager.GetString("GroupBoxModeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Optimization ähnelt.
         /// </summary>
         public static string GroupBoxOptimization {
@@ -394,6 +403,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         public static string GroupBoxQuality {
             get {
                 return ResourceManager.GetString("GroupBoxQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Queue Parallel ähnelt.
+        /// </summary>
+        public static string GroupBoxQueueParallel {
+            get {
+                return ResourceManager.GetString("GroupBoxQueueParallel", resourceCulture);
             }
         }
         
@@ -686,15 +704,6 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Encode Queue Parallel instead of chunking: ähnelt.
-        /// </summary>
-        public static string LabelEncodeQueueParallel {
-            get {
-                return ResourceManager.GetString("LabelEncodeQueueParallel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Encoder: ähnelt.
         /// </summary>
         public static string LabelEncoder {
@@ -767,6 +776,39 @@ namespace NotEnoughAV1Encodes.resources.lang {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 1. Chunking: 
+        ///Video get&apos;s split into chunks and each chunk will be encoded in parallel by the amount of workers specified. 
+        ///To disable, set &quot;Splitting Method&quot; to &quot;Disable&quot; or set &quot;Mode&quot; to &quot;Queue&quot; and set &quot;Parallel Encodes&quot; to 1. Does not affect existing items in the queue! ähnelt.
+        /// </summary>
+        public static string LabelModeDescription1 {
+            get {
+                return ResourceManager.GetString("LabelModeDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 2. Queue: 
+        ///All videos in the queue get processed in parallel by the amount of wokers specified in &quot;Parallel Encodes&quot;.
+        ///This will overwrite &quot;Chunking&quot; mode and therefore the video will not be split into chunks, even if the &quot;Mode&quot; was set to &quot;Chunking&quot; while adding the video to the queue. ähnelt.
+        /// </summary>
+        public static string LabelModeDescription2 {
+            get {
+                return ResourceManager.GetString("LabelModeDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 3. Chunking + Queue: 
+        ///Allows processing the queue in parallel and additionally also chunking the input video as described in 1.
+        ///Be careful how many workers you select, as it will use a lot of resources. ähnelt.
+        /// </summary>
+        public static string LabelModeDescription3 {
+            get {
+                return ResourceManager.GetString("LabelModeDescription3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No Audio Found ähnelt.
         /// </summary>
         public static string LabelNoAudioFound {
@@ -826,6 +868,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         public static string LabelQuantizer {
             get {
                 return ResourceManager.GetString("LabelQuantizer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Parallel Encodes: ähnelt.
+        /// </summary>
+        public static string LabelQueueParallelWorkers {
+            get {
+                return ResourceManager.GetString("LabelQueueParallelWorkers", resourceCulture);
             }
         }
         
@@ -1357,6 +1408,15 @@ namespace NotEnoughAV1Encodes.resources.lang {
         public static string TabItemAudio {
             get {
                 return ResourceManager.GetString("TabItemAudio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Chunking ähnelt.
+        /// </summary>
+        public static string TabItemChunking {
+            get {
+                return ResourceManager.GetString("TabItemChunking", resourceCulture);
             }
         }
         

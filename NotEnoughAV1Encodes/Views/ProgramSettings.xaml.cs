@@ -19,7 +19,6 @@ namespace NotEnoughAV1Encodes.Views
         {
             InitializeComponent();
             settingsDBTemp = settingsDB;
-            ToggleSwitchOverrideWorkerCount.IsOn = settingsDB.OverrideWorkerCount;
             ToggleSwitchDeleteTempFiles.IsOn = settingsDB.DeleteTempFiles;
             ToggleSwitchAutoPauseResume.IsOn = settingsDB.AutoResumePause;
             ToggleSwitchInputSeeking.IsOn = settingsDB.UseInputSeeking;
@@ -115,7 +114,6 @@ namespace NotEnoughAV1Encodes.Views
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            settingsDBTemp.OverrideWorkerCount = ToggleSwitchOverrideWorkerCount.IsOn;
             settingsDBTemp.DeleteTempFiles = ToggleSwitchDeleteTempFiles.IsOn;
             settingsDBTemp.AutoResumePause = ToggleSwitchAutoPauseResume.IsOn;
             settingsDBTemp.UseInputSeeking = ToggleSwitchInputSeeking.IsOn;

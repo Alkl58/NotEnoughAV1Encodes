@@ -289,9 +289,6 @@
   <data name="LabelDestination" xml:space="preserve">
     <value>出力先</value>
   </data>
-  <data name="LabelEncodeQueueParallel" xml:space="preserve">
-    <value>チャンク分割ではなくキューを並列にエンコードする:</value>
-  </data>
   <data name="LabelEncoder" xml:space="preserve">
     <value>エンコーダー:</value>
   </data>
@@ -568,5 +565,20 @@ Please download and extract 7-zip to the following path:
   </data>
   <data name="ButtonCropAutoDetect" xml:space="preserve">
     <value>オートディテクト</value>
+  </data>
+  <data name="LabelModeDescription1" xml:space="preserve">
+    <value>1. Chunking:
+ビデオは複数のチャンクに分割され、各チャンクは指定されたワーカーの数によって並行してエンコードされます。
+無効にするには、「分割方法」を「無効」に設定するか、「モード」を「キュー」に設定し、「並列エンコード」を 1 に設定します。キュー内の既存の項目には影響しません。</value>
+  </data>
+  <data name="LabelModeDescription2" xml:space="preserve">
+    <value>2. Queue:
+キュー内のすべてのビデオは、「並列エンコード」で指定されたワーカーの数だけ並列に処理されます。
+これにより、「チャンク」モードが上書きされるため、ビデオをキューに追加するときに「モード」が「チャンク」に設定されていたとしても、ビデオはチャンクに分割されません。</value>
+  </data>
+  <data name="LabelModeDescription3" xml:space="preserve">
+    <value>3. Chunking + Queue:
+キューを並列処理できるようにし、さらに 1 で説明したように入力ビデオをチャンク化することもできます。
+大量のリソースを使用するため、選択するワーカーの数に注意してください。</value>
   </data>
 </root>

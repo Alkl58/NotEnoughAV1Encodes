@@ -17,8 +17,6 @@ namespace NotEnoughAV1Encodes
         public int AccentTheme { get; set; }
         /// <summary>Sets Background Image of Program</summary>
         public string BGImage { get; set; }
-        /// <summary>Overrides Worker Count -> User can specify it manually</summary>
-        public bool OverrideWorkerCount { get; set; }
         /// <summary>Specifies the Temp Folder used</summary>
         public string TempPath { get; set; } = Path.GetTempPath();
         /// <summary>Specifies the default Output Folder</summary>
@@ -37,18 +35,6 @@ namespace NotEnoughAV1Encodes
         public CultureInfo CultureInfo { get; set; } = new("en");
         /// <summary>Default Preset to load on startup</summary>
         public string DefaultPreset { get; set; }
-        /// <summary>Default Worker Count</summary>
-        public int WorkerCount { get; set; } = 99999999;
-        /// <summary>Default Chunking Method</summary>
-        public int ChunkingMethod { get; set; }
-        /// <summary>Default Reencode Method</summary>
-        public int ReencodeMethod { get; set; }
-        /// <summary>Default Chunk Length</summary>
-        public string ChunkLength { get; set; } = "10";
-        /// <summary>Default PySceneDetect Threshold</summary>
-        public string PySceneDetectThreshold { get; set; } = "30";
-        /// <summary>Toggles Queue Parallel Encoding</summary>
-        public bool QueueParallel { get; set; }
         /// <summary>Toggles Input Seeking</summary>
         public bool UseInputSeeking { get; set; }
         /// <summary>Sort Queue By...</summary>

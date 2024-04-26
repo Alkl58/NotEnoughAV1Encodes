@@ -32,6 +32,11 @@
                     <neav1eControls:FiltersTab x:Name="FiltersTabControl"/>
                 </Grid>
             </TabItem>
+            <TabItem x:Name="TabItemChunking" Header="{lex:Loc}">
+                <Grid>
+                    <neav1eControls:ChunkingTab x:Name="ChunkingTabControl"/>
+                </Grid>
+            </TabItem>
             <TabItem x:Name="TabItemVideo" Header="{lex:Loc}">
                 <Grid>
                     <neav1eControlsPartials:VideoTabVideo x:Name="VideoTabVideoPartialControl"/>

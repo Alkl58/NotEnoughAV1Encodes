@@ -163,12 +163,7 @@ namespace NotEnoughAV1Encodes.Controls
                         mainWindow.SummaryTabControl.LabelVideoLength.Content = mainWindow.videoDB.MIDuration;
                         mainWindow.SummaryTabControl.LabelVideoResolution.Content = mainWindow.videoDB.MIWidth + "x" + mainWindow.videoDB.MIHeight;
                         mainWindow.SummaryTabControl.LabelVideoColorFomat.Content = mainWindow.videoDB.MIChromaSubsampling;
-
-                        mainWindow.SummaryTabControl.ComboBoxChunkingMethod.SelectedIndex = queueElement.ChunkingMethod;
-                        mainWindow.SummaryTabControl.ComboBoxReencodeMethod.SelectedIndex = queueElement.ReencodeMethod;
                         mainWindow.VideoTabVideoOptimizationControl.CheckBoxTwoPassEncoding.IsOn = queueElement.Passes == 2;
-                        mainWindow.SummaryTabControl.TextBoxChunkLength.Text = queueElement.ChunkLength.ToString();
-                        mainWindow.SummaryTabControl.TextBoxPySceneDetectThreshold.Text = queueElement.PySceneDetectThreshold.ToString();
                     }
                     catch (Exception ex)
                     {
@@ -357,11 +352,7 @@ namespace NotEnoughAV1Encodes.Controls
             queueElement.FilterCommand = mainWindow.FiltersTabControl.GenerateVideoFilters();
             queueElement.FrameCount = mainWindow.videoDB.MIFrameCount;
             queueElement.EncodingMethod = mainWindow.VideoTabVideoPartialControl.ComboBoxVideoEncoder.SelectedIndex;
-            queueElement.ChunkingMethod = mainWindow.SummaryTabControl.ComboBoxChunkingMethod.SelectedIndex;
-            queueElement.ReencodeMethod = mainWindow.SummaryTabControl.ComboBoxReencodeMethod.SelectedIndex;
             queueElement.Passes = mainWindow.VideoTabVideoOptimizationControl.CheckBoxTwoPassEncoding.IsOn ? 2 : 1;
-            queueElement.ChunkLength = int.Parse(mainWindow.SummaryTabControl.TextBoxChunkLength.Text);
-            queueElement.PySceneDetectThreshold = float.Parse(mainWindow.SummaryTabControl.TextBoxPySceneDetectThreshold.Text);
             queueElement.VFR = mainWindow.VideoTabVideoPartialControl.CheckBoxVideoVFR.IsChecked == true;
             queueElement.Preset = mainWindow.PresetSettings;
             queueElement.VideoDB = mainWindow.videoDB;
@@ -437,7 +428,7 @@ namespace NotEnoughAV1Encodes.Controls
             // Add Job to Queue
             AddToQueue(mainWindow.uid, false);
 
-            Dispatcher.BeginInvoke((Action)(() => mainWindow.TabControl.SelectedIndex = 7));
+            Dispatcher.BeginInvoke((Action)(() => mainWindow.TabControl.SelectedIndex = 8));
 
             // Reset Unique Identifier
             mainWindow.uid = null;

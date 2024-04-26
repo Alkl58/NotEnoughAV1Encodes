@@ -286,9 +286,6 @@
   <data name="LabelDestination" xml:space="preserve">
     <value>Место назначения</value>
   </data>
-  <data name="LabelEncodeQueueParallel" xml:space="preserve">
-    <value>Кодировать очередь параллельно вместо разделения на чанки:</value>
-  </data>
   <data name="LabelEncoder" xml:space="preserve">
     <value>Кодировщик:</value>
   </data>
@@ -552,5 +549,22 @@ Please download and extract 7-zip to the following path:
   </data>
   <data name="ButtonCropAutoDetect" xml:space="preserve">
     <value>автоматическое обнаружение</value>
+  </data>
+  <data name="LabelModeDescription1" xml:space="preserve">
+    <value>1. Chunking:
+Видео разбивается на фрагменты, и каждый фрагмент будет кодироваться параллельно указанным количеством воркеров.
+Чтобы отключить, установите для параметра «Метод разделения» значение «Отключить» или установите для параметра
+«Режим» значение «Очередь» и установите для параметра «Параллельное кодирование» значение 1. Не влияет на существующие элементы в очереди!</value>
+  </data>
+  <data name="LabelModeDescription2" xml:space="preserve">
+    <value>2. Queue:
+Все видео в очереди обрабатываются параллельно количеством пробуждений, указанным в параметре «Параллельное кодирование».
+Это приведет к перезаписи режима «Чанкирование», и поэтому видео не будет разбито на фрагменты, даже если при
+добавлении видео в очередь для параметра «Режим» было установлено значение «Чанкирование».</value>
+  </data>
+  <data name="LabelModeDescription3" xml:space="preserve">
+    <value>3. Chunking + Queue:
+Позволяет обрабатывать очередь параллельно, а также разбивать входное видео на фрагменты, как описано в пункте 1.
+Будьте осторожны с выбором рабочих, так как на это потребуется много ресурсов.</value>
   </data>
 </root>

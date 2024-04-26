@@ -26,9 +26,6 @@ namespace NotEnoughAV1Encodes
         public static bool startupLock = true;
         public static bool lockQueue = false;
 
-        /// <summary>Encoding the Queue in Parallel or not</summary>
-        private bool QueueParallel;
-
         /// <summary>State of the Program [0 = IDLE; 1 = Encoding; 2 = Paused]</summary>
         public static int ProgramState;
 
@@ -86,16 +83,6 @@ namespace NotEnoughAV1Encodes
         private void Initialize()
         {
             resources.MediaLanguages.FillDictionary();
-
-            // Load Worker Count
-            int coreCount = 0;
-            foreach (System.Management.ManagementBaseObject item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
-            {
-                coreCount += int.Parse(item["NumberOfCores"].ToString());
-            }
-            for (int i = 1; i <= coreCount; i++) { SummaryTabControl.ComboBoxWorkerCount.Items.Add(i); }
-            SummaryTabControl.ComboBoxWorkerCount.SelectedItem = Convert.ToInt32(coreCount * 75 / 100);
-            SummaryTabControl.TextBoxWorkerCount.Text = coreCount.ToString();
 
             // Load Settings from JSON
             try 
@@ -207,27 +194,6 @@ namespace NotEnoughAV1Encodes
         #region Small Functions
         public void LoadSettings()
         {
-            if (settingsDB.OverrideWorkerCount)
-            {
-                SummaryTabControl.ComboBoxWorkerCount.Visibility = Visibility.Hidden;
-                SummaryTabControl.TextBoxWorkerCount.Visibility = Visibility.Visible;
-                if (settingsDB.WorkerCount != 99999999)
-                    SummaryTabControl.TextBoxWorkerCount.Text = settingsDB.WorkerCount.ToString();
-            }
-            else
-            {
-                SummaryTabControl.ComboBoxWorkerCount.Visibility = Visibility.Visible;
-                SummaryTabControl.TextBoxWorkerCount.Visibility = Visibility.Hidden;
-                if (settingsDB.WorkerCount != 99999999)
-                    SummaryTabControl.ComboBoxWorkerCount.SelectedIndex = settingsDB.WorkerCount;
-            }
-
-            SummaryTabControl.ComboBoxChunkingMethod.SelectedIndex = settingsDB.ChunkingMethod;
-            SummaryTabControl.ComboBoxReencodeMethod.SelectedIndex = settingsDB.ReencodeMethod;
-            SummaryTabControl.TextBoxChunkLength.Text = settingsDB.ChunkLength;
-            SummaryTabControl.TextBoxPySceneDetectThreshold.Text = settingsDB.PySceneDetectThreshold;
-            QueueTabControl.ToggleSwitchQueueParallel.IsOn = settingsDB.QueueParallel;
-
             // Sets Temp Path
             Global.Temp = settingsDB.TempPath;
             Logging = settingsDB.Logging;
@@ -455,23 +421,11 @@ namespace NotEnoughAV1Encodes
 
         private async Task MainStartAsync(CancellationToken _cancelToken)
         {
-            QueueParallel = QueueTabControl.ToggleSwitchQueueParallel.IsOn;
-            // Sets amount of Workers
-            int WorkerCountQueue = 1;
-            int WorkerCountElement = int.Parse(SummaryTabControl.ComboBoxWorkerCount.Text);
-
-            if (settingsDB.OverrideWorkerCount)
-            {
-                WorkerCountElement = int.Parse(SummaryTabControl.TextBoxWorkerCount.Text);
-            }
-
-            // If user wants to encode the queue in parallel,
-            // it will set the worker count to 1 and the "outer"
-            // SemaphoreSlim will be set to the original worker count
+            int workerCountQueue = 1;
+            bool QueueParallel = ChunkingTabControl.ComboBoxChunkingMode.SelectedIndex == 1 || ChunkingTabControl.ComboBoxChunkingMode.SelectedIndex == 2;
             if (QueueParallel)
             {
-                WorkerCountQueue = WorkerCountElement;
-                WorkerCountElement = 1;
+                workerCountQueue = int.Parse(ChunkingTabControl.TextBoxQueueParallelWorkers.Text);
             }
 
             // Starts Timer for Taskbar Progress Indicator
@@ -490,7 +444,7 @@ namespace NotEnoughAV1Encodes
                 pauseResumeTimer.Start();
             }
 
-            using SemaphoreSlim concurrencySemaphore = new(WorkerCountQueue);
+            using SemaphoreSlim concurrencySemaphore = new(workerCountQueue);
             // Creates a tasks list
             List<Task> tasks = new();
 
@@ -529,7 +483,7 @@ namespace NotEnoughAV1Encodes
                         List<string> VideoChunks = new();
 
                         // Chunking
-                        if (QueueParallel || queueElement.ChunkingMethod == 2)
+                        if ((QueueParallel || queueElement.Preset.ChunkingMethod == 2) && queueElement.Preset.ChunkingMode != 2)
                         {
                             VideoChunks.Add(queueElement.VideoDB.InputPath);
                             Global.Logger("WARN  - Queue is being processed in Parallel", queueElement.Output + ".log");
@@ -538,7 +492,7 @@ namespace NotEnoughAV1Encodes
                         {
                             await Task.Run(() => videoSplitter.Split(queueElement, _cancelToken), _cancelToken);
 
-                            if (queueElement.ChunkingMethod == 0 || queueElement.Preset.TargetVMAF)
+                            if (queueElement.Preset.ChunkingMethod == 0 || queueElement.Preset.TargetVMAF)
                             {
                                 // Equal Chunking
                                 IOrderedEnumerable<string> sortedChunks = Directory.GetFiles(Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks"), "*.mkv", SearchOption.TopDirectoryOnly).OrderBy(f => f);
@@ -579,8 +533,15 @@ namespace NotEnoughAV1Encodes
                             aTimer.Interval = 1000;
                             aTimer.Start();
 
+                            int workerCount = 1;
+                            if (queueElement.Preset.ChunkingMode == 0 || queueElement.Preset.ChunkingMode == 2)
+                            {
+                                // Chunking or Chunking + Queue Parallel
+                                workerCount = int.Parse(queueElement.Preset.WorkerCount);
+                            }
+
                             // Video Encoding
-                            await Task.Run(() => videoEncoder.Encode(WorkerCountElement, VideoChunks, queueElement, QueueParallel, settingsDB.PriorityNormal, settingsDB, _cancelToken), _cancelToken);
+                            await Task.Run(() => videoEncoder.Encode(workerCount, VideoChunks, queueElement, QueueParallel, settingsDB.PriorityNormal, settingsDB, _cancelToken), _cancelToken);
 
                             // Stop timer for eta / fps calculation
                             aTimer.Stop();

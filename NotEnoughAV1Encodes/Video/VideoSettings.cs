@@ -253,5 +253,19 @@ namespace NotEnoughAV1Encodes
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+        // Chunking
+        /// <summary>Default Chunking Mode</summary>
+        public int ChunkingMode { get; set; } = 0;
+        /// <summary>Default Worker Count</summary>
+        public string WorkerCount { get; set; } = "2";
+        /// <summary>Default Chunking Method</summary>
+        public int ChunkingMethod { get; set; } = 0;
+        /// <summary>Default Reencode Method</summary>
+        public int ReencodeMethod { get; set; }
+        /// <summary>Default Chunk Length</summary>
+        public string ChunkLength { get; set; } = "10";
+        /// <summary>Default PySceneDetect Threshold</summary>
+        public string PySceneDetectThreshold { get; set; } = "30";
     }
 }

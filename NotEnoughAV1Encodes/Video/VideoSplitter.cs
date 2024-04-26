@@ -18,12 +18,12 @@ namespace NotEnoughAV1Encodes.Video
             queueElement = _queueElement;
             Global.Logger("INFO  - VideoSplitter.Split()", queueElement.Output + ".log");
 
-            if (queueElement.ChunkingMethod == 0)
+            if (queueElement.Preset.ChunkingMethod == 0)
             {
                 // Equal Chunking
                 FFmpegChunking(token);
             }
-            else if(queueElement.ChunkingMethod == 1)
+            else if(queueElement.Preset.ChunkingMethod == 1)
             {
                 // PySceneDetect
                 PySceneDetect(token);
@@ -46,7 +46,7 @@ namespace NotEnoughAV1Encodes.Video
                     RedirectStandardError = true,
                     FileName = "cmd.exe",
                     WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Apps", "pyscenedetect"),
-                    Arguments = "/C scenedetect -i \"" + queueElement.VideoDB.InputPath + "\" -o \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier) + '\u0022' + " detect-content -t " + queueElement.PySceneDetectThreshold.ToString() + " list-scenes"
+                    Arguments = "/C scenedetect -i \"" + queueElement.VideoDB.InputPath + "\" -o \"" + Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier) + '\u0022' + " detect-content -t " + queueElement.Preset.PySceneDetectThreshold.ToString() + " list-scenes"
                 };
                 pySceneDetect.StartInfo = startInfo;
 
@@ -309,7 +309,7 @@ namespace NotEnoughAV1Encodes.Video
             }
 
             // Set Encoder
-            string encoder = queueElement.ReencodeMethod switch
+            string encoder = queueElement.Preset.ReencodeMethod switch
             {
                 0 => " -c:v libx264 -preset ultrafast -crf 0",
                 1 => " -c:v ffv1 -level 3 -threads 4 -coder 1 -context 1 -slicecrc 0 -slices 4",
@@ -321,10 +321,10 @@ namespace NotEnoughAV1Encodes.Video
             ffmpegCommand += " -reset_timestamps 1 -map_metadata -1 -sn -an" + encoder;
 
 
-            if (queueElement.ReencodeMethod != 3)
+            if (queueElement.Preset.ReencodeMethod != 3)
             {
-                ffmpegCommand += " -sc_threshold 0 -g " + queueElement.ChunkLength.ToString();
-                ffmpegCommand += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + queueElement.ChunkLength.ToString() + ")" + '\u0022';
+                ffmpegCommand += " -sc_threshold 0 -g " + queueElement.Preset.ChunkLength.ToString();
+                ffmpegCommand += " -force_key_frames " + '\u0022' + "expr:gte(t, n_forced * " + queueElement.Preset.ChunkLength.ToString() + ")" + '\u0022';
                 ffmpegCommand += queueElement.FilterCommand;
                 if (queueElement.SubtitleBurnCommand != null)
                 {
@@ -346,7 +346,7 @@ namespace NotEnoughAV1Encodes.Video
 
             }
 
-            ffmpegCommand += " -segment_time " + queueElement.ChunkLength.ToString() + " -f segment \"";
+            ffmpegCommand += " -segment_time " + queueElement.Preset.ChunkLength.ToString() + " -f segment \"";
             ffmpegCommand += Path.Combine(Global.Temp, "NEAV1E", queueElement.UniqueIdentifier, "Chunks", "split%6d.mkv") + "\"";
 
             Global.Logger("INFO  - VideoSplitter.Split() => FFmpegChunking() => FFmpeg Command: " + ffmpegCommand, queueElement.Output + ".log");

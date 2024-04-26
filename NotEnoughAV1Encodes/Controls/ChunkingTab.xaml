@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="NotEnoughAV1Encodes.Controls.ChunkingTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NotEnoughAV1Encodes.Controls"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1085">
+    <Grid>
+        <GroupBox x:Name="GroupBoxQueueParallel" Header="{lex:Loc}" Margin="10,137,10,0" Height="82" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid Background="{Binding BackgroundColor}">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="UIElement.IsEnabled" Value="False" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMode}" Value="1">
+                                <Setter Property="UIElement.IsEnabled" Value="True" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMode}" Value="2">
+                                <Setter Property="UIElement.IsEnabled" Value="True" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Label x:Name="LabelQueueParallelWorkers" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left" />
+                <TextBox x:Name="TextBoxQueueParallelWorkers" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="2" PreviewTextInput="NumberValidationTextBox" Width="80" Margin="120,0,0,0">
+                    <TextBox.ToolTip>Sets the amount of videos in the queue to encode in parallel</TextBox.ToolTip>
+                </TextBox>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="GroupBoxWorkersAndSplitting" Header="{lex:Loc}" Margin="10,52,10,0" Height="80" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid Background="{Binding BackgroundColor}">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="UIElement.IsEnabled" Value="False" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMode}" Value="0">
+                                <Setter Property="UIElement.IsEnabled" Value="True" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMode}" Value="2">
+                                <Setter Property="UIElement.IsEnabled" Value="True" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="100" MaxWidth="120"/>
+                    <ColumnDefinition MinWidth="100"/>
+                    <ColumnDefinition MinWidth="100" MaxWidth="120"/>
+                    <ColumnDefinition MinWidth="100"/>
+                    <ColumnDefinition MinWidth="100" MaxWidth="120"/>
+                    <ColumnDefinition MinWidth="100"/>
+                    <ColumnDefinition MinWidth="150" MaxWidth="150"/>
+                    <ColumnDefinition MinWidth="100"/>
+                </Grid.ColumnDefinitions>
+                <Label x:Name="LabelWorkerCount" Grid.Column="0" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
+                <TextBox Grid.Column="1" x:Name="TextBoxWorkerCount" Text="{Binding WorkerCount}" PreviewTextInput="NumberValidationTextBox" Height="28" MinWidth="90" MaxWidth="110" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <Label x:Name="LabelSplittingMethod" Grid.Column="2" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left"/>
+                <ComboBox Grid.Column="3" x:Name="ComboBoxChunkingMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left" SelectedIndex="{Binding ChunkingMethod}">
+                    <ComboBoxItem Content="Equal Chunking" IsSelected="True"/>
+                    <ComboBoxItem Content="PySceneDetect"/>
+                    <ComboBoxItem Content="Disable"/>
+                </ComboBox>
+                <Label x:Name="LabelReencodeMethod" Grid.Column="4" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
+                    <Label.Style>
+                        <Style TargetType="Label" BasedOn="{StaticResource MahApps.Styles.Label}">
+                            <Setter Property="UIElement.Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="0">
+                                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+                <ComboBox Grid.Column="5" x:Name="ComboBoxReencodeMethod" Height="28" MinWidth="100" MaxWidth="140" HorizontalAlignment="Left" SelectedIndex="{Binding ReencodeMethod}">
+                    <ComboBoxItem Content="x264" IsSelected="True"/>
+                    <ComboBoxItem Content="ffv1"/>
+                    <ComboBoxItem Content="utvideo"/>
+                    <ComboBoxItem Content="copy (not reencoding)"/>
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox" BasedOn="{StaticResource MahApps.Styles.ComboBox}">
+                            <Setter Property="UIElement.Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="0">
+                                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+                <Label x:Name="LabelChunkLength" Grid.Column="6" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
+                    <Label.Style>
+                        <Style TargetType="Label" BasedOn="{StaticResource MahApps.Styles.Label}">
+                            <Setter Property="UIElement.Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="0">
+                                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+                <TextBox Grid.Column="7"  x:Name="TextBoxChunkLength" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="{Binding ChunkLength}" PreviewTextInput="NumberValidationTextBox" Width="80">
+                    <TextBox.ToolTip>Sets the chunk length in seconds. Recommended: 10</TextBox.ToolTip>
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+                            <Setter Property="UIElement.Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="0">
+                                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <Label x:Name="LabelThreshold" Grid.Column="4" Content="{lex:Loc}" MinWidth="100" MaxWidth="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold" HorizontalAlignment="Left">
+                    <Label.Style>
+                        <Style TargetType="Label" BasedOn="{StaticResource MahApps.Styles.Label}">
+                            <Setter Property="UIElement.Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="1">
+                                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+                <TextBox Grid.Column="5"  x:Name="TextBoxPySceneDetectThreshold" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AcceptsReturn="True" Text="{Binding PySceneDetectThreshold}" PreviewTextInput="NumberValidationTextBox" Width="80">
+                    <TextBox.ToolTip>Sets the threshold of scenedetection. (Default 30)</TextBox.ToolTip>
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+                            <Setter Property="UIElement.Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedIndex, ElementName=ComboBoxChunkingMethod}" Value="1">
+                                    <Setter Property="UIElement.Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </Grid>
+        </GroupBox>
+
+        <ComboBox x:Name="ComboBoxChunkingMode" HorizontalAlignment="Left" Margin="76,10,0,0" VerticalAlignment="Top" Width="140" SelectedIndex="{Binding ChunkingMode}">
+            <ComboBoxItem Content="Chunking" IsSelected="True"/>
+            <ComboBoxItem Content="Queue"/>
+            <ComboBoxItem Content="Chunking + Queue"/>
+        </ComboBox>
+        <Label Content="Mode:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="61"/>
+        <GroupBox x:Name="GroupBoxModeDescription" Margin="10,225,10,10" Header="{lex:Loc}" mah:ControlsHelper.ContentCharacterCasing="Normal">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Name="LabelModeDescription1" Text="{lex:Loc}" />
+                <TextBlock Name="LabelModeDescription2" Grid.Row="1" Text="{lex:Loc}" />
+                <TextBlock Name="LabelModeDescription3" Grid.Row="2" Text="{lex:Loc}" />
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

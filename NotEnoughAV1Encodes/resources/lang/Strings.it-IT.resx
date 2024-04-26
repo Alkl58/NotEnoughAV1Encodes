@@ -289,9 +289,6 @@
   <data name="LabelDestination" xml:space="preserve">
     <value>Destinazione</value>
   </data>
-  <data name="LabelEncodeQueueParallel" xml:space="preserve">
-    <value>Codifica Coda in Parallelo:</value>
-  </data>
   <data name="LabelEncoder" xml:space="preserve">
     <value>Encoder:</value>
   </data>
@@ -559,5 +556,20 @@ Please download and extract 7-zip to the following path:
   </data>
   <data name="ButtonCropAutoDetect" xml:space="preserve">
     <value>Rilevamento automatico</value>
+  </data>
+  <data name="LabelModeDescription1" xml:space="preserve">
+    <value>1. Chunking:
+Il video viene suddiviso in blocchi e ciascun blocco verrà codificato in parallelo in base al numero di lavoratori specificato.
+Per disabilitarlo, imposta "Metodo di suddivisione" su "Disabilita" o imposta "Modalità" su "Coda" e imposta "Codifica parallela" su 1. Non influisce sugli elementi esistenti nella coda!</value>
+  </data>
+  <data name="LabelModeDescription2" xml:space="preserve">
+    <value>2. Queue:
+Tutti i video in coda vengono elaborati in parallelo in base al numero di wakers specificato in "Codifiche parallele".
+Ciò sovrascriverà la modalità "Chunking" e pertanto il video non verrà suddiviso in blocchi, anche se la "Modalità" è stata impostata su "Chunking" durante l'aggiunta del video alla coda.</value>
+  </data>
+  <data name="LabelModeDescription3" xml:space="preserve">
+    <value>3. Chunking + Queue:
+Consente l'elaborazione della coda in parallelo e inoltre anche la suddivisione in blocchi del video in ingresso come descritto al punto 1.
+Fai attenzione a quanti lavoratori selezioni, poiché utilizzerà molte risorse.</value>
   </data>
 </root>

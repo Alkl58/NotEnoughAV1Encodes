@@ -11,10 +11,10 @@ namespace NotEnoughAV1Encodes.Video
 {
     class VideoEncode
     {
-        public void Encode(int _workerCount, List<string> VideoChunks, Queue.QueueElement queueElement, bool queueParallel, bool normalPriority, Settings settings, CancellationToken token)
+        public void Encode(int workerCount, List<string> VideoChunks, Queue.QueueElement queueElement, bool queueParallel, bool normalPriority, Settings settings, CancellationToken token)
         {
             Global.Logger("TRACE - VideoEncode.Encode()", queueElement.Output + ".log");
-            using SemaphoreSlim concurrencySemaphoreInner = new(_workerCount);
+            using SemaphoreSlim concurrencySemaphoreInner = new(workerCount);
             // Creates a tasks list
             List<Task> tasksInner = new();
 
@@ -82,13 +82,13 @@ namespace NotEnoughAV1Encodes.Video
                             int finalProgress = 0;
 
                             // Apply filter if the video has not been processed before
-                            if (queueElement.ChunkingMethod == 1 || queueElement.ChunkingMethod == 2 || (queueElement.ChunkingMethod == 0 && queueElement.ReencodeMethod == 3))
+                            if (queueElement.Preset.ChunkingMethod == 1 || queueElement.Preset.ChunkingMethod == 2 || (queueElement.Preset.ChunkingMethod == 0 && queueElement.Preset.ReencodeMethod == 3))
                             {
                                 ffmpegFilter = queueElement.FilterCommand;
                             }
 
                             // Subtitle Hardsubbing is only possible with Scenebased Encoding at this stage
-                            if ((queueElement.ChunkingMethod == 1 || queueElement.ChunkingMethod == 2) && queueElement.SubtitleBurnCommand != null)
+                            if ((queueElement.Preset.ChunkingMethod == 1 || queueElement.Preset.ChunkingMethod == 2) && queueElement.SubtitleBurnCommand != null)
                             {
                                 // Only allow Picture Based Burn in, if no other Filter is being used
                                 if (string.IsNullOrEmpty(queueElement.FilterCommand))
@@ -109,7 +109,7 @@ namespace NotEnoughAV1Encodes.Video
                             }
 
                             // Set Chunk Input
-                            if (queueElement.ChunkingMethod == 0 || queueElement.ChunkingMethod == 2 || queueParallel || queueElement.Preset.TargetVMAF)
+                            if (queueElement.Preset.ChunkingMethod == 0 || queueElement.Preset.ChunkingMethod == 2 || queueParallel || queueElement.Preset.TargetVMAF)
                             {
                                 // Input for Chunked Encoding or Parallel Queue Processing
                                 ChunkInput = "-i \"" + chunk + "\"";

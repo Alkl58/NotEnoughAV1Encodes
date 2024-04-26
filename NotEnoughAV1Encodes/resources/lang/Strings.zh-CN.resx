@@ -295,9 +295,6 @@
   <data name="LabelDestination" xml:space="preserve">
     <value>保存为</value>
   </data>
-  <data name="LabelEncodeQueueParallel" xml:space="preserve">
-    <value>编码队列并行而不是分块：</value>
-  </data>
   <data name="LabelEncoder" xml:space="preserve">
     <value>编码器：</value>
   </data>
@@ -601,5 +598,20 @@
   </data>
   <data name="ButtonCropAutoDetect" xml:space="preserve">
     <value>自动检测</value>
+  </data>
+  <data name="LabelModeDescription1" xml:space="preserve">
+    <value>1. Chunking：
+视频被分割成块，每个块将按照指定的工作人员数量并行编码。
+要禁用，请将“拆分方法”设置为“禁用”或将“模式”设置为“队列”并将“并行编码”设置为 1。不影响队列中的现有项目！</value>
+  </data>
+  <data name="LabelModeDescription2" xml:space="preserve">
+    <value>2. Queue：
+队列中的所有视频均按照“并行编码”中指定的工作量并行处理。
+这将覆盖“分块”模式，因此视频不会被分割成块，即使在将视频添加到队列时“模式”设置为“分块”也是如此。</value>
+  </data>
+  <data name="LabelModeDescription3" xml:space="preserve">
+    <value>3. Chunking + Queue：
+允许并行处理队列，此外还可以按 1 中所述对输入视频进行分块。
+请注意您选择的工人数量，因为它会使用大量资源。</value>
   </data>
 </root>

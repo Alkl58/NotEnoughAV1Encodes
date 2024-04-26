@@ -295,9 +295,6 @@
   <data name="LabelDestination" xml:space="preserve">
     <value>Destination</value>
   </data>
-  <data name="LabelEncodeQueueParallel" xml:space="preserve">
-    <value>Encode Queue Parallel instead of chunking:</value>
-  </data>
   <data name="LabelEncoder" xml:space="preserve">
     <value>Encoder:</value>
   </data>
@@ -610,5 +607,32 @@ Please download and extract 7-zip to the following path:
   </data>
   <data name="ButtonCropAutoDetect" xml:space="preserve">
     <value>Auto Detect</value>
+  </data>
+  <data name="GroupBoxQueueParallel" xml:space="preserve">
+    <value>Queue Parallel</value>
+  </data>
+  <data name="LabelQueueParallelWorkers" xml:space="preserve">
+    <value>Parallel Encodes:</value>
+  </data>
+  <data name="TabItemChunking" xml:space="preserve">
+    <value>Chunking</value>
+  </data>
+  <data name="GroupBoxModeDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="LabelModeDescription1" xml:space="preserve">
+    <value>1. Chunking: 
+Video get's split into chunks and each chunk will be encoded in parallel by the amount of workers specified. 
+To disable, set "Splitting Method" to "Disable" or set "Mode" to "Queue" and set "Parallel Encodes" to 1. Does not affect existing items in the queue!</value>
+  </data>
+  <data name="LabelModeDescription2" xml:space="preserve">
+    <value>2. Queue: 
+All videos in the queue get processed in parallel by the amount of wokers specified in "Parallel Encodes".
+This will overwrite "Chunking" mode and therefore the video will not be split into chunks, even if the "Mode" was set to "Chunking" while adding the video to the queue.</value>
+  </data>
+  <data name="LabelModeDescription3" xml:space="preserve">
+    <value>3. Chunking + Queue: 
+Allows processing the queue in parallel and additionally also chunking the input video as described in 1.
+Be careful how many workers you select, as it will use a lot of resources.</value>
   </data>
 </root>

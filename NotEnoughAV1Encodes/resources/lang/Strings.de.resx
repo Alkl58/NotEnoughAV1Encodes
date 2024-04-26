@@ -292,9 +292,6 @@
   <data name="LabelDestination" xml:space="preserve">
     <value>Ziel</value>
   </data>
-  <data name="LabelEncodeQueueParallel" xml:space="preserve">
-    <value>Warteschlange parallel encoden anstelle von Splitting:</value>
-  </data>
   <data name="LabelEncoder" xml:space="preserve">
     <value>Encoder:</value>
   </data>
@@ -604,5 +601,25 @@ Please download and extract 7-zip to the following path:
   </data>
   <data name="ButtonCropAutoDetect" xml:space="preserve">
     <value>Autom. Erkennung</value>
+  </data>
+  <data name="GroupBoxModeDescription" xml:space="preserve">
+    <value>Beschreibung</value>
+  </data>
+  <data name="LabelModeDescription1" xml:space="preserve">
+    <value>1. Chunking:
+Das Video wird in Blöcke aufgeteilt und jeder Block wird parallel durch die angegebene Anzahl von Arbeitern codiert.
+Zum Deaktivieren setze „Splitting Method“ auf „Disable“ oder stelle „Mode“ auf „Queue“ und „Parallel Encodes“ auf 1.
+Betrifft keine vorhandenen Elemente in der Warteschlange!</value>
+  </data>
+  <data name="LabelModeDescription2" xml:space="preserve">
+    <value>2. Queue:
+Alle Videos in der Warteschlange werden parallel von der unter „Parallel Encodes“ angegebenen Anzahl von Arbeitern verarbeitet.
+Dadurch wird der „Chunking“-Modus überschrieben und das Video daher nicht in Blöcke aufgeteilt, 
+selbst wenn der „Mode“ beim Hinzufügen des Videos zur Warteschlange auf „Chunking“ eingestellt war.</value>
+  </data>
+  <data name="LabelModeDescription3" xml:space="preserve">
+    <value>3. Chunking + Queue:
+Ermöglicht die parallele Verarbeitung der Warteschlange und zusätzlich auch die Aufteilung des Eingabevideos wie in 1 beschrieben.
+Seie vorsichtig, wie viele Arbeiter ausgewählt werden, da dies viele Ressourcen verbraucht.</value>
   </data>
 </root>

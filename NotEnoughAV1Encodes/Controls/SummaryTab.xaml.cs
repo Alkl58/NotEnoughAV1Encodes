@@ -26,56 +26,6 @@ namespace NotEnoughAV1Encodes.Controls
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private void ComboBoxWorkerCount_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (MainWindow.startupLock) return;
-
-            // Get MainWindow instance to access UI elements
-            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-
-            if (mainWindow.settingsDB.OverrideWorkerCount) return;
-            mainWindow.settingsDB.WorkerCount = ComboBoxWorkerCount.SelectedIndex;
-
-            SaveSettings();
-        }
-
-        private void TextBoxWorkerCount_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            if (MainWindow.startupLock) return;
-
-            // Get MainWindow instance to access UI elements
-            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-
-            if (!mainWindow.settingsDB.OverrideWorkerCount) return;
-            mainWindow.settingsDB.WorkerCount = int.Parse(TextBoxWorkerCount.Text);
-
-            SaveSettings();
-        }
-
-        private void ComboBoxChunkingMethod_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (MainWindow.startupLock) return;
-
-            // Get MainWindow instance to access UI elements
-            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-            mainWindow.settingsDB.ChunkingMethod = ComboBoxChunkingMethod.SelectedIndex;
-            mainWindow.settingsDB.ReencodeMethod = ComboBoxReencodeMethod.SelectedIndex;
-
-            SaveSettings();
-        }
-
-        private void TextBoxChunkLength_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            if (MainWindow.startupLock) return;
-
-            // Get MainWindow instance to access UI elements
-            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-            mainWindow.settingsDB.ChunkLength = TextBoxChunkLength.Text;
-            mainWindow.settingsDB.PySceneDetectThreshold = TextBoxPySceneDetectThreshold.Text;
-
-            SaveSettings();
-        }
-
         private void ButtonDeletePreset_Click(object sender, RoutedEventArgs e)
         {
             try

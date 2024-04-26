@@ -90,8 +90,6 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </GroupBox>
-                <Label x:Name="LabelEncodeQueueParallel" Content="{lex:Loc}" Margin="0,1,67,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="398"/>
-                <mah:ToggleSwitch x:Name="ToggleSwitchQueueParallel" VerticalAlignment="Top" Width="49" HorizontalAlignment="Right" Margin="0,-1,-97,0" Height="30" Content=" " Toggled="ToggleSwitchQueueParallel_Toggled"/>
                 <ComboBox x:Name="ComboBoxSortQueueBy" HorizontalAlignment="Left" Margin="366,3,0,0" VerticalAlignment="Top" Width="161" SelectionChanged="ComboBoxSortQueueBy_SelectionChanged">
                     <ComboBoxItem Content="{lex:Loc SortByOldest}" IsSelected="True"/>
                     <ComboBoxItem Content="{lex:Loc SortByNewest}"/>

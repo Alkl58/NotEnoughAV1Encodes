@@ -34,9 +34,8 @@
                             </Grid.RowDefinitions>
                             <mah:ToggleSwitch x:Name="ToggleSwitchDeleteTempFiles" Header="{lex:Loc}" Height="54" Width="224" HorizontalAlignment="Center"/>
                             <mah:ToggleSwitch Grid.Row="1" Grid.Column="0" x:Name="ToggleSwitchShutdown" Header="{lex:Loc}" Height="53" Width="224" HorizontalAlignment="Center"/>
-                            <mah:ToggleSwitch Grid.Row="2" Grid.Column="0" x:Name="ToggleSwitchOverrideWorkerCount" Header="{lex:Loc}" Height="53" Width="224" HorizontalAlignment="Center"/>
-                            <mah:ToggleSwitch Grid.Row="3" Grid.Column="0" x:Name="ToggleSwitchLogging" Header="{lex:Loc}" Height="53" Width="224" HorizontalAlignment="Center"/>
-                            <mah:ToggleSwitch Grid.Row="4" Grid.Column="0" x:Name="ToggleSwitchClearQueue" Header="{lex:Loc}" Height="53" Width="224" HorizontalAlignment="Center"/>
+                            <mah:ToggleSwitch Grid.Row="2" Grid.Column="0" x:Name="ToggleSwitchLogging" Header="{lex:Loc}" Height="53" Width="224" HorizontalAlignment="Center"/>
+                            <mah:ToggleSwitch Grid.Row="3" Grid.Column="0" x:Name="ToggleSwitchClearQueue" Header="{lex:Loc}" Height="53" Width="224" HorizontalAlignment="Center"/>
                             <mah:ToggleSwitch Grid.Row="0" Grid.Column="1" x:Name="ToggleSwitchAutoPauseResume" Header="{lex:Loc}" Height="53" Width="224" ToolTip="{lex:Loc ToggleSwitchAutoPauseResumeTooltip}" HorizontalAlignment="Center"/>
                             <mah:ToggleSwitch Grid.Row="1" Grid.Column="1" x:Name="ToggleSwitchInputSeeking" Header="{lex:Loc}" Height="53" Width="224" ToolTip="Faster PySceneDetect Seeking - chance of frame loss" HorizontalAlignment="Center"/>
                             <mah:ToggleSwitch Grid.Row="2" Grid.Column="1" x:Name="ToggleSwitchBatchSubFolders" Header="{lex:Loc}" Height="53" Width="224" HorizontalAlignment="Center"/>

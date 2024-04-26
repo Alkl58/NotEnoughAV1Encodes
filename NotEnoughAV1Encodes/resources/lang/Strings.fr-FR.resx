@@ -292,9 +292,6 @@
   <data name="LabelDestination" xml:space="preserve">
     <value>Destination</value>
   </data>
-  <data name="LabelEncodeQueueParallel" xml:space="preserve">
-    <value>Encoder la file d'attente en parallèle plutôt que segmenter</value>
-  </data>
   <data name="LabelEncoder" xml:space="preserve">
     <value>Encodeur</value>
   </data>
@@ -604,5 +601,21 @@ Please download and extract 7-zip to the following path:
   </data>
   <data name="ButtonCropAutoDetect" xml:space="preserve">
     <value>Détection automatique</value>
+  </data>
+  <data name="LabelModeDescription1" xml:space="preserve">
+    <value>1. Chunking:
+La vidéo est divisée en morceaux et chaque morceau sera codé en parallèle par le nombre de travailleurs spécifié.
+Pour désactiver, définissez «Splitting Method » sur « Disable » ou définissez « Mode » sur « Queue » et définissez « Parallel Encodes » sur 1.
+N'affecte pas les éléments existants dans la file d'attente !</value>
+  </data>
+  <data name="LabelModeDescription2" xml:space="preserve">
+    <value>2. Queue:
+Toutes les vidéos de la file d'attente sont traitées en parallèle par le nombre de travailleurs spécifié dans "Parallel Encodes".
+Cela écrasera le mode "Chunking" et donc la vidéo ne sera pas divisée en morceaux, même si le "Mode" a été défini sur "Chunking" lors de l'ajout de la vidéo à la file d'attente.</value>
+  </data>
+  <data name="LabelModeDescription3" xml:space="preserve">
+    <value>3. Chunking + Queue :
+Permet de traiter la file d'attente en parallèle et également de segmenter la vidéo d'entrée comme décrit en 1.
+Faites attention au nombre de travailleurs que vous sélectionnez, car cela utilisera beaucoup de ressources.</value>
   </data>
 </root>
