@@ -10,7 +10,7 @@
         lex:LocalizeDictionary.DesignCulture="en"
         lex:ResxLocalizationProvider.DefaultAssembly="NotEnoughAV1Encodes"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-        Title="NEAV1E" Height="550" Width="800" ResizeMode="NoResize">
+        Title="NEAV1E" Height="560" Width="810" ResizeMode="NoResize">
     <Grid>
         <GroupBox Header="{lex:Loc LabelSource}" Margin="10,10,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="236" VerticalAlignment="Top">
             <Grid>
@@ -48,13 +48,13 @@
                 <Image Height="38" Canvas.Top="-4" Width="38" Source="/resources/img/stop.png" Canvas.Left="-10"/>
             </Canvas>
         </Button>
-        <GroupBox Header="{lex:Loc GroupBoxPresets}" Margin="10,330,400,0" Height="76" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
+        <GroupBox Header="{lex:Loc GroupBoxPresets}" Margin="10,330,383,0" Height="76" VerticalAlignment="Top" mah:ControlsHelper.ContentCharacterCasing="Normal">
             <Grid>
                 <Label x:Name="LabelSelectPresetForEncoding" Grid.Column="0" Content="{lex:Loc}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <ComboBox x:Name="ComboBoxPresets" Height="28" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190" Margin="177,0,0,0"/>
+                <ComboBox x:Name="ComboBoxPresets" Height="28" VerticalAlignment="Center" Margin="177,0,13,0"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="GroupBoxVideoContainer" Header="{lex:Loc}" Margin="400,330,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="76" VerticalAlignment="Top">
+        <GroupBox x:Name="GroupBoxVideoContainer" Header="{lex:Loc}" Margin="410,330,10,0" mah:ControlsHelper.ContentCharacterCasing="Normal" Height="76" VerticalAlignment="Top">
             <Grid>
                 <ComboBox x:Name="ComboBoxContainer" HorizontalAlignment="Left" Height="28" VerticalAlignment="Center" Width="120" Margin="91,0,0,0">
                     <ComboBoxItem Content="MKV (Matroska)" IsSelected="True"/>
