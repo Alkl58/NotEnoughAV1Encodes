@@ -42,10 +42,13 @@ namespace NotEnoughAV1Encodes.Views
         private string svtav1CurrentVersion;
         private string qsvenccUpdateVersion;
         private string qsvenccCurrentVersion;
+        private string nvencUpdateVersion;
+        private string nvencCurrentVersion;
         private string mkvtoolnixUpdateVersion;
         private string mkvtoolnixCurrentVersion;
 
         private string QSVReleaseAPIGithub;
+        private string NVEncReleaseAPIGithub;
         private string MKVToolnixDownloadURL;
 
         private string UpdateVersion = "0";
@@ -111,6 +114,18 @@ namespace NotEnoughAV1Encodes.Views
             set { qsvenccCurrentVersion = value; OnPropertyChanged(); }
         }
 
+        public string NVEncUpdateVersion
+        {
+            get { return nvencUpdateVersion; }
+            set { nvencUpdateVersion = value; OnPropertyChanged(); }
+        }
+
+        public string NVEncCurrentVersion
+        {
+            get { return nvencCurrentVersion; }
+            set { nvencCurrentVersion = value; OnPropertyChanged(); }
+        }
+
         public string MKVToolnixUpdateVersion 
         { 
             get { return mkvtoolnixUpdateVersion; }
@@ -139,11 +154,13 @@ namespace NotEnoughAV1Encodes.Views
         {
             ParseNEAV1EGithub();
             ParseQSVEncCGithub();
+            ParseNVEncGithub();
             await ParseFFMPEGVersion();
             await ParseJeremyleeJSONAsync();
             ParseMKVToolnixWebsite();
             GetLocalMKVToolnixVersion();
             GetLocalQSVEncCVersion();
+            GetLocalNVEncVersion();
             CompareLocalVersion();
             LabelProgressBar.Content = "";
             ProgressBar.IsIndeterminate = false;
@@ -157,6 +174,8 @@ namespace NotEnoughAV1Encodes.Views
             ButtonUpdateRav1e.IsEnabled = _toggle;
             ButtonUpdateSVTAV1.IsEnabled = _toggle;
             ButtonUpdateQSVEnc.IsEnabled = _toggle;
+            ButtonUpdateNVEnc.IsEnabled = _toggle;
+            ButtonUpdateMKVToolNix.IsEnabled = _toggle;
         }
 
         private void ParseNEAV1EGithub()
@@ -202,13 +221,28 @@ namespace NotEnoughAV1Encodes.Views
         {
             try
             {
-                //Parses the latest neav1e release date directly from Github
+                //Parses the latest qsvenc release date directly from Github
                 GitHubClient client = new(new ProductHeaderValue("QSVEnc"));
                 IReadOnlyList<Release> releases = client.Repository.Release.GetAll("rigaya", "QSVEnc").Result;
                 Release latest = releases[0];
 
                 QSVEncCUpdateVersion = latest.TagName;
                 QSVReleaseAPIGithub = latest.AssetsUrl;
+            }
+            catch { }
+        }
+
+        private void ParseNVEncGithub()
+        {
+            try
+            {
+                //Parses the latest nvenc release date directly from Github
+                GitHubClient client = new(new ProductHeaderValue("NVEnc"));
+                IReadOnlyList<Release> releases = client.Repository.Release.GetAll("rigaya", "NVEnc").Result;
+                Release latest = releases[0];
+
+                NVEncUpdateVersion = latest.TagName;
+                NVEncReleaseAPIGithub = latest.AssetsUrl;
             }
             catch { }
         }
@@ -305,6 +339,19 @@ namespace NotEnoughAV1Encodes.Views
                 if (versionInfo != null)
                 {
                     QSVEncCCurrentVersion = versionInfo.FileVersion;
+                }
+            }
+            catch { }
+        }
+
+        private void GetLocalNVEncVersion()
+        {
+            try
+            {
+                var versionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(CURRENT_DIR, "Apps", "nvenc", "NVEncC64.exe"));
+                if (versionInfo != null)
+                {
+                    NVEncCurrentVersion = versionInfo.FileVersion;
                 }
             }
             catch { }
@@ -465,6 +512,33 @@ namespace NotEnoughAV1Encodes.Views
                     {
                         LabelCurrentQSVEncCVersion.Foreground = Brushes.Red;
                         LabelUpdateQSVEncCVersion.Foreground = Brushes.Green;
+                    }
+                }
+                catch { }
+            }
+
+            // NVEnc
+            if (NVEncCurrentVersion != null && NVEncUpdateVersion != null)
+            {
+                try
+                {
+                    double update = double.Parse(NVEncUpdateVersion);
+                    double current = double.Parse(NVEncCurrentVersion);
+                    // Simple Version Comparison Logic
+                    if (current.Equals(update))
+                    {
+                        LabelCurrentNVEncVersion.Foreground = Brushes.Green;
+                        LabelUpdateNVEncVersion.Foreground = Brushes.Green;
+                    }
+                    else if (current.IsGreaterThan(update))
+                    {
+                        LabelCurrentNVEncVersion.Foreground = Brushes.Green;
+                        LabelUpdateNVEncVersion.Foreground = Brushes.Red;
+                    }
+                    else if (update.IsGreaterThan(current))
+                    {
+                        LabelCurrentNVEncVersion.Foreground = Brushes.Red;
+                        LabelUpdateNVEncVersion.Foreground = Brushes.Green;
                     }
                 }
                 catch { }
@@ -747,6 +821,72 @@ namespace NotEnoughAV1Encodes.Views
             ToggleAllButtons(true);
 
             LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Finished updating QSVEncC");
+        }
+
+        private async void ButtonUpdateNVEnc_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleAllButtons(false);
+
+            // Creates the ffmpeg folder if not existent
+            if (!Directory.Exists(Path.Combine(CURRENT_DIR, "Apps", "nvenc")))
+            {
+                Directory.CreateDirectory(Path.Combine(CURRENT_DIR, "Apps", "nvenc"));
+            }
+
+            if (string.IsNullOrEmpty(NVEncReleaseAPIGithub))
+            {
+                LabelProgressBar.Content = "Error: API URL was Null or Empty";
+                return;
+            }
+
+            string downloadUrl = "";
+            try
+            {
+                // Parse API
+                HttpClient client = new();
+                client.DefaultRequestHeaders.Add("User-Agent", "NotEnoughAV1Encodes");
+                HttpResponseMessage response = await client.GetAsync(NVEncReleaseAPIGithub);
+                string jsonContent = await response.Content.ReadAsStringAsync();
+                JArray releasesArray = JArray.Parse(jsonContent);
+                downloadUrl = FindQSVDownloadUrl(releasesArray);
+            }
+            catch (Exception ex) { LabelProgressBar.Content = ex.Message; }
+
+            if (string.IsNullOrEmpty(downloadUrl))
+            {
+                LabelProgressBar.Content = "Could not find download url!";
+                return;
+            }
+
+            try
+            {
+                // Downloads qsvenc
+                await Task.Run(() => DownloadBin(downloadUrl, Path.Combine(CURRENT_DIR, "Apps", "nvenc.7z")));
+
+                // Should never happen
+                if (!File.Exists(Path.Combine(CURRENT_DIR, "Apps", "nvenc.7z")))
+                {
+                    LabelProgressBar.Content = "Downloaded file not found!";
+                    return;
+                }
+
+                Directory.Delete(Path.Combine(CURRENT_DIR, "Apps", "nvenc"), true);
+                Directory.CreateDirectory(Path.Combine(CURRENT_DIR, "Apps", "nvenc"));
+
+                // Extract downloaded 7z file
+                ExtractFile(Path.Combine(CURRENT_DIR, "Apps", "nvenc.7z"), Path.Combine(CURRENT_DIR, "Apps", "nvenc"));
+
+                // Cleanup
+                File.Delete(Path.Combine(CURRENT_DIR, "Apps", "nvenc.7z"));
+
+                GetLocalNVEncVersion();
+                CompareLocalVersion();
+            }
+            catch { }
+
+            ToggleAllButtons(true);
+
+            LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Finished updating NVEnc");
         }
 
         private async void ButtonUpdateMKVToolnix_Click(object sender, RoutedEventArgs e)
