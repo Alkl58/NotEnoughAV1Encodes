@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -818,23 +817,60 @@ namespace NotEnoughAV1Encodes.Views
             // Downloads the archive provided in the Link
             try
             {
-                WebClient webClient = new();
-                webClient.DownloadProgressChanged += (s, e) =>
+                using (var httpClient = new HttpClient())
                 {
-                    ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = e.ProgressPercentage);
-                    LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = Math.Round(e.BytesReceived / 1024f / 1024f, 1) + "MB / " + Math.Round(e.TotalBytesToReceive / 1024f / 1024f, 1) + "MB - " + e.ProgressPercentage + "%");
-                    Dispatcher.Invoke(() => Title = "Updater " + e.ProgressPercentage + "%");
-                };
-                webClient.DownloadFileCompleted += (s, e) =>
+                    using (var response = await httpClient.GetAsync(DownloadURL, HttpCompletionOption.ResponseHeadersRead))
+                    {
+                        response.EnsureSuccessStatusCode();
+                        long? contentLength = response.Content.Headers.ContentLength;
+
+                        using (var stream = await response.Content.ReadAsStreamAsync())
+                        {
+                            using (var fileStream = new FileStream(PathToFile, System.IO.FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
+                            {
+                                var buffer = new byte[8192];
+                                int bytesRead;
+                                long totalBytesRead = 0;
+
+                                while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                                {
+                                    await fileStream.WriteAsync(buffer, 0, bytesRead);
+                                    totalBytesRead += bytesRead;
+
+                                    // Calculate progress
+                                    double progressPercentage = (double)totalBytesRead / contentLength.Value * 100;
+
+                                    // Update UI
+                                    Dispatcher.Invoke(() =>
+                                    {
+                                        ProgressBar.Value = progressPercentage;
+                                        LabelProgressBar.Content = $"{Math.Round(totalBytesRead / 1024f / 1024f, 1)}MB / {Math.Round(contentLength.Value / 1024f / 1024f, 1)}MB - {progressPercentage:F1}%";
+                                        Title = $"Updater {progressPercentage:F1}%";
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // After download completes
+                Dispatcher.Invoke(() =>
                 {
-                    ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = 0);
-                    LabelProgressBar.Dispatcher.Invoke(() => LabelProgressBar.Content = "Extracting...");
-                    Dispatcher.Invoke(() => Title = "Updater");
-                };
-                
-                await webClient.DownloadFileTaskAsync(new Uri(DownloadURL), PathToFile);
+                    ProgressBar.Value = 0;
+                    LabelProgressBar.Content = "Extracting...";
+                    Title = "Updater";
+                });
             }
-            catch { }
+            catch 
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    ProgressBar.Value = 0;
+                    LabelProgressBar.Content = "Error while downloading!";
+                    Title = "Updater";
+                });
+
+            }
         }
 
         private static void ExtractFile(string source, string destination)
