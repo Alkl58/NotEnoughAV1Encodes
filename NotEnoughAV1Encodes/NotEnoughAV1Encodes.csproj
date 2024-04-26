@@ -6,7 +6,7 @@
     <UseWPF>true</UseWPF>
 	<UseWindowsForms>true</UseWindowsForms>
 	<ApplicationIcon>resources\img\neav1e.ico</ApplicationIcon>
-    <Version>2.1.6</Version>
+    <Version>2.1.7</Version>
     <Authors>Alkl58</Authors>
   </PropertyGroup>
 
@@ -33,11 +33,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.57" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.60" />
     <PackageReference Include="MahApps.Metro" Version="3.0.0-alpha0476" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Octokit" Version="9.1.1" />
+    <PackageReference Include="Octokit" Version="11.0.1" />
     <PackageReference Include="System.Management" Version="8.0.0" />
     <PackageReference Include="WPFLocalizeExtension" Version="3.10.0" />
   </ItemGroup>
